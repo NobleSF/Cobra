@@ -1,0 +1,75 @@
+{% load url from future %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{% block tab_title %}Anou{% endblock tab_title %}</title>
+  <!-- prevent pinch/zoom on mobile --->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css" rel="stylesheet">
+  <!--<link href="{{ STATIC_URL }}css/bootstrap/bootstrap.min.css" rel="stylesheet">-->
+  <!--<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-responsive.min.css" rel="stylesheet">-->
+  <link href="{{ STATIC_URL }}css/bootstrap/bootstrap-responsive.min.css" rel="stylesheet">
+  <!--<link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">-->
+
+  <link href="{{ STATIC_URL }}css/base.css" rel="stylesheet">
+
+  {% block css %}
+  {% endblock css %}
+
+</head>
+
+<body>
+  <div id="header">
+    {% block header %}
+      <ul id="navigation">
+        <li class='active'><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Login</a></li>
+      </ul>
+      <div id="logo">
+        <img src="{{ STATIC_URL }}images/Anou_logo_160x100.png"
+      </div>
+    {% endblock header %}
+  </div>
+
+  <hr id="header-separator">
+
+  <div id="body" class="container">
+    {% block content %}
+      <p>Hello World! It's Anou.</p>
+    {% endblock content %}
+  </div> <!-- /container -->
+
+  <hr id="footer-separator">
+
+  <footer id="footer">
+    <div class="container">
+      <div>
+        {% block footer %}
+          <div>Thing One</div>
+          <div>Thing Two</div>
+          <div>Thing Three</div>
+        {% endblock footer %}
+      </div>
+    </div>
+  </footer>
+
+  <!--Javascript Placed at the end of the document so the pages load faster -->
+  <!--jQuery-->
+  <!--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>-->
+  <script src="{{ STATIC_URL }}javascript/jquery-1.9.1.min.js"></script>
+
+  <!--Bootstrap-->
+  <!--<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>-->
+  <script src="{{ STATIC_URL }}javascript/bootstrap/bootstrap.min.js"></script>
+  <script src="{{ STATIC_URL }}javascript/bootstrap/holder.js"></script>
+  <!--inline-->
+  <script type="text/javascript" src="{{ STATIC_URL}}javascript/base.js"></script>
+  <!--added inline-->
+  {% block javascript %}
+  {% endblock javascript %}
+</body>
+</html>

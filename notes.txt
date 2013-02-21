@@ -1,0 +1,9 @@
+User Registration and Managment:
+	http://www.django-userena.org/
+	https://www.djangopackages.com/grids/g/authentication
+
+Mobile Integration / API app
+	search for pre-made Django API apps
+
+Redesign
+	http://ace-subido.github.com/css3-microsoft-metro-buttons/index.html

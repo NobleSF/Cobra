@@ -1,0 +1,65 @@
+body {
+  padding-top: 20px;
+  padding-bottom: 40px;
+  background-color: #fffefa;
+}
+
+#header, #main, #footer {
+  max-width: 1200px;
+  margin: 0px auto;
+}
+
+#logo {
+  padding: 0 2em;
+}
+
+#navigation li {
+  padding: 2em .5em;
+}
+
+#header-separator, #footer-separator {
+  margin: 2em;
+}
+
+.thumbnail {
+  border: none;
+  box-shadow: none;
+  margin-bottom: -60px;
+}
+
+.thumbnail img, .thumbnail-title {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.thumbnail .title, .thumbnail .caption {
+  padding: .5em;
+}
+.thumbnail .title {
+  font-size: 1.4em;
+  text-align: center;
+  background-color: rgba(90,90,90,0.2);
+}
+.thumbnail .caption {
+  font-size: 1em;
+}
+.thumbnail .actions {
+  text-align: center;
+  padding: 0 .2em;
+}
+
+.thumbnail .actions .price {
+  cursor: default;
+}
+
+.title {
+  font-size: 2em;
+  padding-left: 6px;
+  text-decoration: underline;
+  cursor: pointer;
+  color: #172b4d;
+}
+
+#footer .container div div {
+  text-align: center;
+}

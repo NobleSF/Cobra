@@ -1,0 +1,8 @@
+marketing tools
+measuring the dark social and everything else while we're at it.
+every url has a tracer tag in it, not before it, not after it, but inside it, so links don't work unless the tracer is there. Every tracer is databased and has a parent tracer.
+Everytime someone visits the site, the tracer in the URL is replaced with a new one whose parent is the previous one.
+a stats page shows the top 10 IP addresses responsible for the most viral growth
+IP + article_id <=> hash
+
+gauges for UI on stats page http://justgage.com/

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <h2 class="title">Featured</h2>
+
+  <ul class="thumbnails">
+    {% for product in "123" %}
+      <li>
+        <div class="thumbnail">
+          <img data-src="holder.js/350x250" alt="" width="350">
+          <p class="title">Product Title, Location</p>
+          <ul class="actions">
+            <li><span class="price">$42</span></li>
+            <li><a class="save" href="#"></a></li>
+            <li><a class="buy" href="#"></a></li>
+          </ul>
+          <p class="caption">Cras justo odio, dapibus ac facilisis in, egest as eget quam. Donec id elit ...</p>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <h2 class="title">Newest</h2>
+
+  <ul class="thumbnails">
+    {% for product in "1234" %}
+      <li>
+        <div class="thumbnail">
+          <img data-src="holder.js/300x200" alt="" width="300">
+          <p class="title">Product Title, Location</p>
+          <ul class="actions">
+            <li><a class="price" href="#">$42</a></li>
+            <li><a class="save" href="#"></a></li>
+            <li><a class="buy" href="#"></a></li>
+          </ul>
+          <p class="caption">Cras justo odio, dapibus ac facilisis in, egest as eget quam. Donec id elit ...</p>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <h2 class="title">Recommended</h2>
+
+  <ul class="thumbnails">
+    {% for product in "123456" %}
+      <li>
+        <div class="thumbnail">
+          <img data-src="holder.js/150x150" alt="" width="150">
+          <p class="title">Product Title, Location</p>
+          <ul class="actions">
+            <li><a class="price" href="#">$42</a></li>
+            <li><a class="save" href="#"></a></li>
+            <li><a class="buy" href="#"></a></li>
+          </ul>
+          <p class="caption">Cras justo odio, dapibus ac facilisis in, egest as eget quam. Donec id elit ...</p>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+
+{% endblock content %}
