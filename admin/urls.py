@@ -4,11 +4,12 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('admin.views',
-    #url(r'^$', 'home'),
+urlpatterns = patterns('admin.controllers.account',
+
+    #url(r'^$'), ''),
 
     # Examples:
-    # url(r'^$', 'projectomar.views.home', name='home'),
+    # url(r'^$', 'anou.views.home', name='home'),
     # url(r'^projectomar/', include('projectomar.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

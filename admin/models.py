@@ -5,8 +5,8 @@ class Account(models.Model):
   username = models.CharField(max_length=50)
   password = models.CharField(max_length=50)
   name = models.CharField(max_length=50, blank=True, null=True)
-  email = models.CharField(max_length=100)
-  phone = models.CharField(max_length=15)
+  email = models.CharField(max_length=100, blank=True, null=True)
+  phone = models.CharField(max_length=15, blank=True, null=True)
   is_admin = models.BooleanField(default=False)
   #update history
   created_at = models.DateTimeField(auto_now_add = True)
@@ -18,7 +18,8 @@ class Account(models.Model):
 class Country(models.Model):
   name = models.CharField(max_length=100)
   code = models.CharField(max_length=3)
-  currency = models.ForeignKey('Currency') # assuming countries stick to one currency nationwide
+  # assuming countries stick to one currency nationwide
+  currency = models.ForeignKey('Currency')
 
   def __unicode__(self):
     return self.code
@@ -69,11 +70,11 @@ class Order(models.Model):
   total_charge = models.FloatField()
   receipt = models.TextField(blank=True, null=True)
   #shipping info
-  shipped_on = models.DateField()
+  shipped_on = models.DateField(blank=True, null=True)
   shipping_option = models.ForeignKey('ShippingOption')
-  shipping_weight = models.FloatField()
-  shipping_cost = models.FloatField()
-  received_on = models.DateField()
+  shipping_weight = models.FloatField(blank=True, null=True)
+  shipping_cost = models.FloatField(blank=True, null=True)
+  received_on = models.DateField(blank=True, null=True)
   #order items
   from seller.models import Product
   product = models.ManyToManyField(Product)
