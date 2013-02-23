@@ -30,6 +30,15 @@ $(function(){//on page load
   $('.thumbnail .actions .save').html('<i class="icon-star-empty"></i> Save');
   $('.thumbnail .actions .buy').html('<i class="icon-ok"></i> Buy');
 
+  sizeElements();
+
+});
+
+$(window).resize(function() { //Todo: not working
+  //sizeElements();
+});
+
+function sizeElements(){
   $('.thumbnail .title').each( function() {
     $(this).width($(this).prevAll('img:first').width()-10);
     var offset = $(this).prev('img').offset();
@@ -49,5 +58,4 @@ $(function(){//on page load
     offset.top += $(this).prev('p').height() + 30;
     $(this).offset({ top: offset.top, left: offset.left});
   });
-
-});
+}
