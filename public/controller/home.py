@@ -4,4 +4,13 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 
 def home(request):
-  return render(request, 'public/home.html')
+  return render(request, 'public/home/home.html')
+
+def about(request):
+  return render(request, 'public/home/about.html')
+
+def faq(request):
+  return render(request, 'public/home/faq.html')
+
+def contact(request):
+  return render(request, 'public/home/contact.html')

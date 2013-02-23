@@ -25,12 +25,14 @@
   <div id="header">
     {% block header %}
       <ul id="navigation">
-        <li class='active'><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Login</a></li>
+        <li class='active'><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+        <li><a href="{% url 'login' %}">Login</a></li>
       </ul>
       <div id="logo">
-        <img src="{{ STATIC_URL }}images/Anou_logo_160x100.png"
+        <a href="{% url 'home' %}">
+          <img src="{{ STATIC_URL }}images/Anou_logo_160x100.png" alt="Anou logo">
+        </a>
       </div>
     {% endblock header %}
   </div>

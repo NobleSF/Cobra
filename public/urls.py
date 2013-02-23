@@ -1,8 +1,9 @@
 from django.conf.urls import patterns, include, url
-from public.controller import account, checkout, product, artisan, collection
+from public.controller import home, account, checkout, product, artisan, collection
 
 urlpatterns = patterns('',
   #home (site homepage) url defined in anou/urls.py
+  url(r'^about$', home.about, name='about'),
 
   # product page at /product/123
   url(r'^product/(?P<id>\d+)$', product.home, name='product'),
@@ -12,7 +13,6 @@ urlpatterns = patterns('',
 
   # collection at collection/newest or collection/artisan/123
   url(r'^collection/(?P<group>\w+)/?(?P<id>\d+)?$', collection.home, name='collection'),
-
 
 
   #Todo: I'd like to add the word "secure" into all account and checkout pages
