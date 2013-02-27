@@ -7,3 +7,9 @@ Mobile Integration / API app
 
 Redesign
 	http://ace-subido.github.com/css3-microsoft-metro-buttons/index.html
+	pages for sold products prominantly display similar products.
+	Responsive qualities: http://bradfrost.github.com/this-is-responsive/patterns.html
+
+
+Check code for efficiency:
+	http://flake8.readthedocs.org
