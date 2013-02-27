@@ -1,7 +1,9 @@
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from admin.models import Account
+from admin.controller import decorator
 
+@decorator.requires_account
 def home(request, username):
   return render(request, 'public/account/home.html')
 
@@ -59,9 +61,8 @@ def logout(request, username):
   try:
     del request.session['username']
     context = {'success': "get outta here."}
-  except KeyError: # if no one was even logged in
+  except KeyError: # if no one was logged in
     context = {'success': "get outta here."}
-    pass # i don't even care
   except Exception as e:
     context = {'exception': e}
 
@@ -70,6 +71,7 @@ def logout(request, username):
   else:
     return render(request, 'public/account/logout.html', context)
 
+@decorator.requires_account
 def password(request, username, new_password, secret_hash="", old_password=""):
   if request.method == 'POST':
     username = request.POST['username']
