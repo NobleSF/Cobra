@@ -7,3 +7,8 @@ def home(request, id):
   return render(request, 'public/product.html',
     {'id':id}
   )
+
+def collection(request, group, name=None):
+  return render(request, 'public/collection.html',
+    {'group':group}
+  )

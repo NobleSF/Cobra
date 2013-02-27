@@ -1,19 +1,19 @@
 from django.conf.urls import patterns, include, url
-from public.controller import home, account, checkout, product, artisan, collection
+from public.controller import home, account, checkout, product, artisan
 
 urlpatterns = patterns('',
   #home (site homepage) url defined in anou/urls.py
   url(r'^about$', home.about, name='about'),
+  url(r'^contact$', home.contact, name='contact'),
 
   # product page at /product/123
   url(r'^product/(?P<id>\d+)$', product.home, name='product'),
 
-  # artisan page at /artisan/123
-  url(r'^artisan/(?P<id>\d+)$', artisan.home, name='artisan'),
+  # collection at collection/newest or collection/store/woodshop-brahim
+  url(r'^collection/(?P<group>\w+)/?(?P<name>\w+)?$', product.collection, name='collection'),
 
-  # collection at collection/newest or collection/artisan/123
-  url(r'^collection/(?P<group>\w+)/?(?P<id>\d+)?$', collection.home, name='collection'),
-
+  # store page at /store/123 represents a seller profile
+  url(r'^store/(?P<id>\d+)$', store.home, name='store'),
 
   #Todo: I'd like to add the word "secure" into all account and checkout pages
     # just to give the user more peace of mind.
