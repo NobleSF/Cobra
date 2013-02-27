@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from public.controller import home, account, checkout, product, artisan
+from public.controller import home, account, checkout, product, store
 
 urlpatterns = patterns('',
   #home (site homepage) url defined in anou/urls.py
