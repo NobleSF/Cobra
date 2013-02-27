@@ -3,6 +3,7 @@
 #################
 venv
 *.pyc
+*.komodoproject
 
 #################
 ## Eclipse
