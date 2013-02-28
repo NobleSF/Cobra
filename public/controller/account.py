@@ -44,6 +44,8 @@ def login(request, username=None, password=None):
     try:
       if Account.objects.get(username=username).password == password:
         request.session['username'] = username
+        #if seller, set session['seller_pk']
+        #if admin, set session['admin_priveledge']
         context = {'success': "awesome. you're \logged in now!"}
       else:
         context = {'problem': "dude, wrong password."}

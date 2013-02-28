@@ -49,7 +49,8 @@ class ShippingOption(models.Model):
     return self.name
 
 class Image(models.Model): #Images are used for navigation, thumbnail size
-  file = models.CharField(max_length=100)
+  location = models.CharField(max_length=100)
+  #thumbnail file location
   #update history
   created_at = models.DateTimeField(auto_now_add = True)
   updated_at = models.DateTimeField(auto_now = True)

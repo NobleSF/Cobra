@@ -21,10 +21,7 @@ class Product(models.Model):
   is_sold = models.BooleanField(default=False)
   is_active = models.BooleanField(default=False)
   #product description elements
-  product_type = models.ForeignKey('ProductType')
-  artisans = models.ManyToManyField('Artisan')
-  tools = models.ManyToManyField('Tool')
-  materials = models.ManyToManyField('Material')
+  asset = models.ManyToManyField('Asset')
   colors = models.ManyToManyField(Colors)
   width = models.IntegerField(null=True, blank=True)
   height = models.IntegerField(null=True, blank=True)
@@ -41,47 +38,13 @@ class Product(models.Model):
 
 #Product Attributes
 
-class ProductType(models.Model):
+class Asset(models.Model):
   seller = models.ForeignKey('Seller')
+  ilk = models.CharField(max_length=10) #product(type), artisan, tool, material
   name = models.CharField(max_length=50)
   description = models.TextField(null=True, blank=True)
   image = models.ForeignKey(Image)
-  #update history
-  created_at = models.DateTimeField(auto_now_add = True)
-  updated_at = models.DateTimeField(auto_now = True)
-
-  def __unicode__(self):
-    return self.name
-
-class Artisan(models.Model):
-  seller = models.ForeignKey('Seller')
-  name = models.CharField(max_length=50)
-  description = models.TextField(null=True, blank=True)
-  image = models.ForeignKey(Image)
-  #update history
-  created_at = models.DateTimeField(auto_now_add = True)
-  updated_at = models.DateTimeField(auto_now = True)
-
-  def __unicode__(self):
-    return self.name
-
-class Tool(models.Model):
-  seller = models.ForeignKey('Seller')
-  name = models.CharField(max_length=50)
-  description = models.TextField(null=True, blank=True)
-  image = models.ForeignKey(Image)
-  #update history
-  created_at = models.DateTimeField(auto_now_add = True)
-  updated_at = models.DateTimeField(auto_now = True)
-
-  def __unicode__(self):
-    return self.name
-
-class Material(models.Model):
-  seller = models.ForeignKey('Seller')
-  name = models.CharField(max_length=50)
-  description = models.TextField(null=True, blank=True)
-  image = models.ForeignKey(Image)
+  category = models.ManyToManyField('Category')
   #update history
   created_at = models.DateTimeField(auto_now_add = True)
   updated_at = models.DateTimeField(auto_now = True)
@@ -99,3 +62,6 @@ class Photo(models.Model): #Photos are for product pictures only.
 
   def __unicode__(self):
     return self.file
+
+class Category(models.Model):
+  name = models.CharField(max_length=50)
