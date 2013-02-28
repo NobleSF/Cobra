@@ -1,3 +1,5 @@
+#http://pythonconquerstheuniverse.wordpress.com/2012/04/29/python-decorators/
+
 def requires_account(function):
   """
   1 verify user is logged in
