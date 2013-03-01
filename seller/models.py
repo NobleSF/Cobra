@@ -4,7 +4,7 @@ from admin.models import Account, Country, Currency, ShippingOption, Image, Colo
 class Seller(models.Model):
   account     = models.ForeignKey(Account)
   name        = models.CharField(max_length=50)
-  email       = models.CharField(max_length=50, null=True, blank=True)
+  email       = models.EmailField(null=True, blank=True)
   phone       = models.BigIntegerField(null=True, blank=True)
   bio         = models.TextField(null=True, blank=True)
   country     = models.ForeignKey(Country)
@@ -23,11 +23,11 @@ class Product(models.Model):
   #product description elements
   asset       = models.ManyToManyField('Asset')
   colors      = models.ManyToManyField(Colors)
-  width       = models.IntegerField(null=True, blank=True)
-  height      = models.IntegerField(null=True, blank=True)
-  length      = models.IntegerField(null=True, blank=True)
-  weight      = models.IntegerField(null=True, blank=True)
-  price       = models.IntegerField(null=True, blank=True)
+  width       = models.SmallIntegerField(null=True, blank=True)
+  height      = models.SmallIntegerField(null=True, blank=True)
+  length      = models.SmallIntegerField(null=True, blank=True)
+  weight      = models.SmallIntegerField(null=True, blank=True)
+  price       = models.SmallIntegerField(null=True, blank=True)
   shipping_options = models.ManyToManyField(ShippingOption)
   #update history
   created_at  = models.DateTimeField(auto_now_add = True)
@@ -37,8 +37,19 @@ class Product(models.Model):
     return self.product_type.name + ' #' + str(self.pk) + ' by ' + self.seller.name
 
 class Asset(models.Model):
+  PRODUCT  = 1
+  ARTISAN  = 2
+  TOOL     = 3
+  MATERIAL = 4
+  ILK_CHOICES = (
+    (PRODUCT,  'product'),
+    (ARTISAN,  'artisan'),
+    (TOOL,     'tool'),
+    (MATERIAL, 'material'),
+  )
   seller      = models.ForeignKey('Seller')
-  ilk         = models.CharField(max_length=10)#product(type), artisan, tool, material
+  ilk         = models.PositiveSmallIntegerField(choices=ILK_CHOICES)
+  rank        = models.SmallIntegerField()
   name        = models.CharField(max_length=50)
   description = models.TextField(null=True, blank=True)
   image       = models.ForeignKey(Image)
@@ -50,11 +61,14 @@ class Asset(models.Model):
   def __unicode__(self):
     return self.name
 
+  def ilk(self):
+    return self._get_ilk_display()
+
 class Photo(models.Model): #Photos are exclusively product pictures.
   product     = models.ForeignKey('Product')
-  rank        = models.IntegerField()
-  location    = models.CharField(max_length=100)
-  thumbnail   = models.CharField(max_length=100)
+  rank        = models.SmallIntegerField()
+  url         = models.URLField()
+  thumbnail   = models.URLField()
   #update history
   created_at  = models.DateTimeField(auto_now_add = True)
   updated_at  = models.DateTimeField(auto_now = True)
