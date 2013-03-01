@@ -3,11 +3,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from admin.controller import decorator
 
 @decorator.requires_seller_or_admin
-def home(request):
+def home(request, context={}):
   return render(request, 'seller/home.html')
 
 @decorator.requires_seller_or_admin
 def edit(request):
+  from seller.models import Seller
+  seller = Seller.objects.get(pk=request.session['seller_pk'])
+
   if request.method == 'POST':
     try: # it must be a post to work
       name      = request.POST['name']
@@ -16,13 +19,28 @@ def edit(request):
       bio       = request.POST['bio']
       country   = request.POST['country']
       currency  = request.POST['currency']
+      #validate all these
+      valid = True
+      if valid:
+        seller.name     = name
+        seller.email    = email
+        seller.phone    = phone
+        seller.bio      = bio
+        seller.country  = country
+        seller.currency = currency
+        seller.save()
+        context = {'success': "seller info saved"}
 
-      seller = Seller.objects.get(pk=request.session['seller_pk'])
+      else:
+        context = {'problem': "something is invalid"}
 
     except Exception as e:
       context = {'exception': e}
 
-  #collect all seller info and assets for template
+  else:
+    context = {'success': "go edit something"}
+
+  context['seller'] = seller
 
   return render(request, 'seller/edit.html', context)
 
