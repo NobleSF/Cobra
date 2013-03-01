@@ -1,5 +1,5 @@
 from django.db import models
-from admin.models import Account, Country, Currency, ShippingOption, Image, Colors
+from admin.models import Account, Country, Currency, ShippingOption, Image, Color
 
 class Seller(models.Model):
   account     = models.ForeignKey(Account)
@@ -22,13 +22,13 @@ class Product(models.Model):
   is_active   = models.BooleanField(default=False)
   #product description elements
   asset       = models.ManyToManyField('Asset')
-  colors      = models.ManyToManyField(Colors)
+  color       = models.ManyToManyField(Color)
   width       = models.SmallIntegerField(null=True, blank=True)
   height      = models.SmallIntegerField(null=True, blank=True)
   length      = models.SmallIntegerField(null=True, blank=True)
   weight      = models.SmallIntegerField(null=True, blank=True)
   price       = models.SmallIntegerField(null=True, blank=True)
-  shipping_options = models.ManyToManyField(ShippingOption)
+  shipping_option = models.ManyToManyField(ShippingOption)
   #update history
   created_at  = models.DateTimeField(auto_now_add = True)
   updated_at  = models.DateTimeField(auto_now = True)

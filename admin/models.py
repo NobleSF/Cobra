@@ -36,7 +36,7 @@ class Currency(models.Model):
   def __unicode__(self):
     return self.code
 
-class Colors(models.Model):
+class Color(models.Model):
   name          = models.CharField(max_length=15)
 
   def __unicode__(self):
