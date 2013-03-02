@@ -6,10 +6,14 @@ Mobile Integration / API app
 	search for pre-made Django API apps
 
 Redesign
-	http://ace-subido.github.com/css3-microsoft-metro-buttons/index.html
+	Buttons:
+		http://ace-subido.github.com/css3-microsoft-metro-buttons/index.html
+		http://www.red-team-design.com/css3-patterned-buttons
+
 	pages for sold products prominantly display similar products.
 	Responsive qualities: http://bradfrost.github.com/this-is-responsive/patterns.html
-
+	Keep use of JS libraries to a minimum for speed
+		http://www.gonzoblog.nl/2013/02/27/10-fresh-css3-only-tutorials-look-ma-no-javascript/
 
 Check code for efficiency:
 	http://flake8.readthedocs.org

@@ -1,5 +1,4 @@
 from django.db import models
-#don't create a circular import, import within method
 
 class Account(models.Model):
   username      = models.CharField(max_length=50, unique=True)
