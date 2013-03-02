@@ -7,7 +7,7 @@ def requires_account(function):
   """
   return function
 
-def requires_seller(function):
+def requires_seller_or_admin(function):
   """
   1 verify user is a seller
   2 if not and not logged in, send to login

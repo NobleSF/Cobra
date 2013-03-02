@@ -22,7 +22,7 @@ def create(request):
   try:
     product = Product(seller = request.session['seller_pk'])
     product.save()
-    return edit(request, product.pk)
+    return HttpResponseRedirect('seller/product/'+product.pk+'/edit/')
 
   except Exception as e:
     context = {'exception': e}
@@ -35,7 +35,7 @@ def edit(request, id):
   product = Product.objects.get(pk=id)
 
   # if form was submitted
-  if request.method == 'POST' and 'asset' in request.POST:
+  if request.method == 'POST':
     try:
       asset           = request.POST['asset']
       color           = request.POST['color']

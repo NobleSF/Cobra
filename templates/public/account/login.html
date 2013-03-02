@@ -4,10 +4,12 @@
   <form action="{% url login %}" method="post">{% csrf_token %}
 
     <label for="username">Email</label>
-    <input type="text" id="username" name="username" />
+    <input type="email" id="username" name="username"
+           required pattern="\w+" />
 
     <label for="password">Password</label>
-    <input type="password" id="password" name="password" />
+    <input type="password" id="password" name="password"
+           required title="Enter your password" pattern="regex" />
 
     <label></label>
     <input type="submit" value="submit" />
