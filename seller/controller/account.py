@@ -9,15 +9,14 @@ def home(request, context={}):
 @decorator.requires_seller_or_admin
 def edit(request):
   from seller.models import Seller
-  from seller.controller.forms import SellerForm
-
-  seller = Seller.objects.get(pk=request.session['seller_pk'])
+  from seller.controller.forms import SellerEditForm
 
   if request.method == 'POST':
-    form = SellerForm(request.POST)
+    form = SellerEditForm(request.POST)
     if form.is_valid():
       data = form.cleaned_data
       try: # it must be a post to work
+        seller = Seller.objects.get(pk=request.session['seller_pk'])
         seller.update(data)
         seller.save()
         return HttpResponseRedirect('/seller/home/')
@@ -26,16 +25,17 @@ def edit(request):
         context = {'exception': e}
 
   else:
-    form = SellerForm()
+    form = SellerEditForm()
 
   context = {'form': form}
 
   #redirect to seller.home if successful
-  return render(request, 'seller/edit.html', context)
+  return render(request, 'seller/account/edit.html', context)
 
 @decorator.requires_seller_or_admin
 def asset(request): # use api.jquery.com/jQuery.post/
-  from seller.models import Asset, Category
+  from seller.models import Asset
+  from admin.models import Category
   try: # it must be a post to work
     ilk = request.POST['asset_ilk']
     rank = request.POST['asset_rank']
@@ -66,6 +66,7 @@ def asset(request): # use api.jquery.com/jQuery.post/
 
   except Exception as e:
     context = {'exception': e}
+    return HttpResponse("fail") #ajax response
 
   if 'sucess' in context:
     return HttpResponse("success") #ajax response
