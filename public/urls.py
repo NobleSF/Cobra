@@ -30,5 +30,5 @@ urlpatterns = patterns('',
   url(r'^(?P<username>\w+)/confirmation$', checkout.confirmation, name='confirmation'),
 
   #non-pages, ajax calls
-
+  url(r'^test_meta$', home.test_meta, name='test meta'),
 )
