@@ -1,6 +1,5 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
-from admin.models import Account
 from admin.controller import decorator
 
 @decorator.requires_account
@@ -8,6 +7,7 @@ def home(request, username):
   return render(request, 'public/account/home.html')
 
 def create(request, username=None, password=None):
+  from admin.models import Account
   from django.db import IntegrityError
 
   if request.method == 'POST':
@@ -34,30 +34,36 @@ def create(request, username=None, password=None):
       return render(request, 'public/account/create.html', context)
 
 def login(request, username=None, password=None):
+  from admin.models import Account
+  from public.controller.forms import LoginForm
   if request.method == 'POST':
-    username = request.POST['username']
-    password = request.POST['password']
+    #decrypt_with_private_key()
+    form = LoginForm(request.POST)
+  elif username is not None and password is not None:
+    form = LoginForm(username = username, password = password)
 
-  if username == None: #coming fresh, just go to the page
-    return render(request, 'public/account/login.html')
-  else:
-    try:
+  context = {}
+  try:
+    if form.is_valid():
+      data = form.cleaned_data
+      #process the login
       if Account.objects.get(username=username).password == password:
         request.session['username'] = username
         #if seller, set session['seller_pk']
         #if admin, set session['admin_priveledge']
-        context = {'success': "awesome. you're \logged in now!"}
+        return redirect('home')
       else:
-        context = {'problem': "dude, wrong password."}
-    except Account.DoesNotExist:
-      context = {'problem': "dude, wrong username."}
-    except Exception as e:
-      context = {'exception': e}
+        context = {'problem': "wrong username"}
 
-    if 'success' in context:
-      return redirect('home')
-    else:
-      return render(request, 'public/account/login.html', context)
+  except Account.DoesNotExist:
+    context = {'problem': "account does not exist"}
+
+  except Exception as e:
+    context = {'exception': e}
+
+  if 'form' not in context: context['form'] = LoginForm()
+  #context['public_key'] = create new public key
+  return render(request, 'public/account/login.html', context)
 
 def logout(request, username):
   try:
@@ -71,10 +77,12 @@ def logout(request, username):
   if 'success' in context:
     return redirect('home')
   else:
-    return render(request, 'public/account/logout.html', context)
+    return render(request, 'public/home.html', context)
 
 @decorator.requires_account
 def password(request, username, new_password, secret_hash="", old_password=""):
+  from admin.models import Account
+
   if request.method == 'POST':
     username = request.POST['username']
     old_password = request.POST['old_password']

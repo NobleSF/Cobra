@@ -1,17 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+  {% if form.errors %}
+    <p style="color: red;">
+      Please correct the error{{ form.errors|pluralize }} below.
+    </p>
+  {% endif %}
+
+
   <form action="{% url login %}" method="post">{% csrf_token %}
-
-    <label for="username">Email</label>
-    <input type="email" id="username" name="username"
-           required pattern="\w+" />
-
-    <label for="password">Password</label>
-    <input type="password" id="password" name="password"
-           required title="Enter your password" pattern="regex" />
-
-    <label></label>
+    {{ form.as_p }}
     <input type="submit" value="submit" />
   </form>
 {% endblock content %}
