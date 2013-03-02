@@ -1,7 +1,7 @@
 from django.db import models
-from admin.models import Account, Country, Currency, ShippingOption, Image, Color
 
 class Seller(models.Model):
+  from admin.models import Account, Country, Currency
   account     = models.ForeignKey(Account)
   name        = models.CharField(max_length=50)
   email       = models.EmailField(null=True, blank=True)
@@ -17,6 +17,7 @@ class Seller(models.Model):
     return self.name
 
 class Product(models.Model):
+  from admin.models import Color, ShippingOption
   seller      = models.ForeignKey('Seller')
   is_sold     = models.BooleanField(default=False)
   is_active   = models.BooleanField(default=False)
@@ -37,6 +38,7 @@ class Product(models.Model):
     return self.product_type.name + ' #' + str(self.pk) + ' by ' + self.seller.name
 
 class Asset(models.Model):
+  from admin.models import Image
   PRODUCT  = 1
   ARTISAN  = 2
   TOOL     = 3
