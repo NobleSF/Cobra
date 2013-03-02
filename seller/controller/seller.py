@@ -9,49 +9,38 @@ def home(request, context={}):
 @decorator.requires_seller_or_admin
 def edit(request):
   from seller.models import Seller
+  from seller.controller.forms import SellerForm
+
   seller = Seller.objects.get(pk=request.session['seller_pk'])
 
   if request.method == 'POST':
-    try: # it must be a post to work
-      name      = request.POST['name']
-      email     = request.POST['email']
-      phone     = request.POST['phone']
-      bio       = request.POST['bio']
-      country   = request.POST['country']
-      currency  = request.POST['currency']
-      #validate all these
-      valid = True
-      if valid:
-        seller.name     = name
-        seller.email    = email
-        seller.phone    = phone
-        seller.bio      = bio
-        seller.country  = country
-        seller.currency = currency
+    form = SellerForm(request.POST)
+    if form.is_valid():
+      data = form.cleaned_data
+      try: # it must be a post to work
+        seller.update(data)
         seller.save()
-        context = {'success': "seller info saved"}
+        return HttpResponseRedirect('/seller/home/')
 
-      else:
-        context = {'problem': "something is invalid"}
-
-    except Exception as e:
-      context = {'exception': e}
+      except Exception as e:
+        context = {'exception': e}
 
   else:
-    context = {'success': "go edit something"}
+    form = SellerForm()
 
-  context['seller'] = seller
+  context = {'form': form}
 
+  #redirect to seller.home if successful
   return render(request, 'seller/edit.html', context)
 
 @decorator.requires_seller_or_admin
 def asset(request): # use api.jquery.com/jQuery.post/
   from seller.models import Asset, Category
   try: # it must be a post to work
-    ilk =          request.POST['asset_ilk']
-    rank =   request.POST['asset_rank']
-    name =         request.POST['asset_name']
-    description =  request.POST['asset_description']
+    ilk = request.POST['asset_ilk']
+    rank = request.POST['asset_rank']
+    name = request.POST['asset_name']
+    description = request.POST['asset_description']
 
     asset = Asset.objects.get_or_create(
       ilk = ilk,
@@ -73,7 +62,7 @@ def asset(request): # use api.jquery.com/jQuery.post/
       asset.category.add(*category_object_list)
 
     asset.save()
-    context = {'sucess': "asset saved"}
+    context = {'sucess': True}
 
   except Exception as e:
     context = {'exception': e}
