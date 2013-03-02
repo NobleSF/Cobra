@@ -4,7 +4,7 @@ from admin.controller import decorator
 
 @decorator.requires_account
 def home(request, username):
-  return render(request, 'public/account/home.html')
+  return render(request, 'admin/account/home.html')
 
 def create(request, username=None, password=None):
   from admin.models import Account
@@ -15,7 +15,7 @@ def create(request, username=None, password=None):
     password = request.POST['password']
 
   if username == None: #coming fresh, just go to the page
-    return render(request, 'public/account/create.html')
+    return render(request, 'admin/account/create.html')
   else:
     try:
       new_account = Account(username=username, password=password)
@@ -31,16 +31,16 @@ def create(request, username=None, password=None):
     if 'success' in context:
       return login(request, username=username, password=password)
     else:
-      return render(request, 'public/account/create.html', context)
+      return render(request, 'admin/account/create.html', context)
 
 def login(request, username=None, password=None):
   from admin.models import Account
-  from public.controller.forms import LoginForm
+  from admin.controller.forms import AccountLoginForm
   if request.method == 'POST':
     #decrypt_with_private_key()
-    form = LoginForm(request.POST)
+    form = AccountLoginForm(request.POST)
   elif username is not None and password is not None:
-    form = LoginForm(username = username, password = password)
+    form = AccountLoginForm(username = username, password = password)
 
   context = {}
   try:
@@ -61,9 +61,9 @@ def login(request, username=None, password=None):
   except Exception as e:
     context = {'exception': e}
 
-  if 'form' not in context: context['form'] = LoginForm()
+  if 'form' not in context: context['form'] = AccountLoginForm()
   #context['public_key'] = create new public key
-  return render(request, 'public/account/login.html', context)
+  return render(request, 'admin/account/login.html', context)
 
 def logout(request, username):
   try:
@@ -98,10 +98,10 @@ def password(request, username, new_password, secret_hash="", old_password=""):
 
     if request.method == 'GET' and secret_hash != "": #came from email link
       context = {'secret_hash': secret_hash}
-      return render(request, 'public/account/password.html', context)
+      return render(request, 'admin/account/password.html', context)
     else: #coming fresh, just go to the page
       #reset secret_hash, just in case
-      return render(request, 'public/account/password.html')
+      return render(request, 'admin/account/password.html')
 
   elif old_password != "":
     try:
@@ -133,4 +133,4 @@ def password(request, username, new_password, secret_hash="", old_password=""):
     context = {'problem': "issue submitted to the Vogon bureaucracy"}
 
   #success or not, take them back where they came from.
-  return render(request, 'public/account/password.html', context)
+  return render(request, 'admin/account/password.html', context)

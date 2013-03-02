@@ -17,3 +17,6 @@ def confirmation(request, username):
   return render(request, 'public/checkout/confirmation.html',
     {'username':username}
   )
+
+def custom_order(request):
+  return render(request, 'public/checkout/custom_order.html')
