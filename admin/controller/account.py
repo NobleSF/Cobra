@@ -33,6 +33,12 @@ def create(request, username=None, password=None):
     else:
       return render(request, 'admin/account/create.html', context)
 
+def edit(request):
+  from admin.controller.forms import AccountEditForm
+  form = AccountEditForm()
+
+  return render(request, 'admin/account/edit.html', {'form': form})
+
 def login(request, username=None, password=None):
   from admin.models import Account
   from admin.controller.forms import AccountLoginForm
