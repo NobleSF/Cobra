@@ -26,6 +26,8 @@ def edit(request):
 
   else:
     form = SellerEditForm()
+    form.fields['country'].widget.attrs['disabled'] = True
+    form.fields['currency'].widget.attrs['disabled'] = True
 
   context = {'form': form}
 
