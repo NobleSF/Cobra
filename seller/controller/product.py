@@ -32,6 +32,7 @@ def create(request):
 @decorator.requires_seller_or_admin
 def edit(request, id):
   from seller.models import Product
+  """
   product = Product.objects.get(pk=id)
 
   # if form was submitted
@@ -65,8 +66,8 @@ def edit(request, id):
   else:
     context = {'success': 'go edit something'}
 
-
-  return render(request, 'seller/product/edit.html', context)
+  """
+  return render(request, 'seller/product/edit.html')#, context)
 
 @decorator.requires_seller_or_admin
 def detail(request, id):
