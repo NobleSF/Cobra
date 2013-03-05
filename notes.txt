@@ -3,7 +3,7 @@ User Registration and Managment:
 	https://www.djangopackages.com/grids/g/authentication
 
 Mobile Integration / API app
-	search for pre-made Django API apps
+	http://tastypieapi.org/
 
 Redesign
 	Buttons:
@@ -17,3 +17,8 @@ Redesign
 
 Check code for efficiency:
 	http://flake8.readthedocs.org
+
+Super Fast:
+	collectstatic: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/
+	minify everything
+	cache static pages and homepage
