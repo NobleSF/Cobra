@@ -18,3 +18,16 @@ class SellerEditForm(forms.Form):
       return phone
     else:
       return error
+
+class SellerAssetForm(forms.ModelForm):
+  class Meta:
+    model = Asset
+    exclude = ('seller',)
+
+class ImageForm(forms.Form):#a form for posting directly to S3
+  #action   = http://anou.s3.amazonaws.com/
+  file      = forms.FileField()
+  key       = forms.CharField()
+  acl       = forms.CharField(default='public-read', editable=False)
+  policy    = forms.CharField(default='POLICY', editable=False)
+  signature = forms.CharField(defualt='SIGNATURE', editable=False)

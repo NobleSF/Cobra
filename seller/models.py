@@ -31,7 +31,7 @@ class Asset(models.Model):
   seller        = models.ForeignKey('Seller')
   ilk           = models.PositiveSmallIntegerField(choices=ILK_CHOICES)
   rank          = models.SmallIntegerField()
-  name          = models.CharField(max_length=50)
+  name          = models.CharField(max_length=50, null=True, blank=True)
   description   = models.TextField(null=True, blank=True)
   image         = models.ForeignKey('Image')
   category      = models.ManyToManyField(Category)
