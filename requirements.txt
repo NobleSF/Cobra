@@ -7,5 +7,4 @@ dj-database-url==0.2.1
 numpy==1.6.2
 psycopg2==2.4.5
 sendgrid==0.1.2
-sendgrid-python==0.1.1
 virtualenv==1.8.2
