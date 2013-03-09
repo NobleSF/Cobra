@@ -1,28 +1,46 @@
 #http://pythonconquerstheuniverse.wordpress.com/2012/04/29/python-decorators/
+from django.shortcuts import redirect
 
 def requires_account(function):
   """
   1 verify user is logged in
   2 if not, send to login
   """
-  return function
+  if 'username' in request.session:
+    return function
+  else:
+    context = {'problem': "Login Required", 'next':request}
+    return redirect('login', context)
 
 def requires_seller_or_admin(function):
   """
-  1 verify user is a seller
-  2 if not and not logged in, send to login
-  3 if not and are logged in, deny access
+  1 verify user is a seller or admin
+  2 if not logged in, send to login
+  3 if not seller or admin, deny access
   """
-  return function
+  if 'admin_pk' in request.session or 'seller_pk' in request.session:
+    return function
+  elif 'username' not in request.session:
+    context = {'problem': "Login Required", 'next':request}
+    return redirect('login', context)
+  else:
+    context = {'problem': "Access Denied"}
+    return redirect('home', context)
 
 def requires_admin(function):
   """
   1 verify user is an admin
-  2 if not and not logged in, send to login
-  3 if not and are logged in, deny access
+  2 if not logged in, send to login
+  3 if not admin, deny access
   """
-  return function
-
+  if 'admin_pk' in request.session:
+    return function
+  elif 'username' not in request.session:
+    context = {'problem': "Login Required", 'next':request}
+    return redirect('login', context)
+  else:
+    context = {'problem': "Access Denied"}
+    return redirect('home', context)
 
 def talkative(original_function):
   """
