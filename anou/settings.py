@@ -11,8 +11,7 @@ TEMPLATE_DEBUG = DEBUG
 SITE_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
 ADMINS = (
-    ('Tom Counsell', 'tom@theanou.com'),
-    ('Dan Driscoll', 'dan@theanou.com'),
+    ('Devloper', 'dev@theanou.com'),
 )
 MANAGERS = ADMINS
 
@@ -102,7 +101,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    #'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -121,7 +120,6 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
-    #'authorization',
     'public',
     'seller',
     'admin',
@@ -129,7 +127,7 @@ INSTALLED_APPS = (
     #'communication',
 
     'south',
-    'django.contrib.auth',
+    #'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
@@ -146,7 +144,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
     'django.core.context_processors.static',
-    'django.contrib.auth.context_processors.auth',
+    #'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
 )
 

@@ -143,3 +143,10 @@ def password(request, username, new_password, secret_hash="", old_password=""):
 
   #success or not, take them back where they came from.
   return render(request, 'admin/account/password.html', context)
+
+def process_password(encrypted):
+    #after validation, decrypt with private key
+    decrypted = encrypted
+    #hashed = bcrypt.hash(decrypted)
+    hashed = decrypted
+    return hashed
