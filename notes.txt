@@ -4,6 +4,7 @@ User Registration and Managment:
 
 Mobile Integration / API app
 	http://tastypieapi.org/
+	http://django-rest-framework.org/
 
 Redesign
 	Buttons:
