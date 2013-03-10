@@ -2,36 +2,39 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from admin.controller import decorator
 
-@decorator.requires_account
+#@decorator.requires_account
 def home(request, username):
   return render(request, 'admin/account/home.html')
 
-def create(request, username=None, password=None):
+#@decorator.requires_admin
+#why do customers need accounts?
+def create(request):
+  from admin.controller.forms import AccountCreateForm
   from admin.models import Account
   from django.db import IntegrityError
 
   if request.method == 'POST':
-    username = request.POST['username']
-    password = request.POST['password']
+    form = AccountCreateForm(request.POST)
+    if form.is_valid():
+      data = form.cleaned_data
+      try: # it must be a post to work
+        account = Account(data)
+        account.save()
+        return login(request)
 
-  if username == None: #coming fresh, just go to the page
-    return render(request, 'admin/account/create.html')
-  else:
-    try:
-      new_account = Account(username=username, password=password)
-      new_account.save()
-      #login(username, password)
-      context = {'success': "let's get you logged in"}
+      except IntegrityError:
+        context = {'problem': "account exists"}
+      except Exception as e:
+        context = {'exception': e}
 
-    except IntegrityError:
-      context = {'problem': "account exists"}
-    except Exception as e:
-      context = {'exception': e}
-
-    if 'success' in context:
-      return login(request, username=username, password=password)
     else:
-      return render(request, 'admin/account/create.html', context)
+      context = {'problem': "invalid data"}
+
+  else:
+    form = AccountCreateForm()
+    context = {'form': form}
+
+  return render(request, 'admin/account/create.html', context)
 
 def edit(request):
   from admin.controller.forms import AccountEditForm
@@ -39,35 +42,33 @@ def edit(request):
 
   return render(request, 'admin/account/edit.html', {'form': form})
 
-def login(request, username=None, password=None):
+def login(request):
   from admin.models import Account
   from admin.controller.forms import AccountLoginForm
   if request.method == 'POST':
     #decrypt_with_private_key()
     form = AccountLoginForm(request.POST)
-  elif username is not None and password is not None:
-    form = AccountLoginForm(username = username, password = password)
+    try:
+      if form.is_valid():
+        data = form.cleaned_data
+        #process the login
+        if Account.objects.get(username=username).password == password:
+          request.session['username'] = username
+          #if seller, set session['seller_pk']
+          #if admin, set session['admin_pk']
+          return redirect('home')
+        else:
+          context = {'problem': "wrong password"}
 
-  context = {}
-  try:
-    if form.is_valid():
-      data = form.cleaned_data
-      #process the login
-      if Account.objects.get(username=username).password == password:
-        request.session['username'] = username
-        #if seller, set session['seller_pk']
-        #if admin, set session['admin_priveledge']
-        return redirect('home')
-      else:
-        context = {'problem': "wrong username"}
+    except Account.DoesNotExist:
+      context = {'problem': "account does not exist"}
+    except Exception as e:
+      context = {'exception': e}
+    context['form'] = AccountLoginForm()#return fresh form
 
-  except Account.DoesNotExist:
-    context = {'problem': "account does not exist"}
+  else:
+    context = {'form': AccountLoginForm()}
 
-  except Exception as e:
-    context = {'exception': e}
-
-  if 'form' not in context: context['form'] = AccountLoginForm()
   #context['public_key'] = create new public key
   return render(request, 'admin/account/login.html', context)
 
@@ -85,7 +86,7 @@ def logout(request, username):
   else:
     return render(request, 'public/home.html', context)
 
-@decorator.requires_account
+#@decorator.requires_account
 def password(request, username, new_password, secret_hash="", old_password=""):
   from admin.models import Account
 
@@ -121,6 +122,8 @@ def password(request, username, new_password, secret_hash="", old_password=""):
         context = {'problem': "old password incorrect"}
     except Exception as e:
       context = {'exception': e}
+
+    #todo: don't allow password to be same as username
 
   elif secret_hash != "":
     try:
