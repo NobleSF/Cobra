@@ -11,7 +11,7 @@ class AccountCreateForm(forms.ModelForm):
     model = Account
 
   def clean_password(self):
-    return process_password(cleaned_data['password'])
+    return process_password(self.cleaned_data['password'])
 
 
 class AccountEditForm(forms.ModelForm):
@@ -19,7 +19,7 @@ class AccountEditForm(forms.ModelForm):
     model = Account
 
   def clean_password(self):
-    return process_password(cleaned_data['password'])
+    return process_password(self.cleaned_data['password'])
 
 
 class AccountLoginForm(forms.ModelForm):
@@ -29,7 +29,7 @@ class AccountLoginForm(forms.ModelForm):
     fields = {'username', 'password'}
 
   def clean_password(self):
-    return process_password(cleaned_data['password'])
+    return process_password(self.cleaned_data['password'])
 
 class AccountPasswordForm(forms.Form):
   old_password  = forms.CharField(widget=forms.PasswordInput)
@@ -37,6 +37,6 @@ class AccountPasswordForm(forms.Form):
   #public_key  = forms.CharField(widget=forms.HiddenInput, required=False)
 
   def clean_old_password(self):
-    return process_password(cleaned_data['_old_password'])
+    return process_password(self.cleaned_data['_old_password'])
   def clean_new_password(self):
-    return process_password(cleaned_data['new_password'])
+    return process_password(self.cleaned_data['new_password'])

@@ -2,7 +2,7 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from admin.controller import decorator
 
-@decorator.requires_seller_or_admin
+@access_required('seller')
 def home(request):
   from seller.models import Seller, Product
   try:
@@ -16,7 +16,7 @@ def home(request):
 
   return render(request, 'seller/product/home.html', context)
 
-@decorator.requires_seller_or_admin
+@access_required('seller')
 def create(request):
   from seller.models import Seller, Product
   try:
@@ -29,7 +29,7 @@ def create(request):
     from seller.controller import seller
     return seller.home(request, context)
 
-@decorator.requires_seller_or_admin
+@access_required('seller')
 def edit(request, id):
   from seller.models import Product
   """
@@ -69,11 +69,11 @@ def edit(request, id):
   """
   return render(request, 'seller/product/edit.html')#, context)
 
-@decorator.requires_seller_or_admin
+@access_required('seller')
 def detail(request, id):
   return render(request, 'seller/product/detail.html')
 
-@decorator.requires_seller_or_admin
+@access_required('seller')
 def delete(request, id):
   #archive product and return to product home
   return render(request, 'seller/product/home.html')

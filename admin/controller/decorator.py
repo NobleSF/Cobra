@@ -1,46 +1,24 @@
 #http://pythonconquerstheuniverse.wordpress.com/2012/04/29/python-decorators/
+#for login: http://www.djangofoo.com/253/writing-django-decorators
+
 from django.shortcuts import redirect
+from functools import wraps
 
-def requires_account(function):
-  """
-  1 verify user is logged in
-  2 if not, send to login
-  """
-  if 'username' in request.session:
-    return function
-  else:
-    context = {'problem': "Login Required", 'next':request}
-    return redirect('login', context)
 
-def requires_seller_or_admin(function):
-  """
-  1 verify user is a seller or admin
-  2 if not logged in, send to login
-  3 if not seller or admin, deny access
-  """
-  if 'admin_pk' in request.session or 'seller_pk' in request.session:
-    return function
-  elif 'username' not in request.session:
-    context = {'problem': "Login Required", 'next':request}
-    return redirect('login', context)
-  else:
-    context = {'problem': "Access Denied"}
-    return redirect('home', context)
-
-def requires_admin(function):
-  """
-  1 verify user is an admin
-  2 if not logged in, send to login
-  3 if not admin, deny access
-  """
-  if 'admin_pk' in request.session:
-    return function
-  elif 'username' not in request.session:
-    context = {'problem': "Login Required", 'next':request}
-    return redirect('login', context)
-  else:
-    context = {'problem': "Access Denied"}
-    return redirect('home', context)
+def access_required(permission):
+  def decorator(func):
+    def inner_decorator(request, *args, **kwargs):
+      go_for_it = func(request, *args, **kwargs)
+      if permission == 'admin' and 'admin_pk' in request.session:
+        return go_for_it
+      elif permission == 'seller' and 'seller_pk' in request.session:
+        return go_for_it
+      elif permission == 'account' and 'username' in request.session:
+        return go_for_it
+      else:
+        redirect('login')#, next=go_for_it)
+    return wraps(func)(inner_decorator)
+  return decorator
 
 def talkative(original_function):
   """
@@ -51,3 +29,5 @@ def talkative(original_function):
     original_function(*args, **kwargs)
     print("Exiting ", original_function.__name__)
   return new_function
+
+

@@ -1,13 +1,12 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
-from admin.controller import decorator
+from admin.controller.decorator import access_required
 
-#@decorator.requires_account
+@access_required('account')
 def home(request, username):
   return render(request, 'admin/account/home.html')
 
-#@decorator.requires_admin
-#why do customers need accounts?
+@access_required('admin') #why do customers need accounts?
 def create(request):
   from admin.controller.forms import AccountCreateForm
   from admin.models import Account
@@ -36,13 +35,14 @@ def create(request):
 
   return render(request, 'admin/account/create.html', context)
 
+@access_required('account')
 def edit(request):
   from admin.controller.forms import AccountEditForm
   form = AccountEditForm()
 
   return render(request, 'admin/account/edit.html', {'form': form})
 
-def login(request):
+def login(request, next=None):
   from admin.models import Account
   from admin.controller.forms import AccountLoginForm
   if request.method == 'POST':
@@ -56,9 +56,14 @@ def login(request):
           request.session['username'] = username
           #if seller, set session['seller_pk']
           #if admin, set session['admin_pk']
-          return redirect('home')
+          if next is not None:
+            return next
+          else:
+            return redirect('home')
         else:
           context = {'problem': "wrong password"}
+      else:
+        context = {'problem': "invalid data"}
 
     except Account.DoesNotExist:
       context = {'problem': "account does not exist"}
@@ -86,7 +91,7 @@ def logout(request, username):
   else:
     return render(request, 'public/home.html', context)
 
-#@decorator.requires_account
+@access_required('account')
 def password(request, username, new_password, secret_hash="", old_password=""):
   from admin.models import Account
 
@@ -144,9 +149,10 @@ def password(request, username, new_password, secret_hash="", old_password=""):
   #success or not, take them back where they came from.
   return render(request, 'admin/account/password.html', context)
 
-def process_password(encrypted):
-    #after validation, decrypt with private key
-    decrypted = encrypted
-    #hashed = bcrypt.hash(decrypted)
-    hashed = decrypted
-    return hashed
+def process_password(encrypted): #private function
+  from Crypto.Hash import SHA256
+  #http://www.laurentluce.com/posts/python-and-cryptography-with-pycrypto/
+  #https://www.dlitz.net/software/pycrypto/doc/
+  decrypted = encrypted #decrypt with private key
+  hashed = SHA256.new(decrypted).hexdigest()
+  return hashed

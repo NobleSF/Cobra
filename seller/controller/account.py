@@ -2,11 +2,11 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from admin.controller import decorator
 
-@decorator.requires_seller_or_admin
+@access_required('seller')
 def home(request, context={}):
   return render(request, 'seller/home.html')
 
-@decorator.requires_seller_or_admin
+@access_required('seller')
 def edit(request):
   from seller.models import Seller
   from seller.controller.forms import SellerEditForm
@@ -32,7 +32,7 @@ def edit(request):
   context = {'form': form}
   return render(request, 'seller/account/edit.html', context)
 
-@decorator.requires_seller_or_admin
+@access_required('seller')
 def asset(request): # use api.jquery.com/jQuery.post/
   from seller.models import Asset
   from admin.models import Category
