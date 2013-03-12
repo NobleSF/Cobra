@@ -5,6 +5,7 @@ ANOU_FEE = 0.15
 DAYS_UNTIL_PRODUCT_EXPIRES = 120
 
 UNDER_CONSTRUCTION = False
+INTERNAL_IPS = ('127.0.0.1',)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -106,6 +107,8 @@ MIDDLEWARE_CLASSES = (
   # Uncomment the next line for simple clickjacking protection:
   # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+if DEBUG:
+  MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
 
 ROOT_URLCONF = 'anou.urls'
 
@@ -118,6 +121,8 @@ TEMPLATE_DIRS = (
   # Always use forward slashes, even on Windows.
   # Don't forget to use absolute paths, not relative paths.
 )
+if DEBUG:
+  TEMPLATE_DIRS += ('C:\django\django-debug-toolbar\debug_toolbar\templates',)
 
 INSTALLED_APPS = (
   'public',
@@ -138,6 +143,27 @@ INSTALLED_APPS = (
   # Uncomment the next line to enable admin documentation:
   # 'django.contrib.admindocs',
 )
+if DEBUG:
+  INSTALLED_APPS += ('debug_toolbar',)
+
+DEBUG_TOOLBAR_PANELS = (
+  'debug_toolbar.panels.version.VersionDebugPanel',
+  'debug_toolbar.panels.timer.TimerDebugPanel',
+  'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
+  'debug_toolbar.panels.headers.HeaderDebugPanel',
+  'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+  'debug_toolbar.panels.template.TemplateDebugPanel',
+  'debug_toolbar.panels.sql.SQLDebugPanel',
+  'debug_toolbar.panels.signals.SignalDebugPanel',
+  'debug_toolbar.panels.logger.LoggingPanel',
+)
+
+DEBUG_TOOLBAR_CONFIG = {
+  'INTERCEPT_REDIRECTS': False,
+  #'HIDE_DJANGO_SQL': False,
+  #'TAG': 'div',
+  #'ENABLE_STACKTRACES' : True,
+}
 
 TEMPLATE_CONTEXT_PROCESSORS = (
   'django.core.context_processors.debug',
