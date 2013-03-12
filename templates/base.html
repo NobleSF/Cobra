@@ -35,9 +35,8 @@
         </a>
       </div>
     {% endblock header %}
+    <hr id="header-separator">
   </div>
-
-  <hr id="header-separator">
 
   <div id="body" class="container">
     {% block content %}
@@ -45,9 +44,8 @@
     {% endblock content %}
   </div> <!-- /container -->
 
-  <hr id="footer-separator">
-
   <footer id="footer">
+    <hr id="footer-separator">
     <div class="container">
       <div>
         {% block footer %}
@@ -74,5 +72,5 @@
   {% block javascript %}
   {% endblock javascript %}
 </body>
-{% debug %}
+  {% debug %}
 </html>
