@@ -4,7 +4,7 @@ from admin.controller import decorator
 from django.forms.models import modelformset_factory
 
 def home(request):
-  return render(request, 'public/home.html')
+  return render(request, 'admin/dashboard/home.html')
 
 def country(request):
   from admin.models import Country

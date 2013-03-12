@@ -28,9 +28,10 @@ def create(request):
       context = {'problem': "invalid data"}
 
   else:
+    context = {}
     form = AccountCreateForm()
-    context = {'form': form}
 
+  context['form'] = form
   return render(request, 'admin/account/create.html', context)
 
 @access_required('account')
@@ -73,18 +74,14 @@ def login(request, next=None):
   #context['public_key'] = create new public key
   return render(request, 'admin/account/login.html', context)
 
-def logout(request, username):
+def logout(request):
   try:
-    del request.session['username']
-    context = {'success': "get outta here."}
-  except KeyError: # if no one was logged in
-    context = {'success': "get outta here."}
+    if 'username' in request.session: del request.session['username']
+    if 'admin_id' in request.session: del request.session['admin_id']
+    if 'seller_id' in request.session: del request.session['seller_id']
+    return redirect('home')
   except Exception as e:
     context = {'exception': e}
-
-  if 'success' in context:
-    return redirect('home')
-  else:
     return render(request, 'public/home.html', context)
 
 @access_required('account')

@@ -1,6 +1,6 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
-from admin.controller import decorator
+from admin.controller.decorator import access_required
 
 @access_required('seller')
 def home(request, context={}):

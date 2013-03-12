@@ -1,6 +1,7 @@
 #http://pythonconquerstheuniverse.wordpress.com/2012/04/29/python-decorators/
 #for login: http://www.djangofoo.com/253/writing-django-decorators
 
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from functools import wraps
 
@@ -17,7 +18,8 @@ def access_required(permission):
       elif permission == 'account' and 'username' in request.session:
         return go_for_it
       else:
-        redirect('login')#, next=go_for_it)
+        from admin.controller.account import login
+        return login(request, next=go_for_it)
     return wraps(func)(inner_decorator)
   return decorator
 
