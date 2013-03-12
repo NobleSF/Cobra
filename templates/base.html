@@ -25,9 +25,11 @@
   <div id="header">
     {% block header %}
       <ul id="navigation">
-        <li class='active'><a href="{% url 'home' %}">Home</a></li>
-        <li><a href="{% url 'about' %}">About</a></li>
-        <li><a href="{% url 'login' %}">Login</a></li>
+        <!--<li class='active'><a href="{% url 'home' %}">Home</a></li>-->
+        <!--<li><a href="{% url 'about' %}">About</a></li>-->
+        <li><a href="{% url 'admin:login' %}">Login</a></li>
+        <li><a href="{% url 'admin:logout' %}">Logout</a></li>
+        <li><a href="{% url 'admin:home' %}">Admin</a></li>
       </ul>
       <div id="logo">
         <a href="{% url 'home' %}">
@@ -72,5 +74,5 @@
   {% block javascript %}
   {% endblock javascript %}
 </body>
-  {% debug %}
+  <!--{% debug %}-->
 </html>
