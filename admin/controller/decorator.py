@@ -9,9 +9,10 @@ def access_required(permission):
   def decorator(func):
     def inner_decorator(request, *args, **kwargs):
       go_for_it = func(request, *args, **kwargs)
-      if permission == 'admin' and 'admin_pk' in request.session:
+      if permission == 'admin' and 'admin_id' in request.session:
         return go_for_it
-      elif permission == 'seller' and 'seller_pk' in request.session:
+      elif permission == 'seller' and \
+          ('seller_id' in request.session or 'admin id' in request.session):
         return go_for_it
       elif permission == 'account' and 'username' in request.session:
         return go_for_it
@@ -29,5 +30,3 @@ def talkative(original_function):
     original_function(*args, **kwargs)
     print("Exiting ", original_function.__name__)
   return new_function
-
-
