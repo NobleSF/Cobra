@@ -2,11 +2,11 @@ from django.db import models
 
 class Account(models.Model):
   username      = models.CharField(max_length=50, unique=True)
-  password      = models.CharField(max_length=100)
+  password      = models.CharField(max_length=64)
   name          = models.CharField(max_length=50, blank=True, null=True)
   email         = models.EmailField(blank=True, null=True)
   phone         = models.CharField(max_length=15, blank=True, null=True)
-  is_admin      = models.BooleanField(default=False)
+  is_admin      = models.BooleanField(default=False, verbose_name='Admin')
                   # we will have to expand for different levels of admin
                   # as well as country specific admin
   #update history
@@ -29,7 +29,7 @@ class Country(models.Model): #could expand on pypi.python.org/pypi/django-countr
 class Currency(models.Model):
   name          = models.CharField(max_length=50)
   code          = models.CharField(max_length=3)
-  exchange_rate_to_USD = models.FloatField()
+  exchange_rate_to_USD = models.FloatField(verbose_name='Exchange Rate')
   updated_at    = models.DateTimeField(auto_now = True)
 
   def __unicode__(self):

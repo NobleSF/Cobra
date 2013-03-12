@@ -4,11 +4,10 @@ from admin.models import Account
 from admin.controller.account import process_password
 
 class AccountCreateForm(forms.ModelForm):
-  #username  = forms.EmailField(label="Email")
-  #password  = forms.CharField(widget=forms.PasswordInput)
   #public_key  = forms.CharField(widget=forms.HiddenInput, required=False)
   class Meta:
     model = Account
+    #password  = forms.CharField(widget=forms.PasswordInput)
 
   def clean_password(self):
     return process_password(self.cleaned_data['password'])
@@ -22,11 +21,9 @@ class AccountEditForm(forms.ModelForm):
     return process_password(self.cleaned_data['password'])
 
 
-class AccountLoginForm(forms.ModelForm):
-  #public_key  = forms.CharField(widget=forms.HiddenInput, required=False)
-  class Meta:
-    model = Account
-    fields = {'username', 'password'}
+class AccountLoginForm(forms.Form):
+  username  = forms.CharField()
+  password  = forms.CharField(widget=forms.PasswordInput)
 
   def clean_password(self):
     return process_password(self.cleaned_data['password'])
@@ -37,6 +34,6 @@ class AccountPasswordForm(forms.Form):
   #public_key  = forms.CharField(widget=forms.HiddenInput, required=False)
 
   def clean_old_password(self):
-    return process_password(self.cleaned_data['_old_password'])
+    return process_password(self.cleaned_data['old_password'])
   def clean_new_password(self):
     return process_password(self.cleaned_data['new_password'])
