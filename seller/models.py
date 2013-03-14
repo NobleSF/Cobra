@@ -79,8 +79,8 @@ class ShippingOption(models.Model):
 class Photo(models.Model): #Photos are exclusively product pictures.
   product       = models.ForeignKey('Product')
   rank          = models.SmallIntegerField()
-  url           = models.URLField()
-  thumbnail     = models.URLField()
+  original      = models.ImageField(upload_to='photos')
+  thumbnail     = models.ImageField(upload_to='photos/thumbnails')
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
@@ -89,7 +89,8 @@ class Photo(models.Model): #Photos are exclusively product pictures.
     return self.thumbnail
 
 class Image(models.Model): #Images are used for navigation, thumbnail size
-  url           = models.URLField()
+  original      = models.ImageField(upload_to='photos')
+  thumbnail     = models.ImageField(upload_to='photos/thumbnails')
   #thumbnail file location
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)

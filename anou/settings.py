@@ -70,7 +70,7 @@ STATIC_ROOT = ''
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = '/static/'
+STATIC_URL = 'http://s3.amazonaws.com/anou/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -87,6 +87,12 @@ STATICFILES_FINDERS = (
   'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+AWS_ACCESS_KEY_ID = 'AKIAISBCAIGR4FHXJKBQ'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'anou'
+STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'ie+b=mflibb8_#tzf_3&amp;+l$@=kgbgapj-8odui3b&amp;18a(c!$vz'
@@ -130,7 +136,7 @@ INSTALLED_APPS = (
   'admin',
   #'api',
   #'communication',
-
+  'storages',
   'south',
   #'django.contrib.auth',
   'django.contrib.contenttypes',
