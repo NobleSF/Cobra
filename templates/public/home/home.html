@@ -1,7 +1,14 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block javascript %}
+  <script type="text/javascript" src="{{ STATIC_URL}}javascript/home.js"></script>
+{% endblock javascript %}
 
+{% block css %}
+  <link href="{{ STATIC_URL }}css/home.css" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
   <h2 class="title">Featured</h2>
 
   <ul class="thumbnails">
