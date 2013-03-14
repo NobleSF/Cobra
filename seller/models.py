@@ -80,7 +80,7 @@ class Photo(models.Model): #Photos are exclusively product pictures.
   product       = models.ForeignKey('Product')
   rank          = models.SmallIntegerField()
   original      = models.ImageField(upload_to='photos')
-  thumbnail     = models.ImageField(upload_to='photos/thumbnails')
+  thumb         = models.ImageField(upload_to='photos/thums')
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
@@ -89,8 +89,8 @@ class Photo(models.Model): #Photos are exclusively product pictures.
     return self.thumbnail
 
 class Image(models.Model): #Images are used for navigation, thumbnail size
-  original      = models.ImageField(upload_to='photos')
-  thumbnail     = models.ImageField(upload_to='photos/thumbnails')
+  original      = models.ImageField(upload_to='images')
+  thumb         = models.ImageField(upload_to='images/thumbs')
   #thumbnail file location
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
