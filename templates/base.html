@@ -45,6 +45,11 @@
     <hr id="header-separator">
   </div>
 
+  <div class="errors">
+    {% if problem %}<p>problem: {{ problem }}</p>{% endif %}
+    {% if exception %}<p>exception: {{ exception }}</p>{% endif %}
+  </div>
+
   <div id="body" class="container">
     {% block content %}
       <p>Hello World! It's Anou.</p>
