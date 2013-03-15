@@ -3,7 +3,7 @@ from django.db import models
 class Seller(models.Model):
   from admin.models import Account, Country, Currency
   account       = models.ForeignKey(Account)
-  name          = models.CharField(max_length=50, null=True, blank=True)
+  name          = models.CharField(max_length=50)
   email         = models.EmailField(null=True, blank=True)
   phone         = models.BigIntegerField(null=True, blank=True)
   bio           = models.TextField(null=True, blank=True)
@@ -34,7 +34,7 @@ class Asset(models.Model):
   name          = models.CharField(max_length=50, null=True, blank=True)
   description   = models.TextField(null=True, blank=True)
   image         = models.ForeignKey('Image')
-  category      = models.ManyToManyField(Category)
+  category      = models.ManyToManyField(Category, null=True, blank=True)
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
@@ -80,21 +80,21 @@ class Photo(models.Model): #Photos are exclusively product pictures.
   product       = models.ForeignKey('Product')
   rank          = models.SmallIntegerField()
   original      = models.ImageField(upload_to='photos')
-  thumb         = models.ImageField(upload_to='photos/thums')
+  thumb         = models.ImageField(upload_to='photos/thumbs', null=True)
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
 
   def __unicode__(self):
-    return self.thumbnail
+    return self.thumb
 
 class Image(models.Model): #Images are used for navigation, thumbnail size
   original      = models.ImageField(upload_to='images')
-  thumb         = models.ImageField(upload_to='images/thumbs')
+  thumb         = models.ImageField(upload_to='images/thumbs', null=True)
   #thumbnail file location
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
 
   def __unicode__(self):
-    return self.url
+    return self.thumb
