@@ -3,12 +3,12 @@ from django.db import models
 class Seller(models.Model):
   from admin.models import Account, Country, Currency
   account       = models.ForeignKey(Account)
-  name          = models.CharField(max_length=50)
+  name          = models.CharField(max_length=50, null=True, blank=True)
   email         = models.EmailField(null=True, blank=True)
   phone         = models.BigIntegerField(null=True, blank=True)
   bio           = models.TextField(null=True, blank=True)
-  country       = models.ForeignKey(Country)
-  currency      = models.ForeignKey(Currency)
+  country       = models.ForeignKey(Country, null=True, blank=True)
+  currency      = models.ForeignKey(Currency, null=True, blank=True)
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
