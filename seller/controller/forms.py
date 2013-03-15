@@ -13,7 +13,6 @@ class SellerEditForm(forms.Form):
     phone = self.cleaned_data['phone']
     #require country code
     phone = phone.translate(None, string.digits)
-
     if 10 <= len(phone) <= 14:
       return phone
     else:

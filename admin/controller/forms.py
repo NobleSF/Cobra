@@ -4,14 +4,17 @@ from admin.models import Account
 from admin.controller.account import process_password
 
 class AccountCreateForm(forms.ModelForm):
-  #public_key  = forms.CharField(widget=forms.HiddenInput, required=False)
+  is_seller = forms.BooleanField(label='Seller', required=False)
+  public_key  = forms.CharField(label='', widget=forms.HiddenInput, required=False)
   class Meta:
     model = Account
-    #password  = forms.CharField(widget=forms.PasswordInput)
 
   def clean_password(self):
     return process_password(self.cleaned_data['password'])
-
+  def clean_email(self):
+      email = self.cleaned_data['email']
+      if email == '': email = None
+      return email
 
 class AccountEditForm(forms.ModelForm):
   class Meta:

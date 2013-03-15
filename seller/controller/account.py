@@ -6,6 +6,16 @@ from admin.controller.decorator import access_required
 def home(request, context={}):
   return render(request, 'seller/home.html')
 
+def create(account_id):
+  try:
+    from seller.models import Seller
+    account = Seller(account_id=account_id)
+    account.save()
+    return True
+  except Exception as e:
+    context = {'exception': e}
+    return False
+
 @access_required('seller')
 def edit(request):
   from seller.models import Seller

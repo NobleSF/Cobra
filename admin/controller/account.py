@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from admin.controller.decorator import access_required
 
 @access_required('account')
-def home(request, username):
+def home(request):
   return render(request, 'admin/account/home.html')
 
 @access_required('admin') #why do customers need accounts?
@@ -16,8 +16,16 @@ def create(request):
     form = AccountCreateForm(request.POST)
     if form.is_valid():
       try:
-        form.save()
-        return login(request)
+        account = form.save()
+        if 'is_seller' in request.POST and request.POST['is_seller']:
+          from seller.controller.account import create
+          if create(account.id):
+            return login(request)
+          else:
+            Account.objects.get(pk=account.id).delete()
+            context = {'problem': "couldn't create seller account"}
+        else:
+          return login(request)
 
       except IntegrityError:
         context = {'problem': "account exists"}
@@ -44,6 +52,7 @@ def edit(request):
 def login(request, next=None):
   from admin.models import Account
   from admin.controller.forms import AccountLoginForm
+  from seller.models import Seller
   if request.method == 'POST':
     form = AccountLoginForm(request.POST)
     try:
@@ -51,10 +60,16 @@ def login(request, next=None):
         password = process_password(request.POST['password'])
         account = Account.objects.get(username=username)
         if account.password == password:
-          request.session['username'] = username
+          if 'username' not in request.session:
+            request.session['username'] = account.username
           if account.is_admin:
             request.session['admin_id'] = account.id
-          #if seller, set session['seller_id']
+
+          try: seller = Seller.objects.get(account_id=account.id)
+          except Seller.DoesNotExist: seller = None
+          if seller:
+            request.session['seller_id'] = seller.id
+
           if next is not None:
             return next
           else:
