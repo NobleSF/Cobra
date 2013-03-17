@@ -19,7 +19,7 @@ def create(account_id):
 @access_required('seller')
 def edit(request):
   from seller.models import Seller
-  from seller.controller.forms import SellerEditForm, AssetProductForm, AssetArtisanForm, AssetToolForm, AssetMaterialForm
+  from seller.controller.forms import *
   from django.forms.formsets import formset_factory
 
   AssetProductFormSet   = formset_factory(AssetProductForm, extra=20,
