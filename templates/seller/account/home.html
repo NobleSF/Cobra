@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% load url from future %}
+  <ul>
+    <li><a href="{% url 'seller:edit' %}">My Account</a></li>
+    <li><a href="{% url 'seller:product home' %}">My Products</a></li>
+  </ul>
+{% endblock content %}
