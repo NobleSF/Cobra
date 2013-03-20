@@ -17,6 +17,10 @@ body {
   padding: 2em .5em;
 }
 
+a, a:hover, a:active, a:focus{
+  outline: 0;
+}
+
 #header-separator, #footer-separator {
   margin: 2em;
 }

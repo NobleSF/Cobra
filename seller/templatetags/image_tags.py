@@ -2,7 +2,7 @@ from django import template
 register = template.Library()
 
 @register.inclusion_tag('account/image.html')
-def image_upload(seller_id, asset_ilk, asset_rank):
+def image(image_id):
   from seller.models import Asset, Image
   #asset = get_or_none(Asset, seller=seller_id, ilk=asset_ilk, rank=asset_rank)
   try:

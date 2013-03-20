@@ -30,7 +30,6 @@ class Asset(models.Model):
   )
   seller        = models.ForeignKey('Seller')
   ilk           = models.PositiveSmallIntegerField(choices=ILK_CHOICES)
-  rank          = models.SmallIntegerField()
   name          = models.CharField(max_length=50, null=True, blank=True)
   description   = models.TextField(null=True, blank=True)
   image         = models.ForeignKey('Image')
@@ -90,8 +89,8 @@ class Photo(models.Model): #Photos are exclusively product pictures.
 
 class Image(models.Model): #Images are used for navigation, thumbnail size
   original      = models.ImageField(upload_to='images')
-  thumb         = models.ImageField(upload_to='images/thumbs', null=True)
-  #thumbnail file location
+  thumb         = models.ImageField(upload_to='images/thumbs', null=True)#200x200
+  pinky        = models.ImageField(upload_to='images/pinkies', null=True)#65x65
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
