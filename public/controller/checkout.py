@@ -4,19 +4,19 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 
 def cart(request, username):
-  return render(request, 'public/checkout/cart.html',
+  return render(request, 'checkout/cart.html',
     {'username':username}
   )
 
 def payment(request, username):
-  return render(request, 'public/checkout/payment.html',
+  return render(request, 'checkout/payment.html',
     {'username':username}
   )
 
 def confirmation(request, username):
-  return render(request, 'public/checkout/confirmation.html',
+  return render(request, 'checkout/confirmation.html',
     {'username':username}
   )
 
 def custom_order(request):
-  return render(request, 'public/checkout/custom_order.html')
+  return render(request, 'checkout/custom_order.html')

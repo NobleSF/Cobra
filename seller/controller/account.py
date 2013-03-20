@@ -4,7 +4,7 @@ from admin.controller.decorator import access_required
 
 @access_required('seller')
 def home(request, context={}):
-  return render(request, 'seller/account/home.html')
+  return render(request, 'account/home.html')
 
 def create(account_id):
   try:
@@ -61,7 +61,7 @@ def edit(request):
 
       #repeated for each asset ilk
 
-        return HttpResponseRedirect('/seller/account/home/')
+        return HttpResponseRedirect('account/home/')
 
     except Exception as e:
       context = {'exception': e}
@@ -88,7 +88,7 @@ def edit(request):
               'tool_formset':     tool_formset,
               'material_formset': material_formset,
             }
-  return render(request, 'seller/account/edit.html', context)
+  return render(request, 'account/edit.html', context)
 
 @access_required('seller')
 def asset(request): # use api.jquery.com/jQuery.post/

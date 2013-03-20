@@ -4,6 +4,6 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 
 def home(request, id):
-  return render(request, 'public/store.html',
+  return render(request, 'store/home.html',
     {'id':id}
   )

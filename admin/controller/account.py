@@ -4,7 +4,7 @@ from admin.controller.decorator import access_required
 
 @access_required('account')
 def home(request):
-  return render(request, 'admin/account/home.html')
+  return render(request, 'account/home.html')
 
 @access_required('admin') #why do customers need accounts?
 def create(request):
@@ -40,14 +40,14 @@ def create(request):
     form = AccountCreateForm()
 
   context['form'] = form
-  return render(request, 'admin/account/create.html', context)
+  return render(request, 'account/create.html', context)
 
 @access_required('account')
 def edit(request):
   from admin.controller.forms import AccountEditForm
   form = AccountEditForm()
 
-  return render(request, 'admin/account/edit.html', {'form': form})
+  return render(request, 'account/edit.html', {'form': form})
 
 def login(request, next=None):
   from admin.models import Account
@@ -87,7 +87,7 @@ def login(request, next=None):
     context = {'form': AccountLoginForm()}
 
   #context['public_key'] = create new public key
-  return render(request, 'admin/account/login.html', context)
+  return render(request, 'account/login.html', context)
 
 def logout(request):
   try:
@@ -118,10 +118,10 @@ def password(request, username, new_password, secret_hash="", old_password=""):
 
     if request.method == 'GET' and secret_hash != "": #came from email link
       context = {'secret_hash': secret_hash}
-      return render(request, 'admin/account/password.html', context)
+      return render(request, 'account/password.html', context)
     else: #coming fresh, just go to the page
       #reset secret_hash, just in case
-      return render(request, 'admin/account/password.html')
+      return render(request, 'account/password.html')
 
   elif old_password != "":
     try:
@@ -155,7 +155,7 @@ def password(request, username, new_password, secret_hash="", old_password=""):
     context = {'problem': "issue submitted to the Vogon bureaucracy"}
 
   #success or not, take them back where they came from.
-  return render(request, 'admin/account/password.html', context)
+  return render(request, 'account/password.html', context)
 
 def process_password(encrypted): #private function
   from Crypto.Hash import SHA256

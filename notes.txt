@@ -23,6 +23,10 @@ Redesign
 Check code for efficiency:
 	http://flake8.readthedocs.org
 
+Server/Application Monitoring:
+	http://thechangelog.com/log2viz-logs-as-data-for-performance-visibility/
+	need to research our options: django packages vs 3rd party analytics
+
 Super Fast:
 	collectstatic: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/
 	minify everything

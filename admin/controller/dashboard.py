@@ -4,7 +4,7 @@ from admin.controller import decorator
 from django.forms.models import modelformset_factory
 
 def home(request):
-  return render(request, 'admin/dashboard/home.html')
+  return render(request, 'dashboard/home.html')
 
 def country(request):
   from admin.models import Country
@@ -19,7 +19,7 @@ def country(request):
   else:
     formset = CountryFormSet(queryset=Country.objects.all())
   context['formset'] = formset
-  return render(request, 'admin/dashboard/formset.html', context)
+  return render(request, 'dashboard/formset.html', context)
 
 def currency(request):
   from admin.models import Currency
@@ -34,7 +34,7 @@ def currency(request):
   else:
     formset = CurrencyFormSet(queryset=Currency.objects.all())
   context['formset'] = formset
-  return render(request, 'admin/dashboard/formset.html', context)
+  return render(request, 'dashboard/formset.html', context)
 
 def color(request):
   from admin.models import Color
@@ -49,7 +49,7 @@ def color(request):
   else:
     formset = ColorFormSet(queryset=Color.objects.all())
   context['formset'] = formset
-  return render(request, 'admin/dashboard/formset.html', context)
+  return render(request, 'dashboard/formset.html', context)
 
 def category(request):
   from admin.models import Category
@@ -64,7 +64,7 @@ def category(request):
   else:
     formset = CategoryFormSet(queryset=Category.objects.all())
   context['formset'] = formset
-  return render(request, 'admin/dashboard/formset.html', context)
+  return render(request, 'dashboard/formset.html', context)
 
 def rating_subject(request):
   from admin.models import RatingSubject
@@ -79,4 +79,4 @@ def rating_subject(request):
   else:
     formset = RatingSubjectFormSet(queryset=RatingSubject.objects.all())
   context['formset'] = formset
-  return render(request, 'admin/dashboard/formset.html', context)
+  return render(request, 'dashboard/formset.html', context)
