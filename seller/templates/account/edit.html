@@ -2,7 +2,7 @@
 {% block css %}
   <style>
     .hidden_fields, #asset_forms{display: none;}
-    .extra{display: none;}
+    .extra, .end_of_container{display: none;}
     .description{height: 5em;}
 
     #artisan_formset, #product_formset, #tool_formset, #material_formset{
@@ -15,30 +15,7 @@
 {% endblock css%}
 
 {% block javascript %}
-  <script type="text/javascript">
-    $().ready( function(){
-      //assign bootstrap classes
-      $('button').addClass('btn');
-      $('#asset_tabs').addClass('nav').addClass('nav-tabs');
-      $('#asset_tabs').children('li').first().addClass('active');
-      $('#artisan_tab').trigger('click');
-    });
-
-    $('.asset_tab').click(function(){
-      //make this tab active
-      $('.asset_tab').removeClass('active');
-      $(this).addClass('active');
-      //hide all asset containers, then show the right one
-      $('.asset_container').hide();
-      asset_ilk = $(this).attr('id').replace('_tab','');
-      $('#'+asset_ilk+'_container').show();
-    })
-
-    $('#title').click(function(){
-      $('#seller_form').slideToggle();
-    });
-
-  </script>
+<script src="{{ STATIC_URL }}javascript/seller/account_edit.js"></script>
 {% endblock javascript%}
 
 {% block content %}
@@ -61,17 +38,16 @@
   {% load image_tags %}
 
   <div id='asset_forms'>
-    <h2>Assets</h2>
     {% for asset_form in asset_formset %}
-      <form>
-        <div id='asset_{{forloop.counter}}' class='asset'>
+      <div id='asset_{{forloop.counter}}' class='asset'>
+        <form>
           <div class='hidden_fields'>
             {{ asset_form.ilk }}
             {{ asset_form.image }}
             {{ asset_form.DELETE }}
           </div>
           <ul>
-            <li>
+            <li class='asset_image'>
               {% image asset_form.image.value %}
             </li>
             <li>{{ asset_form.name }}</li>
@@ -80,8 +56,8 @@
               {{ asset_form.category }}
             </li>
           </ul>
-        </div>
-      </form>
+        </form>
+      </div>
     {% endfor %}
   </div>
 
@@ -95,7 +71,6 @@
 
   {% for asset_ilk in asset_ilks %}
     <div id='{{ asset_ilk }}_container' class='asset_container'>
-      <h1>{{ asset_ilk|title }}{{ 2|pluralize }}</h1>
     </div>
   {% endfor %}
 
