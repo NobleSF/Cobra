@@ -24,11 +24,11 @@ def edit(request):
 
   AssetProductFormSet   = formset_factory(AssetProductForm, extra=20,
                                           can_order=True, can_delete=True)
-  AssetArtisanFormSet   = formset_factory(AssetArtisanForm, extra=20,
+  AssetArtisanFormSet   = formset_factory(AssetForm, extra=20,
                                           can_order=True, can_delete=True)
-  AssetToolFormSet      = formset_factory(AssetToolForm, extra=20,
+  AssetToolFormSet      = formset_factory(AssetForm, extra=20,
                                           can_order=True, can_delete=True)
-  AssetMaterialFormSet  = formset_factory(AssetMaterialForm, extra=20,
+  AssetMaterialFormSet  = formset_factory(AssetForm, extra=20,
                                           can_order=True, can_delete=True)
   #use order fields as the rank number
 
@@ -69,13 +69,17 @@ def edit(request):
   else: #not POST
     seller_form       = SellerEditForm()
     if 'admin_id' not in request.session:
-      form.fields['country'].widget.attrs['disabled'] = True
-      form.fields['currency'].widget.attrs['disabled'] = True
+      seller_form.fields['country'].widget.attrs['disabled'] = True
+      seller_form.fields['currency'].widget.attrs['disabled'] = True
 
-    product_formset   = AssetProductFormSet(  prefix='product')
-    artisan_formset   = AssetArtisanFormSet(  prefix='artisan')
-    tool_formset      = AssetToolFormSet(     prefix='tool')
-    material_formset  = AssetMaterialFormSet( prefix='material')
+    product_formset   = AssetProductFormSet(  prefix='product',
+                                              initial=[{'ilk': u'product',}])
+    artisan_formset   = AssetArtisanFormSet(  prefix='artisan',
+                                              initial=[{'ilk': u'artisan',}])
+    tool_formset      = AssetToolFormSet(     prefix='tool',
+                                              initial=[{'ilk': u'tool',}])
+    material_formset  = AssetMaterialFormSet( prefix='material',
+                                              initial=[{'ilk': u'material',}])
 
   context = {
               'seller_form':      seller_form,

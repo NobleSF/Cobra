@@ -1,13 +1,15 @@
 from django.db import models
 from django import forms
 from seller.models import Asset, Product, Seller
+from admin.models import Category
 
 class SellerEditForm(forms.Form):
   from admin.models import Country, Currency
   name      = forms.CharField()
   email     = forms.EmailField(required=False)
   phone     = forms.CharField(required=False)
-  bio       = forms.CharField(widget=forms.Textarea, required=False)
+  bio       = forms.CharField(widget=forms.Textarea(attrs={'class':"description"}),
+                              required=False)
   country   = forms.ModelChoiceField(queryset=Country.objects.all())
   currency  = forms.ModelChoiceField(queryset=Currency.objects.all())
 
@@ -21,42 +23,33 @@ class SellerEditForm(forms.Form):
       return error
 
 class AssetProductForm(forms.Form):
-  ilk         = forms.HiddenInput(value='product')
-  image       = forms.HiddenInput()#stores the id of the uploaded image
-  name        = forms.CharField(max_length=50, required=False)
-  description = forms.Textarea(required=False)
-  category    = forms.SelectMultiple(required=False,
-                                      choices=Category.objects.all()#category model
-                                    )
+  ilk         = forms.CharField(widget=forms.TextInput(attrs={'class':"ilk"}),
+                                initial='product')
+  #image takes id of image after ajax upload
+  image       = forms.CharField(widget=forms.TextInput(attrs={'class':"image_text"}))
+  name        = forms.CharField(widget=forms.TextInput(
+                                attrs={'class':"name", 'placeholder':"Name/Smiya"}),
+                                max_length=50, required=False)
+  description = forms.CharField(widget=forms.Textarea(
+                                attrs={'class':"description", 'placeholder':"description"}),
+                                required=False)
+  category    = forms.ModelMultipleChoiceField( widget=forms.SelectMultiple(),
+                                                queryset=Category.objects.all())
+  ORDER       = forms.CharField(widget=forms.TextInput(attrs={'class':"order"}))
+  DELETE      = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class':"delete"}))
 
-class AssetArtisanForm(forms.Form):
-  ilk         = forms.HiddenInput(value='artisan')
-  image       = forms.HiddenInput()#stores the id of the uploaded image
-  name        = forms.CharField(max_length=50, required=False)
-  description = forms.Textarea(required=False)
-
-class AssetToolForm(forms.Form):
-  ilk         = forms.HiddenInput(value='tool')
-  image       = forms.HiddenInput()#stores the id of the uploaded image
-  name        = forms.CharField(max_length=50, required=False)
-  description = forms.Textarea(required=False)
-
-class AssetMaterialForm(forms.Form):
-  ilk         = forms.HiddenInput(value='material')
-  image       = forms.HiddenInput()#stores the id of the uploaded image
-  name        = forms.CharField(max_length=50, required=False)
-  description = forms.Textarea(required=False)
-
-#attempt at a generic Asset Form
-class AssetForm(forms.Form, ilk):
-  ilk         = forms.HiddenInput(value=ilk)
-  image       = forms.HiddenInput()#stores the id of the uploaded image
-  name        = forms.CharField(max_length=50, required=False)
-  description = forms.Textarea(required=False)
-  if ilk == 'product':
-    category  = forms.SelectMultiple(required=False,
-                                      choices=Category.objects.all()#category model
-                                    )
+class AssetForm(forms.Form):
+  ilk         = forms.CharField(widget=forms.TextInput(attrs={'class':"ilk"}))
+  #image takes id of image after ajax upload
+  image       = forms.CharField(widget=forms.TextInput(attrs={'class':"image_text"}))
+  name        = forms.CharField(widget=forms.TextInput(
+                                attrs={'class':"name", 'placeholder':"Name/Smiya"}),
+                                max_length=50, required=False)
+  description = forms.CharField(widget=forms.Textarea(
+                                attrs={'class':"description", 'placeholder':"description"}),
+                                required=False)
+  ORDER       = forms.CharField(widget=forms.TextInput(attrs={'class':"order"}))
+  DELETE      = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class':"delete"}))
 
 class ImageForm(forms.Form):#a form for posting directly to S3
   action      = "http://anou.s3.amazonaws.com/"

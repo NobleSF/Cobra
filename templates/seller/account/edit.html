@@ -1,19 +1,109 @@
 {% extends "base.html" %}
+{% block css %}
+  <style>
+    input.ilk, input.image_text{display: none;}
+    .extra{display: none;}
+    .description{height: 5em;}
+
+    #artisan_formset, #product_formset, #tool_formset, #material_formset{
+      border: 5px solid gray;
+    }
+    ul.asset{list-style: none; text-align: center}
+    ul.asset li{padding: 10px 0 0}
+
+  </style>
+{% endblock css%}
+
+{% block javascript %}
+  <script type="text/javascript">
+    $().ready( function(){
+      $("button").addClass('btn');
+    });
+  </script>
+{% endblock javascript%}
 
 {% block content %}
   {% load url from future %}
-    <h1>Edit Seller Account</h1>
+  <h1>Edit Seller Account</h1>
 
-    {% if form.errors %}
-        <p style="color: red;">
-            Please correct the error{{ form.errors|pluralize }} below.
-        </p>
-    {% endif %}
+  {% if form.errors %}
+    <p style="color: red;">
+        Please correct the error{{ form.errors|pluralize }} below.
+    </p>
+  {% endif %}
 
-    <form action="" method="post">
-        <table>
-            {{ form.as_table }}
-        </table>
-        <input type="submit" value="Submit">
-    </form>
+  <form action="" method="post">{% csrf_token %}
+
+    <div id='seller_form'>
+      <h2>Seller Information</h2>
+      <table>{{ seller_form.as_table }}</table>
+    </div>
+
+    <div id='artisan_formset'>
+      <h2>Artisans</h2>
+      {% for artisan_form in artisan_formset %}
+        <div
+          id='artisan_form_{{forloop.counter}}'
+          class='artisan_form {% if not artisan_form.ORDER.value %}extra{% endif %}'
+        >
+          <ul class='asset'>
+            <li><img data-src="holder.js/200x200" width="200" /></li>
+            <li>{{ artisan_form.name }}</li>
+            <li>{{ artisan_form.description }}</li>
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div id='product_formset'>
+      <h2>Products</h2>
+      {% for product_form in product_formset %}
+        <div
+          id='product_form_{{forloop.counter}}'
+          class='product_form {% if not product_form.ORDER.value %}extra{% endif %}'
+        >
+          <ul class='asset'>
+            <li><img data-src="holder.js/200x200" width="200" /></li>
+            <li>{{ product_form.name }}</li>
+            <li>{{ product_form.description }}</li>
+            <li>{{ product_form.category }}</li>
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div id='tool_formset'>
+      <h2>Tools</h2>
+      {% for tool_form in tool_formset %}
+        <div
+          id='tool_form_{{forloop.counter}}'
+          class='tool_form {% if not tool_form.ORDER.value %}extra{% endif %}'
+        >
+          <ul class='asset'>
+            <li><img data-src="holder.js/200x200" width="200" /></li>
+            <li>{{ tool_form.name }}</li>
+            <li>{{ tool_form.description }}</li>
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div id='material_formset'>
+      <h2>Materials</h2>
+      {% for material_form in material_formset %}
+        <div
+          id='material_form_{{forloop.counter}}'
+          class='material_form {% if not material_form.ORDER.value %}extra{% endif %}'
+        >
+          <ul class='asset'>
+            <li><img data-src="holder.js/200x200" width="200" /></li>
+            <li>{{ material_form.name }}</li>
+            <li>{{ material_form.description }}</li>
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+
+    <button type="submit">All Done!</button>
+  </form>
 {% endblock content %}
