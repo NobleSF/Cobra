@@ -14,7 +14,7 @@ def home(request):
   except Exception as e:
     context = {'exception': e}
 
-  return render(request, 'seller/product/home.html', context)
+  return render(request, 'product/home.html', context)
 
 @access_required('seller')
 def create(request):
@@ -22,7 +22,7 @@ def create(request):
   try:
     product = Product(seller = request.session['seller_pk'])
     product.save()
-    return HttpResponseRedirect('seller/product/'+product.pk+'/edit/')
+    return HttpResponseRedirect('product/'+product.pk+'/edit/')
 
   except Exception as e:
     context = {'exception': e}
@@ -67,13 +67,13 @@ def edit(request, id):
     context = {'success': 'go edit something'}
 
   """
-  return render(request, 'seller/product/edit.html')#, context)
+  return render(request, 'product/edit.html')#, context)
 
 @access_required('seller')
 def detail(request, id):
-  return render(request, 'seller/product/detail.html')
+  return render(request, 'product/detail.html')
 
 @access_required('seller')
 def delete(request, id):
   #archive product and return to product home
-  return render(request, 'seller/product/home.html')
+  return render(request, 'product/home.html')
