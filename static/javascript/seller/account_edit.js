@@ -27,7 +27,6 @@ $('.asset_image').click(function(){
   addAssetForms();
 });
 
-
 function addAssetForms(){
   //use jquery appendTo function to move blank asset forms
   //to asset containers so there is always at least one fresh one.
@@ -41,7 +40,6 @@ function addAssetForms(){
       //count empty forms
       image_text_element = $(this).find('form > .hidden_fields > .image_text').first();
       if (image_text_element.val() == ''){
-
         empty_forms++;
       }
     });
@@ -50,23 +48,8 @@ function addAssetForms(){
     if (empty_forms == 0){
       //grab an empty form from the hidden .asset_forms div
       next_asset_form = $('#asset_forms > .asset').first();
-
       //move it into the container after the last form in there
       next_asset_form.appendTo($(this));
     }
   });
 }
-
-(function($) {
-    $.fn.closest_descendent = function(filter) {
-        var $found = $(),
-            $currentSet = this; // Current place
-        while ($currentSet.length) {
-            $found = $currentSet.filter(filter);
-            if ($found.length) break;  // At least one match: break loop
-            // Get all children of the current set
-            $currentSet = $currentSet.children();
-        }
-        return $found.first(); // Return first match of the collection
-    }
-})(jQuery);
