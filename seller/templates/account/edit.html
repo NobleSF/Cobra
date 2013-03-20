@@ -39,6 +39,8 @@
       <table>{{ seller_form.as_table }}</table>
     </div>
 
+    {% load image_tags %}
+
     <div id='artisan_formset'>
       <h2>Artisans</h2>
       {% for artisan_form in artisan_formset %}
@@ -63,7 +65,9 @@
           class='product_form {% if not product_form.ORDER.value %}extra{% endif %}'
         >
           <ul class='asset'>
-            <li><img data-src="holder.js/200x200" width="200" /></li>
+            <li>
+              {% image_upload product_form.image.value %}
+            </li>
             <li>{{ product_form.name }}</li>
             <li>{{ product_form.description }}</li>
             <li>{{ product_form.category }}</li>
