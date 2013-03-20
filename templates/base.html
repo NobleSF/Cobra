@@ -27,13 +27,18 @@
       <ul id="navigation">
         <!--<li class='active'><a href="{% url 'home' %}">Home</a></li>-->
         <!--<li><a href="{% url 'about' %}">About</a></li>-->
+
+        {% if 'admin_id' in request.session %}
+          <li><a href="{% url 'admin:home' %}">Admin</a></li>
+        {% endif %}
+        {% if 'seller_id' in request.session %}
+          <li><a href="{% url 'seller:home' %}">Seller</a></li>
+        {% endif %}
+
         {% if 'username' not in request.session %}
           <li><a href="{% url 'admin:login' %}">Login</a></li>
         {% else %}
           <li><a href="{% url 'admin:logout' %}">Logout</a></li>
-        {% endif %}
-        {% if 'admin_id' in request.session %}
-          <li><a href="{% url 'admin:home' %}">Admin</a></li>
         {% endif %}
       </ul>
       <div id="logo">
