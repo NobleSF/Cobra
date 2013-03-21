@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+  {% load url from future %}
 
   {% if form.errors %}
     <p style="color: red;">
@@ -8,7 +9,7 @@
     </p>
   {% endif %}
 
-  <form action="" method="post">{% csrf_token %}
+  <form action="{% url 'admin:login' %}" method="post">{% csrf_token %}
     <table>
       {{ form.as_table }}
     </table>

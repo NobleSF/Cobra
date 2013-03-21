@@ -35,9 +35,10 @@
           <li><a href="{% url 'seller:home' %}">Seller</a></li>
         {% endif %}
 
-        {% if 'username' not in request.session %}
+        {% if 'seller_id' not in request.session %}
           <li><a href="{% url 'admin:login' %}">Login</a></li>
-        {% else %}
+        {% endif %}
+        {% if 'username' in request.session %}
           <li><a href="{% url 'admin:logout' %}">Logout</a></li>
         {% endif %}
       </ul>
