@@ -3,8 +3,8 @@ $().ready( function(){
   $('button').addClass('btn');
   $('#asset_tabs').addClass('nav').addClass('nav-tabs');
   $('#asset_tabs').children('li').first().addClass('active');
-  $('#artisan_tab').trigger('click');
-  $('#title').trigger('click');
+  $('#artisan_tab').trigger('click');//activate first tab
+  $('#title').trigger('click');//get out of the way
   addAssetForms();
 });
 

@@ -55,18 +55,19 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = os.path.join(SITE_ROOT, 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = ''
+MEDIA_URL = 'http://s3.amazonaws.com/anou/media/'
+if DEBUG: MEDIA_URL = '/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = '/static/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -94,6 +95,13 @@ AWS_ACCESS_KEY_ID = 'AKIAISBCAIGR4FHXJKBQ'
 AWS_SECRET_ACCESS_KEY = 'KzVwQpxDvlR6ekDHUar9mmGDiIo1hiN+1SrHLs7L'
 AWS_STORAGE_BUCKET_NAME = 'anou'
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
+THUMBNAIL_ALIASES = {
+  '':{
+    'thumb': {'size': (200,200), 'crop':False},
+    'pinky': {'size': (50, 50),  'crop':False},
+  },
+}
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'ie+b=mflibb8_#tzf_3&amp;+l$@=kgbgapj-8odui3b&amp;18a(c!$vz'
@@ -137,6 +145,8 @@ INSTALLED_APPS = (
   'admin',
   #'api',
   #'communication',
+  'ajaxuploader',
+  'easy_thumbnails',
   'storages',
   'south',
   #'django.contrib.auth',

@@ -7,10 +7,12 @@ urlpatterns = patterns('',
   url(r'^edit$', account.edit, name='edit'), #edit seller info
   url(r'^asset$', account.asset, name='asset'), #create/update asset via ajax
 
+  url(r'^ajax/image_upload$', account.image_upload, name="image upload"),
+  url(r'^ajax/photo_upload$', account.photo_upload, name="photo upload"),
+
   url(r'^product$', product.home, name='product home'), #all products
   url(r'^product/create$', product.create, name='product create'),
   url(r'^product/(?P<id>\d+)$', product.detail, name='product detail'),
   url(r'^product/(?P<id>\d+)/edit$', product.edit, name='product edit'),
   url(r'^product/(?P<id>\d+)/delete$', product.delete, name='product delete'),
-
 )

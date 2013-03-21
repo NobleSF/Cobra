@@ -23,6 +23,10 @@ Redesign
 Check code for efficiency:
 	http://flake8.readthedocs.org
 
+Included packages:
+	https://github.com/GoodCloud/django-ajax-uploader
+	https://github.com/SmileyChris/easy-thumbnails
+	
 Server/Application Monitoring:
 	http://thechangelog.com/log2viz-logs-as-data-for-performance-visibility/
 	need to research our options: django packages vs 3rd party analytics
@@ -30,4 +34,4 @@ Server/Application Monitoring:
 Super Fast:
 	collectstatic: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/
 	minify everything
-	cache static pages and homepage
+	cache static files and homepage

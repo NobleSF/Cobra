@@ -11,16 +11,52 @@
     .asset ul{list-style: none; text-align: center}
     .asset ul li{padding: 0}
     .asset ul li.asset_image{
-      padding: 7px 0px;
-      margin: 0 0 10px;
+      width: 200px;
+      height: 200px;
+      padding: 3px;
+      margin: 0 auto 10px;
       border: 2px solid #F0F0F0;
     }
 
   </style>
+  <link href="{{ STATIC_URL }}ajaxuploader/css/fileuploader.css" media="screen" rel="stylesheet" type="text/css" />
 {% endblock css%}
 
 {% block javascript %}
-<script src="{{ STATIC_URL }}javascript/seller/account_edit.js"></script>
+  {% load url from future %}
+  <script type='text/javascript'>
+    $().ready( function(){
+      $('.asset_image').attr('id','file-uploader');//make this a file-uploader box
+      initializeFileUploader();
+    });
+
+    function initializeFileUploader(){
+    var uploader = new qq.FileUploader({
+      action: "{% url 'seller:image upload' %}",
+      element: $('#file-uploader')[0],
+      multiple: true,
+      onComplete: function(id, fileName, responseJSON) {
+        if(responseJSON.success) {
+          alert("success!");
+        } else {
+          alert("upload failed!");
+        }
+      },
+      onAllComplete: function(uploads) {
+        // uploads is an array of maps
+        // the maps look like this: {file: FileObject, response: JSONServerResponse}
+        alert("All complete!");
+      },
+      params: {
+        'csrf_token': '{{ csrf_token }}',
+        'csrf_name': 'csrfmiddlewaretoken',
+        'csrf_xname': 'X-CSRFToken',
+      },
+    });
+  }
+  </script>
+  <script src="{{ STATIC_URL }}javascript/seller/account_edit.js"></script>
+  <script src="{{ STATIC_URL }}ajaxuploader/js/fileuploader.js" ></script>
 {% endblock javascript%}
 
 {% block content %}

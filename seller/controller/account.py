@@ -1,6 +1,8 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from admin.controller.decorator import access_required
+from django.middleware.csrf import get_token
+from ajaxuploader.views import AjaxFileUploader
 
 @access_required('seller')
 def home(request, context={}):
@@ -45,10 +47,12 @@ def edit(request):
     asset_form = AssetForm()
     image_form = ImageForm()
 
+  csrf_token = get_token(request)#does this need a new token for each upload?
   context = {
               'seller_form': seller_form,
               'asset_form': asset_form,
               'image_form': image_form,
+              'csrf_token': csrf_token,
               'asset_ilks': ['artisan','product','tool','material']
             }
   return render(request, 'account/edit.html', context)
@@ -60,7 +64,7 @@ def asset(request): # use api.jquery.com/jQuery.post/
   from seller.controller.forms import AssetProductForm
   from django.forms.formsets import formset_factory
 
-  try: # it must be a post to work
+  try: # it must be an ajax post to work
     form = AssetForm(request.POST, request.FILES)
     if formset.is_valid():
       #asset = Asset.objects.get_or_create(**form.cleaned_data)
@@ -74,3 +78,6 @@ def asset(request): # use api.jquery.com/jQuery.post/
     context = {'exception': e}
 
   return HttpResponse(context) #ajax response
+
+image_upload = AjaxFileUploader()
+photo_upload = AjaxFileUploader()
