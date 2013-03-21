@@ -47,9 +47,13 @@ function addAssetForms(){
     //if there are no empty forms, add one
     if (empty_forms == 0){
       //grab an empty form from the hidden .asset_forms div
-      next_asset_form = $('#asset_forms > .asset').first();
-      //move it into the container after the last form in there
-      next_asset_form.appendTo($(this));
+      new_asset_form = $('#asset_forms > .asset').first().clone(true);
+      //if not product containter, hide category element
+      if ($(this).attr('id').replace('_container','') !== 'product'){
+        new_asset_form.find('.asset_category').hide();
+      }
+      //place it in the container
+      new_asset_form.appendTo($(this));
     }
   });
 }

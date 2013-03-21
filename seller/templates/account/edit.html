@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block css %}
   <style>
-    .hidden_fields, #asset_forms{display: none;}
+    .hidden_fields, #asset_forms, .image_form{display: none;}
     .asset{float: left;}
     .description{height: 5em;}
 
@@ -9,7 +9,12 @@
       border: 5px solid gray;
     }
     .asset ul{list-style: none; text-align: center}
-    .asset ul li{padding: 10px 0 0}
+    .asset ul li{padding: 0}
+    .asset ul li.asset_image{
+      padding: 7px 0px;
+      margin: 0 0 10px;
+      border: 2px solid #F0F0F0;
+    }
 
   </style>
 {% endblock css%}
@@ -38,33 +43,36 @@
   {% load image_tags %}
 
   <div id='asset_forms'>
-    {% for asset_form in asset_formset %}
-      <div id='asset_{{forloop.counter}}' class='asset'>
-        <form>
-          <div class='hidden_fields'>
-            {{ asset_form.ilk }}
-            {{ asset_form.image }}
-            {{ asset_form.DELETE }}
-          </div>
-          <ul>
-            <li class='asset_image'>
-              {% image asset_form.image.value %}
-            </li>
-            <li>{{ asset_form.name }}</li>
-            <li>{{ asset_form.description }}</li>
-            <li id='asset_{{forloop.counter}}_category'>
+    <div class='asset'>
+      <form action='{{ image_form.action }}' class='image_form'>
+        {{ image_form }}
+      </form>
+      <form>
+        <div class='hidden_fields'>
+          {{ asset_form.ilk }}
+          {{ asset_form.image }}
+          {{ asset_form.DELETE }}
+        </div>
+        <ul>
+          <li class='asset_image'>
+            {% image asset_form.image.value %}
+          </li>
+          <li>{{ asset_form.name }}</li>
+          <li>{{ asset_form.description }}</li>
+          <li class='asset_category'>
+            {% if 'admin_id' in request.session %}
               {{ asset_form.category }}
-            </li>
-          </ul>
-        </form>
-      </div>
-    {% endfor %}
+            {% endif %}
+          </li>
+        </ul>
+      </form>
+    </div>
   </div>
 
   <ul id='asset_tabs'>
     {% for asset_ilk in asset_ilks %}
       <li id='{{ asset_ilk }}_tab' class='asset_tab'>
-        <a href='#'>{{ asset_ilk|title }}{{ 2|pluralize }}</a>
+        <a href='#{{ asset_ilk }}_tab'>{{ asset_ilk|title }}{{ 2|pluralize }}</a>
       </li>
     {% endfor %}
   </ul>

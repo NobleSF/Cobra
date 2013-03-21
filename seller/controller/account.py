@@ -22,8 +22,6 @@ def edit(request):
   from seller.controller.forms import *
   from django.forms.formsets import formset_factory
 
-  AssetFormSet = formset_factory(AssetForm, can_delete=True, extra=30)
-
   if request.method == 'POST':
 
     seller_form = SellerEditForm(request.POST)
@@ -44,11 +42,13 @@ def edit(request):
       seller_form.fields['country'].widget.attrs['disabled'] = True
       seller_form.fields['currency'].widget.attrs['disabled'] = True
 
-    asset_formset = AssetFormSet()
+    asset_form = AssetForm()
+    image_form = ImageForm()
 
   context = {
               'seller_form': seller_form,
-              'asset_formset': asset_formset,
+              'asset_form': asset_form,
+              'image_form': image_form,
               'asset_ilks': ['artisan','product','tool','material']
             }
   return render(request, 'account/edit.html', context)
@@ -61,8 +61,7 @@ def asset(request): # use api.jquery.com/jQuery.post/
   from django.forms.formsets import formset_factory
 
   try: # it must be a post to work
-    AssetProductFormset = formset_factory(AssetProductForm)
-    formset = AssetProductForm(request.POST, request.FILES)
+    form = AssetForm(request.POST, request.FILES)
     if formset.is_valid():
       #asset = Asset.objects.get_or_create(**form.cleaned_data)
       #if ilk...
