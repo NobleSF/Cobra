@@ -2,7 +2,7 @@
 {% block css %}
   <style>
     .hidden_fields, #asset_forms{display: none;}
-    .extra, .end_of_container{display: none;}
+    .asset{float: left;}
     .description{height: 5em;}
 
     #artisan_formset, #product_formset, #tool_formset, #material_formset{
@@ -31,7 +31,7 @@
   <form action="" method="post">{% csrf_token %}
     <div id='seller_form'>
       <table>{{ seller_form.as_table }}</table>
-      <button type="submit">OK!</button>
+      <!--<button type="submit">OK!</button>-->
     </div>
   </form>
 
