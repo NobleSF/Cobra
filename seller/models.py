@@ -78,22 +78,37 @@ class ShippingOption(models.Model):
 class Photo(models.Model): #Photos are exclusively product pictures.
   product       = models.ForeignKey('Product')
   rank          = models.SmallIntegerField()
-  original      = models.ImageField(upload_to='photos')
-  thumb         = models.ImageField(upload_to='photos/thumbs', null=True)
+  url           = models.URLField()#all begin http://s3.amazonaws.com/anou/photos/
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
 
   def __unicode__(self):
-    return self.thumb
+    return self.url
+
+  def original(self):#original quality
+    return self.url
+  def thumb(self):#200x200 version
+    #after last slash in url, insert 'thumbs/'
+    return 'thumb url'
+  def pinky(self):#65x65 version
+    #after last slash in url, insert 'pinkies/'
+    return 'pinky url'
 
 class Image(models.Model): #Images are used for navigation, thumbnail size
-  original      = models.ImageField(upload_to='images')
-  thumb         = models.ImageField(upload_to='images/thumbs', null=True)#200x200
-  pinky        = models.ImageField(upload_to='images/pinkies', null=True)#65x65
+  url           = models.URLField()#all begin http://s3.amazonaws.com/anou/images/
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
 
   def __unicode__(self):
     return self.thumb
+
+  def original(self):#original quality
+    return self.url
+  def thumb(self):#200x200 version
+    #after last slash in url, insert 'thumbs/'
+    return 'thumb url'
+  def pinky(self):#65x65 version
+    #after last slash in url, insert 'pinkies/'
+    return 'pinky url'
