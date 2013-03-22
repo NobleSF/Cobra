@@ -69,7 +69,6 @@ function addAssetForms(){
 function initializeFileUploader(element_id){
   csrf_token = $('#csrf_token').attr('value');
   image_ajax_url = $('#image_ajax_url').attr('value');
-  alert(csrf_token + ' and ' + image_ajax_url + '');
   var uploader = new qq.FileUploader({
     action: image_ajax_url,
     element: $('#'+element_id)[0],
@@ -80,6 +79,7 @@ function initializeFileUploader(element_id){
       } else {
         alert("upload failed!");
       }
+      alert(JSON.parse(responseJSON));
     },
     params: {
       'csrf_token': csrf_token,

@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from admin.controller.decorator import access_required
 from django.middleware.csrf import get_token
 from ajaxuploader.views import AjaxFileUploader
+from ajaxuploader.backends.s3 import S3UploadBackend
 
 @access_required('seller')
 def home(request, context={}):
@@ -79,5 +80,5 @@ def asset(request): # use api.jquery.com/jQuery.post/
 
   return HttpResponse(context) #ajax response
 
-image_upload = AjaxFileUploader()
+image_upload = AjaxFileUploader(backend=S3UploadBackend, KEEP_ORIGINAL=True)
 photo_upload = AjaxFileUploader()

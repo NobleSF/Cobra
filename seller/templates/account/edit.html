@@ -63,11 +63,11 @@
           </li>
           <li>{{ asset_form.name }}</li>
           <li>{{ asset_form.description }}</li>
-          <li class='asset_category'>
-            {% if 'admin_id' in request.session %}
+          {% if 'admin_id' in request.session %}
+            <li class='asset_category'>
               {{ asset_form.category }}
-            {% endif %}
-          </li>
+            </li>
+          {% endif %}
         </ul>
       </form>
     </div>
