@@ -47,13 +47,12 @@ def edit(request):
       seller_form.fields['currency'].widget.attrs['disabled'] = True
 
     asset_form = AssetForm()
-    image_filename_suffix = datetime.now().strftime('_%Y-%m-%d-%H-%M_${filename}')
+    #image_filename_suffix = datetime.now().strftime('_%Y-%m-%d-%H-%M_${filename}')
     image_form = S3UploadForm(settings.AWS_ACCESS_KEY_ID,
                               settings.AWS_SECRET_ACCESS_KEY,
                               settings.AWS_STORAGE_BUCKET_NAME,
-                              image_filename_suffix,
-                              success_action_redirect = reverse('seller:save image'),
-                              content_type = 'image/jpeg')
+                              'images/seller_',
+                              success_action_redirect = reverse('seller:save image'))
 
   context = {
               'seller_form': seller_form,
