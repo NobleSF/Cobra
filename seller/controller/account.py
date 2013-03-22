@@ -1,9 +1,7 @@
 from django.http import HttpResponse, Http404
+from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from admin.controller.decorator import access_required
-from django.middleware.csrf import get_token
-from ajaxuploader.views import AjaxFileUploader
-from ajaxuploader.backends.s3 import S3UploadBackend
 
 @access_required('seller')
 def home(request, context={}):
@@ -24,6 +22,9 @@ def edit(request):
   from seller.models import Seller
   from seller.controller.forms import *
   from django.forms.formsets import formset_factory
+  from seller.controller.aws_forms import S3UploadForm
+  from anou import settings
+  from datetime import datetime
 
   if request.method == 'POST':
 
@@ -46,14 +47,18 @@ def edit(request):
       seller_form.fields['currency'].widget.attrs['disabled'] = True
 
     asset_form = AssetForm()
-    image_form = ImageForm()
+    image_filename_suffix = datetime.now().strftime('_%Y-%m-%d-%H-%M_${filename}')
+    image_form = S3UploadForm(settings.AWS_ACCESS_KEY_ID,
+                              settings.AWS_SECRET_ACCESS_KEY,
+                              settings.AWS_STORAGE_BUCKET_NAME,
+                              image_filename_suffix,
+                              success_action_redirect = reverse('seller:save image'),
+                              content_type = 'image/jpeg')
 
-  csrf_token = get_token(request)#does this need a new token for each upload?
   context = {
               'seller_form': seller_form,
               'asset_form': asset_form,
               'image_form': image_form,
-              'csrf_token': csrf_token,
               'asset_ilks': ['artisan','product','tool','material']
             }
   return render(request, 'account/edit.html', context)
@@ -69,7 +74,7 @@ def asset(request): # use api.jquery.com/jQuery.post/
     form = AssetForm(request.POST, request.FILES)
     if formset.is_valid():
       #asset = Asset.objects.get_or_create(**form.cleaned_data)
-      #if ilk...
+      #use image url to lookup image and assign it
       #asset.save()
       context = {'sucess': True}
     else:
@@ -80,5 +85,15 @@ def asset(request): # use api.jquery.com/jQuery.post/
 
   return HttpResponse(context) #ajax response
 
-image_upload = AjaxFileUploader(backend=S3UploadBackend, KEEP_ORIGINAL=True)
-photo_upload = AjaxFileUploader()
+def saveImage(request): #ajax requests only
+  from seller.models import Image
+  from seller.controller.aws_forms import S3UploadForm
+  from anou import settings
+
+  #save url in db
+  #pull image from url (on S3)
+  #create thumb and pinky using easy-thumbnail app
+  #save thumb and pinky on S3
+  #return thumbnail url
+
+  return HttpResponse("test thumbnail url")

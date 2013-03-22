@@ -145,7 +145,6 @@ INSTALLED_APPS = (
   'admin',
   #'api',
   #'communication',
-  'ajaxuploader',
   'easy_thumbnails',
   'storages',
   'south',

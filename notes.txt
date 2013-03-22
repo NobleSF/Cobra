@@ -35,3 +35,5 @@ Super Fast:
 	collectstatic: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/
 	minify everything
 	cache static files and homepage
+
+Security Issues:

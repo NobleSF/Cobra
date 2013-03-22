@@ -61,30 +61,6 @@ function addAssetForms(){
       new_asset_form.find('.asset_image').attr('id', unique_id);
       //place it in the container
       new_asset_form.appendTo($(this));
-      initializeFileUploader(unique_id);
     }
-  });
-}
-
-function initializeFileUploader(element_id){
-  csrf_token = $('#csrf_token').attr('value');
-  image_ajax_url = $('#image_ajax_url').attr('value');
-  var uploader = new qq.FileUploader({
-    action: image_ajax_url,
-    element: $('#'+element_id)[0],
-    multiple: false,
-    onComplete: function(id, fileName, responseJSON) {
-      if(responseJSON.success) {
-        alert("success!");
-      } else {
-        alert("upload failed!");
-      }
-      alert(JSON.parse(responseJSON));
-    },
-    params: {
-      'csrf_token': csrf_token,
-      'csrf_name': 'csrfmiddlewaretoken',
-      'csrf_xname': 'X-CSRFToken',
-    },
   });
 }

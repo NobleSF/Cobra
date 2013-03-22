@@ -17,25 +17,16 @@
       margin: 0 auto 10px;
       border: 2px solid #F0F0F0;
     }
-
   </style>
-  <link href="{{ STATIC_URL }}ajaxuploader/css/fileuploader.css" media="screen" rel="stylesheet" type="text/css" />
 {% endblock css%}
 
 {% block javascript %}
-  <script src="{{ STATIC_URL }}ajaxuploader/js/fileuploader.js" ></script>
   <script src="{{ STATIC_URL }}javascript/seller/account_edit.js"></script>
 {% endblock javascript%}
 
 {% block content %}
   {% load url from future %}
   <h1 id='title'>Seller Account</h1>
-
-  {% if form.errors %}
-    <p style="color: red;">
-      Please correct the error{{ form.errors|pluralize }} below.
-    </p>
-  {% endif %}
 
   <form action="" method="post">{% csrf_token %}
     <div id='seller_form'>
@@ -48,9 +39,7 @@
 
   <div id='asset_forms'>
     <div class='asset'>
-      <form action='{{ image_form.action }}' class='image_form'>
-        {{ image_form }}
-      </form>
+      {{ image_form.as_form_html|safe }}
       <form>
         <div class='hidden_fields'>
           {{ asset_form.ilk }}
@@ -71,7 +60,7 @@
         </ul>
       </form>
     </div>
-    <input type='hidden' id='image_ajax_url' value='{% url 'seller:image upload' %}'>
+    <input type='hidden' id='image_ajax_url' value='{% url 'seller:save image' %}'>
     <input type='hidden' id='csrf_token' value='{{ csrf_token }}'>
   </div>
 
