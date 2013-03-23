@@ -24,10 +24,40 @@ $('#title').on('click', function(){
 });
 
 $('input:file').change(function(){
-  $(this).closest('.asset').find('.image-text').attr('value', $(this).val());
+  key_string = createKey($(this))
+  copyKeyToAssetForm($(this), key_string);
+
+  //create progress bar
   $(this).closest('form').submit();
   addAssetForms();
+  //pull down thumbnail
 })
+
+function createKey(file_element){
+  filename = file_element.val().split('/').pop().split('\\').pop();
+  //todo: if no file extension, add one
+
+  //add asset ilk and datetime
+  asset_ilk = file_element.closest('.asset-container').attr('id').split('_',1).toString();
+  key_date = $('#key_date').html()
+  return ("_" + asset_ilk + "_" + key_date + "_" + filename);
+}
+
+function copyKeyToAssetForm(file_element, key_string){
+  key = file_element.closest('.asset').find('#id_key');
+  //todo: if no file extension, add one
+
+  //add asset ilk and datetime
+  asset_ilk = key.closest('.asset-container').attr('id').split('_',1).toString();
+  key_date = $('#key_date').html()
+  append_to_key = "_" + asset_ilk + "_" + key_date + "_" + filename;
+
+  //find key and append
+  key.val(key.val() + append_to_key);
+
+  //match image input to key
+  key.closest('.asset').find('#id_image').attr('value',key.val());
+}
 
 function addAssetForms(){
   //use jquery appendTo function to move blank asset forms
@@ -41,8 +71,7 @@ function addAssetForms(){
     //for each asset form inside the containter
     $(this).children('.asset').each(function(){
       //count empty forms
-      image_text_element = $(this).find('form > .hidden-fields > .image-text').first();
-      if (image_text_element.val() == ''){
+      if ($(this).find('#id_image').val() == ''){
         num_empty_forms++;
       }else{
         num_forms++;

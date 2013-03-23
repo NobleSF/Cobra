@@ -47,19 +47,21 @@ def edit(request):
       seller_form.fields['currency'].widget.attrs['disabled'] = True
 
     asset_form = AssetForm()
-    #image_filename_suffix = datetime.now().strftime('_%Y-%m-%d-%H-%M_${filename}')
-    prefix_key = 'images/seller_' + str(request.session['seller_id']) + '_'
+
+    prefix_key = 'images/seller_' + str(request.session['seller_id'])
     if settings.DEBUG: prefix_key = 'test/'+prefix_key
     image_form = S3UploadForm(settings.AWS_ACCESS_KEY_ID,
                               settings.AWS_SECRET_ACCESS_KEY,
                               settings.AWS_STORAGE_BUCKET_NAME,
                               prefix_key,
                               success_action_redirect = reverse('seller:save image'))
+    key_date = datetime.now().strftime('%Y-%m-%d-%H-%M')
 
   context = {
               'seller_form': seller_form,
               'asset_form': asset_form,
               'image_form': image_form,
+              'key_date': key_date,
               'asset_ilks': ['artisan','product','tool','material']
             }
   return render(request, 'account/edit.html', context)
