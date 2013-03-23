@@ -18,14 +18,15 @@ $('.asset_tab').click(function(){
   $('#'+asset_ilk+'_container').show();
 })
 
-$('#title').click(function(){
+$('#title').on('click', function(){
   $('#seller_form').slideToggle();
 });
 
-$('.asset_image').click(function(){
-  $(this).closest('form').find('.hidden_fields > .image_text').attr('value', 'tings');
+$('input:file').change(function(){
+  $(this).closest('.asset').find('.image_text').attr('value', $(this).val());
+  $(this).closest('form').submit();
   addAssetForms();
-});
+})
 
 function addAssetForms(){
   //use jquery appendTo function to move blank asset forms

@@ -77,15 +77,20 @@ class S3UploadForm(forms.Form):
         come AFTER the hidden fields, but Django's normal form display methods
         position the visible fields BEFORE the hidden fields.
         """
-        html = ''.join(map(unicode, self.hidden_fields()))
+        html  = '<span class="file-fields">'
+        html += ''.join(map(unicode, self.hidden_fields()))
+        html += '</span>'
+        html += '<span class="file-wrapper">'
         html += unicode(self['file'])
+        html += '<span class="file-button"></span></span>'
         return html
 
     def as_form_html(self, prefix='', suffix=''):
+        #without <input type="submit" value="Upload">
         html = """
-        <form action="%s" method="post" enctype="multipart/form-data">
-        <p>%s <input type="submit" value="Upload"></p>
-        </form>
+            <form action="%s" method="post" enctype="multipart/form-data">
+                %s
+            </form>
         """.strip() % (self.action(), self.as_html())
         return html
 

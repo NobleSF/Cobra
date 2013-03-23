@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block css %}
   <style>
-    .hidden_fields, #asset_forms, .image_form{display: none;}
+    .hidden_fields, #asset_forms, .file-fields{display: none;}
     .asset{float: left;}
     .description{height: 5em;}
 
@@ -39,26 +39,32 @@
 
   <div id='asset_forms'>
     <div class='asset'>
-      {{ image_form.as_form_html|safe }}
-      <form>
-        <div class='hidden_fields'>
-          {{ asset_form.ilk }}
-          {{ asset_form.image }}
-          {{ asset_form.DELETE }}
-        </div>
-        <ul>
-          <li class='asset_image'>
-            {% image asset_form.image.value %}
-          </li>
-          <li>{{ asset_form.name }}</li>
-          <li>{{ asset_form.description }}</li>
-          {% if 'admin_id' in request.session %}
-            <li class='asset_category'>
-              {{ asset_form.category }}
-            </li>
-          {% endif %}
-        </ul>
-      </form>
+      <ul>
+        <li class='asset_image'>
+          {% image asset_form.image.value %}
+          <div class='image_form'>
+            {{ image_form.as_form_html|safe }}
+          </div>
+        </li>
+        <li>
+          <form>
+            <div class='hidden_fields'>
+              {{ asset_form.ilk }}
+              {{ asset_form.image }}
+              {{ asset_form.DELETE }}
+            </div>
+            <ul>
+              <li>{{ asset_form.name }}</li>
+              <li>{{ asset_form.description }}</li>
+              {% if 'admin_id' in request.session %}
+                <li class='asset_category'>
+                  {{ asset_form.category }}
+                </li>
+              {% endif %}
+            </ul>
+          </form>
+        </li>
+      </ul>
     </div>
     <input type='hidden' id='image_ajax_url' value='{% url 'seller:save image' %}'>
     <input type='hidden' id='csrf_token' value='{{ csrf_token }}'>

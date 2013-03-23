@@ -48,10 +48,12 @@ def edit(request):
 
     asset_form = AssetForm()
     #image_filename_suffix = datetime.now().strftime('_%Y-%m-%d-%H-%M_${filename}')
+    prefix_key = 'images/seller_' + str(request.session['seller_id']) + '_'
+    if settings.DEBUG: prefix_key = 'test/'+prefix_key
     image_form = S3UploadForm(settings.AWS_ACCESS_KEY_ID,
                               settings.AWS_SECRET_ACCESS_KEY,
                               settings.AWS_STORAGE_BUCKET_NAME,
-                              'images/seller_',
+                              prefix_key,
                               success_action_redirect = reverse('seller:save image'))
 
   context = {
