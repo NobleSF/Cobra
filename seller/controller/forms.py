@@ -26,7 +26,7 @@ class AssetForm(forms.Form):
   ilk         = forms.CharField(
                   widget=forms.TextInput(attrs={'class':"ilk"}))
   image       = forms.CharField(
-                  widget=forms.TextInput(attrs={'class':"image_text"}))
+                  widget=forms.TextInput(attrs={'class':"image-text"}))
                   #image takes id of image after ajax upload
   name        = forms.CharField(
                   widget=forms.TextInput(attrs={'class':"name"}),
