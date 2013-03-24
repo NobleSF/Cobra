@@ -18,18 +18,8 @@ class Seller(models.Model):
 
 class Asset(models.Model):
   from admin.models import Category
-  PRODUCT  = 1
-  ARTISAN  = 2
-  TOOL     = 3
-  MATERIAL = 4
-  ILK_CHOICES = (
-    (PRODUCT,  'product'),
-    (ARTISAN,  'artisan'),
-    (TOOL,     'tool'),
-    (MATERIAL, 'material'),
-  )
   seller        = models.ForeignKey('Seller')
-  ilk           = models.PositiveSmallIntegerField(choices=ILK_CHOICES)
+  ilk           = models.CharField(max_length=10)#product,artisan,tool,material
   name          = models.CharField(max_length=50, null=True, blank=True)
   description   = models.TextField(null=True, blank=True)
   image         = models.ForeignKey('Image')
@@ -39,9 +29,9 @@ class Asset(models.Model):
   updated_at    = models.DateTimeField(auto_now = True)
 
   def __unicode__(self):
-    return self.name
+    return unicode(self.name)
 
-  def ilk(self):
+  def get_ilk(self):
     return self._get_ilk_display()
 
 class Product(models.Model):
@@ -102,7 +92,7 @@ class Image(models.Model): #Images are used for navigation, thumbnail size
   updated_at    = models.DateTimeField(auto_now = True)
 
   def __unicode__(self):
-    return self.thumb
+    return self.url
 
   def original(self):#original quality
     return self.url
