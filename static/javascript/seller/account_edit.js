@@ -25,13 +25,32 @@ $('#title').on('click', function(){
 
 $('input:file').change(function(){
   key_string = createKey($(this))
-  copyKeyToAssetForm($(this), key_string);
-
-  //create progress bar
-  $(this).closest('form').submit();
+  full_key = copyKeyToAssetForm($(this), key_string);
+  postImage($(this));
+  //loadThumbnail($(this), full_key);
   addAssetForms();
-  //pull down thumbnail
 })
+
+function postImage(file_element){
+  //create progress bar
+  file_element.closest('form').submit();
+  //remove progress bar
+  return true;
+}
+
+function loadThumbnail(file_element, full_key){
+
+  $.get('/seller/ajax/image_save', {url:full_key, ilk:asset_ilk})
+  .done(function(response){
+
+    if (response.problem){//try again?
+    }else if(response.exception){//fail permanently
+    }else if(respolse.url){//success!
+      //replace img placeholder with thumbnail
+      file_element.closest('.asset').find('.placeholder-image')
+      .html('<img src="' + response.url + '" width="200">');
+  });
+}
 
 function createKey(file_element){
   filename = file_element.val().split('/').pop().split('\\').pop();
@@ -57,6 +76,9 @@ function copyKeyToAssetForm(file_element, key_string){
 
   //match image input to key
   key.closest('.asset').find('#id_image').attr('value',key.val());
+
+  //return full key
+  return key.val();
 }
 
 function addAssetForms(){

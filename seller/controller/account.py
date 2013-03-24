@@ -1,4 +1,5 @@
 from django.http import HttpResponse, Http404
+from django.utils import simplejson
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from admin.controller.decorator import access_required
@@ -88,15 +89,47 @@ def asset(request): # use api.jquery.com/jQuery.post/
 
   return HttpResponse(context) #ajax response
 
+@access_required('seller')
 def saveImage(request): #ajax requests only
-  from seller.models import Image
+  from seller.models import Image, Asset, Seller
   from seller.controller.aws_forms import S3UploadForm
   from anou import settings
+  from django.core.validators import URLValidator
+  from django.core.exceptions import ValidationError
+  validate = URLValidator(verify_exists=True)
+  url_root = "http://s3.amazonaws.com/anou/"
 
-  #save url in db
-  #pull image from url (on S3)
-  #create thumb and pinky using easy-thumbnail app
-  #save thumb and pinky on S3
-  #return thumbnail url
+  try:
 
-  return HttpResponse("test thumbnail url")
+    url = url_root + request.GET[u'url']
+    ilk = str(request.GET[u'ilk'])
+
+    validate(url)#will throw a ValidationError exception error if invalid
+
+    image = Image(url=url)
+    image.save()
+
+    #save Image and create or update Asset
+    if 'asset' in request.GET:
+      asset = Asset.get(id=request.GET[u'asset'])
+      asset.image = image
+      asset.save()
+    else:
+      seller = Seller.objects.get(id=request.session['seller_id'])
+      asset = Asset(seller=seller, ilk=ilk, image=image)
+      asset.save()
+
+    #pull image from url (on S3)
+    #create thumb and pinky using easy-thumbnail app
+    #save thumb and pinky on S3
+    #return thumbnail url
+
+    response = {'asset':asset.id, 'url':url}
+
+  except ValidationError:
+    response = {'problem': "url does not exist yet"}
+
+  except Exception as e:
+    response = {'exception': str(e)}
+
+  return HttpResponse(simplejson.dumps(response), mimetype='application/json')

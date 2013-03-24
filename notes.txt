@@ -37,3 +37,4 @@ Super Fast:
 	cache static files and homepage
 
 Security Issues:
+	S3 bucket open for free uploads and file overwrites
