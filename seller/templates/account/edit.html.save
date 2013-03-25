@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block css %}
+  <link href="{{ STATIC_URL }}css/seller/account_edit.css" rel="stylesheet">
+{% endblock css%}
+
+{% block javascript %}
+  <script src="{{ STATIC_URL }}js/seller/account_edit.js"></script>
+{% endblock javascript%}
+
+{% block content %}
+  {% load url from future %}
+
+  <!-- because javascript can't get it's crap together on date formats -->
+  <span id='key_date' style='display: none;'>{{ key_date }}</span>
+
+  <h1 id='title'>Seller Account</h1>
+
+  <form action="" method="post">{% csrf_token %}
+    <div id='seller_form'>
+      <table>{{ seller_form.as_table }}</table>
+      <!--<button type="submit">OK!</button>-->
+    </div>
+  </form>
+
+  {% load image_tags %}
+
+  <div id='asset_forms'>
+    <div class='asset'>
+      <ul>
+        <li class='asset-image'>
+          {% image asset_form.image.value %}
+          <div class='image-form'>
+            {{ image_form.as_form_html|safe }}
+          </div>
+        </li>
+        <li>
+          <form>
+            <div class='hidden-fields'>
+              {{ asset_form.ilk }}
+              {{ asset_form.image }}
+              {{ asset_form.DELETE }}
+            </div>
+            <div class='asset-fields'>
+              <ul>
+                <li>{{ asset_form.name }}</li>
+                <li>{{ asset_form.description }}</li>
+                {% if 'admin_id' in request.session %}
+                  <li class='asset-category'>
+                    {{ asset_form.category }}
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+          </form>
+        </li>
+      </ul>
+    </div>
+    <input type='hidden' id='image_ajax_url' value='{% url 'seller:save image' %}'>
+    <input type='hidden' id='csrf_token' value='{{ csrf_token }}'>
+  </div>
+
+  <ul id='asset_tabs'>
+    {% for asset_ilk in asset_ilks %}
+      <li id='{{ asset_ilk }}_tab' class='asset-tab'>
+        <a href='#{{ asset_ilk }}_tab'>{{ asset_ilk|title }}{{ 2|pluralize }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  {% for asset_ilk in asset_ilks %}
+    <div id='{{ asset_ilk }}_container' class='asset-container'>
+    </div>
+  {% endfor %}
+
+{% endblock content %}

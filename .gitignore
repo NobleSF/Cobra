@@ -1,6 +1,8 @@
 #################
 ## Tom's Additions
 #################
+
+.save
 venv
 *.pyc
 *.komodoproject
