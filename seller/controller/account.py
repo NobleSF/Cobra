@@ -3,6 +3,7 @@ from django.utils import simplejson
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from admin.controller.decorator import access_required
+from django.views.decorators.csrf import csrf_exempt
 
 @access_required('seller')
 def home(request, context={}):
@@ -21,12 +22,7 @@ def create(account_id):
 @access_required('seller')
 def edit(request):
   from seller.models import Seller
-  from seller.controller.forms import *
-  from django.forms.formsets import formset_factory
-  from seller.controller.aws_forms import S3UploadForm
-  from anou import settings
-  from datetime import datetime
-
+  from seller.controller.forms import AssetForm, ImageForm, SellerEditForm
   if request.method == 'POST':
 
     seller_form = SellerEditForm(request.POST)
@@ -48,31 +44,21 @@ def edit(request):
       seller_form.fields['currency'].widget.attrs['disabled'] = True
 
     asset_form = AssetForm()
-
-    prefix_key = 'images/seller_' + str(request.session['seller_id'])
-    if settings.DEBUG: prefix_key = 'test/'+prefix_key
-    image_form = S3UploadForm(settings.AWS_ACCESS_KEY_ID,
-                              settings.AWS_SECRET_ACCESS_KEY,
-                              settings.AWS_STORAGE_BUCKET_NAME,
-                              prefix_key,
-                              success_action_redirect = reverse('seller:save image'))
-    key_date = datetime.now().strftime('%Y-%m-%d-%H-%M')
+    image_form = ImageForm()
 
   context = {
               'seller_form': seller_form,
               'asset_form': asset_form,
               'image_form': image_form,
-              'key_date': key_date,
               'asset_ilks': ['artisan','product','tool','material']
             }
   return render(request, 'account/edit.html', context)
 
 @access_required('seller')
-def asset(request): # use api.jquery.com/jQuery.post/
+def saveAsset(request): # use api.jquery.com/jQuery.post/
   from seller.models import Asset
   from admin.models import Category
   from seller.controller.forms import AssetProductForm
-  from django.forms.formsets import formset_factory
 
   try: # it must be an ajax post to work
     form = AssetForm(request.POST, request.FILES)
@@ -90,46 +76,38 @@ def asset(request): # use api.jquery.com/jQuery.post/
   return HttpResponse(context) #ajax response
 
 @access_required('seller')
+@csrf_exempt
 def saveImage(request): #ajax requests only
   from seller.models import Image, Asset, Seller
-  from seller.controller.aws_forms import S3UploadForm
-  from anou import settings
-  from django.core.validators import URLValidator
-  from django.core.exceptions import ValidationError
-  validate = URLValidator(verify_exists=True)
-  url_root = "http://s3.amazonaws.com/anou/"
+  from seller.controller.forms import ImageForm
+  from anou.settings import DEBUG
+  from datetime import datetime
 
-  try:
+  if request.method == 'POST':
+    form = ImageForm(request.POST, request.FILES)
+    if form.is_valid():
 
-    url = url_root + request.GET[u'url']
-    ilk = str(request.GET[u'ilk'])
+      image = request.FILES['image']
 
-    validate(url)#will throw a ValidationError exception error if invalid
+      #change filename(key) to seller_#_asset-ilk_date_orig-filename
+      key = 'seller_' + "%04d" % request.session['seller_id']#4 digit seller id
+      #key += '_' + request.POST['asset_ilk']
+      key += '_' + datetime.now().strftime('%Y-%m-%d-%H-%M')
+      key += '_' + image.name
+      if DEBUG: key = 'test/'+ key
 
-    image = Image(url=url)
-    image.save()
+      image.name = key;
+      image_object = Image(original = image, thumb = image, pinky = image)
+      image_object.save()
+      context = {'thumb':image_object.thumb.url}
 
-    #save Image and create or update Asset
-    if 'asset' in request.GET:
-      asset = Asset.get(id=request.GET[u'asset'])
-      asset.image = image
-      asset.save()
     else:
-      seller = Seller.objects.get(id=request.session['seller_id'])
-      asset = Asset(seller=seller, ilk=ilk, image=image)
-      asset.save()
+      context = {'problem':"couldn't validate", }
+  else:
+    context = {'problem':"not POST"}
 
-    #pull image from url (on S3)
-    #create thumb and pinky using easy-thumbnail app
-    #save thumb and pinky on S3
-    #return thumbnail url
+  #save all images to AWS
 
-    response = {'asset':asset.id, 'url':url}
-
-  except ValidationError:
-    response = {'problem': "url does not exist yet"}
-
-  except Exception as e:
-    response = {'exception': str(e)}
-
+  response = context
   return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+

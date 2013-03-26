@@ -98,8 +98,8 @@ STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 THUMBNAIL_ALIASES = {
   '':{
-    'thumb': {'size': (200,200), 'crop':False},
-    'pinky': {'size': (50, 50),  'crop':False},
+    'thumb': {'size': (300,225), 'crop':False},
+    'pinky': {'size': (100, 75),  'crop':False},
   },
 }
 

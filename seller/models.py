@@ -86,19 +86,9 @@ class Photo(models.Model): #Photos are exclusively product pictures.
     return 'pinky url'
 
 class Image(models.Model): #Images are used for navigation, thumbnail size
-  url           = models.URLField()#all begin http://s3.amazonaws.com/anou/images/
+  original      = models.ImageField(upload_to='images/originals', max_length=200)
+  thumb         = models.ImageField(upload_to='images/thumbs', null=True, max_length=200)
+  pinky         = models.ImageField(upload_to='images/pinkies', null=True, max_length=200)
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
-
-  def __unicode__(self):
-    return self.url
-
-  def original(self):#original quality
-    return self.url
-  def thumb(self):#200x200 version
-    #after last slash in url, insert 'thumbs/'
-    return 'thumb url'
-  def pinky(self):#65x65 version
-    #after last slash in url, insert 'pinkies/'
-    return 'pinky url'

@@ -40,10 +40,6 @@ class AssetForm(forms.Form):
   DELETE      = forms.BooleanField(
                   widget=forms.CheckboxInput())
 
-class ImageForm(forms.Form):#a form for posting directly to S3
-  action      = "http://anou.s3.amazonaws.com/"
-  file        = forms.FileField()
-  key         = forms.CharField()
-  #acl        = forms.CharField(type='hidden', default='public-read', editable=False)
-  #policy     = forms.CharField(default='POLICY', editable=False)
-  #signature  = forms.CharField(default='SIGNATURE', editable=False)
+class ImageForm(forms.Form):
+  image       = forms.FileField(
+                  widget=forms.FileInput(attrs={'class':'image-input', 'accept':'image/*'}))

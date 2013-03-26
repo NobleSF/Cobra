@@ -5,10 +5,10 @@ urlpatterns = patterns('',
 
   url(r'^$', account.home, name='home'), #seller dashboard
   url(r'^edit$', account.edit, name='edit'), #edit seller info
-  url(r'^asset$', account.asset, name='asset'), #create/update asset via ajax
 
-  url(r'^ajax/image_save$', account.saveImage, name="save image"),
-# url(r'^ajax/photo_save$', account.savePhoto, name="save photo"),
+  url(r'^ajax/asset_save$', account.saveAsset, name='save asset'),
+  url(r'^ajax/image_save$', account.saveImage, name='save image'),
+# url(r'^ajax/photo_save$', account.savePhoto, name='save photo'),
 
   url(r'^product$', product.home, name='product home'), #all products
   url(r'^product/create$', product.create, name='product create'),

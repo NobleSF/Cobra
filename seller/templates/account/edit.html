@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 {% block css %}
-  <link href="{{ STATIC_URL }}css/seller/account_edit.css" rel="stylesheet">
+  <link href='{{ STATIC_URL }}css/seller/account_edit.css' rel='stylesheet'>
 {% endblock css%}
 
 {% block javascript %}
-  <script src="{{ STATIC_URL }}javascript/seller/account_edit.js"></script>
+  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/vendor/jquery.ui.widget.js'></script>
+  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.iframe-transport.js'></script>
+  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.fileupload.js'></script>
+  <script src='{{ STATIC_URL }}js/seller/account_edit.js'></script>
 {% endblock javascript%}
 
 {% block content %}
   {% load url from future %}
-
-  <!-- because javascript can't get it's crap together on date formats -->
-  <span id='key_date' style='display: none;'>{{ key_date }}</span>
 
   <h1 id='title'>Seller Account</h1>
 
@@ -27,13 +27,24 @@
   <div id='asset_forms'>
     <div class='asset'>
       <ul>
-        <li class='asset-image'>
-          {% image asset_form.image.value %}
+        <li class='asset-media'>
+          <div class='image'>
+            <!-- insert image or placeholder -->
+            {% image asset_form.image.value %}
+          </div>
           <div class='image-form'>
-            {{ image_form.as_form_html|safe }}
+            <form>
+              <input type='hidden' id='asset_ilk' name='asset_ilk'>
+              <span class='file-wrapper'>
+                {{ image_form.image }}
+                <!--<input type='file' name='image_file' class='image-input'
+                       accept='image/*' capture=camera'>-->
+                <span class='file-button'></span>
+              </span>
+            </form>
           </div>
         </li>
-        <li>
+        <li class='asset-form'>
           <form>
             <div class='hidden-fields'>
               {{ asset_form.ilk }}

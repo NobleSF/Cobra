@@ -4,7 +4,7 @@
 
 .asset ul{list-style: none; text-align: center}
 .asset-fields ul{margin: auto;}
-.asset-image{
+.image{
   width: 200px;
   height: 200px;
   padding: 3px;
@@ -15,10 +15,13 @@
 /* hide choose file button behind button
  * http://viget.com/inspire/custom-file-inputs-with-a-bit-of-jquery
  */
+.asset-media {
+  height: 220px;
+}
 .image-form {
   position: relative;
-  top: -50px;
-  left: 60px;
+  top: -66px;
+  left: 62px;
 }
 .file-wrapper {
   cursor: pointer;

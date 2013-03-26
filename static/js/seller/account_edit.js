@@ -7,7 +7,11 @@ $().ready( function(){
   $('#artisan_tab').trigger('click');//activate first tab
   $('#title').trigger('click');//get out of the way
   addAssetForms();
-});
+
+  $('.image-input').each(function(){
+    $(this)
+  });//end .each
+});//end .ready
 
 $('.asset-tab').click(function(){
   //make this tab active
@@ -23,22 +27,16 @@ $('#title').on('click', function(){
   $('#seller_form').slideToggle();
 });
 
-$('input:file').change(function(){
-  key_string = createKey($(this))
-  full_key = copyKeyToAssetForm($(this), key_string);
-  postImage($(this));
-  //loadThumbnail($(this), full_key);
-  addAssetForms();
-})
+//$('input:file').change(function(){
+//  key_string = createKey($(this))
+//  //full_key = copyKeyToAssetForm($(this), key_string);
+//  postImage($(this));
+//  //loadThumbnail($(this), full_key);
+//  addAssetForms();
+//})
 
-function postImage(file_element){
-  //create progress bar
-  file_element.closest('form').submit();
-  //remove progress bar
-  return true;
-}
 
-function loadThumbnail(file_element, full_key){
+function updateAsset(imageURL, asset_id){
 
   $.get('/seller/ajax/image_save', {url:full_key, ilk:asset_ilk})
   .done(function(response){
@@ -67,18 +65,7 @@ function copyKeyToAssetForm(file_element, key_string){
   key = file_element.closest('.asset').find('#id_key');
   //todo: if no file extension, add one
 
-  //add asset ilk and datetime
-  asset_ilk = key.closest('.asset-container').attr('id').split('_',1).toString();
-  key_date = $('#key_date').html()
-  append_to_key = "_" + asset_ilk + "_" + key_date + "_" + filename;
 
-  //find key and append
-  key.val(key.val() + append_to_key);
-
-  //match image input to key
-  key.closest('.asset').find('#id_image').attr('value',key.val());
-
-  //return full key
   return key.val();
 }
 
@@ -113,8 +100,24 @@ function addAssetForms(){
       //give it a new unique id
       unique_id = ilk + '_image_' + (num_forms+1).toString();
       new_asset_form.find('.asset-image').attr('id', unique_id);
+      //tell form the ilk
+      new_asset_form.find('#id_ilk').attr('value', ilk)
       //place it in the container
       new_asset_form.appendTo($(this));
-    }
+
+      applyFileUploadAction(new_asset_form.find('.image-input'));
+    }//end if
   });
+}
+
+function applyFileUploadAction(file_input){
+  file_input.fileupload({
+    dataType: 'json',
+    url: '/seller/ajax/image_save',
+    done: function (e, data) {
+      $.each(data.result.files, function (index, file) {
+        $('<p/>').text(file.name).appendTo(document.body);
+      });
+    }
+  });//end fileupload
 }
