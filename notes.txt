@@ -12,6 +12,7 @@ Redesign
 	Buttons:
 		http://ace-subido.github.com/css3-microsoft-metro-buttons/index.html
 		http://www.red-team-design.com/css3-patterned-buttons
+		http://www.dropzonejs.com/
 
 	pages for sold products prominantly display similar products.
 	Responsive qualities: http://bradfrost.github.com/this-is-responsive/patterns.html
