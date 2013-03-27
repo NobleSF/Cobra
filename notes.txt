@@ -13,7 +13,8 @@ Redesign
 		http://ace-subido.github.com/css3-microsoft-metro-buttons/index.html
 		http://www.red-team-design.com/css3-patterned-buttons
 		http://www.dropzonejs.com/
-
+	Images:
+		https://github.com/jonasundderwolf/django-image-cropping
 	pages for sold products prominantly display similar products.
 	Responsive qualities: http://bradfrost.github.com/this-is-responsive/patterns.html
 	Use new HTML 5 elements:
@@ -25,7 +26,7 @@ Check code for efficiency:
 	http://flake8.readthedocs.org
 
 Included packages:
-	https://github.com/GoodCloud/django-ajax-uploader
+	blueimp.github.com/jQuery-File-Upload/
 	https://github.com/SmileyChris/easy-thumbnails
 	
 Server/Application Monitoring:
