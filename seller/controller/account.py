@@ -77,29 +77,48 @@ def saveAsset(request): # use api.jquery.com/jQuery.post/
 
 @access_required('seller')
 @csrf_exempt
-def saveImage(request): #ajax requests only
+def saveImage(request): #ajax requests only, not asset-aware
   from seller.models import Image, Asset, Seller
   from seller.controller.forms import ImageForm
-  from anou.settings import DEBUG
+  from anou.settings import DEBUG, THUMBNAIL_ALIASES, AWS_STATIC_URL
   from datetime import datetime
+  from django.core.files.uploadedfile import SimpleUploadedFile
+  from seller.controller.image_manipulation import scaleImage
 
   if request.method == 'POST':
     form = ImageForm(request.POST, request.FILES)
     if form.is_valid():
 
-      image = request.FILES['image']
-
       #change filename(key) to seller_#_asset-ilk_date_orig-filename
       key = 'seller_' + "%04d" % request.session['seller_id']#4 digit seller id
-      #key += '_' + request.POST['asset_ilk']
-      key += '_' + datetime.now().strftime('%Y-%m-%d-%H-%M')
-      key += '_' + image.name
-      if DEBUG: key = 'test/'+ key
+      key += '_' + datetime.now().strftime('%Y-%m-%d-%H-%M-%S-%f')
+      key += '.jpg'
 
-      image.name = key;
-      image_object = Image(original = image, thumb = image, pinky = image)
-      image_object.save()
-      context = {'thumb':image_object.thumb.url}
+      original_dimensions = THUMBNAIL_ALIASES['original']['size']
+      thumb_dimensions    = THUMBNAIL_ALIASES['thumb']['size']
+      pinky_dimensions    = THUMBNAIL_ALIASES['pinky']['size']
+
+      image_model_object = form.save()
+      original_url = AWS_STATIC_URL + str(image_model_object.original)
+
+      image_model_object.original = SimpleUploadedFile(
+                                  key,
+                                  scaleImage(original_url, original_dimensions),
+                                  content_type='image/jpeg')
+
+      image_model_object.thumb = SimpleUploadedFile(
+                                  key,
+                                  scaleImage(original_url, thumb_dimensions),
+                                  content_type='image/jpeg')
+
+      image_model_object.pinky = SimpleUploadedFile(
+                                  key,
+                                  scaleImage(original_url, pinky_dimensions),
+                                  content_type='image/jpeg')
+
+      image_model_object.save()
+
+      context = {'thumb_url':AWS_STATIC_URL+str(image_model_object.pinky)}
 
     else:
       context = {'problem':"couldn't validate", }
@@ -110,4 +129,3 @@ def saveImage(request): #ajax requests only
 
   response = context
   return HttpResponse(simplejson.dumps(response), mimetype='application/json')
-

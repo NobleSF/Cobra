@@ -1,6 +1,6 @@
 from django.db import models
 from django import forms
-from seller.models import Asset, Product, Seller
+from seller.models import Asset, Product, Seller, Image
 from admin.models import Category
 
 class SellerEditForm(forms.Form):
@@ -40,6 +40,13 @@ class AssetForm(forms.Form):
   DELETE      = forms.BooleanField(
                   widget=forms.CheckboxInput())
 
-class ImageForm(forms.Form):
-  image       = forms.FileField(
-                  widget=forms.FileInput(attrs={'class':'image-input', 'accept':'image/*'}))
+class ImageForm(forms.ModelForm):
+
+  class Meta:
+    model = Image
+    fields = ('original',)
+    widgets = {
+      'original': forms.FileInput(attrs={'class':'image-input',
+                                         'accept':'image/*',
+                                         'capture':'camera'})
+    }

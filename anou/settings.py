@@ -71,7 +71,8 @@ STATIC_ROOT = '/static/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = 'http://s3.amazonaws.com/anou/'
+AWS_STATIC_URL = 'http://s3.amazonaws.com/anou/'
+STATIC_URL = AWS_STATIC_URL
 if DEBUG: STATIC_URL = '/static/'
 
 # Additional locations of static files
@@ -97,10 +98,9 @@ AWS_STORAGE_BUCKET_NAME = 'anou'
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 THUMBNAIL_ALIASES = {
-  '':{
-    'thumb': {'size': (300,225), 'crop':False},
-    'pinky': {'size': (100, 75),  'crop':False},
-  },
+  'original': {'size': (1600,1200)},
+  'thumb':    {'size': (300, 225)},
+  'pinky':    {'size': (100, 75)},
 }
 
 # Make this unique, and don't share it with anybody.
@@ -145,7 +145,7 @@ INSTALLED_APPS = (
   'admin',
   #'api',
   #'communication',
-  'easy_thumbnails',
+  #'easy_thumbnails',
   'storages',
   'south',
   #'django.contrib.auth',
