@@ -2,11 +2,19 @@
 .asset{float: left;}
 .description{height: 5em;}
 
-.asset ul{list-style: none; text-align: center}
-.asset-fields ul{margin: auto;}
+.asset ul{
+  list-style: none;
+  text-align: center;
+}
+.asset-fields ul{
+  margin: auto;
+}
+.asset-fields > ul > li > input, textarea, select{
+  width: 280px;
+}
 .image{
-  width: 200px;
-  height: 200px;
+  width: 300px;
+  height: 225px;
   padding: 3px;
   margin: 0 auto 10px;
   border: 2px solid #F0F0F0;
@@ -16,12 +24,12 @@
  * http://viget.com/inspire/custom-file-inputs-with-a-bit-of-jquery
  */
 .asset-media {
-  height: 220px;
+  height: 250px;
 }
 .image-form {
   position: relative;
-  top: -66px;
-  left: 62px;
+  top: -90px;
+  left: 100px;
 }
 .file-wrapper {
   cursor: pointer;
@@ -33,7 +41,8 @@
   background: rgb(112, 130, 201);
   cursor: pointer;
   display: inline-block;
-  padding: 10px 20px;
+  padding: 15px 25px;
+  border: 3px solid #F0F0F0;
 }
 .file-wrapper input {
   cursor: pointer;
@@ -46,7 +55,15 @@
   opacity: 0.01;
   font-size: 100px;
 }
-/*.bar {
+/* end file button hiding */
+
+.progress {
+  position: relative;
+  left: 20px;
+  top: -50px;
+  width: 180px;
+}
+.bar {
     height: 18px;
     background: green;
-}*/
+}

@@ -1,16 +1,30 @@
-def scaleImage(image_url, dimensions, force=True):
+def makeThumbnails(image_url):
+  from PIL import Image as pil
+  from cStringIO import StringIO
+  from urllib2 import urlopen
+  from anou.settings import DEBUG, THUMBNAIL_ALIASES
+
+  original_dimensions = THUMBNAIL_ALIASES['original']['size']
+  thumb_dimensions    = THUMBNAIL_ALIASES['thumb']['size']
+  pinky_dimensions    = THUMBNAIL_ALIASES['pinky']['size']
+
+  original_image = pil.open(StringIO(urlopen(image_url).read()))
+
+  new_original  = scaleImage(original_image, original_dimensions)
+  thumb         = scaleImage(original_image, thumb_dimensions)
+  pinky         = scaleImage(original_image, pinky_dimensions)
+
+  return (new_original, thumb, pinky)
+
+def scaleImage(img, dimensions, force=True):
   """ Scale the given image, optionally cropping it
       to make sure the result image has
       the specified width and height.
   """
   from PIL import Image as pil
   from cStringIO import StringIO
-  from urllib2 import urlopen
-  from django.core.files.base import ContentFile
 
   (max_width, max_height) = dimensions
-
-  img = pil.open(StringIO(urlopen(image_url).read()))
 
   if not force:
     img.thumbnail((max_width, max_height), pil.ANTIALIAS)

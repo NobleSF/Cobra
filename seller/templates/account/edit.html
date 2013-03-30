@@ -32,16 +32,14 @@
             <!-- insert image or placeholder -->
             {% image asset_form.image.value %}
           </div>
-          <!--<div id="progress">
+          <div class="progress">
             <div class="bar" style="width: 0%;"></div>
-          </div>-->
+          </div>
           <div class='image-form'>
             <form>
               <input type='hidden' id='asset_ilk' name='asset_ilk'>
               <span class='file-wrapper'>
                 {{ image_form.original }}
-                <!--<input type='file' name='image_file' class='image-input'
-                       accept='image/*' capture=camera'>-->
                 <span class='file-button'></span>
               </span>
             </form>

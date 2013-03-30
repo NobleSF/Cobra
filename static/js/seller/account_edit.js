@@ -21,53 +21,15 @@ $('.asset-tab').click(function(){
   $('.asset-container').hide();
   asset_ilk = $(this).attr('id').replace('_tab','');
   $('#'+asset_ilk+'_container').show();
-})
+});
 
 $('#title').on('click', function(){
   $('#seller_form').slideToggle();
 });
 
-//$('input:file').change(function(){
-//  key_string = createKey($(this))
-//  //full_key = copyKeyToAssetForm($(this), key_string);
-//  postImage($(this));
-//  //loadThumbnail($(this), full_key);
-//  addAssetForms();
-//})
-
-
-function updateAsset(imageURL, asset_id){
-
-  $.get('/seller/ajax/image_save', {url:full_key, ilk:asset_ilk})
-  .done(function(response){
-
-    if (response.problem){//try again?
-    }else if(response.exception){//fail permanently
-    }else if(respolse.url){//success!
-      //replace img placeholder with thumbnail
-      file_element.closest('.asset').find('.placeholder-image')
-      .html('<img src="' + response.url + '" width="200">');
-    }
-  });
-}
-
-function createKey(file_element){
-  filename = file_element.val().split('/').pop().split('\\').pop();
-  //todo: if no file extension, add one
-
-  //add asset ilk and datetime
-  asset_ilk = file_element.closest('.asset-container').attr('id').split('_',1).toString();
-  key_date = $('#key_date').html()
-  return ("_" + asset_ilk + "_" + key_date + "_" + filename);
-}
-
-function copyKeyToAssetForm(file_element, key_string){
-  key = file_element.closest('.asset').find('#id_key');
-  //todo: if no file extension, add one
-
-
-  return key.val();
-}
+$('.asset-form form').blur(function(){
+  alert('ajax update!');
+});
 
 function addAssetForms(){
   //use jquery appendTo function to move blank asset forms
@@ -90,43 +52,54 @@ function addAssetForms(){
 
     //if there are no empty forms, add one
     if (num_empty_forms == 0){
+
       //grab an empty form from the hidden .asset_forms div
-      new_asset_form = $('#asset_forms > .asset').first().clone(true);
+      new_asset = $('#asset_forms > .asset').first().clone(true);
+
       //if not product container, hide category element
       ilk = $(this).attr('id').replace('_container','');
       if ( ilk !== 'product'){
-        new_asset_form.find('.asset-category').hide();
+        new_asset.find('.asset-category').hide();
       }
+
       //give it a new unique id
       unique_id = ilk + '_image_' + (num_forms+1).toString();
-      new_asset_form.find('.asset-image').attr('id', unique_id);
-      //tell form the ilk
-      new_asset_form.find('#id_ilk').attr('value', ilk)
-      //place it in the container
-      new_asset_form.appendTo($(this));
+      image_div = new_asset.find('.image');
+      image_div.attr('id', unique_id);
 
-      applyFileUploadAction(new_asset_form.find('.image-input'));
+      //tell form the ilk
+      new_asset.find('#id_ilk').attr('value', ilk)
+
+      //place it in the container
+      new_asset.appendTo($(this));
+
+      asset_form = new_asset.find('.image-input');
+      applyFileUploadAction(asset_form, image_div);
     }//end if
   });
 }
 
-function applyFileUploadAction(file_input){
+function applyFileUploadAction(file_input, image_destination){
+  this_element = file_input;
+  progress_bar = image_destination.siblings('.progress');
+  progress_bar.hide();
+
   file_input.fileupload({
     dataType: 'json',
     url: '/seller/ajax/image_save',
 
     //progressall: function (e, data) {
     //  var progress = parseInt(data.loaded / data.total * 100, 10);
-    //  file_input.find('#progress .bar').css(
-    //    'width',
-    //    progress + '%'
-    //  );
+    //  progress_bar.find('.bar').css('width', (progress*0.9) + '%');
     //},
 
     done: function (e, data) {
-      $.each(data.result.files, function (index, file) {
-        $('<p/>').text(file.name).appendTo(document.body);
-      });
+      response_data = data['response']();
+      response = response_data.result;
+      image_destination.html('<img src="' + response['thumb_url'] + '">');
+      image_destination.closest('.asset').find('.image-id')
+        .attr('value',response['image_id']);
+      addAssetForms();
     }
   });//end fileupload
 }
