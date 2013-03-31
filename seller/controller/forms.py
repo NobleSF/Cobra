@@ -23,25 +23,27 @@ class SellerEditForm(forms.Form):
       return error
 
 class AssetForm(forms.Form):
+  asset_id    = forms.CharField(
+                  widget=forms.TextInput(attrs={'class':"asset-id"}))#asset primary key
   ilk         = forms.CharField(
                   widget=forms.TextInput(attrs={'class':"ilk"}))
   image       = forms.CharField(
-                  widget=forms.TextInput(attrs={'class':"image-id"}))
+                  widget=forms.TextInput(attrs={'class':"image-id autosave"}))
                   #image takes id of image after ajax upload
+  DELETE      = forms.BooleanField(
+                  widget=forms.CheckboxInput(attrs={'class':"delete autosave"}))
+
   name        = forms.CharField(
-                  widget=forms.TextInput(attrs={'class':"name"}),
+                  widget=forms.TextInput(attrs={'class':"name autosave"}),
                   max_length=50, required=False)
   description = forms.CharField(
-                  widget=forms.Textarea(attrs={'class':"description"}),
+                  widget=forms.Textarea(attrs={'class':"description autosave"}),
                   required=False)
   category    = forms.ModelMultipleChoiceField(
-                  widget=forms.SelectMultiple(attrs={'class':"category"}),
+                  widget=forms.SelectMultiple(attrs={'class':"category autosave"}),
                   queryset=Category.objects.all())
-  DELETE      = forms.BooleanField(
-                  widget=forms.CheckboxInput())
 
 class ImageForm(forms.ModelForm):
-
   class Meta:
     model = Image
     fields = ('original',)

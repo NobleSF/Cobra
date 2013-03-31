@@ -22,7 +22,7 @@ class Asset(models.Model):
   ilk           = models.CharField(max_length=10)#product,artisan,tool,material
   name          = models.CharField(max_length=50, null=True, blank=True)
   description   = models.TextField(null=True, blank=True)
-  image         = models.ForeignKey('Image')
+  image         = models.ForeignKey('Image', null=True, blank=True)
   category      = models.ManyToManyField(Category, null=True, blank=True)
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
