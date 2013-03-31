@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block css %}
   <link href='{{ STATIC_URL }}css/seller/account_edit.css' rel='stylesheet'>
+  <link href='{{ STATIC_URL }}css/seller/asset.css' rel='stylesheet'>
 {% endblock css%}
 
 {% block javascript %}
@@ -8,6 +9,7 @@
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.iframe-transport.js'></script>
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.fileupload.js'></script>
   <script src='{{ STATIC_URL }}js/seller/account_edit.js'></script>
+  <script src='{{ STATIC_URL }}js/seller/asset.js'></script>
 {% endblock javascript%}
 
 {% block content %}
@@ -22,53 +24,17 @@
     </div>
   </form>
 
-  {% load image_tags %}
+  {% load inclusion_tags %}
 
   <div id='asset_forms'>
-    <div class='asset'>
-      <ul>
-        <li class='asset-media'>
-          <div class='image'>
-            <!-- insert image or placeholder -->
-            {% image asset_form.image.value %}
-          </div>
-          <div class="progress">
-            <div class="bar" style="width: 0%;"></div>
-          </div>
-          <div class='image-form'>
-            <form>
-              <input type='hidden' id='asset_ilk' name='asset_ilk'>
-              <span class='file-wrapper'>
-                {{ image_form.original }}
-                <span class='file-button'></span>
-              </span>
-            </form>
-          </div>
-        </li>
-        <li class='asset-form'>
-          <form>
-            <div class='hidden-fields'>
-              {{ asset_form.ilk }}
-              {{ asset_form.image }}
-              {{ asset_form.DELETE }}
-            </div>
-            <div class='asset-fields'>
-              <ul>
-                <li>{{ asset_form.name }}</li>
-                <li>{{ asset_form.description }}</li>
-                {% if 'admin_id' in request.session %}
-                  <li class='asset-category'>
-                    {{ asset_form.category }}
-                  </li>
-                {% endif %}
-              </ul>
-            </div>
-          </form>
-        </li>
-      </ul>
-    </div>
+    {% asset_tag image_form asset_form %}
+
+    {% for asset in assets %}
+      {% asset_tag image_form asset_form asset %}
+    {% endfor %}
+
     <input type='hidden' id='image_ajax_url' value='{% url 'seller:save image' %}'>
-    <input type='hidden' id='csrf_token' value='{{ csrf_token }}'>
+    <input type='hidden' id='asset_ajax_url' value='{% url 'seller:save asset' %}'>
   </div>
 
   <ul id='asset_tabs'>

@@ -1,0 +1,42 @@
+{% load inclusion_tags %}
+<div class='asset'>
+  <ul>
+    <li class='asset-media'>
+      <div class='image'>
+        <!-- insert image or placeholder -->
+        {% image_tag asset.image_id %}
+      </div>
+      <div class="progress">
+        <div class="bar" style="width: 0%;"></div>
+      </div>
+      <div class='image-form'>
+        <form>
+          <input type='hidden' id='asset_ilk' name='asset_ilk'>
+          <span class='file-wrapper'>
+            {{ image_form.original }}
+            <span class='file-button'></span>
+          </span>
+        </form>
+      </div>
+    </li>
+    <li class='asset-form'>
+      <form>
+        <div class='hidden-fields'>
+          {{ asset_form.asset_id }}
+          {{ asset_form.ilk }}
+          {{ asset_form.image }}
+          {{ asset_form.DELETE }}
+        </div>
+        <div class='asset-fields'>
+          <ul>
+            <li>{{ asset_form.name }}</li>
+            <li>{{ asset_form.description }}</li>
+            <li class='asset-category'>
+              {{ asset_form.category }}
+            </li>
+          </ul>
+        </div>
+      </form>
+    </li>
+  </ul>
+</div>
