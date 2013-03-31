@@ -16,8 +16,7 @@ def country(request):
       formset.save()
     except Exception as e:
       context['exception'] = e
-  else:
-    formset = CountryFormSet(queryset=Country.objects.all())
+  formset = CountryFormSet(queryset=Country.objects.all())
   context['formset'] = formset
   return render(request, 'dashboard/formset.html', context)
 
@@ -31,8 +30,7 @@ def currency(request):
       formset.save()
     except Exception as e:
       context['exception'] = e
-  else:
-    formset = CurrencyFormSet(queryset=Currency.objects.all())
+  formset = CurrencyFormSet(queryset=Currency.objects.all())
   context['formset'] = formset
   return render(request, 'dashboard/formset.html', context)
 
@@ -46,8 +44,7 @@ def color(request):
       formset.save()
     except Exception as e:
       context['exception'] = e
-  else:
-    formset = ColorFormSet(queryset=Color.objects.all())
+  formset = ColorFormSet(queryset=Color.objects.all())
   context['formset'] = formset
   return render(request, 'dashboard/formset.html', context)
 
@@ -61,8 +58,7 @@ def category(request):
       formset.save()
     except Exception as e:
       context['exception'] = e
-  else:
-    formset = CategoryFormSet(queryset=Category.objects.all())
+  formset = CategoryFormSet(queryset=Category.objects.all())
   context['formset'] = formset
   return render(request, 'dashboard/formset.html', context)
 
@@ -76,7 +72,6 @@ def rating_subject(request):
       formset.save()
     except Exception as e:
       context['exception'] = e
-  else:
-    formset = RatingSubjectFormSet(queryset=RatingSubject.objects.all())
+  formset = RatingSubjectFormSet(queryset=RatingSubject.objects.all())
   context['formset'] = formset
   return render(request, 'dashboard/formset.html', context)
