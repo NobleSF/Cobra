@@ -12,7 +12,7 @@ TEMPLATE_DEBUG = DEBUG
 SITE_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
 ADMINS = (
-  ('Devloper', 'dev@theanou.com'),
+  ('Developer', 'dev@theanou.com'),
 )
 MANAGERS = ADMINS
 
