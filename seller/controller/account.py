@@ -69,7 +69,7 @@ def saveAsset(request): #ajax requests only, create or update asset
   if request.method == 'GET': # it must be an ajax post to work
     try:
       asset = Asset(seller_id=request.session['seller_id'])
-      if 'asset_id' in request.GET and request.GET['asset_id'] != "":
+      if 'asset_id' in request.GET and request.GET['asset_id'] != "none":
         asset = Asset.objects.get(id=request.GET['asset_id'])
 
       asset.ilk = request.GET['ilk']#from data-ilk included in every request

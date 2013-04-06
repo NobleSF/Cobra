@@ -1,7 +1,7 @@
 $().ready( function(){
   //run on page load
-  image_ajax_url = $('#image_ajax_url').attr('value');
-  asset_ajax_url = $('#asset_ajax_url').attr('value');
+  image_ajax_url = $('#image_ajax_url').val();
+  asset_ajax_url = $('#asset_ajax_url').val();
 
   //apply autosave function
   $('.asset').find('.autosave').autosave({
@@ -16,21 +16,26 @@ $().ready( function(){
 function saveAssetBefore($this_element){
   //start 'updating' visual
   $this_element.closest('.asset').removeClass('error').removeClass('saved').addClass('updating');
+  //set pending asset_id data for all elements
+  if ($this_element.closest('.asset').find('#id_asset_id').val() == 'none'){
+    $this_element.closest('.asset').find('#id_asset_id').attr('value',"pending");
+    $this_element.closest('.asset').find('.autosave').attr('data-asset_id',"pending");
+  }
+  //provide new asset form if necessary
+  addAssetForms();
 }
 
 function saveAssetSuccess(data,$this_element){
   //set asset_id data for all elements
+  $this_element.closest('.asset').find('#id_asset_id').attr('value',data.asset_id);
   $this_element.closest('.asset').find('.autosave').attr('data-asset_id',data.asset_id);
   //finished visual
   $this_element.closest('.asset').removeClass('updating').addClass('saved');
-
   //remove if deleted
   if (data.asset_id == "deleted"){
     alert("asset has been deleted");
     $this_element.closest('.asset').fadeOut().remove();
   }
-  //provide new asset form if necessary
-  addAssetForms();
 }
 
 function saveAssetError(error,$this_element){

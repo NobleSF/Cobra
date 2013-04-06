@@ -24,24 +24,29 @@ class SellerEditForm(forms.Form):
 
 class AssetForm(forms.Form):
   asset_id    = forms.CharField(
-                  widget=forms.TextInput(attrs={'class':"asset-id"}))#asset primary key
+                  widget=forms.TextInput(attrs={'class':"asset-id"}), initial="none")#asset primary key
   ilk         = forms.CharField(
                   widget=forms.TextInput(attrs={'class':"ilk"}))
   image       = forms.CharField(
-                  widget=forms.TextInput(attrs={'class':"image-id autosave"}))
+                  widget=forms.TextInput(
+                    attrs={'class':"image-id autosave", 'data-asset_id':""}))
                   #image takes id of image after ajax upload
   DELETE      = forms.BooleanField(
-                  widget=forms.CheckboxInput(attrs={'class':"delete autosave"}))
+                  widget=forms.CheckboxInput(
+                    attrs={'class':"delete autosave", 'data-asset_id':""}))
 
   name        = forms.CharField(
-                  widget=forms.TextInput(attrs={'class':"name autosave"}),
-                  max_length=50, required=False)
+                  widget=forms.TextInput(
+                    attrs={'class':"name autosave", 'data-asset_id':""}),
+                    max_length=50, required=False)
   description = forms.CharField(
-                  widget=forms.Textarea(attrs={'class':"description autosave"}),
-                  required=False)
+                  widget=forms.Textarea(
+                    attrs={'class':"description autosave", 'data-asset_id':""}),
+                    required=False)
   category    = forms.ModelMultipleChoiceField(
-                  widget=forms.SelectMultiple(attrs={'class':"category autosave"}),
-                  queryset=Category.objects.all())
+                  widget=forms.SelectMultiple(
+                    attrs={'class':"category autosave", 'data-asset_id':""}),
+                    queryset=Category.objects.all())
 
 class ImageForm(forms.ModelForm):
   class Meta:
