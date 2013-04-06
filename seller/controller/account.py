@@ -23,8 +23,20 @@ def create(account_id):
 def edit(request):
   from seller.models import Seller, Asset
   from seller.controller.forms import AssetForm, ImageForm, SellerEditForm
-  if request.method == 'POST':
 
+  try:
+    assets = Asset.objects.filter(seller_id=request.session['seller_id'])
+  except:
+    assets = []
+
+  context = {
+              'assets':assets,
+              'asset_form': AssetForm(),
+              'image_form': ImageForm(),
+              'asset_ilks': ['artisan','product','tool','material']
+            }
+
+  if request.method == 'POST':
     seller_form = SellerEditForm(request.POST)
     try: # it must be a post to work
       if seller_form.is_valid():
@@ -35,28 +47,16 @@ def edit(request):
         return HttpResponseRedirect('account/home/')
 
     except Exception as e:
-      context = {'exception': e}
+      context['exception'] = e
 
   else: #not POST
     seller_form   = SellerEditForm()
     if 'admin_id' not in request.session:
       seller_form.fields['country'].widget.attrs['disabled'] = True
       seller_form.fields['currency'].widget.attrs['disabled'] = True
-    try:
-      assets = Asset.objects.filter(seller_id=request.session['seller_id'])
-    except:
-      assets = []
 
-    asset_form = AssetForm()
-    image_form = ImageForm()
+  context['seller_form'] = seller_form
 
-  context = {
-              'seller_form': seller_form,
-              'assets':assets,
-              'asset_form': asset_form,
-              'image_form': image_form,
-              'asset_ilks': ['artisan','product','tool','material']
-            }
   return render(request, 'account/edit.html', context)
 
 @access_required('seller')
