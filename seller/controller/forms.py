@@ -14,13 +14,16 @@ class SellerEditForm(forms.Form):
   currency  = forms.ModelChoiceField(queryset=Currency.objects.all())
 
   def clean_phone(self):
+    import re #regular expressions
     phone = self.cleaned_data['phone']
-    #require country code
-    phone = phone.translate(None, string.digits)
+    #require country calling code
+    phone = re.sub('\D', '', phone)
     if 10 <= len(phone) <= 14:
       return phone
+    elif len(phone) == 0:
+      return None
     else:
-      return error
+      raise forms.ValidationError("number of digits incorrect")
 
 class AssetForm(forms.Form):
   asset_id    = forms.CharField(
