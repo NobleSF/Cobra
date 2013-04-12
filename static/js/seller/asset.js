@@ -1,11 +1,9 @@
 $().ready( function(){
   //run on page load
-  image_ajax_url = $('#image_ajax_url').val();
-  asset_ajax_url = $('#asset_ajax_url').val();
 
   //apply autosave function
   $('.asset').find('.autosave').autosave({
-    url:asset_ajax_url,
+    url:$('#asset_ajax_url').val(),
     before:saveAssetBefore,
     success:saveAssetSuccess,
     error:saveAssetError
@@ -43,27 +41,41 @@ function saveAssetError(error,$this_element){
   $this_element.closest('.asset').removeClass('updating').addClass('error');
 }
 
-function applyFileUploadAction(file_input, image_destination){
-  progress_bar = image_destination.siblings('.progress');
-  progress_bar.hide();
+function applyFileUploadAction(){
+  this.go = function(file_input, display_div){
+    var this_file_input = file_input;
+    var this_display_div = display_div;
 
-  file_input.fileupload({
-    dataType: 'json',
-    url: image_ajax_url,
+    var progress_div = this_file_input.closest('.asset').find('.progress');
+    progress_div.hide();
+    var progress_bar = progress_div.find('.bar');
 
-    //progressall: function (e, data) {
-    //  var progress = parseInt(data.loaded / data.total * 100, 10);
-    //  progress_bar.find('.bar').css('width', (progress*0.9) + '%');
-    //},
+    this_file_input.fileupload({
+      dataType: 'json',
+      url: $('#image_ajax_url').val(),
 
-    done: function (e, data) {
-      response_data = data['response']();
-      response = response_data.result;
-      image_destination.html('<img src="' + response['thumb_url'] + '">');
-      image_destination.closest('.asset').find('.image-id')
-        .attr('value',response['image_id']).trigger('change');
-    }
-  });//end fileupload
+      send: function (e, data) {
+        progress_div.show();
+      },
+
+      progress: function (e, data) {
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+        progress_bar.css('width', progress + '%');
+      },
+
+      done: function (e, data) {
+        response_data = data['response']();
+        response = response_data.result;
+        //load thumb_url into display div
+        this_display_div.html('<img src="' + response['thumb_url'] + '">');
+        //save image_id in form field
+        id_field = this_display_div.closest('.asset').find('.image-id');
+        id_field.attr('value',response['image_id']).trigger('change');
+        //hide progress bar
+        progress_div.hide()
+      }
+    });//end fileupload
+  }
 }
 
 //https://github.com/cfurrow/jquery.autosave.js

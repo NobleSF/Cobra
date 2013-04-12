@@ -33,7 +33,8 @@ function arrangeAssetForms(){
     //move to proper asset container
     var ilk = $(this).find('#id_ilk').val();
     var asset_id = $(this).find('#id_asset_id').val();
-    applyDataAndEvents($(this), asset_id, ilk)
+    applyData($(this), asset_id, ilk)
+    applyEvents($(this));
     if (ilk != ''){
       $(this).appendTo('#'+ilk+'_container');
     }
@@ -62,11 +63,12 @@ function addAssetForms(){
     if (num_empty_forms == 0){
 
       //grab an empty form from the hidden .asset_forms div
-      new_asset = $('#asset_forms .asset').first().clone(true);
+      new_asset = $('#asset_forms .asset').first().clone(false);
 
       var ilk = $(this).attr('id').replace('_container','');
       var asset_id = new_asset.find('#id_asset_id').val();
-      applyDataAndEvents(new_asset, asset_id, ilk);
+      applyData(new_asset, asset_id, ilk);
+      applyEvents(new_asset);
 
       //place it in the container
       new_asset.appendTo($(this));
@@ -75,24 +77,31 @@ function addAssetForms(){
   });
 }
 
-function applyDataAndEvents(asset_form, asset_id, ilk){
-      //if not product container, hide category element
-      if ( ilk !== 'product'){
-        asset_form.find('.asset-category').hide();
-      }
+function applyData(asset_div, asset_id, ilk){
+  //if not product container, hide category element
+  if ( ilk !== 'product'){
+    asset_div.find('.asset-category').hide();
+  }
 
-      //give the image div a new unique id
-      unique_id = ilk + '_image_' + COUNTER.toString();
-      image_div = asset_form.find('.image');
-      image_div.attr('id', unique_id);
+  //give the image div and input a new unique id
+  unique_div_id = ilk + '_image_' + COUNTER.toString();
+  unique_input_id = ilk + '_image_' + COUNTER.toString();
+  image_div = asset_div.find('.image');
+  image_div.attr('id', unique_div_id);
+  image_input = asset_div.find('.image-input');
+  image_input.attr('id', unique_input_id);
 
-      //tell form and autosave elements the asset_id and ilk
-      asset_form.find('.autosave').attr('data-asset_id', asset_id);
-      asset_form.find('#id_ilk').attr('value', ilk);
-      asset_form.find('.autosave').attr('data-ilk', ilk);
+  //tell form and autosave elements the asset_id and ilk
+  asset_div.find('.autosave').attr('data-asset_id', asset_id);
+  asset_div.find('#id_ilk').attr('value', ilk);
+  asset_div.find('.autosave').attr('data-ilk', ilk);
 
-      image_input = asset_form.find('.image-input');
-      applyFileUploadAction(image_input, image_div);
+  COUNTER++;
+}
 
-      COUNTER++;
+function applyEvents(asset_div){
+  image_input = asset_div.find('.image-input');
+  image_div = asset_div.find('.image');
+  uploader = new applyFileUploadAction();
+  uploader.go(image_input, image_div);
 }
