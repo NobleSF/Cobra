@@ -60,3 +60,13 @@ class ImageForm(forms.ModelForm):
                                          'accept':'image/*',
                                          'capture':'camera'})
     }
+
+class ProductEditForm(forms.ModelForm):
+  product_id = forms.CharField(
+    widget=forms.TextInput(attrs={'class':"product-id"}), initial="none")#product
+
+
+
+  class Meta:
+    model = Product
+    fields = ('asset','color','width','height','length','weight','price','shipping_option')

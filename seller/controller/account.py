@@ -30,7 +30,7 @@ def edit(request):
     assets = []
 
   context = {
-              'assets':assets,
+              'assets': assets,
               'asset_form': AssetForm(),
               'image_form': ImageForm(),
               'asset_ilks': ['artisan','product','tool','material']
@@ -55,7 +55,7 @@ def edit(request):
       context['exception'] = e
 
   else: #not POST
-    seller_form   = SellerEditForm()
+    seller_form = SellerEditForm()
     seller_form.fields['name'].initial      = seller.name
     seller_form.fields['email'].initial     = seller.email
     seller_form.fields['phone'].initial     = seller.phone

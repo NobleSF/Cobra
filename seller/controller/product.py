@@ -31,43 +31,30 @@ def create(request):
 
 @access_required('seller')
 def edit(request, id):
-  from seller.models import Product
-  """
-  product = Product.objects.get(pk=id)
+  from seller.models import Product, Asset
+  from seller.controller.forms import ProductEditForm
 
-  # if form was submitted
+  assets = Asset.objects.all().filter(seller_id = request.session['seller_id'])
+
   if request.method == 'POST':
-    try:
-      asset           = request.POST['asset']
-      color           = request.POST['color']
-      width           = request.POST['width']
-      height          = request.POST['height']
-      length          = request.POST['length']
-      weight          = request.POST['weight']
-      price           = request.POST['price']
-      shipping_option = request.POST['shipping_option']
-      #validate these
+    product_form = ProductEditForm(request.POST)
 
-      #loop over assets
 
-      #loop over colors
 
-      #set values
-      product.width           = width
-      product.height          = height
-      product.length          = length
-      product.weight          = weight
-      product.price           = price
-      product.shipping_option = shipping_option
 
-    except Exception as e:
-      context = {'exception': e}
+
+
+
+
 
   else:
-    context = {'success': 'go edit something'}
+    product_form   = ProductEditForm()
 
-  """
-  return render(request, 'product/edit.html')#, context)
+  context = {
+    'product_form': product_form,
+    'assets': assets
+  }
+  return render(request, 'product/edit.html', context)
 
 @access_required('seller')
 def detail(request, id):

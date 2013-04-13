@@ -1,61 +1,24 @@
-<html>
-<head>
-  <title>Edit Product</title>
-</head>
-<style>
+{% extends "base.html" %}
+{% block css %}
+  <link href='{{ STATIC_URL }}css/seller/product_edit.css' rel='stylesheet'>
+{% endblock css%}
 
+{% block javascript %}
+  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/vendor/jquery.ui.widget.js'></script>
+  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.iframe-transport.js'></script>
+  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.fileupload.js'></script>
+  <script src='{{ STATIC_URL }}js/seller/product_edit.js'></script>
+{% endblock javascript%}
 
-</style>
-<body>
-<table id="photos_section">
-  {% for i in '12345' %}
-    <tr><td>
-      <div class="photo-upload">
-        <input type="file" id="photo_input_{{ i }}" class="photo-input">
-        <button id="photo_button_{{ i }}" class="photo-button">{{ i }}</button>
-      </div>
-    </td></tr>
-  {% endfor %}
-</table>
+{% block content %}
+  {% load url from future %}
+  {% load inclusion_tags %}
 
-<table id="assets_section">
-  {? group assets by ilk %}
-  {? for asset in ilk_group %}
-    <tr><td>
+  <form action="" method="post">{% csrf_token %}
+    <div id='product_form'>
+      <table>{{ product_form.as_table }}</table>
+      <button type="submit">OK!</button>
+    </div>
+  </form>
 
-    </td></tr>
-  {? endfor %}
-</table>
-
-<table id="attributes_section">
-  {% for attribute in ('width', 'height', 'length', 'weight', 'price') %}
-    <td><tr>
-      {{ attribute }}
-    </tr></td>
-  {% endfor %}
-</table>
-
-<table id="shipping_optoin_section">
-  <tr>
-    <td>
-      shipping optoin 1
-    </td>
-    <td>
-      shipping option 2
-    </td>
-  </tr>
-  <tr>
-    <td>
-      option 1 cost
-    </td>
-    <td>
-      option 2 cost
-    </td>
-  </tr>
-</table>
-
-<div id="summary">
-
-</div>
-</body>
-</html>
+{% endblock content %}
