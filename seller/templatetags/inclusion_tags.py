@@ -33,7 +33,7 @@ def asset_tag(image_form, asset_form, asset=None):
   return {'asset':asset, 'asset_form':asset_form, 'image_form':image_form}
 
 @register.inclusion_tag('product/asset_chooser.html')
-def asset_chooser_tag(ilk):
+def asset_chooser_tag(request, ilk):
   from seller.models import Asset
 
   try:
@@ -46,7 +46,7 @@ def asset_chooser_tag(ilk):
   return {'assets':assets, 'ilk':ilk}
 
 @register.inclusion_tag('product/shipping_option_chooser.html')
-def shipping_option_chooser_tag():
+def shipping_option_chooser_tag(request):
   from seller.models import Seller, ShippingOption
 
   try:

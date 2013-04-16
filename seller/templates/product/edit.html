@@ -24,26 +24,32 @@
         {{ product_form.shipping_option }}
       </div>
       <ul>
-        <li>{% asset_chooser_tag "product" %}</li>
+        <li>{% asset_chooser_tag request "product" %}</li>
 
         <li>
           <div id='images'>
-
+            Image Chooser
           </div>
         </li>
 
         <li>{{ product_form.price }}</li>
 
-        <li>{% asset_chooser_tag "tool" %}</li>
-        <li>{% asset_chooser_tag "material" %}</li>
-        <li>{% asset_chooser_tag "artisan" %}</li>
+        <li>
+          <div class='asset_chooser' id='color_chooser'>
+            Color Chooser
+          </div>
+        </li>
 
-        <li>{{ product_form.width }}</li>
+        <li>{% asset_chooser_tag request "tool" %}</li>
+        <li>{% asset_chooser_tag request "material" %}</li>
+        <li>{% asset_chooser_tag request "artisan" %}</li>
+
+        <li>{{ product_form.width  }}</li>
         <li>{{ product_form.height }}</li>
         <li>{{ product_form.length }}</li>
         <li>{{ product_form.weight }}</li>
 
-        <li>{% shipping_option_chooser_tag %}</li>
+        <li>{% shipping_option_chooser_tag request %}</li>
 
         <li>
           <div id='summary'>

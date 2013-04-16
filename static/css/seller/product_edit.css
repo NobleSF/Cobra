@@ -1,0 +1,9 @@
+#hidden-fields{ display: none;}
+
+ul {
+  list-style: none;
+}
+
+#price:before {
+  /* price icon */
+}
