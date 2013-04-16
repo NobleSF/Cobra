@@ -14,11 +14,49 @@
   {% load url from future %}
   {% load inclusion_tags %}
 
-  <form action="" method="post">{% csrf_token %}
-    <div id='product_form'>
-      <table>{{ product_form.as_table }}</table>
-      <button type="submit">OK!</button>
-    </div>
-  </form>
+  <div id='product-edit-form'>
+    <form action="" method="post">{% csrf_token %}
+      <div id='hidden-fields'>
+        {{ product_form.product_id }}
+        {{ product_form.assets }}
+        {{ product_form.images }}
+        {{ product_form.color }}
+        {{ product_form.shipping_option }}
+      </div>
+      <ul>
+        <li>{% asset_chooser_tag "product" %}</li>
 
+        <li>
+          <div id='images'>
+
+          </div>
+        </li>
+
+        <li>{{ product_form.price }}</li>
+
+        <li>{% asset_chooser_tag "tool" %}</li>
+        <li>{% asset_chooser_tag "material" %}</li>
+        <li>{% asset_chooser_tag "artisan" %}</li>
+
+        <li>{{ product_form.width }}</li>
+        <li>{{ product_form.height }}</li>
+        <li>{{ product_form.length }}</li>
+        <li>{{ product_form.weight }}</li>
+
+        <li>{% shipping_option_chooser_tag %}</li>
+
+        <li>
+          <div id='summary'>
+            <table>
+              <tr>
+                <td></td>
+                <td></td>
+              </tr>
+            </table>
+            <button type="submit">OK!</button>
+          </div>
+        </li>
+      </ul>
+    </form>
+  </div>
 {% endblock content %}

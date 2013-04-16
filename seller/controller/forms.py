@@ -27,7 +27,8 @@ class SellerEditForm(forms.Form):
 
 class AssetForm(forms.Form):
   asset_id    = forms.CharField(
-                  widget=forms.TextInput(attrs={'class':"asset-id"}), initial="none")#asset primary key
+                  widget=forms.TextInput(attrs={'class':"asset-id"}), initial="none")
+
   ilk         = forms.CharField(
                   widget=forms.TextInput(attrs={'class':"ilk"}))
   image       = forms.CharField(
@@ -61,12 +62,27 @@ class ImageForm(forms.ModelForm):
                                          'capture':'camera'})
     }
 
-class ProductEditForm(forms.ModelForm):
-  product_id = forms.CharField(
-    widget=forms.TextInput(attrs={'class':"product-id"}), initial="none")#product
+class ProductEditForm(forms.Form):
+  product_id      = forms.CharField(
+                      widget=forms.TextInput(attrs={'id':"product-id"}),
+                      initial="none")
 
+  assets          = forms.CharField(
+                      widget=forms.TextInput(attrs={'id':"assets"}))
+  images          = forms.CharField(
+                      widget=forms.TextInput(attrs={'id':"images"}))
+  shipping_option = forms.CharField(
+                      widget=forms.TextInput(attrs={'id':"shipping-option"}))
 
-
-  class Meta:
-    model = Product
-    fields = ('asset','color','width','height','length','weight','price','shipping_option')
+  color           = forms.CharField(
+                      widget=forms.TextInput(attrs={'id':"color"}))
+  width           = forms.CharField(
+                      widget=forms.TextInput(attrs={'id':"width"}))
+  height          = forms.CharField(
+                      widget=forms.TextInput(attrs={'id':"height"}))
+  length          = forms.CharField(
+                      widget=forms.TextInput(attrs={'id':"length"}))
+  weight          = forms.CharField(
+                      widget=forms.TextInput(attrs={'id':"weight"}))
+  price           = forms.CharField(
+                      widget=forms.TextInput(attrs={'id':"price"}))

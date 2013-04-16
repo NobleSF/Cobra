@@ -34,7 +34,7 @@ def edit(request, id):
   from seller.models import Product, Asset
   from seller.controller.forms import ProductEditForm
 
-  assets = Asset.objects.all().filter(seller_id = request.session['seller_id'])
+  #assets = Asset.objects.all().filter(seller_id = request.session['seller_id'])
 
   if request.method == 'POST':
     product_form = ProductEditForm(request.POST)
@@ -48,11 +48,11 @@ def edit(request, id):
 
 
   else:
-    product_form   = ProductEditForm()
+    product_form = ProductEditForm()
 
   context = {
-    'product_form': product_form,
-    'assets': assets
+    'product_form': product_form
+    #'assets': assets
   }
   return render(request, 'product/edit.html', context)
 
