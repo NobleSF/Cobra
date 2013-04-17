@@ -17,9 +17,9 @@ urlpatterns = patterns('',
 
 
   #checkout pages
-  url(r'^(?P<username>\w+)/cart$', checkout.cart, name='cart'),
-  url(r'^(?P<username>\w+)/payment$', checkout.payment, name='payment'),
-  url(r'^(?P<username>\w+)/confirmation$', checkout.confirmation, name='confirmation'),
+  url(r'^checkout/cart$', checkout.cart, name='cart'),
+  url(r'^checkout/payment$', checkout.payment, name='payment'),
+  url(r'^checkout/confirmation$', checkout.confirmation, name='confirmation'),
 
   #non-pages, ajax calls
   url(r'^test_meta$', home.test_meta, name='test meta'),
