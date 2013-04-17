@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block css %}
   <link href='{{ STATIC_URL }}css/seller/product_edit.css' rel='stylesheet'>
+  <link href='{{ STATIC_URL }}css/seller/photo_upload.css' rel='stylesheet'>
 {% endblock css%}
 
 {% block javascript %}
@@ -16,7 +17,7 @@
 
   <div id='product-edit-form'>
     <form action="" method="post">{% csrf_token %}
-      <div id='hidden-fields'>
+      <div class='hidden-fields'>
         {{ product_form.product_id }}
         {{ product_form.assets }}
         {{ product_form.images }}
@@ -31,8 +32,8 @@
         <li>
           <div id='photos'>
             >>Photo Uploads
-            {% for photo_id in photo_ids %}
-              {% photo_upload_tag photo_id %}
+            {% for rank in '12' %}
+              {% photo_upload_tag photo_form rank photos %}
             {% endfor %}
           </div>
         </li>

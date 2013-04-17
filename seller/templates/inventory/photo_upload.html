@@ -1,5 +1,5 @@
 <div class='photo'>
-  {% if image_url %}
+  {% if photo_url %}
     <img src="{{ photo_url }}" width="300" />
   {% else %}
     <img data-src="holder.js/300x225" width="300" />
@@ -12,8 +12,10 @@
 
 <div class='photo-form'>
   <form>
-    {{ photo_form.product_id }}
-    {{ photo_form.rank }}
+    <div class='hidden-fields'>
+      {{ photo_form.product }}
+      {{ photo_form.rank }}
+    </div>
     <span class='file-wrapper'>
       {{ photo_form.original }}
       <span class='file-button'></span>

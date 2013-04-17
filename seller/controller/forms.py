@@ -67,8 +67,8 @@ class PhotoForm(forms.ModelForm):
     model = Photo
     fields = ('product','rank','original',)
     widgets = {
-      'product':  forms.TextInput(attrs={}),
-      'rank':     forms.TextInput(attrs={}),
+      'product':  forms.TextInput(attrs=None),
+      'rank':     forms.TextInput(attrs=None),
       'original': forms.FileInput(attrs={'class':'image-input',
                                          'accept':'image/*',
                                          'capture':'camera'})

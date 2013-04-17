@@ -31,9 +31,9 @@ def create(request):
     return redirect('seller:home')
 
 @access_required('seller')
-def edit(request, id):
-  from seller.models import Product, Asset
-  from seller.controller.forms import ProductEditForm
+def edit(request, product_id):
+  from seller.models import Product, Asset, Photo
+  from seller.controller.forms import ProductEditForm, PhotoForm
 
   if request.method == 'POST':
     try:
@@ -44,11 +44,12 @@ def edit(request, id):
   else:
     product_form = ProductEditForm()
 
-  photo_ids = None
+  photos = Photo.objects.all().filter(product_id=product_id)
 
   context = {
     'product_form': product_form,
-    'photo_ids':    photo_ids
+    'photos':       photos,
+    'photo_form':   PhotoForm()
   }
   return render(request, 'inventory/edit.html', context)
 
