@@ -1,4 +1,4 @@
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from admin.controller.decorator import access_required
 
@@ -14,20 +14,21 @@ def home(request):
   except Exception as e:
     context = {'exception': e}
 
-  return render(request, 'product/home.html', context)
+  return render(request, 'inventory/home.html', context)
 
 @access_required('seller')
 def create(request):
   from seller.models import Seller, Product
   try:
-    product = Product(seller = request.session['seller_pk'])
+    product = Product(seller_id = request.session['seller_id'])
     product.save()
-    return HttpResponseRedirect('product/'+product.pk+'/edit/')
+    #return HttpResponseRedirect('inventory/product/'+product.id+'/edit/')
+    return redirect('seller:inventory edit', id=product.id)
 
   except Exception as e:
     context = {'exception': e}
-    from seller.controller import seller
-    return seller.home(request, context)
+    #return seller.home(request, context)
+    return redirect('seller:home')
 
 @access_required('seller')
 def edit(request, id):
@@ -40,13 +41,6 @@ def edit(request, id):
     product_form = ProductEditForm(request.POST)
 
 
-
-
-
-
-
-
-
   else:
     product_form = ProductEditForm()
 
@@ -54,13 +48,13 @@ def edit(request, id):
     'product_form': product_form
     #'assets': assets
   }
-  return render(request, 'product/edit.html', context)
+  return render(request, 'inventory/edit.html', context)
 
-@access_required('seller')
+@access_required('seller') #it's the 'r' in crud, but is it even needed?
 def detail(request, id):
-  return render(request, 'product/detail.html')
+  return render(request, 'inventory/detail.html')
 
 @access_required('seller')
 def delete(request, id):
   #archive product and return to product home
-  return render(request, 'product/home.html')
+  return HttpResponseRedirect('seller/inventory')
