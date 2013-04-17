@@ -12,7 +12,7 @@ urlpatterns = patterns('',
 
   url(r'^inventory$', inventory.home, name='inventory home'), #all products
   url(r'^inventory/create$', inventory.create, name='inventory create'),
-  url(r'^inventory/(?P<id>\d+)$', inventory.detail, name='inventory detail'),
-  url(r'^inventory/(?P<id>\d+)/edit$', inventory.edit, name='inventory edit'),
-  url(r'^inventory/(?P<id>\d+)/delete$', inventory.delete, name='inventory delete'),
+  url(r'^inventory/(?P<product_id>\d+)$', inventory.detail, name='inventory detail'),
+  url(r'^inventory/(?P<product_id>\d+)/edit$', inventory.edit, name='inventory edit'),
+  url(r'^inventory/(?P<product_id>\d+)/delete$', inventory.delete, name='inventory delete'),
 )
