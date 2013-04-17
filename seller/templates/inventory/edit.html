@@ -23,43 +23,67 @@
         {{ product_form.color }}
         {{ product_form.shipping_option }}
       </div>
+
       <ul>
         <li>{% asset_chooser_tag request "product" %}</li>
+        <li class='section-divider'><hr></li>
 
         <li>
-          <div id='images'>
-            Image Chooser
+          <div id='photos'>
+            >>Photo Uploads
           </div>
         </li>
-
-        <li>{{ product_form.price }}</li>
-
+        <li class='section-divider'><hr></li>
+        <li>{{ product_form.price }} MAD</li>
+        <li class='section-divider'><hr></li>
         <li>
           <div class='asset_chooser' id='color_chooser'>
-            Color Chooser
+            >>Color Chooser
           </div>
         </li>
+        <li class='section-divider'><hr></li>
 
         <li>{% asset_chooser_tag request "tool" %}</li>
+        <li class='section-divider'><hr></li>
+
         <li>{% asset_chooser_tag request "material" %}</li>
+        <li class='section-divider'><hr></li>
+
         <li>{% asset_chooser_tag request "artisan" %}</li>
+        <li class='section-divider'><hr></li>
 
-        <li>{{ product_form.width  }}</li>
-        <li>{{ product_form.height }}</li>
-        <li>{{ product_form.length }}</li>
-        <li>{{ product_form.weight }}</li>
+        <li>{{ product_form.width  }} cm</li>
+        <li>{{ product_form.height }} cm</li>
+        <li>{{ product_form.length }} cm</li>
+        <li>{{ product_form.weight }} gram</li>
+        <li class='section-divider'><hr></li>
 
-        <li>{% shipping_option_chooser_tag request %}</li>
+        <li>>>Shipping Option Chooser{% shipping_option_chooser_tag request %}</li>
+        <li class='section-divider'><hr></li>
 
         <li>
           <div id='summary'>
+            >>Summary
             <table>
               <tr>
-                <td></td>
-                <td></td>
+                <td class='summary-photo'>
+                  <img src=''>
+                </td>
+                <td>
+                  <ul>
+                    <li>price</li>
+                    <li>shipping cost</li>
+                    <li id='summary-show-more'>show more</li>
+                    <li class='summary-detail'>anou fee</li>
+                    <li class='summary-detail'>total customer price</li>
+                    <li class='summary-detail'>customer view in USD</li>
+                  </ul>
+                </td>
+                <td class='summary-submit'>
+                  <button type="submit">OK!</button>
+                </td>
               </tr>
             </table>
-            <button type="submit">OK!</button>
           </div>
         </li>
       </ul>

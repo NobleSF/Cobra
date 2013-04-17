@@ -4,6 +4,50 @@ ul {
   list-style: none;
 }
 
+/* PHOTOS */
+.photo-uploader{}
+
+/* ASSET CHOOSERS */
+.asset-chooser{
+  margin: 10px;
+}
+.asset-chooser > .asset{
+  width: 120px;
+  cursor: pointer;
+}
+.asset-image{
+  width: 100px;
+  height: 75px;
+  background-color: #DDD
+}
+.asset-name{
+  text-align: center;
+}
+
 #price:before {
   /* price icon */
+}
+
+/* SUMMARY */
+.summary-photo{
+  vertical-align: middle;
+}
+.summary-photo > img{
+  background-color: #DDD;
+  width: 100px;
+  height: 75px;
+  border: none;
+}
+#summary-show-more{
+  text-decoration: underline;
+  cursor: pointer;
+}
+.summary-detail{
+  display: none;
+}
+.summary-submit{
+  width: 100px;
+  height: auto;
+  text-align: center;
+  vertical-align: middle;
 }
