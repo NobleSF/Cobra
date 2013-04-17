@@ -9,11 +9,21 @@ def image_tag(image_id=None):
       image = Image.objects.get(id=image_id).thumb
     else:
       image = None
-
   except Exception as e:
     image = None
-
   return {'image': image}
+
+@register.inclusion_tag('inventory/photo_upload.html')
+def photo_upload_tag(photo_id=None):
+  from seller.models import Photo
+  try:
+    if photo_id is not None:
+      photo_url = Photo.objects.get(id=photo_id).thumb_url
+    else:
+      photo_url = None
+  except Exception as e:
+    photo_url = None
+  return {'photo_url': photo_url}
 
 @register.inclusion_tag('account/asset.html')
 def asset_tag(image_form, asset_form, asset=None):

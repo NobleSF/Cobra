@@ -1,0 +1,22 @@
+<div class='photo'>
+  {% if image_url %}
+    <img src="{{ photo_url }}" width="300" />
+  {% else %}
+    <img data-src="holder.js/300x225" width="300" />
+  {% endif %}
+</div>
+
+<div class="progress">
+  <div class="bar" style="width: 0%;"></div>
+</div>
+
+<div class='photo-form'>
+  <form>
+    {{ photo_form.product_id }}
+    {{ photo_form.rank }}
+    <span class='file-wrapper'>
+      {{ photo_form.original }}
+      <span class='file-button'></span>
+    </span>
+  </form>
+</div>

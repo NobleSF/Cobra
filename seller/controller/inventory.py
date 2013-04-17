@@ -36,14 +36,19 @@ def edit(request, id):
   from seller.controller.forms import ProductEditForm
 
   if request.method == 'POST':
-    product_form = ProductEditForm(request.POST)
-
+    try:
+      product_form = ProductEditForm(request.POST)
+    except Exception as e:
+      context = {'except': e}
 
   else:
     product_form = ProductEditForm()
 
+  photo_ids = None
+
   context = {
-    'product_form': product_form
+    'product_form': product_form,
+    'photo_ids':    photo_ids
   }
   return render(request, 'inventory/edit.html', context)
 

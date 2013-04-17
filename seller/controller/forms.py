@@ -1,6 +1,6 @@
 from django.db import models
 from django import forms
-from seller.models import Asset, Product, Seller, Image
+from seller.models import Asset, Product, Seller, Image, Photo
 from admin.models import Category
 
 class SellerEditForm(forms.Form):
@@ -57,6 +57,18 @@ class ImageForm(forms.ModelForm):
     model = Image
     fields = ('original',)
     widgets = {
+      'original': forms.FileInput(attrs={'class':'image-input',
+                                         'accept':'image/*',
+                                         'capture':'camera'})
+    }
+
+class PhotoForm(forms.ModelForm):
+  class Meta:
+    model = Photo
+    fields = ('product','rank','original',)
+    widgets = {
+      'product':  forms.TextInput(attrs={}),
+      'rank':     forms.TextInput(attrs={}),
       'original': forms.FileInput(attrs={'class':'image-input',
                                          'accept':'image/*',
                                          'capture':'camera'})

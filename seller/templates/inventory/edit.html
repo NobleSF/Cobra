@@ -31,6 +31,9 @@
         <li>
           <div id='photos'>
             >>Photo Uploads
+            {% for photo_id in photo_ids %}
+              {% photo_upload_tag photo_id %}
+            {% endfor %}
           </div>
         </li>
         <li class='section-divider'><hr></li>
