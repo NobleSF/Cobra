@@ -102,8 +102,9 @@ def saveAsset(request): #ajax requests only, create or update asset
       context = {'asset_id':asset.id, 'get':request.GET}
 
       if 'DELETE' in request.GET:
-        asset.delete()
-        context = {'asset_id':"deleted"}
+        #asset.delete()
+        #context = {'asset_id':"deleted"}
+        pass #what do we do with products using this asset?
 
     except Exception as e:
       context = {'exception':e}
