@@ -6,6 +6,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 @access_required('seller')
 def home(request, context={}):
+  from seller.controller.inventory import checkInventory
+  everything_checks_out = checkInventory()
   return render(request, 'account/home.html')
 
 def create(account_id):

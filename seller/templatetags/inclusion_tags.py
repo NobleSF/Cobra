@@ -35,7 +35,6 @@ def asset_tag(image_form, asset_form, asset=None):
 @register.inclusion_tag('inventory/asset_chooser.html')
 def asset_chooser_tag(request, ilk):
   from seller.models import Asset
-
   try:
     seller_id = request.session['seller_id']
     assets = Asset.objects.all().filter(seller_id=seller_id, ilk=ilk)
@@ -48,7 +47,6 @@ def asset_chooser_tag(request, ilk):
 @register.inclusion_tag('inventory/shipping_option_chooser.html')
 def shipping_option_chooser_tag(request):
   from seller.models import Seller, ShippingOption
-
   try:
     country = Seller.objects.get(id=request.session['seller_id']).country
     shipping_options = ShippingOption.objects.all().filter(country=country)

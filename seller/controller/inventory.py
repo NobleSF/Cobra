@@ -35,8 +35,6 @@ def edit(request, id):
   from seller.models import Product, Asset
   from seller.controller.forms import ProductEditForm
 
-  #assets = Asset.objects.all().filter(seller_id = request.session['seller_id'])
-
   if request.method == 'POST':
     product_form = ProductEditForm(request.POST)
 
@@ -46,7 +44,6 @@ def edit(request, id):
 
   context = {
     'product_form': product_form
-    #'assets': assets
   }
   return render(request, 'inventory/edit.html', context)
 
@@ -58,3 +55,12 @@ def detail(request, id):
 def delete(request, id):
   #archive product and return to product home
   return HttpResponseRedirect('seller/inventory')
+
+def checkInventory():
+  #delete empty products
+  #for all products in seller
+    #if product meets requirements for posting live
+      #product.is_active = True
+    #else
+      #product.is_active = False
+  return True
