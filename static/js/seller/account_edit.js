@@ -81,6 +81,8 @@ function applyData(asset_div, asset_id, ilk){
   //if not product container, hide category element
   if ( ilk !== 'product'){
     asset_div.find('.asset-category').hide();
+  }else{
+    asset_div.find('.asset-category').show();
   }
 
   //give the image div and input a new unique id
@@ -100,8 +102,12 @@ function applyData(asset_div, asset_id, ilk){
 }
 
 function applyEvents(asset_div){
+  //for images uploader
   image_input = asset_div.find('.image-input');
   image_div = asset_div.find('.image');
   uploader = new applyFileUploadAction();
   uploader.go(image_input, image_div);
+
+  //for input fields
+  applyAutosave();
 }

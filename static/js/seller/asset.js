@@ -1,15 +1,16 @@
 $().ready( function(){
   //run on page load
+  applyAutosave();
+});
 
-  //apply autosave function
+function applyAutosave() {
   $('.asset').find('.autosave').autosave({
     url:$('#asset_ajax_url').val(),
     before:saveAssetBefore,
     success:saveAssetSuccess,
     error:saveAssetError
   });
-
-});
+}
 
 function saveAssetBefore($this_element){
   //start 'updating' visual
