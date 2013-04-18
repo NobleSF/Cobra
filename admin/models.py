@@ -37,7 +37,7 @@ class Currency(models.Model):
 
 class Color(models.Model):
   name          = models.CharField(max_length=15)
-  color_hex     = models.CharField(max_length=6)
+  hex_value     = models.CharField(max_length=6)
 
   def __unicode__(self):
     return self.name
