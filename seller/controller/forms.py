@@ -80,14 +80,18 @@ class ProductEditForm(forms.Form):
                       initial="none")
 
   assets          = forms.CharField(
-                      widget=forms.TextInput(attrs={'id':"assets"}))
+                      widget=forms.TextInput(attrs={'id':"assets"}),
+                      initial=" ")
+  shipping_option = forms.CharField(
+                      widget=forms.TextInput(attrs={'id':"shipping-option"}),
+                      initial=" ")
+  color           = forms.CharField(
+                      widget=forms.TextInput(attrs={'id':"color"}),
+                      initial=" ")
+
   images          = forms.CharField(
                       widget=forms.TextInput(attrs={'id':"images"}))
-  shipping_option = forms.CharField(
-                      widget=forms.TextInput(attrs={'id':"shipping-option"}))
 
-  color           = forms.CharField(
-                      widget=forms.TextInput(attrs={'id':"color"}))
   width           = forms.CharField(
                       widget=forms.TextInput(attrs={'id':"width"}))
   height          = forms.CharField(

@@ -1,6 +1,6 @@
 <div class='asset-chooser' id='{{ ilk }}_chooser'>
   {% for asset in assets %}
-    <div class='asset'>
+    <div class='asset' data-object-id='{{ asset.id }}' data-input-id='assets'>
 
       <div class='asset-image'>
         <img src='{{ asset.image.thumb_url }}'>

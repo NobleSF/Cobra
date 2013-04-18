@@ -16,13 +16,16 @@ ul {
   cursor: pointer;
   padding: 10px;
 }
-.asset .selected {
+.asset.selected {
   border: solid 1px blue;
+  padding: 9px;
+  background-color: #DDF;
 }
 .asset-image{
   width: 100px;
   height: 75px;
-  background-color: #DDD
+  background-color: #DDD;
+  border: solid 1px #999;
 }
 .asset-name{
   text-align: center;

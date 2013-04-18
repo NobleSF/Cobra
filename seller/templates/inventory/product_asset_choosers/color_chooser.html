@@ -1,0 +1,8 @@
+<div class='asset-chooser' id='color-chooser'>
+  {% for color in colors %}
+    <div class='asset' data-object-id='{{ color.id }}' data-input-id='color'>
+      <div class='asset-image' style='background-color: #{{ color.hex_value }};'></div>
+      <div class='asset-name'>{{ color.name }}</div>
+    </div>
+  {% endfor %}
+</div>

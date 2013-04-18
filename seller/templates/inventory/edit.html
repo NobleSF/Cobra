@@ -13,7 +13,7 @@
 
 {% block content %}
   {% load url from future %}
-  {% load inclusion_tags %}
+  {% load inventory_inclusion_tags %}
 
   <div id='product-edit-form'>
     <form action="" method="post">{% csrf_token %}
@@ -45,9 +45,7 @@
       </div>
 
       <div id='color-chooser-section' class='section'>
-        <div class='asset_chooser' id='color_chooser'>
-          >>Color Chooser
-        </div>
+        {% color_chooser_tag %}
         <hr>
       </div>
 
@@ -77,13 +75,11 @@
       </div>
 
       <div id='shipping-option-chooser-section' class='section'>
-        >>>Shipping Option Chooser
         {% shipping_option_chooser_tag request %}
         <hr>
       </div>
 
       <div id='summary-section' class='section'>
-        >>Summary
         <table>
           <tr>
             <td class='summary-photo'>

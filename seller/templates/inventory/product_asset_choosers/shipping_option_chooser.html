@@ -1,0 +1,17 @@
+<div class='asset-chooser' id='shipping-option-chooser'>
+  {% for shipping_option in shipping_options %}
+    <div  class='asset'
+          data-object-id='{{ shipping_option.id }}'
+          data-input-id='shipping-option'
+          data-cost-formula='{{ shipping_option.cost_formula }}'
+    >
+
+      <div class='asset-image'>
+        <img src='{{ shipping_option.image.thumb_url }}'>
+      </div>
+
+      <div class='asset-name'>{{ shipping_option.name }}</div>
+
+    </div>
+  {% endfor %}
+</div>
