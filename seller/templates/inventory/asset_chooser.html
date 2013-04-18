@@ -1,14 +1,15 @@
 <div class='asset-chooser' id='{{ ilk }}_chooser'>
   {% for asset in assets %}
     <div class='asset'>
-      <ul>
-        <li class='asset-image'>
-          <img src='{{ asset.image.thumb_url }}'>
-        </li>
-        <li class='asset-name'>
-          {{ asset.name }}
-        </li>
-      </ul>
+
+      <div class='asset-image'>
+        <img src='{{ asset.image.thumb_url }}'>
+      </div>
+
+      <div class='asset-name'>
+        {{ asset.name }}
+      </div>
+
     </div>
   {% endfor %}
 </div>

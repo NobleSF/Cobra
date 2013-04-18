@@ -12,8 +12,12 @@ ul {
   margin: 10px;
 }
 .asset-chooser > .asset{
-  width: 120px;
+  width: 100px;
   cursor: pointer;
+  padding: 10px;
+}
+.asset .selected {
+  border: solid 1px blue;
 }
 .asset-image{
   width: 100px;
