@@ -1,6 +1,6 @@
-<div class='asset-chooser' id='{{ ilk }}_chooser'>
+<ul class='asset-chooser' id='{{ ilk }}_chooser'>
   {% for asset in assets %}
-    <div class='asset' data-object-id='{{ asset.id }}' data-input-id='assets'>
+    <li class='asset' data-object-id='{{ asset.id }}' data-input-id='assets'>
 
       <div class='asset-image'>
         <img src='{{ asset.image.thumb_url }}'>
@@ -10,6 +10,6 @@
         {{ asset.name }}
       </div>
 
-    </div>
+    </li>
   {% endfor %}
-</div>
+</ul>
