@@ -6,7 +6,7 @@ from admin.controller.decorator import access_required
 def home(request):
   return render(request, 'account/home.html')
 
-@access_required('admin') #why do customers need accounts?
+#@access_required('admin')
 def create(request):
   from admin.controller.forms import AccountCreateForm
   from admin.models import Account

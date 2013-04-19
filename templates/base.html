@@ -36,7 +36,10 @@
 
         {% if 'seller_id' not in request.session %}
           <li><a href="{% url 'admin:login' %}">Login</a></li>
+        {% else }
+          <li><a href="">Welcome Seller {{ request.session['seller_id' }}</a></li>
         {% endif %}
+
         {% if 'username' in request.session %}
           <li><a href="{% url 'admin:logout' %}">Logout</a></li>
         {% endif %}
