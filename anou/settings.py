@@ -2,12 +2,18 @@
 import dj_database_url, os, socket
 
 LOCAL_MACHINES = ['TOMCOUNSELL']
-if os.environ['COMPUTERNAME'] in LOCAL_MACHINES:
-  PRODUCTION = False
-  DEBUG = True
-else:
-  PRODUCTION = True
+try:
+  if os.environ['COMPUTERNAME'] in LOCAL_MACHINES:
+    PRODUCTION = False
+  else:
+    PRODUCTION = True
+except Exception as e:
+    PRODUCTION = True
+
+if PRODUCTION:
   DEBUG = True #for testing until we go live
+else:
+  DEBUG = True
 
 TEMPLATE_DEBUG = DEBUG
 SITE_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
