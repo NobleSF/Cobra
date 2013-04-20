@@ -101,7 +101,7 @@ STATIC_ROOT = '/static/'
 # Example: "http://media.lawrence.com/static/"
 AWS_STATIC_URL = 'http://s3.amazonaws.com/' + AWS_STORAGE_BUCKET_NAME + '/'
 STATIC_URL = AWS_STATIC_URL
-if DEBUG: STATIC_URL = '/static/'
+if not PRODUCTION: STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
