@@ -5,7 +5,6 @@
 .save
 venv
 *.pyc
-anou/settings.py
 *.komodoproject
 .komodotools/
 
