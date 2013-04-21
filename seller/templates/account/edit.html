@@ -15,7 +15,9 @@
 {% block content %}
   {% load url from future %}
 
-  <h1 id='title'>Seller Account</h1>
+  <h1 id='title'>Seller Account
+    <span id='acct-details' class='btn btn-small'><a>show/hide details</a></span>
+  </h1>
 
   <form action="" method="post">{% csrf_token %}
     <div id='seller_form'>
@@ -40,7 +42,7 @@
   <ul id='asset_tabs'>
     {% for asset_ilk in asset_ilks %}
       <li id='{{ asset_ilk }}_tab' class='asset-tab'>
-        <a href='#{{ asset_ilk }}_tab'>{{ asset_ilk|title }}{{ 2|pluralize }}</a>
+        <a>{{ asset_ilk|title }}{{ 2|pluralize }}</a>
       </li>
     {% endfor %}
   </ul>

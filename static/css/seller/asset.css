@@ -1,6 +1,19 @@
 .hidden-fields, #asset_forms, .file-fields{display: none;}
 .description{height: 5em;}
 
+.asset{float: left;}
+
+.asset ul{
+  list-style: none;
+  text-align: center;
+}
+.asset-fields ul{
+  margin: auto;
+}
+.asset-fields > ul > li > input, textarea, select{
+  width: 280px;
+}
+
 .image{
   width: 300px;
   height: 225px;

@@ -42,8 +42,8 @@ function saveAssetError(error,$this_element){
   $this_element.closest('.asset').removeClass('updating').addClass('error');
 }
 
-function applyFileUploadAction(){
-  this.go = function(file_input, display_div){
+function fileUploadAction(){
+  this.apply = function(file_input, display_div){
     var this_file_input = file_input;
     var this_display_div = display_div;
 

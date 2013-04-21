@@ -8,7 +8,6 @@ $().ready( function(){
 
   //run on page load
   $('#artisan_tab').trigger('click');//activate first tab
-  $('#title').trigger('click');//get out of the way
   arrangeAssetForms();
   addAssetForms();
 
@@ -24,7 +23,7 @@ $('.asset-tab').click(function(){
   $('#'+asset_ilk+'_container').show();
 });
 
-$('#title').on('click', function(){
+$('#acct-details').on('click', function(){
   $('#seller_form').slideToggle();
 });
 
@@ -64,17 +63,16 @@ function addAssetForms(){
 
       //grab an empty form from the hidden .asset_forms div
       new_asset = $('#asset_forms .asset').first().clone(false);
-
       var ilk = $(this).attr('id').replace('_container','');
       var asset_id = new_asset.find('#id_asset_id').val();
-      applyData(new_asset, asset_id, ilk);
-      applyEvents(new_asset);
 
       //place it in the container
       new_asset.appendTo($(this));
+      applyData(new_asset, asset_id, ilk);
+      applyEvents(new_asset);
 
     }//end if
-  });
+  });//end for each asset-container
 }
 
 function applyData(asset_div, asset_id, ilk){
@@ -105,8 +103,8 @@ function applyEvents(asset_div){
   //for images uploader
   image_input = asset_div.find('.image-input');
   image_div = asset_div.find('.image');
-  uploader = new applyFileUploadAction();
-  uploader.go(image_input, image_div);
+  uploader = new fileUploadAction();
+  uploader.apply(image_input, image_div);
 
   //for input fields
   applyAutosave();

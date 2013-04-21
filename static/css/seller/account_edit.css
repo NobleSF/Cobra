@@ -1,12 +1,3 @@
-.asset{float: left;}
-
-.asset ul{
-  list-style: none;
-  text-align: center;
-}
-.asset-fields ul{
-  margin: auto;
-}
-.asset-fields > ul > li > input, textarea, select{
-  width: 280px;
+.asset-tab{
+  cursor: pointer;
 }
