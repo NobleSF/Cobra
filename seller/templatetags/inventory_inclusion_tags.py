@@ -18,7 +18,7 @@ def asset_chooser_tag(request, ilk):
   from seller.models import Asset
   try:
     seller_id = request.session['seller_id']
-    assets = Asset.objects.all().filter(seller_id=seller_id, ilk=ilk)
+    assets = Asset.objects.filter(seller_id=seller_id, ilk=ilk)
 
   except Exception as e:
     assets = None
@@ -30,7 +30,7 @@ def shipping_option_chooser_tag(request):
   from seller.models import Seller, ShippingOption
   try:
     country = Seller.objects.get(id=request.session['seller_id']).country
-    shipping_options = ShippingOption.objects.all().filter(country=country)
+    shipping_options = ShippingOption.objects.filter(country=country)
 
   except Exception as e:
     shipping_options = None

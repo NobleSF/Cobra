@@ -1,9 +1,10 @@
+{% load static %}
 <ul class='asset-chooser' id='{{ ilk }}_chooser'>
   {% for asset in assets %}
     <li class='asset' data-object-id='{{ asset.id }}' data-input-id='assets'>
 
       <div class='asset-image'>
-        <img src='{{ asset.image.thumb_url }}'>
+        <img src='{% get_media_prefix %}{{ asset.image.pinky }}'>
       </div>
 
       <div class='asset-name'>
