@@ -1,3 +1,4 @@
+{% load static %}
 <div class='asset-chooser' id='shipping-option-chooser'>
   {% for shipping_option in shipping_options %}
     <div  class='asset'
@@ -7,7 +8,7 @@
     >
 
       <div class='asset-image'>
-        <img src='{{ shipping_option.image.thumb_url }}'>
+        <img src='{% get_media_prefix %}{{ shipping_option.image.thumb_url }}'>
       </div>
 
       <div class='asset-name'>{{ shipping_option.name }}</div>
