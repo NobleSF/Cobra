@@ -9,6 +9,11 @@
   border: 2px solid #F0F0F0;
 }
 
+.photo{
+  width: 300px;
+  height: 225px;
+}
+
 /* hide the "choose file input" behind button
  * http://viget.com/inspire/custom-file-inputs-with-a-bit-of-jquery
  */

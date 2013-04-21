@@ -23,6 +23,7 @@
         {{ product_form.images }}
         {{ product_form.color }}
         {{ product_form.shipping_option }}
+        <input type='hidden' id='photo-ajax-url' value='{% url 'seller:save photo' %}'>
       </div>
 
       <div id='product-chooser-section' class='section'>
@@ -32,8 +33,11 @@
 
       <div id='photos-section' class='section'>
         <div id='photos'>
-          {% for rank in '12' %}
-            {% photo_upload_tag photo_form rank photos %}
+          {% for photo in photos %}
+            {% photo_upload_tag photo_form product photo=photo %}
+          {% endfor %}
+          {% for rank in '123456789' %}
+            {% photo_upload_tag photo_form product rank=rank %}
           {% endfor %}
         </div>
         <hr>

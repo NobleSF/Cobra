@@ -1,6 +1,8 @@
-from django.http import HttpResponse, Http404, HttpResponseRedirect
-from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect
+from django.utils import simplejson
+from django.shortcuts import render, redirect
 from admin.controller.decorator import access_required
+from django.views.decorators.csrf import csrf_exempt
 
 @access_required('seller')
 def home(request):
@@ -23,7 +25,7 @@ def create(request):
     product = Product(seller_id = request.session['seller_id'])
     product.save()
     #return HttpResponseRedirect('inventory/product/'+product.id+'/edit/')
-    return redirect('seller:inventory edit', id=product.id)
+    return redirect( str(product.id) + '/edit')
 
   except Exception as e:
     context = {'exception': e}
@@ -34,6 +36,7 @@ def create(request):
 def edit(request, product_id):
   from seller.models import Product, Asset, Photo
   from seller.controller.forms import ProductEditForm, PhotoForm
+  product = Product.objects.get(id=product_id)
 
   if request.method == 'POST':
     try:
@@ -44,12 +47,15 @@ def edit(request, product_id):
   else:
     product_form = ProductEditForm()
 
-  photos = Photo.objects.all().filter(product_id=product_id)
+  product_form.fields['product_id'].initial = product.id
+  photos = Photo.objects.all().filter(product_id=product_id).order_by(rank)
 
   context = {
-    'product_form': product_form,
-    'photos':       photos,
-    'photo_form':   PhotoForm()
+    'product':        product,
+    'product_form':   product_form,
+    'photos':         photos,
+    'photo_form':     PhotoForm(),
+    'photo_ajax_url': ''
   }
   return render(request, 'inventory/edit.html', context)
 
@@ -70,3 +76,57 @@ def checkInventory():
     #else
       #product.is_active = False
   return True
+
+@access_required('seller')
+@csrf_exempt
+def savePhoto(request): #ajax requests only, not asset-aware
+  from seller.models import Photo, Product, Seller
+  from seller.controller.forms import PhotoForm
+  from anou.settings import DEBUG, AWS_STATIC_URL
+  from datetime import datetime
+  from django.core.files.uploadedfile import SimpleUploadedFile
+  from seller.controller.image_manipulation import makeThumbnails
+
+  if request.method == 'POST':
+    form = PhotoForm(request.POST, request.FILES)
+    if form.is_valid():
+      try:
+        #change filename(key) to seller_#_date.jpg
+        key = 'seller_' + "%04d" % request.session['seller_id']#4 digit seller id
+        key += '_' + datetime.now().strftime('%Y-%m-%d-%H-%M-%S-%f')
+        key += '.jpg'
+
+        photo_model_object = form.save()
+        original_url = AWS_STATIC_URL + str(photo_model_object.original)
+
+        (original_photo, thumb_photo, pinky_photo) = makeThumbnails(original_url)
+
+        photo_model_object.original = SimpleUploadedFile(
+                                    key,
+                                    original_photo,
+                                    content_type='image/jpeg')
+
+        photo_model_object.thumb = SimpleUploadedFile(
+                                    key,
+                                    thumb_photo,
+                                    content_type='image/jpeg')
+
+        photo_model_object.pinky = SimpleUploadedFile(
+                                    key,
+                                    pinky_photo,
+                                    content_type='image/jpeg')
+
+        photo_model_object.save()
+
+        context = { 'photo_id':str(photo_model_object.id),
+                    'thumb_url':AWS_STATIC_URL+str(photo_model_object.thumb)}
+
+      except Exception as e:
+        context = {'exception':e}
+    else:
+      context = {'problem':"couldn't validate"}
+  else:
+    context = {'problem':"not POST"}
+
+  response = context
+  return HttpResponse(simplejson.dumps(response), mimetype='application/json')

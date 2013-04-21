@@ -2,16 +2,14 @@ from django import template
 register = template.Library()
 
 @register.inclusion_tag('inventory/photo_upload.html')
-def photo_upload_tag(photo_form, rank, photos=None):
-  from seller.models import Photo
-  try:
-    if photo_id is not None:
-      photo_url = photos.filter(rank=rank).thumb_url
-    else:
-      photo_url = None
-  except Exception as e:
-    photo_url = None
-  return {'photo_form':photo_form, 'photo_url':photo_url}
+def photo_upload_tag(photo_form, product, rank=None, photo=None):
+  if photo is not None:
+    rank = photo.rank
+
+  photo_form.fields['rank'].initial = rank
+  photo_form.fields['product'].initial = product.id
+
+  return {'photo_form':photo_form, 'photo':photo}
 
 @register.inclusion_tag('inventory/product_asset_choosers/asset_chooser.html')
 def asset_chooser_tag(request, ilk):
