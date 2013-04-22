@@ -36,7 +36,7 @@
           {% for photo in photos %}
             {% photo_upload_tag photo_form product photo=photo %}
           {% endfor %}
-          {% for rank in '123456789' %}
+          {% for rank in add_ranks_range %}
             {% photo_upload_tag photo_form product rank=rank %}
           {% endfor %}
         </div>

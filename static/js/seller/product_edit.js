@@ -2,6 +2,7 @@ $().ready( function(){
   //assign bootstrap classes
   $('button').addClass('btn');
   $('.file-button').addClass('btn').html('<i class="icon-camera"></i>');
+  $('.progress').addClass('progress-striped');
 
   //run on page load
   num_divs = 0

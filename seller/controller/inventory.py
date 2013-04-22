@@ -48,14 +48,16 @@ def edit(request, product_id):
     product_form = ProductEditForm()
 
   product_form.fields['product_id'].initial = product.id
-  photos = Photo.objects.all().filter(product_id=product_id).order_by(rank)
+  photos = Photo.objects.all().filter(product_id=product_id).order_by('rank')
+  # we want additional ranks going up to nine photos maximum
+  add_ranks_range = range(photos.count()+1, 10)
 
   context = {
-    'product':        product,
-    'product_form':   product_form,
-    'photos':         photos,
-    'photo_form':     PhotoForm(),
-    'photo_ajax_url': ''
+    'product':          product,
+    'product_form':     product_form,
+    'photos':           photos,
+    'photo_form':       PhotoForm(),
+    'add_ranks_range':  add_ranks_range
   }
   return render(request, 'inventory/edit.html', context)
 
