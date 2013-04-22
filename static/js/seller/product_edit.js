@@ -3,6 +3,8 @@ $().ready( function(){
   $('button').addClass('btn');
   $('.file-button').addClass('btn').html('<i class="icon-camera"></i>');
   $('.progress').addClass('progress-striped');
+  $('.asset-chooser').addClass('btn-group');
+  $('.asset').addClass('btn');
 
   //run on page load
   num_divs = 0
@@ -20,6 +22,7 @@ $().ready( function(){
 
   $('.asset').each( function(){
     $(this).bind('click', function(){
+      $(this).toggleClass('active');
       $(this).toggleClass('selected');
       toggleSaveAssetId($(this));
     });
@@ -31,6 +34,13 @@ $().ready( function(){
     uploader = new fileUploadAction();
     uploader.apply(file_input, display_div);
   });
+
+  $('#price').addClass('updates-summary');
+  $('#weight').addClass('updates-summary');
+  $('#shipping-option').addClass('updates-summary');
+  $('.photo-upload-div').first().find('.photo').addClass('updates-summary');
+  $('.updates-summary').each(function(){$(this).change(updateSummary);});
+  updateSummary();
 
 });//end .ready
 
@@ -87,6 +97,33 @@ function fileUploadAction(){
       }
     });//end fileupload
   }
+}
+
+function updateSummary(){
+  //set image
+  first_image_url = $('.photo-upload-div').first().find('img').attr('src');
+  summary_pinky_url = first_image_url.replace('thumbs','pinkies');
+  $('.summary-photo').find('img').attr('src', summary_pinky_url);
+
+  //set price and Anou fee
+  seller_price = parseInt($('#price').val());
+  $('#summary-price').attr('value', seller_price);
+  anou_fee = parseInt(seller_price * 0.15);
+  $('#summary-anou-fee').attr('value', anou_fee);
+
+  //set shipping cost and totals
+  weight = $('#weight').val();
+  shipping_option = $('#shipping-option').val();
+  if ((weight > 0) ){ //&& (shipping_option != " ")
+    shipping_cost = parseInt(weight/3);//ajax call to calculate shipping cost
+    $('#summary-shipping-cost').attr('value', shipping_cost);
+    total = seller_price + anou_fee + shipping_cost;
+    $('#summary-total').attr('value', total);
+    USD_total = parseInt(total / 8.5);//pull conversion rate from controller
+    $('#summary-USD').attr('value', USD_total);
+  }
+
+
 }
 
 //https://github.com/cfurrow/jquery.autosave.js

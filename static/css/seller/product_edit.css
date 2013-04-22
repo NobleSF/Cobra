@@ -12,14 +12,10 @@ ul {
   margin: 10px;
 }
 .asset-chooser > .asset{
-  width: 100px;
-  cursor: pointer;
-  padding: 10px;
+  padding: 15px;
 }
 .asset.selected {
-  border: solid 1px blue;
-  padding: 9px;
-  background-color: #DDF;
+  background-color: #0F0;
 }
 .asset-image{
   width: 100px;
@@ -31,8 +27,8 @@ ul {
   text-align: center;
 }
 
-#price:before {
-  /* price icon */
+#measurements-section li{
+  display: list-item;
 }
 
 /* SUMMARY */

@@ -44,7 +44,13 @@
       </div>
 
       <div id='price-section' class='section'>
-        {{ product_form.price }} MAD
+        <ul>
+          <li class='input-prepend input-append'>
+            <span class='add-on'>$</i></span>
+            {{ product_form.price }}
+            <span class='add-on'>Dh</span>
+          </li>
+        </ul>
         <hr>
       </div>
 
@@ -70,10 +76,26 @@
 
       <div id='measurements-section' class='section'>
         <ul>
-          <li>{{ product_form.width  }} cm</li>
-          <li>{{ product_form.height }} cm</li>
-          <li>{{ product_form.length }} cm</li>
-          <li>{{ product_form.weight }} gram</li>
+          <li class='input-prepend input-append'>
+            <span class='add-on'><i class='icon-move'></i></span>
+            {{ product_form.width  }}
+            <span class='add-on'>cm</span>
+          </li>
+          <li class='input-prepend input-append'>
+            <span class='add-on'><i class='icon-resize-full'></i></span>
+            {{ product_form.height }}
+            <span class='add-on'>cm</span>
+          </li>
+          <li class='input-prepend input-append'>
+            <span class='add-on'><i class='icon-fullscreen'></i></span>
+            {{ product_form.length }}
+            <span class='add-on'>cm</span>
+          </li>
+          <li class='input-prepend input-append'>
+            <span class='add-on'><i class='icon-inbox'></i></span>
+            {{ product_form.weight }}
+            <span class='add-on'>gram</span>
+          </li>
         </ul>
         <hr>
       </div>
@@ -91,12 +113,32 @@
             </td>
             <td>
               <ul>
-                <li>price</li>
-                <li>shipping cost</li>
+                <li class='input-prepend input-append'>
+                  <span class='add-on'>$</span>
+                  <input type='text' id='summary-price' class='input-mini' disabled>
+                  <span class='add-on'>Dh</span>
+                </li>
+                <li class='input-prepend input-append summary-detail'>
+                  <span class='add-on'><i class='icon-plane'></i></span>
+                  <input type='text' id='summary-shipping-cost' class='input-mini' disabled>
+                  <span class='add-on'>Dh</span>
+                </li>
+                <li class='input-prepend input-append summary-detail'>
+                  <span class='add-on'><i class='icon-qrcode'></i></span>
+                  <input type='text' id='summary-anou-fee' class='input-mini' disabled>
+                  <span class='add-on'>Dh</span>
+                </li>
+                <li class='input-prepend input-append summary-detail'>
+                  <span class='add-on'><i class='icon-tasks'></i></span>
+                  <input type='text' id='summary-total' class='input-mini' disabled>
+                  <span class='add-on'>Dh</span>
+                </li>
+                <li class='input-prepend input-append summary-detail'>
+                  <span class='add-on'><i class='icon-shopping-cart'></i></span>
+                  <input type='text' id='summary-USD' class='input-mini' disabled>
+                  <span class='add-on'>USD</span>
+                </li>
                 <li id='summary-show-more'>show more</li>
-                <li class='summary-detail'>anou fee</li>
-                <li class='summary-detail'>total customer price</li>
-                <li class='summary-detail'>customer view in USD</li>
               </ul>
             </td>
             <td class='summary-submit'>
