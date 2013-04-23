@@ -13,7 +13,7 @@
         <form>
           <input type='hidden' id='asset_ilk' name='asset_ilk'>
           <span class='file-wrapper'>
-            {{ image_form.original }}
+            {{ image_form }}
             <span class='file-button'></span>
           </span>
         </form>
@@ -24,7 +24,7 @@
         <div class='hidden-fields'>
           {{ asset_form.asset_id }}
           {{ asset_form.ilk }}
-          {{ asset_form.image }}
+          {{ asset_form.image_url }}
           {{ asset_form.DELETE }}
         </div>
         <div class='asset-fields'>

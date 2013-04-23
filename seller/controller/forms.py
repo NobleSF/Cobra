@@ -31,10 +31,10 @@ class AssetForm(forms.Form):
 
   ilk         = forms.CharField(
                   widget=forms.TextInput(attrs={'class':"ilk"}))
-  image       = forms.CharField(
+  image_url   = forms.CharField(
                   widget=forms.TextInput(
-                    attrs={'class':"image-id autosave", 'data-asset_id':""}))
-                  #image takes id of image after ajax upload
+                    attrs={'class':"image-url autosave", 'data-asset_id':""}))
+                  #image takes url of image after ajax upload to cloudinary
   DELETE      = forms.BooleanField(
                   widget=forms.CheckboxInput(
                     attrs={'class':"delete autosave", 'data-asset_id':""}))
@@ -52,15 +52,36 @@ class AssetForm(forms.Form):
                     attrs={'class':"category autosave", 'data-asset_id':""}),
                     queryset=Category.objects.all())
 
-class ImageForm(forms.ModelForm):
-  class Meta:
-    model = Image
-    fields = ('original',)
-    widgets = {
-      'original': forms.FileInput(attrs={'class':'image-input',
-                                         'accept':'image/*',
-                                         'capture':'camera'})
-    }
+class ImageForm(forms.Form):
+  from anou.settings import CLOUDINARY
+
+  def getUnixTimestamp():
+    from django.utils.dateformat import format
+    from datetime import datetime
+    return format(datetime.now(), u'U')
+
+  def getSignatureHash(timestamp):
+    from anou.settings import CLOUDINARY
+    import hashlib
+    cloudinary_string = 'timestamp='+timestamp+CLOUDINARY['api_secret']
+    h = hashlib.new('sha1')
+    h.update(cloudinary_string)
+    return h.hexdigest()
+
+  timestamp       = forms.CharField(label="", initial=getUnixTimestamp())
+  signature       = forms.CharField(label="", initial="not yet set")
+  api_key         = forms.CharField(label="", initial=CLOUDINARY['api_key'])
+
+  format          = forms.CharField(label="", initial=CLOUDINARY['format'])
+  transformation  = forms.CharField(label="", initial=CLOUDINARY['transformation'])
+  tags            = forms.CharField(label="")
+
+  file            = forms.FileField(label="",
+                      widget=forms.FileInput(attrs={  'class':'image-input',
+                                                      'accept':'image/*',
+                                                      'capture':'camera'
+                                                    })
+                    )
 
 class PhotoForm(forms.ModelForm):
   class Meta:

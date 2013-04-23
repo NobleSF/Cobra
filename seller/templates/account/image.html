@@ -1,5 +1,5 @@
-{% if image %}
-  <img src="http://s3.amazonaws.com/anou/{{ image }}" width="300" />
+{% if image_url %}
+  <img src="{{ image_url }}" width="300" />
 {% else %}
   <img data-src="holder.js/300x225" width="300" />
 {% endif %}

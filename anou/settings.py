@@ -120,9 +120,11 @@ STATICFILES_FINDERS = (
 )
 
 CLOUDINARY = {
-  'cloud_name': 'anou',
-  'api_key': '155257496663982',
-  'api_secret': 'z78hCbzKQ26-6UQoE0FvmguCP9A',
+  'cloud_name':     'anou',
+  'api_key':        '155257496663982',
+  'api_secret':     'z78hCbzKQ26-6UQoE0FvmguCP9A',
+  'format':         'jpg',
+  'transformation': 't_original'
 }
 
 THUMBNAIL_ALIASES = {

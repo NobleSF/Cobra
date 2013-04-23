@@ -31,10 +31,14 @@ def edit(request):
   except:
     assets = []
 
+  image_form = ImageForm()
+  image_form.fields['tags'].initial = "asset,seller"+str(request.session['seller_id'])
+  image_form.fields['signature'].initial = getSignatureHash(image_form)
+
   context = {
               'assets': assets,
               'asset_form': AssetForm(),
-              'image_form': ImageForm(),
+              'image_form': image_form,
               'asset_ilks': ['artisan','product','tool','material']
             }
 
@@ -72,10 +76,24 @@ def edit(request):
 
   return render(request, 'account/edit.html', context)
 
+def getSignatureHash(image_form):
+  from anou.settings import CLOUDINARY
+  import hashlib
+
+  cloudinary_string  = 'format=' + image_form.fields['format'].initial
+  cloudinary_string += '&tags=' + image_form.fields['tags'].initial
+  cloudinary_string += '&timestamp=' + image_form.fields['timestamp'].initial
+  cloudinary_string += '&transformation=' + image_form.fields['transformation'].initial
+  cloudinary_string += CLOUDINARY['api_secret']
+
+  h = hashlib.new('sha1')
+  h.update(cloudinary_string)
+  return h.hexdigest()
+
 @access_required('seller')
 @csrf_exempt
 def saveAsset(request): #ajax requests only, create or update asset
-  from seller.models import Asset
+  from seller.models import Asset, Image
   from admin.models import Category
   from seller.controller.forms import AssetForm
 
@@ -89,8 +107,8 @@ def saveAsset(request): #ajax requests only, create or update asset
 
       element = request.GET['name']
       value   = request.GET['value']
-      if element == 'image':
-        asset.image_id = value
+      if element == 'image_url':
+        asset.image = customSaveImage(value)
       elif element == 'name':
         asset.name = value
       elif element == 'description':
@@ -113,6 +131,14 @@ def saveAsset(request): #ajax requests only, create or update asset
 
   response = context
   return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+
+def customSaveImage(url):
+  from seller.models import Image
+  image_object = Image(original=url)
+  image_object.thumb = url.replace("upload", "upload/t_thumb")
+  image_object.pinky = url.replace("upload", "upload/t_pinky")
+  image_object.save()
+  return image_object
 
 @access_required('seller')
 @csrf_exempt
