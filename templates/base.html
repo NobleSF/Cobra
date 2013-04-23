@@ -84,12 +84,12 @@
   {% if debug %}
     <script src="{{ STATIC_URL }}vendor/jquery/jquery-1.9.1.min.js"></script>
     <script src="{{ STATIC_URL }}vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="{{ STATIC_URL }}vendor/holder/js/holder.js"></script>
   {% else %}
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
   {% endif %}
 
+  <script src="{{ STATIC_URL }}vendor/holder/js/holder.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL}}js/base.js"></script>
 
   {% block javascript %}
