@@ -66,37 +66,17 @@ class Photo(models.Model): #Photos are exclusively product pictures.
   from anou.settings import MEDIA_URL
   product       = models.ForeignKey('Product')
   rank          = models.SmallIntegerField()
-  original      = models.ImageField(upload_to='photos/originals', max_length=200)
-  thumb         = models.ImageField(upload_to='photos/thumbs', null=True, max_length=200)
-  pinky         = models.ImageField(upload_to='photos/pinkies', null=True, max_length=200)
+  original      = models.URLField(max_length=200)
+  thumb         = models.URLField(null=True, max_length=200)
+  pinky         = models.URLField(null=True, max_length=200)
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
-
-  def original_url(self):
-    from anou.settings import MEDIA_URL
-    return MEDIA_URL + self.original
-  def thumb_url(self):
-    from anou.settings import MEDIA_URL
-    return MEDIA_URL + self.thumb
-  def pinky_url(self):
-    from anou.settings import MEDIA_URL
-    return MEDIA_URL + self.pinky
 
 class Image(models.Model): #Images are used for navigation, thumbnail size
-  original      = models.ImageField(upload_to='images/originals', max_length=200)
-  thumb         = models.ImageField(upload_to='images/thumbs', null=True, max_length=200)
-  pinky         = models.ImageField(upload_to='images/pinkies', null=True, max_length=200)
+  original      = models.URLField(max_length=200)
+  thumb         = models.URLField(null=True, max_length=200)
+  pinky         = models.URLField(null=True, max_length=200)
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
-
-  def original_url(self):
-    from anou.settings import MEDIA_URL
-    return MEDIA_URL + self.original
-  def thumb_url(self):
-    from anou.settings import MEDIA_URL
-    return MEDIA_URL + self.thumb
-  def pinky_url(self):
-    from anou.settings import MEDIA_URL
-    return MEDIA_URL + self.pinky

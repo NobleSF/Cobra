@@ -119,6 +119,12 @@ STATICFILES_FINDERS = (
 # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
+CLOUDINARY = {
+  'cloud_name': 'anou',
+  'api_key': '155257496663982',
+  'api_secret': 'z78hCbzKQ26-6UQoE0FvmguCP9A',
+}
+
 THUMBNAIL_ALIASES = {
   'original': {'size': (1600,1200)},
   'thumb':    {'size': (300, 225)},
@@ -170,7 +176,6 @@ INSTALLED_APPS = (
   'admin',
   #'api',
   #'communication',
-  #'easy_thumbnails',
   'storages',
   'south',
   #'django.contrib.auth',
