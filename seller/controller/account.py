@@ -100,7 +100,9 @@ def saveAsset(request): #ajax requests only, create or update asset
   if request.method == 'GET': # it must be an ajax post to work
     try:
       asset = Asset(seller_id=request.session['seller_id'])
-      if 'asset_id' in request.GET and request.GET['asset_id'] != "none":
+      if 'asset_id' in request.GET and \
+          request.GET['asset_id'] != "pending" and \
+          request.GET['asset_id'] != "none":
         asset = Asset.objects.get(id=request.GET['asset_id'])
 
       asset.ilk = request.GET['ilk']#from data-ilk included in every request
@@ -139,57 +141,3 @@ def customSaveImage(url):
   image_object.pinky = url.replace("upload", "upload/t_pinky")
   image_object.save()
   return image_object
-
-@access_required('seller')
-@csrf_exempt
-def saveImage(request): #ajax requests only, not asset-aware
-  from seller.models import Image, Asset, Seller
-  from seller.controller.forms import ImageForm
-  from anou.settings import DEBUG, AWS_STATIC_URL
-  from datetime import datetime
-  from django.core.files.uploadedfile import SimpleUploadedFile
-  from seller.controller.image_manipulation import makeThumbnails
-
-  if request.method == 'POST':
-    form = ImageForm(request.POST, request.FILES)
-    if form.is_valid():
-      try:
-        #change filename(key) to seller_#_asset-ilk_date_orig-filename
-        key = 'seller_' + "%04d" % request.session['seller_id']#4 digit seller id
-        key += '_' + datetime.now().strftime('%Y-%m-%d-%H-%M-%S-%f')
-        key += '.jpg'
-
-        image_model_object = form.save()
-        original_url = AWS_STATIC_URL + str(image_model_object.original)
-
-        (original_image, thumb_image, pinky_image) = makeThumbnails(original_url)
-
-        image_model_object.original = SimpleUploadedFile(
-                                    key,
-                                    original_image,
-                                    content_type='image/jpeg')
-
-        image_model_object.thumb = SimpleUploadedFile(
-                                    key,
-                                    thumb_image,
-                                    content_type='image/jpeg')
-
-        image_model_object.pinky = SimpleUploadedFile(
-                                    key,
-                                    pinky_image,
-                                    content_type='image/jpeg')
-
-        image_model_object.save()
-
-        context = { 'image_id':str(image_model_object.id),
-                    'thumb_url':AWS_STATIC_URL+str(image_model_object.thumb)}
-
-      except Exception as e:
-        context = {'exception':e}
-    else:
-      context = {'problem':"couldn't validate"}
-  else:
-    context = {'problem':"not POST"}
-
-  response = context
-  return HttpResponse(simplejson.dumps(response), mimetype='application/json')

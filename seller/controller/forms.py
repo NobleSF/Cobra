@@ -60,14 +60,6 @@ class ImageForm(forms.Form):
     from datetime import datetime
     return format(datetime.now(), u'U')
 
-  def getSignatureHash(timestamp):
-    from anou.settings import CLOUDINARY
-    import hashlib
-    cloudinary_string = 'timestamp='+timestamp+CLOUDINARY['api_secret']
-    h = hashlib.new('sha1')
-    h.update(cloudinary_string)
-    return h.hexdigest()
-
   timestamp       = forms.CharField(label="", initial=getUnixTimestamp())
   signature       = forms.CharField(label="", initial="not yet set")
   api_key         = forms.CharField(label="", initial=CLOUDINARY['api_key'])
