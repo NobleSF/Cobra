@@ -55,12 +55,7 @@ class AssetForm(forms.Form):
 class ImageForm(forms.Form):
   from anou.settings import CLOUDINARY
 
-  def getUnixTimestamp():
-    from django.utils.dateformat import format
-    from datetime import datetime
-    return format(datetime.now(), u'U')
-
-  timestamp       = forms.CharField(label="", initial=getUnixTimestamp())
+  timestamp       = forms.CharField(label="", initial="not yet set")
   signature       = forms.CharField(label="", initial="not yet set")
   api_key         = forms.CharField(label="", initial=CLOUDINARY['api_key'])
 

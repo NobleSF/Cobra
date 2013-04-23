@@ -33,6 +33,7 @@ def edit(request):
 
   image_form = ImageForm()
   image_form.fields['tags'].initial = "asset,seller"+str(request.session['seller_id'])
+  image_form.fields['timestamp'].initial = getUnixTimestamp()
   image_form.fields['signature'].initial = getSignatureHash(image_form)
 
   context = {
@@ -76,6 +77,11 @@ def edit(request):
 
   return render(request, 'account/edit.html', context)
 
+def getUnixTimestamp():
+  from django.utils.dateformat import format
+  from datetime import datetime
+  return format(datetime.now(), u'U')
+
 def getSignatureHash(image_form):
   from anou.settings import CLOUDINARY
   import hashlib
@@ -99,10 +105,13 @@ def saveAsset(request): #ajax requests only, create or update asset
 
   if request.method == 'GET': # it must be an ajax post to work
     try:
-      asset = Asset(seller_id=request.session['seller_id'])
-      if 'asset_id' in request.GET and \
-          request.GET['asset_id'] != "pending" and \
-          request.GET['asset_id'] != "none":
+      if request.GET['asset_id'] == "none":
+        asset = Asset(seller_id=request.session['seller_id'])
+
+      elif request.GET['asset_id'] == "pending":
+        raise Exception("asset_id is already pending")
+
+      else:
         asset = Asset.objects.get(id=request.GET['asset_id'])
 
       asset.ilk = request.GET['ilk']#from data-ilk included in every request
