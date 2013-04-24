@@ -35,10 +35,10 @@ $().ready( function(){
     uploader.apply(file_input, display_div);
   });
 
+  $('#photo1').addClass('updates-summary');
   $('#price').addClass('updates-summary');
   $('#weight').addClass('updates-summary');
   $('#shipping-option').addClass('updates-summary');
-  $('.photo-upload-div').first().find('.photo').addClass('updates-summary');
   $('.updates-summary').each(function(){$(this).change(updateSummary);});
   updateSummary();
 
@@ -71,7 +71,7 @@ function fileUploadAction(){
 
     this_file_input.fileupload({
       dataType: 'json',
-      url: $('#photo-ajax-url').val(),
+      url: "http://api.cloudinary.com/v1_1/anou/image/upload",
 
       send: function (e, data) {
         progress_div.show();
@@ -86,13 +86,15 @@ function fileUploadAction(){
         response_data = data['response']();
         response = response_data.result;
         //load thumb_url into display div
-        this_display_div.html('<img src="' + response['thumb_url'] + '">');
+        thumb_url = response['url'].replace("upload","upload/t_thumb");
+        this_display_div.html('<img src="' + thumb_url + '">');
         //save image_id in form field
         image_ids_input = this_display_div.closest('#product-edit-form')
                                           .find('input#images');
-        image_ids_input.attr('value',response['image_id']);
+        image_ids_input.attr('value', (image_ids_input.val() + " " + response['url']));
         image_ids_input.trigger('change');//for any autosave function watching
         //hide progress bar
+        progress_bar.css('width', '0%');
         progress_div.hide()
       }
     });//end fileupload
@@ -101,16 +103,18 @@ function fileUploadAction(){
 
 function updateSummary(){
   //set image
-  first_image_url = $('.photo-upload-div').first().find('img').attr('src');
-  summary_pinky_url = first_image_url.replace('thumbs','pinkies');
-  $('.summary-photo').find('img').attr('src', summary_pinky_url);
-
+  first_image_url = $('#photo1').closest('.photo-upload-div').find('img').attr('src');
+  if(!first_image_url){/*do nothing*/}else{
+    summary_pinky_url = first_image_url.replace('thumb','pinky');
+    $('.summary-photo').find('img').attr('src', summary_pinky_url);
+  }
   //set price and Anou fee
   seller_price = parseInt($('#price').val());
-  $('#summary-price').attr('value', seller_price);
-  anou_fee = parseInt(seller_price * 0.15);
-  $('#summary-anou-fee').attr('value', anou_fee);
-
+  if (seller_price > 0){
+    $('#summary-price').attr('value', seller_price);
+    anou_fee = parseInt(seller_price * 0.15);
+    $('#summary-anou-fee').attr('value', anou_fee);
+  }
   //set shipping cost and totals
   weight = $('#weight').val();
   shipping_option = $('#shipping-option').val();

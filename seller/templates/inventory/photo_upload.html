@@ -1,8 +1,7 @@
-{% load static %}
 <div class='photo-upload-div'>
   <div class='photo'>
-    {% if photo %}
-      <img src="{% get_media_prefix %}{{ photo.thumb }}" width="300" />
+    {% if photo_url %}
+      <img src="{{ photo_url }}" width="300" />
     {% else %}
       <img data-src="holder.js/300x225" width="300" />
     {% endif %}
@@ -15,11 +14,20 @@
   <div class='photo-form'>
     <form>
       <div class='hidden-fields'>
+        {{ photo_form.timestamp }}
+        {{ photo_form.signature }}
+        {{ photo_form.api_key }}
+        {{ photo_form.format }}
+        {{ photo_form.transformation }}
+        {{ photo_form.tags }}
         {{ photo_form.product }}
         {{ photo_form.rank }}
+        <input type='hidden' class='photo_id autosave' value=''
+               id='photo{{ photo_form.rank.value }}'
+               name='photo{{ photo_form.rank.value }}'>
       </div>
       <span class='file-wrapper'>
-        {{ photo_form.original }}
+        {{ photo_form.file }}
         <span class='file-button'></span>
       </span>
     </form>

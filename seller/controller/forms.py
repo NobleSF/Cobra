@@ -65,22 +65,30 @@ class ImageForm(forms.Form):
 
   file            = forms.FileField(label="",
                       widget=forms.FileInput(attrs={  'class':'image-input',
-                                                      'accept':'image/*',
+                                                      'accept':'*',
                                                       'capture':'camera'
                                                     })
                     )
 
-class PhotoForm(forms.ModelForm):
-  class Meta:
-    model = Photo
-    fields = ('product','rank','original',)
-    widgets = {
-      'product':  forms.TextInput(attrs=None),
-      'rank':     forms.TextInput(attrs=None),
-      'original': forms.FileInput(attrs={'class':'image-input',
-                                         'accept':'image/*',
-                                         'capture':'camera'})
-    }
+class PhotoForm(forms.Form):
+  from anou.settings import CLOUDINARY
+
+  timestamp       = forms.CharField(label="", initial="not yet set")
+  signature       = forms.CharField(label="", initial="not yet set")
+  api_key         = forms.CharField(label="", initial=CLOUDINARY['api_key'])
+
+  format          = forms.CharField(label="", initial=CLOUDINARY['format'])
+  transformation  = forms.CharField(label="", initial=CLOUDINARY['transformation'])
+  tags            = forms.CharField(label="")
+
+  file            = forms.FileField(label="",
+                      widget=forms.FileInput(attrs={  'class':'image-input',
+                                                      'accept':'*',
+                                                      'capture':'camera'
+                                                    })
+                    )
+  product         = forms.CharField(label="")
+  rank            = forms.CharField(label="")
 
 class ProductEditForm(forms.Form):
   product_id      = forms.CharField(

@@ -52,14 +52,37 @@ def edit(request, product_id):
   # we want additional ranks going up to nine photos maximum
   add_ranks_range = range(photos.count()+1, 10)
 
+  photo_form = PhotoForm()
+  photo_form.fields['tags'].initial = "product,seller"+str(request.session['seller_id'])
+  photo_form.fields['timestamp'].initial = getUnixTimestamp()
+  photo_form.fields['signature'].initial = getSignatureHash(photo_form)
+
   context = {
     'product':          product,
     'product_form':     product_form,
     'photos':           photos,
-    'photo_form':       PhotoForm(),
+    'photo_form':       photo_form,
     'add_ranks_range':  add_ranks_range
   }
   return render(request, 'inventory/edit.html', context)
+
+def getUnixTimestamp():
+  from django.utils.dateformat import format
+  from datetime import datetime
+  return format(datetime.now(), u'U')
+
+def getSignatureHash(photo_form):
+  from anou.settings import CLOUDINARY
+  import hashlib
+  cloudinary_string  = 'format=' + photo_form.fields['format'].initial
+  cloudinary_string += '&tags=' + photo_form.fields['tags'].initial
+  cloudinary_string += '&timestamp=' + photo_form.fields['timestamp'].initial
+  cloudinary_string += '&transformation=' + photo_form.fields['transformation'].initial
+  cloudinary_string += CLOUDINARY['api_secret']
+
+  h = hashlib.new('sha1')
+  h.update(cloudinary_string)
+  return h.hexdigest()
 
 @access_required('seller') #it's the 'r' in crud, but is it even needed?
 def detail(request, id):
@@ -81,54 +104,5 @@ def checkInventory():
 
 @access_required('seller')
 @csrf_exempt
-def savePhoto(request): #ajax requests only, not asset-aware
-  from seller.models import Photo, Product, Seller
-  from seller.controller.forms import PhotoForm
-  from anou.settings import DEBUG, AWS_STATIC_URL
-  from datetime import datetime
-  from django.core.files.uploadedfile import SimpleUploadedFile
-  from seller.controller.image_manipulation import makeThumbnails
-
-  if request.method == 'POST':
-    form = PhotoForm(request.POST, request.FILES)
-    if form.is_valid():
-      try:
-        #change filename(key) to seller_#_date.jpg
-        key = 'seller_' + "%04d" % request.session['seller_id']#4 digit seller id
-        key += '_' + datetime.now().strftime('%Y-%m-%d-%H-%M-%S-%f')
-        key += '.jpg'
-
-        photo_model_object = form.save()
-        original_url = AWS_STATIC_URL + str(photo_model_object.original)
-
-        (original_photo, thumb_photo, pinky_photo) = makeThumbnails(original_url)
-
-        photo_model_object.original = SimpleUploadedFile(
-                                    key,
-                                    original_photo,
-                                    content_type='image/jpeg')
-
-        photo_model_object.thumb = SimpleUploadedFile(
-                                    key,
-                                    thumb_photo,
-                                    content_type='image/jpeg')
-
-        photo_model_object.pinky = SimpleUploadedFile(
-                                    key,
-                                    pinky_photo,
-                                    content_type='image/jpeg')
-
-        photo_model_object.save()
-
-        context = { 'photo_id':str(photo_model_object.id),
-                    'thumb_url':AWS_STATIC_URL+str(photo_model_object.thumb)}
-
-      except Exception as e:
-        context = {'exception':e}
-    else:
-      context = {'problem':"couldn't validate"}
-  else:
-    context = {'problem':"not POST"}
-
-  response = context
-  return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+def saveProduct(request): #ajax requests only, not asset-aware
+  pass

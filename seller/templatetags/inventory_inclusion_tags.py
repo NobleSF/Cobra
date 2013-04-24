@@ -5,11 +5,14 @@ register = template.Library()
 def photo_upload_tag(photo_form, product, rank=None, photo=None):
   if photo is not None:
     rank = photo.rank
+    photo_url = photo.thumb
+  else:
+    photo_url = None
 
   photo_form.fields['rank'].initial = rank
   photo_form.fields['product'].initial = product.id
 
-  return {'photo_form':photo_form, 'photo':photo}
+  return {'photo_form':photo_form, 'photo_url':photo_url}
 
 @register.inclusion_tag('inventory/product_asset_choosers/asset_chooser.html')
 def asset_chooser_tag(request, ilk):
