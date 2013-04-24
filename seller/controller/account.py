@@ -85,7 +85,6 @@ def getUnixTimestamp():
 def getSignatureHash(image_form):
   from anou.settings import CLOUDINARY
   import hashlib
-
   cloudinary_string  = 'format=' + image_form.fields['format'].initial
   cloudinary_string += '&tags=' + image_form.fields['tags'].initial
   cloudinary_string += '&timestamp=' + image_form.fields['timestamp'].initial

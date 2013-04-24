@@ -11,9 +11,17 @@
       </div>
       <div class='image-form'>
         <form>
-          <input type='hidden' id='asset_ilk' name='asset_ilk'>
+          <div class='hidden-fields'>
+            {{ image_form.timestamp }}
+            {{ image_form.signature }}
+            {{ image_form.api_key }}
+            {{ image_form.format }}
+            {{ image_form.transformation }}
+            {{ image_form.tags }}
+            <input type='hidden' id='asset_ilk' name='asset_ilk'>
+          </div>
           <span class='file-wrapper'>
-            {{ image_form }}
+            {{ image_form.file }}
             <span class='file-button'></span>
           </span>
         </form>
