@@ -3,8 +3,9 @@ from django.db import models
 class Order(models.Model):
   from seller.models import Product, ShippingOption
   from admin.models import Account
-  account             = models.ForeignKey(Account)
+  account             = models.ForeignKey(Account)#what if no customer accounts?
   notes               = models.TextField(blank=True, null=True)
+
   #charges breakdown
   products_charge     = models.DecimalField(max_digits=6, decimal_places=2)
   shipping_charge     = models.DecimalField(max_digits=6, decimal_places=2)
@@ -13,16 +14,20 @@ class Order(models.Model):
   discount_reason     = models.TextField(blank=True, null=True)
   total_charge        = models.DecimalField(max_digits=6, decimal_places=2)
   receipt             = models.TextField(blank=True, null=True)
+
   #shipping info
-  shipped_on          = models.DateField(blank=True, null=True)
   shipping_address    = models.TextField()
   shipping_option     = models.ForeignKey(ShippingOption)
+  #reported weight and cost after shipped
   shipping_weight     = models.FloatField(blank=True, null=True)
   shipping_cost       = models.DecimalField(blank=True, null=True,
                                             max_digits=6, decimal_places=2)
-  received_on         = models.DateField(blank=True, null=True)
+  shipped_date        = models.DateField(blank=True, null=True)
+  received_date       = models.DateField(blank=True, null=True)
+
   #order items
   product             = models.ManyToManyField(Product)
+
   #Status
   is_seller_notified  = models.BooleanField(default=False)
   is_seller_confirmed = models.BooleanField(default=False)
@@ -30,6 +35,7 @@ class Order(models.Model):
   is_arrived          = models.BooleanField(default=False)
   is_reviewed         = models.BooleanField(default=False)
   is_artisan_paid     = models.BooleanField(default=False)
+
   #update history
   created_at          = models.DateTimeField(auto_now_add = True)
   updated_at          = models.DateTimeField(auto_now = True)
