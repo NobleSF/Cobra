@@ -23,7 +23,7 @@ class Asset(models.Model):
   name          = models.CharField(max_length=50, null=True, blank=True)
   description   = models.TextField(null=True, blank=True)
   image         = models.ForeignKey('Image', null=True, blank=True)
-  category      = models.ManyToManyField(Category, null=True, blank=True)
+  categories    = models.ManyToManyField(Category, null=True, blank=True)
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
@@ -40,14 +40,14 @@ class Product(models.Model):
   is_sold       = models.BooleanField(default=False)
   is_active     = models.BooleanField(default=False)
   #product description elements
-  asset         = models.ManyToManyField('Asset')
-  color         = models.ManyToManyField(Color)
+  assets        = models.ManyToManyField('Asset')
+  colors        = models.ManyToManyField(Color)
   width         = models.SmallIntegerField(null=True, blank=True)
   height        = models.SmallIntegerField(null=True, blank=True)
   length        = models.SmallIntegerField(null=True, blank=True)
   weight        = models.SmallIntegerField(null=True, blank=True)
   price         = models.SmallIntegerField(null=True, blank=True)
-  shipping_option = models.ManyToManyField('ShippingOption')
+  shipping_options = models.ManyToManyField('ShippingOption')
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)

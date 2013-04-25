@@ -26,7 +26,7 @@ class Order(models.Model):
   received_date       = models.DateField(blank=True, null=True)
 
   #order items
-  product             = models.ManyToManyField(Product)
+  products             = models.ManyToManyField(Product)
 
   #Status
   is_seller_notified  = models.BooleanField(default=False)
