@@ -128,9 +128,9 @@ CLOUDINARY = {
 }
 
 THUMBNAIL_ALIASES = {
-  'original': {'size': (1600,1200)},
-  'thumb':    {'size': (300, 225)},
-  'pinky':    {'size': (100, 75)},
+  'original': {'size': (1600,1200), 'transformation':"t_original"},
+  'thumb':    {'size': (300, 225),  'transformation':"t_thumb"},
+  'pinky':    {'size': (100, 75),   'transformation':"t_pinky"},
 }
 
 # Make this unique, and don't share it with anybody.
@@ -176,8 +176,8 @@ INSTALLED_APPS = (
   'public',
   'seller',
   'admin',
+  'communication',
   #'api',
-  #'communication',
   'storages',
   'south',
   #'django.contrib.auth',
