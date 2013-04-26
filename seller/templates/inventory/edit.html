@@ -15,18 +15,20 @@
   {% load url from future %}
   {% load inventory_inclusion_tags %}
 
+  <input type='hidden' id='product_ajax_url' value='{% url 'seller:save product' %}'>
+
   <div id='product-edit-form'>
     <form action="" method="post">{% csrf_token %}
       <div class='hidden-fields'>
         {{ product_form.product_id }}
         {{ product_form.assets }}
-        {{ product_form.images }}
-        {{ product_form.color }}
-        {{ product_form.shipping_option }}
+        {{ product_form.photos }}
+        {{ product_form.colors }}
+        {{ product_form.shipping_options }}
       </div>
 
       <div id='product-chooser-section' class='section'>
-        {% asset_chooser_tag request "product" %}
+        {% asset_chooser_tag request product "product" %}
         <hr>
       </div>
 
@@ -54,22 +56,22 @@
       </div>
 
       <div id='color-chooser-section' class='section'>
-        {% color_chooser_tag %}
+        {% color_chooser_tag product %}
         <hr>
       </div>
 
       <div id='tool-chooser-section' class='section'>
-        {% asset_chooser_tag request "tool" %}
+        {% asset_chooser_tag request product "tool" %}
         <hr>
       </div>
 
       <div id='material-chooser-section' class='section'>
-        {% asset_chooser_tag request "material" %}
+        {% asset_chooser_tag request product "material" %}
         <hr>
       </div>
 
       <div id='artisan-chooser-section' class='section'>
-        {% asset_chooser_tag request "artisan" %}
+        {% asset_chooser_tag request product "artisan" %}
         <hr>
       </div>
 
@@ -100,7 +102,7 @@
       </div>
 
       <div id='shipping-option-chooser-section' class='section'>
-        {% shipping_option_chooser_tag request %}
+        {% shipping_option_chooser_tag request product %}
         <hr>
       </div>
 

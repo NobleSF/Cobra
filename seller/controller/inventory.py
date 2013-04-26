@@ -41,11 +41,39 @@ def edit(request, product_id):
   if request.method == 'POST':
     try:
       product_form = ProductEditForm(request.POST)
+      if product_form.is_valid():
+        product_data = product_form.cleaned_data
+        product.price = product_data['price']
+
+
+        context = {'success': "product saved"}
+        return redirect('seller:home')
+
+      else:
+        context = {'problem': "form did not validate"}
+
     except Exception as e:
       context = {'except': e}
 
   else:
     product_form = ProductEditForm()
+    product_form.fields['price'].initial  = product.price
+    product_form.fields['length'].initial = product.length
+    product_form.fields['width'].initial  = product.width
+    product_form.fields['height'].initial = product.height
+    product_form.fields['weight'].initial = product.weight
+
+    assets = product.assets.all()
+    for asset in assets:
+      product_form.fields['assets'].initial += str(asset.id)+" "
+
+    colors = product.colors.all()
+    for color in colors:
+      product_form.fields['colors'].initial += str(color.id)+" "
+
+    shipping_options = product.shipping_options.all()
+    for shipping_option in shipping_options:
+      product_form.fields['shipping_options'].initial += str(shipping_option.id)+" "
 
   product_form.fields['product_id'].initial = product.id
   photos = Photo.objects.all().filter(product_id=product_id).order_by('rank')
@@ -105,4 +133,97 @@ def checkInventory():
 @access_required('seller')
 @csrf_exempt
 def saveProduct(request): #ajax requests only, not asset-aware
-  pass
+  from seller.models import Product, Asset, ShippingOption
+  from admin.models import Color
+  context = {}
+
+  if request.method == 'GET': # it must be an ajax GET to work
+    try:
+      product_id = request.GET['product_id']
+      product = Product.objects.get(id=product_id)
+      attribute = request.GET['attribute']
+      if 'status' in request.GET:
+        status = request.GET['status']
+      else:
+        status = None
+
+      if attribute == "asset":
+        asset_id = request.GET['asset_id']
+        asset = Asset.objects.get(id=asset_id)
+        if status == "active":
+          product.assets.add(asset)
+          context['asset'] = "added asset " + str(asset.id)
+        else:
+          product.assets.remove(asset)
+          context['asset'] = "removed asset " + str(asset.id)
+
+      elif attribute == "shipping option":
+        shipping_option_id = request.GET['shipping_option_id']
+        shipping_option = ShippingOption.objects.get(id=shipping_option_id)
+        if status == "active":
+          product.shipping_options.add(shipping_option)
+          context['shipping_option'] = "added shipping option "+str(shipping_option.id)
+        else:
+          product.shipping_options.remove(shipping_option)
+          context['shipping_option'] = "removed shipping option "+str(shipping_option.id)
+
+      elif attribute == "color":
+        color_id = request.GET['color_id']
+        color = Color.objects.get(id=color_id)
+        if status == "active":
+          product.colors.add(color)
+          context['color'] = "added color " + str(color.id)
+        else:
+          product.colors.remove(color)
+          context['color'] = "removed color " + str(color.id)
+
+      elif attribute == "photo":
+        photo_id = request.GET['photo_id']
+        if not photo_id:
+          photo_id = None
+        rank = request.GET['rank']
+        url = request.GET['url']
+        photo = customSavePhoto(url, product_id, rank, photo_id)
+        context['photo_id'] = photo.id
+        context['photo'] = "saved photo at rank " + rank
+
+      elif attribute == "price":
+        product.price   = request.GET['value']
+        context['price'] = "saved price: " + request.GET['value']
+      elif attribute == "length":
+        product.length  = request.GET['value']
+        context['length'] = "saved length: " + request.GET['value']
+      elif attribute == "width":
+        product.width   = request.GET['value']
+        context['width'] = "saved width: " + request.GET['value']
+      elif attribute == "height":
+        product.height  = request.GET['value']
+        context['height'] = "saved height: " + request.GET['value']
+      elif attribute == "weight":
+        product.weight  = request.GET['value']
+        context['weight'] = "saved weight: " + request.GET['value']
+
+      product.save()
+      context['success'] = str(attribute) + " attribute saved"
+
+    except Exception as e:
+      context['exception'] = e
+
+  else:
+    context['problem'] = "not GET"
+
+  response = context
+  return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+  #return HttpResponse(context['exception'])
+
+def customSavePhoto(url, product_id, rank, photo_id=None):
+  from seller.models import Photo
+  if photo_id:
+    photo_object = Photo.objects.get(id=photo_id)
+  else:
+    photo_object = Photo(product_id=product_id, rank=rank, original=url)
+
+  photo_object.thumb = url.replace("upload", "upload/t_thumb")
+  photo_object.pinky = url.replace("upload", "upload/t_pinky")
+  photo_object.save()
+  return photo_object

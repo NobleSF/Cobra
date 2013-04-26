@@ -1,6 +1,11 @@
 <ul class='asset-chooser' id='{{ ilk }}_chooser'>
   {% for asset in assets %}
-    <li class='asset' data-object-id='{{ asset.id }}' data-input-id='assets'>
+    <li class='asset'
+        store-object_id='{{ asset.id }}'
+        store-input_id='assets'
+    >
+      <!-- data-object-id and data-input-id are used by ajax
+            to store saved assets in the product form --->
 
       <div class='asset-image'>
         <img src='{{ asset.image.pinky }}'>
@@ -8,6 +13,15 @@
 
       <div class='asset-name'>
         {{ asset.name }}
+      </div>
+
+      <div class='hidden-fields'>
+        <input type='text' id='asset{{ asset.id }}' class='asset-input autosave'
+               data-product_id='{{ product_id }}'
+               data-attribute='asset'
+               data-asset_id='{{ asset.id }}'
+               data-status=""
+        >
       </div>
 
     </li>

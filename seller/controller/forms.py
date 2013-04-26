@@ -82,7 +82,7 @@ class PhotoForm(forms.Form):
   tags            = forms.CharField(label="")
 
   file            = forms.FileField(label="",
-                      widget=forms.FileInput(attrs={  'class':'image-input',
+                      widget=forms.FileInput(attrs={  'class':'photo-input',
                                                       'accept':'*',
                                                       'capture':'camera'
                                                     })
@@ -91,30 +91,30 @@ class PhotoForm(forms.Form):
   rank            = forms.CharField(label="")
 
 class ProductEditForm(forms.Form):
-  product_id      = forms.CharField(
-                      widget=forms.TextInput(attrs={'id':"product-id"}),
-                      initial="none")
+  product_id        = forms.CharField(
+                        widget=forms.TextInput(),
+                        initial="none")
 
-  assets          = forms.CharField(
-                      widget=forms.TextInput(attrs={'id':"assets"}),
-                      initial=" ")
-  shipping_option = forms.CharField(
-                      widget=forms.TextInput(attrs={'id':"shipping-option"}),
-                      initial=" ")
-  color           = forms.CharField(
-                      widget=forms.TextInput(attrs={'id':"color"}),
-                      initial=" ")
+  assets            = forms.CharField(
+                        widget=forms.TextInput(),
+                        initial=" ")
+  shipping_options  = forms.CharField(
+                        widget=forms.TextInput(),
+                        initial=" ")
+  colors            = forms.CharField(
+                        widget=forms.TextInput(),
+                        initial=" ")
 
-  images          = forms.CharField(
-                      widget=forms.TextInput(attrs={'id':"images"}))
+  photos            = forms.CharField(
+                        widget=forms.TextInput())
 
-  width           = forms.CharField(
-                      widget=forms.TextInput(attrs={'id':"width"}))
-  height          = forms.CharField(
-                      widget=forms.TextInput(attrs={'id':"height"}))
-  length          = forms.CharField(
-                      widget=forms.TextInput(attrs={'id':"length"}))
-  weight          = forms.CharField(
-                      widget=forms.TextInput(attrs={'id':"weight"}))
-  price           = forms.CharField(
-                      widget=forms.TextInput(attrs={'id':"price"}))
+  price             = forms.CharField(
+                        widget=forms.TextInput(attrs={'class':"autosave giveMeData"}))
+  length            = forms.CharField(
+                        widget=forms.TextInput(attrs={'class':"autosave giveMeData"}))
+  width             = forms.CharField(
+                        widget=forms.TextInput(attrs={'class':"autosave giveMeData"}))
+  height            = forms.CharField(
+                        widget=forms.TextInput(attrs={'class':"autosave giveMeData"}))
+  weight            = forms.CharField(
+                        widget=forms.TextInput(attrs={'class':"autosave giveMeData"}))

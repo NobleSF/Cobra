@@ -1,8 +1,28 @@
-<div class='asset-chooser' id='color-chooser'>
+<ul class='asset-chooser' id='color-chooser'>
   {% for color in colors %}
-    <div class='asset' data-object-id='{{ color.id }}' data-input-id='color'>
-      <div class='asset-image' style='background-color: #{{ color.hex_value }};'></div>
-      <div class='asset-name'>{{ color.name }}</div>
-    </div>
+    <li class='asset'
+        store-object_id='{{ color.id }}'
+        store-input_id='colors'
+    >
+      <!-- data-object-id and data-input-id are used by ajax
+      to store saved colors in the product form --->
+
+      <div class='asset-image' style='background-color: #{{ color.hex_value }};'>
+      </div>
+
+      <div class='asset-name'>
+        {{ color.name }}
+      </div>
+
+      <div class='hidden-fields'>
+        <input type='text' id='color{{ color.id }}' class='color-input autosave'
+               data-product_id='{{ product_id }}'
+               data-attribute='color'
+               data-color_id='{{ color.id }}'
+               data-status=""
+        >
+      </div>
+
+    </li>
   {% endfor %}
-</div>
+</ul>

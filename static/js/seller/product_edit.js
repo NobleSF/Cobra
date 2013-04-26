@@ -7,7 +7,8 @@ $().ready( function(){
   $('.asset').addClass('btn');
 
   //run on page load
-  num_divs = 0
+  //only show the first 5 photo upload divs
+  num_divs = 0;
   $('.photo-upload-div').each(function(){
     num_divs += 1;
     if (num_divs > 5){
@@ -15,39 +16,80 @@ $().ready( function(){
     }
   });
 
+  markAssignedAssetsAsSelected();
+
+  //activate the "show more" link in the summary
   $('#summary-show-more').bind('click', function(){
     $('.summary-detail').show();
     $('#summary-show-more').hide();
   });
 
+  //selection actions for choosing assets, etc
   $('.asset').each( function(){
     $(this).bind('click', function(){
       $(this).toggleClass('active');
       $(this).toggleClass('selected');
-      toggleSaveAssetId($(this));
+      toggleStoreAssetId($(this));
+      toggleActiveState($(this));
     });
   });
 
+  //apply events for photo uploads
   $('.photo-upload-div').each(function(){
-    file_input = $(this).find('.image-input');
+    file_input = $(this).find('.photo-input');
     display_div = $(this).find('.photo');
     uploader = new fileUploadAction();
     uploader.apply(file_input, display_div);
   });
 
+  applyAutosaveDataToTextAttributes();
+  applyAutosaveEvents();
+
+  //set events for updating the summary
   $('#photo1').addClass('updates-summary');
   $('#price').addClass('updates-summary');
   $('#weight').addClass('updates-summary');
-  $('#shipping-option').addClass('updates-summary');
+  $('#shipping_option').addClass('updates-summary');
   $('.updates-summary').each(function(){$(this).change(updateSummary);});
   updateSummary();
 
 });//end .ready
 
-function toggleSaveAssetId(asset_element){
-  asset_id = asset_element.attr('data-object-id');
-  input_element = $('#'+asset_element.attr('data-input-id'));
+function markAssignedAssetsAsSelected(){
+  //actual assets
+  asset_ids = $('#id_assets').val().split(" ");
+  $.each(asset_ids, function(index, value){
+    if (value !== ""){
+      var btn = $('[store-input_id="assets"][store-object_id="'+value+'"]')
+      $(btn).addClass("active").addClass("selected");
+    }
+  });
+
+
+  //colors
+  color_ids = $('#id_colors').val().split(" ");
+  $.each(color_ids, function(index, value){
+    if (value !== ""){
+      var btn = $('[store-input_id="colors"][store-object_id="'+value+'"]')
+      $(btn).addClass("active").addClass("selected");
+    }
+  });
+
+  //shipping options
+  shipping_option_ids = $('#id_shipping_options').val().split(" ");
+  $.each(shipping_option_ids, function(index, value){
+    if (value !== ""){
+      var btn = $('[store-input_id="shipping_options"][store-object_id="'+value+'"]')
+      $(btn).addClass("active").addClass("selected");
+    }
+  });
+}
+
+function toggleStoreAssetId(asset_element){
+  asset_id = asset_element.attr('store-object_id');
+  input_element = $('#id_'+asset_element.attr('store-input_id'));
   input_element_value = input_element.attr('value');
+  if (input_element_value === undefined){input_element_value=""}
 
   if (asset_element.hasClass('selected')){ //if selected
     if (!input_element_value.match(asset_id)){ //if does not already contain id
@@ -58,6 +100,35 @@ function toggleSaveAssetId(asset_element){
     input_element_value = input_element_value.replace(asset_id, '');
     input_element.attr('value', input_element_value);
   }
+}
+
+function toggleActiveState(asset_element){
+  asset_input = asset_element.find('input');
+  if (asset_element.hasClass('selected')){ //if selected
+    asset_input.attr('data-status', "active");
+  }else{
+    asset_input.attr('data-status', "");
+  }
+  asset_input.trigger('change');//for any autosave function watching
+}
+
+function applyAutosaveDataToTextAttributes(){
+  $('.giveMeData').each(function(){
+    $(this).attr('data-product_id', $('#id_product_id').val());
+    attribute = $(this).attr('id').replace("id_","");
+    $(this).attr('data-attribute', attribute);
+  });
+}
+
+function applyAutosaveEvents(){
+  $('.autosave').each(function(){
+    $(this).autosave({
+      url:$('#product_ajax_url').val(),
+      before:function(){$(this).addClass('updating')},
+      success:function(){$(this).removeClass('updating').addClass('saved')},
+      error:function(){$(this).removeClass('updating').addClass('error')}
+    });
+  });
 }
 
 function fileUploadAction(){
@@ -88,24 +159,23 @@ function fileUploadAction(){
         //load thumb_url into display div
         thumb_url = response['url'].replace("upload","upload/t_thumb");
         this_display_div.html('<img src="' + thumb_url + '">');
-        //save image_id in form field
-        image_ids_input = this_display_div.closest('#product-edit-form')
-                                          .find('input#images');
-        image_ids_input.attr('value', (image_ids_input.val() + " " + response['url']));
-        image_ids_input.trigger('change');//for any autosave function watching
+        //save photo_id in form field
+        photo_ids_input = this_display_div.closest('#product-edit-form')
+                                          .find('input#photos');
+        photo_ids_input.attr('value', (photo_ids_input.val() + " " + response['url']));
         //hide progress bar
         progress_bar.css('width', '0%');
-        progress_div.hide()
+        progress_div.hide();
       }
     });//end fileupload
   }
 }
 
 function updateSummary(){
-  //set image
-  first_image_url = $('#photo1').closest('.photo-upload-div').find('img').attr('src');
-  if(!first_image_url){/*do nothing*/}else{
-    summary_pinky_url = first_image_url.replace('thumb','pinky');
+  //set photo
+  first_photo_url = $('#photo1').closest('.photo-upload-div').find('img').attr('src');
+  if(!first_photo_url){/*do nothing*/}else{
+    summary_pinky_url = first_photo_url.replace('thumb','pinky');
     $('.summary-photo').find('img').attr('src', summary_pinky_url);
   }
   //set price and Anou fee
@@ -117,7 +187,7 @@ function updateSummary(){
   }
   //set shipping cost and totals
   weight = $('#weight').val();
-  shipping_option = $('#shipping-option').val();
+  shipping_option = $('#shipping_option').val();
   if ((weight > 0) ){ //&& (shipping_option != " ")
     shipping_cost = parseInt(weight/3);//ajax call to calculate shipping cost
     $('#summary-shipping-cost').attr('value', shipping_cost);

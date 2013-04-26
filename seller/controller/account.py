@@ -124,7 +124,7 @@ def saveAsset(request): #ajax requests only, create or update asset
       elif element == 'description':
         asset.description = value
       elif element == 'category':
-        asset.category = value
+        asset.categories.add(id=value)
 
       asset.save()
       context = {'asset_id':asset.id, 'get':request.GET}
