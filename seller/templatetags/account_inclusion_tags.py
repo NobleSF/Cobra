@@ -5,10 +5,8 @@ register = template.Library()
 def image_tag(image_id=None):
   from seller.models import Image
   try:
-    if image_id is not None:
-      image_url = Image.objects.get(id=image_id).thumb
-    else:
-      image_url = None
+    image_url = Image.objects.get(id=image_id).thumb
+
   except Exception as e:
     image_url = None
   return {'image_url': image_url}
@@ -17,15 +15,16 @@ def image_tag(image_id=None):
 def asset_tag(image_form, asset_form, asset=None):
   from seller.models import Asset
   try:
-    if asset is not None:
-      asset_form.fields["asset_id"].initial = asset.id
-      asset_form.fields["ilk"].initial = asset.ilk
-      asset_form.fields["image_url"].initial = asset.image_id
-      asset_form.fields["name"].initial = asset.name
-      asset_form.fields["description"].initial = asset.description
-      asset_form.fields["category"].initial = asset.category.all()
+    asset_form.fields["asset_id"].initial = asset.id
+    asset_form.fields["ilk"].initial = asset.ilk
+    asset_form.fields["image_url"].initial = asset.image_id
+    asset_form.fields["name"].initial = asset.name
+    asset_form.fields["description"].initial = asset.description
+    asset_form.fields["category"].initial = asset.categories.all()
+    image_id = asset.image_id
 
   except Exception as e:
     asset = None
+    image_id = None
 
-  return {'asset':asset, 'asset_form':asset_form, 'image_form':image_form}
+  return {'asset':asset, 'asset_form':asset_form, 'image_form':image_form, 'image_id':image_id}
