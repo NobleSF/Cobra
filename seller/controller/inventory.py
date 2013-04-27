@@ -34,7 +34,8 @@ def create(request):
 
 @access_required('seller')
 def edit(request, product_id):
-  from seller.models import Product, Asset, Photo
+  from seller.models import Product, Asset, Photo, ShippingOption
+  from admin.models import Color
   from seller.controller.forms import ProductEditForm, PhotoForm
   product = Product.objects.get(id=product_id)
 
@@ -42,9 +43,34 @@ def edit(request, product_id):
     try:
       product_form = ProductEditForm(request.POST)
       if product_form.is_valid():
-        product_data = product_form.cleaned_data
-        product.price = product_data['price']
+        product_data    = product_form.cleaned_data
 
+        product.price   = product_data['price']
+        product.length  = product_data['length']
+        product.width   = product_data['width']
+        product.height  = product_data['height']
+        product.weight  = product_data['weight']
+
+        asset_ids = product_data['assets'].split(" ");
+        while '' in asset_ids:
+          asset_ids.remove('')
+        product.assets.clear()
+        for asset_id in asset_ids:
+          product.assets.add(Asset.objects.get(id=asset_id))
+
+        shipping_option_ids = product_data['shipping_options'].split(" ");
+        while '' in shipping_option_ids:
+          shipping_option_ids.remove('')
+        product.shipping_options.clear()
+        for shipping_option_id in shipping_option_ids:
+          product.shipping_options.add(ShippingOption.objects.get(id=shipping_option_id))
+
+        colors_ids = product_data['colors'].split(" ");
+        while '' in colors_ids:
+          colors_ids.remove('')
+          product.colors.clear()
+        for colors_id in colors_ids:
+          product.colors.add(Color.objects.get(id=colors_id))
 
         context = {'success': "product saved"}
         return redirect('seller:home')
