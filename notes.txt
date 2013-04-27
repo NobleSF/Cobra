@@ -1,6 +1,4 @@
-User Registration and Managment:
-	http://www.django-userena.org/
-	https://www.djangopackages.com/grids/g/authentication
+Using South: http://stackoverflow.com/questions/4625712/whats-the-recommended-approach-to-resetting-migration-history-using-django-sout
 
 Mobile Integration / API app
 	http://tastypieapi.org/
