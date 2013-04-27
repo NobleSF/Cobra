@@ -4,9 +4,9 @@ register = template.Library()
 @register.inclusion_tag('inventory/product_detail.html')
 def product_detail_tag(product):
   from seller.models import Photo
-  photo = Photo.objects.filter(product_id=product.id, rank=1)[0]
+  photos = Photo.objects.filter(product_id=product.id)
 
-  return {'product':product, 'photo_url':photo.thumb}
+  return {'product':product, 'photos':photos}
 
 @register.inclusion_tag('inventory/photo_upload.html')
 def photo_upload_tag(photo_form, product, rank=None, photo=None):

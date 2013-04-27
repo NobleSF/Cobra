@@ -2,7 +2,16 @@
 
 <li>
   <div class='product-photo'>
-    <img src="{{ photo_url }}">
+    {% for photo in photos %}
+
+      {% if forloop.counter == 1 %}
+        <img src="{{ photo.thumb }}"><br>
+      {% elif forloop.counter < 5 %}
+        <img src="{{ photo.pinky }}">
+      {% endif %}
+
+    {% endfor %}
+    <br>
     <a href="{% url 'seller:inventory edit' product_id=product.id %}">
       EDIT product {{ product.id }}
     </a>
