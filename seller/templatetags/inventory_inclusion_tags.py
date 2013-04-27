@@ -6,13 +6,15 @@ def photo_upload_tag(photo_form, product, rank=None, photo=None):
   if photo is not None:
     rank = photo.rank
     photo_url = photo.thumb
+    photo_id = photo.id
   else:
     photo_url = None
+    photo_id = None
 
   photo_form.fields['rank'].initial = rank
   photo_form.fields['product'].initial = product.id
 
-  return {'photo_form':photo_form, 'photo_url':photo_url, 'product_id':product.id}
+  return {'photo_form':photo_form, 'photo_url':photo_url, 'photo_id':photo_id, 'product_id':product.id}
 
 @register.inclusion_tag('inventory/product_asset_choosers/asset_chooser.html')
 def asset_chooser_tag(request, product, ilk):

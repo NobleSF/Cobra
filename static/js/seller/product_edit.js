@@ -123,7 +123,7 @@ function applyAutosaveDataToTextAttributes(){
 function applyAutosaveEvents(){
   $('.autosave').each(function(){
     $(this).autosave({
-      url:$('#product_ajax_url').val(),
+      url:$('#product-ajax-url').attr('value'),
       before:function(){$(this).addClass('updating')},
       success:function(){$(this).removeClass('updating').addClass('saved')},
       error:function(){$(this).removeClass('updating').addClass('error')}
@@ -160,9 +160,9 @@ function fileUploadAction(){
         thumb_url = response['url'].replace("upload","upload/t_thumb");
         this_display_div.html('<img src="' + thumb_url + '">');
         //save photo_id in form field
-        photo_ids_input = this_display_div.closest('#product-edit-form')
-                                          .find('input#photos');
-        photo_ids_input.attr('value', (photo_ids_input.val() + " " + response['url']));
+        photo_save_input = this_display_div.closest('.photo-upload-div').find('.photo-id-save');
+        photo_save_input.attr('value', response['url']);
+        photo_save_input.trigger('change');
         //hide progress bar
         progress_bar.css('width', '0%');
         progress_div.hide();
@@ -179,16 +179,16 @@ function updateSummary(){
     $('.summary-photo').find('img').attr('src', summary_pinky_url);
   }
   //set price and Anou fee
-  seller_price = parseInt($('#price').val());
-  if (seller_price > 0){
+  seller_price = parseInt($('#id_price').val());
+  if (seller_price !== ""){
     $('#summary-price').attr('value', seller_price);
     anou_fee = parseInt(seller_price * 0.15);
     $('#summary-anou-fee').attr('value', anou_fee);
   }
   //set shipping cost and totals
-  weight = $('#weight').val();
-  shipping_option = $('#shipping_option').val();
-  if ((weight > 0) ){ //&& (shipping_option != " ")
+  weight = $('#id_weight').val();
+  shipping_option_id = $('#id_shipping_options').val().trim();
+  if ((weight !== "") && (shipping_option_id != "")){
     shipping_cost = parseInt(weight/3);//ajax call to calculate shipping cost
     $('#summary-shipping-cost').attr('value', shipping_cost);
     total = seller_price + anou_fee + shipping_cost;
@@ -196,8 +196,6 @@ function updateSummary(){
     USD_total = parseInt(total / 8.5);//pull conversion rate from controller
     $('#summary-USD').attr('value', USD_total);
   }
-
-
 }
 
 //https://github.com/cfurrow/jquery.autosave.js

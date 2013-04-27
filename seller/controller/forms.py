@@ -2,6 +2,9 @@ from django.db import models
 from django import forms
 from seller.models import Asset, Product, Seller, Image, Photo
 from admin.models import Category
+from django.forms.widgets import TextInput
+class NumberInput(TextInput):
+    input_type = 'number'
 
 class SellerEditForm(forms.Form):
   from admin.models import Country, Currency
@@ -105,16 +108,21 @@ class ProductEditForm(forms.Form):
                         widget=forms.TextInput(),
                         initial=" ")
 
-  photos            = forms.CharField(
-                        widget=forms.TextInput())
+  #photos            = forms.CharField(
+  #                      widget=forms.TextInput())
 
   price             = forms.CharField(
-                        widget=forms.TextInput(attrs={'class':"autosave giveMeData"}))
+                        widget=NumberInput(attrs={'class':"autosave giveMeData",
+                                            'min':'1', 'max':'99999','step':'1'}))
   length            = forms.CharField(
-                        widget=forms.TextInput(attrs={'class':"autosave giveMeData"}))
+                        widget=NumberInput(attrs={'class':"autosave giveMeData",
+                                            'min':'1', 'max':'99999','step':'1'}))
   width             = forms.CharField(
-                        widget=forms.TextInput(attrs={'class':"autosave giveMeData"}))
+                        widget=NumberInput(attrs={'class':"autosave giveMeData",
+                                            'min':'1', 'max':'99999','step':'1'}))
   height            = forms.CharField(
-                        widget=forms.TextInput(attrs={'class':"autosave giveMeData"}))
+                        widget=NumberInput(attrs={'class':"autosave giveMeData",
+                                            'min':'1', 'max':'99999','step':'1'}))
   weight            = forms.CharField(
-                        widget=forms.TextInput(attrs={'class':"autosave giveMeData"}))
+                        widget=NumberInput(attrs={'class':"autosave giveMeData",
+                                            'min':'1', 'max':'99999','step':'1'}))

@@ -182,7 +182,7 @@ def saveProduct(request): #ajax requests only, not asset-aware
         if not photo_id:
           photo_id = None
         rank = request.GET['rank']
-        url = request.GET['url']
+        url = request.GET['value']
         photo = customSavePhoto(url, product_id, rank, photo_id)
         context['photo_id'] = photo.id
         context['photo'] = "saved photo at rank " + rank
@@ -204,10 +204,10 @@ def saveProduct(request): #ajax requests only, not asset-aware
         context['weight'] = "saved weight: " + request.GET['value']
 
       product.save()
-      context['success'] = str(attribute) + " attribute saved"
+      context['success'] = attribute + " attribute saved"
 
     except Exception as e:
-      context['exception'] = e
+      context = {'exception': e}
 
   else:
     context['problem'] = "not GET"
