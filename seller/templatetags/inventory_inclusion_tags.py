@@ -1,6 +1,13 @@
 from django import template
 register = template.Library()
 
+@register.inclusion_tag('inventory/product_detail.html')
+def product_detail_tag(product):
+  from seller.models import Photo
+  photo = Photo.objects.filter(product_id=product.id, rank=1)[0]
+
+  return {'product':product, 'photo_url':photo.thumb}
+
 @register.inclusion_tag('inventory/photo_upload.html')
 def photo_upload_tag(photo_form, product, rank=None, photo=None):
   if photo is not None:

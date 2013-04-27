@@ -1,0 +1,10 @@
+{% load url from future %}
+
+<li>
+  <div class='product-photo'>
+    <img src="{{ photo_url }}">
+    <a href="{% url 'seller:inventory edit' product_id=product.id %}">
+      EDIT product {{ product.id }}
+    </a>
+  </div>
+</li>

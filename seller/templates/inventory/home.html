@@ -1,1 +1,13 @@
-inventory home
+{% extends "base.html" %}
+
+{% block content %}
+  {% load url from future %}
+  {% load inventory_inclusion_tags %}
+
+  <ul class='products'>
+    {% for product in products %}
+      {% product_detail_tag product %}
+    {% endfor %}
+  </ul>
+
+{% endblock content %}

@@ -8,11 +8,9 @@ from django.views.decorators.csrf import csrf_exempt
 def home(request):
   from seller.models import Seller, Product
   try:
-    seller = Seller.objects.get(pk=request.session['seller_pk'])
-    product = seller.product_set.all()
-    context = {'success': "got your products"}
-    context['product'] = product
-
+    seller = Seller.objects.get(id=request.session['seller_id'])
+    products = seller.product_set.all()
+    context = {'products': products}
   except Exception as e:
     context = {'exception': e}
 
