@@ -106,50 +106,50 @@
         {% shipping_option_chooser_tag request product %}
         <hr>
       </div>
+
+      <div id='summary-section' class='section'>
+        <table>
+          <tr>
+            <td class='summary-photo'>
+              <img src=''>
+            </td>
+            <td>
+              <ul>
+                <li class='input-prepend input-append'>
+                  <span class='add-on'>$</span>
+                  <input type='text' id='summary-price' class='input-mini' disabled>
+                  <span class='add-on'>Dh</span>
+                </li>
+                <li class='input-prepend input-append summary-detail'>
+                  <span class='add-on'><i class='icon-plane'></i></span>
+                  <input type='text' id='summary-shipping-cost' class='input-mini' disabled>
+                  <span class='add-on'>Dh</span>
+                </li>
+                <li class='input-prepend input-append summary-detail'>
+                  <span class='add-on'><i class='icon-qrcode'></i></span>
+                  <input type='text' id='summary-anou-fee' class='input-mini' disabled>
+                  <span class='add-on'>Dh</span>
+                </li>
+                <li class='input-prepend input-append summary-detail'>
+                  <span class='add-on'><i class='icon-tasks'></i></span>
+                  <input type='text' id='summary-total' class='input-mini' disabled>
+                  <span class='add-on'>Dh</span>
+                </li>
+                <li class='input-prepend input-append summary-detail'>
+                  <span class='add-on'><i class='icon-shopping-cart'></i></span>
+                  <input type='text' id='summary-USD' class='input-mini' disabled>
+                  <span class='add-on'>USD</span>
+                </li>
+                <li id='summary-show-more'>show more</li>
+              </ul>
+            </td>
+            <td class='summary-submit'>
+              <button type="submit">OK!</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+
     </form>
-
-    <div id='summary-section' class='section'>
-      <table>
-        <tr>
-          <td class='summary-photo'>
-            <img src=''>
-          </td>
-          <td>
-            <ul>
-              <li class='input-prepend input-append'>
-                <span class='add-on'>$</span>
-                <input type='text' id='summary-price' class='input-mini' disabled>
-                <span class='add-on'>Dh</span>
-              </li>
-              <li class='input-prepend input-append summary-detail'>
-                <span class='add-on'><i class='icon-plane'></i></span>
-                <input type='text' id='summary-shipping-cost' class='input-mini' disabled>
-                <span class='add-on'>Dh</span>
-              </li>
-              <li class='input-prepend input-append summary-detail'>
-                <span class='add-on'><i class='icon-qrcode'></i></span>
-                <input type='text' id='summary-anou-fee' class='input-mini' disabled>
-                <span class='add-on'>Dh</span>
-              </li>
-              <li class='input-prepend input-append summary-detail'>
-                <span class='add-on'><i class='icon-tasks'></i></span>
-                <input type='text' id='summary-total' class='input-mini' disabled>
-                <span class='add-on'>Dh</span>
-              </li>
-              <li class='input-prepend input-append summary-detail'>
-                <span class='add-on'><i class='icon-shopping-cart'></i></span>
-                <input type='text' id='summary-USD' class='input-mini' disabled>
-                <span class='add-on'>USD</span>
-              </li>
-              <li id='summary-show-more'>show more</li>
-            </ul>
-          </td>
-          <td class='summary-submit'>
-            <button type="submit">OK!</button>
-          </td>
-        </tr>
-      </table>
-    </div>
-
   </div>
 {% endblock content %}
