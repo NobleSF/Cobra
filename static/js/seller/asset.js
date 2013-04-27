@@ -38,6 +38,7 @@ function saveAssetSuccess(data,$this_element){
 }
 
 function saveAssetError(error,$this_element){
+  $this_element.closest('.asset').find('#id_asset_id').attr('value',"none");
   //error visual
   $this_element.closest('.asset').removeClass('updating').addClass('error');
 }
