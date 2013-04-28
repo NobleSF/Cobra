@@ -1,0 +1,21 @@
+
+.left-navigation li {
+  padding: 0.2em 1.5em;
+}
+
+.top-navigation li {
+  padding: 2em .5em;
+}
+
+#anou-carousel{
+
+}
+
+#main{
+
+}
+
+#search-toolbar{
+  background-color: #999;
+  padding: 10px 10px 0;
+}
