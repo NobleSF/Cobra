@@ -24,34 +24,47 @@
 </head>
 
 <body>
-  <div id="header">
+  <div id="header" class="container">
     {% block header %}
-      <ul id="navigation">
-        <!--<li class='active'><a href="{% url 'home' %}">Home</a></li>-->
-        <!--<li><a href="{% url 'about' %}">About</a></li>-->
-
-        {% if 'admin_id' in request.session %}
-          <li><a href="{% url 'admin:home' %}">Admin</a></li>
-        {% endif %}
-        {% if 'seller_id' in request.session %}
-          <li><a href="{% url 'seller:home' %}">Seller</a></li>
-        {% endif %}
-
-        {% if 'seller_id' not in request.session %}
-          <li><a href="{% url 'admin:login' %}">Login</a></li>
-        {% endif %}
-
-        {% if 'username' in request.session %}
-          <li><a href="{% url 'admin:logout' %}">Logout</a></li>
-        {% endif %}
-      </ul>
-      <div id="logo">
+      <div id="base-logo" class='pull-left'>
         <a href="{% url 'home' %}">
           <img src="{{ STATIC_URL }}images/Anou_logo_160x100.png" alt="Anou logo">
         </a>
       </div>
+      <div id="base-navigation">
+        <ul class='nav nav-pills pull-right'>
+          <li class='btn-large'>
+            <a href="{% url 'home' %}">Home</a>
+          </li>
+          <!--<li><a href="{% url 'about' %}">About</a></li>-->
+
+          {% if 'admin_id' in request.session %}
+            <li class='btn-large'>
+              <a href="{% url 'admin:home' %}">Admin</a>
+            </li>
+          {% endif %}
+
+          {% if 'seller_id' in request.session %}
+            <li class='btn-large'>
+              <a href="{% url 'seller:home' %}">Seller</a>
+            </li>
+          {% endif %}
+
+          {% if 'seller_id' not in request.session %}
+            <li class='btn-large'>
+              <a href="{% url 'admin:login' %}">Login</a>
+            </li>
+          {% endif %}
+
+          {% if 'username' in request.session %}
+            <li class='btn-large'>
+              <a href="{% url 'admin:logout' %}">Logout</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
     {% endblock header %}
-    <hr id="header-separator">
+    <!--<hr id="header-separator">-->
   </div>
 
   <div class="errors">
@@ -68,15 +81,8 @@
   <footer id="footer">
     <hr id="footer-separator">
     <div class="container">
-      <div>
-        {% block footer %}
-          <!--
-          <div>Thing One</div>
-          <div>Thing Two</div>
-          <div>Thing Three</div>
-          -->
-        {% endblock footer %}
-      </div>
+      {% block footer %}
+      {% endblock footer %}
     </div>
   </footer>
 
