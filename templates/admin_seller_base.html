@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block css %}
+{% endblock css %}
+
+
+    {% block header %}
+      <div id="logo pull-left">
+        <a href="{% url 'home' %}">
+          <img src="{{ STATIC_URL }}images/Anou_logo_160x100.png" alt="Anou logo">
+        </a>
+      </div>
+
+      <ul id="navigation">
+        <!--<li class='active'><a href="{% url 'home' %}">Home</a></li>-->
+        <!--<li><a href="{% url 'about' %}">About</a></li>-->
+
+        {% if 'admin_id' in request.session %}
+          <li><a href="{% url 'admin:home' %}">Admin</a></li>
+        {% endif %}
+        {% if 'seller_id' in request.session %}
+          <li><a href="{% url 'seller:home' %}">Seller</a></li>
+        {% endif %}
+
+        {% if 'seller_id' not in request.session %}
+          <li><a href="{% url 'admin:login' %}">Login</a></li>
+        {% endif %}
+
+        {% if 'username' in request.session %}
+          <li><a href="{% url 'admin:logout' %}">Logout</a></li>
+        {% endif %}
+      </ul>
+    {% endblock header %}
+
+
+
+
+  <div id="body" class="container">
+    {% block content %}
+      <p>Hello World! It's Anou.</p>
+    {% endblock content %}
+  </div>
+
+  <footer id="footer">
+    <hr id="footer-separator">
+    <div class="container">
+      <div>
+        {% block footer %}
+          <!--
+          <div>Thing One</div>
+          <div>Thing Two</div>
+          <div>Thing Three</div>
+          -->
+        {% endblock footer %}
+      </div>
+    </div>
+  </footer>
+
+  <!--Javascript Placed at the end of the document so the pages load faster -->
+  {% if debug %}
+    <script src="{{ STATIC_URL }}vendor/jquery/jquery-1.9.1.min.js"></script>
+    <script src="{{ STATIC_URL }}vendor/bootstrap/js/bootstrap.min.js"></script>
+  {% else %}
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+  {% endif %}
+
+  <script src="{{ STATIC_URL }}vendor/holder/js/holder.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL}}js/base.js"></script>
+
+  {% block javascript %}
+  {% endblock javascript %}
+</body>
+</html>

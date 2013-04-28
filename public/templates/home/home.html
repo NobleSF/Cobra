@@ -1,69 +1,55 @@
 {% extends "base.html" %}
+{% load url from future %}
+{% load home_inclusion_tags %}
 
 {% block javascript %}
-  <script type="text/javascript" src="{{ STATIC_URL}}js/home.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+  <script src="{{ STATIC_URL}}vendor/shapeshift/js/jquery.shapeshift.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL}}js/public/home.js"></script>
 {% endblock javascript %}
 
 {% block css %}
-  <link href="{{ STATIC_URL }}css/home.css" rel="stylesheet">
+  <link href="{{ STATIC_URL }}css/public/home.css" rel="stylesheet">
 {% endblock css %}
 
+{% block header %}
+  <div class='content'>
+
+    <span id='top-of-page-marker'>&nbsp</span>
+    <div id='scroll-controller' style='display:none;'
+         data-spy='scroll' data-target='#scroll-controller' data-offset='400'
+    >
+      <a id='#top-of-page' href='#top-of-page-marker'></a>
+      <a id='#rest-of-page' href='#product-container'></a>
+    </div>
+
+    <div id='full-nav'>
+      <div class='hidden-phone'>{% home_header_tag request "full" %}</div>
+      <div class='visible-phone'>{% home_header_tag request "mobile" %}</div>
+    </div>
+    <div id='mini-nav' style='display:none;'>
+      {% home_header_tag request "mini" %}
+    </div>
+
+{% endblock header %}
+
+
 {% block content %}
-  <h2 class="title">Featured</h2>
+  <div id='main' class='content'>
 
-  <ul class="thumbnails">
-    {% for product in "123" %}
-      <li>
-        <div class="thumbnail">
-          <img data-src="holder.js/350x250" alt="" width="350">
-          <p class="title">Product Title, Location</p>
-          <ul class="actions">
-            <li><span class="price">$42</span></li>
-            <li><a class="save" href="#"></a></li>
-            <li><a class="buy" href="#"></a></li>
-          </ul>
-          <p class="caption">Cras justo odio, dapibus ac facilisis in, egest as eget quam. Donec id elit ...</p>
+    <div id='search-toolbar'>
+      <div class='row-fluid'>
+        <div class='span4'><input type='text' value='search'></div>
+        <div class='span5'>
+          <a href='' class='btn'>Carpets</a>
+          <a href='' class='btn'>Baskets</a>
+          <a href='' class='btn'>Necklaces</a>
+          <a href='' class='btn'>Bracelets</a>
         </div>
-      </li>
-    {% endfor %}
-  </ul>
+        <div class='span3'><input type='text' value='search'></div>
+      </div>
+    </div>
+    <div id='product-container'></div>
 
-  <h2 class="title">Newest</h2>
-
-  <ul class="thumbnails">
-    {% for product in "1234" %}
-      <li>
-        <div class="thumbnail">
-          <img data-src="holder.js/300x200" alt="" width="300">
-          <p class="title">Product Title, Location</p>
-          <ul class="actions">
-            <li><a class="price" href="#">$42</a></li>
-            <li><a class="save" href="#"></a></li>
-            <li><a class="buy" href="#"></a></li>
-          </ul>
-          <p class="caption">Cras justo odio, dapibus ac facilisis in, egest as eget quam. Donec id elit ...</p>
-        </div>
-      </li>
-    {% endfor %}
-  </ul>
-
-  <h2 class="title">Recommended</h2>
-
-  <ul class="thumbnails">
-    {% for product in "123456" %}
-      <li>
-        <div class="thumbnail">
-          <img data-src="holder.js/150x150" alt="" width="150">
-          <p class="title">Product Title, Location</p>
-          <ul class="actions">
-            <li><a class="price" href="#">$42</a></li>
-            <li><a class="save" href="#"></a></li>
-            <li><a class="buy" href="#"></a></li>
-          </ul>
-          <p class="caption">Cras justo odio, dapibus ac facilisis in, egest as eget quam. Donec id elit ...</p>
-        </div>
-      </li>
-    {% endfor %}
-  </ul>
-
+  </div>
 {% endblock content %}
