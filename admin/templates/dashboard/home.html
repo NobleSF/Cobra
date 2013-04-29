@@ -3,6 +3,7 @@
 {% block content %}
   {% load url from future %}
   <ul>
+    <li><a href="{% url 'admin:account create' %}">Create New Admin or Seller Account</a></li>
     <li><a href="{% url 'admin:currency' %}">Currency</a></li>
     <li><a href="{% url 'admin:country' %}">Country</a></li>
     <li><a href="{% url 'admin:color' %}">Color</a></li>
