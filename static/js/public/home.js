@@ -8,6 +8,10 @@ $(function(){//on page load
   //bootstrap carousel
   $('.carousel').carousel();
 
+  $('.product').hover(function(){
+    $(this).find('.extra').toggle(300);
+  });
+
 });
 
 function showFullHeader(){

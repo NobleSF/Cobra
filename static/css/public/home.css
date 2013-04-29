@@ -1,9 +1,14 @@
 
-.left-navigation li {
-  padding: 0.2em 1.5em;
+.left-navigation li{
+  padding: 0.1em 0;
+  max-width: 160px;
+}
+.left-navigation li a{
+  padding: 0.5em 1.5em 0.5em 0;
+  font-size: 24pt;
 }
 
-.top-navigation li {
+.top-navigation li{
   padding: 2em .5em;
 }
 
@@ -16,11 +21,75 @@
 }
 
 #search-toolbar{
-  background-color: #999;
+  background-color: rgba(0,0,0,0.3);
   padding: 10px 10px 0;
 }
 
 .carousel-caption > a, p, h1, h2, h3, h4, h5, h6{
   color: #BBB;
   text-align: center;
+}
+
+/* Product Container using Shapeshift by McPants */
+#product-container{
+  position: relative;
+  width: 100%;
+}
+#product-container .product{
+  height: 240px;
+  padding: 5px;
+}
+.product-container div[data-ss-colspan="2"] { width: 480px; }
+.product-container div[data-ss-colspan="3"] { width: 715px; }
+
+.product .title{
+  z-index: 3;
+  position: relative;
+  top: 2.3em;
+  left: 0px;
+  width: 300px;
+  height: 2em;
+  background-color: rgba(255,255,255,0.5);
+  font-size: 16pt;
+  text-align: center;
+}
+.product .title p{
+  padding: 0.8em 1em 0.5em;
+  color: #333
+}
+
+.product .image{
+  z-index: 2;
+  position: relative;
+  top: 15px;
+  left: 0px;
+  height: 225px;
+  width: 300px;
+  margin: 0px;
+  padding: 0px;
+}
+
+.product .extra{
+  z-index: 1;
+  position: relative;
+  top: -225px;
+  left: 0px;
+  height: 240px;
+  display: none;
+}
+.product .extra:hover{
+  display: block;
+}
+
+.product .extra ul{
+  position: relative;
+  left: 300px;
+  list-style: none;
+  margin: 0;
+}
+.product .extra ul li{
+  padding: 0px;
+  margin: 7.5px;
+  width: 100px;
+  height: 75px;
 }

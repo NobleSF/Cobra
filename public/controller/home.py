@@ -4,7 +4,12 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 
 def home(request):
-  return render(request, 'home/home.html')
+  from seller.models import Product
+  products = Product.objects.all()[0:9]
+
+  context = {'products':products}
+
+  return render(request, 'home/home.html', context)
 
 def about(request):
   return render(request, 'home/about.html')
