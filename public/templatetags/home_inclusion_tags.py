@@ -19,13 +19,23 @@ def product_tag(product):
   from seller.models import Product, Photo, Asset
 
   context = {}
+
   try:
-    product_type = product.assets.filter(ilk='product')[0].name
-    artisan = product.assets.filter(ilk='artisan')[0].name
-    product.name = product_type + " by " + artisan
+    product.name = product.assets.filter(ilk='product')[0].name # +" from " seller.city
+
+    #grab only tools and materials
+    utilities = product.assets.filter(ilk='tool') | product.assets.filter(ilk='material')
+    #put name of the first 3 utilities used in 'details' array
+    product.details = []
+    for utility in utilities: #[0:3]
+      product.details.append(utility.name)
+
+    #get artisan information
+    artisan = product.assets.filter(ilk='artisan')[0]
+    product.artisan_image = artisan.image.thumb
+    product.artisan_name = artisan.name
   except:
     product.name = "thingy by whomever"
-
   context['product'] = product
 
   photo_objects = Photo.objects.filter(product=product)

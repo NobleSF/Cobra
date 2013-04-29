@@ -5,7 +5,7 @@ from django.template import RequestContext
 
 def home(request):
   from seller.models import Product
-  products = Product.objects.all()[0:9]
+  products = Product.objects.all()
 
   context = {'products':products}
 
