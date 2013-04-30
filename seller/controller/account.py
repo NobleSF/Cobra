@@ -24,56 +24,61 @@ def create(account_id):
 def edit(request):
   from seller.models import Seller, Asset
   from seller.controller.forms import AssetForm, ImageForm, SellerEditForm
-  seller = Seller.objects.get(id=request.session['seller_id'])
 
   try:
-    assets = Asset.objects.filter(seller_id=seller.id)
-  except:
-    assets = []
+    seller = Seller.objects.get(id=request.session['seller_id'])
 
-  image_form = ImageForm()
-  image_form.fields['tags'].initial = "asset,seller"+str(request.session['seller_id'])
-  image_form.fields['timestamp'].initial = getUnixTimestamp()
-  image_form.fields['signature'].initial = getSignatureHash(image_form)
+    try:
+      assets = Asset.objects.filter(seller_id=seller.id)
+    except:
+      assets = []
 
-  context = {
-              'assets': assets,
-              'asset_form': AssetForm(),
-              'image_form': image_form,
-              'asset_ilks': ['artisan','product','tool','material']
-            }
+    image_form = ImageForm()
+    image_form.fields['tags'].initial = "asset,seller"+str(request.session['seller_id'])
+    image_form.fields['timestamp'].initial = getUnixTimestamp()
+    image_form.fields['signature'].initial = getSignatureHash(image_form)
 
-  if request.method == 'POST':
-    seller_form = SellerEditForm(request.POST)
-    try: # it must be a post to work
-      if seller_form.is_valid():
-        seller_data = seller_form.cleaned_data
-        seller.name     = seller_data['name']
-        seller.email    = seller_data['email']
-        seller.phone    = seller_data['phone']
-        seller.bio      = seller_data['bio']
-        seller.country  = seller_data['country']
-        seller.currency = seller_data['currency']
-        seller.save()
-        context = {'success': "Seller info saved"}
-        return redirect('seller:home')
+    context = {
+                'assets': assets,
+                'asset_form': AssetForm(),
+                'image_form': image_form,
+                'asset_ilks': ['artisan','product','tool','material']
+              }
 
-    except Exception as e:
-      context['exception'] = e
+    if request.method == 'POST':
+      seller_form = SellerEditForm(request.POST)
+      try: # it must be a post to work
+        if seller_form.is_valid():
+          seller_data = seller_form.cleaned_data
+          seller.name     = seller_data['name']
+          seller.email    = seller_data['email']
+          seller.phone    = seller_data['phone']
+          seller.bio      = seller_data['bio']
+          seller.country  = seller_data['country']
+          seller.currency = seller_data['currency']
+          seller.save()
+          context = {'success': "Seller info saved"}
+          return redirect('seller:home')
 
-  else: #not POST
-    seller_form = SellerEditForm()
-    seller_form.fields['name'].initial      = seller.name
-    seller_form.fields['email'].initial     = seller.email
-    seller_form.fields['phone'].initial     = seller.phone
-    seller_form.fields['bio'].initial       = seller.bio
-    seller_form.fields['country'].initial   = seller.country
-    seller_form.fields['currency'].initial  = seller.currency
-    if 'admin_id' not in request.session:
-      seller_form.fields['country'].widget.attrs['disabled'] = True
-      seller_form.fields['currency'].widget.attrs['disabled'] = True
+      except Exception as e:
+        context['exception'] = e
 
-  context['seller_form'] = seller_form
+    else: #not POST
+      seller_form = SellerEditForm()
+      seller_form.fields['name'].initial      = seller.name
+      seller_form.fields['email'].initial     = seller.email
+      seller_form.fields['phone'].initial     = seller.phone
+      seller_form.fields['bio'].initial       = seller.bio
+      seller_form.fields['country'].initial   = seller.country
+      seller_form.fields['currency'].initial  = seller.currency
+      if 'admin_id' not in request.session:
+        seller_form.fields['country'].widget.attrs['disabled'] = True
+        seller_form.fields['currency'].widget.attrs['disabled'] = True
+
+    context['seller_form'] = seller_form
+
+  except Exception as e:
+    context = {'except':e}
 
   return render(request, 'account/edit.html', context)
 
