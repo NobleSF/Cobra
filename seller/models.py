@@ -9,6 +9,7 @@ class Seller(models.Model):
   bio           = models.TextField(null=True, blank=True)
   country       = models.ForeignKey(Country, null=True, blank=True)
   currency      = models.ForeignKey(Currency, null=True, blank=True)
+  image         = models.ForeignKey('Image', null=True, blank=True)
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
