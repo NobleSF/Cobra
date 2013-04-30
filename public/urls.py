@@ -13,7 +13,7 @@ urlpatterns = patterns('',
   url(r'^collection/(?P<group>\w+)/?(?P<name>\w+)?$', product.collection, name='collection'),
 
   # store page at /store/123 represents a seller profile
-  url(r'^store/(?P<id>\d+)$', store.home, name='store'),
+  url(r'^store/(?P<seller_id>\d+)$', store.home, name='store'),
 
 
   #checkout pages
