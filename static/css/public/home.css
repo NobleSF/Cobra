@@ -35,6 +35,7 @@
   width: 100%
 }
 #product-container .product{
+  cursor: pointer;
 }
 
 .right-side, .left-side{

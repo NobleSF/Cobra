@@ -8,7 +8,9 @@ $(function(){//on page load
   //bootstrap carousel
   $('.carousel').carousel();
 
-
+  $('.product').click(function(){
+    window.location.href = $(this).attr('data-url');
+  });
 
 });
 

@@ -22,6 +22,7 @@ def product_tag(product):
 
   try:
     product.name = product.assets.filter(ilk='product')[0].name # +" from " seller.city
+    product.seller_name = product.seller.name
 
     #grab only tools and materials
     utilities = product.assets.filter(ilk='tool') | product.assets.filter(ilk='material')
