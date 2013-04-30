@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 
 def home(request, id):
-  return render(request, 'product/home.html',
+  return render(request, 'product/detail.html',
     {'id':id}
   )
 
