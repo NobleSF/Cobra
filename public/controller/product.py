@@ -4,11 +4,11 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 
 def home(request, id):
-  return render(request, 'product/detail.html',
+  return render(request, 'product.html',
     {'id':id}
   )
 
 def collection(request, group, name=None):
-  return render(request, 'product/collection.html',
+  return render(request, 'collection.html',
     {'group':group}
   )
