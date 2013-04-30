@@ -1,0 +1,59 @@
+
+#info-left ul{
+  list-style: none;
+}
+
+
+.asset .image{
+
+}
+.asset .description{
+
+}
+
+.thumbnail{
+  padding: 0px;
+  margin-right: 2.5%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Fix for Bootstrap thumbnails by muayyad-alsadi @ https://github.com/twitter/bootstrap/issues/3494
+.row-fluid .thumbnails [class*="span"]{margin-right:2.5641%;}
+.row-fluid .thumbnails [class*="span"]:first-child{margin-right:2.5641%;margin-bottom:0;}
+.row-fluid .thumbnails .span1 { width: 5.76913%;}
+.row-fluid .thumbnails .span2 { width: 14.1025%;}
+.row-fluid .thumbnails .span3 { width: 22.4358%;}
+.row-fluid .thumbnails .span4 { width: 30.7691%;}
+.row-fluid .thumbnails .span5 { width: 39.1025%;}
+.row-fluid .thumbnails .span6 { width: 47.4358%;}
+.row-fluid .thumbnails .span7 { width: 55.7691%;}
+.row-fluid .thumbnails .span8 { width: 64.1025%;}
+.row-fluid .thumbnails .span9 { width: 72.4358%;}
+.row-fluid .thumbnails .span10 { width: 80.7691%;}
+.row-fluid .thumbnails .span11 { width: 89.1025%;}
+.row-fluid .thumbnails .span12 { width: 97.4358%;}
+*/

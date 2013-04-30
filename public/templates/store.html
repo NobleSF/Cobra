@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block javascript %}
+  <script type="text/javascript" src="{{ STATIC_URL}}js/public/store.js"></script>
+{% endblock javascript %}
+
+{% block css %}
+  <link href="{{ STATIC_URL }}css/public/store.css" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+  <div id='store' class='row-fluid'>
+    <div id='info-left' class='span4'>
+      <ul>
+        {% if store.image.thumb %}
+          <li>
+            <img src='{{ store.image.thumb }}'>
+          </li>
+        {% endif %}
+        <li>
+          <h1>{{ store.name }}</h1>
+        </li>
+        <li>
+          <ul id='seller-data' class='info-list'>
+            {% if store.country %}
+              <li>
+                <i class="icon-globe"></i>
+                {{ store.country.name }}
+              </li>
+            {% endif %}
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div id='info-right' class='span8'>
+      <p id='store-bio' class='well'>
+        {{ store.bio }}
+      </p>
+      <div id='assets' class='row-fluid'>
+        <ul id='asset-list' class='thumbnails'>
+          {% for asset in store.assets %}
+            <li class='span6'>
+              <div class='asset thumbnail'>
+                <p class='description'>
+                  <span class='image'>
+                    <img src='{{ asset.image.pinky }}'>
+                  </span>
+                {% if asset.name %}
+                  <span class='name'>{{ asset.name }}</span>
+                {% endif %}
+                {% if asset.description %}
+                  <p>{{ asset.description }}</p>
+                {% endif %}
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id='products' class='row-fulid'>
+    <ul class='thumbnails'>
+      {% for product in products %}
+        <li class='thumbnail span3'>
+          <div class='title title-photo'><p>{{ product.name }}</p></div>
+          <div class='photo'>
+            <img src='{{ product.main_photo }}'>
+          </div>
+          <div class='extra extra-photos row-fluid hidden-phone'>
+            {% for extra_photo in product.extra_photos %}
+              <div class='span4'><img src='{{ extra_photo.pinky }}'></div>
+            {% endfor %}
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock content %}
