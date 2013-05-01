@@ -50,9 +50,9 @@
         <span class='price'>{{ product.price }}</span>
         with free shipping!
       </h4>
-      <button id='buy-button' class="btn btn-primary btn-success" type="button">
+      <a href="{% url 'cart-add' product.id %}" id='buy-button' class='btn btn-primary btn-success'>
         Add To Cart
-      </button>
+      </a>
     </div>
 
     <div id='artisan-rep' class='span4 well well-small'>
