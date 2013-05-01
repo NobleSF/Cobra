@@ -100,7 +100,7 @@ def edit(request, product_id):
       product_form.fields['shipping_options'].initial += str(shipping_option.id)+" "
 
   product_form.fields['product_id'].initial = product.id
-  photos = Photo.objects.all().filter(product_id=product_id).order_by('rank')
+  photos = Photo.objects.filter(product=product).order_by('rank')
   # we want additional ranks going up to nine photos maximum
   add_ranks_range = range(photos.count()+1, 10)
 
