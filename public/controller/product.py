@@ -5,20 +5,28 @@ from django.template import RequestContext
 
 def home(request, product_id):
   from seller.models import Product, Photo
+  from itertools import chain
 
   try:
+    #product = get_object_or_404(Product, id=product_id)
     product = Product.objects.get(id=product_id)
-    seller = product.seller
+    product.price = generateCostAmalgamBoobsBomb(product)
 
     product.photos = Photo.objects.filter(product=product).order_by('rank')
     for photo in product.photos:
       photo.feature_url = str(photo.thumb).replace('thumb','product')
 
-    artisans  = product.assets.filter(ilk='artisan')
-    tools     = product.assets.filter(ilk='tool')
-    materials = product.assets.filter(ilk='material')
+    product.artisans  = product.assets.filter(ilk='artisan').order_by('?')[:1]
+    product.materials = product.assets.filter(ilk='material').order_by('?')[:3]
+    product.tools     = product.assets.filter(ilk='tool').order_by('?')[:3]
+    product.utilities = list(chain(product.materials, product.tools))
+
+    product.utilities_bootstrap_span_length = int(12/len(product.utilities))
 
     context = {'product':product}
+
+  except Product.DoesNotExist:
+    raise Http404
 
   except Exception as e:
     context = {'except':e}
@@ -29,3 +37,20 @@ def collection(request, group, name=None):
   return render(request, 'collection.html',
     {'group':group}
   )
+
+def generateCostAmalgamBoobsBomb(product):
+  import locale
+  locale.setlocale( locale.LC_ALL, '' )
+  from anou.settings import ANOU_FEE
+
+  total  = product.price
+  total *= (1 + ANOU_FEE)
+  total += calculateShipping(product)
+  total /= product.seller.currency.exchange_rate_to_USD
+  total  = "$"+str(int(round(total)))
+  #total  = locale.currency(round(total), grouping=True)
+
+  return total
+
+def calculateShipping(product):
+  return product.weight/3

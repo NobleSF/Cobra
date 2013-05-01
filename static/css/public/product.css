@@ -1,15 +1,54 @@
 
-#photos{
-  max-width: 800px;
-}
-
-#actions{
+#product div{
   text-align: center;
 }
 
+#photos{
+  max-width: 800px;
+  margin: auto;
+}
+
+.price{
+  font-size: 2em;
+}
 #buy-button{
   width: 100%;
   padding: 0.3em 0.3em;
-  font-size: 3.5em;
-  line-height: 1.2em;
+  font-size: 3em;
+  line-height: 1em;
+}
+
+#artisan-rep > *{
+  margin: 0;
+  padding: 0;
+}
+#artisan-rep-image{
+  padding-bottom: 1em;
+}
+#artisan-rep-name{
+  position: relative;
+  top: -0.5em;
+}
+
+#ratings, #actions, #artisan-rep{
+  padding: 0.5em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+#seller{
+  margin: 2.5em;
+}
+#seller p{
+  text-align: justify;
+}
+#seller .title i{
+  font-size: 0.5em;
+}
+
+.thumbnails li{
+  max-width: 310px;
+}
+.utility h4{
+  text-align: center;
 }
