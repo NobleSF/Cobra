@@ -1,1 +1,67 @@
-detail view of product {{ id }}
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block javascript %}
+  <script type="text/javascript" src="{{ STATIC_URL}}js/public/product.js"></script>
+{% endblock javascript %}
+
+{% block css %}
+  <link href="{{ STATIC_URL }}css/public/product.css" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+  <div id='product' class='row-fluid'>
+    <div id='photos' class='carousel slide span9'>
+      <ol class='carousel-indicators'>
+        {% for photo in product.photos %}
+          <li data-target='#photos' data-slide-to='{{ forloop.counter }}'
+              class='{% if forloop.first %}active{% endif %}'></li>
+        {% endfor %}
+      </ol>
+      <!-- Carousel items -->
+      <div class='carousel-inner'>
+        {% for photo in product.photos %}
+          <div class='item {% if forloop.first %}active{% endif %}'>
+            <img src='{{ photo.feature_url }}' alt='product photo {{ photo.rank }}'>
+            <!--<div class='carousel-caption'></div>-->
+          </div>
+        {% endfor %}
+      </div>
+      <!-- Carousel nav -->
+      <a class="carousel-control left" href="#photos" data-slide="prev">&lsaquo;</a>
+      <a class="carousel-control right" href="#photos" data-slide="next">&rsaquo;</a>
+    </div>
+
+    <div id='ratings' class='span3 well'>
+      {% for rating in '1234' %}
+        <div class='rating'>
+          {% for star in '12345' %}
+            <i class="icon-star-empty"></i>
+          {% endfor %}
+          <span class='rating-subject'>Rating Subject</span>
+        </div>
+      {% endfor %}
+    </div>
+    <div id='actions' class='span3 well well-large'>
+      <h3 id='command-to-buy'>You Need This!</h3>
+      <button id='buy-button' class="btn btn-primary" type="button">Add To Cart</button>
+    </div>
+
+  </div>
+  <div id='seller-and-assets' class='row-fluid'>
+    <div id='seller' class='span6'>
+      <h1>Seller Information</h1>
+    </div>
+    <div id='artisans' class='span6'>
+      <h1>Artisan Images and Information</h1>
+    </div>
+  </div>
+  <div id='seller-and-assets' class='row-fluid'>
+    <div id='tools' class='span6'>
+      <h1>Tool Images and Information</h1>
+    </div>
+    <div id='materials' class='span6'>
+      <h1>Material Images and Information</h1>
+    </div>
+  </div>
+{% endblock content %}
