@@ -1,6 +1,6 @@
-from django.http import HttpResponse, HttpResponseRedirect
-from django.utils import simplejson
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
+from django.utils import simplejson
 from admin.controller.decorator import access_required
 from django.views.decorators.csrf import csrf_exempt
 
