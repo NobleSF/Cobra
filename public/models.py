@@ -1,5 +1,43 @@
 from django.db import models
 
+class Cart(models.Model):
+  email               = models.EmailField(blank=True, null=True, unique=True)
+  address1            = models.CharField(max_length=100, null=True, blank=True)
+  address2            = models.CharField(max_length=100, null=True, blank=True)
+  city                = models.CharField(max_length=50, null=True, blank=True)
+  state               = models.CharField(max_length=50, null=True, blank=True)
+  postal_code         = models.CharField(max_length=15, null=True, blank=True)
+  country             = models.CharField(max_length=50, null=True, blank=True)
+
+  #update history
+  checked_out         = models.BooleanField(default=False)
+  created_at          = models.DateTimeField(auto_now_add = True)
+  updated_at          = models.DateTimeField(auto_now = True)
+
+  def discount(self):
+    #for when we implement shipping groups and discounts
+    return 0
+
+  def total(self):
+    sum = 0
+    for item in self.items:
+      sum += item.price
+    return sum
+
+class Item(models.Model):
+  from seller.models import Product
+
+  cart = models.ForeignKey('Cart')
+  product = models.ForeignKey(Product)
+  #quantity = models.PositiveIntegerField(default=1)
+
+  def __unicode__(self):
+    #return u'%d units of %s' % (self.quantity, self.product.__name__)
+    return self.product.name
+
+  def price(self):
+    return self.product.display_price
+
 class Order(models.Model):
   from seller.models import Product, ShippingOption
   from admin.models import Account
@@ -60,3 +98,9 @@ class CustomerActivity(models.Model):
   action              = models.CharField(max_length=10) #what are the options?
   value               = models.IntegerField() #what's this for?
   created_at          = models.DateTimeField(auto_now_add = True)
+
+class Visitor(models.Model):
+  from django.contrib.sessions.models import Session
+
+  sessions            = models.ManyToManyField(Session)
+  carts               = models.ForeignKey('Cart', null=True, blank=True)
