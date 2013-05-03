@@ -10,7 +10,7 @@ def home(request, product_id):
   try:
     #product = get_object_or_404(Product, id=product_id)
     product = Product.objects.get(id=product_id)
-    product.price = generateCostAmalgamBoobsBomb(product)
+    product.price = product.display_price
 
     product.photos = Photo.objects.filter(product=product).order_by('rank')
     for photo in product.photos:
@@ -38,19 +38,3 @@ def collection(request, group, name=None):
     {'group':group}
   )
 
-def generateCostAmalgamBoobsBomb(product):
-  import locale
-  locale.setlocale( locale.LC_ALL, '' )
-  from anou.settings import ANOU_FEE
-
-  total  = product.price
-  total *= (1 + ANOU_FEE)
-  total += calculateShipping(product)
-  total /= product.seller.currency.exchange_rate_to_USD
-  total  = "$"+str(int(round(total)))
-  #total  = locale.currency(round(total), grouping=True)
-
-  return total
-
-def calculateShipping(product):
-  return product.weight/3

@@ -2,6 +2,8 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
 from django.utils import simplejson
 
+from public.controller.cart_class import Cart
+
 def cartAdd(request, product_id):
   from seller.models import Product
 
@@ -20,7 +22,6 @@ def cartAdd(request, product_id):
     return HttpResponseRedirect(request.META["HTTP_REFERER"])
 
 def cart(request, product_id=None):
-
   return render(request, 'checkout/cart.html')
 
 def payment(request):

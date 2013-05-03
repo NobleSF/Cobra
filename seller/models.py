@@ -17,6 +17,14 @@ class Seller(models.Model):
   def __unicode__(self):
     return self.name
 
+class ArtisanManager(models.Manager):
+  def get_query_set(self):
+    return super(ArtisanManager, self).get_query_set().filter(ilk='artisan')
+
+class UtilityManager(models.Manager):
+  def get_query_set(self):
+    return super(UtilityManager, self).get_query_set().filter(ilk='tool') | super(UtilityManager, self).get_query_set().filter(ilk='material')
+
 class Asset(models.Model):
   from admin.models import Category
   seller        = models.ForeignKey('Seller')
@@ -28,6 +36,10 @@ class Asset(models.Model):
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
+
+  #managers
+  artisans      = ArtisanManager()
+  utilities     = UtilityManager()
 
   def __unicode__(self):
     return unicode(self.name)
@@ -52,6 +64,28 @@ class Product(models.Model):
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
+
+  def shipping_cost(self):
+    return self.weight/3
+
+  def display_price(self):
+    import locale
+    locale.setlocale( locale.LC_ALL, '' )
+    from anou.settings import ANOU_FEE
+
+    cost_amalgum_boobs_bomb = self.price
+    cost_amalgum_boobs_bomb *= (1 + ANOU_FEE)
+    cost_amalgum_boobs_bomb += calculateShipping(self)
+    cost_amalgum_boobs_bomb /= self.seller.currency.exchange_rate_to_USD
+    cost_amalgum_boobs_bomb  = "$"+str(int(round(cost_amalgum_boobs_bomb)))
+    #locale.currency(round(cost_amalgum_boobs_bomb), grouping=True)
+    return cost_amalgum_boobs_bomb
+
+  def name(self):
+    return self.assets.get(ilk='product')[0].name
+
+  def __unicode__(self):
+    return self.name() + ' by ' +self.seller.name
 
 class ShippingOption(models.Model):
   from admin.models import Country
