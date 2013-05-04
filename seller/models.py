@@ -17,14 +17,6 @@ class Seller(models.Model):
   def __unicode__(self):
     return self.name
 
-class ArtisanManager(models.Manager):
-  def get_query_set(self):
-    return super(ArtisanManager, self).get_query_set().filter(ilk='artisan')
-
-class UtilityManager(models.Manager):
-  def get_query_set(self):
-    return super(UtilityManager, self).get_query_set().filter(ilk='tool') | super(UtilityManager, self).get_query_set().filter(ilk='material')
-
 class Asset(models.Model):
   from admin.models import Category
   seller        = models.ForeignKey('Seller')
@@ -36,10 +28,6 @@ class Asset(models.Model):
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
-
-  #managers
-  artisans      = ArtisanManager()
-  utilities     = UtilityManager()
 
   def __unicode__(self):
     return unicode(self.name)
