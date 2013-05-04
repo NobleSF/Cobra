@@ -1,1 +1,65 @@
-this is your cart
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block javascript %}
+  <script type="text/javascript" src="{{ STATIC_URL}}js/public/checkout.js"></script>
+{% endblock javascript %}
+
+{% block css %}
+  <link href="{{ STATIC_URL }}css/public/checkout.css" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+  <div id='head'>
+    <h2>
+      You have
+      <span class='badge'><h1>{{ cart.count }}</h1></span>
+      item{{ cart.count|pluralize }}
+      in your Shopping Cart.
+      <a href="{% url 'home' %}">Continue Shopping.</a>
+    </h2>
+  </div>
+
+  <div class='row-fluid'>
+    <div id='cart' class='span8'>
+      <div id='items'>
+        {% for item in cart %}
+          <div id='item_{{ item.id }}' class='thumbnail row-fluid'>
+            <div class='photo span6'>
+              <img src='{{ item.photo.thumb }}' alt='product photo'>
+            </div>
+            <div class='details span5'>
+              <ul>
+                <li class='name'>
+                  {{ item.product.name }} by {{ item.product.seller.name }}
+                </li>
+                <li class='price'>${{ item.product.display_price }}</li>
+                <li class='remove'>
+                  <a href="{% url 'cart-remove' item.product.id %}">remove</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div id='summary' class='fluid-row'>
+        <div class='span6'>
+          <h2>Total</h2>
+        </div>
+        <div class='span6'>
+          <h2>${{ cart.summary }}</h2>
+        </div>
+      </div>
+    </div>
+    <div id='information' class='span4'>
+      <div class='well'>
+
+      </div>
+      <div class='well'>
+
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}

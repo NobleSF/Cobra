@@ -4,25 +4,37 @@ from django.utils import simplejson
 
 from public.controller.cart_class import Cart
 
+def cart(request):
+  cart = Cart(request)
+  total = cart.summary()
+  context = {'cart':Cart(request)}
+  return render(request, 'checkout/cart.html', context)
+
 def cartAdd(request, product_id):
   from seller.models import Product
-
+  cart = Cart(request)
   try:
     product = Product.objects.get(id=product_id)
-
-    if 'cart' in request.session:
-      request.session['cart'].products.append(product.id)
-    else:
-      request.session['order_id'] = Cart()
-
+  except Exception as e:
+    context = {'problem':"Received bad product id"}
+    return HttpResponseRedirect(request.META["HTTP_REFERER"], context)
+  else:
+    cart.add(product)
+    context = {'success':"added product to cart"}
     return redirect('cart')
 
+def cartRemove(request, product_id):
+  from seller.models import Product
+  cart = Cart(request)
+  try:
+    product = Product.objects.get(id=product_id)
   except Exception as e:
-    context = {'except':e}
-    return HttpResponseRedirect(request.META["HTTP_REFERER"])
-
-def cart(request, product_id=None):
-  return render(request, 'checkout/cart.html')
+    context = {'problem':"Received bad product id"}
+    return HttpResponseRedirect(request.META["HTTP_REFERER"], context)
+  else:
+    cart.remove(product)
+    context = {'success':"removed product from cart"}
+    return redirect('cart')
 
 def payment(request):
   return render(request, 'checkout/payment.html')

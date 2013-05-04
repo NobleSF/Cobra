@@ -27,9 +27,9 @@ class Cart(models.Model):
 class Item(models.Model):
   from seller.models import Product
 
-  cart = models.ForeignKey('Cart')
-  product = models.ForeignKey(Product)
-  #quantity = models.PositiveIntegerField(default=1)
+  cart                = models.ForeignKey('Cart')
+  product             = models.ForeignKey(Product)
+  #quantity           = models.PositiveIntegerField(default=1)
 
   def __unicode__(self):
     #return u'%d units of %s' % (self.quantity, self.product.__name__)
@@ -37,6 +37,14 @@ class Item(models.Model):
 
   def price(self):
     return self.product.display_price
+
+  def photos(self):
+    from seller.models import Photo
+    return Photo.objects.filter(product_id=self.product.id)
+
+  def photo(self):
+    photos = self.photos()
+    return photos[0]
 
 class Order(models.Model):
   from seller.models import Product, ShippingOption

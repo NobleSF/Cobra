@@ -54,23 +54,23 @@ class Product(models.Model):
   updated_at    = models.DateTimeField(auto_now = True)
 
   def shipping_cost(self):
-    return self.weight/3
+    cost = self.weight/3
+    #need to pull in shipping cost formula for each inproduct.shipping_options
+    cost /= self.seller.currency.exchange_rate_to_USD
+    return int(round(cost)) #keep the change, ya filthy animal
 
-  def display_price(self):
-    import locale
-    locale.setlocale( locale.LC_ALL, '' )
+  def display_price(self, locale='US'):
     from anou.settings import ANOU_FEE
 
     cost_amalgum_boobs_bomb = self.price
     cost_amalgum_boobs_bomb *= (1 + ANOU_FEE)
-    cost_amalgum_boobs_bomb += calculateShipping(self)
-    cost_amalgum_boobs_bomb /= self.seller.currency.exchange_rate_to_USD
-    cost_amalgum_boobs_bomb  = "$"+str(int(round(cost_amalgum_boobs_bomb)))
-    #locale.currency(round(cost_amalgum_boobs_bomb), grouping=True)
+    cost_amalgum_boobs_bomb = int(round(cost_amalgum_boobs_bomb))
+    cost_amalgum_boobs_bomb += self.shipping_cost()
+
     return cost_amalgum_boobs_bomb
 
   def name(self):
-    return self.assets.get(ilk='product')[0].name
+    return self.assets.filter(ilk='product')[0].name
 
   def __unicode__(self):
     return self.name() + ' by ' +self.seller.name

@@ -10,7 +10,6 @@ def home(request, product_id):
   try:
     #product = get_object_or_404(Product, id=product_id)
     product = Product.objects.get(id=product_id)
-    product.price = product.display_price
 
     product.photos = Photo.objects.filter(product=product).order_by('rank')
     for photo in product.photos:
@@ -37,4 +36,3 @@ def collection(request, group, name=None):
   return render(request, 'collection.html',
     {'group':group}
   )
-

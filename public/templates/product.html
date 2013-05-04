@@ -47,7 +47,7 @@
 
     <div id='actions' class='span4'>
       <h4 id='command-to-buy'>
-        <span class='price'>{{ product.price }}</span>
+        <span class='price'>${{ product.display_price }}</span>
         with free shipping!
       </h4>
       <a href="{% url 'cart-add' product.id %}" id='buy-button' class='btn btn-primary btn-success'>
