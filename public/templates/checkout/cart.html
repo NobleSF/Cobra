@@ -16,7 +16,6 @@
       <span class='badge'><h1>{{ cart.count }}</h1></span>
       item{{ cart.count|pluralize }}
       in your Shopping Cart.
-      <a href="{% url 'home' %}">Continue Shopping.</a>
     </h2>
   </div>
 
@@ -25,13 +24,17 @@
       <div id='items'>
         {% for item in cart %}
           <div id='item_{{ item.id }}' class='thumbnail row-fluid'>
-            <div class='photo span6'>
-              <img src='{{ item.photo.thumb }}' alt='product photo'>
+            <div class='photo span4'>
+              <a href="{% url 'product' item.product.id %}">
+                <img src='{{ item.photo.thumb }}' alt='product photo'>
+              </a>
             </div>
-            <div class='details span5'>
+            <div class='details span8'>
               <ul>
                 <li class='name'>
-                  {{ item.product.name }} by {{ item.product.seller.name }}
+                  <a href="{% url 'product' item.product.id %}">
+                    {{ item.product.name }} by {{ item.product.seller.name }}
+                  </a>
                 </li>
                 <li class='price'>${{ item.product.display_price }}</li>
                 <li class='remove'>
@@ -44,20 +47,40 @@
       </div>
 
       <div id='summary' class='fluid-row'>
-        <div class='span6'>
-          <h2>Total</h2>
+        <div class='span5'>
+          <ul>
+            <li>Shipping</li>
+            <li>Total</li>
+            <li></li>
+          </ul>
         </div>
-        <div class='span6'>
-          <h2>${{ cart.summary }}</h2>
+        <div class='span7'>
+          <ul>
+            <li id='total'>$0.00</li>
+            <li id='total'>${{ cart.summary }}</li>
+            <li>
+              <a href="{% url 'home' %}">Continue Shopping</a>
+              or
+              <button id='checkout' class='btn btn-large btn-success'>
+                Checkout
+              </button>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
     <div id='information' class='span4'>
       <div class='well'>
-
+        <h4>How much is Shipping?</h4>
+        <p>Shipping to anywhere in the US and Europe is free when you order from the website.</p>
       </div>
       <div class='well'>
-
+        <h4>Can the shipping and billing address be different?</h4>
+        <p>Yes they can and you will have the opportunity to enter them seperately.</p>
+      </div>
+      <div class='well'>
+        <h4>What is your security policy?</h4>
+        <p>Our security is the highest possible, because we permanently delete all your sensitive personal information as soon as your payment is processed so that no one (not even us!) can see it. The only information we keep on file is your shipping address so the artisan knows where to send your order and your email so we can keep you updated on it's progress.</p>
       </div>
     </div>
   </div>

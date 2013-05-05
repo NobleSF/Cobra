@@ -1,0 +1,28 @@
+.thumbnail{
+  padding: 1em 0em 1em 1em;
+  margin: 1em 0;
+}
+#items .details ul{
+  list-style: none;
+  padding: 1em 1em 0 1em;
+}
+#summary ul{
+  list-style: none;
+  padding: 0 0 0 1em;
+}
+
+#items .details li, #summary li{
+  font-size: 1.7em;
+  line-height: 1.5em;
+  text-align: right;
+}
+#items .details .price, #summary{
+  font-weight: 700;
+}
+#items .details .remove a{
+  text-decoration: underline;
+}
+
+#information .well{
+  margin: 1em;
+}
