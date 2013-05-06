@@ -75,7 +75,7 @@
       <ul class='thumbnails'>
         {% for product in products %}
           <li class='span6'>
-            <div class='thumbnail'>
+            <a href="{% url 'product' product.id %}" class='thumbnail'>
 
               <div class='title'><p>{{ product.name }}</p></div>
 
@@ -95,7 +95,7 @@
                 </div>
               </div>
 
-            </div>
+            </a
           </li>
           {% cycle "" "</ul><ul class='thumbnails'>" %}
         {% endfor %}
