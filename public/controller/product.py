@@ -11,7 +11,7 @@ def home(request, product_id):
     #product = get_object_or_404(Product, id=product_id)
     product = Product.objects.get(id=product_id)
 
-    product.photos = Photo.objects.filter(product=product).order_by('rank')
+    product.photos = product.photo_set.order_by('rank')
     for photo in product.photos:
       photo.feature_url = str(photo.thumb).replace('thumb','product')
 

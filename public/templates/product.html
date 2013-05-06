@@ -14,10 +14,7 @@
     <div class='span8'>
       <div id='photos' class='carousel slide'>
         <ol class='carousel-indicators'>
-          {% for photo in product.photos %}
-            <li data-target='#photos' data-slide-to='{{ forloop.counter }}'
-                class='{% if forloop.first %}active{% endif %}'></li>
-          {% endfor %}
+
         </ol>
         <!-- Carousel items -->
         <div class='carousel-inner'>
@@ -32,6 +29,19 @@
         <a class="carousel-control left" href="#photos" data-slide="prev">&lsaquo;</a>
         <a class="carousel-control right" href="#photos" data-slide="next">&rsaquo;</a>
       </div>
+
+      <div id='pinkies' class='hidden-phone'>
+        <ul class='thumbnails'>
+          {% for photo in product.photos %}
+            <li>
+              <img class='thumbnail {% if forloop.first %}active{% endif %}'
+                   data-target='#photos' data-slide-to='{{ forloop.counter0 }}'
+                   src='{{ photo.pinky }}'>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+
     </div>
 
     <div id='ratings' class='span4 well well-small'>
@@ -46,31 +56,27 @@
     </div>
 
     <div id='actions' class='span4'>
-      <h4 id='command-to-buy'>
-        <span class='price'>${{ product.display_price }}</span>
-        with free shipping!
-      </h4>
+      <table id='buying-table'>
+        <tr>
+          <td rowspan=2 class='price'>${{ product.display_price }}</td>
+          <td class='price-qualifier'>free shipping.</td>
+        </tr>
+        <tr>
+          <td class='price-qualifier'>free returns.</td>
+        </tr>
+      </table>
       <a href="{% url 'cart-add' product.id %}" id='buy-button' class='btn btn-primary btn-success'>
         Add To Cart
       </a>
     </div>
 
-    <div id='artisan-rep' class='span4 well well-small'>
-      <img id='artisan-rep-image' src='{{ product.artisans.0.image.thumb}}'>
+    <div id='artisan' class='span4'>
+      <img id='artisan-image' src='{{ product.artisans.0.image.thumb}}'>
       <p>handmade by</p>
-      <h3 id='artisan-rep-name'>{{ product.artisans.0.name }}</h3>
+      <h3 id='artisan-name'>{{ product.artisans.0.name }}</h3>
+      <p id='artisan-bio'>{{ product.artisans.0.description }}</p>
     </div>
 
-  </div>
-
-  <div id='seller'>
-    {% if product.seller.image %}<img src='{{ product.seller.image.thumb }}'>{% endif %}
-    <h1 class='title'>
-      {{ product.artisans.0.name }}
-      <i>is a member of</i>
-      {{ product.seller.name }}
-    </h1>
-    <p>{{ product.seller.bio }}</p>
   </div>
 
   <div id='utilities' class='row-fluid'>
@@ -85,6 +91,16 @@
         </li>
       {% endfor %}
     </ul>
+  </div>
+
+  <div id='seller'>
+    {% if product.seller.image %}<img src='{{ product.seller.image.thumb }}'>{% endif %}
+    <h1 class='title'>
+      {{ product.artisans.0.name }}
+      <i>is a member of</i>
+      {{ product.seller.name }}
+    </h1>
+    <p>{{ product.seller.bio }}</p>
   </div>
 
 {% endblock content %}
