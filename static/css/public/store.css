@@ -1,59 +1,73 @@
 
 #info-left ul{
   list-style: none;
+  text-align: center;
 }
 
-
-.asset .image{
-
+#artisan-profiles .thumbnail{
+  max-width: 300px;
+  border: none;
+  box-shadow: 0 0 0 0;
+  margin: auto;
 }
-.asset .description{
-
+#artisan-profiles .title{
+  position: relative;
+  top: -3em;
+}
+#artisan-profiles .description{
+  position: relative;
+  top: -2em;
+}
+#info-left #store-bio, .artisan-description{
+  text-align: justify;
 }
 
-.thumbnail{
-  padding: 0px;
-  margin-right: 2.5%;
+#products .thumbnail{
+  max-height: 304px;
+  max-width: 300px;
+  border: none;
+  box-shadow: 0 0 0 0;
+  margin: auto;
+}
+#products .thumbnails li{
+  margin-bottom: 0px;
 }
 
+.thumbnail .title{
+  z-index: 5;
+  height: 3em;
+  text-align: center;
+}
+.thumbnail .title p{
+  padding: 0.5em 0;
+  max-width: 300px;
+  font-size: 16pt;
+  color: rgba(0,0,0,0.7);
+  background-color: rgba(200,200,200,0.5)
+}
+.thumbnail .photo{
+  z-index: -1;
+  position: relative;
+  top: -3em;
+  margin: 0;
+  padding: 0;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Fix for Bootstrap thumbnails by muayyad-alsadi @ https://github.com/twitter/bootstrap/issues/3494
-.row-fluid .thumbnails [class*="span"]{margin-right:2.5641%;}
-.row-fluid .thumbnails [class*="span"]:first-child{margin-right:2.5641%;margin-bottom:0;}
-.row-fluid .thumbnails .span1 { width: 5.76913%;}
-.row-fluid .thumbnails .span2 { width: 14.1025%;}
-.row-fluid .thumbnails .span3 { width: 22.4358%;}
-.row-fluid .thumbnails .span4 { width: 30.7691%;}
-.row-fluid .thumbnails .span5 { width: 39.1025%;}
-.row-fluid .thumbnails .span6 { width: 47.4358%;}
-.row-fluid .thumbnails .span7 { width: 55.7691%;}
-.row-fluid .thumbnails .span8 { width: 64.1025%;}
-.row-fluid .thumbnails .span9 { width: 72.4358%;}
-.row-fluid .thumbnails .span10 { width: 80.7691%;}
-.row-fluid .thumbnails .span11 { width: 89.1025%;}
-.row-fluid .thumbnails .span12 { width: 97.4358%;}
-*/
+.thumbnail .extra-photos{
+  position: relative;
+  top: -3em;
+}
+.extra .pinky{
+  margin: 0px;
+  max-width: 100px;
+  width: 33.333%
+}
+.extra-photos .first-extra-photo{
+  padding: 6px 4px 6px 0px;
+}
+.extra-photos .second-extra-photo{
+  padding: 6px 2px;
+}
+.extra-photos .third-extra-photo{
+  padding: 6px 0px 6px 4px;
+}

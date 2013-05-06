@@ -11,13 +11,12 @@ def home(request, seller_id):
 
   store.assets = Asset.objects.filter(seller=store).order_by('ilk')
   store.artisans = store.assets.filter(ilk='artisan')
-  store.utilities = store.assets.filter(ilk='tool') | store.assets.filter(ilk='material')
+  #store.utilities = store.assets.filter(ilk='tool') | store.assets.filter(ilk='material')
 
-  products = Product.objects.filter(seller=store)
+  products = store.product_set.all()
   for product in products:
     product.name = product.assets.filter(ilk='product')[0].name
-    product.main_photo = Photo.objects.filter(product=product)[0].thumb
-    product.extra_photos = Photo.objects.filter(product=product)[1:4]
+    product.photos = product.photo_set.all()
 
   context = {'store':store, 'products':products}
 
