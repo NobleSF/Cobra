@@ -1,9 +1,0 @@
-/* Anou was made by Dan Driscoll and Tom Counsell in Morocco */
-/* humanstxt.org */
-
-/* SITE */
-  Languages: Python
-  Standards: HTML5, CSS3
-  Components: jQuery, Bootstrap
-  Software: Komodo, Git
-  Hosting: Heroku, Amazon S3

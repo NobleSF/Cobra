@@ -1,0 +1,24 @@
+/* TEAM */
+
+Founder: Dan Driscoll
+Contact: dan 'at 'theanou.com
+Residence: Imouzzer-Kandar, Morocco
+From: San Diego, California
+
+Technical Director: Tom Counsell
+Contact: tom 'at' theanou.com
+Residens: Figuig, Morocco
+From: Indianapolis, Indiana
+
+/* THANKS */
+
+United States Peace Corps: http://www.peacecorps.gov/
+Dan's Aunt and Uncle
+Telerivet: http://www.telerivet.com
+
+/* SITE */
+  Languages: Python/Django
+  Standards: HTML5, CSS3
+  Components: Telerivet, jQuery, Bootstrap by Twitter
+  Software: Komodo, GitHub, Photoshop
+  Hosting: Heroku, Amazon S3, Cloudinary
