@@ -49,6 +49,9 @@ AWS_SECRET_ACCESS_KEY = 'KzVwQpxDvlR6ekDHUar9mmGDiIo1hiN+1SrHLs7L'
 AWS_STORAGE_BUCKET_NAME = 'anou'
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
+MANDRILL_API_KEY = "7YojodlUpLv64JypQMQqZw"
+EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
+
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
@@ -183,6 +186,7 @@ INSTALLED_APPS = (
   'apps.admin',
   'apps.communication',
   #'api',
+  'djrill',
   'storages',
   'south',
   #'django.contrib.auth',

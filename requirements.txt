@@ -6,6 +6,7 @@ cloudinary
 distribute==0.6.28
 dj-database-url==0.2.1
 django-storages==1.1.6
+djrill
 gunicorn==0.17.2
 numpy==1.6.2
 psycopg2==2.4.5
