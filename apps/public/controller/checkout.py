@@ -3,11 +3,12 @@ from django.shortcuts import render, redirect
 from django.utils import simplejson
 
 from apps.public.controller.cart_class import Cart
+from apps.public.controller.forms import CartForm
 
 def cart(request):
   cart = Cart(request)
   total = cart.summary()
-  context = {'cart':Cart(request)}
+  context = {'cart':Cart(request), 'cart_form':CartForm()}
   return render(request, 'checkout/cart.html', context)
 
 def cartAdd(request, product_id):

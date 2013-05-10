@@ -11,12 +11,26 @@
 
 {% block content %}
   <div id='head'>
-    <h2>
+    <h3 id='cart-sentance'>
       You have
       <span class='badge'><h1>{{ cart.count }}</h1></span>
       item{{ cart.count|pluralize }}
       in your Shopping Cart.
-    </h2>
+    </h3>
+    <p id='cart-paragraph' class='hidden'>
+      You have
+      {% for item in cart %}
+        {% if forloop.first %}a
+        {% elif forloop.last %} and a
+        {% else %}, a
+        {% endif %}
+        {{ item.product.name }}
+        for
+        ${{ item.product.display_price }}
+      {% endfor %}
+      in your cart for a total of
+      ${{ cart.summary }}
+    </p>
   </div>
 
   <div class='row-fluid'>
@@ -56,8 +70,8 @@
         </div>
         <div class='span7'>
           <ul>
-            <li id='total'>$0.00</li>
-            <li id='total'>${{ cart.summary }}</li>
+            <li class='amount'>0.00</li>
+            <li class='amount'>${{ cart.summary }}</li>
             <li>
               <a href="{% url 'home' %}">Continue Shopping</a>
               or
@@ -68,7 +82,15 @@
           </ul>
         </div>
       </div>
+
+      <div id='cart-form' class='hidden'>
+        <h3>We'll want to update you on your order progress?</h3>
+        <h3>Where should we ship the goods?</h3>
+        {{ cart_form.as_table }}
+      </div>
+
     </div>
+
     <div id='information' class='span4'>
       <div class='well'>
         <h4>How much is Shipping?</h4>

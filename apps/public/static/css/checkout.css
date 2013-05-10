@@ -6,16 +6,17 @@
   list-style: none;
   padding: 1em 1em 0 1em;
 }
-#summary ul{
+#summary ul, #mini-summary ul{
   list-style: none;
   padding: 0 0 0 1em;
 }
 
-#items .details li, #summary li{
+#items .details li, #summary li, #mini-summary li{
   font-size: 1.7em;
   line-height: 1.5em;
   text-align: right;
 }
+
 #items .details .price, #summary{
   font-weight: 700;
 }
