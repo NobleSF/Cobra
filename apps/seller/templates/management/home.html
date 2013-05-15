@@ -1,0 +1,18 @@
+{% extends "seller_base.html" %}
+
+{% block inventory_active %}active{% endblock %}
+
+{% block seller_page_content %}
+  {% load url from future %}
+  {% load inventory_inclusion_tags %}
+
+
+  <div id='inventory' class=''>
+    <ul class='products'>
+      {% for product in products %}
+        {% product_detail_tag product %}
+      {% endfor %}
+    </ul>
+  </div>
+
+{% endblock seller_page_content %}

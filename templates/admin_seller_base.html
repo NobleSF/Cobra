@@ -19,7 +19,7 @@
           <li><a href="{% url 'admin:home' %}">Admin</a></li>
         {% endif %}
         {% if 'seller_id' in request.session %}
-          <li><a href="{% url 'seller:home' %}">Seller</a></li>
+          <li><a href="{% url 'seller:management home' %}">Seller</a></li>
         {% endif %}
 
         {% if 'seller_id' not in request.session %}

@@ -5,18 +5,6 @@ from apps.admin.controller.decorator import access_required
 from django.views.decorators.csrf import csrf_exempt
 
 @access_required('seller')
-def home(request):
-  from apps.seller.models import Seller, Product
-  try:
-    seller = Seller.objects.get(id=request.session['seller_id'])
-    products = seller.product_set.all()
-    context = {'products': products}
-  except Exception as e:
-    context = {'exception': e}
-
-  return render(request, 'inventory/home.html', context)
-
-@access_required('seller')
 def create(request):
   from apps.seller.models import Seller, Product
   try:

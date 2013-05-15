@@ -4,12 +4,6 @@ from django.shortcuts import render, redirect
 from apps.admin.controller.decorator import access_required
 from django.views.decorators.csrf import csrf_exempt
 
-@access_required('seller')
-def home(request, context={}):
-  from apps.seller.controller.inventory import checkInventory
-  everything_checks_out = checkInventory()
-  return render(request, 'account/home.html')
-
 def create(account_id):
   try:
     from apps.seller.models import Seller
