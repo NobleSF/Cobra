@@ -19,6 +19,7 @@ Redesign
 		http://html5doctor.com/the-progress-element/
 	Keep use of JS libraries to a minimum for speed
 		http://www.gonzoblog.nl/2013/02/27/10-fresh-css3-only-tutorials-look-ma-no-javascript/
+		http://jquery-jkit.com/
 
 Check code for efficiency:
 	http://flake8.readthedocs.org
