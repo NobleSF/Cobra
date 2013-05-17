@@ -36,18 +36,7 @@
 {% block content %}
   <div id='main' class='content-fluid'>
 
-    <div id='search-toolbar'>
-      <div class='row-fluid'>
-        <div class='span3'><input type='text' value='search' class='input-small'></div>
-        <div class='span6'>
-          <a href='' class='btn btn-small'>Carpets</a>
-          <a href='' class='btn btn-small'>Baskets</a>
-          <a href='' class='btn btn-small'>Necklaces</a>
-          <a href='' class='btn btn-small'>Bracelets</a>
-        </div>
-        <div class='span3'><input type='text' value='search' class='input-small'></div>
-      </div>
-    </div>
+    {% search_bar_tag %}
 
     <div id='product-container'>
       <div class='row-fluid'>

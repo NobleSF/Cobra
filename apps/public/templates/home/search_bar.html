@@ -1,0 +1,16 @@
+{% load static %}
+{% load url from future %}
+
+<div id='search-toolbar'>
+  <div class='row-fluid'>
+    <div class='span3'><input type='text' value='search' class='input-small'></div>
+    <div class='span6'>
+      <ul>
+        {% for keyword in search_keywords %}
+          <li>{{ keyword }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class='span3'><input type='text' value='search' class='input-small'></div>
+  </div>
+</div>

@@ -47,3 +47,20 @@ def product_tag(product):
       pass
 
   return context
+
+@register.inclusion_tag('home/search_bar.html')
+def search_bar_tag(search_keywords=None):
+  from apps.admin.models import Category, Color, Country
+
+  #these should be cached queries!!
+  colors = Color.objects.all()
+  categories = Category.objects.all()
+  countries = Country.objects.all()
+  #cached queries!
+
+  context = {
+    'colors':colors,
+    'categories':categories,
+    'countries':countries,
+    'search_keywords':search_keywords
+  }
