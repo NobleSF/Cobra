@@ -11,6 +11,31 @@ def home(request):
 
   return render(request, 'home/home.html', context)
 
+def search(request, collection=None, category=None, color=None):
+  from apps.seller.models import Product
+  products = Product.objects.all()
+
+  #for keyword in keywords:
+  #  keyword = str(keyword)
+  #  if keyword in colors:
+  #    products = products.filter(product.color.name=keyword)
+  #  if keyword in catagories:
+  #    products = products.filter(product.category.name=keyword)
+  #  if keyword in countries:
+  #    products = products.filter(product.seller.country.name=keyword)
+  #  if keyword in rating:#matches rating regex
+  #    products = products.filter(product.rating >= keyword)
+
+  search_keywords = {
+    'collection':collection,
+    'category':category,
+    'color':color
+  }
+
+  context = {'products':products, 'search_keywords':search_keywords}
+  return render(request, 'home/search.html', context)
+
+
 def about(request):
   return render(request, 'home/about.html')
 

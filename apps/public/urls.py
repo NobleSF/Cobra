@@ -9,9 +9,12 @@ urlpatterns = patterns('',
   # product page at /product/123
   url(r'^product/(?P<product_id>\d+)$', product.home, name='product'),
 
-  # collection at collection/newest or collection/store/woodshop-brahim
-  url(r'^collection/(?P<group>\w+)/?(?P<name>\w+)?$',
-      product.collection, name='collection'),
+  # search at search/newest or search/carpets/red/length_50-100
+  # we need a big regex to pull the keywords from the url here instead of putting that logic in the controller
+  url(
+    r'^search[((/type_(?P<category>\w+))?|(/color_(?P<color>\w+))?|/(?P<collection>\w+))?]+$',
+    home.search, name='search'),
+  #url(r'^search(/(?P<keywords>\w+))+$', home.search, name='search'),
 
   # store page at /store/123 represents a seller profile
   url(r'^store/(?P<seller_id>\d+)$', store.home, name='store'),
