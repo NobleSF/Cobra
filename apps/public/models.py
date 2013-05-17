@@ -5,13 +5,14 @@ class Cart(models.Model):
   name                = models.CharField(max_length=100, null=True, blank=True)
   address1            = models.CharField(max_length=100, null=True, blank=True)
   address2            = models.CharField(max_length=100, null=True, blank=True)
-  city                = models.CharField(max_length=50, null=True, blank=True)
-  state               = models.CharField(max_length=50, null=True, blank=True)
-  postal_code         = models.CharField(max_length=15, null=True, blank=True)
-  country             = models.CharField(max_length=50, null=True, blank=True)
+  city                = models.CharField(max_length=50,  null=True, blank=True)
+  state               = models.CharField(max_length=50,  null=True, blank=True)
+  postal_code         = models.CharField(max_length=15,  null=True, blank=True)
+  country             = models.CharField(max_length=50,  null=True, blank=True)
+
+  checked_out         = models.BooleanField(default=False)
 
   #update history
-  checked_out         = models.BooleanField(default=False)
   created_at          = models.DateTimeField(auto_now_add = True)
   updated_at          = models.DateTimeField(auto_now = True)
 

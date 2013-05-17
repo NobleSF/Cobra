@@ -1,1 +1,21 @@
-{{ username }}, this is your order confirmation
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block javascript %}
+  <script type="text/javascript" src="{{ STATIC_URL}}public/js/checkout.js"></script>
+{% endblock javascript %}
+
+{% block css %}
+  <link href="{{ STATIC_URL }}public/css/checkout.css" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+  <div id='head'>
+    <h3 id='cart-sentance'>
+      Congratulations, you've pruchased
+      <span class='badge'><h1>{{ cart.count }}</h1></span>
+      item{{ cart.count|pluralize }}.
+    </h3>
+  </div>
+
+{% endblock content %}

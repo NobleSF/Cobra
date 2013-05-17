@@ -84,9 +84,15 @@
       </div>
 
       <div id='cart-form' class='hidden'>
-        <h3>We'll want to update you on your order progress?</h3>
-        <h3>Where should we ship the goods?</h3>
-        {{ cart_form.as_table }}
+        <form id='cart-form'>
+          <input type='hidden' id='cart-ajax-url' value="{% url 'cart-save' %}">
+          <h3>We'll want to update you on your order progress.</h3>
+          {{ cart_form.email }}
+          <h3>Where should we ship the goods?</h3>
+          {{ cart_form.as_table }}
+          <label for='pay-now'></label>
+          <button id='pay-now' class='btn btn-large btn-success'>Pay Now</button>
+        </form>
       </div>
 
     </div>

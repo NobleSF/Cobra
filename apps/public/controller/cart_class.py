@@ -59,6 +59,58 @@ class Cart:
     except Exception as e:
       pass
 
+  def saveData(self, attribute, value):
+    try:
+      if attribute == 'email':
+        self.cart.email = value
+      elif attribute == 'name':
+        self.cart.name = value
+      elif attribute == 'address1':
+        self.cart.address1 = value
+      elif attribute == 'address2':
+        self.cart.address2 = value
+      elif attribute == 'city':
+        self.cart.city = value
+      elif attribute == 'state':
+        self.cart.state = value
+      elif attribute == 'postal_code':
+        self.cart.postal_code = value
+      elif attribute == 'country':
+        self.cart.country = value
+      else:
+        raise TypeError('attribute ' + attribute + ' cannot be saved in cart')
+
+    except Exception as e:
+      raise Exception
+    else:
+      self.cart.save()
+
+  def getData(self, attribute):
+    try:
+      if attribute == 'email':
+        value = self.cart.email
+      elif attribute == 'name':
+        value = self.cart.name
+      elif attribute == 'address1':
+        value = self.cart.address1
+      elif attribute == 'address2':
+        value = self.cart.address2
+      elif attribute == 'city':
+        value = self.cart.city
+      elif attribute == 'state':
+        value = self.cart.state
+      elif attribute == 'postal_code':
+        value = self.cart.postal_code
+      elif attribute == 'country':
+        value = self.cart.country
+      else:
+        raise TypeError('attribute ' + attribute + ' not found in cart')
+
+    except Exception as e:
+      raise Exception
+    else:
+      return value
+
   def count(self):
     result = 0
     for item in self.cart.item_set.all():
