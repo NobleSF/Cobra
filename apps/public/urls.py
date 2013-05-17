@@ -24,7 +24,6 @@ urlpatterns = patterns('',
   url(r'^checkout/cart$', checkout.cart, name='cart'),
   url(r'^checkout/cart-add/(?P<product_id>\d+)$', checkout.cartAdd, name='cart-add'),
   url(r'^checkout/cart-remove/(?P<product_id>\d+)$', checkout.cartRemove, name='cart-remove'),
-  url(r'^checkout/payment$', checkout.payment, name='payment'),
   url(r'^checkout/confirmation$', checkout.confirmation, name='confirmation'),
 
   #non-pages, ajax calls

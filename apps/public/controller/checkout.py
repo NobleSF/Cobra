@@ -37,9 +37,6 @@ def cartRemove(request, product_id):
     context = {'success':"removed product from cart"}
     return redirect('cart')
 
-def payment(request):
-  return render(request, 'checkout/payment.html')
-
 def confirmation(request):
   return render(request, 'checkout/confirmation.html')
 
