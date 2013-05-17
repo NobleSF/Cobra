@@ -50,7 +50,9 @@ $().ready( function(){
   $('#price').addClass('updates-summary');
   $('#weight').addClass('updates-summary');
   $('#shipping_option').addClass('updates-summary');
-  $('.updates-summary').each(function(){$(this).change(updateSummary);});
+  $('.updates-summary').each(function(){
+    $(this).change(updateSummary());
+  });
   updateSummary();
 
 });//end .ready
