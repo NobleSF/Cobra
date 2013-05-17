@@ -67,7 +67,15 @@ def cartSave(request): #ajax requests only
   return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 def confirmation(request):
-  return render(request, 'checkout/confirmation.html')
+  #from apps.public.controller.order_class import Order
+  cart = Cart(request)
+  orders = []
+  for item in cart:
+    orders.append(Order(item, cart))
+
+  cart.checkout()
+  context = {'cart':cart}
+  return render(request, 'checkout/confirmation.html', context)
 
 def custom_order(request):
   return render(request, 'checkout/custom_order.html')

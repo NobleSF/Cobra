@@ -63,8 +63,7 @@ class Order(models.Model):
   total_charge        = models.DecimalField(max_digits=6, decimal_places=2)
   receipt             = models.TextField(blank=True, null=True)
 
-  #shipping info
-  shipping_address    = models.TextField()
+  #cart                = models.ForiegnKey('Cart')
   shipping_option     = models.ForeignKey(ShippingOption)
   #reported weight and cost after shipped
   shipping_weight     = models.FloatField(blank=True, null=True)
@@ -74,7 +73,7 @@ class Order(models.Model):
   received_date       = models.DateField(blank=True, null=True)
 
   #order items
-  products             = models.ManyToManyField(Product)
+  products            = models.ManyToManyField(Product)
 
   #Status
   is_seller_notified  = models.BooleanField(default=False)

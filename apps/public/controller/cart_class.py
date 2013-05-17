@@ -126,3 +126,7 @@ class Cart:
   def clear(self):
     for item in self.cart.item_set.all():
       item.delete()
+
+  def checkout(self):
+    self.cart.checked_out = True
+    self.cart.save()
