@@ -63,7 +63,7 @@ class Order(models.Model):
   total_charge        = models.DecimalField(max_digits=6, decimal_places=2)
   receipt             = models.TextField(blank=True, null=True)
 
-  #cart                = models.ForiegnKey('Cart')
+  cart                = models.ForeignKey('Cart')
   shipping_option     = models.ForeignKey(ShippingOption)
   #reported weight and cost after shipped
   shipping_weight     = models.FloatField(blank=True, null=True)
