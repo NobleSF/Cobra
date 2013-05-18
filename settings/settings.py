@@ -167,8 +167,6 @@ if not PRODUCTION:
   MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
 
 ROOT_URLCONF = 'settings.urls'
-if PRODUCTION:
-  ROOT_URLCONF = 'urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'settings.wsgi.application'
