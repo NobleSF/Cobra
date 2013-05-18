@@ -1,1 +1,1 @@
-web: gunicorn anou.wsgi --timeout 300
+web: gunicorn settings.wsgi --timeout 300
