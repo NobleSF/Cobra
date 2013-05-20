@@ -64,6 +64,12 @@
               <a href="{% url 'admin:logout' %}">Logout</a>
             </li>
           {% endif %}
+
+          {% if 'cart_id' in request.session %}
+            <li class='btn-large'>
+              <a href="{% url 'cart' %}">Cart</a>
+            </li>
+          {% endif %}
         </ul>
       </div>
     {% endblock header %}

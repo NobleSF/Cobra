@@ -36,7 +36,7 @@ def product_tag(product):
     product.artisan_image = artisan.image.thumb
     product.artisan_name = artisan.name
   except:
-    product.name = "thingy by whomever"
+    product.name = "product by Cooperative"
   context['product'] = product
 
   photo_objects = Photo.objects.filter(product=product)

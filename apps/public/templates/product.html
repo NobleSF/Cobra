@@ -43,7 +43,7 @@
       </div>
 
     </div>
-
+    <!--
     <div id='ratings' class='span4 well well-small'>
       {% for rating in '123' %}
         <div class='rating'>
@@ -54,6 +54,7 @@
         </div>
       {% endfor %}
     </div>
+    -->
 
     <div id='actions' class='span4'>
       <table id='buying-table'>
@@ -74,7 +75,7 @@
       <img id='artisan-image' src='{{ product.artisans.0.image.thumb}}'>
       <p>handmade by</p>
       <h3 id='artisan-name'>{{ product.artisans.0.name }}</h3>
-      <p id='artisan-bio'>{{ product.artisans.0.description }}</p>
+      <p id='artisan-bio'>{{ product.artisans.0.description|truncatewords:"20" }}</p>
     </div>
 
   </div>
@@ -84,15 +85,18 @@
       {% for utility in product.utilities %}
         <li class='span{{product.utilities_bootstrap_span_length}}'>
           <div class='utility thumbnail'>
-            {% if utility.image %}       <img src='{{ utility.image.thumb }}'>{% endif %}
-            {% if utility.name %}        <h4>{{ utility.name }}</h4>          {% endif %}
-            {% if utility.description %} <p>{{ utility.description }}</p>     {% endif %}
+            {% if utility.image %} <img src='{{ utility.image.thumb }}'> {% endif %}
+            {% if utility.name %}  <h4>{{ utility.name }}</h4>           {% endif %}
+            {% if utility.description %}
+              <p>{{ utility.description|truncatewords:"20" }}</p>
+            {% endif %}
           </div>
         </li>
       {% endfor %}
     </ul>
   </div>
 
+  <!--
   <div id='seller'>
     {% if product.seller.image %}<img src='{{ product.seller.image.thumb }}'>{% endif %}
     <h1 class='title'>
@@ -102,5 +106,6 @@
     </h1>
     <p>{{ product.seller.bio }}</p>
   </div>
+  -->
 
 {% endblock content %}
