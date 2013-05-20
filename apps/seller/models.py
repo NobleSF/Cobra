@@ -53,27 +53,55 @@ class Product(models.Model):
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
 
-  def shipping_cost(self):
-    cost = self.weight/3
-    #need to pull in shipping cost formula for each inproduct.shipping_options
-    cost /= self.seller.currency.exchange_rate_to_USD
-    return int(round(cost)) #keep the change, ya filthy animal
 
-  def display_price(self, locale='US'):
-    from settings.settings import ANOU_FEE
-
-    cost_amalgum_boobs_bomb = self.price
-    cost_amalgum_boobs_bomb *= (1 + ANOU_FEE)
-    cost_amalgum_boobs_bomb = int(round(cost_amalgum_boobs_bomb))
-    cost_amalgum_boobs_bomb += self.shipping_cost()
-
-    return cost_amalgum_boobs_bomb
+  def __unicode__(self):
+    return self.name() + ' by ' +self.seller.name
 
   def name(self):
     return self.assets.filter(ilk='product')[0].name
 
-  def __unicode__(self):
-    return self.name() + ' by ' +self.seller.name
+  def shipping_cost(self):
+    if self.weight:
+      cost = self.weight/3
+      #need to pull in shipping cost formula for each inproduct.shipping_options
+      cost /= self.seller.currency.exchange_rate_to_USD
+      return int(round(cost)) #keep the change, ya filthy animal
+    else:
+      return False
+
+  def display_price(self, locale='US'):
+    from settings.settings import ANOU_FEE
+
+    if self.price and self.weight:
+      cost_amalgum_boobs_bomb = self.price
+      cost_amalgum_boobs_bomb *= (1 + ANOU_FEE)
+      cost_amalgum_boobs_bomb = int(round(cost_amalgum_boobs_bomb))
+      cost_amalgum_boobs_bomb += self.shipping_cost()
+      return cost_amalgum_boobs_bomb
+    else:
+      return False
+
+  def is_complete(self):
+    is_product = has_artisan = has_photo = has_price = False
+    if len(self.assets.filter(ilk='product')) > 0:
+      is_product = True
+    if len(self.assets.filter(ilk='artisan')) > 0:
+      has_artisan = True
+    if len(self.photo_set.all()) > 0:
+      has_photo = True
+    if self.display_price:
+      has_price = True
+
+    if is_product and has_artisan and has_photo and has_price:
+      return True
+    else:
+      return False
+
+  def is_approved(self):
+    if self.is_complete:
+      return True
+    else:
+      return False
 
 class ShippingOption(models.Model):
   from apps.admin.models import Country
