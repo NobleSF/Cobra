@@ -1,4 +1,5 @@
 from apps.seller import models
+from apps.admin import models as admin_models
 class Product:
   def __init__(self, request):
     try:
@@ -11,7 +12,7 @@ class Product:
       yield asset
 
   def new(self, request):
-    product = models.Product()
+    product = models.Product(seller_id = request.session['seller_id'])
     product.save()
     request.product_id = product.id
     return product
@@ -27,19 +28,47 @@ class Product:
     photo.save()
     return photo
 
+  def photos(self):
+    return self.product.photo_set.all().order_by('rank')
+
   def addAsset(self, asset_id):
     asset = models.Asset.objects.get(id=asset_id)
     if asset:
       self.product.assets.add(asset)
+      return "added asset " + asset.name
     else:
-      raise ModelError('asset-id does not exist')
+      return "asset does not exist"
 
   def removeAsset(self, asset_id):
     asset = models.Asset.objects.get(id=asset_id)
     if asset:
       self.product.assets.remove(asset)
+
+  def addShippingOption(self, shipping_option_id):
+    shipping_option = models.ShippingOption.objects.get(id=shipping_option_id)
+    if shipping_option:
+      self.product.shipping_options.add(shipping_option)
+      return "added shipping option " + shipping_option.name
     else:
-      pass #i don't care
+      return "shipping option does not exist"
+
+  def removeShippingOption(self, shipping_option_id):
+    shipping_option = models.ShippingOption.objects.get(id=shipping_option_id)
+    if shipping_option:
+      self.product.shipping_options.remove(shipping_option)
+
+  def addColor(self, color_id):
+    color = admin_models.Color.objects.get(id=color_id)
+    if color:
+      self.product.colors.add(color)
+      return "added color " + color.name
+    else:
+      return "color does not exist"
+
+  def removeColor(self, color_id):
+    color = admin_models.Color.objects.get(id=color_id)
+    if color:
+      self.product.colors.remove(color)
 
   def update(self, attribute, value):
     try:
@@ -57,9 +86,10 @@ class Product:
         raise TypeError('attribute does not exist')
 
     except Exception as e:
-      raise Exception
+      return "attribute does not exist"
     else:
-      return value
+      self.product.save()
+      return "saved " + attribute + ": " + value
 
   def get(self, attribute):
     try:
@@ -77,7 +107,7 @@ class Product:
         raise TypeError('attribute does not exist')
 
     except Exception as e:
-      raise Exception
+      raise e
     else:
       return value
 
@@ -85,6 +115,8 @@ class Product:
   def clear(self):
     try:
       self.product.assets.clear()
+      self.product.shipping_options.clear()
+      self.product.colors.clear()
     except:
       return False
     else:
