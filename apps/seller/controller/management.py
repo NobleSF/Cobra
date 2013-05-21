@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from apps.admin.controller.decorator import access_required
 
 @access_required('seller')
-def home(request):
+def home(request, context={}):
   from apps.seller.models import Seller
   from apps.seller.controller.inventory import checkInventory
   everything_checks_out = checkInventory()
@@ -12,7 +12,8 @@ def home(request):
   try:
     seller = Seller.objects.get(id=request.session['seller_id'])
     products = seller.product_set.all()
-    context = {'seller':seller, 'products': products}
+    context['seller'] = seller
+    context['products'] = products
   except Exception as e:
     context = {'exception': e}
 
