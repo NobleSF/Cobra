@@ -3,13 +3,42 @@ from django.shortcuts import render, redirect
 from django.utils import simplejson
 from apps.admin.controller.decorator import access_required
 from django.views.decorators.csrf import csrf_exempt
-
+from apps.seller.models import Seller
 from apps.seller.controller.product_class import Product
+
+def checkInventory(seller):
+  #preferred method
+  #incomplete_products = seller.product_set.filter('is_complete' = False)
+  #if len(incomplete_products) > 1:
+  #  incomplete_products[1:].delete()
+
+  #hacked method
+  try:
+    keep = 1
+    for product in seller.product_set.all():
+      if not product.is_complete():
+        if keep <= 0:
+          product.delete()
+        keep -= 1
+  except:
+    return False
+  else:
+    return True
 
 @access_required('seller')
 def create(request):
+  seller = Seller.objects.get(id=request.session['seller_id'])
+  checkInventory(seller)
   try:
+    edit_this_product = None
+    for product in seller.product_set.all():
+      if not product.is_complete():
+        edit_this_product = product
+
+    if edit_this_product:
+      request.product_id = edit_this_product.id
     product = Product(request)
+
     return redirect( str(product.product.id) + '/edit')
 
   except Exception as e:
@@ -21,6 +50,7 @@ def create(request):
 @access_required('seller')
 def edit(request, product_id):
   from apps.seller.controller.forms import ProductEditForm, PhotoForm
+  request.product_id = product_id
   product = Product(request)
 
   if request.method == 'POST':
@@ -79,7 +109,8 @@ def edit(request, product_id):
 
   product_form.fields['product_id'].initial = product.product.id
   # we want additional ranks going up to nine photos maximum
-  #add_ranks_range = range(photos.count()+1, 10)
+  add_ranks_range = range(product.product.photo_set.count()+1, 10)
+  product.product.photos = product.product.photo_set.all()
 
   photo_form = PhotoForm()
   photo_form.fields['tags'].initial = "product,seller"+str(request.session['seller_id'])
@@ -89,9 +120,8 @@ def edit(request, product_id):
   context = {
     'product':          product.product,
     'product_form':     product_form,
-    'photos':           product.photos,
-    'photo_form':       photo_form
-    #'add_ranks_range':  add_ranks_range
+    'photo_form':       photo_form,
+    'add_ranks_range':  add_ranks_range
   }
   return render(request, 'inventory/edit.html', context)
 
@@ -122,20 +152,16 @@ def delete(request, id):
   #archive product and return to product home
   return HttpResponseRedirect('seller/inventory')
 
-def checkInventory():
-  #for product in seller.products.filter(is_complete = False)
-    #if not first
-      #delete product
-  return True
-
 @access_required('seller')
 @csrf_exempt
 def saveProduct(request): #ajax requests only, not asset-aware
-  product = Product(request)
   context = {}
 
   if request.method == 'GET': # it must be an ajax GET to work
     try:
+      request.product_id = request.GET['product_id']
+      product = Product(request)
+
       attribute = request.GET['attribute']
       if 'status' in request.GET:
         status = request.GET['status']

@@ -58,7 +58,10 @@ class Product(models.Model):
     return self.name() + ' by ' +self.seller.name
 
   def name(self):
-    return self.assets.filter(ilk='product')[0].name
+    if len(self.assets.filter(ilk='product')) > 0:
+      if self.assets.filter(ilk='product')[0].name:
+        return self.assets.filter(ilk='product')[0].name
+    return str(self.id)
 
   def shipping_cost(self):
     if self.weight:

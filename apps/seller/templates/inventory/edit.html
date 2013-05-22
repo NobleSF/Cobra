@@ -29,7 +29,7 @@
 
     <div id='photos-section' class='section'>
       <div id='photos'>
-        {% for photo in photos %}
+        {% for photo in product.photos %}
           {% photo_upload_tag photo_form product photo=photo %}
         {% endfor %}
         {% for rank in add_ranks_range %}

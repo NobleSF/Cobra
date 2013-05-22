@@ -6,8 +6,6 @@ from apps.admin.controller.decorator import access_required
 @access_required('seller')
 def home(request, context={}):
   from apps.seller.models import Seller
-  from apps.seller.controller.inventory import checkInventory
-  everything_checks_out = checkInventory()
 
   try:
     seller = Seller.objects.get(id=request.session['seller_id'])
