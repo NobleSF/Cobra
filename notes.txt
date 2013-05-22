@@ -7,6 +7,9 @@ Mobile Integration / API app
 Redesign
 	Homepage:
 		http://bxslider.com/
+		http://www.fitgrd.com/
+	Blog:
+		https://www.djangopackages.com/packages/p/django-blog-zinnia/
 	Buttons:
 		http://ace-subido.github.com/css3-microsoft-metro-buttons/index.html
 		http://www.red-team-design.com/css3-patterned-buttons
