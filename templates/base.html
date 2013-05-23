@@ -39,37 +39,24 @@
           <li class='btn-large'>
             <a href="{% url 'home' %}">Home</a>
           </li>
-          <!--<li><a href="{% url 'about' %}">About</a></li>-->
-
-          {% if 'admin_id' in request.session %}
-            <li class='btn-large'>
-              <a href="{% url 'admin:home' %}">Admin</a>
-            </li>
-          {% endif %}
-
-          {% if 'seller_id' in request.session %}
-            <li class='btn-large'>
-              <a href="{% url 'seller:management home' %}">Seller</a>
-            </li>
-          {% endif %}
-
-          {% if 'seller_id' not in request.session %}
-            <li class='btn-large'>
-              <a href="{% url 'admin:login' %}">Login</a>
-            </li>
-          {% endif %}
-
-          {% if 'username' in request.session %}
-            <li class='btn-large'>
-              <a href="{% url 'admin:logout' %}">Logout</a>
-            </li>
-          {% endif %}
+          <li class='btn-large'>
+            <a href="{% url 'about' %}">About</a>
+          </li>
 
           {% if 'cart_id' in request.session %}
             <li class='btn-large'>
-              <a href="{% url 'cart' %}">Cart</a>
+              <a href="{% url 'cart' %}">
+                <i class='symbol cart'>Cart</i>
+              </a>
             </li>
           {% endif %}
+
+          <li class='btn-large'>
+            <a href="{% url 'seller:management home' %}">
+              <i class='symbol blue-arrow'></i>
+            </a>
+          </li>
+
         </ul>
       </div>
     {% endblock header %}

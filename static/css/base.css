@@ -14,8 +14,11 @@ body {
 }
 
 #base-navigation li {
-  padding: 2em .5em;
+  padding: 0.2em .02em;
+  font-size: 35px;
 }
+
+i{font-style: normal;}
 
 a, a:hover, a:active, a:focus{
   outline: 0;
@@ -23,4 +26,25 @@ a, a:hover, a:active, a:focus{
 
 #header-separator, #footer-separator {
   margin: 2em;
+}
+
+.symbol{
+  line-height: 10px;
+}
+
+.symbol.blue-arrow {
+  background: rgba(255, 255, 255, 0.5)
+              url(http://s3.amazonaws.com/anou/images/blue_arrow.png)
+              center left no-repeat;
+  background-size: 60px 60px;
+  font-size: 60px;
+  padding-left: 60px;
+}
+.symbol.cart {
+  background: rgba(255, 255, 255, 0.5)
+              url(http://s3.amazonaws.com/anou/images/eldorado/basic/045.png)
+              center left no-repeat;
+  background-size: 40px 40px;
+  font-size: 35px;
+  padding-left: 40px;
 }
