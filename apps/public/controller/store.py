@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 
@@ -15,12 +15,11 @@ def home(request, seller_id):
 
     products = store.product_set.all()
     for product in products:
-      product.name = product.assets.filter(ilk='product')[0].name
       product.photos = product.photo_set.all()
 
     context = {'store':store, 'products':products}
 
-  except DoesNotExist:
+  except Seller.DoesNotExist:
     return Http404
 
   except Exception as e:
