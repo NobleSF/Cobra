@@ -21,17 +21,17 @@ ul{
 }
 
 .symbol.tag {
-  background: rgba(255, 255, 255, 0.5) url(http://localhost:8000/static/images/eldorado/mobile/005.png) center left no-repeat;
+  background: rgba(255, 255, 255, 0.5) url(http://s3.amazonaws.com/anou/images/eldorado/mobile/005.png) center left no-repeat;
 }
 .symbol.weight {
-  background: url(http://localhost:8000/static/images/eldorado/layout/035.png) center left no-repeat;
+  background: url(http://s3.amazonaws.com/anou/images/eldorado/layout/035.png) center left no-repeat;
 }
 .symbol.money {
-  background: url(http://localhost:8000/static/images/eldorado/finance/042.png) center left no-repeat;
+  background: url(http://s3.amazonaws.com/anou/images/eldorado/finance/042.png) center left no-repeat;
 }
 .symbol.shipping {
-  background: url(http://localhost:8000/static/images/eldorado/transport/003.png) center left no-repeat;
+  background: url(http://s3.amazonaws.com/anou/images/eldorado/transport/003.png) center left no-repeat;
 }
 .symbol.edit {
-  background: url(http://localhost:8000/static/images/eldorado/player/026.png) center left no-repeat;
+  background: url(http://s3.amazonaws.com/anou/images/eldorado/player/026.png) center left no-repeat;
 }

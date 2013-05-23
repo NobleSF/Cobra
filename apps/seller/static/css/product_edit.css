@@ -67,29 +67,29 @@ ul {
   padding-left: 40px;
 }
 .symbol.width {
-  background: url(http://localhost:8000/static/images/eldorado/finance/052.png) center left no-repeat;
+  background: url(http://s3.amazonaws.com/anou/images/eldorado/finance/052.png) center left no-repeat;
 }
 .symbol.length {
-  background: url(http://localhost:8000/static/images/eldorado/finance/056.png) center left no-repeat;
+  background: url(http://s3.amazonaws.com/anou/images/eldorado/finance/056.png) center left no-repeat;
 }
 .symbol.height {
-  background: url(http://localhost:8000/static/images/eldorado/finance/054.png) center left no-repeat;
+  background: url(http://s3.amazonaws.com/anou/images/eldorado/finance/054.png) center left no-repeat;
 }
 .symbol.weight {
-  background: url(http://localhost:8000/static/images/eldorado/layout/035.png) center left no-repeat;
+  background: url(http://s3.amazonaws.com/anou/images/eldorado/layout/035.png) center left no-repeat;
 }
 .symbol.money {
-  background: url(http://localhost:8000/static/images/eldorado/finance/042.png) center left no-repeat;
+  background: url(http://s3.amazonaws.com/anou/images/eldorado/finance/042.png) center left no-repeat;
 }
 .symbol.shipping {
-  background: url(http://localhost:8000/static/images/eldorado/transport/003.png) center left no-repeat;
+  background: url(http://s3.amazonaws.com/anou/images/eldorado/transport/003.png) center left no-repeat;
 }
 .symbol.fee {
-  background: url(http://localhost:8000/static/images/eldorado/finance/001.png) center left no-repeat;
+  background: url(http://s3.amazonaws.com/anou/images/eldorado/finance/001.png) center left no-repeat;
 }
 .symbol.total {
-  background: url(http://localhost:8000/static/images/eldorado/basic/058.png) center left no-repeat;
+  background: url(http://s3.amazonaws.com/anou/images/eldorado/basic/058.png) center left no-repeat;
 }
 .symbol.USD {
-  background: url(http://localhost:8000/static/images/eldorado/finance/047.png) center left no-repeat;
+  background: url(http://s3.amazonaws.com/anou/images/eldorado/finance/047.png) center left no-repeat;
 }

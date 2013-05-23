@@ -64,5 +64,5 @@
   padding-left: 40px;
 }
 .symbol.camera {
-  background: rgb(112, 130, 201) url(http://localhost:8000/static/images/eldorado/devices/023.png) center center no-repeat;
+  background: rgb(112, 130, 201) url(http://s3.amazonaws.com/anou/images/eldorado/devices/023.png) center center no-repeat;
 }
