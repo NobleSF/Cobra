@@ -101,7 +101,7 @@ class Product(models.Model):
       return False
 
   def is_approved(self):
-    if self.is_complete:
+    if self.is_complete():
       return True
     else:
       return False

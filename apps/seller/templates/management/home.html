@@ -18,7 +18,9 @@
 
   <div id='inventory' class='fitgrid-row'>
     {% for product in products %}
-      {% product_detail_tag product %}
+      {% if product.is_complete %}
+        {% product_detail_tag product %}
+      {% endif %}
     {% endfor %}
   </div>
 
