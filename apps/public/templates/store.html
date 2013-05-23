@@ -74,30 +74,32 @@
 
       <ul class='thumbnails'>
         {% for product in products %}
-          <li class='span6'>
-            <a href="{% url 'product' product.id %}" class='thumbnail'>
+          {% if product.is_approved %}
+            <li class='span6'>
+              <a href="{% url 'product' product.id %}" class='thumbnail'>
 
-              <div class='title'><p>{{ product.name }}</p></div>
+                <div class='title'><p>{{ product.name }}</p></div>
 
-              <div class='photo'>
-                <img src='{{ product.photos.0.thumb }}'>
-              </div>
-
-              <div class='extra extra-photos row-fluid hidden-phone'>
-                <div class='first-extra-photo span4 pinky'>
-                  <img src='{{ product.photos.1.pinky }}'>
+                <div class='photo'>
+                  <img src='{{ product.photos.0.thumb }}'>
                 </div>
-                <div class='second-extra-photo span4 pinky'>
-                  <img src='{{ product.photos.2.pinky }}'>
-                </div>
-                <div class='third-extra-photo span4 pinky'>
-                  <img src='{{ product.photos.3.pinky }}'>
-                </div>
-              </div>
 
-            </a
-          </li>
-          {% cycle "" "</ul><ul class='thumbnails'>" %}
+                <div class='extra extra-photos row-fluid hidden-phone'>
+                  <div class='first-extra-photo span4 pinky'>
+                    <img src='{{ product.photos.1.pinky }}'>
+                  </div>
+                  <div class='second-extra-photo span4 pinky'>
+                    <img src='{{ product.photos.2.pinky }}'>
+                  </div>
+                  <div class='third-extra-photo span4 pinky'>
+                    <img src='{{ product.photos.3.pinky }}'>
+                  </div>
+                </div>
+
+              </a
+            </li>
+            {% cycle "" "</ul><ul class='thumbnails'>" %}
+          {% endif %}
         {% endfor %}
       </ul>
 
