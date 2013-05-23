@@ -1,5 +1,14 @@
 {% extends "seller_base.html" %}
 
+{% block css %}
+  <link href='{{ STATIC_URL }}seller/css/inventory.css' rel='stylesheet'>
+  <link href='{{ STATIC_URL }}vendor/fitgrid/css/fitgrid.css' rel='stylesheet'>
+{% endblock css%}
+
+{% block javascript %}
+  <script src='{{ STATIC_URL }}seller/js/inventory.js'></script>
+{% endblock javascript%}
+
 {% block inventory_active %}active{% endblock %}
 
 {% block seller_page_content %}
@@ -7,12 +16,10 @@
   {% load inventory_inclusion_tags %}
 
 
-  <div id='inventory' class=''>
-    <ul class='products'>
-      {% for product in products %}
-        {% product_detail_tag product %}
-      {% endfor %}
-    </ul>
+  <div id='inventory' class='fitgrid-row'>
+    {% for product in products %}
+      {% product_detail_tag product %}
+    {% endfor %}
   </div>
 
 {% endblock seller_page_content %}

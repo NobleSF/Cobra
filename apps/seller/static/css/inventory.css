@@ -1,0 +1,37 @@
+/* Product Grid */
+#inventory .product{
+  margin: 1em;
+}
+ul{
+  list-style: none;
+}
+
+
+/* Product Detail */
+.title{
+  position: relative;
+  top: -40px;
+  height: 40px;
+  font: 3em bold;
+}
+
+.symbol{
+  line-height: 40px;
+  padding-left: 40px;
+}
+
+.symbol.tag {
+  background: rgba(255, 255, 255, 0.5) url(http://localhost:8000/static/images/eldorado/mobile/005.png) center left no-repeat;
+}
+.symbol.weight {
+  background: url(http://localhost:8000/static/images/eldorado/layout/035.png) center left no-repeat;
+}
+.symbol.money {
+  background: url(http://localhost:8000/static/images/eldorado/finance/042.png) center left no-repeat;
+}
+.symbol.shipping {
+  background: url(http://localhost:8000/static/images/eldorado/transport/003.png) center left no-repeat;
+}
+.symbol.edit {
+  background: url(http://localhost:8000/static/images/eldorado/player/026.png) center left no-repeat;
+}

@@ -1,19 +1,28 @@
 {% load url from future %}
 
-<li>
-  <div class='product-photo'>
+<div class='product row-fluid fg6'>
+  <div class='product-photo span6'>
     {% for photo in photos %}
 
       {% if forloop.counter == 1 %}
-        <img src="{{ photo.thumb }}"><br>
-      {% elif forloop.counter < 5 %}
-        <img src="{{ photo.pinky }}">
+        <img src="{{ photo.thumb }}"/>
+        <span class='symbol tag title'>100{{ product.id }}</span>
       {% endif %}
 
     {% endfor %}
-    <br>
-    <a href="{% url 'seller:inventory edit' product_id=product.id %}">
-      EDIT product {{ product.id }}
-    </a>
   </div>
-</li>
+
+  <div class='product-info span6'>
+    <ul>
+      <li class='symbol weight'>{{ product.weight }} g</li>
+      <li class='symbol money'>{{ product.price }} DH</li>
+      <li class='symbol shipping'>{{ product.shipping_cost }} DH</li>
+      <li class='symbol edit'>
+        <a href="{% url 'seller:inventory edit' product_id=product.id %}">
+          {{ product.updated_at|date:"d/m/Y" }}
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</div>
