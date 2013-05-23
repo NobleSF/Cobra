@@ -1,8 +1,5 @@
 $().ready( function(){
   //assign bootstrap classes
-  $('button').addClass('btn');
-  $('.file-button').addClass('btn').html('<i class="icon-camera"></i>');
-  $('.progress').addClass('progress-striped');
   $('.asset-chooser').addClass('btn-group');
   $('.asset').addClass('btn');
 
