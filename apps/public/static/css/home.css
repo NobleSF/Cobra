@@ -19,7 +19,7 @@
 #search-toolbar{
   background-color: rgba(0,0,0,0.3);
   padding: 10px 10px 0;
-  margin: 10px 0;
+  margin: 0;
 }
 
 .carousel-caption > a, p, h1, h2, h3, h4, h5, h6{
@@ -29,7 +29,8 @@
 
 /* Product Container */
 #product-container{
-  width: 100%
+  width: 100%;
+  margin: 10px 0 0;
 }
 #product-container .product{
   cursor: pointer;
@@ -37,6 +38,11 @@
 
 .right-side, .left-side{
   max-width: 300px;
+}
+
+.product{
+  margin: 2% 1% -7em;
+  line-height: normal;
 }
 
 .product .title{
@@ -51,38 +57,22 @@
   background-color: rgba(200,200,200,0.5);
 }
 
-.product .photo, .artisan-image{
+.product .photo{
   z-index: -1;
   position: relative;
   top: -3em;
-  margin: 0px;
-  padding: 0px;
 }
 
 .extra{
-  display: none;
-}
-
-.product .extra-photos{
+  /*display: none;*/
   position: relative;
-  top: -3em;
-  padding: 5px 0;
+  top: -7em;
+  height: 4em;
+}
+.extra img{
+  max-height: 4em;
 }
 
-.product .extra-photos div{
-  margin: 0;
-  padding: 0;
-  border: none;
-  max-width: 100px;
-  width: 33.33%
-}
-
-.product .title-artisan{
-}
-
-.product .details{
-  position: relative;
-  top: -3em;
-  padding: 0.5em;
+.extra .details{
   text-align: center;
 }

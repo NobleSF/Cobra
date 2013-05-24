@@ -1,53 +1,27 @@
 $(function(){//on page load
 
-  //header changes
-  //$('#scroll-controller').scrollspy();
-  //$('#rest-of-page').on('activate', showMiniHeader());
-  //$('#top-of-page').on('activate', showFullHeader());
-
-  //bootstrap carousel
-  $('.carousel').carousel();
-
-  $('.product').click(function(){
-    window.location.href = $(this).attr('data-url');
+  $(this).find('.extra').find('div').find('*').each(function(){
+    $(this).hide();
   });
 
 });
 
-function showFullHeader(){
-  $('#full-nav').show();
-  $('#mini-nav').hide();
-}
-function showMiniHeader(){
-  $('#full-nav').hide();
-  $('#mini-nav').show();
-}
+//bootstrap carousel
+$('.carousel').carousel();
+
+$('.product').click(function(){
+  window.location.href = $(this).attr('data-url');
+});
 
 $('.product').hover(
   function(){ //on mouseenter
-    //adjust parent product row
-    var neighbor = findNeighbor($(this).closest('.product-area'));
-    neighbor.removeClass('span3').hide();
-    $(this).closest('.product-area').removeClass('span3').addClass('span6');
-
-    //adjust product right/left sides
-    $(this).find('.left-side').removeClass('span12').addClass('span6');
-    $(this).find('.right-side').addClass('span6');
-    $(this).find('.extra').each(function(){
-      $(this).slideDown(500);
+    $(this).find('.extra').find('div').find('*').each(function(){
+      $(this).show();
     });
   },
   function(){//on mouseleave
-    //adjust parent product row
-    var neighbor = findNeighbor($(this).closest('.product-area'));
-    neighbor.addClass('span3').show();
-    $(this).closest('.product-area').removeClass('span6').addClass('span3');
-
-    //adjust product right/left sides
-    $(this).find('.left-side').removeClass('span6').addClass('span12');
-    $(this).find('.right-side').removeClass('span6');
-    $(this).find('.extra').each(function(){
-      $(this).slideUp(500);
+    $(this).find('.extra').find('div').find('*').each(function(){
+      $(this).hide();
     });
   }
 );
