@@ -28,8 +28,8 @@ a, a:hover, a:active, a:focus{
   margin: 2em;
 }
 
-.symbol{
-  line-height: 10px;
+.nav .symbol{
+  line-height: 14px;
 }
 
 .symbol.blue-arrow {
