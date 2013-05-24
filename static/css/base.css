@@ -33,7 +33,7 @@ a, a:hover, a:active, a:focus{
 }
 
 .symbol.blue-arrow {
-  background: rgba(255, 255, 255, 0.5)
+  background: rgba(255, 255, 255, 0)
               url(http://s3.amazonaws.com/anou/images/blue_arrow.png)
               center left no-repeat;
   background-size: 60px 60px;
@@ -41,10 +41,23 @@ a, a:hover, a:active, a:focus{
   padding-left: 60px;
 }
 .symbol.cart {
-  background: rgba(255, 255, 255, 0.5)
+  background: rgba(255, 255, 255, 0)
               url(http://s3.amazonaws.com/anou/images/eldorado/basic/045.png)
               center left no-repeat;
   background-size: 40px 40px;
   font-size: 35px;
   padding-left: 40px;
+}
+
+
+#header{
+  background-color: #fffefa;
+  border-bottom: 2px solid rgb(220,220,240);
+}
+#base-logo{
+  padding: 3px;
+}
+
+#body{
+  margin-top: 50px;
 }

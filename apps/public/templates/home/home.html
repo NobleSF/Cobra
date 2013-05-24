@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% load url from future %}
 {% load home_inclusion_tags %}
 
@@ -8,35 +9,54 @@
 
 {% block css %}
   <link href="{{ STATIC_URL }}public/css/home.css" rel="stylesheet">
+  <link href="{{ STATIC_URL }}vendor/fitgrid/css/fitgrid.css" rel="stylesheet">
 {% endblock css %}
 
 {% block header %}
-  <div class='content'>
+  {{ block.super }}
 
-    <span id='top-of-page-marker'>&nbsp</span>
-    <div id='scroll-controller' style='display:none;'
-         data-spy='scroll' data-target='#scroll-controller' data-offset='400'
-    >
-      <a id='#top-of-page' href='#top-of-page-marker'></a>
-      <a id='#rest-of-page' href='#product-container'></a>
-    </div>
 
-    <div id='full-nav'>
-      <div class='hidden-phone'>{% home_header_tag request "full" %}</div>
-      <div class='visible-phone'>{% home_header_tag request "mobile" %}</div>
-    </div>
-    <div id='mini-nav' style='display:none;'>
-      {% home_header_tag request "mini" %}
-    </div>
-
-  </div>
 {% endblock header %}
 
 
 {% block content %}
+
+  <div class='fitgrid-row'>
+    <div class='fg8'>
+      <div id="anou-carousel" class="carousel slide">
+        <ol class="carousel-indicators">
+          <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+          <!--<li data-target="#myCarousel" data-slide-to="1"></li>-->
+          <!--<li data-target="#myCarousel" data-slide-to="2"></li>-->
+        </ol>
+        <!-- Carousel items -->
+        <div class="carousel-inner">
+          <div class="active item">
+            <img src="{% get_static_prefix %}images/video.jpg">
+            <div class='carousel-caption'>
+              <h3>Watch Video</h3>
+            </div>
+          </div>
+          <!--<div class="item"></div>-->
+          <!--<div class="item"></div>-->
+        </div>
+        <!-- Carousel nav -->
+        <a class="carousel-control left hidden-phone" href="#anou-carousel" data-slide="prev">&lsaquo;</a>
+        <a class="carousel-control right hidden-phone" href="#anou-carousel" data-slide="next">&rsaquo;</a>
+      </div>
+    </div>
+
+    <div id='featured-seller' class='fg4'>
+      <p>a little featurette on a seller</p>
+    </div>
+
+  </div>
+  {% search_bar_tag %}
+
+
   <div id='main' class='content-fluid'>
 
-    {% search_bar_tag %}
+
 
     <div id='product-container'>
       <div class='row-fluid'>
