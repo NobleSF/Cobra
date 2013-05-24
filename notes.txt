@@ -15,7 +15,9 @@ Redesign
 		http://www.red-team-design.com/css3-patterned-buttons
 		http://www.dropzonejs.com/
 	Images:
-		https://github.com/jonasundderwolf/django-image-cropping
+		Cloudinary for all uploaded images and photos
+		load SVG icons into http://icomoon.io/ and export as icon font
+		Where to find SVG icons: http://game-icons.net/ http://icomoon.io/
 	pages for sold products prominantly display similar products.
 	Responsive qualities: http://bradfrost.github.com/this-is-responsive/patterns.html
 	Use new HTML 5 elements:
