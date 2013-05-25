@@ -6,37 +6,38 @@
 
 
   <div id='seller-title' class='row-fluid'>
+
     <div class='span4'>
       Seller Image/Logo
     </div>
 
-    <div class='span4'>
-      {{ seller.name }}
-      <span id='account-link'>
-        <a href="{% url 'seller:edit' %}">edit account</a>
-      </span>
+    <div class='span8'>
+      <h2 id='seller-title'>
+        {{ seller.name }}
+        <span id='account-link'>
+          <a href="{% url 'seller:edit' %}">(edit account icon)</a>
+        </span>
+      </h2>
+
+      <div id='management-nav'>
+        <ul class='nav nav-tabs'>
+          <li class='{% block new_product_active %}{% endblock %}'>
+            <a href="{% url 'seller:inventory create' %}">Add Product icon</a>
+          </li>
+          <!--<li class='{% block catalogue_active %}{% endblock %}'>
+            <a href="{% url 'seller:management catalogue' %}">Product Catalogue</a>
+          </li>-->
+          <li class='{% block orders_active %}{% endblock %}'>
+            <a href="{% url 'seller:management orders' %}">Sold Products icon</a>
+          </li>
+          <li class='{% block inventory_active %}{% endblock %}'>
+            <a href="{% url 'seller:management home' %}">Current Products icon</a>
+          </li>
+        </ul>
+      </div>
+
     </div>
 
-    <div class='span4'>
-      <p>gold star for being awesome</p>
-    </div>
-  </div>
-
-  <div id='tabs'>
-    <ul class='nav nav-tabs'>
-      <li class='{% block new_product_active %}{% endblock %}'>
-        <a href="{% url 'seller:inventory create' %}">Add Product</a>
-      </li>
-      <li class='{% block catalogue_active %}{% endblock %}'>
-        <a href="{% url 'seller:management catalogue' %}">Product Catalogue</a>
-      </li>
-      <li class='{% block orders_active %}{% endblock %}'>
-        <a href="{% url 'seller:management orders' %}">Sold Products</a>
-      </li>
-      <li class='{% block inventory_active %}{% endblock %}'>
-        <a href="{% url 'seller:management home' %}">Current Products</a>
-      </li>
-    </ul>
   </div>
 
   {% block seller_page_content %}

@@ -49,7 +49,6 @@ a, a:hover, a:active, a:focus{
   padding-left: 40px;
 }
 
-
 #header{
   background-color: #fffefa;
   border-bottom: 2px solid rgb(220,220,240);
@@ -60,4 +59,17 @@ a, a:hover, a:active, a:focus{
 
 #body{
   margin-top: 40px;
+}
+
+/* Seller Pages base CSS */
+#seller-title{
+  text-align: center;
+}
+
+#management-nav ul{
+  text-align: center;
+}
+#management-nav ul li{
+  float: none;
+  display: inline-block;
 }
