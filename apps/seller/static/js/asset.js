@@ -1,9 +1,9 @@
 $().ready( function(){
   //run on page load
-  applyAutosave();
+  applyAssetAutosave();
 });
 
-function applyAutosave() {
+function applyAssetAutosave() {
   $('.asset').find('.autosave').autosave({
     url:$('#asset_ajax_url').val(),
     before:saveAssetBefore,
@@ -48,7 +48,7 @@ function fileUploadAction(){
     var this_file_input = file_input;
     var this_display_div = display_div;
 
-    var progress_div = this_file_input.closest('.asset').find('.progress');
+    var progress_div = this_file_input.closest('.asset, .seller-media').find('.progress');
     progress_div.hide();
     var progress_bar = progress_div.find('.bar');
 

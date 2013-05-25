@@ -1,12 +1,14 @@
 $().ready( function(){
   COUNTER = 1;
   //assign bootstrap classes
-  $('button').addClass('btn');
-  $('#asset_tabs').addClass('nav').addClass('nav-tabs');
-  $('#asset_tabs').children('li').first().addClass('active');
-  $('.file-button').addClass('btn').html('<i class="icon-camera"></i>');
+  $('#asset-tabs').children('li').first().addClass('active');
 
-  //run on page load
+  //run on page load for seller form
+  applyData($('#seller-account'), 'seller', 'seller');
+  applyEvents($('#seller-account'), to_assets=false);
+  applySellerAutosave();
+
+  //run on page load for assets
   $('#artisan_tab').trigger('click');//activate first tab
   arrangeAssetForms();
   addAssetForms();
@@ -23,12 +25,34 @@ $('.asset-tab').click(function(){
   $('#'+asset_ilk+'_container').show();
 });
 
-$('#acct-details').on('click', function(){
-  $('#seller_form').slideToggle();
+$('#acct-details-show').on('click', function(){
+  $('#seller-account').slideToggle();
 });
 
+function applySellerAutosave() {
+  $('#seller-account').find('.autosave').autosave({
+    url:$('#seller_ajax_url').val(),
+    before:saveSellerBefore,
+    success:saveSellerSuccess,
+    error:saveSellerError
+  });
+}
+
+function saveSellerBefore($this_element){
+  //start 'updating' visual
+  $this_element.closest('#seller-account').removeClass('error').removeClass('saved').addClass('updating');
+}
+function saveSellerSuccess(data,$this_element){
+  //finished visual
+  $this_element.closest('.asset').removeClass('updating').addClass('saved');
+}
+function saveSellerError(error,$this_element){
+  //error visual
+  $this_element.closest('.asset').removeClass('updating').addClass('error');
+}
+
 function arrangeAssetForms(){
-  $('#asset_forms .asset').each(function(){
+  $('#asset-forms .asset').each(function(){
     //move to proper asset container
     var ilk = $(this).find('#id_ilk').val();
     var asset_id = $(this).find('#id_asset_id').val();
@@ -61,8 +85,8 @@ function addAssetForms(){
     //if there are no empty forms, add one
     if (num_empty_forms == 0){
 
-      //grab an empty form from the hidden .asset_forms div
-      new_asset = $('#asset_forms .asset').first().clone(false);
+      //grab an empty form from the hidden .asset-forms div
+      new_asset = $('#asset-forms .asset').first().clone(false);
       var ilk = $(this).attr('id').replace('_container','');
       var asset_id = new_asset.find('#id_asset_id').val();
 
@@ -99,7 +123,7 @@ function applyData(asset_div, asset_id, ilk){
   COUNTER++;
 }
 
-function applyEvents(asset_div){
+function applyEvents(asset_div, to_assets){
   //for images uploader
   image_input = asset_div.find('.image-input');
   image_div = asset_div.find('.image');
@@ -107,5 +131,8 @@ function applyEvents(asset_div){
   uploader.apply(image_input, image_div);
 
   //for input fields
-  applyAutosave();
+  to_assets = to_assets || true;
+  if (to_assets){
+    applyAssetAutosave();
+  }
 }

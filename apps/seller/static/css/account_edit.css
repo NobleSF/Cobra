@@ -1,3 +1,67 @@
 .asset-tab{
   cursor: pointer;
 }
+
+#seller-account ul{
+  list-style: none;
+}
+
+#seller-form input, #seller-form select{
+  max-width: 15em;
+}
+#seller-form textarea{
+  min-height: 8em;
+  width: 80%;
+}
+
+#seller-form-submit{
+}
+
+/* hide choose file button behind button
+ * http://viget.com/inspire/custom-file-inputs-with-a-bit-of-jquery
+ */
+.asset-media, .seller-media {
+  height: 250px;
+}
+.image-form {
+  position: relative;
+  top: -90px;
+  left: 210px;
+  text-align: left;
+}
+.file-wrapper {
+  cursor: pointer;
+  display: inline-block;
+  overflow: hidden;
+  position: relative;
+}
+.file-wrapper .file-button {
+  background: rgb(112, 130, 201);
+  cursor: pointer;
+  display: inline-block;
+  padding: 15px 25px;
+  border: 3px solid #F0F0F0;
+}
+.file-wrapper input {
+  cursor: pointer;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  filter: alpha(opacity=1);
+  -moz-opacity: 0.01;
+  opacity: 0.01;
+  font-size: 100px;
+}
+/* end file button hiding */
+
+.progress {
+  position: relative;
+  left: 20px;
+  top: -50px;
+  width: 180px;
+}
+.bar {
+    height: 18px;
+    background: green;
+}

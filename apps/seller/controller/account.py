@@ -33,7 +33,8 @@ def edit(request):
     image_form.fields['signature'].initial = getSignatureHash(image_form)
 
     context = {
-                'assets': assets,
+                'seller':     seller,
+                'assets':     assets,
                 'asset_form': AssetForm(),
                 'image_form': image_form,
                 'asset_ilks': ['artisan','product','tool','material']
@@ -59,15 +60,21 @@ def edit(request):
 
     else: #not POST
       seller_form = SellerEditForm()
-      seller_form.fields['name'].initial      = seller.name
-      seller_form.fields['email'].initial     = seller.email
-      seller_form.fields['phone'].initial     = seller.phone
-      seller_form.fields['bio'].initial       = seller.bio
-      seller_form.fields['country'].initial   = seller.country
-      seller_form.fields['currency'].initial  = seller.currency
+      seller_form.fields['name'].initial        = seller.name
+      seller_form.fields['email'].initial       = seller.email
+      seller_form.fields['phone'].initial       = seller.phone
+      seller_form.fields['bio'].initial         = seller.bio
+      try: seller_form.fields['image'].initial  = seller.image_id
+      except: pass
+      seller_form.fields['city'].initial        = seller.city
+      seller_form.fields['country'].initial     = seller.country
+      seller_form.fields['coordinates'].initial = seller.coordinates
+      seller_form.fields['currency'].initial    = seller.currency
+
+      #disable fields only editable by admin
       if 'admin_id' not in request.session:
-        seller_form.fields['country'].widget.attrs['disabled'] = True
-        seller_form.fields['currency'].widget.attrs['disabled'] = True
+        for fieldname in ['name', 'city', 'country', 'coordinates', 'currency']:
+          seller_form.fields[fieldname].widget.attrs['disabled'] = True
 
     context['seller_form'] = seller_form
 
@@ -93,6 +100,13 @@ def getSignatureHash(image_form):
   h = hashlib.new('sha1')
   h.update(cloudinary_string)
   return h.hexdigest()
+
+@access_required('seller')
+@csrf_exempt
+def saveSeller(request): #ajax requests only, create or update asset
+  context = {'test':"success"}
+  response = context
+  return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 @access_required('seller')
 @csrf_exempt
