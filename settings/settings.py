@@ -11,7 +11,7 @@ except Exception as e:
     PRODUCTION = True
 
 if PRODUCTION:
-  DEBUG = True #for testing until we go live
+  DEBUG = False
 else:
   DEBUG = True
 
@@ -124,7 +124,8 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
   'django.contrib.staticfiles.finders.FileSystemFinder',
   'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-# 'django.contrib.staticfiles.finders.DefaultStorageFinder',
+  #'django.contrib.staticfiles.finders.DefaultStorageFinder',
+  'compressor.finders.CompressorFinder',
 )
 
 CLOUDINARY = {
@@ -188,6 +189,7 @@ INSTALLED_APPS = (
   #'api',
   'djrill',
   'storages',
+  'compressor',
   'south',
   #'django.contrib.auth',
   'django.contrib.contenttypes',
