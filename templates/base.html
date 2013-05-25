@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load url from future %}
+{% load compress %}
 <head>
   <meta charset="utf-8">
   <title>{% block tab_title %}Anou{% endblock tab_title %}</title>
@@ -10,20 +11,21 @@
   <!--favicon-->
   <link rel="shortcut icon" href="{{ STATIC_URL }}images/favicon_old.ico" />
 
-  {% if debug %}
-    <link href="{{ STATIC_URL }}vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ STATIC_URL }}vendor/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
-  {% else %}
-    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css" rel="stylesheet">
-    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-responsive.min.css" rel="stylesheet">
-    <link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
-  {% endif %}
+  {% compress css %}
+    {% if debug %}
+      <link href="{{ STATIC_URL }}vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+      <link href="{{ STATIC_URL }}vendor/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    {% else %}
+      <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css" rel="stylesheet">
+      <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-responsive.min.css" rel="stylesheet">
+      <link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
+    {% endif %}
 
-  <link href="{{ STATIC_URL }}css/base.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}css/base.css" rel="stylesheet">
 
-  {% block css %}
-  {% endblock css %}
-
+    {% block css %}
+    {% endblock css %}
+  {% endcompress %}
 </head>
 
 <body>
@@ -83,18 +85,20 @@
   </footer>
 
   <!--Javascript Placed at the end of the document so the pages load faster -->
-  {% if debug %}
-    <script src="{{ STATIC_URL }}vendor/jquery/jquery-1.9.1.min.js"></script>
-    <script src="{{ STATIC_URL }}vendor/bootstrap/js/bootstrap.min.js"></script>
-  {% else %}
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
-  {% endif %}
+  {% compress js %}
+    {% if debug %}
+      <script src="{{ STATIC_URL }}vendor/jquery/jquery-1.9.1.min.js"></script>
+      <script src="{{ STATIC_URL }}vendor/bootstrap/js/bootstrap.min.js"></script>
+    {% else %}
+      <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+      <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+    {% endif %}
 
-  <script src="{{ STATIC_URL }}vendor/holder/js/holder.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL}}js/base.js"></script>
+    <script src="{{ STATIC_URL }}vendor/holder/js/holder.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL}}js/base.js"></script>
 
-  {% block javascript %}
-  {% endblock javascript %}
+    {% block javascript %}
+    {% endblock javascript %}
+  {% endcompress %}
 </body>
 </html>
