@@ -7,7 +7,9 @@ class Seller(models.Model):
   email         = models.EmailField(null=True, blank=True)
   phone         = models.BigIntegerField(null=True, blank=True)
   bio           = models.TextField(null=True, blank=True)
+  city          = models.CharField(max_length=50, null=True, blank=True)
   country       = models.ForeignKey(Country, null=True, blank=True)
+  coordinates   = models.CharField(max_length=30, null=True, blank=True)
   currency      = models.ForeignKey(Currency, null=True, blank=True)
   image         = models.ForeignKey('Image', null=True, blank=True)
   #update history
