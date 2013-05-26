@@ -3,6 +3,9 @@
 ul {
   list-style: none;
 }
+input{
+  max-width: 150px;
+}
 
 /* PHOTOS */
 .photo-uploader{}
