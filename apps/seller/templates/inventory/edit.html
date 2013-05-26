@@ -1,4 +1,5 @@
 {% extends "seller_base.html" %}
+{% load url from future %}
 
 {% block css %}
   <link href='{{ STATIC_URL }}seller/css/product_edit.css' rel='stylesheet'>
@@ -15,7 +16,6 @@
 {% block new_product_active %}active{% endblock %}
 
 {% block seller_page_content %}
-  {% load url from future %}
   {% load inventory_inclusion_tags %}
 
   <input type='hidden' id='product-ajax-url' value='{% url 'seller:save product' %}'>

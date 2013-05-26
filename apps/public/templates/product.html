@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load url from future %}
 
+{% block title %}
+  {{ product.name }} by {{ product.seller.name }}
+{% endblock title %}
+
 {% block javascript %}
   <script type="text/javascript" src="{{ STATIC_URL}}public/js/product.js"></script>
 {% endblock javascript %}

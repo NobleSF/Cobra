@@ -19,10 +19,30 @@ def home(request, context={}):
 
 @access_required('seller')
 def orders(request):
+  from apps.seller.models import Seller
+
   context = {}
+  try:
+    seller = Seller.objects.get(id=request.session['seller_id'])
+    products = seller.product_set.all()
+    context['seller'] = seller
+
+  except Exception as e:
+    context = {'exception': e}
+
   return render(request, 'management/orders.html', context)
 
 @access_required('seller')
-def catalogue(request):
+def catalog(request):
+  from apps.seller.models import Seller
+
   context = {}
-  return render(request, 'management/catalogue.html', context)
+  try:
+    seller = Seller.objects.get(id=request.session['seller_id'])
+    products = seller.product_set.all()
+    context['seller'] = seller
+
+  except Exception as e:
+    context = {'exception': e}
+
+  return render(request, 'management/catalog.html', context)

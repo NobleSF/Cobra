@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load url from future %}
 
+{% block title %}
+  {{ store.name }}
+{% endblock title %}
+
 {% block javascript %}
   <script type="text/javascript" src="{{ STATIC_URL}}public/js/store.js"></script>
 {% endblock javascript %}

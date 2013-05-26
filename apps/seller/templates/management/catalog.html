@@ -1,9 +1,13 @@
 {% extends "seller_base.html" %}
+{% load url from future %}
 
-{% block catalogue_active %}active{% endblock %}
+{% block title %}
+  {{ block.super }} Catalog
+{% endblock title %}
+
+{% block catalog_active %}active{% endblock %}
 
 {% block seller_page_content %}
-  {% load url from future %}
   {% load inventory_inclusion_tags %}
 
 

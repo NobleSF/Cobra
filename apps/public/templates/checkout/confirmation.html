@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load url from future %}
 
+{% block title %}
+  Order Confirmation
+{% endblock title %}
+
 {% block javascript %}
   <script type="text/javascript" src="{{ STATIC_URL}}public/js/checkout.js"></script>
 {% endblock javascript %}

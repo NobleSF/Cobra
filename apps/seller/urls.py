@@ -5,7 +5,7 @@ urlpatterns = patterns('',
 
   url(r'^$', management.home, name='management home'), #seller dashboard, live products
   url(r'^orders$', management.orders, name='management orders'), #orders
-  url(r'^catalogue$', management.catalogue, name='management catalogue'), #catalogue
+  url(r'^catalog$', management.catalog, name='management catalog'), #catalog
 
   url(r'^edit$', account.edit, name='edit'), #edit seller info
   url(r'^ajax/seller_save$', account.saveSeller, name='save seller'),

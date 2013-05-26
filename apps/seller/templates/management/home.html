@@ -1,5 +1,9 @@
 {% extends "seller_base.html" %}
 
+{% block title %}
+  {{ block.super }} Products
+{% endblock title %}
+
 {% block css %}
   <link href='{{ STATIC_URL }}seller/css/inventory.css' rel='stylesheet'>
   <link href='{{ STATIC_URL }}vendor/fitgrid/css/fitgrid.css' rel='stylesheet'>

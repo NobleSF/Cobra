@@ -1,4 +1,9 @@
 {% extends "base.html" %}
+
+{% block title %}
+  {{ block.super }} Edit
+{% endblock title %}
+
 {% block css %}
   <link href='{{ STATIC_URL }}seller/css/account_edit.css' rel='stylesheet'>
   <link href='{{ STATIC_URL }}seller/css/asset.css' rel='stylesheet'>

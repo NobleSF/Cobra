@@ -1,34 +1,59 @@
 {% extends "base.html" %}
+{% load url from future %}
+
+{% block title %}
+  {{ block.super }} Seller
+{% endblock title %}
+
+{% block header %}
+  <div id="base-logo" class='pull-left'>
+    <a href="{% url 'home' %}">
+      <img src="{{ STATIC_URL }}images/Anou_logo_80x50.png" alt="Anou logo">
+    </a>
+  </div>
+  <div id="base-navigation">
+    <ul class='nav nav-pills pull-right'>
+
+      <li class='btn-large'>
+        <a href="{% url 'seller:management home' %}">
+          <i class='symbol blue-arrow'></i>
+        </a>
+      </li>
+
+    </ul>
+  </div>
+{% endblock header %}
 
 {% block content %}
-  {% load url from future %}
   {% load inventory_inclusion_tags %}
 
 
   <div id='seller-title' class='row-fluid'>
 
-    <div class='span4'>
-      Seller Image/Logo
+    <div class='span3'>
+      <img src="{{ seller.image.thumb }}">
     </div>
 
-    <div class='span8'>
-      <h2 id='seller-title'>
-        <span id='seller-page-link' class='btn btn-small'>
-          <a href="{% url 'store' seller.id %}">seller public page icon</a>
-        </span>
-        {{ seller.name }}
-        <span id='account-link' class='btn btn-small'>
-          <a href="{% url 'seller:edit' %}">edit account icon</a>
-        </span>
-      </h2>
+    <div class='span9'>
+      {% if seller %}
+        <h2 id='seller-title'>
+          <span id='seller-page-link' class='btn btn-small'>
+            <a href="{% url 'store' seller.id %}">seller public page icon</a>
+          </span>
+          {{ seller.name }}
+          <span id='account-link' class='btn btn-small'>
+            <a href="{% url 'seller:edit' %}">edit account icon</a>
+          </span>
+        </h2>
+      {% endif %}
 
       <div id='management-nav'>
         <ul class='nav nav-tabs'>
           <li class='{% block new_product_active %}{% endblock %}'>
             <a href="{% url 'seller:inventory create' %}">Add Product icon</a>
           </li>
-          <!--<li class='{% block catalogue_active %}{% endblock %}'>
-            <a href="{% url 'seller:management catalogue' %}">Product Catalogue</a>
+          <!--<li class='{% block catalog_active %}{% endblock %}'>
+            <a href="{% url 'seller:management catalog' %}">Product Catalog</a>
           </li>-->
           <li class='{% block orders_active %}{% endblock %}'>
             <a href="{% url 'seller:management orders' %}">Sold Products icon</a>

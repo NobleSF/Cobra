@@ -1,9 +1,13 @@
 {% extends "seller_base.html" %}
+{% load url from future %}
+
+{% block title %}
+  {{ block.super }} Orders
+{% endblock title %}
 
 {% block orders_active %}active{% endblock %}
 
 {% block seller_page_content %}
-  {% load url from future %}
   {% load inventory_inclusion_tags %}
 
 
