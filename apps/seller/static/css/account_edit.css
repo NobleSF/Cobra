@@ -25,7 +25,7 @@
 }
 .image-form {
   position: relative;
-  top: -90px;
+  top: -110px;
   left: 210px;
   text-align: left;
 }
@@ -55,11 +55,12 @@
 }
 /* end file button hiding */
 
-.progress {
+.progress-holder {
   position: relative;
   left: 20px;
   top: -50px;
   width: 180px;
+  height: 20px;
 }
 .bar {
     height: 18px;

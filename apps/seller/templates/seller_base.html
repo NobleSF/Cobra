@@ -13,9 +13,12 @@
 
     <div class='span8'>
       <h2 id='seller-title'>
+        <span id='seller-page-link' class='btn btn-small'>
+          <a href="{% url 'store' seller.id %}">seller public page icon</a>
+        </span>
         {{ seller.name }}
-        <span id='account-link'>
-          <a href="{% url 'seller:edit' %}">(edit account icon)</a>
+        <span id='account-link' class='btn btn-small'>
+          <a href="{% url 'seller:edit' %}">edit account icon</a>
         </span>
       </h2>
 

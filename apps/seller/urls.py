@@ -8,7 +8,7 @@ urlpatterns = patterns('',
   url(r'^catalogue$', management.catalogue, name='management catalogue'), #catalogue
 
   url(r'^edit$', account.edit, name='edit'), #edit seller info
-  url(r'^ajax/asset_save$', account.saveSeller, name='save seller'),
+  url(r'^ajax/seller_save$', account.saveSeller, name='save seller'),
   url(r'^ajax/asset_save$', account.saveAsset, name='save asset'),
   url(r'^ajax/product_save$', inventory.saveProduct, name='save product'),
 

@@ -37,10 +37,12 @@
         <li class='seller-media'>
           <div class='image'>
             <!-- insert image or placeholder -->
-            {% image_tag image_id %}
+            {% image_tag seller.image.id %}
           </div>
-          <div class="progress">
-            <div class="bar" style="width: 0%;"></div>
+          <div class='progress-holder'>
+            <div class="progress">
+              <div class="bar" style="width: 0%;"></div>
+            </div>
           </div>
           <div class='image-form'>
             <form>

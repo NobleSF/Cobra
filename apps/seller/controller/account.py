@@ -41,19 +41,34 @@ def edit(request):
               }
 
     if request.method == 'POST':
-      seller_form = SellerEditForm(request.POST)
+      POST = request.POST.copy()
+
+      #fields only editable by admin
+      if 'admin_id' not in request.session:
+        for fieldname in ['name', 'city', 'coordinates']:
+          POST[fieldname] = eval("seller."+fieldname)
+        for fieldname in ['country', 'currency']:
+          POST[fieldname] = eval("seller."+fieldname+".id")
+
+      seller_form = SellerEditForm(POST)
       try: # it must be a post to work
         if seller_form.is_valid():
           seller_data = seller_form.cleaned_data
-          seller.name     = seller_data['name']
-          seller.email    = seller_data['email']
-          seller.phone    = seller_data['phone']
-          seller.bio      = seller_data['bio']
-          seller.country  = seller_data['country']
-          seller.currency = seller_data['currency']
+          seller.name         = seller_data['name']
+          seller.email        = seller_data['email']
+          seller.phone        = seller_data['phone']
+          seller.bio          = seller_data['bio']
+          #seller.image       = customSaveImage(seller_data['image_url'])
+          seller.city         = seller_data['city']
+          seller.country      = seller_data['country']
+          seller.coordinates  = seller_data['coordinates']
+          seller.currency     = seller_data['currency']
           seller.save()
-          context = {'success': "Seller info saved"}
-          return redirect('seller:home')
+          context['success'] = "Seller info saved"
+          return redirect('seller:management home')
+        else:
+          context['problem'] = "Seller form did not validate"
+          context['errors'] = seller_form.errors
 
       except Exception as e:
         context['exception'] = e
@@ -104,16 +119,32 @@ def getSignatureHash(image_form):
 @access_required('seller')
 @csrf_exempt
 def saveSeller(request): #ajax requests only, create or update asset
-  context = {'test':"success"}
+  from apps.seller.models import Seller
+
+  if request.method == 'GET': # it must be an ajax post to work
+    try:
+      seller = Seller.objects.get(id=request.session['seller_id'])
+      element = request.GET['name']
+      value   = request.GET['value']
+
+      if element == 'image_url':
+        seller.image = customSaveImage(value)
+
+      seller.save()
+      context = {'success': element + " saved with value: " + value}
+
+    except Exception as e:
+      context = {'exception':e}
+  else:
+    context = {'problem':"not GET"}
+
   response = context
   return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 @access_required('seller')
 @csrf_exempt
 def saveAsset(request): #ajax requests only, create or update asset
-  from apps.seller.models import Asset, Image
-  from apps.admin.models import Category
-  from apps.seller.controller.forms import AssetForm
+  from apps.seller.models import Asset
 
   if request.method == 'GET': # it must be an ajax post to work
     try:

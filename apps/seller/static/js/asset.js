@@ -72,7 +72,7 @@ function fileUploadAction(){
         thumb_url = response['url'].replace("upload","upload/t_thumb");
         this_display_div.html('<img src="' + thumb_url + '">');
         //save image_id in form field
-        image_field = this_display_div.closest('.asset').find('.image-url');
+        image_field = this_display_div.closest('.asset, #seller-account').find('.image-url');
         image_field.attr('value',response['url']).trigger('change');
         //hide progress bar
         progress_bar.css('width', '0%');
