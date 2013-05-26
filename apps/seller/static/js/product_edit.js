@@ -1,6 +1,6 @@
 $().ready( function(){
   //assign bootstrap classes
-  $('.asset-chooser').addClass('btn-group');
+  //$('.asset-chooser').addClass('btn-group');
   $('.asset').addClass('btn');
 
   //run on page load
