@@ -11,7 +11,7 @@ except Exception as e:
     PRODUCTION = True
 
 if PRODUCTION:
-  DEBUG = False
+  DEBUG = True
 else:
   DEBUG = True
 
