@@ -21,6 +21,9 @@
   position: relative;
   top: -80px;
   left: 210px;
+  width: 90px;
+  padding: 0;
+  margin: 0;
 }
 .file-wrapper {
   cursor: pointer;
