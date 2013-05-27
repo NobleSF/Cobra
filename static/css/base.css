@@ -9,13 +9,32 @@ body {
   margin: 0px auto;
 }
 
-#base-logo {
-  padding: 0 2em;
+#header{
+  background-color: #fffefa;
+  border-bottom: 2px solid rgb(220,220,240);
 }
 
-#base-navigation li {
-  padding: 0.2em .02em;
-  font-size: 35px;
+#base-logo {
+  padding: 0 1em 0 0;
+  margin: 3px;
+}
+
+#base-navigation ul {
+  list-style: none;
+  margin: 0;
+}
+#base-navigation li, #base-navigation li:hover, #base-navigation li:active {
+  padding: 0.5em 0.5em 0;
+  display: inline-block;
+  line-height: 40px;
+}
+#base-navigation a, #base-navigation a:hover, #base-navigation a:active {
+  color: #333;
+  font-size: 2em;
+  text-decoration: none;
+}
+#base-navigation a:hover {
+  color: #888;
 }
 
 i{font-style: normal;}
@@ -24,41 +43,8 @@ a, a:hover, a:active, a:focus{
   outline: 0;
 }
 
-#header-separator, #footer-separator {
-  margin: 2em;
-}
-
-.nav .symbol{
-  line-height: 14px;
-}
-
-.symbol.blue-arrow {
-  background: rgba(255, 255, 255, 0)
-              url(http://s3.amazonaws.com/anou/images/blue_arrow.png)
-              center left no-repeat;
-  background-size: 60px 60px;
-  font-size: 60px;
-  padding-left: 60px;
-}
-.symbol.cart {
-  background: rgba(255, 255, 255, 0)
-              url(http://s3.amazonaws.com/anou/images/eldorado/basic/045.png)
-              center left no-repeat;
-  background-size: 40px 40px;
-  font-size: 35px;
-  padding-left: 40px;
-}
-
-#header{
-  background-color: #fffefa;
-  border-bottom: 2px solid rgb(220,220,240);
-}
-#base-logo{
-  padding: 3px;
-}
-
 #body{
-  margin-top: 40px;
+  margin-top: 50px;
 }
 
 /* Seller Pages base CSS */
@@ -73,3 +59,14 @@ a, a:hover, a:active, a:focus{
   float: none;
   display: inline-block;
 }
+
+/* COLORS */
+.anou-blue {color: rgb(65, 123, 217) !important;}
+.anou-blue:hover {color: rgba(65,123,217,0.8) !important;}
+.blue {color: #417bd9 !important;}
+.black {color: #000 !important;}
+.grey {color: #888 !important;}
+.red {color: rgb(179, 50, 0) !important}
+.red:hover {color: rgba(179, 50, 0, 0.8) !important}
+.gold {color: rgb(209, 176, 0) !important;}
+.gold {color: rgba(209, 176, 0, 0.8) !important;}

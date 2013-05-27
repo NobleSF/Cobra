@@ -25,6 +25,8 @@ Redesign
 	Keep use of JS libraries to a minimum for speed
 		http://www.gonzoblog.nl/2013/02/27/10-fresh-css3-only-tutorials-look-ma-no-javascript/
 		http://jquery-jkit.com/
+	For an extra dose of awesomeness:
+		http://www.unheap.com/
 
 Check code for efficiency:
 	http://flake8.readthedocs.org

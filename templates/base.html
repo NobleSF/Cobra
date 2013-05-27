@@ -17,11 +17,11 @@
   {% else %}
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-responsive.min.css" rel="stylesheet">
-    <link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
   {% endif %}
 
   {% compress css %}
     <link href="{{ STATIC_URL }}css/base.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}css/icon-font.css" rel="stylesheet">
     {% block css %}
     {% endblock css %}
   {% endcompress %}
@@ -37,29 +37,40 @@
         </a>
       </div>
       <div id="base-navigation">
-        <ul class='nav nav-pills pull-right'>
-          <li class='btn-large'>
-            <a href="{% url 'home' %}">Home</a>
-          </li>
-          <li class='btn-large'>
-            <a href="{% url 'about' %}">About</a>
-          </li>
 
+        <ul class='pull-right'>
           {% if 'cart_id' in request.session %}
-            <li class='btn-large'>
-              <a href="{% url 'cart' %}">
-                <i class='symbol cart'>Cart</i>
+            <li>
+              <a href="{% url 'cart' %}"
+                 class='symbol-cart' title='cart'>
+                <span class='hidden-phone'>Cart</span>
               </a>
             </li>
           {% endif %}
 
-          <li class='btn-large'>
-            <a href="{% url 'seller:management home' %}">
-              <i class='symbol blue-arrow'></i>
-            </a>
-          </li>
+          {% if 'admin_id' in request.session or 'seller_id' in request.session %}
+            <li>
+              <a href="{% url 'admin:logout' %}"
+                 class='symbol-enter red' title='logout'></a>
+            </li>
+          {% endif %}
 
+          <li>
+            <a href="{% url 'seller:management home' %}"
+               class='symbol-arrow-right anou-blue' title='artisan account'></a>
+            {{ symbol.euro }}
+          </li>
         </ul>
+
+        <ul class='pull-left'>
+          <li>
+            <a href="{% url 'home' %}">Home</a>
+          </li>
+          <li>
+            <a href="{% url 'about' %}">About</a>
+          </li>
+        </ul>
+
       </div>
     {% endblock header %}
 
