@@ -7,6 +7,7 @@ venv
 *.pyc
 *.komodoproject
 .komodotools/
+pagekite.py
 
 #################
 ## Eclipse
