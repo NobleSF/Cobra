@@ -20,7 +20,7 @@
 
   <input type='hidden' id='product-ajax-url' value='{% url 'seller:save product' %}'>
 
-  <div id='product-edit-form'>
+  <div id='product-edit-form' class='text-center'>
 
     <div id='product-chooser-section' class='section'>
       {% asset_chooser_tag request product "product" %}
@@ -28,7 +28,7 @@
     </div>
 
     <div id='photos-section' class='section'>
-      <div id='photos'>
+      <div id='photos' class='text-center'>
         {% for photo in product.photos %}
           {% photo_upload_tag photo_form product photo=photo %}
         {% endfor %}
@@ -50,10 +50,9 @@
 
       <div id='price-section' class='section'>
         <ul>
-          <li class='input-prepend input-append'>
-            <span class='add-on'><i class='symbol money'></i></span>
+          <li class='input-prepend'>
+            <span class='add-on'><i class='symbol-dirham black'></i></span>
             {{ product_form.price }}
-            <span class='add-on'>Dh</span>
           </li>
         </ul>
         <hr>
@@ -82,24 +81,24 @@
       <div id='measurements-section' class='section'>
         <ul>
           <li class='input-prepend input-append'>
-            <span class='add-on'><i class='symbol width'></i></span>
+            <span class='add-on'><i class='symbol-weight black'></i></span>
             {{ product_form.width  }}
             <span class='add-on'>cm</span>
           </li>
           <li class='input-prepend input-append'>
-            <span class='add-on'><i class='symbol height'></i></span>
+            <span class='add-on'><i class='symbol-weight black'></i></span>
             {{ product_form.height }}
             <span class='add-on'>cm</span>
           </li>
           <li class='input-prepend input-append'>
-            <span class='add-on'><i class='symbol length'></i></span>
+            <span class='add-on'><i class='symbol-weight black'></i></span>
             {{ product_form.length }}
             <span class='add-on'>cm</span>
           </li>
           <li class='input-prepend input-append'>
-            <span class='add-on'><i class='symbol weight'></i></span>
+            <span class='add-on'><i class='symbol-weight black'></i></span>
             {{ product_form.weight }}
-            <span class='add-on'>gram</span>
+            <span class='add-on'>g</span>
           </li>
         </ul>
         <hr>
@@ -112,36 +111,31 @@
 
       <div id='summary-section' class='section row-fluid'>
 
-        <div class='summary-photo span1'>
+        <div class='summary-photo span2'>
           <img src=''>
         </div>
 
-        <div class='summary-values span2'>
+        <div class='summary-values span3'>
           <ul>
-            <li class='input-prepend input-append'>
-              <span class='add-on'><i class='symbol money'></i></span>
-              <input type='text' id='summary-price' class='input-mini' disabled>
-              <span class='add-on'>Dh</span>
+            <li class='input-prepend'>
+              <span class='add-on'><i class='symbol-dirham black'></i></span>
+              <input type='text' id='summary-price' disabled>
             </li>
-            <li class='input-prepend input-append summary-detail'>
-              <span class='add-on'><i class='symbol shipping'></i></span>
-              <input type='text' id='summary-shipping-cost' class='input-mini' disabled>
-              <span class='add-on'>Dh</span>
+            <li class='input-prepend summary-detail'>
+              <span class='add-on'><i class='symbol-shipping black'></i></span>
+              <input type='text' id='summary-shipping-cost' disabled>
             </li>
-            <li class='input-prepend input-append summary-detail'>
-              <span class='add-on'><i class='symbol fee'></i></span>
-              <input type='text' id='summary-anou-fee' class='input-mini' disabled>
-              <span class='add-on'>Dh</span>
+            <li class='input-prepend summary-detail'>
+              <span class='add-on'><i class='symbol-percent black'></i></span>
+              <input type='text' id='summary-anou-fee' disabled>
             </li>
-            <li class='input-prepend input-append summary-detail'>
-              <span class='add-on'><i class='symbol total'></i></span>
-              <input type='text' id='summary-total' class='input-mini' disabled>
-              <span class='add-on'>Dh</span>
+            <li class='input-prepend summary-detail'>
+              <span class='add-on'><i class='symbol-sum black'></i></span>
+              <input type='text' id='summary-total' disabled>
             </li>
-            <li class='input-prepend input-append summary-detail'>
-              <span class='add-on'><i class='symbol USD'></i></span>
-              <input type='text' id='summary-USD' class='input-mini' disabled>
-              <span class='add-on'>USD</span>
+            <li class='input-prepend summary-detail'>
+              <span class='add-on'><i class='symbol-currency-exchange black'></i></span>
+              <input type='text' id='summary-USD' disabled>
             </li>
             <li id='summary-show-more'>show more</li>
           </ul>

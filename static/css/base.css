@@ -4,6 +4,13 @@ body {
   background-color: #fffefa;
 }
 
+i{font-style: normal; font-size: 24pt;}
+a, a:hover, a:active, a:focus{outline: 0;}
+
+#body{
+  margin-top: 50px;
+}
+
 #header, #main, #footer {
   max-width: 1200px;
   margin: 0px auto;
@@ -26,7 +33,7 @@ body {
 #base-navigation li, #base-navigation li:hover, #base-navigation li:active {
   padding: 0.5em 0.5em 0;
   display: inline-block;
-  line-height: 40px;
+  line-height: 45px;
 }
 #base-navigation a, #base-navigation a:hover, #base-navigation a:active {
   color: #333;
@@ -37,16 +44,6 @@ body {
   color: #888;
 }
 
-i{font-style: normal;}
-
-a, a:hover, a:active, a:focus{
-  outline: 0;
-}
-
-#body{
-  margin-top: 50px;
-}
-
 /* Seller Pages base CSS */
 #seller-title{
   text-align: center;
@@ -55,18 +52,27 @@ a, a:hover, a:active, a:focus{
 #management-nav ul{
   text-align: center;
 }
-#management-nav ul li{
+#management-nav li{
   float: none;
   display: inline-block;
+  font-size: 6em;
+}
+#management-nav a{
+  line-height: 1em;
 }
 
-/* COLORS */
-.anou-blue {color: rgb(65, 123, 217) !important;}
-.anou-blue:hover {color: rgba(65,123,217,0.8) !important;}
-.blue {color: #417bd9 !important;}
-.black {color: #000 !important;}
-.grey {color: #888 !important;}
-.red {color: rgb(179, 50, 0) !important}
-.red:hover {color: rgba(179, 50, 0, 0.8) !important}
-.gold {color: rgb(209, 176, 0) !important;}
-.gold {color: rgba(209, 176, 0, 0.8) !important;}
+/* SYMBOLS AND COLORS */
+[class*="symbol-"]:hover {
+  text-decoration: none !important;
+  opacity: 0.7;
+}
+[class*="symbol-"].black:hover {opacity: 1 !important;}
+.anou-blue  {color: rgb(65, 123, 217)   !important;}
+.blue       {color: #417bd9             !important;}
+.black      {color: #333                !important;}
+.gray       {color: #888                !important;}
+.white      {color: #fffefa             !important;}
+.red        {color: rgb(179, 50, 0)     !important;}
+.gold       {color: rgb(209, 176, 0)    !important;}
+.green      {color: rgb(37, 153, 0)     !important;}
+.orange     {color: rgb(231, 166, 0)    !important;}

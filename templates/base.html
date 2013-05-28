@@ -51,13 +51,13 @@
           {% if 'admin_id' in request.session or 'seller_id' in request.session %}
             <li>
               <a href="{% url 'admin:logout' %}"
-                 class='symbol-enter red' title='logout'></a>
+                 class='symbol-logout red' title='logout'></a>
             </li>
           {% endif %}
 
           <li>
             <a href="{% url 'seller:management home' %}"
-               class='symbol-arrow-right anou-blue' title='artisan account'></a>
+               class='symbol-blue-arrow anou-blue' title='artisan account'></a>
             {{ symbol.euro }}
           </li>
         </ul>

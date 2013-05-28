@@ -24,13 +24,11 @@
   <div class='row-fluid'>
     <div class='span12'>
       <h1 id='seller-title' >
-        <span id='seller-page-link' class='btn btn-small'>
-          <a href="{% url 'store' seller.id %}">seller public page icon</a>
-        </span>
+        <a href="{% url 'store' seller.id %}"
+           class='symbol-profile green' title='seller public page'></a>
         {{ seller.name }}
-        <span id='acct-details-show' class='btn btn-small'>
-          <a>show/hide details icon</a>
-        </span>
+        <a href="{% url 'seller:edit' %}"
+           class='symbol-assets green' title='edit account'></a>
       </h1>
     </div>
   </div>
@@ -62,7 +60,7 @@
               </div>
               <span class='file-wrapper'>
                 {{ image_form.file }}
-                <span class='file-button btn'><i class="icon-camera"></i></span>
+                <span class='file-button btn'><i class="symbol-camera"></i></span>
               </span>
             </form>
           </div>
@@ -79,19 +77,43 @@
           <li>{{ seller_form.image_url }}</li>
         </ul>
         <ul class='seller-details'>
-          <li>{{ seller_form.name }}</li>
-          <li>{{ seller_form.city }}</li>
-          <li>{{ seller_form.country }}</li>
-          <li>{{ seller_form.coordinates }}</li>
-          <li>{{ seller_form.currency }}</li>
+          <li class='input-prepend'>
+            <i class='symbol-name black' title='name'></i>
+            {{ seller_form.name }}
+          </li>
+          <li class='input-prepend'>
+            <i class='symbol-city black' title='city'></i>
+            {{ seller_form.city }}
+          </li>
+          <li class='input-prepend'>
+            <i class='symbol-country black' title='country'></i>
+            {{ seller_form.country }}
+          </li>
+          <li class='input-prepend'>
+            <i class='symbol-location black' title='GPS coordinates'></i>
+            {{ seller_form.coordinates }}
+          </li>
+          <li class='input-prepend'>
+            <i class='symbol-currency black' title='currency'></i>
+            {{ seller_form.currency }}
+          </li>
         </ul>
       </div>
 
       <div class='span5'>
         <ul>
-          <li>{{ seller_form.email }}</li>
-          <li>{{ seller_form.phone }}</li>
-          <li>{{ seller_form.bio }}</li>
+          <li class='input-prepend'>
+            <i class='symbol-email black' title='city'></i>
+            {{ seller_form.email }}
+          </li>
+          <li class='input-prepend'>
+            <i class='symbol-phone black' title='city'></i>
+            {{ seller_form.phone }}
+          </li>
+          <li class='input-prepend'>
+            <i class='symbol-description black' title='city'></i>
+            {{ seller_form.bio }}
+          </li>
         </ul>
         <button id='seller-form-submit' type="submit" class='btn'>
           Submit Form Icon
@@ -111,10 +133,13 @@
     <input type='hidden' id='asset_ajax_url' value='{% url 'seller:save asset' %}'>
   </div>
 
-  <ul id='asset-tabs' class='nav nav-tabs'>
+  <ul id='asset-tabs' class='nav nav-tabs text-center'>
     {% for asset_ilk in asset_ilks %}
       <li id='{{ asset_ilk }}_tab' class='asset-tab'>
-        <a>{{ asset_ilk|title }}{{ 2|pluralize }}</a>
+        <a>
+          <i class='symbol-{{ asset_ilk }}{{ 2|pluralize }} blue'></i>
+          {{ asset_ilk|title }}{{ 2|pluralize }}
+        </a>
       </li>
     {% endfor %}
   </ul>

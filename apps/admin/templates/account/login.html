@@ -1,7 +1,35 @@
 {% extends "base.html" %}
+{% load url from future %}
 
+{% block title %}
+  {{ block.super }} Seller
+{% endblock title %}
+
+{% block css %}
+  <style>
+    input{max-width: 150px;}
+    ul{list-style: none;}
+    form{text-align: center;}
+  </style>
+{% endblock css%}
+
+{% block header %}
+  <div id="base-logo" class='pull-left'>
+    <a href="{% url 'home' %}">
+      <img src="{{ STATIC_URL }}images/Anou_logo_80x50.png" alt="Anou logo">
+    </a>
+  </div>
+  <div id="base-navigation">
+    <ul class='nav nav-pills pull-right'>
+
+      <li class='btn-large'>
+        <a href="{% url 'home' %}">Home</a>
+      </li>
+
+    </ul>
+  </div>
+{% endblock header %}
 {% block content %}
-  {% load url from future %}
 
   {% if form.errors %}
     <p style="color: red;">
@@ -10,9 +38,14 @@
   {% endif %}
 
   <form action="{% url 'admin:login' %}" method="post">{% csrf_token %}
-    <table>
-      {{ form.as_table }}
-    </table>
-    <input type="submit" value="submit" />
+    <ul>
+      <li>
+        username icon{{ form.username }}
+      </li>
+      <li>
+        password icon{{ form.password }}
+      </li>
+    </ul>
+    <input type="submit" value="submit icon" />
   </form>
 {% endblock content %}

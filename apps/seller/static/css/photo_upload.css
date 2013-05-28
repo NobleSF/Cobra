@@ -35,7 +35,7 @@
   background: rgb(112, 130, 201);
   cursor: pointer;
   display: inline-block;
-  padding: 30px 35px;
+  padding: 5px 10px;
   border: 3px solid #F0F0F0;
 }
 .file-wrapper input {
@@ -62,10 +62,6 @@
     background: green;
 }
 
-.symbol{
-  line-height: 40px;
-  padding-left: 40px;
-}
-.symbol.camera {
-  background: rgb(112, 130, 201) url(http://s3.amazonaws.com/anou/images/eldorado/devices/023.png) center center no-repeat;
+.symbol-camera{
+  font-size: 50px;
 }

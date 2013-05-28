@@ -10,28 +10,16 @@ ul{
 /* Product Detail */
 .title{
   position: relative;
-  top: -40px;
-  height: 40px;
-  font: 3em bold;
+  top: -35px;
+  font-size: 30px;
+  font-weight: bold;
+}
+.title p{
+  height: 35px;
+  margin: 0;
+  line-height: normal;
+  background-color: rgba(200,200,200,0.5);
 }
 
-.symbol{
-  line-height: 40px;
-  padding-left: 40px;
-}
-
-.symbol.tag {
-  background: rgba(255, 255, 255, 0.5) url(http://s3.amazonaws.com/anou/images/eldorado/mobile/005.png) center left no-repeat;
-}
-.symbol.weight {
-  background: url(http://s3.amazonaws.com/anou/images/eldorado/layout/035.png) center left no-repeat;
-}
-.symbol.money {
-  background: url(http://s3.amazonaws.com/anou/images/eldorado/finance/042.png) center left no-repeat;
-}
-.symbol.shipping {
-  background: url(http://s3.amazonaws.com/anou/images/eldorado/transport/003.png) center left no-repeat;
-}
-.symbol.edit {
-  background: url(http://s3.amazonaws.com/anou/images/eldorado/player/026.png) center left no-repeat;
+.product-info li{
 }

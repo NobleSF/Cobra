@@ -6,7 +6,12 @@
 
       {% if forloop.counter == 1 %}
         <img src="{{ photo.thumb }}"/>
-        <span class='symbol tag title'>100{{ product.id }}</span>
+        <div class='title text-center'>
+          <p>
+            100{{ product.id }}
+            <i class='symbol-tag black' title='product id'></i>
+          </p>
+        </div>
       {% endif %}
 
     {% endfor %}
@@ -14,11 +19,21 @@
 
   <div class='product-info span6'>
     <ul>
-      <li class='symbol weight'>{{ product.weight }} g</li>
-      <li class='symbol money'>{{ product.price }} DH</li>
-      <li class='symbol shipping'>{{ product.shipping_cost }} DH</li>
-      <li class='symbol edit'>
+      <li>
+        <i class='symbol-weight black' title='weight'></i>
+        {{ product.weight }} g
+      </li>
+      <li>
+        <i class='symbol-dirham black' title='price'></i>
+        {{ product.price }} Dh
+      </li>
+      <li>
+        <i class='symbol-shipping black' title='shipping cost'></i>
+        {{ product.shipping_cost }} Dh
+      </li>
+      <li>
         <a href="{% url 'seller:inventory edit' product_id=product.id %}">
+          <i class='symbol-update orange' title='update this product'></i>
           {{ product.updated_at|date:"d/m/Y" }}
         </a>
       </li>
