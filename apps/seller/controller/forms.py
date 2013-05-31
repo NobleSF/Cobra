@@ -101,6 +101,19 @@ class PhotoForm(forms.Form):
   product         = forms.CharField(label="")
   rank            = forms.CharField(label="")
 
+class PhotoForm2(forms.Form): #to be run as 2 separate forms on the page
+  from settings.settings import CLOUDINARY
+
+  product         = forms.CharField(label="")
+  rank            = forms.CharField(label="")
+
+  file            = forms.FileField(label="",
+                      widget=forms.FileInput(attrs={  'class':'photo-input',
+                                                      'accept':'*',
+                                                      'capture':'camera'
+                                                    })
+                    )
+
 class ProductEditForm(forms.Form):
   product_id        = forms.CharField(
                         widget=forms.TextInput(),

@@ -1,0 +1,29 @@
+{% extends "seller_base.html" %}
+{% load url from future %}
+
+{% block title %}
+  {{ block.super }} Testing
+{% endblock title %}
+
+{% block css %}
+  <link href='{{ STATIC_URL }}seller/css/photo_upload.css' rel='stylesheet'>
+{% endblock css%}
+
+{% block javascript %}
+  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/vendor/jquery.ui.widget.js'></script>
+  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.iframe-transport.js'></script>
+  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.fileupload.js'></script>
+  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/load-image.js'></script>
+  <script src='{{ STATIC_URL }}seller/js/test.js'></script>
+{% endblock javascript%}
+
+{% block content %}
+  {% load inventory_inclusion_tags %}
+
+  {% for key, value in data.items %}
+    {{ key }}: {{ value }}
+  {% endfor %}
+
+  {% photo_upload_tag photo_form product rank="1" %}
+
+{% endblock content %}
