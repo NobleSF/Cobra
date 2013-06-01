@@ -8,7 +8,7 @@ def product_detail_tag(product):
 
   return {'product':product, 'photos':photos}
 
-@register.inclusion_tag('inventory/photo_upload.html')
+@register.inclusion_tag('inventory/photo_upload2.html')
 def photo_upload_tag(photo_form, product, rank=None, photo=None):
   if photo is not None:
     rank = photo.rank

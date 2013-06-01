@@ -1,5 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.utils import simplejson
 from apps.admin.controller.decorator import access_required
 from django.views.decorators.csrf import csrf_exempt
@@ -50,6 +51,8 @@ def create(request):
 @access_required('seller')
 def edit(request, product_id):
   from apps.seller.controller.forms import ProductEditForm, PhotoForm
+  from apps.seller.controller.management import signForm
+
   request.product_id = product_id
   product = Product(request)
 
@@ -81,7 +84,7 @@ def edit(request, product_id):
         for color_id in color_ids:
           product.addColor(color_id)
 
-        context = {'success': "product saved"}
+        messages.success(request, "product saved")
         return redirect('seller:home')
 
       else:
@@ -112,10 +115,7 @@ def edit(request, product_id):
   add_ranks_range = range(product.product.photo_set.count()+1, 10)
   product.product.photos = product.product.photo_set.all()
 
-  photo_form = PhotoForm()
-  photo_form.fields['tags'].initial = "product,seller"+str(request.session['seller_id'])
-  photo_form.fields['timestamp'].initial = getUnixTimestamp()
-  photo_form.fields['signature'].initial = getSignatureHash(photo_form)
+  photo_form = signForm(PhotoForm(), "product,seller"+str(request.session['seller_id']))
 
   context = {
     'product':          product.product,
@@ -125,32 +125,36 @@ def edit(request, product_id):
   }
   return render(request, 'inventory/edit.html', context)
 
-def getUnixTimestamp():
-  from django.utils.dateformat import format
-  from datetime import datetime
-  return format(datetime.now(), u'U')
-
-def getSignatureHash(photo_form):
-  from settings.settings import CLOUDINARY
-  import hashlib
-  cloudinary_string  = 'format=' + photo_form.fields['format'].initial
-  cloudinary_string += '&tags=' + photo_form.fields['tags'].initial
-  cloudinary_string += '&timestamp=' + photo_form.fields['timestamp'].initial
-  cloudinary_string += '&transformation=' + photo_form.fields['transformation'].initial
-  cloudinary_string += CLOUDINARY['api_secret']
-
-  h = hashlib.new('sha1')
-  h.update(cloudinary_string)
-  return h.hexdigest()
-
 @access_required('seller') #it's the 'r' in crud, but is it even needed?
-def detail(request, id):
+def detail(request, product_id):
   return render(request, 'inventory/detail.html')
 
 @access_required('seller')
-def delete(request, id):
-  #archive product and return to product home
-  return HttpResponseRedirect('seller/inventory')
+def remove(request, product_id): #archive product and return to management home
+  try:
+    request.product_id = product_id
+    product = Product(request)
+    if product.remove():
+      messages.success(request, "product %d removed." % product.product.id)
+    else:
+      messages.error(request, "cannot not remove that product")
+  except Exception as e:
+    context = {'exception':e}
+
+  return redirect('seller:management home')
+
+@access_required('seller')
+def delete(request, id): #permenantly delete product and return to management home
+  try:
+    product = Product.objects.filter(seller_id=request.session['seller_id']).get(id=product_id)
+    product.delete()
+    messages.success(request, "product " + product.id + " (" + product.name + ") deleted.")
+  except Product.DoesNotExist:
+    messages.error(request, "could not find that seller's product")
+  except Exception as e:
+    context = {'exception': e}
+
+  return redirect('seller:management home')
 
 @access_required('seller')
 @csrf_exempt
