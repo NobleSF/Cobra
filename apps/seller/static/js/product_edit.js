@@ -172,8 +172,8 @@ function fileUploadAction(){
         }
       },
 
-       'data' not available in iframe mode from here on
-       and the following callbacks don't even happen on Android 2.3
+      //'data' not available in iframe mode from here on
+      //and the following callbacks don't even happen on Android 2.3
 
       progress: function (e, data) {
         var progress = parseInt(data.loaded / data.total * 100, 10);
