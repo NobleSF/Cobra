@@ -41,7 +41,10 @@ class Product(models.Model):
   from apps.admin.models import Color
   seller        = models.ForeignKey('Seller')
   is_sold       = models.BooleanField(default=False)
-  is_active     = models.BooleanField(default=False)
+  is_active     = models.BooleanField(default=True) #for seller removal
+  is_approved   = models.BooleanField(default=False) #for admin approval
+  is_orderable  = models.BooleanField(default=False) #for custom orders
+
   #product description elements
   assets        = models.ManyToManyField('Asset')
   colors        = models.ManyToManyField(Color)
