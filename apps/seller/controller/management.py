@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.utils import simplejson
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from apps.admin.controller.decorator import access_required
 from django.views.decorators.csrf import csrf_exempt
 
@@ -10,7 +11,7 @@ def home(request, context={}):
 
   try:
     seller = Seller.objects.get(id=request.session['seller_id'])
-    products = seller.product_set.all()
+    products = seller.product_set.filter(is_active=True)
     context['seller'] = seller
     context['products'] = products
   except Exception as e:
