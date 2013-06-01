@@ -3,7 +3,7 @@ from apps.admin import models as admin_models
 class Product:
   def __init__(self, request):
     try:
-      self.product = models.Product.objects.get(id=request.product_id)
+      self.product = models.Product.objects.filter(seller_id=request.session['seller_id']).get(id=request.product_id)
     except:
       self.product = self.new(request)
 
@@ -122,10 +122,24 @@ class Product:
     else:
       return True
 
+  def remove(self):
+    try:
+      self.product.is_active = False
+      self.product.save()
+    except:
+      return False
+    else:
+      return True
+
   def delete(self):
     try:
       self.product.assets.clear()
     except:
       pass
     finally:
-      self.product.delete()
+      try:
+        self.product.delete()
+      except:
+        return False
+      else:
+        return True

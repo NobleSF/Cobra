@@ -18,5 +18,5 @@ urlpatterns = patterns('',
   url(r'^inventory/create$', inventory.create, name='inventory create'),
   url(r'^inventory/(?P<product_id>\d+)$', inventory.detail, name='inventory detail'),
   url(r'^inventory/(?P<product_id>\d+)/edit$', inventory.edit, name='inventory edit'),
-  url(r'^inventory/(?P<product_id>\d+)/delete$', inventory.delete, name='inventory delete'),
+  url(r'^inventory/(?P<product_id>\d+)/remove$', inventory.remove, name='inventory remove'),
 )

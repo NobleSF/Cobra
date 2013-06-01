@@ -6,12 +6,12 @@
 {% endblock title %}
 
 {% block header %}
-  <div id="base-logo" class='pull-left'>
+  <div id='base-logo' class='pull-left'>
     <a href="{% url 'home' %}">
       <img src="{{ STATIC_URL }}images/Anou_logo_80x50.png" alt="Anou logo">
     </a>
   </div>
-  <div id="base-navigation">
+  <div id='base-navigation'>
     <ul class='pull-right'>
 
       <li>
@@ -27,6 +27,15 @@
       </li>
 
     </ul>
+  </div>
+  <div id='messages' class='pull-left'>
+    {% if messages %}
+      <ul>
+        {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
   </div>
 {% endblock header %}
 

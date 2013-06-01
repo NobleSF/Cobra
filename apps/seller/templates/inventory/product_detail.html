@@ -37,6 +37,11 @@
           {{ product.updated_at|date:"d/m/Y" }}
         </a>
       </li>
+      <li>
+        <a href="{% url 'seller:inventory remove' product_id=product.id %}">
+          remove
+        </a>
+      </li>
     </ul>
   </div>
 
