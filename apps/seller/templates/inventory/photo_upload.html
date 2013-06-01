@@ -1,3 +1,6 @@
+{% load url from future %}
+{% load static %}
+
 <div class='photo-upload-div'>
   <div class='photo'>
     {% if photo_url %}
@@ -11,15 +14,13 @@
     <div class="bar" style="width: 0%;"></div>
   </div>
 
+  <div class="loading hidden-fields">
+    <img src='{% get_static_prefix %}images/loader.gif'>
+  </div>
+
   <div class='photo-form'>
-    <form>
+    <form class='data-form' method='post' action='{% url "seller:photo form data" %}'>
       <div class='hidden-fields'>
-        {{ photo_form.timestamp }}
-        {{ photo_form.signature }}
-        {{ photo_form.api_key }}
-        {{ photo_form.format }}
-        {{ photo_form.transformation }}
-        {{ photo_form.tags }}
         {{ photo_form.product }}
         {{ photo_form.rank }}
         <input type='hidden' class='photo-id-save autosave' value=''
@@ -31,6 +32,9 @@
                data-rank='{{ photo_form.rank.value }}'
                >
       </div>
+    </form>
+
+    <form>
       <span class='file-wrapper'>
         {{ photo_form.file }}
         <span class='file-button btn symbol-camera'></span>

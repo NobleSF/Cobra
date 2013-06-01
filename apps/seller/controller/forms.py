@@ -81,7 +81,7 @@ class ImageForm(forms.Form):
                                                     })
                     )
 
-class PhotoForm(forms.Form):
+class PhotoFormold(forms.Form):
   from settings.settings import CLOUDINARY
 
   timestamp       = forms.CharField(label="", initial="not yet set")
@@ -101,7 +101,7 @@ class PhotoForm(forms.Form):
   product         = forms.CharField(label="")
   rank            = forms.CharField(label="")
 
-class PhotoForm2(forms.Form): #to be run as 2 separate forms on the page
+class PhotoForm(forms.Form): #to be run as 2 separate forms on the page
   from settings.settings import CLOUDINARY
 
   product         = forms.CharField(label="")

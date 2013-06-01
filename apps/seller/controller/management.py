@@ -55,7 +55,7 @@ def test(request):
   from apps.seller.models import Product
 
   context = {
-    'photo_form': PhotoForm2(),
+    'photo_form': PhotoForm(),
     'product':    Product.objects.get(id=1)
   }
   if request.method == 'GET':

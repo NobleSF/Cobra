@@ -115,12 +115,10 @@ def edit(request, product_id):
   add_ranks_range = range(product.product.photo_set.count()+1, 10)
   product.product.photos = product.product.photo_set.all()
 
-  photo_form = signForm(PhotoForm(), "product,seller"+str(request.session['seller_id']))
-
   context = {
     'product':          product.product,
     'product_form':     product_form,
-    'photo_form':       photo_form,
+    'photo_form':       PhotoForm(),
     'add_ranks_range':  add_ranks_range
   }
   return render(request, 'inventory/edit.html', context)
