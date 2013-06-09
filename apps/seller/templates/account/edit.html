@@ -27,14 +27,12 @@
         <a href="{% url 'store' seller.id %}"
            class='symbol-profile green' title='seller public page'></a>
         {{ seller.name }}
-        <a href="{% url 'seller:edit' %}"
-           class='symbol-assets green' title='edit account'></a>
       </h1>
     </div>
   </div>
 
   <div id='seller-account' class='row-fluid'>
-    <div class='span4'>
+    <div class='span3'>
 
       <ul>
         <li class='seller-media'>
@@ -78,23 +76,23 @@
         </ul>
         <ul class='seller-details'>
           <li class='input-prepend'>
-            <i class='symbol-name black' title='name'></i>
+            <i class='add-on symbol-name black' title='name'></i>
             {{ seller_form.name }}
           </li>
           <li class='input-prepend'>
-            <i class='symbol-city black' title='city'></i>
+            <i class='add-on symbol-city black' title='city'></i>
             {{ seller_form.city }}
           </li>
           <li class='input-prepend'>
-            <i class='symbol-country black' title='country'></i>
+            <i class='add-on symbol-country black' title='country'></i>
             {{ seller_form.country }}
           </li>
           <li class='input-prepend'>
-            <i class='symbol-location black' title='GPS coordinates'></i>
+            <i class='add-on symbol-location black' title='GPS coordinates'></i>
             {{ seller_form.coordinates }}
           </li>
           <li class='input-prepend'>
-            <i class='symbol-currency black' title='currency'></i>
+            <i class='add-on symbol-currency black' title='currency'></i>
             {{ seller_form.currency }}
           </li>
         </ul>
@@ -103,15 +101,15 @@
       <div class='span5'>
         <ul>
           <li class='input-prepend'>
-            <i class='symbol-email black' title='city'></i>
+            <i class='add-on symbol-email black' title='email'></i>
             {{ seller_form.email }}
           </li>
           <li class='input-prepend'>
-            <i class='symbol-phone black' title='city'></i>
+            <i class='add-on symbol-phone black' title='phone number'></i>
             {{ seller_form.phone }}
           </li>
           <li class='input-prepend'>
-            <i class='symbol-description black' title='city'></i>
+            <i class='add-on symbol-description black' title='bio'></i>
             {{ seller_form.bio }}
           </li>
         </ul>
@@ -137,8 +135,9 @@
     {% for asset_ilk in asset_ilks %}
       <li id='{{ asset_ilk }}_tab' class='asset-tab'>
         <a>
-          <i class='symbol-{{ asset_ilk }}{{ 2|pluralize }} blue'></i>
-          {{ asset_ilk|title }}{{ 2|pluralize }}
+          <i class='symbol-{{ asset_ilk }}{{ 2|pluralize }} blue'
+             title='{{ asset_ilk|title }}{{ 2|pluralize }}'>
+          </i>
         </a>
       </li>
     {% endfor %}

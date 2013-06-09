@@ -13,6 +13,10 @@
   list-style: none;
 }
 
+#seller-account ul li{
+  display: block;
+}
+
 #seller-form input, #seller-form select{
   max-width: 15em;
 }
@@ -25,6 +29,10 @@
 }
 
 #seller-form-submit{
+}
+
+#seller-account i.add-on {
+  font-size: 18pt;
 }
 
 /* hide choose file button behind button
