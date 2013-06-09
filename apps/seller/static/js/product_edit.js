@@ -1,9 +1,6 @@
 $().ready( function(){
-  //assign bootstrap classes
-  //$('.asset-chooser').addClass('btn-group');
-  $('.asset').addClass('btn');
-
   //run on page load
+
   //only show the first 5 photo upload divs
   num_divs = 0;
   $('.photo-upload-div').each(function(){
@@ -44,9 +41,9 @@ $().ready( function(){
 
   //set events for updating the summary
   $('#photo1').addClass('updates-summary');
-  $('#price').addClass('updates-summary');
-  $('#weight').addClass('updates-summary');
-  $('#shipping_option').addClass('updates-summary');
+  $('#id_price').addClass('updates-summary');
+  $('#id_weight').addClass('updates-summary');
+  $('#id_shipping_option').addClass('updates-summary');
   $('.updates-summary').each(function(){
     $(this).change(updateSummary());
   });

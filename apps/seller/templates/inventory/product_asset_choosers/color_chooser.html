@@ -7,11 +7,8 @@
       <!-- data-object-id and data-input-id are used by ajax
       to store saved colors in the product form --->
 
-      <div class='asset-image' style='background-color: #{{ color.hex_value }};'>
-      </div>
-
-      <div class='asset-name'>
-        {{ color.name }}
+      <div class='asset-image' title='{{ color.name }}'
+           style='background-color: #{{ color.hex_value }};'>
       </div>
 
       <div class='hidden-fields'>

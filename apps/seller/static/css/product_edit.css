@@ -7,15 +7,24 @@ input{
   max-width: 150px;
 }
 
+.section-number {
+  margin: 80px 10px 10px;
+  font-size: 400%;
+  line-height: 100%;
+  background: #DDD;
+}
+
 /* PHOTOS */
 .photo-uploader{}
 
 /* ASSET CHOOSERS */
 .asset-chooser{
-  margin: 10px;
+  margin: 0 10px 10px;
 }
 .asset-chooser > .asset{
   padding: 15px;
+  width: 103px;
+  display: inline-block;
 }
 .asset.selected {
   background-color: #0F0;
@@ -23,7 +32,7 @@ input{
 .asset-image{
   width: 100px;
   height: 75px;
-  background-color: #DDD;
+  background-color:; #DDD;
   border: solid 1px #999;
 }
 .asset-name{

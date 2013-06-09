@@ -24,11 +24,13 @@
   <div id='product-edit-form' class='text-center'>
 
     <div id='product-chooser-section' class='section'>
+      <div class='section-number'>1</div>
       {% asset_chooser_tag request product "product" %}
-      <hr>
     </div>
 
     <div id='photos-section' class='section'>
+      <div class='section-number'>2</div>
+
       <div id='photos' class='text-center'>
         {% for photo in product.photos %}
           {% photo_upload_tag photo_form product photo=photo %}
@@ -37,7 +39,7 @@
           {% photo_upload_tag photo_form product rank=rank %}
         {% endfor %}
       </div>
-      <hr>
+
     </div>
 
     <form action="" method="post">{% csrf_token %}
@@ -50,36 +52,37 @@
       </div>
 
       <div id='price-section' class='section'>
+        <div class='section-number'>3</div>
         <ul>
           <li class='input-prepend'>
             <span class='add-on'><i class='symbol-dirham black'></i></span>
             {{ product_form.price }}
           </li>
         </ul>
-        <hr>
       </div>
 
       <div id='color-chooser-section' class='section'>
+        <div class='section-number'>4</div>
         {% color_chooser_tag product %}
-        <hr>
       </div>
 
       <div id='tool-chooser-section' class='section'>
+        <div class='section-number'>5</div>
         {% asset_chooser_tag request product "tool" %}
-        <hr>
       </div>
 
       <div id='material-chooser-section' class='section'>
+        <div class='section-number'>6</div>
         {% asset_chooser_tag request product "material" %}
-        <hr>
       </div>
 
       <div id='artisan-chooser-section' class='section'>
+        <div class='section-number'>7</div>
         {% asset_chooser_tag request product "artisan" %}
-        <hr>
       </div>
 
       <div id='measurements-section' class='section'>
+        <div class='section-number'>8</div>
         <ul>
           <li class='input-prepend input-append'>
             <span class='add-on'><i class='symbol-weight black'></i></span>
@@ -102,15 +105,15 @@
             <span class='add-on'>g</span>
           </li>
         </ul>
-        <hr>
       </div>
 
       <div id='shipping-option-chooser-section' class='section'>
+        <div class='section-number'>9</div>
         {% shipping_option_chooser_tag request product %}
-        <hr>
       </div>
 
       <div id='summary-section' class='section row-fluid'>
+        <div class='section-number'>10</div>
 
         <div class='summary-photo span2'>
           <img src=''>
@@ -145,7 +148,6 @@
         <div class='summary-submit span1'>
           <button class='btn' type="submit">OK!</button>
         </div>
-
       </div>
     </form>
   </div>

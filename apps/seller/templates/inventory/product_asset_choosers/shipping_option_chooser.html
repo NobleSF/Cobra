@@ -8,11 +8,9 @@
       <!-- data-object-id and data-input-id are used by ajax
       to store saved shippign options in the product form --->
 
-      <div class='asset-image'>
-        <img src='{{ shipping_option.image.pinky }}'>
+      <div class='asset-image' title='{{ shipping_option.name }}'>
+        <img src='{{ shipping_option.image.pinky }}' alt='{{ shipping_option.name }} image'>
       </div>
-
-      <div class='asset-name'>{{ shipping_option.name }}</div>
 
       <div class='hidden-fields'>
         <input type='text'
