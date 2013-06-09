@@ -120,9 +120,9 @@ function applyAutosaveEvents(){
   $('.autosave').each(function(){
     $(this).autosave({
       url:$('#product-ajax-url').attr('value'),
-      before:function(){$(this).addClass('updating')},
-      success:function(){$(this).removeClass('updating').addClass('saved')},
-      error:function(){$(this).removeClass('updating').addClass('error')}
+      before:function(){$(this).addClass('updating');},
+      success:function(){$(this).removeClass('updating').addClass('saved');},
+      error:function(){$(this).removeClass('updating').addClass('error');}
     });
   });
 }

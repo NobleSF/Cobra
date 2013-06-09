@@ -203,7 +203,8 @@ def saveProduct(request): #ajax requests only, not asset-aware
           context['photo'] = "saved photo at rank " + rank
 
       else:
-        product.update(attribute, request.GET['value'])
+        success_message = product.update(attribute, request.GET['value'])
+        context['success'] = success_message
 
     except Exception as e:
       context = {'exception': e}
