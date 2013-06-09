@@ -1,4 +1,5 @@
 {% extends "seller_base.html" %}
+{% load url from future %}
 
 {% block title %}
   {{ block.super }} Products
@@ -10,22 +11,68 @@
 {% endblock css%}
 
 {% block javascript %}
-  <script src='{{ STATIC_URL }}seller/js/inventory.js'></script>
 {% endblock javascript%}
 
-{% block inventory_active %}active{% endblock %}
+{% block header %}
+  <div id='base-logo' class='pull-left'>
+    <a href="{% url 'home' %}">
+      <img src="{{ STATIC_URL }}images/Anou_logo_80x50.png" alt="Anou logo">
+    </a>
+  </div>
+  <div id='base-navigation'>
+    <ul class='pull-left'>
 
-{% block seller_page_content %}
-  {% load url from future %}
-  {% load inventory_inclusion_tags %}
+      <li>
+        <a href="{% url 'admin:logout' %}"
+           class='symbol-logout red' title='logout'>
+        </a>
+      </li>
 
-
-  <div id='inventory' class='fitgrid-row'>
-    {% for product in products %}
-      {% if product.is_complete %}
-        {% product_detail_tag product %}
-      {% endif %}
-    {% endfor %}
+    </ul>
   </div>
 
-{% endblock seller_page_content %}
+  <!-- MESSAGES -->
+  <div id='messages' class='pull-left'>
+    {% if messages %}
+      <ul>
+        {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+
+{% endblock header %}
+
+{% block content %}
+
+  <div id='seller-title' class='row-fluid'>
+
+    <div class='span3'>
+      <img src="{{ seller.image.thumb }}">
+      <a href="{% url 'seller:edit' %}"
+           class='symbol-assets green' title='edit account'></a>
+    </div>
+
+    <div class='span9'>
+      <div id='management-nav'>
+        <ul class=''>
+          <li class='{% block new_product_active %}{% endblock %}'>
+            <a href="{% url 'seller:inventory create' %}"
+               class='symbol-product-add green' title='Add Product'></a>
+          </li>
+          <li class='{% block orders_active %}{% endblock %}'>
+            <a href="{% url 'seller:management orders' %}"
+               class='symbol-product-check green' title='Sold Products'></a>
+          </li>
+          <li class='{% block inventory_active %}{% endblock %}'>
+            <a href="{% url 'seller:management products' %}"
+               class='symbol-products green' title='Current Products'></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+{% endblock content %}

@@ -16,7 +16,7 @@
 
 {% block new_product_active %}active{% endblock %}
 
-{% block seller_page_content %}
+{% block content %}
   {% load inventory_inclusion_tags %}
 
   <input type='hidden' id='product-ajax-url' value='{% url 'seller:save product' %}'>
@@ -149,4 +149,4 @@
       </div>
     </form>
   </div>
-{% endblock seller_page_content %}
+{% endblock content %}

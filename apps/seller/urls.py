@@ -4,9 +4,9 @@ from controller import account, inventory, management
 urlpatterns = patterns('',
 
   url(r'^$', management.home, name='management home'), #seller dashboard, live products
+  url(r'^products$', management.products, name='management products'), #products
   url(r'^orders$', management.orders, name='management orders'), #orders
-  url(r'^catalog$', management.catalog, name='management catalog'), #catalog
-  url(r'^test$', management.test, name='management test'), #catalog
+  url(r'^test$', management.test, name='management test'), #testing page
 
   url(r'^edit$', account.edit, name='edit'), #edit seller info
   url(r'^ajax/seller_save$', account.saveSeller, name='save seller'),
