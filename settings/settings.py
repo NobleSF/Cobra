@@ -31,31 +31,41 @@ MANAGERS = ADMINS
 
 DATABASES = {
   'default': {
-    'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-    'NAME': 'cobra',                      # Or path to database file if using sqlite3.
-    'USER': 'Cobra',                      # Not used with sqlite3.
-    'PASSWORD': '4WuPb3eMDyfByVBs',                  # Not used with sqlite3.
-    'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-    'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    'ENGINE':   'django.db.backends.mysql',   # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+    'NAME':     'cobra',                      # Or path to database file if using sqlite3.
+    'USER':     'Cobra',                      # Not used with sqlite3.
+    'PASSWORD': '4WuPb3eMDyfByVBs',           # Not used with sqlite3.
+    'HOST':     '',                           # Set to empty string for localhost. Not used with sqlite3.
+    'PORT':     '',                           # Set to empty string for default. Not used with sqlite3.
   }
 }
 if PRODUCTION:
   DATABASES['default'] =  dj_database_url.config()
   SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+#AMAZON WEB STORAGE S3
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 AWS_ACCESS_KEY_ID = 'AKIAISBCAIGR4FHXJKBQ'
 AWS_SECRET_ACCESS_KEY = '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'
 AWS_STORAGE_BUCKET_NAME = 'anou'
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
-MANDRILL_API_KEY = "7YojodlUpLv64JypQMQqZw"
-EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
+#MANDRILL EMAIL
+#MANDRILL_API_KEY = "7YojodlUpLv64JypQMQqZw"
+#EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
+
+#SENDGRID EMAIL_BACKEND
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'limetree'
+EMAIL_HOST_PASSWORD = 'H0hner765@'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = [
   'www.theanou.com',
+  'www.theanu.com',
   'anou-cobra.herokuapp.com',
   'localhost'
 ]
