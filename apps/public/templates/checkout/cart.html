@@ -7,6 +7,8 @@
 
 {% block javascript %}
   <script type="text/javascript" src="{{ STATIC_URL}}public/js/checkout.js"></script>
+  <!-- WEPAY Script -->
+  <script type="text/javascript">var WePay = WePay || {};WePay.load_widgets = WePay.load_widgets || function() { };WePay.widgets = WePay.widgets || [];WePay.widgets.push( {object_id: 471978,widget_type: "store_item_buy_now",anchor_id: "wepay_widget_anchor_51b76cfb57ff4",widget_options: {store_id: 715108,show_item_price: true,show_item_images: false,button_text_sold_out: "Sold Out",show_item_custom_options: true,button_text: "Pay Now"}});if (!WePay.script) {WePay.script = document.createElement('script');WePay.script.type = 'text/javascript';WePay.script.async = true;WePay.script.src = 'https://static.wepay.com/min/js/widgets.v2.js';var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(WePay.script, s);} else if (WePay.load_widgets) {WePay.load_widgets();}</script>
 {% endblock javascript %}
 
 {% block css %}
@@ -21,7 +23,7 @@
       item{{ cart.count|pluralize }}
       in your Shopping Cart.
     </h3>
-    <p id='cart-paragraph' class='hidden'>
+    <h3 id='cart-paragraph' class='hidden'>
       You have
       {% for item in cart %}
         {% if forloop.first %}a
@@ -34,7 +36,10 @@
       {% endfor %}
       in your cart for a total of
       ${{ cart.summary }}
-    </p>
+    </h3>
+    <h3 id='cart-return' class='hidden'>
+      <a href='#cart'>Go back to Cart.</a>
+    </h3>
   </div>
 
   <div class='row-fluid'>
@@ -75,7 +80,9 @@
         <div class='span7'>
           <ul>
             <li class='amount'>0.00</li>
-            <li class='amount'>${{ cart.summary }}</li>
+            <li class='amount'>
+              $<span id='order-total'>{{ cart.summary }}</span>
+            </li>
             <li>
               <a href="{% url 'home' %}">Continue Shopping</a>
               or
@@ -95,7 +102,10 @@
           <h3>Where should we ship the goods?</h3>
           {{ cart_form.as_table }}
           <label for='pay-now'></label>
-          <button id='pay-now' class='btn btn-large btn-success'>Pay Now</button>
+          <!--<button id='pay-now' class='btn btn-large btn-success'>Pay Now</button>-->
+          <a class="wepay-widget-button wepay-green" id="wepay_widget_anchor_51b76cfb57ff4" href="https://www.wepay.com/stores/715108/item/471978">Pay Now</a>
+
+
         </form>
       </div>
 

@@ -12,12 +12,28 @@ $(function(){//on page load
 });
 
 $('#checkout').on('click', function(){
-  $("#cart #items").slideUp();
-  $("#cart #summary").slideUp();
-  $("#cart-sentance").slideUp();
-  $("#cart-paragraph").removeClass('hidden');
-  $("#cart-form").removeClass('hidden');
+  //hide cart, show checkout
+  $('#cart #items').slideUp();
+  $('#cart #summary').slideUp();
+  $('#cart-sentance').slideUp();
+  $('#cart-paragraph').removeClass('hidden');
+  $('#cart-return').removeClass('hidden');
+  $('#cart-form').removeClass('hidden');
+
+  //hack wepay widget
+  $('.wepay-widget-input').val($('#order-total').html()).attr('disabled','disabled');
 });
+
+$('#cart-return').on('click', function(){
+  //hide cart, show checkout
+  $('#cart-paragraph').addClass('hidden');
+  $('#cart-return').addClass('hidden');
+  $('#cart-form').addClass('hidden');
+  $('#cart #items').slideDown();
+  $('#cart #summary').slideDown();
+  $('#cart-sentance').slideDown();
+});
+
 
 $('#pay-now').on('click', function(){
 

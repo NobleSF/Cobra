@@ -27,3 +27,7 @@
 #information .well{
   margin: 1em;
 }
+
+#cart-form .wepay-widget-input{
+  height: 2em;
+}
