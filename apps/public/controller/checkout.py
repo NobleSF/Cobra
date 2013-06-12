@@ -9,19 +9,19 @@ def cart(request):
   cart = Cart(request)
   total = cart.summary()
   cart_form = CartForm()
-  #try:
-  cart_form.fields['email'].initial       = cart.getData('email')
-  cart_form.fields['name'].initial        = cart.getData('name')
-  cart_form.fields['address1'].initial    = cart.getData('address1')
-  cart_form.fields['address2'].initial    = cart.getData('address2')
-  cart_form.fields['city'].initial        = cart.getData('city')
-  cart_form.fields['state'].initial       = cart.getData('state')
-  cart_form.fields['postal_code'].initial = cart.getData('postal_code')
-  cart_form.fields['country'].initial     = cart.getData('country')
-  #except Exception as e:
-  #  pass
+  try:
+    cart_form.fields['email'].initial       = cart.getData('email')
+    cart_form.fields['name'].initial        = cart.getData('name')
+    cart_form.fields['address1'].initial    = cart.getData('address1')
+    cart_form.fields['address2'].initial    = cart.getData('address2')
+    cart_form.fields['city'].initial        = cart.getData('city')
+    cart_form.fields['state'].initial       = cart.getData('state')
+    cart_form.fields['postal_code'].initial = cart.getData('postal_code')
+    cart_form.fields['country'].initial     = cart.getData('country')
+  except Exception as e:
+    pass
 
-  context = {'cart':Cart(request), 'cart_form':CartForm()}
+  context = {'cart':Cart(request), 'cart_form':cart_form}
   return render(request, 'checkout/cart.html', context)
 
 def cartAdd(request, product_id):

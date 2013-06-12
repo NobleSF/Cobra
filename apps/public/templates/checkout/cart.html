@@ -23,7 +23,12 @@
       item{{ cart.count|pluralize }}
       in your Shopping Cart.
     </h3>
-    <h3 id='cart-paragraph' class='hidden'>
+
+    <h3 id='cart-return' class=''>
+      <a href='#cart'><span class='symbol-cart'></span> go back to my Cart.</a>
+    </h3>
+
+    <h3 id='cart-paragraph' class=''>
       You have
       {% for item in cart %}
         {% if forloop.first %}a
@@ -36,9 +41,6 @@
       {% endfor %}
       in your cart for a total of
       ${{ cart.summary }}
-    </h3>
-    <h3 id='cart-return' class='hidden'>
-      <a href='#cart'>Go back to Cart.</a>
     </h3>
   </div>
 
@@ -86,39 +88,62 @@
             <li>
               <a href="{% url 'home' %}">Continue Shopping</a>
               or
-              <button id='checkout' class='btn btn-large btn-success'>
+              <a href='#' id='checkout' class='btn btn-large btn-success'>
                 Checkout
-              </button>
+              </a>
             </li>
           </ul>
         </div>
       </div>
 
-      <div id='cart-form' class='hidden'>
-        <form id='cart-form'>
-          <input type='hidden' id='cart-ajax-url' value="{% url 'cart-save' %}">
-          <h3>We'll want to update you on your order progress.</h3>
-          {{ cart_form.email }}
-          <h3>Where should we ship the goods?</h3>
-          {{ cart_form.as_table }}
-          <label for='pay-now'></label>
-          <!--<button id='pay-now' class='btn btn-large btn-success'>Pay Now</button>-->
-          <a class="wepay-widget-button wepay-green" id="wepay_widget_anchor_51b76cfb57ff4" href="https://www.wepay.com/stores/715108/item/471978">Pay Now</a>
+      <div id='checkout-form' class=''>
+        <input type='hidden' id='cart-ajax-url' value="{% url 'cart-save' %}">
+        <div class='row-fluid'>
 
+          <div class='span6'>
+            <fieldset><legend>Shipping Address</legend>
+              {{ cart_form.name }}<br>
+              {{ cart_form.address1 }}<br>
+              {{ cart_form.address2 }}<br>
+              {{ cart_form.city }}
+              {{ cart_form.state }}<br>
+              {{ cart_form.postal_code }}
+              {{ cart_form.country }}
+            </fieldset>
+          </div>
 
-        </form>
+          <div class='span6'>
+            <fieldset><legend>Contact Email</legend>
+              {{ cart_form.email }}
+              <span id='email-suggestion'>
+                Did you mean <a id='suggested-email'></a>?
+              </span>
+            </fieldset>
+
+            <h3>
+              <button id='pay-now' class='btn btn-large btn-success disabled'>
+                Pay Now
+              </button>
+              ${{ cart.summary }}
+            </h3>
+
+            <div id='wepay-payment'>
+              <a class="wepay-widget-button wepay-green" id="wepay_widget_anchor_51b76cfb57ff4" href="https://www.wepay.com/stores/715108/item/471978">Pay Now</a>
+            </div>
+          </div>
+
+        </div>
       </div>
-
     </div>
 
     <div id='information' class='span4'>
       <div class='well'>
         <h4>How much is Shipping?</h4>
-        <p>Shipping to anywhere in the US and Europe is free when you order from the website.</p>
+        <p>Shipping is free to the USA, Europe, or Morocco. Unfortunately we are not able to ship to any other countries right now.</p>
       </div>
       <div class='well'>
         <h4>Can the shipping and billing address be different?</h4>
-        <p>Yes they can and you will have the opportunity to enter them seperately.</p>
+        <p>Yes, they can be different. You will have the opportunity to enter them seperately.</p>
       </div>
       <div class='well'>
         <h4>What is your security policy?</h4>
