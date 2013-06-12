@@ -41,8 +41,8 @@
         <ul class='pull-right'>
           {% if 'cart_id' in request.session %}
             <li>
-              <a href="{% url 'cart' %}"
-                 class='symbol-cart' title='cart'>
+              <a href="{% url 'cart' %}">
+                <span class='symbol-cart' title='cart'></span>
                 <span class='hidden-phone'>Cart</span>
               </a>
             </li>
