@@ -61,6 +61,14 @@ EMAIL_HOST_PASSWORD = 'H0hner765@'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
+#WEPAY
+WEPAY = {
+  'client_id': '114473',
+  'client_secret': '443ad32d57',
+  'access_token': 'PRODUCTION_ed41e33671a46b6a3a93e6c6c6d45265fcb62a8f04998d232391bcd3e39749f9',
+  'account_id': '519238566'
+}
+
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = [
