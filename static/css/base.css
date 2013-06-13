@@ -6,6 +6,7 @@ body {
 
 i{font-style: normal; font-size: 24pt;}
 a, a:hover, a:active, a:focus{outline: 0;}
+.trim{text-rendering: optimizeSpeed;}
 
 #body{
   margin-top: 50px;
