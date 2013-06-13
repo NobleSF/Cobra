@@ -10,6 +10,7 @@ class Cart(models.Model):
   postal_code         = models.CharField(max_length=15,  null=True, blank=True)
   country             = models.CharField(max_length=50,  null=True, blank=True)
 
+  wepay_checkout_id   = models.BigIntegerField(null=True, blank=True)
   checked_out         = models.BooleanField(default=False)
 
   #update history
