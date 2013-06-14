@@ -39,14 +39,12 @@
       <div id="base-navigation">
 
         <ul class='pull-right'>
-          {% if 'cart_id' in request.session %}
-            <li>
-              <a href="{% url 'cart' %}">
-                <span class='symbol-cart' title='cart'></span>
-                <span class='hidden-phone'>Cart</span>
-              </a>
-            </li>
-          {% endif %}
+          <li>
+            <a href="{% url 'cart' %}">
+              <span class='symbol-cart' title='cart'></span>
+              <span class='hidden-phone'>Cart</span>
+            </a>
+          </li>
 
           {% if 'admin_id' in request.session or 'seller_id' in request.session %}
             <li>
@@ -108,7 +106,7 @@
     <script src="{{ STATIC_URL }}vendor/jquery/jquery-1.9.1.min.js"></script>
     <script src="{{ STATIC_URL }}vendor/bootstrap/js/bootstrap.min.js"></script>
   {% else %}
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
   {% endif %}
 
