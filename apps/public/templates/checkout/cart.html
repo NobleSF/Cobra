@@ -9,9 +9,11 @@
   <script type="text/javascript" src="{{ STATIC_URL}}public/js/checkout.js"></script>
   <!-- WEPAY Script -->
   <script type="text/javascript" src="https://www.wepay.com/min/js/iframe.wepay.js"></script>
-  <script type="text/javascript">
-    WePay.iframe_checkout("wepay-payment", "{{ wepay_checkout_uri }}");
-  </script>
+  {% if cart.count %}
+    <script type="text/javascript">
+      WePay.iframe_checkout("wepay-payment", "{{ wepay_checkout_uri }}");
+    </script>
+  {% endif %}
 {% endblock javascript %}
 
 {% block css %}
@@ -71,9 +73,17 @@
                 $<span id='order-total'>{{ cart.summary }}</span>
               </li>
               <li>
-                <a href='#' id='checkout-button' class='btn btn-large btn-success'>
-                  Secure Checkout
-                </a>
+                {% if cart.count %}
+                  <button id='checkout-button'
+                     class='btn btn-large btn-success'>
+                    Secure Checkout
+                  </button>
+                {% else %}
+                  <button id='checkout-button-dummy'
+                     class='btn btn-large btn-success disabled'>
+                    Secure Checkout
+                  </button>
+                {% endif %}
               </li>
             </ul>
           </div>
@@ -82,7 +92,9 @@
 
       <div id='cart-shortcut' class='part2 part3'>
         <h3 id='cart-return-button' class=''>
-          <a href='#cart'><span class='symbol-cart'></span> go back to my Cart.</a>
+          <a href='#cart-sentance'>
+            <span class='symbol-cart'></span> go back to Cart.
+          </a>
         </h3>
 
         <h3 id='cart-paragraph' class='trim'>
@@ -106,7 +118,15 @@
           <input type='hidden' id='cart-ajax-url' value="{% url 'cart-save' %}">
           <div class='row-fluid'>
             <div class='span6'>
-              <fieldset><legend>Contact Email</legend>
+              <fieldset><legend>Contact Info</legend>
+
+                <div class="control-group">
+                  <div class="controls">
+                    {{ cart_form.name }}
+                    <p class="help-inline">Please provide your name.</p>
+                  </div>
+                </div>
+
                 <div class="control-group">
                   <div class="controls">
                     {{ cart_form.email }}
@@ -116,6 +136,7 @@
                     <p class="help-inline">Please provide your email.</p>
                   </div>
                 </div>
+
               </fieldset>
             </div>
             <div class='span6'>
