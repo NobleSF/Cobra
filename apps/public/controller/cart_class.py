@@ -130,3 +130,47 @@ class Cart:
   def checkout(self):
     self.cart.checked_out = True
     self.cart.save()
+
+  def getWePayCheckoutURI(self):
+    from apps.wepay.api import WePay
+    from settings.settings import WEPAY, PRODUCTION
+    try:
+      wepay = WePay(True, WEPAY['access_token'])
+      #wepay = WePay(PRODUCTION, WEPAY['access_token'])
+
+      if PRODUCTION:
+        redirect_uri = "http://anou-cobra.herokuapp.com/checkout/confirmation"
+      else:
+        redirect_uri = "http://localcobra.pagekite.me/checkout/confirmation"
+
+      wepay_response = wepay.call('/checkout/create', {
+        'account_id':         WEPAY['account_id'],
+        'amount':             str(self.summary()),
+        'short_description':  'Order Total',
+        'type':               'GOODS',
+        'mode':               'iframe',
+        'fee_payer':          'payee',
+        'redirect_uri':       redirect_uri,
+        'require_shipping':   True
+      })
+      self.cart.wepay_checkout_id = wepay_response['checkout_id']
+      self.cart.save()
+
+    except Exception as e:
+      return e
+    else:
+      return wepay_response['checkout_uri']
+
+  def getWePayCheckoutData(self):
+    from apps.wepay.api import WePay
+    from settings.settings import WEPAY, PRODUCTION
+    try:
+      wepay = WePay(PRODUCTION, WEPAY['access_token'])
+      wepay_response = wepay.call('/checkout', {
+        'checkout_id': self.cart.wepay_checkout_id
+      })
+
+    except Exception as e:
+      return "error: " + str(e)
+    else:
+      return wepay_response

@@ -1,13 +1,13 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
 from django.utils import simplejson
+from django.contrib import messages
 
 from apps.public.controller.cart_class import Cart
 from apps.public.controller.forms import CartForm
 
 def cart(request):
   cart = Cart(request)
-  total = cart.summary()
   cart_form = CartForm()
   try:
     cart_form.fields['email'].initial       = cart.getData('email')
@@ -21,7 +21,17 @@ def cart(request):
   except Exception as e:
     pass
 
-  context = {'cart':Cart(request), 'cart_form':cart_form}
+  wepay_checkout_uri = cart.getWePayCheckoutURI()
+  context = {
+    'cart':Cart(request),
+    'cart_form':cart_form,
+    'wepay_checkout_uri':wepay_checkout_uri
+  }
+
+  if not str(wepay_checkout_uri).startswith("http"):
+    context['exception'] = wepay_checkout_uri
+    messages.warning(request, 'WePay connection issue. You will be unable to checkout.')
+
   return render(request, 'checkout/cart.html', context)
 
 def cartAdd(request, product_id):
@@ -69,11 +79,11 @@ def cartSave(request): #ajax requests only
 def confirmation(request):
   #from apps.public.controller.order_class import Order
   cart = Cart(request)
-  orders = []
-  for item in cart:
-    orders.append(Order(item, cart))
+  #orders = []
+  #for item in cart:
+  #  orders.append(Order(item, cart))
 
-  cart.checkout()
+  #cart.checkout()
   context = {'cart':cart}
   return render(request, 'checkout/confirmation.html', context)
 
