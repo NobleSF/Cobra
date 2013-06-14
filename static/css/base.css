@@ -21,6 +21,9 @@ a, a:hover, a:active, a:focus{outline: 0;}
   background-color: #fffefa;
   border-bottom: 2px solid rgb(220,220,240);
 }
+#header *{
+  vertical-align: baseline;
+}
 
 #base-logo {
   padding: 0 1em 0 0;
