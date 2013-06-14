@@ -10,27 +10,20 @@ def cart(request):
   cart = Cart(request)
   cart_form = CartForm()
   try:
-    cart_form.fields['email'].initial       = cart.getData('email')
-    cart_form.fields['name'].initial        = cart.getData('name')
-    cart_form.fields['address1'].initial    = cart.getData('address1')
-    cart_form.fields['address2'].initial    = cart.getData('address2')
-    cart_form.fields['city'].initial        = cart.getData('city')
-    cart_form.fields['state'].initial       = cart.getData('state')
-    cart_form.fields['postal_code'].initial = cart.getData('postal_code')
-    cart_form.fields['country'].initial     = cart.getData('country')
+    cart_form.fields['email'].initial = cart.getData('email')
+    cart_form.fields['name'].initial  = cart.getData('name')
   except Exception as e:
     pass
+  finally:
+    context = {'cart':cart, 'cart_form':cart_form}
 
-  wepay_checkout_uri = cart.getWePayCheckoutURI()
-  context = {
-    'cart':Cart(request),
-    'cart_form':cart_form,
-    'wepay_checkout_uri':wepay_checkout_uri
-  }
-
-  if not str(wepay_checkout_uri).startswith("http"):
-    context['exception'] = wepay_checkout_uri
-    messages.warning(request, 'WePay connection issue. You will be unable to checkout.')
+  if cart.count():
+    wepay_checkout_uri = cart.getWePayCheckoutURI()
+    if not str(wepay_checkout_uri).startswith("http"):
+      context['exception'] = wepay_checkout_uri
+      messages.warning(request, 'WePay connection issue. You are unable to checkout.')
+    else:
+      context['wepay_checkout_uri'] = wepay_checkout_uri
 
   return render(request, 'checkout/cart.html', context)
 
@@ -78,13 +71,17 @@ def cartSave(request): #ajax requests only
 
 def confirmation(request):
   #from apps.public.controller.order_class import Order
-  cart = Cart(request)
-  #orders = []
-  #for item in cart:
-  #  orders.append(Order(item, cart))
+  checkout_id = None
+  try:
+    if request.method == 'GET':
+      checkout_id = request.GET.get('checkout_id')
+  except:
+    pass
+  finally:
+    cart = Cart(request, checkout_id)
 
-  #cart.checkout()
-  context = {'cart':cart}
+  wepay = cart.getWePayCheckoutData(request)
+  context = {'cart':cart, 'wepay':wepay}
   return render(request, 'checkout/confirmation.html', context)
 
 def custom_order(request):

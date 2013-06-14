@@ -2,12 +2,20 @@
 
 from apps.public import models
 class Cart:
-  def __init__(self, request):
+  def __init__(self, request, checkout_id=None):
     cart_id = request.session.get('cart_id')#if no cart id, returns None
+
+    #override session cart if valid checkout_id is provided
+    if checkout_id:
+      try:
+        cart_id = models.Cart.objects.get(wepay_checkout_id=checkout_id).id
+      except:
+        pass
+
     if cart_id:
       try:
-        cart = models.Cart.objects.get(id=cart_id, checked_out=False)
-      except Exception as e:
+        cart = models.Cart.objects.get(id=cart_id)
+      except:
         cart = self.new(request)
     else:
       cart = self.new(request)
@@ -112,10 +120,10 @@ class Cart:
       return value
 
   def count(self):
-    result = 0
-    for item in self.cart.item_set.all():
-      result += 1 #* item.quantity
-    return result
+    #result = 0
+    #for item in self.cart.item_set.all():
+    #  result += 1 * item.quantity
+    return len(self.cart.item_set.all())
 
   def summary(self):
     result = 0
@@ -135,8 +143,7 @@ class Cart:
     from apps.wepay.api import WePay
     from settings.settings import WEPAY, PRODUCTION
     try:
-      wepay = WePay(True, WEPAY['access_token'])
-      #wepay = WePay(PRODUCTION, WEPAY['access_token'])
+      wepay = WePay(PRODUCTION, WEPAY['access_token'])
 
       if PRODUCTION:
         redirect_uri = "http://anou-cobra.herokuapp.com/checkout/confirmation"
@@ -161,7 +168,7 @@ class Cart:
     else:
       return wepay_response['checkout_uri']
 
-  def getWePayCheckoutData(self):
+  def getWePayCheckoutData(self, request):
     from apps.wepay.api import WePay
     from settings.settings import WEPAY, PRODUCTION
     try:
@@ -169,6 +176,29 @@ class Cart:
       wepay_response = wepay.call('/checkout', {
         'checkout_id': self.cart.wepay_checkout_id
       })
+
+      if wepay_response.get('shipping_address'):
+        self.saveData('name', wepay_response.get('name'))
+        self.saveData('address1', wepay_response['shipping_address'].get('address1'))
+        self.saveData('address2', wepay_response['shipping_address'].get('address2'))
+        self.saveData('city', wepay_response['shipping_address'].get('city'))
+        if wepay_response['shipping_address'].get('state'): #US address
+          self.saveData('state', wepay_response['shipping_address'].get('state'))
+          self.saveData('postal_code', wepay_response['shipping_address'].get('zip'))
+        else:
+          self.saveData('state', wepay_response['shipping_address'].get('region'))
+          self.saveData('postal_code', wepay_response['shipping_address'].get('postcode'))
+        self.saveData('country', wepay_response['shipping_address'].get('country'))
+
+      #checkout the cart
+      if not self.cart.checked_out and wepay_response.get('gross'):
+        if (int(wepay_response['gross']) == self.summary() and
+            wepay_response.get('state') in ['authorized', 'reserved', 'captured']):
+
+          try: del request.session['cart_id']
+          except: pass
+
+          self.checkout()
 
     except Exception as e:
       return "error: " + str(e)

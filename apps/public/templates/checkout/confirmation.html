@@ -14,12 +14,117 @@
 {% endblock css %}
 
 {% block content %}
-  <div id='head'>
-    <h3 id='cart-sentance'>
-      Congratulations, you've pruchased
-      <span class='badge'><h1>{{ cart.count }}</h1></span>
-      item{{ cart.count|pluralize }}.
-    </h3>
+  <div class='row-fluid'>
+    <div class='span8'>
+
+      {% if cart.count %}
+        <div id='comfirmation-title'>
+          <h1>Order Complete!</h1>
+          <h3>
+            Total Charged:
+            <span class='badge'><h3>${{ wepay.gross|floatformat:2 }}</h3></span>
+            Confirmation Number:
+            <span class='badge'><h3>{{ wepay.checkout_id }}</h3></span>
+          </h3>
+        </div>
+      {% else %}
+        <h3>Oh no, can't find your order!</h3>
+      {% endif %}
+
+      <div class='row-fluid'>
+        <div id='items' class='span4'>
+          <ul>
+            {% for item in cart %}
+              <li>
+                <img src='{{ item.photo.pinky }}' alt='product photo'>
+                <p>{{ item.product.name }}, ${{ item.product.display_price }}</p>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div id='confirmation-details' class='span8'>
+          <fieldset>
+            <legend>Contact Information</legend>
+            <p>
+              {% if cart.cart.name %}
+                {{ cart.cart.name }}
+              {% elif wepay.payer_name %}
+                {{ wepay.payer_name}}
+              {% else %}
+                No name on file.
+              {% endif %}
+              <br>
+              {% if cart.cart.email %}
+                {{ cart.cart.email }}
+              {% elif wepay.payer_email %}
+                {{ wepay.payer_email}}
+              {% else %}
+                No email on file.
+              {% endif %}
+            </p>
+            <p>Subscribe to receive updates as Anou transforms the world of Fair Trade.</p>
+          </fieldset>
+
+          <fieldset>
+            <legend>Shipping Address</legend>
+            <p>
+              {% if wepay.shipping_address %}
+                {% if wepay.shipping_address.name %}
+                  {{ wepay.shipping_address.name }}
+                {% else %}{{ cart.cart.name }}{% endif %}<br>
+                {{ wepay.shipping_address.address1 }}<br>
+                {% if wepay.shipping_address.address2 %}
+                  {{ wepay.shipping_address.address2 }}<br>
+                {% endif %}
+                {{ wepay.shipping_address.city }},
+                {{ wepay.shipping_address.state }}{{ wepay.shipping_address.region }}
+                {{ wepay.shipping_address.zip }}{{ wepay.shipping_address.post_code }}<br>
+                {{ wepay.shipping_address.country }}
+              {% endif %}
+            </p>
+          </fieldset>
+
+          <p class='text-info'>
+            If any of the above contact or shipping information is incorrect, please let us know immediately at <a href='mailto:hello@theanou.com'>hello@theanou.com</a> so we can correct it.
+          </p>
+        </div>
+      </div>
+
+      <div id='followup'>
+        <h3>Share Your Exeperience on Social Media</h3>
+        <h3>Read the latest blog post by founder, Dan Driscoll</h3>
+      </div>
+
+    </div><!-- end of left side, span8 -->
+
+    <div id='information' class='span4'>
+      <div class='well'>
+        <h4>When will my order arrive?</h4>
+        <p>Shipping from rural Morocco can take from 10 to 28 days, but we'll keep you updated on your order's progress by email.</p>
+      </div>
+      <div class='well'>
+        <h4>What about returns?</h4>
+        <p>If you need to return part or all of your order for any reason, we will send you a shipping label to cover return shipping. You will be fully refunded for any returned items. Email us at <a href='mailto:hello@theanou.com'>hello@theanou.com</a>, we are happy to assist you.</p>
+      </div>
+      <div class='well'>
+        <h4>How can Anou be improved?</h4>
+        <p>We genuinely hope you had a positive buying experience and would love to hear from you. We want to hear about what we did right and where we could make some changes...</p>
+      </div>
+      <div class='well'>
+        <h4>What can I do to help?</h4>
+        <p>The "Fair Trade" industry is broken. "Please tell you friends about this show"-AD</p>
+      </div>
+    </div>
+  </div>
+
+  <div id='data' class='hidden'>
+    <h1>Wepay Data:</h1>
+    <ul>
+      {% for key,value in wepay.items %}
+        <li>{{key}}: {{value}}</li>
+      {% endfor %}
+    </ul>
   </div>
 
 {% endblock content %}
