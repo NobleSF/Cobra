@@ -71,6 +71,7 @@ def cartSave(request): #ajax requests only
 
 def confirmation(request):
   #from apps.public.controller.order_class import Order
+
   checkout_id = None
   try:
     if request.method == 'GET':

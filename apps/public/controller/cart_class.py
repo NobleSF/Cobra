@@ -191,13 +191,10 @@ class Cart:
         self.saveData('country', wepay_response['shipping_address'].get('country'))
 
       #checkout the cart
-      if not self.cart.checked_out and wepay_response.get('gross'):
-        if (int(wepay_response['gross']) == self.summary() and
-            wepay_response.get('state') in ['authorized', 'reserved', 'captured']):
-
+      if (not self.cart.checked_out) and wepay_response.get('gross'):
+        if wepay_response.get('state') in ['authorized', 'reserved', 'captured']:
           try: del request.session['cart_id']
           except: pass
-
           self.checkout()
 
     except Exception as e:
