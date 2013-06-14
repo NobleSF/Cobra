@@ -11,27 +11,23 @@ $(function(){//on page load
 
 });
 
-$('#checkout').on('click', function(){
+$('#checkout-button').on('click', function(){
   //hide cart, show checkout
-  $('#cart #items').slideUp();
-  $('#cart #summary').slideUp();
-  $('#cart-sentance').slideUp();
-  $('#cart-paragraph').slideDown();
-  $('#cart-return').slideDown();
-  $('#checkout-form').slideDown();
-  //hack wepay widget
-  $('.wepay-widget-input').removeAttr('disabled');
-  $('.wepay-widget-input').val($('#order-total').html()).attr('disabled','disabled');
+  $('.part1').slideUp(400);
+  $('.part2').delay(400).slideDown(400);
 });
-
-$('#cart-return').on('click', function(){
+$('#pay-now-button').on('click', function(){
   //hide cart, show checkout
-  $('#cart-paragraph').slideUp();
-  $('#cart-return').slideUp();
-  $('#checkout-form').slideUp();
-  $('#cart #items').slideDown();
-  $('#cart #summary').slideDown();
-  $('#cart-sentance').slideDown();
+  if (validateForm()){
+    $('#customer-info').slideUp(400);
+    $('#payment').delay(400).slideDown(400);
+  }
+});
+$('#cart-return-button').on('click', function(){
+  //hide cart, show checkout
+  $('.part3').slideUp(400);
+  $('.part2').slideUp(400);
+  $('.part1').delay(400).slideDown(400);
 });
 
 $('#checkout-form').find('#id_email').on('blur', function() {
@@ -50,21 +46,17 @@ $('#suggested-email').click(function(){
   $('#checkout-form').find('#id_email').val($('#suggested-email').html());
   $('#suggested-email').html('');
   $('#email-suggestion').hide();
+  $('#checkout-form').find('#id_email').trigger('change');
 })
 
 $('input.required').on('change', function(){
   if ($(this).val() == ""){
-    $(this).addClass('error');
-    disableWepay();
+    $(this).closest('.control-group').addClass('error');
   }else{
-    if ($(this).hasClass('error')){
+    if ($(this).closest('.control-group').hasClass('error')){
       validateForm();
     }
   }
-});
-
-$('#pay-now').on('click', function(){
-  validateForm();
 });
 
 function validateForm(){
@@ -73,35 +65,20 @@ function validateForm(){
     $(this).removeClass('error');
     if ($(this).val() == ""){
       complete = false;
-      $(this).addClass('error');
-    }
-    if ($(this).attr('id') == 'id_email'){
+      $(this).closest('.control-group').addClass('error');
+      $(this).closest('.control-group').find('.help-inline').fadeOut().fadeIn();
+    }else if ($(this).attr('id') == 'id_email'){
       if (!IsEmail($(this).val())){
         complete = false;
-        $(this).addClass('error');
+        $(this).closest('.control-group').addClass('error');
+        $(this).closest('.control-group').find('.help-inline').fadeOut().fadeIn();
       }else{
-        $(this).removeClass('error');
+        $(this).closest('.control-group').removeClass('error');
+        $(this).closest('.control-group').find('.help-inline').fadeOut();
       }
     }
   });
-  if (complete){
-    enableWepay();
-  }else{
-    disableWepay();
-  }
-}
-
-function enableWepay(){
-  //hack wepay widget
-  $('.wepay-widget-input').removeAttr('disabled');
-  $('.wepay-widget-input').val($('#order-total').html()).attr('disabled','disabled');
-
-  $('#pay-now').removeClass('disabled');
-  $('#wepay-payment').show();
-}
-function disableWepay(){
-  $('#pay-now').addClass('disabled');
-  $('#wepay-payment').hide();
+  return complete
 }
 
 //http://stackoverflow.com/questions/2507030/email-validation-using-jquery

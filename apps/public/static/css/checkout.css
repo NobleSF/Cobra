@@ -1,3 +1,5 @@
+body{min-width: 620px;}/* for the wepay iframe */
+
 .thumbnail{
   padding: 1em 0em 1em 1em;
   margin: 1em 0;
@@ -11,7 +13,7 @@
   padding: 0 0 0 1em;
 }
 
-#cart-paragraph, #cart-return, #checkout-form, #wepay-payment{
+#customer-info.part2, #payment.part3, #cart-shortcut{
   display: none;
 }
 
@@ -35,34 +37,19 @@
 #checkout-form .wepay-widget-input{
   height: 2em;
 }
-.wepay-store-widget{
-  position: relative;
-  top: -56px;
-  padding: 0;
+
+#id_city, #id_postal_code{width: 150px;}
+#id_state, #id_country{width: 3em;}
+
+#checkout-form{
+  margin-top: 50px;
+  text-align: center;
+}
+fieldset legend{
   margin: 0;
-  filter: alpha(opacity=1);
-  -moz-opacity: 0.01;
-  opacity: 0.01;
-  font-size: 10px;
 }
-.wepay-store-widget a.wepay-widget-button{
-  cursor: pointer;
-  height: 50px;
-  width: 172px;
-  position: absolute;
-  right: 0;
-  top: 0;
-
-}
-.wepay-store-widget .item-price-box{
+.help-inline{
   display: none;
-}
-
-#id_city, #id_postal_code{
-  width: 150px;
-}
-#id_state, #id_country{
-  width: 3em;
 }
 
 #email-suggestion{
@@ -72,6 +59,12 @@
   cursor: pointer;
 }
 
-input.error{
-  border-color: #b94a48;
+#payment{
+  border: dotted 2px grey;
+  width: 620px;
+  text-align: center;
+  margin: 15px 0;
+}
+#wepay-payment{
+  margin: 8px;
 }

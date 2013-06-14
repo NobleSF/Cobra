@@ -74,11 +74,18 @@
       </div>
     {% endblock header %}
 
-  </div>
-
-  <div class="errors">
-    {% if problem %}<p>problem: {{ problem }}</p>{% endif %}
-    {% if exception %}<p>exception: {{ exception }}</p>{% endif %}
+    {% block messages %}
+      <!-- MESSAGES -->
+      <div id='messages' class='pull-left'>
+        {% if messages %}
+          <ul>
+            {% for message in messages %}
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    {% endblock messages %}
   </div>
 
   <div id="body" class="container">

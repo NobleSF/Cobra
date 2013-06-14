@@ -27,18 +27,6 @@
 
     </ul>
   </div>
-
-  <!-- MESSAGES -->
-  <div id='messages' class='pull-left'>
-    {% if messages %}
-      <ul>
-        {% for message in messages %}
-          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-  </div>
-
 {% endblock header %}
 
 {% block content %}
