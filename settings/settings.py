@@ -43,39 +43,73 @@ if PRODUCTION:
   DATABASES['default'] =  dj_database_url.config()
   SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-#AMAZON WEB STORAGE S3
+################## 3RD PARTY SERVICES ##################
+
+#AMAZON WEB STORAGE S3, STATIC FILE HOSTING
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 AWS_ACCESS_KEY_ID = 'AKIAISBCAIGR4FHXJKBQ'
 AWS_SECRET_ACCESS_KEY = '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'
 AWS_STORAGE_BUCKET_NAME = 'anou'
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
-#MANDRILL EMAIL
-#MANDRILL_API_KEY = "7YojodlUpLv64JypQMQqZw"
-#EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
+#CLOUDINARY IMAGE AND PHOTO HOSTING
+CLOUDINARY = {
+  'cloud_name':     'anou',
+  'api_key':        '155257496663982',
+  'api_secret':     'z78hCbzKQ26-6UQoE0FvmguCP9A',
+  'format':         'jpg',
+  'transformation': 't_original'
+}
+THUMBNAIL_ALIASES = {
+  'original': {'size': (1600,1200), 'transformation':"t_original"},
+  'thumb':    {'size': (300, 225),  'transformation':"t_thumb"},
+  'pinky':    {'size': (100, 75),   'transformation':"t_pinky"},
+}
 
-#SENDGRID EMAIL_BACKEND
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'limetree'
+#SENDGRID EMAIL BACKEND
+EMAIL_HOST          = 'smtp.sendgrid.net'
+EMAIL_HOST_USER     = 'limetree'
 EMAIL_HOST_PASSWORD = 'H0hner765@'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_PORT          = 587
+EMAIL_USE_TLS       = True
 
-#WEPAY
+#TELERIVET SMS GATEWAY
+if PRODUCTION:
+  TELERIVET = {
+    'webhook_secret': '',
+    'api_key':        '',
+    'project_id':     '',
+    'phone_id':       ''
+  }
+else:
+  TELERIVET = {
+    'api_key':          '37X4WKLEZ7ECNE4CW3GHECKHGA4FZUP2',
+    'project_id':       'PJ8973e6e346c349cbcdd094fcffa9fcb5',
+    'phone_id':         'PNc238efdc2e8a62af145811e15d7cd653',
+    'phone_number':     '0665555555',
+    'PAGEKITE': {
+      'webhook_url':    'http://localcobra.pagekite.me/communication/incoming',
+      'webhook_secret': 'QNCWR2444MRT6R2G74UDTMTA6QKM2TET',
+    }
+  }
+
+#WEPAY PAYMENT AND CHECKOUT PROCESSING
 if PRODUCTION:
   WEPAY = {
-    'client_id': '114473',
-    'client_secret': '443ad32d57',
-    'access_token': 'PRODUCTION_ed41e33671a46b6a3a93e6c6c6d45265fcb62a8f04998d232391bcd3e39749f9',
-    'account_id': '519238566'
+    'client_id':      '114473',
+    'client_secret':  '443ad32d57',
+    'access_token':   'PRODUCTION_ed41e33671a46b6a3a93e6c6c6d45265fcb62a8f04998d232391bcd3e39749f9',
+    'account_id':     '519238566'
   }
 else:
   WEPAY = {
-    'client_id': '137470',
-    'client_secret': '463bfe717b',
-    'access_token': 'STAGE_3c234c249310a336d4999b8604b73a27ac5ec6e7255ac9a7ef3d0b6c2629079e',
-    'account_id': '854657449'
+    'client_id':      '137470',
+    'client_secret':  '463bfe717b',
+    'access_token':   'STAGE_3c234c249310a336d4999b8604b73a27ac5ec6e7255ac9a7ef3d0b6c2629079e',
+    'account_id':     '854657449'
   }
+
+############## END 3RD PARTY SERVICES ##################
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
@@ -157,20 +191,6 @@ STATICFILES_FINDERS = (
   #'django.contrib.staticfiles.finders.DefaultStorageFinder',
   'compressor.finders.CompressorFinder',
 )
-
-CLOUDINARY = {
-  'cloud_name':     'anou',
-  'api_key':        '155257496663982',
-  'api_secret':     'z78hCbzKQ26-6UQoE0FvmguCP9A',
-  'format':         'jpg',
-  'transformation': 't_original'
-}
-
-THUMBNAIL_ALIASES = {
-  'original': {'size': (1600,1200), 'transformation':"t_original"},
-  'thumb':    {'size': (300, 225),  'transformation':"t_thumb"},
-  'pinky':    {'size': (100, 75),   'transformation':"t_pinky"},
-}
 
 # Make this unique, and don't share it with anybody.
 if PRODUCTION:
