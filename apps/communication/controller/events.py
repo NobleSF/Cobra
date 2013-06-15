@@ -13,7 +13,7 @@ def communicateOrderShipped(order):
   #send email to buyer
   return True
 
-def communicateOrderArtisansPaid(order):
+def communicateOrderSellerPaid(order):
   #send text to seller
   return True
 
