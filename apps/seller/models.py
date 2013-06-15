@@ -68,26 +68,35 @@ class Product(models.Model):
         return self.assets.filter(ilk='product')[0].name
     return str(self.id)
 
+  def anou_fee(self):
+    from settings.settings import ANOU_FEE_RATE
+    if self.price:
+      fee = self.price * ANOU_FEE_RATE
+      return int(round(fee))
+    else:
+      return 0
+
   def shipping_cost(self):
     if self.weight:
-      cost = self.weight/3
-      #need to pull in shipping cost formula for each inproduct.shipping_options
-      cost /= self.seller.currency.exchange_rate_to_USD
-      return int(round(cost)) #keep the change, ya filthy animal
+      cost = 250 if self.weight > 200 else 50
+      #need to pull in shipping cost formula for each in product.shipping_options
+
+      return int(round(cost))
     else:
-      return False
+      return 0
+
+  def local_price(self):
+    if self.price:
+      return self.price + self.anou_fee() + self.shipping_cost()
+    else:
+      return 0
 
   def display_price(self, locale='US'):
-    from settings.settings import ANOU_FEE
-
-    if self.price and self.weight:
-      cost_amalgum_boobs_bomb = self.price
-      cost_amalgum_boobs_bomb *= (1 + ANOU_FEE)
-      cost_amalgum_boobs_bomb = int(round(cost_amalgum_boobs_bomb))
-      cost_amalgum_boobs_bomb += self.shipping_cost()
-      return cost_amalgum_boobs_bomb
-    else:
-      return False
+    cost_amalgum_boobs_bomb = self.local_price()
+    #convert to USD and round to the nearest $1
+    cost_amalgum_boobs_bomb /= self.seller.currency.exchange_rate_to_USD
+    cost_amalgum_boobs_bomb = int(round(cost_amalgum_boobs_bomb))
+    return cost_amalgum_boobs_bomb
 
   def is_complete(self):
     is_product = has_artisan = has_photo = has_price = False
