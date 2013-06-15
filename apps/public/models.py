@@ -1,7 +1,7 @@
 from django.db import models
 
 class Cart(models.Model):
-  email               = models.EmailField(blank=True, null=True, unique=True)
+  email               = models.EmailField(blank=True, null=True)
   name                = models.CharField(max_length=100, null=True, blank=True)
   address1            = models.CharField(max_length=100, null=True, blank=True)
   address2            = models.CharField(max_length=100, null=True, blank=True)
@@ -52,24 +52,24 @@ class Item(models.Model):
 class Order(models.Model):
   from apps.seller.models import Product, ShippingOption
   from apps.admin.models import Account
-  account             = models.ForeignKey(Account)#what if no customer accounts?
-  notes               = models.TextField(blank=True, null=True)
 
-  #charges breakdown
+  cart                = models.ForeignKey('Cart')
+
+  #charges breakdown in local currency (eg. dirhams in Morocco)
   products_charge     = models.DecimalField(max_digits=6, decimal_places=2)
-  shipping_charge     = models.DecimalField(max_digits=6, decimal_places=2)
   anou_charge         = models.DecimalField(max_digits=6, decimal_places=2)
-  discount_charge     = models.DecimalField(max_digits=6, decimal_places=2)
-  discount_reason     = models.TextField(blank=True, null=True)
+  shipping_charge     = models.DecimalField(max_digits=6, decimal_places=2)
+  discount_charge     = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+  discount_reason     = models.CharField(max_length=100, null=True, blank=True)
   total_charge        = models.DecimalField(max_digits=6, decimal_places=2)
   receipt             = models.TextField(blank=True, null=True)
 
-  cart                = models.ForeignKey('Cart')
-  shipping_option     = models.ForeignKey(ShippingOption)
+  shipping_option     = models.ForeignKey(ShippingOption, null=True, blank=True)
   #reported weight and cost after shipped
   shipping_weight     = models.FloatField(blank=True, null=True)
   shipping_cost       = models.DecimalField(blank=True, null=True,
                                             max_digits=6, decimal_places=2)
+  tracking_number     = models.CharField(max_length=50, null=True, blank=True)
   shipped_date        = models.DateField(blank=True, null=True)
   received_date       = models.DateField(blank=True, null=True)
 
@@ -80,9 +80,12 @@ class Order(models.Model):
   is_seller_notified  = models.BooleanField(default=False)
   is_seller_confirmed = models.BooleanField(default=False)
   is_shipped          = models.BooleanField(default=False)
-  is_arrived          = models.BooleanField(default=False)
+  is_received         = models.BooleanField(default=False)
   is_reviewed         = models.BooleanField(default=False)
-  is_artisan_paid     = models.BooleanField(default=False)
+  is_seller_paid      = models.BooleanField(default=False)
+
+  is_returned         = models.BooleanField(default=False)
+  notes               = models.TextField(blank=True, null=True)
 
   #update history
   created_at          = models.DateTimeField(auto_now_add = True)
