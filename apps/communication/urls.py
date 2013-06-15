@@ -1,10 +1,8 @@
 from django.conf.urls import patterns, include, url
-from django.contrib import admin
-from djrill import DjrillAdminSite
-
-admin.site = DjrillAdminSite
-admin.autodiscover()
+from controller import events, sms
 
 urlpatterns = patterns('',
-  url(r'^admin/', include(admin.site.urls),
+  url(r'^incoming$', sms.incoming, name='sms incoming'),
+
+
 )
