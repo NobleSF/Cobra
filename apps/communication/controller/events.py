@@ -1,5 +1,7 @@
-def communicateOrderCreated(order):
-  #send text to seller
+def communicateOrdersCreated(orders):
+  for order in orders:
+    #send text to seller
+
   #send email to buyer
   return True
 

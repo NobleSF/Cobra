@@ -5,12 +5,20 @@ class Order:
   def __init__(self, order_id):
     self.order = models.Order.objects.get(id=order_id)
 
-  def createManyFromCart(self, cart):
+  def createFromCart(self, cart):
     checkout_data = self.getCheckoutData(cart)
 
     orders = []
     for item in cart:
       orders.append(self.createFromCartItem(item, checkout_data))
+
+    if events.communicateOrdersCreated(orders):
+      for order in orders:
+        order.is_seller_notified = True
+        order.save()
+    else:
+      raise Exception
+
     return orders
 
   def createFromCartItem(self, item, checkout_data):
@@ -23,20 +31,13 @@ class Order:
     )
     order.save()
     order.products.add(item.product)
-
-    if events.communicateOrderCreated(order):
-      order.is_seller_notified = True
-      order.save()
-    else:
-      raise Exception
-
     return order
 
-  def getCheckoutData(self):
+  def getCheckoutData(self, cart=None):
     from apps.wepay.api import WePay
     from settings.settings import WEPAY, PRODUCTION
-
-    cart = self.order.cart
+    if not cart:
+      cart = self.order.cart
 
     wepay = WePay(PRODUCTION, WEPAY['access_token'])
     wepay_response = wepay.call('/checkout', {

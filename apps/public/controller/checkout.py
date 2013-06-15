@@ -70,19 +70,20 @@ def cartSave(request): #ajax requests only
   return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 def confirmation(request):
-  #from apps.public.controller.order_class import Order
+  from apps.public.controller.order_class import Order
 
   checkout_id = None
   try:
     if request.method == 'GET':
       checkout_id = request.GET.get('checkout_id')
-  except:
-    pass
+  except: pass
+  #will use the checkout_id from the session cart, if not provided
   finally:
     cart = Cart(request, checkout_id)
 
-  wepay = cart.getWePayCheckoutData(request)
-  context = {'cart':cart, 'wepay':wepay}
+  checkout_data = Order.getCheckoutData(cart)
+
+  context = {'cart':cart, 'checkout_data':checkout_data}
   return render(request, 'checkout/confirmation.html', context)
 
 def custom_order(request):
