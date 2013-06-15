@@ -177,19 +177,6 @@ class Cart:
         'checkout_id': self.cart.wepay_checkout_id
       })
 
-      if wepay_response.get('shipping_address'):
-        self.saveData('name', wepay_response.get('name'))
-        self.saveData('address1', wepay_response['shipping_address'].get('address1'))
-        self.saveData('address2', wepay_response['shipping_address'].get('address2'))
-        self.saveData('city', wepay_response['shipping_address'].get('city'))
-        if wepay_response['shipping_address'].get('state'): #US address
-          self.saveData('state', wepay_response['shipping_address'].get('state'))
-          self.saveData('postal_code', wepay_response['shipping_address'].get('zip'))
-        else:
-          self.saveData('state', wepay_response['shipping_address'].get('region'))
-          self.saveData('postal_code', wepay_response['shipping_address'].get('postcode'))
-        self.saveData('country', wepay_response['shipping_address'].get('country'))
-
       #checkout the cart
       if (not self.cart.checked_out) and wepay_response.get('gross'):
         if wepay_response.get('state') in ['authorized', 'reserved', 'captured']:
