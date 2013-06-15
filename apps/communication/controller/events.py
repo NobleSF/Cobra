@@ -1,21 +1,21 @@
 def communicateOrderCreated(order):
   #send text to seller
   #send email to buyer
-  pass
+  return True
 
 def communicateOrderConfirmed(order):
   #send reply text to seller
   #send email to buyer
-  pass
+  return True
 
 def communicateOrderShipped(order):
   #send reply text to seller
   #send email to buyer
-  pass
+  return True
 
 def communicateOrderArtisansPaid(order):
   #send text to seller
-  pass
+  return True
 
 def test():
   from django.core.mail import send_mail
