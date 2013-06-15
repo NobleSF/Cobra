@@ -18,7 +18,7 @@ else:
 TEMPLATE_DEBUG = DEBUG
 SITE_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
-ANOU_FEE = 0.15
+ANOU_FEE_RATE = 0.15
 DAYS_UNTIL_PRODUCT_EXPIRES = 120
 
 UNDER_CONSTRUCTION = False
