@@ -20,7 +20,10 @@ def home(request, product_id):
     product.tools     = product.assets.filter(ilk='tool').order_by('?')[:3]
     product.utilities = list(chain(product.materials, product.tools))
 
-    product.utilities_bootstrap_span_length = int(12/len(product.utilities))
+    if not len(product.utilities):
+      product.utilities_bootstrap_span_length = 12
+    else:
+      product.utilities_bootstrap_span_length = int(12/len(product.utilities))
 
     context = {'product':product}
 
