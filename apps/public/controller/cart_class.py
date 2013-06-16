@@ -2,8 +2,9 @@
 
 from apps.public import models
 class Cart:
-  def __init__(self, request, checkout_id=None):
-    cart_id = request.session.get('cart_id')#if no cart id, returns None
+  def __init__(self, request=None, checkout_id=None, cart_id=None):
+    if not cart_id:
+      cart_id = request.session.get('cart_id')#if no cart id, returns None
 
     #override session cart if valid checkout_id is provided
     if checkout_id:
@@ -136,8 +137,9 @@ class Cart:
       item.delete()
 
   def checkout(self):
-    self.cart.checked_out = True
-    self.cart.save()
+    if not self.cart.checked_out:
+      self.cart.checked_out = True
+      self.cart.save()
 
   def getWePayCheckoutURI(self):
     from apps.wepay.api import WePay
@@ -168,23 +170,58 @@ class Cart:
     else:
       return wepay_response['checkout_uri']
 
-  def getWePayCheckoutData(self, request):
+  def getWePayCheckoutData(self):
     from apps.wepay.api import WePay
     from settings.settings import WEPAY, PRODUCTION
-    try:
-      wepay = WePay(PRODUCTION, WEPAY['access_token'])
-      wepay_response = wepay.call('/checkout', {
-        'checkout_id': self.cart.wepay_checkout_id
-      })
 
-      #checkout the cart
-      if (not self.cart.checked_out) and wepay_response.get('gross'):
-        if wepay_response.get('state') in ['authorized', 'reserved', 'captured']:
-          try: del request.session['cart_id']
-          except: pass
-          self.checkout()
+    if not self.cart.wepay_checkout_id:
+      return {}
 
-    except Exception as e:
-      return "error: " + str(e)
     else:
-      return wepay_response
+      try:
+        wepay = WePay(PRODUCTION, WEPAY['access_token'])
+        wepay_response = wepay.call('/checkout', {
+          'checkout_id': self.cart.wepay_checkout_id
+        })
+      except Exception as e:
+        return "error: " + str(e)
+      else:
+        return wepay_response
+
+  def getCheckoutData(self):
+    #start with WePay data, then overwrite with our own.
+    wepay_checkout_data = self.getWePayCheckoutData()
+
+    if not wepay_checkout_data:
+      return {}
+
+    else:
+      checkout_data = wepay_checkout_data
+
+      #name and email
+      if self.cart.name: checkout_data['name'] = self.cart.name
+      else: checkout_data['name'] = wepay_checkout_data['payer_name']
+      if self.cart.email: checkout_data['email'] = self.cart.email
+      else: checkout_data['email'] = wepay_checkout_data['payer_email']
+
+      #shipping address
+      if self.cart.address1 and self.cart.city and \
+         self.cart.state and self.cart.postal_code:
+        checkout_data['shipping_address']['address1']     = self.cart.address1
+        checkout_data['shipping_address']['address2']     = self.cart.address2
+        checkout_data['shipping_address']['city']         = self.cart.city
+        checkout_data['shipping_address']['state']        = self.cart.state
+        checkout_data['shipping_address']['postal_code']  = self.cart.postal_code
+        checkout_data['shipping_address']['country']      = self.cart.country
+
+      #if we didn't overwrite with our info, fix wepay's so it looks like ours.
+      elif wepay_checkout_data['shipping_address']['region'] or \
+           wepay_checkout_data['shipping_address']['post_code']:
+        # international address, all should match except region -> state, post_code -> postal_code
+        checkout_data['shipping_address']['state'] = wepay_checkout_data['shipping_address']['region']
+        checkout_data['shipping_address']['postal_code'] = wepay_checkout_data['shipping_address']['post_code']
+      else:
+        #US address, all should match up except zip -> postal_code
+        checkout_data['shipping_address']['postal_code'] = wepay_checkout_data['shipping_address']['zip']
+
+      return checkout_data

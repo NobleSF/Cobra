@@ -70,20 +70,42 @@ def cartSave(request): #ajax requests only
   return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 def confirmation(request):
-  from apps.public.controller.order_class import Order
-
+  from apps.public.controller.order_class import getOrders
   checkout_id = None
+
   try:
     if request.method == 'GET':
       checkout_id = request.GET.get('checkout_id')
-  except: pass
-  #will use the checkout_id from the session cart, if not provided
+  except:
+    pass # no worries, use the checkout_id from the session cart
   finally:
-    cart = Cart(request, checkout_id)
+    cart = Cart(request, checkout_id) #creates a new cart if checkout_id = None
+    checkout_data = cart.getCheckoutData() #return {} if no data available
 
-  checkout_data = Order.getCheckoutData(cart)
+  if not checkout_data: #empty data means no checkout_id created for the cart.
+    checkout_data = {'problem': "No order completed yet with that checkout_id"}
+
+  else:
+    #at this point we know that the order is real
+    try:
+      #if necessary, remove from session and checkout the cart
+      if checkout_data.get('gross') and \
+         checkout_data.get('state') in ['authorized', 'reserved', 'captured']:
+        cart.checkout()
+        orders = getOrders(checkout_id)
+        try: del request.session['cart_id']
+        except: pass
+      else:
+        checkout_data = {'problem': "Payment on order is not complete."}
+
+    except:
+      checkout_data = {'error': "Problem collecting your order information."}
+      #email Tom and CC the customer
 
   context = {'cart':cart, 'checkout_data':checkout_data}
+  try: context['orders'] = orders #if the variable exists
+  except: pass
+
   return render(request, 'checkout/confirmation.html', context)
 
 def custom_order(request):

@@ -1,76 +1,46 @@
 from apps.public import models
 from apps.communication.controller import events
 
+def getOrders(self, wepay_checkout_id):
+  cart = models.Cart.objects.get(wepay_checkout_id = wepay_checkout_id)
+  orders = cart.order_set.all()
+  if not orders:
+    orders = self.createFromCart(cart)
+  return orders
+
+def createFromCart(cart):
+  from apps.public.controller.cart_class import Cart
+  cart = Cart(cart_id=cart.id)
+  checkout_data = cart.getCheckoutData()
+
+  orders = []
+  for item in cart.item_set.all():
+    orders.append(createFromCartItem(item, checkout_data))
+
+  if events.communicateOrdersCreated(orders):
+    for order in orders:
+      order.is_seller_notified = True
+      order.save()
+  else:
+    raise Exception
+
+  return orders
+
+def createFromCartItem(self, item, checkout_data):
+  order = models.Order(
+    cart            = item.cart,
+    products_charge = item.product.price,
+    anou_charge     = item.product.anou_fee(),
+    shipping_charge = item.product.shipping_cost(),
+    total_charge    = item.product.local_price()
+  )
+  order.save()
+  order.products.add(item.product)
+  return order
+
 class Order:
-  def __init__(self, order_id):
+  def __init__(self, order_id=None):
     self.order = models.Order.objects.get(id=order_id)
-
-  def createFromCart(self, cart):
-    checkout_data = self.getCheckoutData(cart)
-
-    orders = []
-    for item in cart:
-      orders.append(self.createFromCartItem(item, checkout_data))
-
-    if events.communicateOrdersCreated(orders):
-      for order in orders:
-        order.is_seller_notified = True
-        order.save()
-    else:
-      raise Exception
-
-    return orders
-
-  def createFromCartItem(self, item, checkout_data):
-    order = models.Order(
-      cart            = item.cart,
-      products_charge = item.product.price,
-      anou_charge     = item.product.anou_fee(),
-      shipping_charge = item.product.shipping_cost(),
-      total_charge    = item.product.local_price()
-    )
-    order.save()
-    order.products.add(item.product)
-    return order
-
-  def getCheckoutData(self, cart=None):
-    from apps.wepay.api import WePay
-    from settings.settings import WEPAY, PRODUCTION
-    if not cart:
-      cart = self.order.cart
-
-    wepay = WePay(PRODUCTION, WEPAY['access_token'])
-    wepay_response = wepay.call('/checkout', {
-      'checkout_id': cart.wepay_checkout_id
-    })
-
-    #start with WePay data, then overwrite with our own.
-    checkout_data = wepay_response
-
-    #name and email
-    if cart.name: checkout_data['name'] = cart.name
-    else: checkout_data['name'] = wepay_response['payer_name']
-    if cart.email: checkout_data['email'] = cart.email
-    else: checkout_data['email'] = wepay_response['payer_email']
-
-    #shipping address
-    if cart.address1 and cart.city and cart.state and cart.postal_code:
-      checkout_data['shipping_address']['address1']     = cart.address_1
-      checkout_data['shipping_address']['address2']     = cart.address2
-      checkout_data['shipping_address']['city']         = cart.city
-      checkout_data['shipping_address']['state']        = cart.state
-      checkout_data['shipping_address']['postal_code']  = cart.postal_code
-      checkout_data['shipping_address']['country']      = cart.country
-    elif wepay_response['shipping_address']['region'] or \
-         wepay_response['shipping_address']['post_code']:
-      # international address, all should match except region -> state, post_code -> postal_code
-      checkout_data['shipping_address']['state'] = wepay_response['shipping_address']['region']
-      checkout_data['shipping_address']['postal_code'] = wepay_response['shipping_address']['post_code']
-    else:
-      #US address, all should match up except zip -> postal_code
-      checkout_data['shipping_address']['postal_code'] = wepay_response['shipping_address']['zip']
-
-    return checkout_data
 
   def seller_confirmed(self):
     if events.communicateOrderConfirmed(self.order):
