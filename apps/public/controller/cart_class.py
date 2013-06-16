@@ -143,11 +143,11 @@ class Cart:
 
   def getWePayCheckoutURI(self):
     from apps.wepay.api import WePay
-    from settings.settings import WEPAY, PRODUCTION
+    from settings.settings import WEPAY, PAYMENTS_PRODUCTION
     try:
-      wepay = WePay(PRODUCTION, WEPAY['access_token'])
+      wepay = WePay(PAYMENTS_PRODUCTION, WEPAY['access_token'])
 
-      if PRODUCTION:
+      if PAYMENTS_PRODUCTION:
         redirect_uri = "http://anou-cobra.herokuapp.com/checkout/confirmation"
       else:
         redirect_uri = "http://localcobra.pagekite.me/checkout/confirmation"
@@ -172,14 +172,14 @@ class Cart:
 
   def getWePayCheckoutData(self):
     from apps.wepay.api import WePay
-    from settings.settings import WEPAY, PRODUCTION
+    from settings.settings import WEPAY, PAYMENTS_PRODUCTION
 
     if not self.cart.wepay_checkout_id:
       return {}
 
     else:
       try:
-        wepay = WePay(PRODUCTION, WEPAY['access_token'])
+        wepay = WePay(PAYMENTS_PRODUCTION, WEPAY['access_token'])
         wepay_response = wepay.call('/checkout', {
           'checkout_id': self.cart.wepay_checkout_id
         })

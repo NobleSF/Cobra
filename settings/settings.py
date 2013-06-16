@@ -15,14 +15,15 @@ if PRODUCTION:
 else:
   DEBUG = True
 
+PAYMENTS_PRODUCTION = not DEBUG
 TEMPLATE_DEBUG = DEBUG
-SITE_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
 ANOU_FEE_RATE = 0.15
 DAYS_UNTIL_PRODUCT_EXPIRES = 120
 
 UNDER_CONSTRUCTION = False
 INTERNAL_IPS = ('127.0.0.1',)
+SITE_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
 ADMINS = (
   ('Developer', 'dev@theanou.com'),
