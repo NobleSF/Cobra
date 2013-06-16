@@ -83,7 +83,7 @@ def confirmation(request):
     checkout_data = cart.getCheckoutData() #return {} if no data available
 
   if not checkout_data: #empty data means no checkout_id created for the cart.
-    checkout_data = {'problem': "No order completed yet with that checkout_id"}
+    checkout_data = {'problem': "No order exists with that confirmation number (checkout_id)"}
 
   else:
     #at this point we know that the order is real
@@ -98,8 +98,10 @@ def confirmation(request):
       else:
         checkout_data = {'problem': "Payment on order is not complete."}
 
-    except:
-      checkout_data = {'error': "Problem collecting your order information."}
+    except Exception as e:
+      checkout_data = {'error': "Problem collecting your order information.",
+                       'exception': e
+                       }
       #email Tom and CC the customer
 
   context = {'cart':cart, 'checkout_data':checkout_data}

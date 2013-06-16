@@ -1,11 +1,11 @@
 from apps.public import models
 from apps.communication.controller import events
 
-def getOrders(self, wepay_checkout_id):
+def getOrders(wepay_checkout_id):
   cart = models.Cart.objects.get(wepay_checkout_id = wepay_checkout_id)
   orders = cart.order_set.all()
   if not orders:
-    orders = self.createFromCart(cart)
+    orders = createFromCart(cart)
   return orders
 
 def createFromCart(cart):
@@ -14,7 +14,7 @@ def createFromCart(cart):
   checkout_data = cart.getCheckoutData()
 
   orders = []
-  for item in cart.item_set.all():
+  for item in cart: #or for item in cart.cart.item_set.all()
     orders.append(createFromCartItem(item, checkout_data))
 
   if events.communicateOrdersCreated(orders):
@@ -26,7 +26,7 @@ def createFromCart(cart):
 
   return orders
 
-def createFromCartItem(self, item, checkout_data):
+def createFromCartItem(item, checkout_data):
   order = models.Order(
     cart            = item.cart,
     products_charge = item.product.price,

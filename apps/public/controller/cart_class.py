@@ -184,7 +184,7 @@ class Cart:
           'checkout_id': self.cart.wepay_checkout_id
         })
       except Exception as e:
-        return "error: " + str(e)
+        return {'error': e}
       else:
         return wepay_response
 
@@ -200,11 +200,14 @@ class Cart:
 
       #name and email
       if self.cart.name: checkout_data['name'] = self.cart.name
-      else: checkout_data['name'] = wepay_checkout_data['payer_name']
+      else: checkout_data['name'] = wepay_checkout_data.get('payer_name')
       if self.cart.email: checkout_data['email'] = self.cart.email
-      else: checkout_data['email'] = wepay_checkout_data['payer_email']
+      else: checkout_data['email'] = wepay_checkout_data.get('payer_email')
 
       #shipping address
+      if not checkout_data.get('shipping_address'):
+        checkout_data['shipping_address'] = {}
+
       if self.cart.address1 and self.cart.city and \
          self.cart.state and self.cart.postal_code:
         checkout_data['shipping_address']['address1']     = self.cart.address1
@@ -215,13 +218,13 @@ class Cart:
         checkout_data['shipping_address']['country']      = self.cart.country
 
       #if we didn't overwrite with our info, fix wepay's so it looks like ours.
-      elif wepay_checkout_data['shipping_address']['region'] or \
-           wepay_checkout_data['shipping_address']['post_code']:
+      elif wepay_checkout_data['shipping_address'].get('region') or \
+           wepay_checkout_data['shipping_address'].get('post_code'):
         # international address, all should match except region -> state, post_code -> postal_code
         checkout_data['shipping_address']['state'] = wepay_checkout_data['shipping_address']['region']
         checkout_data['shipping_address']['postal_code'] = wepay_checkout_data['shipping_address']['post_code']
       else:
         #US address, all should match up except zip -> postal_code
-        checkout_data['shipping_address']['postal_code'] = wepay_checkout_data['shipping_address']['zip']
+        checkout_data['shipping_address']['postal_code'] = wepay_checkout_data['shipping_address'].get('zip')
 
       return checkout_data

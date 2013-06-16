@@ -34,9 +34,9 @@ class Item(models.Model):
   product             = models.ForeignKey(Product)
   #quantity           = models.PositiveIntegerField(default=1)
 
-  def __unicode__(self):
+  #def __unicode__(self):
     #return u'%d units of %s' % (self.quantity, self.product.__name__)
-    return self.product.name
+    #return self.product.name
 
   def price(self):
     return self.product.display_price

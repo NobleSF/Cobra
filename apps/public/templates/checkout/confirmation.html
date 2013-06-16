@@ -19,12 +19,19 @@
 
       {% if cart.count %}
         <div id='comfirmation-title'>
-          <h1>Order Complete!</h1>
+          <h1>
+            {% if checkout_data.error or checkout_data.problem %}
+              {{ checkout_data.error }}
+              {{ checkout_data.problem }}
+            {% else %}
+              Order Complete!
+            {% endif %}
+          </h1>
           <h3>
             Total Charged:
-            <span class='badge'><h3>${{ wepay.gross|floatformat:2 }}</h3></span>
+            <span class='badge'><h3>${{ checkout_data.gross|floatformat:2 }}</h3></span>
             Confirmation Number:
-            <span class='badge'><h3>{{ wepay.checkout_id }}</h3></span>
+            <span class='badge'><h3>{{ checkout_data.checkout_id }}</h3></span>
           </h3>
         </div>
       {% else %}
@@ -47,46 +54,44 @@
           <fieldset>
             <legend>Contact Information</legend>
             <p>
-              {% if cart.cart.name %}
-                {{ cart.cart.name }}
-              {% elif wepay.payer_name %}
-                {{ wepay.payer_name}}
+              {% if checkout_data.name %}
+                {{ checkout_data.name}}
               {% else %}
                 No name on file.
               {% endif %}
               <br>
-              {% if cart.cart.email %}
-                {{ cart.cart.email }}
-              {% elif wepay.payer_email %}
-                {{ wepay.payer_email}}
+              {% if checkout_data.email %}
+                {{ checkout_data.email}}
               {% else %}
-                No email on file.
+                No email on file!
               {% endif %}
             </p>
-            <p>Subscribe to receive updates as Anou transforms the world of Fair Trade.</p>
+            {% if checkout_data.email %}
+              <p>Subscribe to receive updates as Anou transforms the world of Fair Trade.</p>
+            {% endif %}
           </fieldset>
 
           <fieldset>
             <legend>Shipping Address</legend>
             <p>
-              {% if wepay.shipping_address %}
-                {% if wepay.shipping_address.name %}
-                  {{ wepay.shipping_address.name }}
-                {% else %}{{ cart.cart.name }}{% endif %}<br>
-                {{ wepay.shipping_address.address1 }}<br>
-                {% if wepay.shipping_address.address2 %}
-                  {{ wepay.shipping_address.address2 }}<br>
+              {% if checkout_data.shipping_address %}
+                {{ checkout_data.shipping_address.name }}<br>
+                {{ checkout_data.shipping_address.address1 }}<br>
+                {% if checkout_data.shipping_address.address2 %}
+                  {{ checkout_data.shipping_address.address2 }}<br>
                 {% endif %}
-                {{ wepay.shipping_address.city }},
-                {{ wepay.shipping_address.state }}{{ wepay.shipping_address.region }}
-                {{ wepay.shipping_address.zip }}{{ wepay.shipping_address.post_code }}<br>
-                {{ wepay.shipping_address.country }}
+                {{ checkout_data.shipping_address.city }},
+                {{ checkout_data.shipping_address.state }}
+                {{ checkout_data.shipping_address.zip }}<br>
+                {{ checkout_data.shipping_address.country }}
+              {% else %}
+                No shipping address on file!
               {% endif %}
             </p>
           </fieldset>
 
           <p class='text-info'>
-            If any of the above contact or shipping information is incorrect, please let us know immediately at <a href='mailto:hello@theanou.com'>hello@theanou.com</a> so we can correct it.
+            If any of the above contact or shipping information is incorrect or missing, please contact us immediately at <a href='mailto:hello@theanou.com'>hello@theanou.com</a> so we can correct it.
           </p>
         </div>
       </div>
@@ -121,7 +126,7 @@
   <div id='data' class='hidden'>
     <h1>Wepay Data:</h1>
     <ul>
-      {% for key,value in wepay.items %}
+      {% for key,value in checkout_data.items %}
         <li>{{key}}: {{value}}</li>
       {% endfor %}
     </ul>
