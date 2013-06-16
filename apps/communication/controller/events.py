@@ -1,6 +1,7 @@
 def communicateOrdersCreated(orders):
   for order in orders:
     #send text to seller
+    pass
 
   #send email to buyer
   return True
