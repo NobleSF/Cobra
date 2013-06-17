@@ -1,1 +1,1 @@
-Order for {{ cart.items.0.name }} by {{ cart.item.0.product.seller.name }}
+Anou Order #{{ data.0.cart.wepay_checkout_id }}

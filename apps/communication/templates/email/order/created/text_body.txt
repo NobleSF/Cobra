@@ -1,0 +1,12 @@
+Thanks for your order!
+
+Your order confirmation at http://www.theanou.com/checkout/confirmation?checkout_id={{ data.0.cart.wepay_checkout_id }}
+
+We have contacted the artisan(s) you ordered from and we will notify you when they have confirmed the sale. We will also notify you by email when your order has been shipped.
+
+For more information, please check out our FAQ section at www.theanou.com/faq, or simply contact us at hello@theanou.com.
+
+Thanks for purchasing on Anou! By shipping directly from the artisan to you bypassing any middlemen, the artisan is finally getting paid what they deserve for their hard work.
+
+Best,
+Dan, Brahim, and the rest of the Anou team.
