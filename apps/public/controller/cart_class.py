@@ -199,10 +199,18 @@ class Cart:
       checkout_data = wepay_checkout_data
 
       #name and email
-      if self.cart.name: checkout_data['name'] = self.cart.name
-      else: checkout_data['name'] = wepay_checkout_data.get('payer_name')
-      if self.cart.email: checkout_data['email'] = self.cart.email
-      else: checkout_data['email'] = wepay_checkout_data.get('payer_email')
+      if self.cart.name:
+        checkout_data['name'] = self.cart.name
+      else:
+        checkout_data['name'] = wepay_checkout_data.get('payer_name')
+        self.cart.name = wepay_checkout_data.get('payer_name')
+        self.cart.save()
+      if self.cart.email:
+        checkout_data['email'] = self.cart.email
+      else:
+        checkout_data['email'] = wepay_checkout_data.get('payer_email')
+        self.cart.email = wepay_checkout_data.get('payer_email')
+        self.cart.save()
 
       #shipping address
       if not checkout_data.get('shipping_address'):
