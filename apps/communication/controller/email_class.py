@@ -1,59 +1,60 @@
-from apps.communtication import models
+from apps.communication import models
+from django.template import Context
 from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
+from settings.settings import DEBUG
 
 class Email:
-  def __init__(self, template_name):
-    self.template_name = template_name
+  def __init__(self, template_dir, data):
+    #creates an email using the template and data provided
 
+    subject_template = "email/%s/subject.txt" % template_dir
+    text_body_template = "email/%s/text_body.txt" % template_dir
+    html_body_template = "email/%s/html_body.html" % template_dir
 
+    #plaintext_context = Context(autoescape=False)
+    context = {'data':data}
 
+    self.subject = render_to_string(subject_template, context)
+    self.text_body = render_to_string(text_body_template, context)
+    self.html_body = render_to_string(html_body_template, context)
 
-  def object(self, cart=None, order=None, event=None):
-    if cart:
-      self.data = dict(cart)
-      self.category = 'cart'
-    elif order:
-      self.data = dict(order)
-      self.category = 'order'
+  def sendTo(self, to): #sends the email object to the provided email or list of emails
+
+    #allow the function to receive a string or a list
+    self.to = [to] if isinstance(to, basestring) else to
+
+    if DEBUG: #redirect non-production emails
+      self.text_body = "*STAGE* To: %s\n %s" % (','.join(self.to), self.text_body)
+      self.html_body = "<h2>*STAGE* To: %s</h2> %s" % (','.join(self.to), self.html_body)
+      self.to = ['dev+test@theanou.com']
+
+    try:
+      self.mail = EmailMultiAlternatives(
+                    subject     = self.subject,
+                    body        = self.text_body,
+                    from_email  = "hello@theanou.com",
+                    to          = self.to
+                    #cc         = ['dump@theanou.com']
+                  )
+      self.mail.attach_alternative(self.html_body, "text/html")
+      self.mail.send()
+    except Exception as e:
+      return str(e)
     else:
-      self.data = dict()
-      self.category = 'dunno'
-
-  def action(self, template_name):
-    from django.template import context
-
-    file_location = "email/" + self.category + "/" + template_name + "/"
-    subject_template = file_location + "subject.txt"
-    text_body_template = file_location + "text_body.txt"
-    html_body_template = file_location + "html_body.html"
-
-    plaintext_context = Context(autoescape=False) #HTML escaping not appropriate in plaintext
-    self.subject = render_to_string(subject_template, self.data, plaintext_context)
-    self.text_body = render_to_string(text_body_template, self.data, plaintext_context)
-    self.html_body = render_to_string(html_body_template, self.data, plaintext_context)
-
-  def send():
-    from django.core.mail import EmailMultiAlternatives
-    self.mail = EmailMultiAlternatives(
-                  subject     = self.subject,
-                  from_email  = "hello@theanou.com",
-                  to          = ["test@theanou.com"],
-                  body        = self.text_body
-                )
-    self.mail.attach_alternative(self.html_body, "text/html")
-    self.save()
-    self.mail.send()
-    #if error:
-      #report error, or save to variable in Email db model object
+      return self.save()
 
   def save(self):
-    email = models.Email(
-      from_address  = self.mail.from_email,
-      to_address    = self.mail.to[0],
-      subject       = self.mail.subject,
-      html_body     = self.mail.body,
-      text_boby     = self.mail.alternatives[0][0]
-    )
-    cart.save()
-    request.session['cart_id'] = cart.id
-    return cart
+    try:
+      email = models.Email(
+        from_address  = self.mail.from_email,
+        to_address    = ','.join(self.mail.to),
+        subject       = self.mail.subject,
+        text_body     = self.mail.body,
+        html_body     = self.mail.alternatives[0][0]
+      )
+    except Exception as e:
+      return str(e)
+    else:
+      email.save()
+      return True
