@@ -77,10 +77,14 @@ EMAIL_USE_TLS       = True
 #TELERIVET SMS GATEWAY
 if PRODUCTION:
   TELERIVET = {
-    'webhook_secret': '',
-    'api_key':        '',
-    'project_id':     '',
-    'phone_id':       ''
+    'api_key':          'NUM4RN3KAHPAN76QR3MF2LCKEEEAZ3AN',
+    'project_id':       'PJ5e901dbfc89c2d4e3b08efcada0ed5ea',
+    'phone_id':         'PNd14ab124cc5676e6062c554c4214bce4',
+    'phone_number':     '0665555555',
+    'status_url':       'http://www.theanou.com/communication/sms/status_confirmation',
+    'status_secret':    'JuiceIsWorthTheSqueeze',
+    'webhook_url':      'http://anou-cobra.herokuapp.com/communication/sms/incoming',
+    'webhook_secret':   'NT9NAEQUAGWWGG4WQ7GQHP7WHXPNZR3P'
   }
 else:
   TELERIVET = {
@@ -88,10 +92,10 @@ else:
     'project_id':       'PJ8973e6e346c349cbcdd094fcffa9fcb5',
     'phone_id':         'PNc238efdc2e8a62af145811e15d7cd653',
     'phone_number':     '0665555555',
-    'PAGEKITE': {
-      'webhook_url':    'http://localcobra.pagekite.me/communication/incoming',
-      'webhook_secret': 'QNCWR2444MRT6R2G74UDTMTA6QKM2TET',
-    }
+    'status_url':       'http://www.theanou.com/communication/sms/status_confirmation',
+    'status_secret':    'JuiceIsWorthTheSqueeze',
+    'webhook_url':      'http://localcobra.pagekite.me/communication/sms/incoming',
+    'webhook_secret':   'QNCWR2444MRT6R2G74UDTMTA6QKM2TET'
   }
 
 #WEPAY PAYMENT AND CHECKOUT PROCESSING
