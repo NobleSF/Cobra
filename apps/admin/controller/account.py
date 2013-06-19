@@ -17,7 +17,7 @@ def create(request):
     if form.is_valid():
       try:
         account = form.save()
-        if 'is_seller' in request.POST and request.POST['is_seller']:
+        if request.POST.get('is_seller'): #returns None if doesn't exist
           from apps.seller.controller.account import create
           if create(account.id):
             return login(request)
