@@ -26,6 +26,10 @@ def createFromCart(cart):
 
   return orders
 
+def processOrderEvent((product_id, action, data)):#yes, it's gets a tuple
+
+  return True
+
 def createFromCartItem(item, checkout_data):
   order = models.Order(
     cart            = item.cart,

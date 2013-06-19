@@ -3,7 +3,7 @@ from apps.communication.controller.sms import sendSMS
 
 def communicateOrdersCreated(orders):
   try:
-    for order in orders:
+    for order in orders: #send SMS to seller for each order
       products_string = ""
       for product in order.products:
         products_string += str(product.id) + " "
@@ -17,21 +17,37 @@ def communicateOrdersCreated(orders):
     return email.sendTo(getCustomerEmailFromOrder(orders[0]))
     #returns True or exception string
   except Exception as e:
-    return str(e)
+    return "error: " + str(e)
 
-def communicateOrderConfirmed(order, reply_sms_sent=False):
+def updateOrder((product_id, action, data), gimme_reply_sms=False):
+  #yes, it's gets a tuple and optional boolean
+  if gimme_reply_sms:
+    return "reply msg"
+  else:
+    return True
+
+def communicateOrderConfirmed(order, gimme_reply_sms=False):
   try:
-    if not reply_sms_sent:
-      msg = "Shukran"
-      seller_phone = order.products.all()[0].seller.phone
-      sendSMS(msg, seller_phone)
+    sms_response_message = "Shukran"
 
     #send email to buyer
     email = Email('order/confirmed', order)
-    return email.sendTo(getCustomerEmailFromOrder(order))
-    #returns True or exception string
+    email_success = email.sendTo(getCustomerEmailFromOrder(order))
+
+    if gimme_reply_msg:
+      return sms_response_message
+    else:
+      seller_phone = order.products.all()[0].seller.phone
+      sms_success = sendSMS(sms_response_message, seller_phone)
+
+      if (email_success == sms_success == True):
+        return True
+      else:
+        return str(email_success) + str(sms_success)
+        #each respectivly return True or exception str
+
   except Exception as e:
-    return str(e)
+    return "error: " + str(e)
 
 def communicateOrderShipped(order, reply_sms_sent=False):
   try:
@@ -45,7 +61,7 @@ def communicateOrderShipped(order, reply_sms_sent=False):
     return email.sendTo(getCustomerEmailFromOrder(order))
     #returns True or exception string
   except Exception as e:
-    return str(e)
+    return "error: " + str(e)
 
 def communicateOrderSellerPaid(order):
   try:
@@ -54,7 +70,7 @@ def communicateOrderSellerPaid(order):
       #sendSMS() to seller
 
   except Exception as e:
-    return str(e)
+    return "error: " + str(e)
 
 def communicateCustomerSubscribed(order):
   return True

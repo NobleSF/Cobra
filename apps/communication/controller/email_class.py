@@ -40,7 +40,7 @@ class Email:
       self.mail.attach_alternative(self.html_body, "text/html")
       self.mail.send()
     except Exception as e:
-      return str(e)
+      return "error: " + str(e)
     else:
       return self.save()
 
@@ -54,7 +54,7 @@ class Email:
         html_body     = self.mail.alternatives[0][0]
       )
     except Exception as e:
-      return str(e)
+      return "error: " + str(e)
     else:
       email.save()
       return True
