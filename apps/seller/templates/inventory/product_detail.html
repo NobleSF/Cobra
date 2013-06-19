@@ -1,48 +1,32 @@
 {% load url from future %}
+<div id='remove-product{{ product.id }}' class='remove-product'>
+  <a href="{% url 'seller:inventory remove' product_id=product.id %}">
+    <i class='symbol-close red' title='remove product from inventory'></i>
+  </a>
+</div>
 
-<div class='product row-fluid fg6'>
-  <div class='product-photo span6'>
-    {% for photo in photos %}
+<div class='product-image'>
+  <img id='product{{ product.id }}-image'
+       src="{{ product.first_photo.thumb }}"/>
+</div>
 
-      {% if forloop.counter == 1 %}
-        <img src="{{ photo.thumb }}"/>
-        <div class='title text-center'>
-          <p>
-            100{{ product.id }}
-            <i class='symbol-tag black' title='product id'></i>
-          </p>
-        </div>
+<div class='details text-center'>
+  <div class='part1'>
+    <div class='ratings'>
+      {% if rating.product > 3 %}
+        <i class='symbol-tag color-rating{{ rating.product }}' title='likeability'></i>
+      {% else %}
+        <i class='symbol-tag color-rating{{ rating.product }}' title='likeability'></i>
       {% endif %}
-
-    {% endfor %}
+      <i class='symbol-tag color-rating{{ rating.picture }}' title='picture quality'></i>
+      <i class='symbol-tag color-rating{{ rating.price }}' title='price accuracy'></i>
+    </div>
   </div>
 
-  <div class='product-info span6'>
-    <ul>
-      <li>
-        <i class='symbol-weight black' title='weight'></i>
-        {{ product.weight }} g
-      </li>
-      <li>
-        <i class='symbol-dirham black' title='price'></i>
-        {{ product.price }} Dh
-      </li>
-      <li>
-        <i class='symbol-shipping black' title='shipping cost'></i>
-        {{ product.shipping_cost }} Dh
-      </li>
-      <li>
-        <a href="{% url 'seller:inventory edit' product_id=product.id %}">
-          <i class='symbol-update orange' title='update this product'></i>
-          {{ product.updated_at|date:"d/m/Y" }}
-        </a>
-      </li>
-      <li>
-        <a href="{% url 'seller:inventory remove' product_id=product.id %}">
-          remove
-        </a>
-      </li>
-    </ul>
+  <div class='part2'>
+    <div class='product-id'>
+      <span>100{{ product.id }}</span>
+      <i class='symbol-tag color-rating{{ rating.overall }}' title='product id'></i>
+    </div>
   </div>
-
 </div>

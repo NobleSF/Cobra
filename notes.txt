@@ -27,6 +27,7 @@ Redesign
 		http://jquery-jkit.com/
 	For an extra dose of awesomeness:
 		http://www.unheap.com/
+		http://djdesignerlab.com/2013/05/28/15-tools-for-formatting-css-code-for-well-organized-web-design/
 
 Check code for efficiency:
 	http://flake8.readthedocs.org

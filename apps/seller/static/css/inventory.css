@@ -1,25 +1,48 @@
 /* Product Grid */
-#inventory .product{
-  margin: 1em;
+.right-to-left{
+  float: right !important;
 }
-ul{
-  list-style: none;
-}
-
 
 /* Product Detail */
-.title{
+.remove-product{
+  height: 1em;
+  z-index: 5;
   position: relative;
-  top: -35px;
-  font-size: 30px;
-  font-weight: bold;
+  top: 0;
 }
-.title p{
-  height: 35px;
+.remove-product a i{
+  font-size: 1.5em;
+}
+.remove-product a:hover{
+  text-decoration: none;
+}
+
+.product-image{
+  position: relative;
+  top: -1em;
+  z-index: 0;
+}
+
+.details{
+  position: relative;
+  top: -9em; /*-1 for the remove button plus 2x4 for details and ratings*/
+  max-width: 300px;
+  z-index: 1;
+  height: 0em;
+}
+.details .part1, .details .part2{
+  height: 4em;
   margin: 0;
-  line-height: normal;
-  background-color: rgba(200,200,200,0.5);
+  line-height: 4em;
 }
+.ratings, .product-id{
+  height: 4em;
+  background-color: rgba(250,250,250,0.7);
+}
+.ratings i, .product-id i, .product-id span{
+  font-size: 3.5em;
+}
+
 
 .product-info li{
 }

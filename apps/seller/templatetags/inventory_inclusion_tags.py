@@ -3,10 +3,21 @@ register = template.Library()
 
 @register.inclusion_tag('inventory/product_detail.html')
 def product_detail_tag(product):
-  from apps.seller.models import Photo
-  photos = Photo.objects.filter(product_id=product.id)
+  product.first_photo = product.photo_set.all()[0]
 
-  return {'product':product, 'photos':photos}
+  #placeholder for ratings
+  from settings.settings import DEBUG
+  from random import randint
+  rating = {}
+  if DEBUG:
+    three_random_ratings = (randint(1,5), randint(1,5), randint(1,5))
+    (rating['product'], rating['picture'], rating['price']) = three_random_ratings
+  else:
+    (rating['product'], rating['picture'], rating['price']) = (5,5,5)
+  rating['overall'] = int(sum([val for val in three_random_ratings]) / 3) + 1
+  #placeholder for ratings
+
+  return {'product':product, 'rating':rating}
 
 @register.inclusion_tag('inventory/photo_upload.html')
 def photo_upload_tag(photo_form, product, rank=None, photo=None):

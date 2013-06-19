@@ -6,26 +6,25 @@ from apps.admin.controller.decorator import access_required
 from django.views.decorators.csrf import csrf_exempt
 
 @access_required('seller')
-def home(request, context={}):
+def home(request):
   from apps.seller.models import Seller
 
   try:
     seller = Seller.objects.get(id=request.session['seller_id'])
-    context['seller'] = seller
+    context = {'seller': seller}
   except Exception as e:
     context = {'exception': e}
 
   return render(request, 'management/home.html', context)
 
 @access_required('seller')
-def products(request, context={}):
+def products(request):
   from apps.seller.models import Seller
 
   try:
     seller = Seller.objects.get(id=request.session['seller_id'])
     products = seller.product_set.filter(is_active=True)
-    context['seller'] = seller
-    context['products'] = products
+    context = {'seller': seller, 'products': products}
   except Exception as e:
     context = {'exception': e}
 
@@ -35,11 +34,10 @@ def products(request, context={}):
 def orders(request):
   from apps.seller.models import Seller
 
-  context = {}
   try:
     seller = Seller.objects.get(id=request.session['seller_id'])
     products = seller.product_set.all()
-    context['seller'] = seller
+    context = {'seller': seller}
 
   except Exception as e:
     context = {'exception': e}
