@@ -12,8 +12,8 @@ class Email(models.Model):
   created_at      = models.DateTimeField(auto_now_add = True)
 
 class SMS(models.Model):
-  from_number     = models.CharField(max_length=10)
-  to_number       = models.CharField(max_length=10)
+  from_number     = models.CharField(max_length=15)
+  to_number       = models.CharField(max_length=15)
   message         = models.CharField(max_length=160)
   auto_reply      = models.CharField(max_length=160, null=True, blank=True)
 
