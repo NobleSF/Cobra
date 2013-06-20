@@ -35,15 +35,15 @@
       <ul class=''>
         <li class='{% block new_product_active %}{% endblock %}'>
           <a href="{% url 'seller:inventory create' %}"
-             class='symbol-product-add green' title='Add Product'></a>
+             class='symbol-box green' title='Add Product'></a>
         </li>
         <li class='{% block orders_active %}{% endblock %}'>
           <a href="{% url 'seller:management orders' %}"
-             class='symbol-product-check green' title='Sold Products'></a>
+             class='symbol-box green' title='Sold Products'></a>
         </li>
         <li class='{% block inventory_active %}{% endblock %}'>
           <a href="{% url 'seller:management products' %}"
-             class='symbol-products green' title='Current Products'></a>
+             class='symbol-box green' title='Current Products'></a>
         </li>
       </ul>
     </div>

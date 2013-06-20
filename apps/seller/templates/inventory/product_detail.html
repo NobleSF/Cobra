@@ -11,22 +11,24 @@
 </div>
 
 <div class='details text-center'>
-  <div class='part1'>
-    <div class='ratings'>
-      {% if rating.product > 3 %}
-        <i class='symbol-tag color-rating{{ rating.product }}' title='likeability'></i>
-      {% else %}
-        <i class='symbol-tag color-rating{{ rating.product }}' title='likeability'></i>
-      {% endif %}
-      <i class='symbol-tag color-rating{{ rating.picture }}' title='picture quality'></i>
-      <i class='symbol-tag color-rating{{ rating.price }}' title='price accuracy'></i>
-    </div>
+  <div class='part1 ratings'>
+
+    {% if rating.product > 3 %}
+      <i class='symbol-happy color-rating{{ rating.product }}' title='likeability'></i>
+    {% else %}
+      <i class='symbol-sad color-rating{{ rating.product }}' title='likeability'></i>
+    {% endif %}
+    <i class='symbol-camera color-rating{{ rating.picture }}' title='picture quality'></i>
+    <i class='symbol-tag color-rating{{ rating.price }}' title='price accuracy'></i>
+
   </div>
 
-  <div class='part2'>
-    <div class='product-id'>
-      <span>100{{ product.id }}</span>
-      <i class='symbol-tag color-rating{{ rating.overall }}' title='product id'></i>
+  <div class='part2 product-id'>
+
+    <div class='product-id-tag'>
+      <i class='symbol-longtag color-rating{{ rating.overall }}' title='product id'></i>
     </div>
+    <div class='product-id-number'>100{{ product.id }}</div>
+
   </div>
 </div>

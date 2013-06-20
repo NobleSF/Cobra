@@ -25,24 +25,31 @@
 
 .details{
   position: relative;
-  top: -9em; /*-1 for the remove button plus 2x4 for details and ratings*/
+  top: -5em; /*-1 for the remove button plus 2x4 for details and ratings*/
   max-width: 300px;
   z-index: 1;
   height: 0em;
+  cursor: pointer;
 }
 .details .part1, .details .part2{
   height: 4em;
   margin: 0;
   line-height: 4em;
 }
-.ratings, .product-id{
+.ratings{
   height: 4em;
   background-color: rgba(250,250,250,0.7);
 }
-.ratings i, .product-id i, .product-id span{
+.product-id{
+  height: 4em;
+}
+.ratings i, .product-id i, .product-id .product-id-number{
   font-size: 3.5em;
 }
-
+.product-id .product-id-number{
+  position: relative;
+  top: -1.5em;
+}
 
 .product-info li{
 }
