@@ -51,7 +51,7 @@ a, a:hover, a:active, a:focus{outline: 0;}
 /* SYMBOLS AND COLORS */
 [class*="symbol-"]:hover {
   text-decoration: none !important;
-  opacity: 0.7;
+  /*opacity: 0.7;*/
 }
 [class*="symbol-"].black:hover {opacity: 1 !important;}
 .anou-blue  {color: rgb(65, 123, 217)   !important;}

@@ -112,7 +112,7 @@ def edit(request, product_id):
 
   product_form.fields['product_id'].initial = product.product.id
   # we want additional ranks going up to nine photos maximum
-  add_ranks_range = range(product.product.photo_set.count()+1, 10)
+  add_ranks_range = range(product.product.photo_set.count()+1, 6)
   product.product.photos = product.product.photo_set.all()
 
   context = {

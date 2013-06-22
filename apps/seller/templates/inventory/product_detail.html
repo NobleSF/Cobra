@@ -1,13 +1,15 @@
 {% load url from future %}
 <div id='remove-product{{ product.id }}' class='remove-product'>
-  <a href="{% url 'seller:inventory remove' product_id=product.id %}">
+  <a href="{% url 'seller:inventory remove' product.id %}">
     <i class='symbol-close red' title='remove product from inventory'></i>
   </a>
 </div>
 
 <div class='product-image'>
-  <img id='product{{ product.id }}-image' src="{{ product.first_photo.thumb }}"
-       style="width: 300; height: 225;"/>
+  <a href='{% url 'seller:inventory edit' product.id %}'>
+    <img id='product{{ product.id }}-image' src="{{ product.first_photo.thumb }}"
+         style="width: 300; height: 225;"/>
+  </a>
 </div>
 
 <div class='details text-center'>

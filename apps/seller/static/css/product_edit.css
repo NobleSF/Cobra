@@ -1,3 +1,7 @@
+@media (max-width: 979px) {
+  #body{margin-top: 10px;}
+}
+
 .hidden-fields{ display: none;}
 
 ul {
@@ -13,9 +17,17 @@ input{
   line-height: 100%;
   background: #DDD;
 }
+.section-number.first{
+  margin: 0 10px 10px;
+}
 
 /* PHOTOS */
-.photo-uploader{}
+.photo-upload-div{
+  height: 250px;
+}
+.photo-upload-div div{
+  margin: 0 auto;
+}
 
 /* ASSET CHOOSERS */
 .asset-chooser{
@@ -34,7 +46,7 @@ input{
 .asset-image{
   width: 100px;
   height: 75px;
-  background-color:; #DDD;
+  background-color: #DDD;
   border: solid 1px #999;
   border-radius: 10px;
   overflow: hidden;

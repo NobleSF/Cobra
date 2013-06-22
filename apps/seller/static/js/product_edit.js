@@ -134,7 +134,9 @@ function fileUploadAction(){
     var photo_url = "http://res.cloudinary.com/anou/image/upload/_unique_id_.jpg";
 
     var progress_div = this_file_input.closest('.photo-upload-div').find('.progress');
+    var button_div = this_file_input.closest('.photo-upload-div').find('.photo-form');
     progress_div.hide();
+    button_div.show();
     var progress_bar = progress_div.find('.bar');
     var iframe_fallback = false;
 
@@ -166,6 +168,7 @@ function fileUploadAction(){
           //not using iframe, so we can show a progress bar
           progress_bar.css('width', '0%');
           progress_div.show();
+          button_div.hide();
         }
       },
 
@@ -189,6 +192,7 @@ function fileUploadAction(){
         //we're done here, hide the progress bar
         progress_bar.css('width', '0%');
         progress_div.hide();
+        button_div.show();
       }
 
     });//end fileupload
