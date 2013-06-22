@@ -1,0 +1,67 @@
+/* Product Grid */
+.right-to-left{
+  float: right !important;
+}
+
+.product{
+  max-width: 300px;
+  max-height: 250px;
+}
+
+.product-id{
+  height: 4.5em;
+  padding: 0.5em 0 0;
+  margin: 0;
+  line-height: 4em;
+  position: relative;
+  z-index: 3;
+}
+
+.product-id, .details .costs{
+  background-color: rgba(250,250,250,0.7);
+}
+
+.product-id .product-id-number{
+  font-size: 2.5em;
+  font-weight: 900;
+  color: #FFF;
+  position: relative;
+  top: -2em;
+}
+
+.number{
+  font-size: 2em;
+  font-weight: 900;
+  line-height: 1.2em;
+}
+
+.details{
+  position: relative;
+  z-index: 5;
+  max-width: 300px;
+  height: 0em;
+}
+
+.details ul{
+  margin: 0;
+  list-style: none;
+}
+
+.status i, .product-id i{
+  font-size: 3.5em;
+  padding: 0 0.1em;
+}
+
+.product-image{
+  position: relative;
+  z-index: 0;
+  top: -4.5em;
+}
+
+.product-id, .total-cost{
+  cursor: pointer;
+}
+
+.extra{
+  display: none;
+}

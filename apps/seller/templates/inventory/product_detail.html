@@ -6,8 +6,8 @@
 </div>
 
 <div class='product-image'>
-  <img id='product{{ product.id }}-image'
-       src="{{ product.first_photo.thumb }}"/>
+  <img id='product{{ product.id }}-image' src="{{ product.first_photo.thumb }}"
+       style="width: 300; height: 225;"/>
 </div>
 
 <div class='details text-center'>
@@ -19,7 +19,7 @@
       <i class='symbol-sad color-rating{{ rating.product }}' title='likeability'></i>
     {% endif %}
     <i class='symbol-camera color-rating{{ rating.picture }}' title='picture quality'></i>
-    <i class='symbol-tag color-rating{{ rating.price }}' title='price accuracy'></i>
+    <i class='symbol-coins color-rating{{ rating.price }}' title='price accuracy'></i>
 
   </div>
 

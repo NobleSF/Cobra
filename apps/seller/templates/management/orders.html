@@ -5,10 +5,27 @@
   {{ block.super }} Orders
 {% endblock title %}
 
-{% block orders_active %}active{% endblock %}
+{% block css %}
+  <link href='{{ STATIC_URL }}seller/css/orders.css' rel='stylesheet'>
+  <link href='{{ STATIC_URL }}vendor/fitgrid/css/fitgrid.css' rel='stylesheet'>
+{% endblock css%}
+
+{% block javascript %}
+  <script src='{{ STATIC_URL }}seller/js/orders.js'></script>
+{% endblock javascript%}
 
 {% block content %}
   {% load inventory_inclusion_tags %}
+
+  <div id='inventory' class='fitgrid-row'>
+    {% for product in products %}
+      {% if product.is_complete %}
+        <div id='product{{product.id}}' class='product fg4 right-to-left'>
+          {% sold_product_detail_tag product %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
 
 
 {% endblock content %}

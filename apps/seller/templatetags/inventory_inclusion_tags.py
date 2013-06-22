@@ -19,6 +19,13 @@ def product_detail_tag(product):
 
   return {'product':product, 'rating':rating}
 
+@register.inclusion_tag('inventory/sold_product_detail.html')
+def sold_product_detail_tag(product):
+  product.first_photo = product.photo_set.all()[0]
+  product.total_cost = product.shipping_cost() + product.local_price()
+
+  return {'product':product}
+
 @register.inclusion_tag('inventory/photo_upload.html')
 def photo_upload_tag(photo_form, product, rank=None, photo=None):
   if photo is not None:

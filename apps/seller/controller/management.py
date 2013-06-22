@@ -37,7 +37,7 @@ def orders(request):
   try:
     seller = Seller.objects.get(id=request.session['seller_id'])
     products = seller.product_set.all()
-    context = {'seller': seller}
+    context = {'seller': seller, 'products': products}
 
   except Exception as e:
     context = {'exception': e}

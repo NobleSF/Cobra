@@ -1,0 +1,44 @@
+{% load url from future %}
+
+<div class='product-id'>
+  <div class='product-id-tag text-center'>
+    {% if product.id < 4 %}
+      <i class='symbol-longtag gold' title='product id'></i>
+    {% else %}
+      <i class='symbol-longtag black' title='product id'></i>
+    {% endif %}
+  </div>
+  <div class='product-id-number text-center'>
+    100{{ product.id }}
+  </div>
+</div>
+
+<div class='details text-center'>
+  <div class='costs'>
+    <ul>
+      <li class='total-cost extra'>
+        <span class='number'>{{product.total_cost}} Dh</span>
+        <i class='symbol-coins gold' title='total cost'></i>
+      </li>
+
+      <li class='costs-detail extra'>
+        <span class='number'>{{product.shipping_cost}}</span>
+        <i class='symbol-shipping' title='shipping cost'></i>
+        <span class='number'>+</span>
+        <span class='number'>{{product.local_price}}</span>
+        <i class='symbol-coins gold' title='product cost'></i>
+      </li>
+
+      <li class='status extra'>
+        <i class='symbol-shipping red' title='product arrived'></i>
+        <i class='symbol-phone green' title='product shipped'></i>
+        <i class='symbol-phone green' title='product confirmed'></i>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class='product-image'>
+  <img id='product{{ product.id }}-image'
+       src="{{ product.first_photo.thumb }}"/>
+</div>
