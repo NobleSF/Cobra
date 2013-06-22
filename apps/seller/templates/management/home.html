@@ -14,46 +14,43 @@
 {% endblock javascript%}
 
 {% block header %}
-
-  <!-- MESSAGES -->
-  <div id='messages' class='pull-left'>
-    {% if messages %}
-      <ul>
-        {% for message in messages %}
-          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-  </div>
-
+<!-- NO HEADER -->
 {% endblock header %}
+
+{% block messages %}
+<!-- NO MESSAGES -->
+{% endblock messages %}
 
 {% block content %}
 
-  <div class='pull-right'>
-    <div id='management-nav'>
-      <ul class=''>
-        <li class='{% block new_product_active %}{% endblock %}'>
-          <a href="{% url 'seller:inventory create' %}"
-             class='symbol-box green' title='Add Product'></a>
-        </li>
-        <li class='{% block orders_active %}{% endblock %}'>
-          <a href="{% url 'seller:management orders' %}"
-             class='symbol-box green' title='Sold Products'></a>
-        </li>
-        <li class='{% block inventory_active %}{% endblock %}'>
-          <a href="{% url 'seller:management products' %}"
-             class='symbol-box green' title='Current Products'></a>
-        </li>
-      </ul>
-    </div>
+  <div id='management-nav'>
+    <ul class=''>
+      <li class='right-to-left'>
+        <a href="{% url 'seller:inventory create' %}"
+           class='symbol-product-add green' title='Add Product'></a>
+      </li>
+      <li class='right-to-left'>
+        <a href="{% url 'seller:management orders' %}"
+           class='symbol-orders gold' title='Sold Products'></a>
+      </li>
+      <li class='right-to-left'>
+        <a href="{% url 'seller:management products' %}"
+           class='symbol-products blue' title='Current Products'></a>
+      </li>
+    </ul>
   </div>
 
   <div id='seller-image'>
-    <img src="{{ seller.image.thumb }}">
-    <a href="{% url 'seller:edit' %}"
-         class='symbol-assets green' title='edit account'>
-    </a>
+    <div>
+      <img src="{{ seller.image.thumb }}">
+    </div>
+    <div id='edit-account'>
+      <a id='edit-account-button'
+         href="{% url 'seller:edit' %}"
+         class='symbol-assets green'
+         title='edit account'>
+      </a>
+    </div>
   </div>
 
   <div id='base-navigation'>

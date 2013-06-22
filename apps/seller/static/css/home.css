@@ -1,3 +1,20 @@
+#header{
+  height: 0;
+  border-color: #FFF;
+}
+#body{
+  margin-top: 10px;
+}
+
+#management-nav li{
+  float: none;
+  display: inline-block;
+  font-size: 10em;
+}
+#management-nav a{
+  line-height: 1em;
+}
+
 #nav-links{
   margin: 0 50%;
 }
@@ -8,4 +25,32 @@
 
 #management-nav ul{
   margin: 10px 0;
+}
+
+#management-nav ul li{
+  margin: 0 10px;
+}
+
+#edit-account{
+  height: 2em;
+  width: 2em;
+  text-align: center;
+  position: relative;
+  top: -1.5em;
+  background-color: rgba(250,250,250,0.7);
+}
+
+#edit-account-button{
+}
+
+/* Portrait tablet and down */
+@media (max-width: 520px) {
+
+  #management-nav li{
+    float: none;
+    display: inline-block;
+    font-size: 5em;
+    float: none;
+  }
+
 }

@@ -48,23 +48,6 @@ a, a:hover, a:active, a:focus{outline: 0;}
   color: #888;
 }
 
-/* Seller Pages base CSS */
-#seller-title{
-  text-align: center;
-}
-
-#management-nav ul{
-  text-align: center;
-}
-#management-nav li{
-  float: none;
-  display: inline-block;
-  font-size: 6em;
-}
-#management-nav a{
-  line-height: 1em;
-}
-
 /* SYMBOLS AND COLORS */
 [class*="symbol-"]:hover {
   text-decoration: none !important;
@@ -87,3 +70,7 @@ a, a:hover, a:active, a:focus{outline: 0;}
 .color-rating3  {color: rgb(255, 83,  83)   !important;}
 .color-rating4  {color: rgb(126, 198, 132)  !important;}
 .color-rating5  {color: rgb(1,   142, 11)   !important;}
+
+.right-to-left{
+  float: right !important;
+}
