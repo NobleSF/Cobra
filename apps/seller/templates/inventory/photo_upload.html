@@ -10,12 +10,10 @@
     {% endif %}
   </div>
 
+  <div id='spinner{{ photo_form.rank.value }}' class='spinner-div'></div>
+
   <div class="progress progress-striped">
     <div class="bar" style="width: 0%;"></div>
-  </div>
-
-  <div class="loading hidden-fields">
-    <img src='{% get_static_prefix %}images/loader.gif'>
   </div>
 
   <div class='photo-form'>
@@ -37,7 +35,7 @@
     <form>
       <span class='file-wrapper'>
         {{ photo_form.file }}
-        <span class='file-button btn symbol-camera{{ photo_form.rank.value }}'></span>
+        <span class='file-button btn symbol-camera{{ photo_form.rank.value }} black'></span>
       </span>
     </form>
   </div>
