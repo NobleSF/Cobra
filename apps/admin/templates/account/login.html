@@ -40,12 +40,14 @@
   <form action="{% url 'admin:login' %}" method="post">{% csrf_token %}
     <ul>
       <li>
-        username icon{{ form.username }}
+        <i class='symbol-profile'></i>
+        {{ form.username }}
       </li>
       <li>
-        password icon{{ form.password }}
+        <i class='symbol-password'></i>
+        {{ form.password }}
       </li>
     </ul>
-    <input type="submit" value="submit icon" />
+    <button class='symbol-submit'></button>
   </form>
 {% endblock content %}

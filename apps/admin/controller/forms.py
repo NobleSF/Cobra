@@ -25,8 +25,9 @@ class AccountEditForm(forms.ModelForm):
 
 
 class AccountLoginForm(forms.Form):
-  username  = forms.CharField()
-  password  = forms.CharField(widget=forms.PasswordInput)
+  username  = forms.CharField(widget=forms.TextInput(
+    attrs={'autofocus':''}))
+  password  = forms.CharField()
 
   def clean_password(self):
     return process_password(self.cleaned_data['password'])
