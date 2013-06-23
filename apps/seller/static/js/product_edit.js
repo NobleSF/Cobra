@@ -1,5 +1,6 @@
 $().ready( function(){
   //run on page load
+  $('#page-viewport').attr('content', 'width=350');
 
   //only show the first 5 photo upload divs
   num_divs = 0;
@@ -140,17 +141,19 @@ function fileUploadAction(){
     var progress_bar = progress_div.find('.bar');
     var iframe_fallback = false;
 
-
+    var spinner_id = progress_div.closest('.photo-upload-div').find('.spinner-div').attr('id');
+    var spinner_target = document.getElementById(spinner_id);
+    var spinner = new Spinner()
 
     this_file_input.fileupload({
-      forceIframeTransport: true,
+      //forceIframeTransport: true,
       dataType: 'json',
       url: "http://api.cloudinary.com/v1_1/anou/image/upload",
 
       submit: function(e, data){
         var spinner_id = progress_div.closest('.photo-upload-div').find('.spinner-div').attr('id');
         var spinner_target = document.getElementById(spinner_id);
-        data.spinner = new Spinner().spin(spinner_target);
+        spinner.spin(spinner_target);
 
         // call server to get signed form data
         var form = progress_bar.closest('.photo-upload-div').find('.data-form');
@@ -165,7 +168,7 @@ function fileUploadAction(){
         if (data.dataType.indexOf('iframe') >= 0){
           //using iframe fallback, so use loadPhoto to bring it back later
           iframe_fallback = true;
-          loadPhoto(progress_div, photo_url, data.spinner);
+          loadPhoto(progress_div, photo_url, spinner);
         }else{
           //not using iframe, so we can show a progress bar
           progress_bar.css('width', '0%');
@@ -185,9 +188,10 @@ function fileUploadAction(){
       done: function (e, data) {
         response_data = data['response']();
         response = response_data.result;
-
-        loadThumb(response['url'], this_display_div);
-        storePhotoURL(response['url'], this_display_div);
+        if (!iframe_fallback){
+          loadThumb(response['url'], this_display_div);
+          storePhotoURL(response['url'], this_display_div);
+        }
       },
 
       always: function (e, data) {
@@ -195,7 +199,9 @@ function fileUploadAction(){
         progress_bar.css('width', '0%');
         progress_div.hide();
         button_div.show();
-        data.spinner.stop();
+        if (!iframe_fallback){
+          data.spinner.stop();
+        }
       }
 
     });//end fileupload
@@ -235,7 +241,7 @@ function loadPhoto(progress_div, photo_url, spinner){
   }).error(function(){
     //photo doesn't exist yet, wiat 10 sec and try again.
     setTimeout(function(){
-      loadPhoto(progress_div, photo_url);
+      loadPhoto(progress_div, photo_url, spinner);
     }, 10000); //wait 10 seconds
   });
 }
@@ -248,7 +254,7 @@ function loadThumb(url, display_div){ //load thumb_url into display div
 
 function storePhotoURL(url, display_div){
   photo_save_input = display_div.closest('.photo-upload-div').find('.photo-id-save');
-  photo_save_input.attr('value', response['url']);
+  photo_save_input.attr('value', url);
   photo_save_input.trigger('change');
 }
 

@@ -1,5 +1,7 @@
 @media (max-width: 979px) {
-  #body{margin-top: 10px;}
+  #body{
+    margin-top: 10px;
+  }
 }
 
 .hidden-fields{ display: none;}
