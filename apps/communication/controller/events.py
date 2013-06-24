@@ -19,11 +19,51 @@ def communicateOrdersCreated(orders):
   except Exception as e:
     return "error: " + str(e)
 
-def updateOrder((product_id, action, data), gimme_reply_sms=False):
+def updateOrder((product_id, data), gimme_reply_sms=False):
   #yes, it's gets a tuple and optional boolean
+  from datetime import datetime
+  from apps.public.models import Order
+  from apps.seller.models import Product
+
+  if product_id:
+    product = Product.objects.get(id=product_id)
+
+    if data.get('remove'): #the product should be removed
+      product.is_active = False
+
+    else: #update the order of that product_id
+      order = Order.objects.filter(product=product)
+      tracking_number = data.get('tracking_number')
+      reply = str(product_id) + " "
+
+      if tracking_number: #if they provide a tracking number
+        #the order is both confirmed and shipped
+        order.is_seller_confirmed = order.is_shipped = True
+        order.shipped_date = datetime.today()
+        order.tracking_number = tracking_number
+        reply += "shukran"
+
+      elif order.is_seller_confirmed: #if they have already confirmed the order
+        #confirm it is shipped
+        order.is_shipped = True
+        order.shipped_date = datetime.today()
+        reply += "shukran"
+
+      elif not order.is_seller_confirmed: #if the order is not yet confirmed
+        #confirm the order
+        order.is_seller_confirmed = True
+        reply += "shukran"
+
+      else: #if everything is already done
+        #their message was redundant
+        reply += "safi"
+
+      order.save()
+
   if gimme_reply_sms:
-    return "reply msg"
+    return reply
   else:
+    #send the reply message to the seller
     return True
 
 def communicateOrderConfirmed(order, gimme_reply_sms=False):

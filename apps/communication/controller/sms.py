@@ -113,8 +113,26 @@ def status_confirmation(request):
   else:
     return HttpResponse(status=403)
 
-def understandMessage(message):
+def understandMessage(message): #example message '1234 MAS12312938110'
   #take a message and comprehend the desired action on a product id (or return False)
 
-  return ('1234', 'shipped', {'tracking_number':"123456789"})
-  #return False
+  data = {}
+  try:
+    product_id = re.findall('\d+', message)[0].strip()
+  except:
+    product_id = None
+
+  if product_id:
+    try:
+      tracking_number = re.findall('[C][P]\s?\w+\s?[M][A]', message)[0]
+      data['tracking_number'] = tracking_number.replace(' ','')#remove spaces
+    except: pass
+
+    if re.match('([r]?[R]?)\s*(\d+)\s*([r]?[R]?)', message):
+      data['remove'] = True
+
+  if product_id:
+    return (product_id, data)
+    #example ('1234', {'tracking_number':"CP123456789MA"})
+  else:
+    return False
