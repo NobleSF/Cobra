@@ -20,16 +20,26 @@ def communicateOrdersCreated(orders):
     return "error: " + str(e)
 
 def updateOrder((product_id, data), gimme_reply_sms=False):
-  #yes, it's gets a tuple and optional boolean
+  #gets a tuple (of id and data dict) and optional boolean
   from datetime import datetime
   from apps.public.models import Order
   from apps.seller.models import Product
 
-  if product_id:
+  #if product_id: #we should always have a product id
+  try:
     product = Product.objects.get(id=product_id)
 
     if data.get('remove'): #the product should be removed
-      product.is_active = False
+      if product.order_set.all():
+        order = product.order_set.all()[0]
+        if not order.is_seller_confirmed:
+          pass #cancel order and tell customer
+        reply = 'xata'
+
+      else:
+        product.is_active = False
+        product.save()
+        reply = 'shukran'
 
     else: #update the order of that product_id
       order = Order.objects.filter(product=product)
@@ -41,24 +51,30 @@ def updateOrder((product_id, data), gimme_reply_sms=False):
         order.is_seller_confirmed = order.is_shipped = True
         order.shipped_date = datetime.today()
         order.tracking_number = tracking_number
-        reply += "shukran"
+        order.save()
+        reply += communicateOrderShipped(order, gimme_reply_sms)
 
       elif order.is_seller_confirmed: #if they have already confirmed the order
         #confirm it is shipped
         order.is_shipped = True
         order.shipped_date = datetime.today()
-        reply += "shukran"
+        order.save()
+        reply += communicateOrderShipped(order, gimme_reply_sms)
 
       elif not order.is_seller_confirmed: #if the order is not yet confirmed
         #confirm the order
         order.is_seller_confirmed = True
-        reply += "shukran"
+        order.save()
+        reply += communicateOrderConfirmed(order, gimme_reply_sms)
 
       else: #if everything is already done
         #their message was redundant
         reply += "safi"
 
-      order.save()
+      #order.save()
+
+  except:
+    pass
 
   if gimme_reply_sms:
     return reply
@@ -68,17 +84,21 @@ def updateOrder((product_id, data), gimme_reply_sms=False):
 
 def communicateOrderConfirmed(order, gimme_reply_sms=False):
   try:
-    sms_response_message = "Shukran"
+    sms_reply = "shukran"
 
     #send email to buyer
     email = Email('order/confirmed', order)
     email_success = email.sendTo(getCustomerEmailFromOrder(order))
 
-    if gimme_reply_msg:
-      return sms_response_message
+    if gimme_reply_sms and (email_success == True):
+      return sms_reply
+    elif gimmer_reply_sms:
+      #error message in email_success string
+      return sms_reply
+
     else:
       seller_phone = order.products.all()[0].seller.phone
-      sms_success = sendSMS(sms_response_message, seller_phone)
+      sms_success = sendSMS(sms_reply, seller_phone)
 
       if (email_success == sms_success == True):
         return True
@@ -89,17 +109,30 @@ def communicateOrderConfirmed(order, gimme_reply_sms=False):
   except Exception as e:
     return "error: " + str(e)
 
-def communicateOrderShipped(order, reply_sms_sent=False):
+def communicateOrderShipped(order, gimme_reply_sms=False):
   try:
-    if not reply_sms_sent:
-      msg = "Shukran"
-      seller_phone = order.products.all()[0].seller.phone
-      sendSMS(msg, seller_phone)
+    sms_reply = "shukran"
 
     #send email to buyer
     email = Email('order/shipped', order)
-    return email.sendTo(getCustomerEmailFromOrder(order))
-    #returns True or exception string
+    email_success = email.sendTo(getCustomerEmailFromOrder(order))
+
+    if gimme_reply_sms and (email_success == True):
+      return sms_reply
+    elif gimmer_reply_sms:
+      #error message in email_success string
+      return sms_reply
+
+    else:
+      seller_phone = order.products.all()[0].seller.phone
+      sms_success = sendSMS(msg, seller_phone)
+
+      if (email_success == sms_success == True):
+        return True
+      else:
+        return str(email_success) + str(sms_success)
+        #each respectivly return True or exception str
+
   except Exception as e:
     return "error: " + str(e)
 

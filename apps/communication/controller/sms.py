@@ -69,12 +69,12 @@ def incoming(request): #receives SMS messages via Telerivet, detail at
 
       #look at what we received
       msg_data = understandMessage(request.POST['content'])
-      #msg_data is tuple like (product_id, action, data) or
+      #msg_data is tuple of id, data dict (product_id, data) or
       #just False if not understandable
 
-      if msg_data: #if it was understandable, send it to update the order
+      if msg_data: #if it was understandable, update the order
         reply_msg = updateOrder(msg_data, gimme_reply_sms=True)
-        #gives us reply string, error string, or False
+        #gives us reply string, error string, or False(do not reply)
 
         if isinstance(reply_msg, basestring) and not reply_msg.startswith("error"):
           sms.auto_reply = reply_msg
