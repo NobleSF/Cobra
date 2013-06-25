@@ -5,8 +5,11 @@
 <head>
   <meta charset="utf-8">
   <title>{% block title %}Anou{% endblock title %}</title>
-  <!-- prevent pinch/zoom on mobile --->
-  <meta id='page-viewport' name="viewport" content="width=device-width" />
+
+  {% block viewport %}
+    <!-- prevent pinch/zoom on mobile --->
+    <meta id='page-viewport' name="viewport" content="width=device-width" />
+  {% endblock viewport %}
 
   <!--favicon-->
   <link rel="shortcut icon" href="{{ STATIC_URL }}images/favicon_old.ico" />
