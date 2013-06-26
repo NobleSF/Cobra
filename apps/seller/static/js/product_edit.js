@@ -1,6 +1,5 @@
 $().ready( function(){
   //run on page load
-  $('#page-viewport').attr('content', 'width=350');
 
   //only show the first 5 photo upload divs
   num_divs = 0;

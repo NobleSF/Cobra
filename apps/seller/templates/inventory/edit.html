@@ -1,6 +1,12 @@
 {% extends "seller_base.html" %}
 {% load url from future %}
 
+{% block title %}edit {{ product.id }}{% endblock title %}
+
+{% block viewport %}
+  <meta id='page-viewport' name="viewport" content="width=350" />
+{% endblock viewport %}
+
 {% block css %}
   <link href='{{ STATIC_URL }}seller/css/product_edit.css' rel='stylesheet'>
   <link href='{{ STATIC_URL }}seller/css/photo_upload.css' rel='stylesheet'>
