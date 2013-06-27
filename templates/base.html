@@ -96,11 +96,13 @@
   </div>
 
   <footer id="footer">
-    <hr id="footer-separator">
-    <div class="container">
-      {% block footer %}
-      {% endblock footer %}
-    </div>
+    {% block footer %}
+      <hr id="footer-separator">
+      <div class="container">
+        {% block footer_content %}
+        {% endblock footer_content %}
+      </div>
+    {% endblock footer %}
   </footer>
 
   <!--Javascript Placed at the end of the document so the pages load faster -->

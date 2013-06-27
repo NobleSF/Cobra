@@ -56,32 +56,32 @@ def login(request, next=None):
   if request.method == 'POST':
     form = AccountLoginForm(request.POST)
     try:
-        username = request.POST['username']
-        password = process_password(request.POST['password'])
-        account = Account.objects.get(username=username)
-        if account.password == password:
-          if 'username' not in request.session:
-            request.session['username'] = account.username
-          if account.is_admin:
-            request.session['admin_id'] = account.id
+      username = request.POST['username']
+      password = process_password(request.POST['password'])
+      account = Account.objects.get(username=username)
+      if account.password == password:
+        if 'username' not in request.session:
+          request.session['username'] = account.username
+        if account.is_admin:
+          request.session['admin_id'] = account.id
 
-          try: seller = Seller.objects.get(account_id=account.id)
-          except Seller.DoesNotExist: seller = None
-          if seller:
-            request.session['seller_id'] = seller.id
+        try: seller = Seller.objects.get(account_id=account.id)
+        except Seller.DoesNotExist: seller = None
+        if seller:
+          request.session['seller_id'] = seller.id
 
-          if next is not None:
-            return next
-          else:
-            return redirect('home')
+        if next is not None:
+          return next
         else:
-          context = {'problem': "wrong password"}
+          return redirect('home')
+      else:
+        context = {'problem': "wrong password"}
 
     except Account.DoesNotExist:
       context = {'problem': "account does not exist"}
     except Exception as e:
       context = {'exception': e}
-    #context['form'] = AccountLoginForm()#return fresh form
+    context['form'] = AccountLoginForm()#return fresh form
 
   else:
     context = {'form': AccountLoginForm()}

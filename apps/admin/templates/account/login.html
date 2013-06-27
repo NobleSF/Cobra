@@ -7,26 +7,50 @@
 
 {% block css %}
   <style>
+    #header{
+      border-bottom: none;
+    }
     input{max-width: 150px;}
     ul{list-style: none;}
-    form{text-align: center;}
+    form{
+      text-align: center;
+    }
+
+    table{
+      margin: 0 auto;
+    }
+    table td{
+      height: 4em;
+      vertical-align: middle;
+    }
+    input{
+      height: 1em;
+      font-size: 2em;
+      width: 8em;
+      text-align: center;
+    }
+    table i{
+      font-size: 3em;
+      padding: 0 .5em;
+    }
+    button{
+      font-size: 2.5em;
+      line-height: normal;
+      height: 1.5em;
+      width: 4em;
+      background-color: green;
+      border-radius: 0.5em;
+      margin: 0.5em;
+    }
+
   </style>
 {% endblock css%}
 
 {% block header %}
-  <div id="base-logo" class='pull-left'>
+  <div id="base-logo" class='text-center'>
     <a href="{% url 'home' %}">
       <img src="{{ STATIC_URL }}images/Anou_logo_80x50.png" alt="Anou logo">
     </a>
-  </div>
-  <div id="base-navigation">
-    <ul class='nav nav-pills pull-right'>
-
-      <li class='btn-large'>
-        <a href="{% url 'home' %}">Home</a>
-      </li>
-
-    </ul>
   </div>
 {% endblock header %}
 {% block content %}
@@ -38,16 +62,20 @@
   {% endif %}
 
   <form action="{% url 'admin:login' %}" method="post">{% csrf_token %}
-    <ul>
-      <li>
-        <i class='symbol-profile'></i>
-        {{ form.username }}
-      </li>
-      <li>
-        <i class='symbol-password'></i>
-        {{ form.password }}
-      </li>
-    </ul>
-    <button class='symbol-submit'></button>
+
+    <table><tr>
+      <td><i class='symbol-profile'></i></td>
+      <td>{{ form.username }}</td>
+    </tr></table>
+
+    <table><tr>
+      <td><i class='symbol-password'></i></td>
+      <td>{{ form.password }}</td>
+    </tr></table>
+
+    <button class='symbol-submit white'></button>
   </form>
 {% endblock content %}
+
+{% block footer %}
+{% endblock footer %}
