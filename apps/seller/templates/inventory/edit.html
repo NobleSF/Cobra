@@ -123,39 +123,47 @@
       <div id='summary-section' class='section row-fluid'>
         <div class='section-number'>10</div>
 
-        <div class='summary-photo span2'>
-          <img src=''>
+        <div class='product-id'>
+          <div class='product-id-tag text-center'>
+            <i class='symbol-longtag black' title='product id'></i>
+          </div>
+          <div class='product-id-number text-center'>
+            100{{ product.id }}
+          </div>
         </div>
 
-        <div class='summary-values span3'>
-          <ul>
-            <li class='input-prepend'>
-              <span class='add-on'><i class='symbol-dirham black'></i></span>
-              <input type='text' id='summary-price' disabled>
-            </li>
-            <li class='input-prepend summary-detail'>
-              <span class='add-on'><i class='symbol-shipping black'></i></span>
-              <input type='text' id='summary-shipping-cost' disabled>
-            </li>
-            <li class='input-prepend summary-detail'>
-              <span class='add-on'><i class='symbol-percent black'></i></span>
-              <input type='text' id='summary-anou-fee' disabled>
-            </li>
-            <li class='input-prepend summary-detail'>
-              <span class='add-on'><i class='symbol-sum black'></i></span>
-              <input type='text' id='summary-total' disabled>
-            </li>
-            <li class='input-prepend summary-detail'>
-              <span class='add-on'><i class='symbol-currency-exchange black'></i></span>
-              <input type='text' id='summary-USD' disabled>
-            </li>
-            <li id='summary-show-more'>show more</li>
-          </ul>
+        <div class='details text-center'>
+          <div class='costs'>
+            <ul>
+              <li class='total-cost extra'>
+                <span class='number'>{{ product.seller_paid_amount }}</span>
+                <i class='symbol-coins' title='total cost'></i>
+              </li>
+
+              <li class='costs-detail extra'>
+                <span class='number'>{{product.shipping_cost}}</span>
+                <i class='symbol-shipping' title='shipping cost'></i>
+                <span class='number'>+</span>
+                <span class='number'>{{product.price}}</span>
+                <i class='symbol-coins' title='product cost'></i>
+              </li>
+
+              <li class='costs-detail extra'>
+                <span class='number'>{{product.anou_fee}}</span>
+                <i class='symbol-percent' title='shipping cost'></i>
+                <span class='number'>,</span>
+                <span class='number'>{{product.display_price}}</span>
+                <i class='symbol-currency-exchange' title='product cost'></i>
+              </li>
+            </ul>
+          </div>
         </div>
 
-        <div class='summary-submit span1'>
-          <button class='btn' type="submit">OK!</button>
+        <div class='summary-image'>
+          <img src="{{ product.photos.0.thumb }}"/>
         </div>
+
+        <button class='symbol-submit white'></button>
       </div>
     </form>
   </div>

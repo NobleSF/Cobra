@@ -85,6 +85,12 @@ class Product(models.Model):
     else:
       return 0
 
+  def seller_paid_amount(self):
+    if self.price:
+      return self.price + self.shipping_cost()
+    else:
+      return 0
+
   def local_price(self):
     if self.price:
       return self.price + self.anou_fee() + self.shipping_cost()

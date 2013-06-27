@@ -85,29 +85,64 @@ input::-webkit-inner-spin-button {
 }
 
 /* SUMMARY */
-.summary-photo{
-  vertical-align: middle;
-}
-.summary-photo > img{
-  background-color: #DDD;
-  width: 100px;
-  height: 75px;
-  border: none;
-}
-#summary-show-more{
-  text-decoration: underline;
-  cursor: pointer;
-}
-.summary-detail{
-  display: none;
-}
-.summary-submit{
-  width: 100px;
-  height: auto;
-  text-align: center;
-  vertical-align: middle;
+#summary-section .product-id i{
+  font-size: 3em;
 }
 
+#summary-section .product-id{
+  height: 0;
+  padding: 0.5em 0;
+  margin: 0;
+  line-height: 4em;
+  position: relative;
+  top: 0.5em;
+  z-index: 3;
+}
+
+#summary-section .product-id-tag, #summary-section  .details .costs{
+  background-color: rgba(250,250,250,0.5);
+}
+
+#summary-section .product-id .product-id-number{
+  font-size: 2.5em;
+  font-weight: 900;
+  color: #FFF;
+  position: relative;
+  top: -2em;
+}
+
+#summary-section .details{
+  position: relative;
+  top: 4em;
+  left: 16px;
+  z-index: 5;
+  max-width: 300px;
+  height: 0em;
+}
+#summary-section .details ul{
+  margin: 0;
+  list-style: none;
+}
+#summary-section .number{
+  font-size: 2em;
+  font-weight: 900;
+  line-height: 1.2em;
+}
+.summary-image img{
+  background-color: #EEE;
+  width: 300px;
+  height: 225px;
+  border: none;
+}
+#summary-section button{
+  font-size: 2.5em;
+  line-height: normal;
+  height: 2em;
+  width: 310px;
+  background-color: green;
+  border-radius: 0.5em;
+  margin: 0.5em;
+}
 
 /* input fields */
 #price-section li *, #measurements-section li *, #summary-section li *{
