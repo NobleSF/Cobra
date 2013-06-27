@@ -195,6 +195,7 @@ function fileUploadAction(){
         if (!iframe_fallback){
           loadThumb(response['url'], this_display_div);
           storePhotoURL(response['url'], this_display_div);
+          spinner.stop();
         }
       },
 
@@ -203,9 +204,6 @@ function fileUploadAction(){
         progress_bar.css('width', '0%');
         progress_div.hide();
         button_div.show();
-        if (!iframe_fallback){
-          data.spinner.stop();
-        }
       }
 
     });//end fileupload
