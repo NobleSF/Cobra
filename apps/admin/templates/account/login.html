@@ -46,6 +46,14 @@
   </style>
 {% endblock css%}
 
+{% block javascript %}
+  <script>
+    $('i').click(function(){
+      $(this).closest('table').find('input').focus();
+    });
+  </script>
+{% endblock javascript %}
+
 {% block header %}
   <div id="base-logo" class='text-center'>
     <a href="{% url 'home' %}">
