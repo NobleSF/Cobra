@@ -48,123 +48,122 @@
 
     </div>
 
-    <form action="" method="post">{% csrf_token %}
-      <div class='hidden-fields'>
-        {{ product_form.product_id }}
-        {{ product_form.assets }}
-        {# product_form.photos #}
-        {{ product_form.colors }}
-        {{ product_form.shipping_options }}
-      </div>
+    <div class='hidden-fields'>
+      {{ product_form.product_id }}
+      {{ product_form.assets }}
+      {# product_form.photos #}
+      {{ product_form.colors }}
+      {{ product_form.shipping_options }}
+    </div>
 
-      <div id='price-section' class='section'>
-        <div class='section-number'>3</div>
-        <table><tr>
-          <td><i class='symbol-coins gold'></i></td>
-          <td>{{ product_form.price }}</td>
-          <td><span class='units'>Dh</span></td>
-        </tr></table>
-      </div>
+    <div id='price-section' class='section'>
+      <div class='section-number'>3</div>
+      <table><tr>
+        <td><i class='symbol-coins gold'></i></td>
+        <td>{{ product_form.price }}</td>
+        <td><span class='units'>Dh</span></td>
+      </tr></table>
+    </div>
 
-      <div id='color-chooser-section' class='section'>
-        <div class='section-number'>4</div>
-        {% color_chooser_tag product %}
-      </div>
+    <div id='color-chooser-section' class='section'>
+      <div class='section-number'>4</div>
+      {% color_chooser_tag product %}
+    </div>
 
-      <div id='tool-chooser-section' class='section'>
-        <div class='section-number'>5</div>
-        {% asset_chooser_tag request product "tool" %}
-      </div>
+    <div id='tool-chooser-section' class='section'>
+      <div class='section-number'>5</div>
+      {% asset_chooser_tag request product "tool" %}
+    </div>
 
-      <div id='material-chooser-section' class='section'>
-        <div class='section-number'>6</div>
-        {% asset_chooser_tag request product "material" %}
-      </div>
+    <div id='material-chooser-section' class='section'>
+      <div class='section-number'>6</div>
+      {% asset_chooser_tag request product "material" %}
+    </div>
 
-      <div id='artisan-chooser-section' class='section'>
-        <div class='section-number'>7</div>
-        {% asset_chooser_tag request product "artisan" %}
-      </div>
+    <div id='artisan-chooser-section' class='section'>
+      <div class='section-number'>7</div>
+      {% asset_chooser_tag request product "artisan" %}
+    </div>
 
-      <div id='measurements-section' class='section'>
-        <div class='section-number'>8</div>
+    <div id='measurements-section' class='section'>
+      <div class='section-number'>8</div>
 
-        <table><tr>
-          <td><i class='symbol-width black'></i></td>
-          <td>{{ product_form.width }}</td>
-          <td><span class='units'>cm</span></td>
-        </tr></table>
+      <table><tr>
+        <td><i class='symbol-width black'></i></td>
+        <td>{{ product_form.width }}</td>
+        <td><span class='units'>cm</span></td>
+      </tr></table>
 
-        <table><tr>
-          <td><i class='symbol-height black'></i></td>
-          <td>{{ product_form.height }}</td>
-          <td><span class='units'>cm</span></td>
-        </tr></table>
+      <table><tr>
+        <td><i class='symbol-height black'></i></td>
+        <td>{{ product_form.height }}</td>
+        <td><span class='units'>cm</span></td>
+      </tr></table>
 
-        <table><tr>
-          <td><i class='symbol-length black'></i></td>
-          <td>{{ product_form.length }}</td>
-          <td><span class='units'>cm</span></td>
-        </tr></table>
+      <table><tr>
+        <td><i class='symbol-length black'></i></td>
+        <td>{{ product_form.length }}</td>
+        <td><span class='units'>cm</span></td>
+      </tr></table>
 
-        <table><tr>
-          <td><i class='symbol-weight black'></i></td>
-          <td>{{ product_form.weight}}</td>
-          <td><span class='units'>g&nbsp;&nbsp;</span></td>
-        </tr></table>
+      <table><tr>
+        <td><i class='symbol-weight black'></i></td>
+        <td>{{ product_form.weight}}</td>
+        <td><span class='units'>g&nbsp;&nbsp;</span></td>
+      </tr></table>
 
-      </div>
+    </div>
 
-      <div id='shipping-option-chooser-section' class='section'>
-        <div class='section-number'>9</div>
-        {% shipping_option_chooser_tag request product %}
-      </div>
+    <div id='shipping-option-chooser-section' class='section'>
+      <div class='section-number'>9</div>
+      {% shipping_option_chooser_tag request product %}
+    </div>
 
-      <div id='summary-section' class='section row-fluid'>
-        <div class='section-number'>10</div>
+    <div id='summary-section' class='section row-fluid'>
+      <div class='section-number'>10</div>
 
-        <div class='product-id'>
-          <div class='product-id-tag text-center'>
-            <i class='symbol-longtag black' title='product id'></i>
-          </div>
-          <div class='product-id-number text-center'>
-            100{{ product.id }}
-          </div>
+      <div class='product-id'>
+        <div class='product-id-tag text-center'>
+          <i class='symbol-longtag black' title='product id'></i>
         </div>
-
-        <div class='details text-center'>
-          <div class='costs'>
-            <ul>
-              <li class='total-cost extra'>
-                <span class='number'>{{ product.seller_paid_amount }}</span>
-                <i class='symbol-coins' title='total cost'></i>
-              </li>
-
-              <li class='costs-detail extra'>
-                <span class='number'>{{product.shipping_cost}}</span>
-                <i class='symbol-shipping' title='shipping cost'></i>
-                <span class='number'>+</span>
-                <span class='number'>{{product.price}}</span>
-                <i class='symbol-coins' title='product cost'></i>
-              </li>
-
-              <li class='costs-detail extra'>
-                <span class='number'>{{product.anou_fee}}</span>
-                <i class='symbol-percent' title='shipping cost'></i>
-                <span class='number'>,</span>
-                <span class='number'>{{product.display_price}}</span>
-                <i class='symbol-currency-exchange' title='product cost'></i>
-              </li>
-            </ul>
-          </div>
+        <div class='product-id-number text-center'>
+          100{{ product.id }}
         </div>
-
-        <div class='summary-image'>
-          <img src="{{ product.photos.0.thumb }}"/>
-        </div>
-
-        <button class='symbol-submit white'></button>
       </div>
-    </form>
+
+      <div class='details text-center'>
+        <div class='costs'>
+          <ul>
+            <li class='total-cost extra'>
+              <span class='number'>{{ product.seller_paid_amount }}</span>
+              <i class='symbol-coins' title='total cost'></i>
+            </li>
+
+            <li class='costs-detail extra'>
+              <span class='number'>{{product.shipping_cost}}</span>
+              <i class='symbol-shipping' title='shipping cost'></i>
+              <span class='number'>+</span>
+              <span class='number'>{{product.price}}</span>
+              <i class='symbol-coins' title='product cost'></i>
+            </li>
+
+            <li class='costs-detail extra'>
+              <span class='number'>{{product.anou_fee}}</span>
+              <i class='symbol-percent' title='shipping cost'></i>
+              <span class='number'>,</span>
+              <span class='number'>{{product.display_price}}</span>
+              <i class='symbol-currency-exchange' title='product cost'></i>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class='summary-image'>
+        <img src="{{ product.photos.0.thumb }}"/>
+      </div>
+
+      <button class='symbol-submit white'></button>
+    </div>
+
   </div>
 {% endblock content %}
