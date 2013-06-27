@@ -10,6 +10,11 @@ $().ready( function(){
     }
   });
 
+  //focus on inputs when icon clicked
+  $('i').click(function(){
+    $(this).closest('table').find('input').focus()
+  });
+
   markAssignedAssetsAsSelected();
 
   //activate the "show more" link in the summary

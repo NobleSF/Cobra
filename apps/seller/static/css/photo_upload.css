@@ -12,6 +12,7 @@
 .photo{
   width: 300px;
   height: 225px;
+  background-color: #EEE;
 }
 
 /* hide the "choose file input" behind button

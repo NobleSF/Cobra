@@ -13,6 +13,29 @@ input{
   max-width: 150px;
 }
 
+#header{
+  border-bottom: none;
+}
+
+.section table{
+  margin: 1.25em auto;
+}
+.section input{
+  height: 1em;
+  font-size: 3em;
+  width: 3em;
+  text-align: center;
+}
+.section table i, .section table .units {
+  font-size: 4em;
+  padding: 0 .2em;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .section-number {
   margin: 80px 10px 10px;
   font-size: 400%;

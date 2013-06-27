@@ -59,12 +59,11 @@
 
       <div id='price-section' class='section'>
         <div class='section-number'>3</div>
-        <ul>
-          <li class='input-prepend'>
-            <span class='add-on'><i class='symbol-dirham black'></i></span>
-            {{ product_form.price }}
-          </li>
-        </ul>
+        <table><tr>
+          <td><i class='symbol-coins gold'></i></td>
+          <td>{{ product_form.price }}</td>
+          <td><span class='units'>Dh</span></td>
+        </tr></table>
       </div>
 
       <div id='color-chooser-section' class='section'>
@@ -89,28 +88,31 @@
 
       <div id='measurements-section' class='section'>
         <div class='section-number'>8</div>
-        <ul>
-          <li class='input-prepend input-append'>
-            <span class='add-on'><i class='symbol-weight black'></i></span>
-            {{ product_form.width  }}
-            <span class='add-on'>cm</span>
-          </li>
-          <li class='input-prepend input-append'>
-            <span class='add-on'><i class='symbol-weight black'></i></span>
-            {{ product_form.height }}
-            <span class='add-on'>cm</span>
-          </li>
-          <li class='input-prepend input-append'>
-            <span class='add-on'><i class='symbol-weight black'></i></span>
-            {{ product_form.length }}
-            <span class='add-on'>cm</span>
-          </li>
-          <li class='input-prepend input-append'>
-            <span class='add-on'><i class='symbol-weight black'></i></span>
-            {{ product_form.weight }}
-            <span class='add-on'>g</span>
-          </li>
-        </ul>
+
+        <table><tr>
+          <td><i class='symbol-width black'></i></td>
+          <td>{{ product_form.width }}</td>
+          <td><span class='units'>cm</span></td>
+        </tr></table>
+
+        <table><tr>
+          <td><i class='symbol-height black'></i></td>
+          <td>{{ product_form.height }}</td>
+          <td><span class='units'>cm</span></td>
+        </tr></table>
+
+        <table><tr>
+          <td><i class='symbol-length black'></i></td>
+          <td>{{ product_form.length }}</td>
+          <td><span class='units'>cm</span></td>
+        </tr></table>
+
+        <table><tr>
+          <td><i class='symbol-weight black'></i></td>
+          <td>{{ product_form.weight}}</td>
+          <td><span class='units'>g&nbsp;&nbsp;</span></td>
+        </tr></table>
+
       </div>
 
       <div id='shipping-option-chooser-section' class='section'>
