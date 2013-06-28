@@ -1,4 +1,4 @@
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from apps.admin.controller.decorator import access_required
 
@@ -53,6 +53,7 @@ def login(request, next=None):
   from apps.admin.models import Account
   from apps.admin.controller.forms import AccountLoginForm
   from apps.seller.models import Seller
+
   if request.method == 'POST':
     form = AccountLoginForm(request.POST)
     try:
@@ -70,8 +71,10 @@ def login(request, next=None):
         if seller:
           request.session['seller_id'] = seller.id
 
-        if next is not None:
-          return next
+        if 'next' in request.session:
+          full_path = request.session['next']
+          del request.session['next']
+          return HttpResponseRedirect(full_path)
         else:
           return redirect('home')
       else:
@@ -84,6 +87,8 @@ def login(request, next=None):
     context['form'] = AccountLoginForm()#return fresh form
 
   else:
+    if next:
+      request.session['next'] = next #path of requested page after login
     context = {'form': AccountLoginForm()}
 
   #context['public_key'] = create new public key
