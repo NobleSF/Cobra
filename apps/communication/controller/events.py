@@ -6,9 +6,16 @@ def communicateOrdersCreated(orders):
     for order in orders: #send SMS to seller for each order
       products_string = ""
       for product in order.products:
-        products_string += str(product.id) + " "
+        products_string += str(product.id) + "  "
+
+        #message each artisan that their product has sold and for how much
+        artisan_msg = str(product.id) + "\r\n" + "$ %d Dh" % product.price
+        for artisan in product.assets.filter(ilk='artisan'):
+          sendSMS(artisan_msg, artisan.phone)
+
+      #message the seller with the address
       address_string = getCustomerAddressFromOrder(order, sms_format=True)
-      msg = products_string + "\r\n" + address_string
+      seller_msg = products_string + "\r\n" + address_string
       seller_phone = order.products.all()[0].seller.phone
       sendSMS(msg, seller_phone)
 
