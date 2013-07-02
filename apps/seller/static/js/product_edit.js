@@ -338,6 +338,29 @@ function validateForm(){
     $('#shipping-option-chooser-section').addClass('attention');
     no_errors = false
   }
+
+  //run scripts to remove attention classes at interaction
+  if (!no_errors){
+    $('#photos').find('.photo-form').click(function(){
+      $(this).closest('photos-section').removeClass('attention');
+    });
+    $('#product-chooser-section').click(function(){
+      $(this).removeClass('attention');
+    });
+    $('#artisan-chooser-section').click(function(){
+      $(this).removeClass('attention');
+    });
+    $('#id_price').click(function(){
+      $(this).closest('#price-section').removeClass('attention');
+    });
+    $('#id_weight').click(function(){
+      $(this).closest('#measurements-section').removeClass('attention');
+    });
+    $('#shipping-option-chooser-section').click(function(){
+      $(this).removeClass('attention');
+    });
+  }
+
   return no_errors
 }
 
