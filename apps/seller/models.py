@@ -41,7 +41,7 @@ class Product(models.Model):
   from apps.admin.models import Color
   seller        = models.ForeignKey('Seller')
   is_sold       = models.BooleanField(default=False)
-  is_active     = models.BooleanField(default=True) #for seller removal
+  is_active     = models.BooleanField(default=False) #for seller add/remove
   is_approved   = models.BooleanField(default=False) #for admin approval
   is_orderable  = models.BooleanField(default=False) #for custom orders
 
@@ -121,7 +121,7 @@ class Product(models.Model):
       return False
 
   def is_approved(self):
-    if self.is_complete():
+    if self.is_active():
       return True
     else:
       return False

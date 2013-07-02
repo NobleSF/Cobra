@@ -1,5 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
+from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.utils import simplejson
 from apps.admin.controller.decorator import access_required
@@ -9,15 +10,15 @@ from apps.seller.controller.product_class import Product
 
 def checkInventory(seller):
   #preferred method
-  #incomplete_products = seller.product_set.filter('is_complete' = False)
-  #if len(incomplete_products) > 1:
-  #  incomplete_products[1:].delete()
+  #inactive_products = seller.product_set.filter('is_active' = False)
+  #if len(inactive_products) > 1:
+  #  inactive_products[1:].delete()
 
-  #hacked method
+  #hacked method: keep first inactive, else delete
   try:
     keep = 1
     for product in seller.product_set.all():
-      if not product.is_complete():
+      if not product.is_active:
         if keep <= 0:
           product.delete()
         keep -= 1
@@ -33,20 +34,18 @@ def create(request):
   try:
     edit_this_product = None
     for product in seller.product_set.all():
-      if not product.is_complete():
+      if not product.is_active:
         edit_this_product = product
 
     if edit_this_product:
       request.product_id = edit_this_product.id
-    product = Product(request)
 
-    return redirect( str(product.product.id) + '/edit')
+    #if no product id in request at this point, this will create a new one
+    product = Product(request)
+    return redirect("%d/edit" % product.product.id)
 
   except Exception as e:
-    context = {'exception': e}
-    from apps.seller.controller.management import home
-    return home(request, context)
-    #return redirect('')
+    return redirect("/seller/")
 
 @access_required('seller')
 def edit(request, product_id):
@@ -56,44 +55,6 @@ def edit(request, product_id):
   request.product_id = product_id
   product = Product(request)
 
-  #if request.method == 'POST':
-  #  try:
-  #    product_form = ProductEditForm(request.POST)
-  #    if product_form.is_valid():
-  #      product_data = product_form.cleaned_data
-  #      product.clear()
-  #
-  #      product.update('price',   product_data['price'])
-  #      product.update('length',  product_data['length'])
-  #      product.update('width',   product_data['width'])
-  #      product.update('height',  product_data['height'])
-  #      product.update('weight',  product_data['weight'])
-  #
-  #      asset_ids = product_data['assets'].split(" ")
-  #      while '' in asset_ids: asset_ids.remove('') #remove empty instances
-  #      for asset_id in asset_ids:
-  #        product.addAsset(asset_id)
-  #
-  #      shipping_option_ids = product_data['shipping_options'].split(" ")
-  #      while '' in shipping_option_ids: shipping_option_ids.remove('') #remove empty instances
-  #      for shipping_option_id in shipping_option_ids:
-  #        product.addShippingOption(shipping_option_id)
-  #
-  #      color_ids = product_data['colors'].split(" ")
-  #      while '' in color_ids: color_ids.remove('') #remove empty instances
-  #      for color_id in color_ids:
-  #        product.addColor(color_id)
-  #
-  #      messages.success(request, "product saved")
-  #      return redirect('seller:home')
-  #
-  #    else:
-  #      context = {'problem': "form did not validate"}
-  #
-  #  except Exception as e:
-  #    context = {'except': e}
-  #
-  #else:
   product_form = ProductEditForm()
   product_form.fields['price'].initial  = product.get('price')
   product_form.fields['length'].initial = product.get('length')
@@ -109,7 +70,6 @@ def edit(request, product_id):
 
   for shipping_option in product.product.shipping_options.all():
     product_form.fields['shipping_options'].initial += str(shipping_option.id)+" "
-  #end else
 
   product_form.fields['product_id'].initial = product.product.id
   # we want additional ranks going up to 5 photos
@@ -165,6 +125,9 @@ def saveProduct(request): #ajax requests only, not asset-aware
       request.product_id = request.GET['product_id']
       product = Product(request)
 
+      if 'activate' in request.GET and request.GET['activate'] == "yes":
+        product.activate();
+
       attribute = request.GET['attribute']
       if 'status' in request.GET:
         status = request.GET['status']
@@ -202,6 +165,12 @@ def saveProduct(request): #ajax requests only, not asset-aware
         else:
           context['photo_id'] = photo.id
           context['photo'] = "saved photo at rank " + rank
+
+      elif attribute == "active":
+        if status == "yes":
+          context['active'] = product.activate()
+        else:
+          context['active'] = not product.deactivate()
 
       else:
         success_message = product.update(attribute, request.GET['value'])

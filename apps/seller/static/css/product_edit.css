@@ -171,3 +171,7 @@ input::-webkit-inner-spin-button {
   height: 225px;
   border: none;
 }
+
+.attention {
+  background-color: rgba(245, 0, 0, 0.3);
+}

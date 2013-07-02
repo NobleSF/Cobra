@@ -122,7 +122,25 @@ class Product:
     else:
       return True
 
-  def remove(self):
+  def activate(self):
+    try:
+      self.product.is_active = True
+      self.product.save()
+    except:
+      return False
+    else:
+      return True
+
+  def deactivate(self):
+    try:
+      self.product.is_active = False
+      self.product.save()
+    except:
+      return False
+    else:
+      return True
+
+  def remove(self): #old, marked for deletion
     try:
       self.product.is_active = False
       self.product.save()
