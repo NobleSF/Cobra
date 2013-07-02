@@ -25,4 +25,6 @@ urlpatterns += patterns('',
   url(r'^admin/dashboard/color$', dashboard.color, name='color'),
   url(r'^admin/admin/dashboard/category$', dashboard.category, name='category'),
   url(r'^dashboard/rating_subject$', dashboard.rating_subject, name='rating_subject'),
+  url(r'^dashboard/shipping_option$', dashboard.shipping_option, name='shipping_option'),
+  url(r'^dashboard/image_object$', dashboard.image_object, name='image_object'),
 )

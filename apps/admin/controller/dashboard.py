@@ -75,3 +75,31 @@ def rating_subject(request):
   formset = RatingSubjectFormSet(queryset=RatingSubject.objects.all())
   context['formset'] = formset
   return render(request, 'dashboard/formset.html', context)
+
+def shipping_option(request):
+  from apps.seller.models import ShippingOption
+  ShippingOptionFormSet = modelformset_factory(ShippingOption)
+  context = {}
+  if request.method == 'POST':
+    formset = ShippingOptionFormSet(request.POST)
+    try:
+      formset.save()
+    except Exception as e:
+      context['exception'] = e
+  formset = ShippingOptionFormSet(queryset=ShippingOption.objects.all())
+  context['formset'] = formset
+  return render(request, 'dashboard/formset.html', context)
+
+def image_object(request):
+  from apps.seller.models import Image
+  ImageFormSet = modelformset_factory(Image)
+  context = {}
+  if request.method == 'POST':
+    formset = ImageFormSet(request.POST)
+    try:
+      formset.save()
+    except Exception as e:
+      context['exception'] = e
+  formset = ImageFormSet(queryset=Image.objects.all())
+  context['formset'] = formset
+  return render(request, 'dashboard/formset.html', context)
