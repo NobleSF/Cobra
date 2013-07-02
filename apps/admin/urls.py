@@ -19,7 +19,7 @@ urlpatterns = patterns('',
 
 #dashboard pages
 urlpatterns += patterns('',
-  url(r'^admin/dashboard$', dashboard.home, name='home'),
+  url(r'^admin/dashboard$', dashboard.home, name='dashboard'),
   url(r'^admin/dashboard/country$', dashboard.country, name='country'),
   url(r'^admin/dashboard/currency$', dashboard.currency, name='currency'),
   url(r'^admin/dashboard/color$', dashboard.color, name='color'),

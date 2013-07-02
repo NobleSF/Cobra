@@ -60,6 +60,9 @@
       <a href="{% url 'home' %}">
         <img src="{{ STATIC_URL }}images/Anou_logo_80x50.png" alt="Anou logo">
       </a>
+      {% if request.session.admin_id %}
+        <br><a href="{% url 'admin:dashboard' %}">Admin Dashboard</a>
+      {% endif %}
     </div>
     <div id='nav-links'>
       <ul>

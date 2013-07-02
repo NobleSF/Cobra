@@ -65,10 +65,9 @@ def login(request, next=None):
           request.session['username'] = account.username
         if account.is_admin:
           request.session['admin_id'] = account.id
-
-        try: seller = Seller.objects.get(account_id=account.id)
-        except Seller.DoesNotExist: seller = None
-        if seller:
+        else:#is seller
+          try: seller = Seller.objects.get(account_id=account.id)
+          except Seller.DoesNotExist: seller = None
           request.session['seller_id'] = seller.id
 
         if 'next' in request.session:
@@ -76,7 +75,7 @@ def login(request, next=None):
           del request.session['next']
           return HttpResponseRedirect(full_path)
         else:
-          return redirect('home')
+          return redirect('/')
       else:
         context = {'problem': "wrong password"}
 
@@ -84,6 +83,7 @@ def login(request, next=None):
       context = {'problem': "account does not exist"}
     except Exception as e:
       context = {'exception': e}
+
     context['form'] = AccountLoginForm()#return fresh form
 
   else:
