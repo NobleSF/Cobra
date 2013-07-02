@@ -39,7 +39,10 @@
         </div>
         <div class='asset-fields'>
           <ul>
-            <li>{{ asset_form.name }}</li>
+            <li>
+              {{ asset_form.name }}
+              <i class='delete-asset symbol-remove red'></i>
+            </li>
             <li>{{ asset_form.description }}</li>
             <li class='asset-category'>
               {{ asset_form.category }}

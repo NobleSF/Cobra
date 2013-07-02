@@ -68,7 +68,7 @@
     </div><!--end first span -->
 
     <form id='seller-form' action="" method="post">{% csrf_token %}
-      <input type='hidden' id='seller_ajax_url' value='{% url 'seller:save seller' %}'>
+      <input type='hidden' id='save-seller-url' value='{% url 'seller:save seller' %}'>
 
       <div class='span3'>
         <ul class='hidden-fields'>
@@ -128,7 +128,8 @@
       {% asset_tag image_form asset_form asset %}
     {% endfor %}
 
-    <input type='hidden' id='asset_ajax_url' value='{% url 'seller:save asset' %}'>
+    <input type='hidden' id='save-asset-url' value='{% url 'seller:save asset' %}'>
+    <input type='hidden' id='delete-asset-url' value='{% url 'seller:delete asset' %}'>
   </div>
 
   <ul id='asset-tabs' class='nav nav-tabs text-center'>

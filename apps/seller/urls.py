@@ -11,8 +11,9 @@ urlpatterns = patterns('',
   url(r'^edit$', account.edit, name='edit'), #edit seller info
   url(r'^ajax/seller_save$', account.saveSeller, name='save seller'),
   url(r'^ajax/asset_save$', account.saveAsset, name='save asset'),
-  url(r'^ajax/product_save$', inventory.saveProduct, name='save product'),
+  url(r'^ajax/asset_delete$', account.deleteAsset, name='delete asset'),
 
+  url(r'^ajax/product_save$', inventory.saveProduct, name='save product'),
   url(r'^ajax/photo_form_data$', management.photoFormData, name='photo form data'),
 
   url(r'^inventory/create$', inventory.create, name='inventory create'),

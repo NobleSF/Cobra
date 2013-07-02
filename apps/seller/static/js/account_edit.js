@@ -29,9 +29,21 @@ $('#acct-details-show').on('click', function(){
   $('#seller-account').slideToggle();
 });
 
+$('.delete-asset').click(function(){
+  $(this).closest('.asset').addClass('soon-dead');
+  var asset_id = $(this).closest('.asset').find('#id_asset_id').val();
+  $.ajax({
+    url:$('#delete-asset-url').val(),
+    data:{'asset_id':asset_id}
+  })
+  .done(function(){
+    $(this).remove()
+  });
+});
+
 function applySellerAutosave() {
   $('#seller-account').find('.autosave').autosave({
-    url:$('#seller_ajax_url').val(),
+    url:$('#save-seller-url').val(),
     before:saveSellerBefore,
     success:saveSellerSuccess,
     error:saveSellerError

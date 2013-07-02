@@ -10,7 +10,11 @@
 .asset-fields ul{
   margin: auto;
 }
-.asset-fields > ul > li > input, textarea, select{
+
+.asset-fields > ul > li > input{
+  width: 245px;
+}
+.asset-fields > ul > li > textarea, select{
   width: 280px;
 }
 
@@ -20,4 +24,8 @@
   padding: 3px;
   margin: 0 auto 10px;
   border: 2px solid #F0F0F0;
+}
+
+.soon-dead{
+  opacity: 0.3;
 }

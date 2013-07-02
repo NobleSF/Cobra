@@ -147,14 +147,13 @@ def saveSeller(request): #ajax requests only, create or update asset
 def saveAsset(request): #ajax requests only, create or update asset
   from apps.seller.models import Asset
 
-  if request.method == 'GET': # it must be an ajax post to work
+  if request.method == 'GET': # it must be an ajax get to work
     try:
       if request.GET['asset_id'] == "none":
+        #create new asset
         asset = Asset(seller_id=request.session['seller_id'])
-
       elif request.GET['asset_id'] == "pending":
         raise Exception("asset_id is already pending")
-
       else:
         asset = Asset.objects.get(id=request.GET['asset_id'])
 
@@ -185,6 +184,16 @@ def saveAsset(request): #ajax requests only, create or update asset
     context = {'problem':"not GET"}
 
   response = context
+  return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+
+@access_required('seller')
+@csrf_exempt
+def deleteAsset(request): #ajax requests only
+  from apps.seller.models import Asset
+  asset = Asset.objects.get(id=request.GET['asset_id'])
+  asset.delete()
+
+  response = {'deleted':"asset has been permanently deleted"}
   return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 def customSaveImage(url):

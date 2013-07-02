@@ -5,7 +5,7 @@ $().ready( function(){
 
 function applyAssetAutosave() {
   $('.asset').find('.autosave').autosave({
-    url:$('#asset_ajax_url').val(),
+    url:$('#save-asset-url').val(),
     before:saveAssetBefore,
     success:saveAssetSuccess,
     error:saveAssetError
