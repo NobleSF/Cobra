@@ -70,7 +70,7 @@
     <form id='seller-form' action="" method="post">{% csrf_token %}
       <input type='hidden' id='save-seller-url' value='{% url 'seller:save seller' %}'>
 
-      <div class='span3'>
+      <div class='span3 offset1'>
         <ul class='hidden-fields'>
           <li>{{ seller_form.image_url }}</li>
         </ul>
@@ -96,9 +96,12 @@
             {{ seller_form.currency }}
           </li>
         </ul>
+
+        <button type="submit" id='seller-form-submit'
+          class='symbol-blue-arrow white'></button>
       </div>
 
-      <div class='span5'>
+      <div class='span4'>
         <ul>
           <li class='input-prepend'>
             <i class='add-on symbol-email black' title='email'></i>
@@ -113,10 +116,8 @@
             {{ seller_form.bio }}
           </li>
         </ul>
-        <button id='seller-form-submit' type="submit" class='btn'>
-          Submit Form Icon
-        </button>
       </div>
+
     </form>
 
   </div>

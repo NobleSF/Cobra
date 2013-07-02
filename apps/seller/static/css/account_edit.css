@@ -35,6 +35,16 @@
   font-size: 18pt;
 }
 
+#seller-form button{
+  font-size: 2.5em;
+  line-height: normal;
+  height: 2em;
+  width: 310px;
+  background-color: green;
+  border-radius: 0.5em;
+  margin: 0.5em;
+}
+
 /* hide choose file button behind button
  * http://viget.com/inspire/custom-file-inputs-with-a-bit-of-jquery
  */
