@@ -29,13 +29,15 @@
         <a href="{% url 'seller:inventory create' %}"
            class='symbol-product-add green' title='Add Product'></a>
       </li>
-      <li class='right-to-left'>
-        <a href="{% url 'seller:management orders' %}"
-           class='symbol-orders gold' title='Sold Products'></a>
-      </li>
+
       <li class='right-to-left'>
         <a href="{% url 'seller:management products' %}"
            class='symbol-products blue' title='Current Products'></a>
+      </li>
+
+      <li class='right-to-left'>
+        <a href="{% url 'seller:management orders' %}"
+           class='symbol-orders gold' title='Sold Products'></a>
       </li>
     </ul>
   </div>
