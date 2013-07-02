@@ -154,3 +154,6 @@ class Image(models.Model): #Images are used for navigation, thumbnail size
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
+
+  def __unicode__(self):
+    return unicode(self.original).replace('http://res.cloudinary.com/anou/image/upload/','')
