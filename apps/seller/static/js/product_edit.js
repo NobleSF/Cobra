@@ -304,6 +304,8 @@ function updateSummary(){
 }
 
 function validateForm(){
+  //remove previously applied attention classes
+  $('.attention').removeClass('attention');
   no_errors = true
 
   //product type selected
