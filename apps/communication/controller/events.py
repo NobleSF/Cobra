@@ -9,7 +9,7 @@ def communicateOrdersCreated(orders):
         products_string += str(product.id) + "  "
 
         #message each artisan that their product has sold and for how much
-        artisan_msg = str(product.id) + "\r\n" + "$ %d Dh" % product.price
+        artisan_msg = str(product.id) + "\r\n" + "%d Dh" % product.price
         for artisan in product.assets.filter(ilk='artisan'):
           sendSMS(artisan_msg, artisan.phone)
 
