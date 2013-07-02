@@ -18,9 +18,8 @@ $().ready( function(){
   markAssignedAssetsAsSelected();
 
   //activate the "show more" link in the summary
-  $('#summary-show-more').bind('click', function(){
-    $('.summary-detail').show();
-    $('#summary-show-more').hide();
+  $('.total-cost').bind('click', function(){
+    $('.extra').toggle();
   });
 
   //selection actions for choosing assets, etc
@@ -53,6 +52,12 @@ $().ready( function(){
     $(this).change(updateSummary());
   });
   updateSummary();
+
+  //validate form and show confirmation
+  $('#submit').bind('click', function(){
+    $('#product-edit-form').hide();
+    $('#confirmation').show();
+  });
 
 });//end .ready
 

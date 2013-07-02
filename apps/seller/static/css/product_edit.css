@@ -38,9 +38,9 @@ input::-webkit-inner-spin-button {
 
 .section-number {
   margin: 80px 10px 10px;
-  font-size: 400%;
+  font-size: 600%;
   line-height: 100%;
-  background: #DDD;
+  color: #9595A0;
 }
 .section-number.first{
   margin: 0 10px 10px;
@@ -84,46 +84,34 @@ input::-webkit-inner-spin-button {
   display: list-item;
 }
 
+/* input fields */
+#price-section li *, #measurements-section li *, #summary-section li *{
+  min-height: 40px;
+  font-size: 30px;
+}
+#measurements-section li .add-on:last-child{
+  width: 2em;
+  line-height: normal;
+}
+
 /* SUMMARY */
-#summary-section .product-id i{
-  font-size: 3em;
-}
-
-#summary-section .product-id{
-  height: 0;
-  padding: 0.5em 0;
-  margin: 0;
-  line-height: 4em;
-  position: relative;
-  top: 0.5em;
-  z-index: 3;
-}
-
-#summary-section .product-id-tag, #summary-section  .details .costs{
-  background-color: rgba(250,250,250,0.5);
-}
-
-#summary-section .product-id .product-id-number{
-  font-size: 2.5em;
-  font-weight: 900;
-  color: #FFF;
-  position: relative;
-  top: -2em;
-}
-
-#summary-section .details{
-  position: relative;
-  top: 4em;
-  left: 16px;
+.summary-info{
+  height: 80px;
+  font-size: 130%;
   z-index: 5;
-  max-width: 300px;
-  height: 0em;
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.4);
 }
-#summary-section .details ul{
-  margin: 0;
-  list-style: none;
+.summary-info .total-cost{
+  cursor: pointer;
 }
-#summary-section .number{
+.summary-image{
+  position: relative;
+  top: -80px;
+  z-index: 0;
+}
+
+.summary-info .number{
   font-size: 2em;
   font-weight: 900;
   line-height: 1.2em;
@@ -142,14 +130,44 @@ input::-webkit-inner-spin-button {
   background-color: green;
   border-radius: 0.5em;
   margin: 0.5em;
+  position: relative;
+  top: -75px;
+}
+.extra{
+  display: none;
 }
 
-/* input fields */
-#price-section li *, #measurements-section li *, #summary-section li *{
-  min-height: 40px;
-  font-size: 30px;
+/*Confirmation*/
+#confirmation{
+  text-align: center;
+  display: none;
 }
-#measurements-section li .add-on:last-child{
-  width: 2em;
+#confirmation .product-id{
+  position: relative;
+  z-index: 5;
+  background-color: rgba(255, 255, 255, 0.5);
+  height: 4em;
+  padding: 0.5em;
+}
+#confirmation .product-id-tag i{
+  font-size: 4em;
   line-height: normal;
+}
+#confirmation .product-id-number{
+  font-size: 3.5em;
+  font-weight: 900;
+  color: #FFF;
+  position: relative;
+  top: -0.8em;
+}
+#confirmation .image{
+  position: relative;
+  top: -75px;
+  z-index: 0;
+}
+#confirmation .image img{
+  background-color: #EEE;
+  width: 300px;
+  height: 225px;
+  border: none;
 }

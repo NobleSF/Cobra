@@ -59,7 +59,7 @@
     <div id='price-section' class='section'>
       <div class='section-number'>3</div>
       <table><tr>
-        <td><i class='symbol-coins gold'></i></td>
+        <td><i class=''>$</i></td>
         <td>{{ product_form.price }}</td>
         <td><span class='units'>Dh</span></td>
       </tr></table>
@@ -122,48 +122,49 @@
     <div id='summary-section' class='section row-fluid'>
       <div class='section-number'>10</div>
 
-      <div class='product-id'>
-        <div class='product-id-tag text-center'>
-          <i class='symbol-longtag black' title='product id'></i>
-        </div>
-        <div class='product-id-number text-center'>
-          100{{ product.id }}
-        </div>
-      </div>
+      <div class='summary-info'>
 
-      <div class='details text-center'>
-        <div class='costs'>
-          <ul>
-            <li class='total-cost extra'>
-              <span class='number'>{{ product.seller_paid_amount }}</span>
-              <i class='symbol-coins' title='total cost'></i>
-            </li>
-
-            <li class='costs-detail extra'>
-              <span class='number'>{{product.shipping_cost}}</span>
-              <i class='symbol-shipping' title='shipping cost'></i>
-              <span class='number'>+</span>
-              <span class='number'>{{product.price}}</span>
-              <i class='symbol-coins' title='product cost'></i>
-            </li>
-
-            <li class='costs-detail extra'>
-              <span class='number'>{{product.anou_fee}}</span>
-              <i class='symbol-percent' title='shipping cost'></i>
-              <span class='number'>,</span>
-              <span class='number'>{{product.display_price}}</span>
-              <i class='symbol-currency-exchange' title='product cost'></i>
-            </li>
-          </ul>
+        <div class='total-cost'>
+          <span class='number'>{{ product.seller_paid_amount }}</span>
+          <i class='' title='total cost'>Dh</i>
         </div>
+
+        <div class='costs-detail extra'>
+          <span class='number'>{{product.shipping_cost}}</span>
+          <i class='symbol-shipping' title='shipping cost'></i>
+          <span class='number'>+</span>
+          <span class='number'>{{product.price}}</span>
+          <i class='' title='product cost'>Dh</i>
+        </div>
+
       </div>
 
       <div class='summary-image'>
         <img src="{{ product.photos.0.thumb }}"/>
       </div>
 
-      <button class='symbol-submit white'></button>
+      <button id='submit' class='symbol-blue-arrow white'></button>
     </div>
 
   </div>
+
+  <div id='confirmation'>
+    <div class='product-id'>
+
+      <div class='product-id-tag'>
+        <i class='symbol-longtag black' title='product id'></i>
+      </div>
+      <div class='product-id-number'>
+        10{{ product.id }}
+      </div>
+
+    </div><!-- end #product-edit-form -->
+
+    <div class='image'>
+      <img src="{{ product.photos.0.thumb }}"/>
+    </div>
+  </div>
+
+
+
 {% endblock content %}
