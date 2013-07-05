@@ -2,8 +2,15 @@
 
 {% block content %}
   {% load url from future %}
+
+  <h3>Admin Tools</h3>
   <ul>
     <li><a href="{% url 'admin:account create' %}">Create New Admin or Seller Account</a></li>
+    <li><a href="{% url 'admin:review products' %}">Review New Products</a></li>
+  </ul>
+
+  <h3>Site Settings</h3>
+  <ul>
     <li><a href="{% url 'admin:currency' %}">Currency</a></li>
     <li><a href="{% url 'admin:country' %}">Country</a></li>
     <li><a href="{% url 'admin:color' %}">Color</a></li>

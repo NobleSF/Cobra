@@ -1,11 +1,38 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
-from apps.admin.controller import decorator
+from apps.admin.controller.decorator import access_required
 from django.forms.models import modelformset_factory
+from django.contrib import messages
+from django.utils import simplejson
+from datetime import datetime
 
+@access_required('admin')
 def home(request):
   return render(request, 'dashboard/home.html')
 
+@access_required('admin')
+def review_products(request):
+  from apps.seller.models import Product
+  new_products = Product.objects.filter(is_active=True).filter(approved=None).order_by('updated_at').reverse()
+  context = {'products': new_products}
+  return render(request, 'dashboard/review_products.html', context)
+
+@access_required('admin')
+def approve_product(request):
+  from apps.seller.models import Product
+  try:
+    product_id = request.GET['product_id']
+    product = Product.objects.get(id=product_id)
+    product.approved = datetime.now()
+    product.save()
+  except Exception as e:
+    response = {'exception': e}
+  else:
+    response = {'success': str(product.id) + " approved"}
+
+  return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+
+@access_required('admin')
 def country(request):
   from apps.admin.models import Country
   CountryFormSet = modelformset_factory(Country)
@@ -20,6 +47,7 @@ def country(request):
   context['formset'] = formset
   return render(request, 'dashboard/formset.html', context)
 
+@access_required('admin')
 def currency(request):
   from apps.admin.models import Currency
   CurrencyFormSet = modelformset_factory(Currency)
@@ -34,6 +62,7 @@ def currency(request):
   context['formset'] = formset
   return render(request, 'dashboard/formset.html', context)
 
+@access_required('admin')
 def color(request):
   from apps.admin.models import Color
   ColorFormSet = modelformset_factory(Color)
@@ -48,6 +77,7 @@ def color(request):
   context['formset'] = formset
   return render(request, 'dashboard/formset.html', context)
 
+@access_required('admin')
 def category(request):
   from apps.admin.models import Category
   CategoryFormSet = modelformset_factory(Category)
@@ -62,6 +92,7 @@ def category(request):
   context['formset'] = formset
   return render(request, 'dashboard/formset.html', context)
 
+@access_required('admin')
 def rating_subject(request):
   from apps.admin.models import RatingSubject
   RatingSubjectFormSet = modelformset_factory(RatingSubject)
@@ -76,6 +107,7 @@ def rating_subject(request):
   context['formset'] = formset
   return render(request, 'dashboard/formset.html', context)
 
+@access_required('admin')
 def shipping_option(request):
   from apps.seller.models import ShippingOption
   ShippingOptionFormSet = modelformset_factory(ShippingOption)
@@ -90,6 +122,7 @@ def shipping_option(request):
   context['formset'] = formset
   return render(request, 'dashboard/formset.html', context)
 
+@access_required('admin')
 def image_object(request):
   from apps.seller.models import Image
   ImageFormSet = modelformset_factory(Image)

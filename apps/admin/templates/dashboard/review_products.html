@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block javascript %}
+  <script>
+
+    $('.approve').click(function(){
+      var product_id = $(this).attr('data-product-id');
+      var product_li = $(this).closest("li")
+      approveProduct(product_id, product_li);
+    })
+
+    function approveProduct(product_id, product_li){
+      var approve_url = $('#approve-url').val()
+
+      $.get(approve_url, {product_id:product_id})
+      .done(function(){
+        product_li.find('button').removeClass('btn-info').addClass('btn-success');
+        product_li.slideUp('slow', function(){
+          $(this).remove()
+        });
+      });
+    }
+
+  </script>
+{% endblock javascript %}
+
+{% block css %}
+  <style>
+    ul{list-style: none;}
+    li{padding: 0.5em 0;}
+    li a{font-size: 16pt;}
+    ul li button{margin: 0 1em 0 0;}
+  </style>
+{% endblock css %}
+
+{% block content %}
+  <h3>New Unapproved Products</h3>
+
+  <input id='approve-url' type='hidden'
+         value="{% url 'admin:approve product' %}">
+
+  <ul>
+    {% for product in products %}
+      <li>
+        <button class='approve btn btn-info'
+                data-product-id="{{ product.id }}">
+          Approve
+        </button>
+
+        <a href="{% url 'product' product.id %}" target='_blank'>
+          {{ product.id }}:
+          {{ product.name }}
+        </a>
+        by
+        <a href="{% url 'store' product.seller.id %}" target='_blank'>
+          {{ product.seller.name }}
+        </a>
+
+      </li>
+    {% endfor %}
+  </ul>
+
+{% endblock content %}
