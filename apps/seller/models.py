@@ -40,10 +40,6 @@ class Asset(models.Model):
 class Product(models.Model):
   from apps.admin.models import Color
   seller        = models.ForeignKey('Seller')
-  is_sold       = models.BooleanField(default=False)
-  is_active     = models.BooleanField(default=False) #for seller add/remove
-  is_approved   = models.BooleanField(default=False) #for admin approval
-  is_orderable  = models.BooleanField(default=False) #for custom orders
 
   #product description elements
   assets        = models.ManyToManyField('Asset')
@@ -54,6 +50,13 @@ class Product(models.Model):
   weight        = models.SmallIntegerField(null=True, blank=True)
   price         = models.SmallIntegerField(null=True, blank=True)
   shipping_options = models.ManyToManyField('ShippingOption')
+
+  #lifecycle milestones
+  is_active     = models.BooleanField(default=False) #for seller add/remove
+  approved      = models.DateTimeField(null=True, blank=True) #for admin approval
+  sold          = models.DateTimeField(null=True, blank=True)
+  #is_orderable  = models.BooleanField(default=False) #for custom orders
+
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)

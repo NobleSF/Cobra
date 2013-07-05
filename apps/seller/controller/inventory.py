@@ -93,7 +93,7 @@ def remove(request, product_id): #archive product and return to management home
   try:
     request.product_id = product_id
     product = Product(request)
-    if product.remove():
+    if product.deactivate():
       messages.success(request, "product %d removed." % product.product.id)
     else:
       messages.error(request, "cannot not remove that product")

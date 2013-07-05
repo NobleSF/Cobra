@@ -1,5 +1,7 @@
 from apps.seller import models
 from apps.admin import models as admin_models
+from datetime import datetime
+
 class Product:
   def __init__(self, request):
     try:
@@ -140,9 +142,9 @@ class Product:
     else:
       return True
 
-  def remove(self): #old, marked for deletion
+  def approve(self):
     try:
-      self.product.is_active = False
+      self.product.approved = datetime.now
       self.product.save()
     except:
       return False
