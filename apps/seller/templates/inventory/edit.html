@@ -25,7 +25,7 @@
 {% block content %}
   {% load inventory_inclusion_tags %}
 
-  <input type='hidden' id='product-ajax-url' value='{% url 'seller:save product' %}'>
+  <input type='hidden' id='product-ajax-url' value="{% url 'seller:save product' %}">
   <input type='hidden' id='product-id' value='{{ product.id }}'>
 
   <div id='product-edit-form' class='text-center'>

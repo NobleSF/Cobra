@@ -6,7 +6,7 @@ from apps.admin.controller.decorator import access_required
 def home(request):
   return render(request, 'account/home.html')
 
-#@access_required('admin')
+@access_required('admin')
 def create(request):
   from apps.admin.controller.forms import AccountCreateForm
   from apps.admin.models import Account
@@ -46,7 +46,6 @@ def create(request):
 def edit(request):
   from apps.admin.controller.forms import AccountEditForm
   form = AccountEditForm()
-
   return render(request, 'account/edit.html', {'form': form})
 
 def login(request, next=None):
