@@ -3,7 +3,7 @@ register = template.Library()
 
 @register.inclusion_tag('inventory/product_detail.html')
 def product_detail_tag(product):
-  product.first_photo = product.photo_set.all()[0]
+  product.first_photo = product.photo_set.order_by('rank')[0]
 
   #placeholder for ratings
   from settings.settings import DEBUG
@@ -21,7 +21,7 @@ def product_detail_tag(product):
 
 @register.inclusion_tag('inventory/sold_product_detail.html')
 def sold_product_detail_tag(product):
-  product.first_photo = product.photo_set.all()[0]
+  product.first_photo = product.photo_set.order_by('rank')[0]
   product.total_cost = product.shipping_cost() + product.local_price()
 
   return {'product':product}
