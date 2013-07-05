@@ -134,16 +134,16 @@ class ProductEditForm(forms.Form):
 
   price             = forms.CharField(
                         widget=NumberInput(attrs={'class':"autosave giveMeData",
-                                            'min':'1', 'max':'99999','step':'1'}))
+                                            'min':'1', 'max':'30000','step':'1'}))
   length            = forms.CharField(
                         widget=NumberInput(attrs={'class':"autosave giveMeData",
-                                            'min':'1', 'max':'99999','step':'1'}))
+                                            'min':'1', 'max':'30000','step':'1'}))
   width             = forms.CharField(
                         widget=NumberInput(attrs={'class':"autosave giveMeData",
-                                            'min':'1', 'max':'99999','step':'1'}))
+                                            'min':'1', 'max':'30000','step':'1'}))
   height            = forms.CharField(
                         widget=NumberInput(attrs={'class':"autosave giveMeData",
-                                            'min':'1', 'max':'99999','step':'1'}))
+                                            'min':'1', 'max':'30000','step':'1'}))
   weight            = forms.CharField(
                         widget=NumberInput(attrs={'class':"autosave giveMeData",
-                                            'min':'1', 'max':'99999','step':'1'}))
+                                            'min':'1', 'max':'30000','step':'1'}))

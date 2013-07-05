@@ -15,6 +15,16 @@ $().ready( function(){
     $(this).closest('table').find('input').focus()
   });
 
+  //show exit-button when focused on input (mobile)
+  $('#id_price, #id_weight, #id_width, #id_height, #id_length')
+  .on('focus', function(){
+    $(this).closest('td').next('td').next('td').find('button')
+    .css('opacity', '1');
+  });
+  $('.exit-button button').on('click', function(){
+    $('.exit-button button').focus().css('opacity', '0.01').blur();
+  });
+
   markAssignedAssetsAsSelected();
 
   //activate the "show more" link in the summary
@@ -71,7 +81,7 @@ $().ready( function(){
       });
 
     }else{
-      $('body').scrollTo($('.attention').first(), 800);
+      $('body').scrollTo($('.attention').first(), 1100);
     }
   });
 

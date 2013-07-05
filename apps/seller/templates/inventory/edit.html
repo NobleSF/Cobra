@@ -59,9 +59,12 @@
     <div id='price-section' class='section'>
       <div class='section-number'>3</div>
       <table><tr>
-        <td><i class=''>$</i></td>
+        <td><i class='symbol-currency'></i></td>
         <td>{{ product_form.price }}</td>
         <td><span class='units'>Dh</span></td>
+        <td class='exit-button'>
+          <button class='symbol-blue-arrow white hidden-desktop'></button>
+        </td>
       </tr></table>
     </div><!--end price section-->
 
@@ -92,24 +95,36 @@
         <td><i class='symbol-weight black'></i></td>
         <td>{{ product_form.weight}}</td>
         <td><span class='units'>g&nbsp;&nbsp;</span></td>
+        <td class='exit-button'>
+          <button class='symbol-blue-arrow white hidden-desktop'></button>
+        </td>
       </tr></table>
 
       <table><tr>
         <td><i class='symbol-width black'></i></td>
         <td>{{ product_form.width }}</td>
         <td><span class='units'>cm</span></td>
+        <td class='exit-button'>
+          <button class='symbol-blue-arrow white hidden-desktop'></button>
+        </td>
       </tr></table>
 
       <table><tr>
         <td><i class='symbol-height black'></i></td>
         <td>{{ product_form.height }}</td>
         <td><span class='units'>cm</span></td>
+        <td class='exit-button'>
+          <button class='symbol-blue-arrow white hidden-desktop'></button>
+        </td>
       </tr></table>
 
       <table><tr>
         <td><i class='symbol-length black'></i></td>
         <td>{{ product_form.length }}</td>
         <td><span class='units'>cm</span></td>
+        <td class='exit-button'>
+          <button class='symbol-blue-arrow white hidden-desktop'></button>
+        </td>
       </tr></table>
     </div><!--end measurements section-->
 

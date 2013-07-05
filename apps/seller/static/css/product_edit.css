@@ -1,8 +1,3 @@
-@media (max-width: 979px) {
-  #body{
-    margin-top: 10px;
-  }
-}
 
 .hidden-fields{ display: none;}
 
@@ -94,6 +89,14 @@ input::-webkit-inner-spin-button {
   line-height: normal;
 }
 
+button.symbol-blue-arrow{
+  width: 1em;
+}
+
+.exit-button button{
+  opacity: 0.01;
+}
+
 /* SUMMARY */
 .summary-info{
   height: 80px;
@@ -122,17 +125,22 @@ input::-webkit-inner-spin-button {
   height: 225px;
   border: none;
 }
-#summary-section button{
+button.symbol-blue-arrow{
   font-size: 2.5em;
   line-height: normal;
-  height: 2em;
-  width: 310px;
+  height: 1.8em;
+  min-width: 2.5em;
   background-color: green;
   border-radius: 0.5em;
   margin: 0.5em;
+
+}
+#summary-section button{
+  width: 310px;
   position: relative;
   top: -75px;
 }
+
 .extra{
   display: none;
 }
