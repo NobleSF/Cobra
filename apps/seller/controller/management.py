@@ -23,7 +23,8 @@ def products(request):
 
   try:
     seller = Seller.objects.get(id=request.session['seller_id'])
-    products = seller.product_set.filter(is_active=True)
+    products = seller.product_set.exclude(approved=None)
+    #redundent to add .filter(is_active=True)
     context = {'seller': seller, 'products': products}
   except Exception as e:
     context = {'exception': e}
