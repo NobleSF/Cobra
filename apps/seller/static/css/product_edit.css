@@ -89,10 +89,6 @@ input::-webkit-inner-spin-button {
   line-height: normal;
 }
 
-button.symbol-blue-arrow{
-  width: 1em;
-}
-
 .exit-button button{
   opacity: 0.01;
 }
@@ -126,19 +122,19 @@ button.symbol-blue-arrow{
   border: none;
 }
 button.symbol-blue-arrow{
-  font-size: 2.5em;
+  font-size: 1.5em;
   line-height: normal;
   height: 1.8em;
-  min-width: 2.5em;
+  min-width: 2em;
   background-color: green;
   border-radius: 0.5em;
-  margin: 0.5em;
-
 }
 #summary-section button{
+  font-size: 2.5em;
   width: 310px;
   position: relative;
   top: -75px;
+  margin: 0.5em;
 }
 
 .extra{

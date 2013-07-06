@@ -1,5 +1,9 @@
 $().ready( function(){
   //run on page load
+  var viewport_width = $(window).width();
+  if (viewport_width < 500){
+  }
+  //$(window).resize(function() {});
 
   //only show the first 5 photo upload divs
   num_divs = 0;
@@ -21,8 +25,10 @@ $().ready( function(){
     $(this).closest('td').next('td').next('td').find('button')
     .css('opacity', '1');
   });
-  $('.exit-button button').on('click', function(){
-    $('.exit-button button').focus().css('opacity', '0.01').blur();
+  $('#id_price, #id_weight, #id_width, #id_height, #id_length')
+  .on('blur', function(){
+    $(this).closest('td').next('td').next('td').find('button')
+    .css('opacity', '0.01');
   });
 
   markAssignedAssetsAsSelected();
