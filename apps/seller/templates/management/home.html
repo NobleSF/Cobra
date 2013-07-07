@@ -6,8 +6,37 @@
 {% endblock title %}
 
 {% block css %}
-  <link href='{{ STATIC_URL }}seller/css/home.css' rel='stylesheet'>
-  <link href='{{ STATIC_URL }}vendor/fitgrid/css/fitgrid.css' rel='stylesheet'>
+  <style>
+    #header{border: none;}
+    #body{margin: 0 auto; max-width: 800px}
+    #primary-nav, #secondary-nav, #footer{text-align: center;}
+    a:hover{text-decoration: none;}
+
+    #primary-nav{}
+    #orders{float: left;}
+    #products{}
+    #new-product{float: right;}
+    #orders i, #products i, #new-product i{
+      font-size: 1200%;
+      line-height: normal;
+    }
+
+    #secondary-nav{margin-top: 40%;}
+    #home{float: left;}
+    #edit-account{}
+    #logout{float: right;}
+    #edit-account i{font-size: 90%}
+
+    @media (max-width: 600px){
+      #orders i, #products i, #new-product i{font-size: 600%}
+      #secondary-nav{margin-top: 20%;}
+    }
+    @media (max-width: 300px){
+      #orders i, #products i, #new-product i{font-size: 400%}
+      #secondary-nav{margin-top: 20%;}
+    }
+
+  </style>
 {% endblock css%}
 
 {% block javascript %}
@@ -22,57 +51,33 @@
 {% endblock messages %}
 
 {% block content %}
-
-  <div id='management-nav'>
-    <ul class=''>
-      <li class='right-to-left'>
-        <a href="{% url 'seller:inventory create' %}"
-           class='symbol-product-add green' title='Add Product'></a>
-      </li>
-
-      <li class='right-to-left'>
-        <a href="{% url 'seller:management products' %}"
-           class='symbol-products blue' title='Current Products'></a>
-      </li>
-
-      <li class='right-to-left'>
-        <a href="{% url 'seller:management orders' %}"
-           class='symbol-orders gold' title='Sold Products'></a>
-      </li>
-    </ul>
+  <div id='primary-nav'>
+    <a id='orders' href="{% url 'seller:management orders' %}">
+      <i class='symbol-orders gold' title='Sold Products'></i>
+    </a>
+    <a id='products' href="{% url 'seller:management products' %}">
+      <i class='symbol-products blue' title='Current Products'></i>
+    </a>
+    <a id='new-product' href="{% url 'seller:inventory create' %}">
+      <i class='symbol-product-add green' title='Add Product'></i>
+    </a>
   </div>
 
-  <div id='seller-image'>
-    <div>
-      <img src="{{ seller.image.thumb }}">
-    </div>
-    <div id='edit-account'>
-      <a id='edit-account-button'
-         href="{% url 'seller:edit' %}"
-         class='symbol-assets green'
-         title='edit account'>
-      </a>
-    </div>
+  <div id='secondary-nav'>
+    <a id='home' href="{% url 'home' %}">
+      <img src="{{ STATIC_URL }}images/Anou_logo_80x50.png" alt="Anou logo">
+    </a>
+    <a id='edit-account' href="{% url 'seller:edit' %}">
+      <i class='symbol-assets green' title='edit account'></i>
+    </a>
+    <a id='logout' href="{% url 'admin:logout' %}">
+      <i class='symbol-logout red' title='logout'></i>
+    </a>
   </div>
-
-  <div id='base-navigation'>
-    <div id='base-logo' class='pull-left'>
-      <a href="{% url 'home' %}">
-        <img src="{{ STATIC_URL }}images/Anou_logo_80x50.png" alt="Anou logo">
-      </a>
-      {% if request.session.admin_id %}
-        <br><a href="{% url 'admin:dashboard' %}">Admin Dashboard</a>
-      {% endif %}
-    </div>
-    <div id='nav-links'>
-      <ul>
-        <li>
-          <a href="{% url 'admin:logout' %}"
-             class='symbol-logout red' title='logout'>
-          </a>
-        </li>
-      </ul>
-    </div>
-  </div>
-
 {% endblock content %}
+
+{% block footer %}
+  {% if request.session.admin_id %}
+    <a href="{% url 'admin:dashboard' %}">Admin Dashboard</a>
+  {% endif %}
+{% endblock footer %}
