@@ -173,11 +173,6 @@ def saveAsset(request): #ajax requests only, create or update asset
       asset.save()
       context = {'asset_id':asset.id, 'get':request.GET}
 
-      if 'DELETE' in request.GET:
-        #asset.delete()
-        #context = {'asset_id':"deleted"}
-        pass #what do we do with products using this asset?
-
     except Exception as e:
       context = {'exception':e}
   else:
@@ -190,10 +185,17 @@ def saveAsset(request): #ajax requests only, create or update asset
 @csrf_exempt
 def deleteAsset(request): #ajax requests only
   from apps.seller.models import Asset
-  asset = Asset.objects.get(id=request.GET['asset_id'])
-  asset.delete()
-
-  response = {'deleted':"asset has been permanently deleted"}
+  try:
+    asset = Asset.objects.get(id=request.GET['asset_id'])
+    #todo: what do we do with products using this asset?
+    asset.delete()
+    response = {'deleted': "asset has been permanently deleted",
+                'asset_id': request.GET['asset_id']
+               }
+  except Exception as e:
+    response = {'exception': str(e),
+                'asset_id': 'None'
+               }
   return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 def customSaveImage(url):

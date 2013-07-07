@@ -1,10 +1,9 @@
 $().ready( function(){
   //run on page load
-  applyAssetAutosave();
 });
 
-function applyAssetAutosave() {
-  $('.asset').find('.autosave').autosave({
+function applyAssetAutosave(asset_div) {
+  asset_div.find('.autosave').autosave({
     url:$('#save-asset-url').val(),
     before:saveAssetBefore,
     success:saveAssetSuccess,
@@ -26,21 +25,32 @@ function saveAssetBefore($this_element){
 
 function saveAssetSuccess(data,$this_element){
   //set asset_id data for all elements
+  $this_element.closest('.asset').attr('id','asset-'+data.asset_id);
   $this_element.closest('.asset').find('#id_asset_id').attr('value',data.asset_id);
   $this_element.closest('.asset').find('.autosave').attr('data-asset_id',data.asset_id);
   //finished visual
-  $this_element.closest('.asset').removeClass('updating').addClass('saved');
-  //remove if deleted
-  if (data.asset_id == "deleted"){
-    alert("asset has been deleted");
-    $this_element.closest('.asset').fadeOut().remove();
-  }
+  $this_element.closest('.asset').removeClass('updating').removeClass('error').addClass('saved');
 }
 
 function saveAssetError(error,$this_element){
   $this_element.closest('.asset').find('#id_asset_id').attr('value',"none");
   //error visual
   $this_element.closest('.asset').removeClass('updating').addClass('error');
+}
+
+function applyAssetDeleteAction(asset_div){
+  asset_div.find('.delete-asset').click(function(){
+    $(this).closest('.asset').addClass('soon-dead');
+    var asset_id = $(this).closest('.asset').find('#id_asset_id').val();
+    $.ajax({
+      url:$('#delete-asset-url').val(),
+      data:{'asset_id':asset_id}
+    })
+    .success(function(data){
+      //slideUp animation and delete element and events from DOM
+      $('#asset-'+data.asset_id).slideUp(500, function(){$(this).remove()});
+    });
+  });
 }
 
 function fileUploadAction(){

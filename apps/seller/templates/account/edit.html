@@ -32,7 +32,7 @@
   </div>
 
   <div id='seller-account' class='row-fluid'>
-    <div class='span3'>
+    <div class='pull-left'>
 
       <ul>
         <li class='seller-media'>
@@ -65,19 +65,23 @@
         </li>
       </ul>
 
-    </div><!--end first span -->
+    </div>
 
     <form id='seller-form' action="" method="post">{% csrf_token %}
       <input type='hidden' id='save-seller-url' value='{% url 'seller:save seller' %}'>
 
-      <div class='span3 offset1'>
+      <div class='pull-left'>
         <ul class='hidden-fields'>
           <li>{{ seller_form.image_url }}</li>
         </ul>
         <ul class='seller-details'>
           <li class='input-prepend'>
-            <i class='add-on symbol-name black' title='name'></i>
-            {{ seller_form.name }}
+            <i class='add-on symbol-email black' title='email'></i>
+            {{ seller_form.email }}
+          </li>
+          <li class='input-prepend'>
+            <i class='add-on symbol-phone black' title='phone number'></i>
+            {{ seller_form.phone }}
           </li>
           <li class='input-prepend'>
             <i class='add-on symbol-city black' title='city'></i>
@@ -96,26 +100,22 @@
             {{ seller_form.currency }}
           </li>
         </ul>
-
-        <button type="submit" id='seller-form-submit'
-          class='symbol-blue-arrow white'></button>
       </div>
 
-      <div class='span4'>
+      <div class='pull-left'>
         <ul>
           <li class='input-prepend'>
-            <i class='add-on symbol-email black' title='email'></i>
-            {{ seller_form.email }}
-          </li>
-          <li class='input-prepend'>
-            <i class='add-on symbol-phone black' title='phone number'></i>
-            {{ seller_form.phone }}
+            <i class='add-on symbol-name black' title='name'></i>
+            {{ seller_form.name }}
           </li>
           <li class='input-prepend'>
             <i class='add-on symbol-description black' title='bio'></i>
             {{ seller_form.bio }}
           </li>
         </ul>
+
+        <button type="submit" id='seller-form-submit'
+          class='symbol-blue-arrow white'></button>
       </div>
 
     </form>

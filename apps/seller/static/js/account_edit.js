@@ -1,21 +1,21 @@
 $().ready( function(){
-  COUNTER = 1;
+  COUNTER = 1;//for creating unique id numbers
   //assign bootstrap classes
-  $('#asset-tabs').children('li').first().addClass('active');
+  $('#asset-tabs').children('li').first().addClass('active');//first tab active
+  $('#artisan_tab').trigger('click');//activate first tab
 
   //run on page load for seller form
-  applyData($('#seller-account'), 'seller', 'seller');
-  applyEvents($('#seller-account'), to_assets=false);
-  applySellerAutosave();
+  applyData($('#seller-account'), 'seller', 'seller');//add data- attributes
+  applyEvents($('#seller-account'), to_assets=false);//for seller image
+  applySellerAutosave();//autosave seller form elements
 
   //run on page load for assets
-  $('#artisan_tab').trigger('click');//activate first tab
-  arrangeAssetForms();
-  addAssetForms();
+  arrangeAssetForms();//move assets to their respective tab
+  addAssetForms();//create blank assets as needed
 
 });//end .ready
 
-$('.asset-tab').click(function(){
+$('.asset-tab').click(function(){//when an asset tab is clicked
   //make this tab active
   $('.asset-tab').removeClass('active');
   $(this).addClass('active');
@@ -23,22 +23,6 @@ $('.asset-tab').click(function(){
   $('.asset-container').hide();
   asset_ilk = $(this).attr('id').replace('_tab','');
   $('#'+asset_ilk+'_container').show();
-});
-
-$('#acct-details-show').on('click', function(){
-  $('#seller-account').slideToggle();
-});
-
-$('.delete-asset').click(function(){
-  $(this).closest('.asset').addClass('soon-dead');
-  var asset_id = $(this).closest('.asset').find('#id_asset_id').val();
-  $.ajax({
-    url:$('#delete-asset-url').val(),
-    data:{'asset_id':asset_id}
-  })
-  .done(function(){
-    $(this).remove()
-  });
 });
 
 function applySellerAutosave() {
@@ -68,7 +52,7 @@ function arrangeAssetForms(){
     //move to proper asset container
     var ilk = $(this).find('#id_ilk').val();
     var asset_id = $(this).find('#id_asset_id').val();
-    applyData($(this), asset_id, ilk)
+    applyData($(this), asset_id, ilk);
     applyEvents($(this));
     if (ilk != ''){
       $(this).appendTo('#'+ilk+'_container');
@@ -143,8 +127,9 @@ function applyEvents(asset_div, to_assets){
   uploader.apply(image_input, image_div);
 
   //for input fields
-  to_assets = to_assets || true;
+  to_assets = to_assets || true;//parameter defaults to true
   if (to_assets){
-    applyAssetAutosave();
+    applyAssetAutosave(asset_div);
+    applyAssetDeleteAction(asset_div);
   }
 }
