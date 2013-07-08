@@ -14,13 +14,14 @@ function applyAssetAutosave(asset_div) {
 function saveAssetBefore($this_element){
   //start 'updating' visual
   $this_element.closest('.asset').removeClass('error').removeClass('saved').addClass('updating');
-  //set pending asset_id data for all elements
+  //if no asset_id, set pending asset_id data for all elements
   if ($this_element.closest('.asset').find('#id_asset_id').val() == 'none'){
+    $this_element.closest('.asset').attr('id','asset-pending');
     $this_element.closest('.asset').find('#id_asset_id').attr('value',"pending");
     $this_element.closest('.asset').find('.autosave').attr('data-asset_id',"pending");
+    //probably need a new asset form
+    addAssetForms();
   }
-  //provide new asset form if necessary
-  addAssetForms();
 }
 
 function saveAssetSuccess(data,$this_element){
@@ -33,7 +34,9 @@ function saveAssetSuccess(data,$this_element){
 }
 
 function saveAssetError(error,$this_element){
-  $this_element.closest('.asset').find('#id_asset_id').attr('value',"none");
+  if ($this_element.closest('.asset').find('#id_asset_id').val() == 'pending'){
+    $this_element.closest('.asset').find('#id_asset_id').attr('value',"none");
+  }
   //error visual
   $this_element.closest('.asset').removeClass('updating').addClass('error');
 }
