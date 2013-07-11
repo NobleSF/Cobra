@@ -121,7 +121,7 @@ input::-webkit-inner-spin-button {
   height: 225px;
   border: none;
 }
-button.symbol-blue-arrow{
+button.symbol-go{
   font-size: 1.5em;
   line-height: normal;
   height: 1.8em;
@@ -160,7 +160,7 @@ button.symbol-blue-arrow{
 #confirmation .product-id-number{
   font-size: 3.5em;
   font-weight: 900;
-  color: #FFF;
+  color: #000;
   position: relative;
   top: -0.8em;
 }

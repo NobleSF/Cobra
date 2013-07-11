@@ -25,7 +25,7 @@
     <div class='span12'>
       <h1 id='seller-title' >
         <a href="{% url 'store' seller.id %}"
-           class='symbol-profile green' title='seller public page'></a>
+           class='symbol-name green' title='seller public page'></a>
         {{ seller.name }}
       </h1>
     </div>
@@ -96,7 +96,7 @@
             {{ seller_form.coordinates }}
           </li>
           <li class='input-prepend'>
-            <i class='add-on symbol-currency black' title='currency'></i>
+            <i class='add-on symbol-money black' title='currency'></i>
             {{ seller_form.currency }}
           </li>
         </ul>
@@ -105,7 +105,7 @@
       <div class='pull-left'>
         <ul>
           <li class='input-prepend'>
-            <i class='add-on symbol-name black' title='name'></i>
+            <i class='add-on symbol-profile black' title='name'></i>
             {{ seller_form.name }}
           </li>
           <li class='input-prepend'>
@@ -115,7 +115,7 @@
         </ul>
 
         <button type="submit" id='seller-form-submit'
-          class='symbol-blue-arrow white'></button>
+          class='symbol-go white'></button>
       </div>
 
     </form>
