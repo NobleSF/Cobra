@@ -60,19 +60,17 @@ $().ready( function(){
   applyAutosaveEvents();
 
   //set events for updating the summary
-  $('#photo1').addClass('updates-summary');
+  $('#photos').find('img').addClass('updates-summary');//just the first photo
   $('#id_price').addClass('updates-summary');
   $('#id_weight').addClass('updates-summary');
-  $('#id_shipping_option').addClass('updates-summary');
+  $('#id_shipping_options').addClass('updates-summary');
   $('.updates-summary').each(function(){
-    $(this).change(updateSummary());
+    $(this).on('change', function(){updateSummary();});
   });
-  updateSummary();
 
   //validate form and show confirmation
   $('#submit').bind('click', function(){
     if (validateForm()){
-
       //show progress spinner over button
 
       $.ajax({
@@ -135,6 +133,7 @@ function toggleStoreAssetId(asset_element){
     input_element_value = input_element_value.replace(asset_id, '');
     input_element.attr('value', input_element_value);
   }
+  input_element.trigger('change');//for any autosave function watching
 }
 
 function toggleActiveState(asset_element){
@@ -295,27 +294,27 @@ function storePhotoURL(url, display_div){
 function updateSummary(){
   //set photo
   first_photo_url = $('#photo1').closest('.photo-upload-div').find('img').attr('src');
-  if(!first_photo_url){/*do nothing*/}else{
-    summary_pinky_url = first_photo_url.replace('thumb','pinky');
-    $('.summary-photo').find('img').attr('src', summary_pinky_url);
+  if(!first_photo_url){/*do nothing*/
+  }else{
+    //summary_pinky_url = first_photo_url.replace('thumb','pinky');
+    $('#summary-section').find('.summary-image').find('img').attr('src', first_photo_url);
   }
   //set price and Anou fee
   seller_price = parseInt($('#id_price').val());
   if (seller_price !== ""){
-    $('#summary-price').attr('value', seller_price);
-    anou_fee = parseInt(seller_price * 0.15);
-    $('#summary-anou-fee').attr('value', anou_fee);
+    $('#summary-price').html(seller_price);
   }
   //set shipping cost and totals
   weight = $('#id_weight').val();
   shipping_option_id = $('#id_shipping_options').val().trim();
   if ((weight !== "") && (shipping_option_id != "")){
-    shipping_cost = parseInt(weight/3);//ajax call to calculate shipping cost
-    $('#summary-shipping-cost').attr('value', shipping_cost);
+    //ajax call to calculate shipping cost
+    shipping_cost = parseInt(weight/3);
+    anou_fee = parseInt((seller_price * 0.15));
     total = seller_price + anou_fee + shipping_cost;
-    $('#summary-total').attr('value', total);
-    USD_total = parseInt(total / 8.5);//pull conversion rate from controller
-    $('#summary-USD').attr('value', USD_total);
+
+    $('#summary-shipping').html(shipping_cost);
+    $('#summary-total').html(total);
   }
 }
 

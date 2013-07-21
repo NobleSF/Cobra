@@ -139,15 +139,21 @@
       <div class='summary-info'>
 
         <div class='total-cost'>
-          <span class='number'>{{ product.seller_paid_amount }}</span>
+          <span id='summary-total' class='number'>
+            {% if product.seller_paid_amount %}{{ product.seller_paid_amount }}{% endif %}
+          </span>
           <i class='' title='total cost'>Dh</i>
         </div>
 
         <div class='costs-detail extra'>
-          <span class='number'>{{product.shipping_cost}}</span>
+          <span id='summary-shipping' class='number'>
+            {% if product.shipping_cost %}{{product.shipping_cost}}{% endif %}
+          </span>
           <i class='symbol-shipping' title='shipping cost'></i>
           <span class='number'>+</span>
-          <span class='number'>{{product.price}}</span>
+          <span id='summary-price' class='number'>
+            {% if product.price %}{{product.price}}{% endif %}
+          </span>
           <i class='' title='product cost'>Dh</i>
         </div>
 
