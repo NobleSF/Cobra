@@ -78,7 +78,7 @@
 
       <ul class='thumbnails'>
         {% for product in products %}
-          {% if product.is_approved %}
+          {% if product.approved %}
             <li class='span6'>
               <a href="{% url 'product' product.id %}" class='thumbnail'>
 

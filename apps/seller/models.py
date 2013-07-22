@@ -120,12 +120,6 @@ class Product(models.Model):
     else:
       return False
 
-  def is_approved(self):
-    if self.is_active():
-      return True
-    else:
-      return False
-
 class ShippingOption(models.Model):
   from apps.admin.models import Country
   name          = models.CharField(max_length=50)
