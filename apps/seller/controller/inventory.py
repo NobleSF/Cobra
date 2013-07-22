@@ -118,7 +118,7 @@ def delete(request, id): #permenantly delete product and return to management ho
 @access_required('seller')
 @csrf_exempt
 def saveProduct(request): #ajax requests only, not asset-aware
-  context = {}
+  response = {}
 
   if request.method == 'GET': # it must be an ajax GET to work
     try:
@@ -136,21 +136,21 @@ def saveProduct(request): #ajax requests only, not asset-aware
 
       if attribute == "asset":
         if status == "active":
-          context['asset'] = product.addAsset(request.GET['asset_id'])
+          response['asset'] = product.addAsset(request.GET['asset_id'])
         else:
-          context['asset'] = product.removeAsset(request.GET['asset_id'])
+          response['asset'] = product.removeAsset(request.GET['asset_id'])
 
       elif attribute == "shipping option":
         if status == "active":
-          context['shipping_option'] = product.addShippingOption(request.GET['shipping_option_id'])
+          response['shipping_option'] = product.addShippingOption(request.GET['shipping_option_id'])
         else:
-          context['shipping_option'] = product.removeShippingOption(request.GET['shipping_option_id'])
+          response['shipping_option'] = product.removeShippingOption(request.GET['shipping_option_id'])
 
       elif attribute == "color":
         if status == "active":
-          context['color'] = product.addColor(request.GET['color_id'])
+          response['color'] = product.addColor(request.GET['color_id'])
         else:
-          context['color'] = product.removeColor(request.GET['color_id'])
+          response['color'] = product.removeColor(request.GET['color_id'])
 
       elif attribute == "photo":
         try:
@@ -163,25 +163,30 @@ def saveProduct(request): #ajax requests only, not asset-aware
         except:
           contet['photo'] = "error saving photo"
         else:
-          context['photo_id'] = photo.id
-          context['photo'] = "saved photo at rank " + rank
+          response['photo_id'] = photo.id
+          response['photo'] = "saved photo at rank " + rank
 
       elif attribute == "active":
         if status == "yes":
-          context['active'] = product.activate()
+          response['active'] = product.activate()
         else:
-          context['active'] = not product.deactivate()
+          response['active'] = not product.deactivate()
 
       else:
         success_message = product.update(attribute, request.GET['value'])
-        context['success'] = success_message
+        response['success'] = success_message
+
+      cost_summary = {
+        'summary_price': str(product.product.price) if product.product.price else "",
+        'summary_shipping_cost': str(product.product.shipping_cost())
+      }
+      response.update(cost_summary)
 
     except Exception as e:
-      context = {'exception': e}
+      response = {'exception': e}
 
   else:
-    context['problem'] = "not GET"
+    response['problem'] = "not GET"
 
-  response = context
   return HttpResponse(simplejson.dumps(response), mimetype='application/json')
-  #return HttpResponse(context['exception'])
+  #return HttpResponse(response['exception'])

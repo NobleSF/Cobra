@@ -80,7 +80,7 @@ class Product(models.Model):
 
   def shipping_cost(self):
     from apps.seller.controller.shipping import calculateShippingCost
-    if len(self.shipping_options.all()) > 0:
+    if self.weight and len(self.shipping_options.all()) > 0:
       return calculateShippingCost(self.weight, self.shipping_options.all()[0])
     else:
       return 0

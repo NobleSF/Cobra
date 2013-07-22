@@ -73,6 +73,7 @@ class Product:
       self.product.colors.remove(color)
 
   def update(self, attribute, value):
+    value = value if value else None
     try:
       if attribute == 'price':
         self.product.price = value
@@ -91,7 +92,7 @@ class Product:
       return "attribute does not exist"
     else:
       self.product.save()
-      return "saved " + attribute + ": " + value
+      return "saved " + attribute + ": " + (value if value else "None")
 
   def get(self, attribute):
     try:
