@@ -61,9 +61,8 @@ class Product(models.Model):
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
 
-
   def __unicode__(self):
-    return self.name() + ' by ' +self.seller.name
+    return self.name() + ' by ' + self.seller.name
 
   def name(self):
     if len(self.assets.filter(ilk='product')) > 0:
@@ -80,11 +79,9 @@ class Product(models.Model):
       return 0
 
   def shipping_cost(self):
-    if self.weight:
-      cost = 250 if self.weight > 200 else 50
-      #need to pull in shipping cost formula for each in product.shipping_options
-
-      return int(round(cost))
+    from apps.seller.controller.shipping import calculateShippingCost
+    if len(self.shipping_options.all()) > 0:
+      return calculateShippingCost(self.weight, self.shipping_options.all()[0])
     else:
       return 0
 
@@ -133,7 +130,8 @@ class ShippingOption(models.Model):
   from apps.admin.models import Country
   name          = models.CharField(max_length=50)
   country       = models.ForeignKey(Country)
-  cost_formula  = models.CharField(max_length=50) #l,w,h(cm), g=weight(grams)
+  #cost_formula  = models.CharField(max_length=50, null=True, blank=True)
+  #using varaibles: l,w,h(cm), g=weight(grams)
   image         = models.ForeignKey('Image')
 
   def __unicode__(self):
