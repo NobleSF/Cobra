@@ -97,7 +97,7 @@ def edit(request):
   except Exception as e:
     context = {'except':e}
 
-  return render(request, 'account/edit.html', context)
+  return render(request, 'account/edit_seller.html', context)
 
 def getUnixTimestamp():
   from django.utils.dateformat import format
