@@ -43,6 +43,11 @@
       border-radius: 0.5em;
       margin: 0.5em;
     }
+    .chg-type-to-text{
+      font-size: 0.5em;
+      line-height: 4.5em;
+      border-left: 2em solid transparent;
+    }
 
   </style>
 {% endblock css%}
@@ -51,6 +56,10 @@
   <script>
     $('i').click(function(){
       $(this).closest('table').find('input').focus();
+    });
+    $('.chg-type-to-text').on('click', function(){
+      $(this).prev('td').find('input').attr('type', 'text').blur().focus();
+      $(this).remove();
     });
   </script>
 {% endblock javascript %}
@@ -84,11 +93,13 @@
     <table><tr>
       <td><i class='symbol-phone'></i></td>
       <td>{{ form.username }}</td>
+      <td class='chg-type-to-text visible-phone'>abc</td>
     </tr></table>
 
     <table><tr>
       <td><i class='symbol-password'></i></td>
       <td>{{ form.password }}</td>
+      <td class='chg-type-to-text visible-phone'>abc</td>
     </tr></table>
 
     <button class='symbol-go white'></button>
