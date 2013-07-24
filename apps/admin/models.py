@@ -5,7 +5,7 @@ class Account(models.Model):
   password      = models.CharField(max_length=64)
   name          = models.CharField(max_length=50, blank=True, null=True)
   email         = models.EmailField(blank=True, null=True, unique=True)
-  phone         = models.CharField(max_length=15, blank=True, null=True)
+  phone         = models.CharField(max_length=15, blank=True, null=True, unique=True)
   is_admin      = models.BooleanField(default=False, verbose_name='Admin')
                   # we will have to expand for different levels of admin
                   # as well as country specific admin

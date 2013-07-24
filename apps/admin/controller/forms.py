@@ -3,6 +3,10 @@ from django import forms
 from apps.admin.models import Account
 from apps.admin.controller.account import process_password
 
+from django.forms.widgets import TextInput
+class NumberInput(TextInput):
+  input_type = 'tel'
+
 class AccountCreateForm(forms.ModelForm):
   is_seller = forms.BooleanField(label='Seller', required=False)
   public_key  = forms.CharField(label='', widget=forms.HiddenInput, required=False)
@@ -25,9 +29,8 @@ class AccountEditForm(forms.ModelForm):
 
 
 class AccountLoginForm(forms.Form):
-  username  = forms.CharField(widget=forms.TextInput(
-    attrs={'autofocus':''}))
-  password  = forms.CharField()
+  username  = forms.CharField(widget=NumberInput(attrs={'autofocus':''}))
+  password  = forms.CharField(widget=NumberInput())
 
   def clean_password(self):
     return process_password(self.cleaned_data['password'])

@@ -1,6 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from apps.admin.controller.decorator import access_required
+from apps.admin.models import Account
 
 @access_required('account')
 def home(request):
@@ -9,7 +10,6 @@ def home(request):
 @access_required('admin')
 def create(request):
   from apps.admin.controller.forms import AccountCreateForm
-  from apps.admin.models import Account
   from django.db import IntegrityError
 
   if request.method == 'POST':
@@ -22,7 +22,7 @@ def create(request):
           if create(account.id):
             return login(request)
           else:
-            Account.objects.get(pk=account.id).delete()
+            Account.objects.get(id=account.id).delete()
             context = {'problem': "couldn't create seller account"}
         else:
           return login(request)
@@ -45,29 +45,52 @@ def create(request):
 @access_required('account')
 def edit(request):
   from apps.admin.controller.forms import AccountEditForm
+  account = Account.objects.get(
+    id = (request.session.get('admin_id') or request.session.get('admin_id'))
+  )
   form = AccountEditForm()
   return render(request, 'account/edit.html', {'form': form})
 
 def login(request, next=None):
-  from apps.admin.models import Account
   from apps.admin.controller.forms import AccountLoginForm
   from apps.seller.models import Seller
 
   if request.method == 'POST':
     form = AccountLoginForm(request.POST)
     try:
+      account = None
       username = request.POST['username']
       password = process_password(request.POST['password'])
-      account = Account.objects.get(username=username)
-      if account.password == password:
-        if 'username' not in request.session:
-          request.session['username'] = account.username
+
+      if not account:
+        try:
+          account = Account.objects.get(username=username)
+        except: pass
+      if not account:
+        try:
+          l = len(username)
+          account = Account.objects.get(phone__endswith=username[l-8:l])
+        except: pass
+      if not account:
+        try:
+          account = Account.objects.get(email=username)
+        except: pass
+
+      if account and account.password == password:
+
         if account.is_admin:
           request.session['admin_id'] = account.id
+          request.session['username'] = account.username
         else:#is seller
-          try: seller = Seller.objects.get(account_id=account.id)
-          except Seller.DoesNotExist: seller = None
-          request.session['seller_id'] = seller.id
+          try:
+            seller = Seller.objects.get(account_id=account.id)
+          except Seller.DoesNotExist:
+            seller = None
+          else:
+            request.session['seller_id'] = seller.id
+
+        if 'username' not in request.session: #keep admin username if already logged in
+          request.session['username'] = account.username
 
         if 'next' in request.session:
           full_path = request.session['next']
