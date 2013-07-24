@@ -299,8 +299,8 @@ function updateSummary(data){
   first_photo_url = $('#photo1').closest('.photo-upload-div').find('img').attr('src');
   if(!first_photo_url){/*do nothing*/
   }else{
-    //summary_pinky_url = first_photo_url.replace('thumb','pinky');
     $('#summary-section').find('.summary-image').find('img').attr('src', first_photo_url);
+    $('#floating-photo').find('.image').find('img').attr('src', first_photo_url);
   }
   //set price and Anou fee
   seller_price = data.summary_price;

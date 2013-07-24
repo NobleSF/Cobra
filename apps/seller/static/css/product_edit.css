@@ -1,5 +1,5 @@
 
-.hidden-fields{ display: none;}
+.hidden-fields{display: none;}
 
 ul {
   list-style: none;
@@ -10,6 +10,17 @@ input{
 
 #header{
   border-bottom: none;
+}
+
+#product-edit-form{
+  max-width: 600px;
+  float: right;
+}
+
+#floating-photo{
+  position: fixed;
+  top: 100px;
+  left: 150px;
 }
 
 .section table{
