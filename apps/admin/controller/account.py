@@ -62,18 +62,33 @@ def login(request, next=None):
       username = request.POST['username']
       password = process_password(request.POST['password'])
 
-      if not account:
-        try:
-          account = Account.objects.get(username=username)
-        except: pass
+      #login with phone number
       if not account:
         try:
           l = len(username)
           account = Account.objects.get(phone__endswith=username[l-8:l])
         except: pass
+
+      #login with username
+      if not account:
+        try:
+          account = Account.objects.get(username=username)
+        except: pass
+
+      #login with email address
       if not account:
         try:
           account = Account.objects.get(email=username)
+        except: pass
+
+      #lower-case first letter (for phones that auto-capitalize it)
+      username_as_list = list(username)
+      username_as_list[0] = username_as_list[0].lower()
+      username = "".join(username_as_list)
+      if not account:
+        try: account = Account.objects.get(username=username)
+        except: pass
+        try: account = Account.objects.get(email=username)
         except: pass
 
       if account and account.password == password:
