@@ -2,9 +2,10 @@ from django.db import models
 from django import forms
 from apps.seller.models import Asset, Product, Seller, Image, Photo
 from apps.admin.models import Category
+
 from django.forms.widgets import TextInput
 class NumberInput(TextInput):
-    input_type = 'number'
+  input_type = 'number'
 
 class SellerEditForm(forms.Form):
   from apps.admin.models import Country, Currency
