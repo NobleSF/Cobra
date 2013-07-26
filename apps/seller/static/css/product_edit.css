@@ -20,7 +20,10 @@ input{
 #floating-photo{
   position: fixed;
   top: 100px;
-  left: 150px;
+  left: 100px;
+}
+#floating-photo .image{
+  border: none;
 }
 
 .section table{

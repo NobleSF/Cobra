@@ -81,6 +81,7 @@ $().ready( function(){
               },
       }).success(function(){
         $('#product-edit-form').hide();
+        $('#floating-photo').remove();
         $('#confirmation').show();
       });
 
