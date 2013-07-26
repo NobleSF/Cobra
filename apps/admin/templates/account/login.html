@@ -7,11 +7,13 @@
 
 {% block css %}
   <style>
-    #header{
-      border-bottom: none;
-    }
     body{padding: 10px 0;}
-    #body{margin-top:20px;}
+    #header{border-bottom: none;}
+    #body{margin-top:100px;}
+    @media (max-width: 980px) {
+      #body{margin-top:0px;}
+    }
+
     input{max-width: 150px;}
     ul{list-style: none;}
     form{
