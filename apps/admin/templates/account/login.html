@@ -10,7 +10,8 @@
     #header{
       border-bottom: none;
     }
-    body{margin-top:30px;}
+    body{padding: 10px 0;}
+    #body{margin-top:20px;}
     input{max-width: 150px;}
     ul{list-style: none;}
     form{
@@ -25,8 +26,6 @@
       vertical-align: middle;
     }
     input{
-      height: 1em;
-      font-size: 2em;
       width: 8em;
       text-align: center;
     }
@@ -34,19 +33,31 @@
       font-size: 3em;
       padding: 0 .5em;
     }
-    button{
+    button, .exit-button span{
       font-size: 2.5em;
       line-height: normal;
       height: 1.5em;
       width: 4em;
       background-color: green;
+      border: none;
       border-radius: 0.5em;
       margin: 0.5em;
     }
+    .exit-button{
+      border-left: 1em solid transparent;
+    }
+    .exit-button span{
+      font-size: 1em;
+      height: 100%;
+      width: 3em;
+      opacity: 0.01;
+      padding: 0.5em 0em;
+    }
+
     .chg-type-to-text{
       font-size: 0.5em;
       line-height: 4.5em;
-      border-left: 2em solid transparent;
+      color: white;
     }
 
   </style>
@@ -57,8 +68,24 @@
     $('i').click(function(){
       $(this).closest('table').find('input').focus();
     });
+
+    //show exit-button when focused on input (mobile)
+    $('#id_username, #id_password').on('focus', function(){
+      $(this).closest('td').next('td').find('span')
+      .css('opacity', '1');
+    });
+
+    $('.exit-button span').on('click', function(){
+      $('#id_username, #id_password').blur();
+      $(this).css('opacity', '0.01');
+    });
+    $('#id_username, #id_password').on('blur', function(){
+      $(this).closest('td').next('td').find('span')
+      .css('opacity', '0.01');
+    });
+
     $('.chg-type-to-text').on('click', function(){
-      $(this).prev('td').find('input').attr('type', 'text').blur().focus();
+      $('input').attr('type', 'text').blur().focus();
       $(this).remove();
     });
   </script>
@@ -77,6 +104,9 @@
           <a href="{% url 'admin:dashboard' %}">Admin Dashboard</a>
         </li>
       {% endif %}
+      <li>
+        <a class='chg-type-to-text visible-phone'>abc</a>
+      </li>
     </ul>
   </div>
 {% endblock header %}
@@ -93,13 +123,17 @@
     <table><tr>
       <td><i class='symbol-phone'></i></td>
       <td>{{ form.username }}</td>
-      <td class='chg-type-to-text visible-phone'>abc</td>
+      <td class='exit-button'>
+        <span class='symbol-go white hidden-desktop'></span>
+      </td>
     </tr></table>
 
     <table><tr>
       <td><i class='symbol-password'></i></td>
       <td>{{ form.password }}</td>
-      <td class='chg-type-to-text visible-phone'>abc</td>
+      <td class='exit-button'>
+        <span class='symbol-go white hidden-desktop'></span>
+      </td>
     </tr></table>
 
     <button class='symbol-go white'></button>

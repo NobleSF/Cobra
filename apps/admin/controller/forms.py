@@ -29,7 +29,7 @@ class AccountEditForm(forms.ModelForm):
 
 
 class AccountLoginForm(forms.Form):
-  username  = forms.CharField(widget=NumberInput(attrs={'autofocus':''}))
+  username  = forms.CharField(widget=NumberInput())
   password  = forms.CharField(widget=NumberInput())
 
   def clean_password(self):
