@@ -16,6 +16,11 @@ input{
   max-width: 600px;
   float: right;
 }
+@media (max-width: 600px){
+  #product-edit-form{
+    float: none;
+  }
+}
 
 #floating-photo{
   position: fixed;

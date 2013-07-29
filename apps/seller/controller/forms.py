@@ -5,7 +5,7 @@ from apps.admin.models import Category
 
 from django.forms.widgets import TextInput
 class NumberInput(TextInput):
-  input_type = 'number'
+  input_type = 'tel'
 
 class SellerEditForm(forms.Form):
   from apps.admin.models import Country, Currency
