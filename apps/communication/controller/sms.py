@@ -22,14 +22,13 @@ def sendSMS(msg, to_number, priority='1'): #using Telerivet
       'status_secret':  TELERIVET['status_secret']
     }
     response = requests.post(post_url, auth=authentication, data=parameters)
-    status_code = response.status_code
     response_content = json.loads(response.content) #dict of response content
 
   except Exception as e:
     return "error: " + str(e)
 
   else:
-    if status_code == '200':
+    if int(response.status_code) is 200:
       return saveSMS(response_content) #responds True or exception str
     else:
       return "bad request or possible Telerivet error"

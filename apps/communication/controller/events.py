@@ -5,19 +5,24 @@ def communicateOrdersCreated(orders):
   try:
     for order in orders: #send SMS to seller for each order
       products_string = ""
-      for product in order.products:
-        products_string += str(product.id) + "  "
+      for product in order.products.all():
+        products_string += "%d  " % product.id
 
         #message each artisan that their product has sold and for how much
-        artisan_msg = str(product.id) + "\r\n" + "%d Dh" % product.price
+        artisan_msg = "%d \r\n %d Dh" % (product.id, product.price)
         for artisan in product.assets.filter(ilk='artisan'):
-          sendSMS(artisan_msg, artisan.phone)
+          pass
+          #artisan assets need phone numbers
+          #sendSMS(artisan_msg, artisan.phone)
 
       #message the seller with the address
       address_string = getCustomerAddressFromOrder(order, sms_format=True)
       seller_msg = products_string + "\r\n" + address_string
       seller_phone = order.products.all()[0].seller.phone
-      sendSMS(msg, seller_phone)
+      success = sendSMS(seller_msg, seller_phone)
+      if success is not True:
+        error_message = success #got stored in place of True
+        #todo: email tom here
 
     #send email to buyer
     email = Email('order/created', orders)
