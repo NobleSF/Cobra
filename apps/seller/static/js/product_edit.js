@@ -302,6 +302,7 @@ function updateSummary(data){
   }else{
     $('#summary-section').find('.summary-image').find('img').attr('src', first_photo_url);
     $('#floating-photo').find('.image').find('img').attr('src', first_photo_url);
+    $('#confirmation').find('.image').find('img').attr('src', first_photo_url);
   }
   //set price and Anou fee
   seller_price = data.summary_price;
