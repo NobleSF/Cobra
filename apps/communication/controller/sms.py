@@ -52,7 +52,6 @@ def saveSMS(sms_content): #takes Telerivet response content detail at
 @csrf_exempt
 def incoming(request): #receives SMS messages via Telerivet, detail at
   #https://telerivet.com/p/PJ8973e6e346c349cbcdd094fcffa9fcb5/api/webhook/receiving
-  from apps.public.controller.order_class import processOrderEvent
   from apps.communication.controller.events import updateOrder
 
   if TELERIVET['webhook_secret'] == request.POST.get('secret'):
