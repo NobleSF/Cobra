@@ -2,11 +2,12 @@
 
 <div class='product-id'>
   <div class='product-id-tag text-center'>
-    {% if product.id < 4 %}
-      <i class='symbol-solidtag gold' title='product id'></i>
-    {% else %}
-      <i class='symbol-opentag black' title='product id'></i>
-    {% endif %}
+
+      <i class='
+        {% if product.order.is_seller_paid %}symbol-solidtag gold
+        {% else %}symbol-opentag black
+        {% endif %}
+      ' title='product id'></i>
   </div>
   <div class='product-id-number text-center'>
     {{ product.id }}
@@ -17,20 +18,25 @@
   <div class='costs'>
     <ul>
       <li class='total-cost extra'>
-        <span class='number'>{{product.total_cost}} Dh</span>
+        <span class='number'>{{ product.order.seller_paid_amount|floatformat:'0' }} Dh</span>
       </li>
 
       <li class='costs-detail extra'>
-        <span class='number'>{{product.shipping_cost}}</span>
+        <span class='number'>{{ product.order.shipping_charge|floatformat:'0' }}</span>
         <i class='symbol-shipping' title='shipping cost'></i>
         <span class='number'>+</span>
-        <span class='number'>{{product.local_price}}</span>
+        <span class='number'>{{ product.order.products_charge|floatformat:'0' }}</span>
       </li>
 
       <li class='status extra'>
-        <i class='symbol-shipping red' title='product arrived'></i>
-        <i class='symbol-SMS-shipping green' title='product shipped'></i>
-        <i class='symbol-SMS green' title='product confirmed'></i>
+        <i class='symbol-shipping {% if order.is_received %}green{% else %}red{% endif %}'
+           title='product arrived'></i>
+
+        <i class='symbol-SMS-shipping {% if order.is_shipped %}green{% else %}red{% endif %}'
+           title='product shipped'></i>
+
+        <i class='symbol-SMS {% if order.is_seller_confirmed %}green{% else %}red{% endif %}'
+           title='product confirmed'></i>
       </li>
     </ul>
   </div>
@@ -38,5 +44,5 @@
 
 <div class='product-image'>
   <img id='product{{ product.id }}-image'
-       src="{{ product.first_photo.thumb }}"/>
+       src="{{ product.first_photo.thumb_size }}"/>
 </div>

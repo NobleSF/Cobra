@@ -25,8 +25,6 @@ class Product:
     else:
       photo = models.Photo(product=self.product, rank=rank, original=url)
 
-    photo.thumb = url.replace("upload", "upload/t_thumb")
-    photo.pinky = url.replace("upload", "upload/t_pinky")
     photo.save()
     return photo
 
@@ -127,7 +125,7 @@ class Product:
 
   def activate(self):
     try:
-      self.product.is_active = True
+      self.product.active_at = datetime.now()
       self.product.save()
     except:
       return False
@@ -136,7 +134,7 @@ class Product:
 
   def deactivate(self):
     try:
-      self.product.is_active = False
+      self.product.deactive_at = datetime.now()
       self.product.save()
     except:
       return False
@@ -145,7 +143,16 @@ class Product:
 
   def approve(self):
     try:
-      self.product.approved = datetime.now
+      self.product.approved_at = datetime.now()
+      self.product.save()
+    except:
+      return False
+    else:
+      return True
+
+  def mark_sold(self):
+    try:
+      self.product.sold_at = datetime.now()
       self.product.save()
     except:
       return False

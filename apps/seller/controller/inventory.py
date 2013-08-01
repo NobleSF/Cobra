@@ -178,7 +178,7 @@ def saveProduct(request): #ajax requests only, not asset-aware
 
       cost_summary = {
         'summary_price': str(product.product.price) if product.product.price else "",
-        'summary_shipping_cost': str(product.product.shipping_cost())
+        'summary_shipping_cost': str(product.product.shipping_cost)
       }
       response.update(cost_summary)
 

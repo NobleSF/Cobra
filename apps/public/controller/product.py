@@ -13,7 +13,7 @@ def home(request, product_id):
 
     product.photos = product.photo_set.order_by('rank')
     for photo in product.photos:
-      photo.feature_url = str(photo.thumb).replace('thumb','product')
+      photo.feature_url = photo.product
 
     product.artisans  = product.assets.filter(ilk='artisan').order_by('?')[:1]
     product.materials = product.assets.filter(ilk='material').order_by('?')[:3]

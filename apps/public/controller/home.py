@@ -2,12 +2,15 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
+from datetime import datetime
 
 def home(request):
   from apps.seller.models import Product
-  products = Product.objects.all()
+  unsold_products = Product.objects.filter(sold_at=None)
+  approved_products = unsold_products.filter(approved_at__lte=datetime.today())
+  active_products = approved_products.filter(deactive_at=None)
 
-  context = {'products':products}
+  context = {'products':active_products}
 
   return render(request, 'home/home.html', context)
 

@@ -1,4 +1,5 @@
 from django import template
+from math import ceil as roundUp
 register = template.Library()
 
 @register.inclusion_tag('inventory/product_detail.html')
@@ -13,8 +14,8 @@ def product_detail_tag(product):
     three_random_ratings = (randint(1,5), randint(1,5), randint(1,5))
     (rating['product'], rating['picture'], rating['price']) = three_random_ratings
   else:
-    (rating['product'], rating['picture'], rating['price']) = (5,5,5)
-  rating['overall'] = int(sum([val for val in three_random_ratings]) / 3) + 1
+    (rating['product'], rating['picture'], rating['price']) = (0,0,0)
+  rating['overall'] = int(roundUp(sum([val/3 for val in three_random_ratings])))
   #placeholder for ratings
 
   return {'product':product, 'rating':rating}
@@ -22,7 +23,7 @@ def product_detail_tag(product):
 @register.inclusion_tag('inventory/sold_product_detail.html')
 def sold_product_detail_tag(product):
   product.first_photo = product.photo_set.order_by('rank')[0]
-  product.total_cost = product.shipping_cost() + product.local_price()
+  product.total_cost = product.shipping_cost + product.local_price
 
   return {'product':product}
 
@@ -30,7 +31,7 @@ def sold_product_detail_tag(product):
 def photo_upload_tag(photo_form, product, rank=None, photo=None):
   if photo is not None:
     rank = photo.rank
-    photo_url = photo.thumb
+    photo_url = photo.thumb_size
     photo_id = photo.id
   else:
     photo_url = None

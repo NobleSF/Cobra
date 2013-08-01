@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from apps.admin.controller.decorator import access_required
 from django.views.decorators.csrf import csrf_exempt
+from datetime import datetime
 
 @access_required('seller')
 def home(request):
@@ -23,9 +24,10 @@ def products(request):
 
   try:
     seller = Seller.objects.get(id=request.session['seller_id'])
-    products = seller.product_set.exclude(approved=None)
-    #redundent to add .filter(is_active=True)
-    context = {'seller': seller, 'products': products}
+    active_products = seller.product_set.filter(active_at__lte=datetime.today())
+    approved_products = active_products.filter(approved_at__lte=datetime.today())
+
+    context = {'seller': seller, 'products': approved_products}
   except Exception as e:
     context = {'exception': e}
 
@@ -37,8 +39,10 @@ def orders(request):
 
   try:
     seller = Seller.objects.get(id=request.session['seller_id'])
-    products = seller.product_set.all()
-    context = {'seller': seller, 'products': products}
+    sold_products = seller.product_set.filter(sold_at__lte=datetime.today())
+    for product in sold_products:
+      product.order = product.item_set.all()[0].cart.order_set.all()[0]
+    context = {'seller': seller, 'products': sold_products}
 
   except Exception as e:
     context = {'exception': e}

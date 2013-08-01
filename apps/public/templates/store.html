@@ -17,9 +17,9 @@
   <div id='store' class='row-fluid'>
     <div id='info-left' class='span4'>
       <ul>
-        {% if store.image.thumb %}
+        {% if store.image.thumb_size %}
           <li>
-            <img src='{{ store.image.thumb }}'>
+            <img src='{{ store.image.thumb_size }}'>
           </li>
         {% endif %}
         <li>
@@ -49,7 +49,7 @@
             {% for artisan in store.artisans %}
               <div class='artisan-profile thumbnail'>
                 {% if artisan.image %}
-                  <img class='artisan-image' src='{{ artisan.image.thumb }}'>
+                  <img class='artisan-image' src='{{ artisan.image.thumb_size }}'>
                 {% endif %}
                 {% if artisan.name %}
                   <div class='title'>
@@ -85,18 +85,18 @@
                 <div class='title'><p>{{ product.name }}</p></div>
 
                 <div class='photo'>
-                  <img src='{{ product.photos.0.thumb }}'>
+                  <img src='{{ product.photos.0.thumb_size }}'>
                 </div>
 
                 <div class='extra extra-photos row-fluid hidden-phone'>
                   <div class='first-extra-photo span4 pinky'>
-                    <img src='{{ product.photos.1.pinky }}'>
+                    <img src='{{ product.photos.1.pinky_size }}'>
                   </div>
                   <div class='second-extra-photo span4 pinky'>
-                    <img src='{{ product.photos.2.pinky }}'>
+                    <img src='{{ product.photos.2.pinky_size }}'>
                   </div>
                   <div class='third-extra-photo span4 pinky'>
-                    <img src='{{ product.photos.3.pinky }}'>
+                    <img src='{{ product.photos.3.pinky_size }}'>
                   </div>
                 </div>
 

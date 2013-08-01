@@ -201,7 +201,5 @@ def deleteAsset(request): #ajax requests only
 def customSaveImage(url):
   from apps.seller.models import Image
   image_object = Image(original=url)
-  image_object.thumb = url.replace("upload", "upload/t_thumb")
-  image_object.pinky = url.replace("upload", "upload/t_pinky")
   image_object.save()
   return image_object

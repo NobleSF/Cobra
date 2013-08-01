@@ -43,7 +43,7 @@
           <ul>
             {% for item in cart %}
               <li>
-                <img src='{{ item.photo.pinky }}' alt='product photo'>
+                <img src='{{ item.photo.pinky_size }}' alt='product photo'>
                 <p>{{ item.product.name }}, ${{ item.product.display_price }}</p>
               </li>
             {% endfor %}

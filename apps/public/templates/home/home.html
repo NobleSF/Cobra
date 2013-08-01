@@ -56,11 +56,9 @@
 
   <div id='product-container' class='fitgrid-row fg-no-gutter image-grid'>
     {% for product in products %}
-      {% if product.approved %}<!-- if approved date is > today -->
-        <div class='fg3 product-area {% cycle 'pos1' 'pos2' 'pos3' 'pos4' %}'>
-          {% product_tag product %}
-        </div>
-      {% endif %}
+      <div class='fg3 product-area {% cycle 'pos1' 'pos2' 'pos3' 'pos4' %}'>
+        {% product_tag product %}
+      </div>
     {% endfor %}
   </div>
 

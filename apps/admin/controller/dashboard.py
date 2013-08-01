@@ -13,8 +13,11 @@ def home(request):
 @access_required('admin')
 def review_products(request):
   from apps.seller.models import Product
-  new_products = Product.objects.filter(is_active=True).filter(approved=None).order_by('updated_at').reverse()
-  context = {'products': new_products}
+  new_products = Product.objects.filter(active_at__lte=datetime.today())
+  yet_approved = new_products.filter(approved_at=None)
+  products_to_review = yet_approved.order_by('updated_at').reverse()
+
+  context = {'products': products_to_review}
   return render(request, 'dashboard/review_products.html', context)
 
 @access_required('admin')
@@ -23,7 +26,7 @@ def approve_product(request):
   try:
     product_id = request.GET['product_id']
     product = Product.objects.get(id=product_id)
-    product.approved = datetime.now()
+    product.approved_at = datetime.now()
     product.save()
   except Exception as e:
     response = {'exception': e}

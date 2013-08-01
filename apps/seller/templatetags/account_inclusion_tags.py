@@ -5,7 +5,7 @@ register = template.Library()
 def image_tag(image_id=None):
   from apps.seller.models import Image
   try:
-    image_url = Image.objects.get(id=image_id).thumb
+    image_url = Image.objects.get(id=image_id).thumb_size
 
   except Exception as e:
     image_url = None
