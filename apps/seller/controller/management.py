@@ -26,8 +26,9 @@ def products(request):
     seller = Seller.objects.get(id=request.session['seller_id'])
     active_products = seller.product_set.filter(active_at__lte=datetime.today())
     approved_products = active_products.filter(approved_at__lte=datetime.today())
+    unsold_products = approved_products.filter(sold_at__isnull=True)
 
-    context = {'seller': seller, 'products': approved_products}
+    context = {'seller': seller, 'products': unsold_products}
   except Exception as e:
     context = {'exception': e}
 
