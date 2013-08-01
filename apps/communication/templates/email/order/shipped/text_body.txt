@@ -1,6 +1,6 @@
 Your order has shipped!
 
-Your order: http://www.theanou.com/checkout/confirmation?checkout_id={{ data.0.cart.wepay_checkout_id }}
+Your order: http://www.theanou.com/checkout/confirmation?checkout_id={{ data.cart.wepay_checkout_id }}
 
 Your item should arrive within two weeks. In rare cases, products from rural Morocco can take up to 4 weeks at the most.
 
