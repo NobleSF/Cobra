@@ -21,38 +21,17 @@
 {% endblock header %}
 
 {% block content %}
+  <div class='text-center'>
+    <img id='video-image'
+         src='http://res.cloudinary.com/anou/image/upload/c_fill,g_center,h_300,w_1200/v1375396116/meet_brahim_e1g9op_lezgqo.jpg'
+         >
 
-  <div class='fitgrid-row fg-no-outer-gutter'>
-    <div class='fg8'>
-      <div id="anou-carousel" class="carousel slide">
-        <ol class="carousel-indicators">
-          <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-          <!--<li data-target="#myCarousel" data-slide-to="1"></li>-->
-          <!--<li data-target="#myCarousel" data-slide-to="2"></li>-->
-        </ol>
-        <!-- Carousel items -->
-        <div class="carousel-inner">
-          <div class="active item">
-            <img src="{% get_static_prefix %}images/video.jpg">
-            <div class='carousel-caption'>
-              <h3>Watch Video</h3>
-            </div>
-          </div>
-          <!--<div class="item"></div>-->
-          <!--<div class="item"></div>-->
-        </div>
-        <!-- Carousel nav -->
-        <a class="carousel-control left hidden-phone" href="#anou-carousel" data-slide="prev">&lsaquo;</a>
-        <a class="carousel-control right hidden-phone" href="#anou-carousel" data-slide="next">&rsaquo;</a>
-      </div>
-    </div>
-
-    <div id='featured-seller' class='fg4'>
-      <p>a little featurette on a seller</p>
-    </div>
-
+    <iframe id='video'
+            width="100%" height="450"
+            style="display:none;"
+            src="//www.youtube.com/embed/xquR19Ms2R4?rel=0" frameborder="0" allowfullscreen></iframe>
   </div>
-  {% search_bar_tag %}
+  <!--{% search_bar_tag %}-->
 
   <div id='product-container' class='fitgrid-row fg-no-gutter image-grid'>
     {% for product in products %}

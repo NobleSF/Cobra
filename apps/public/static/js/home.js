@@ -7,7 +7,11 @@ $(function(){//on page load
 });
 
 //bootstrap carousel
-$('.carousel').carousel();
+
+$('#video-image').on('click', function(){
+  $('#video-image').hide();
+  $('#video').show();
+});
 
 $('.product').click(function(){
   window.location.href = $(this).attr('data-url');
