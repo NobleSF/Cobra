@@ -60,7 +60,7 @@ class AssetForm(forms.Form):
                     attrs={'class':"description autosave", 'data-asset_id':""}),
                     required=False)
   category    = forms.ModelMultipleChoiceField(
-                  widget=forms.SelectMultiple(
+                  widget=forms.Select(
                     attrs={'class':"category autosave", 'data-asset_id':""}),
                     queryset=Category.objects.all())
 

@@ -146,6 +146,7 @@ def saveSeller(request): #ajax requests only, create or update asset
 @csrf_exempt
 def saveAsset(request): #ajax requests only, create or update asset
   from apps.seller.models import Asset
+  from apps.admin.models import Category
 
   if request.method == 'GET': # it must be an ajax get to work
     try:
@@ -168,7 +169,8 @@ def saveAsset(request): #ajax requests only, create or update asset
       elif element == 'description':
         asset.description = value
       elif element == 'category':
-        asset.categories.add(id=value)
+        asset.categories.clear()
+        asset.categories.add(Category.objects.get(id=value))
 
       asset.save()
       context = {'asset_id':asset.id, 'get':request.GET}
