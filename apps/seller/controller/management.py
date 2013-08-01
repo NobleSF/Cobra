@@ -41,7 +41,7 @@ def orders(request):
     seller = Seller.objects.get(id=request.session['seller_id'])
     sold_products = seller.product_set.filter(sold_at__lte=datetime.today())
     for product in sold_products:
-      product.order = product.item_set.all()[0].cart.order_set.all()[0]
+      product.order = product.order_set.all()[0]
     context = {'seller': seller, 'products': sold_products}
 
   except Exception as e:
