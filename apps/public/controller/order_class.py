@@ -1,11 +1,15 @@
 from apps.public import models
 from apps.communication.controller import events
+from datetime import datetime
 
 def getOrders(wepay_checkout_id):
   cart = models.Cart.objects.get(wepay_checkout_id = wepay_checkout_id)
   orders = cart.order_set.all()
   if not orders:
     orders = createFromCart(cart)
+    #after creating an order, run cleanup
+    from apps.public.controller.cart_class import cleanupCarts
+    cleanupCarts()
   return orders
 
 def createFromCart(cart):
@@ -15,28 +19,32 @@ def createFromCart(cart):
 
   orders = []
   for item in cart: #or for item in cart.cart.item_set.all()
-    orders.append(createFromCartItem(item, checkout_data))
+    if item.product.sold_at == None:
+      orders.append(createFromCartItem(item, checkout_data))
+      item.product.sold_at = datetime.now()
+      item.product.save()
+    else:
+      #we have a problem, the customer was just charged for a product someone else already bought
+      #todo: to notify someone about this item.product
+      pass
 
   if events.communicateOrdersCreated(orders):
     for order in orders:
-      order.is_seller_notified = True
+      order.seller_notified_at = datetime.now()
       order.save()
   else:
     raise Exception
 
   return orders
 
-def processOrderEvent((product_id, action, data)):#yes, it's gets a tuple
-
-  return True
-
 def createFromCartItem(item, checkout_data):
   order = models.Order(
-    cart            = item.cart,
-    products_charge = item.product.price,
-    anou_charge     = item.product.anou_fee(),
-    shipping_charge = item.product.shipping_cost(),
-    total_charge    = item.product.local_price()
+    cart                = item.cart,
+    products_charge     = item.product.price,
+    anou_charge         = item.product.anou_fee,
+    shipping_charge     = item.product.shipping_cost,
+    total_charge        = item.product.local_price,
+    seller_paid_amount  = item.product.price + item.product.shipping_cost
   )
   order.save()
   order.products.add(item.product)

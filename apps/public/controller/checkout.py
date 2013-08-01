@@ -82,6 +82,7 @@ def confirmation(request):
     #Cart() creates a new cart if checkout_id=None and no cart in request.session
     cart = Cart(request, checkout_id)
     checkout_data = cart.getCheckoutData() #return {} if no data available
+    #also runs checkout processes if necessary
 
   if not checkout_data: #empty data means no checkout_id created for the cart.
     checkout_data = {'problem': "No order exists with that confirmation number (checkout_id)"}

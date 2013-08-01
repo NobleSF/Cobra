@@ -1,6 +1,26 @@
-# based on https://github.com/bmentges/django-cart
-
 from apps.public import models
+from datetime import datetime, timedelta
+
+def cleanupCarts():
+  from apps.seller.models import Product
+
+  try:
+    time_1_hour_ago = datetime.today() - timedelta(hours=1)
+    recently_purchased_products = Product.objects.filter(sold_at__gte=time_1_hour_ago)
+
+    #remove sold from any carts that have not checked out yet
+    for product in recently_purchased_products:
+      if len(product.item_set.all()) > 1:
+        for item in product.item_set.all():
+          if not item.cart.checked_out:
+            item.delete()
+
+  except Exception as e:
+    return e
+  else:
+    return True
+
+# based on https://github.com/bmentges/django-cart
 class Cart:
   def __init__(self, request=None, checkout_id=None, cart_id=None):
     if not cart_id:
@@ -129,7 +149,7 @@ class Cart:
   def summary(self):
     result = 0
     for item in self.cart.item_set.all():
-      result += item.product.display_price()
+      result += item.product.display_price
     return '%.2f' % result
 
   def clear(self):
@@ -193,7 +213,7 @@ class Cart:
     wepay_checkout_data = self.getWePayCheckoutData()
 
     if not wepay_checkout_data:
-      return {}
+      checkout_data = {}
 
     else:
       checkout_data = wepay_checkout_data
@@ -214,25 +234,39 @@ class Cart:
 
       #shipping address
       if not checkout_data.get('shipping_address'):
-        checkout_data['shipping_address'] = {}
+        checkout_data['shipping_address'] = {} #create the dict
 
-      if self.cart.address1 and self.cart.city and \
-         self.cart.state and self.cart.postal_code:
-        checkout_data['shipping_address']['address1']     = self.cart.address1
-        checkout_data['shipping_address']['address2']     = self.cart.address2
-        checkout_data['shipping_address']['city']         = self.cart.city
-        checkout_data['shipping_address']['state']        = self.cart.state
-        checkout_data['shipping_address']['postal_code']  = self.cart.postal_code
-        checkout_data['shipping_address']['country']      = self.cart.country
+      if not (self.cart.address1 and self.cart.city and
+              self.cart.state and self.cart.postal_code):
+        #we do not have an address stored for this order
+        #pull address from WePay and save it as our own
 
-      #if we didn't overwrite with our info, fix wepay's so it looks like ours.
-      elif wepay_checkout_data['shipping_address'].get('region') or \
-           wepay_checkout_data['shipping_address'].get('post_code'):
-        # international address, all should match except region -> state, post_code -> postal_code
-        checkout_data['shipping_address']['state'] = wepay_checkout_data['shipping_address']['region']
-        checkout_data['shipping_address']['postal_code'] = wepay_checkout_data['shipping_address']['post_code']
-      else:
-        #US address, all should match up except zip -> postal_code
-        checkout_data['shipping_address']['postal_code'] = wepay_checkout_data['shipping_address'].get('zip')
+        #US or international address, all should match up except state, postal_code
 
-      return checkout_data
+        self.cart.address1  = wepay_checkout_data['shipping_address']['address1']
+        self.cart.address2  = wepay_checkout_data['shipping_address']['address2']
+        self.cart.city      = wepay_checkout_data['shipping_address']['city']
+        self.cart.country   = wepay_checkout_data['shipping_address']['country']
+
+        #check for non-US address first
+        if (wepay_checkout_data['shipping_address'].get('region') or
+            wepay_checkout_data['shipping_address'].get('post_code')):
+         # international address, all should match except region -> state, post_code -> postal_code
+         self.cart.state = wepay_checkout_data['shipping_address'].get('region')
+         self.cart.postal_code = wepay_checkout_data['shipping_address'].get('post_code')
+
+        else: #US address
+          self.cart.state = wepay_checkout_data['shipping_address'].get('state')
+          self.cart.postal_code = wepay_checkout_data['shipping_address'].get('zip')
+
+        self.cart.save() #save all our address changes
+
+      checkout_data['shipping_address']['address1']     = self.cart.address1
+      checkout_data['shipping_address']['address2']     = self.cart.address2
+      checkout_data['shipping_address']['city']         = self.cart.city
+      checkout_data['shipping_address']['state']        = self.cart.state
+      checkout_data['shipping_address']['postal_code']  = self.cart.postal_code
+      checkout_data['shipping_address']['country']      = self.cart.country
+
+
+    return checkout_data
