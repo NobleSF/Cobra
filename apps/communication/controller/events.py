@@ -1,5 +1,6 @@
 from apps.communication.controller.email_class import Email
 from apps.communication.controller.sms import sendSMS
+from settings.settings import DEBUG
 
 def communicateOrdersCreated(orders):
   try:
@@ -40,42 +41,42 @@ def updateOrder((product_id, data), gimme_reply_sms=False):
   #if product_id: #we should always have a product id
   try:
     product = Product.objects.get(id=product_id)
+    order = product.order_set.all()[0]
 
     if data.get('remove'): #the product should be removed
       if product.order_set.all():
-        order = product.order_set.all()[0]
-        if not order.is_seller_confirmed:
-          pass #cancel order and tell customer
-        reply = 'xata'
+        if order.is_seller_confirmed:
+          reply = 'xata'
+        else:
+          reply = 'shukran'
+          #todo: email dan or tom, or text brahim
+          #cancel order and tell customer
 
       else:
-        product.is_active = False
+        product.deactive_at = datetime.now()
         product.save()
         reply = 'shukran'
 
     else: #update the order of that product_id
-      order = Order.objects.filter(product=product)
-      tracking_number = data.get('tracking_number')
       reply = str(product_id) + " "
 
-      if tracking_number: #if they provide a tracking number
+      if data.get('tracking_number'): #if they provide a tracking number
         #the order is both confirmed and shipped
-        order.is_seller_confirmed = order.is_shipped = True
-        order.shipped_date = datetime.today()
-        order.tracking_number = tracking_number
+        if not order.is_seller_confirmed: order.seller_confirmed_at = datetime.now()
+        order.shipped_at = datetime.now()
+        order.tracking_number = data.get('tracking_number')
         order.save()
         reply += communicateOrderShipped(order, gimme_reply_sms)
 
-      elif order.is_seller_confirmed: #if they have already confirmed the order
+      elif order.is_seller_confirmed and not order.is_shipped: #if order already confirmed
         #confirm it is shipped
-        order.is_shipped = True
-        order.shipped_date = datetime.today()
+        order.shipped_at = datetime.now()
         order.save()
         reply += communicateOrderShipped(order, gimme_reply_sms)
 
       elif not order.is_seller_confirmed: #if the order is not yet confirmed
         #confirm the order
-        order.is_seller_confirmed = True
+        order.seller_confirmed_at = datetime.now()
         order.save()
         reply += communicateOrderConfirmed(order, gimme_reply_sms)
 
@@ -85,11 +86,12 @@ def updateOrder((product_id, data), gimme_reply_sms=False):
 
       #order.save()
 
-  except:
-    pass
+  except Exception as e:
+    if DEBUG: reply = str(e)
+    else: reply = 'xata'
 
   if gimme_reply_sms:
-    return reply
+    return (reply[:158] + '..') if len(reply)>160 else reply
   else:
     #send the reply message to the seller
     return True

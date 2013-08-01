@@ -29,13 +29,13 @@
       </li>
 
       <li class='status extra'>
-        <i class='symbol-shipping {% if order.is_received %}green{% else %}red{% endif %}'
+        <i class='symbol-shipping {% if product.order.is_received %}green{% else %}red{% endif %}'
            title='product arrived'></i>
 
-        <i class='symbol-SMS-shipping {% if order.is_shipped %}green{% else %}red{% endif %}'
+        <i class='symbol-SMS-shipping {% if product.order.is_shipped %}green{% else %}red{% endif %}'
            title='product shipped'></i>
 
-        <i class='symbol-SMS {% if order.is_seller_confirmed %}green{% else %}red{% endif %}'
+        <i class='symbol-SMS {% if product.order.is_seller_confirmed %}green{% else %}red{% endif %}'
            title='product confirmed'></i>
       </li>
     </ul>

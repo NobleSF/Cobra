@@ -67,7 +67,7 @@ def incoming(request): #receives SMS messages via Telerivet, detail at
 
       #look at what we received
       msg_data = understandMessage(request.POST['content'])
-      #msg_data is tuple of id, data dict (product_id, data) or
+      #msg_data is tuple of ( product_id, data{} ) or
       #just False if not understandable
 
       if msg_data: #if it was understandable, update the order
@@ -80,6 +80,9 @@ def incoming(request): #receives SMS messages via Telerivet, detail at
           #send reply back with response
           response = {'messages':[{'content':reply_msg}]}
           return HttpResponse(json.dumps(response), mimetype='application/json')
+
+        else:
+          pass #something wrong updateOrder function
 
       else: #message not understandable
         #maybe they wanna chat or need help? send someone an email?
@@ -126,7 +129,8 @@ def understandMessage(message): #example message '1234 MAS12312938110'
       data['tracking_number'] = tracking_number.replace(' ','')#remove spaces
     except: pass
 
-    if re.match('([r]?[R]?)\s*(\d+)\s*([r]?[R]?)', message):
+    #if there is an 'R' before or after a product id number
+    if re.match('[rR]\s*\d+', message):
       data['remove'] = True
 
   if product_id:
