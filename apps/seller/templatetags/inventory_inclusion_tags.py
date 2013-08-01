@@ -10,12 +10,8 @@ def product_detail_tag(product):
   from settings.settings import DEBUG
   from random import randint
   rating = {}
-  if DEBUG:
-    three_random_ratings = (randint(1,5), randint(1,5), randint(1,5))
-    (rating['product'], rating['picture'], rating['price']) = three_random_ratings
-  else:
-    (rating['product'], rating['picture'], rating['price']) = (0,0,0)
-  rating['overall'] = int(roundUp(sum([val/3 for val in three_random_ratings])))
+  (rating['product'], rating['picture'], rating['price']) = (0,0,0)
+  rating['overall'] = int(roundUp(sum([val/3 for val in (0,0,0)])))
   #placeholder for ratings
 
   return {'product':product, 'rating':rating}
