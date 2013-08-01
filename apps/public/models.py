@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 
 class Cart(models.Model):
   email               = models.EmailField(blank=True, null=True)
@@ -34,20 +35,23 @@ class Item(models.Model):
   product             = models.ForeignKey(Product)
   #quantity           = models.PositiveIntegerField(default=1)
 
-  #def __unicode__(self):
-    #return u'%d units of %s' % (self.quantity, self.product.__name__)
-    #return self.product.name
-
+  @property
   def price(self):
     return self.product.display_price
 
+  @property
   def photos(self):
     from apps.seller.models import Photo
     return Photo.objects.filter(product_id=self.product.id)
 
+  @property
   def photo(self):
-    photos = self.photos()
+    photos = self.photos
     return photos[0]
+
+  def __unicode__(self):
+    #return u'%d units of %s' % (self.quantity, self.product.name)
+    return self.product.name
 
 class Order(models.Model):
   from apps.seller.models import Product, ShippingOption
@@ -70,32 +74,47 @@ class Order(models.Model):
   shipping_cost       = models.DecimalField(blank=True, null=True,
                                             max_digits=6, decimal_places=2)
   tracking_number     = models.CharField(max_length=50, null=True, blank=True)
-  shipped_date        = models.DateField(blank=True, null=True)
-  received_date       = models.DateField(blank=True, null=True)
+
+  seller_paid_amount  = models.DecimalField(blank=True, null=True,
+                                            max_digits=6, decimal_places=2)
 
   #order items
   products            = models.ManyToManyField(Product)
 
   #Status
-  is_seller_notified  = models.BooleanField(default=False)
-  is_seller_confirmed = models.BooleanField(default=False)
-  is_shipped          = models.BooleanField(default=False)
-  is_received         = models.BooleanField(default=False)
-  is_reviewed         = models.BooleanField(default=False)
-  is_seller_paid      = models.BooleanField(default=False)
+  seller_notified_at  = models.DateTimeField(null=True, blank=True)
+  seller_confirmed_at = models.DateTimeField(null=True, blank=True)
+  shipped_at          = models.DateTimeField(null=True, blank=True)
+  received_at         = models.DateTimeField(null=True, blank=True)
+  reviewed_at         = models.DateTimeField(null=True, blank=True)
+  seller_paid_at      = models.DateTimeField(null=True, blank=True)
 
-  is_returned         = models.BooleanField(default=False)
+  returned_at         = models.DateTimeField(null=True, blank=True)
   notes               = models.TextField(blank=True, null=True)
 
   #update history
   created_at          = models.DateTimeField(auto_now_add = True)
   updated_at          = models.DateTimeField(auto_now = True)
 
+  #derivative attributes
+  @property
+  def is_seller_notified(self): return True if self.seller_notified_at else False
+  @property
+  def is_seller_confirmed(self): return True if self.seller_confirmed_at else False
+  @property
+  def is_shipped(self): return True if self.shipped_at else False
+  @property
+  def is_received(self): return True if self.received_at else False
+  @property
+  def is_reviewed(self): return True if self.reviewed_at else False
+  @property
+  def is_seller_paid(self): return True if self.seller_paid_at else False
+
 class Rating(models.Model):
   from apps.seller.models import Product
   from apps.admin.models import Account, RatingSubject
-  account             = models.ForeignKey(Account)
-  product_id          = models.ForeignKey(Product)
+  #account             = models.ForeignKey(Account)
+  product             = models.ForeignKey(Product)
   subject             = models.ForeignKey(RatingSubject)
   value               = models.SmallIntegerField()
   created_at          = models.DateTimeField(auto_now_add = True)
