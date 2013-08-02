@@ -33,11 +33,15 @@
   </div>
   <!--{% search_bar_tag %}-->
 
-  <div id='product-container' class='fitgrid-row fg-no-gutter image-grid'>
+  <div id='product-container'>
     {% for product in products %}
-      <div class='fg3 product-area {% cycle 'pos1' 'pos2' 'pos3' 'pos4' %}'>
-        {% product_tag product %}
-      </div>
+      {% cycle "<div class='product-row row-fluid'>" "" "" "" %}
+
+        <div class='span3 product-area {% cycle "pos1" "pos2" "pos3" "pos4" %}'>
+          {% product_tag product %}
+        </div>
+
+      {% cycle "" "" "" "</div>" %}
     {% endfor %}
   </div>
 

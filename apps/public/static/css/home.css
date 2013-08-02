@@ -15,68 +15,52 @@
   padding: 2em .5em;
 }
 
-#anou-carousel{
-  margin: 0 0 10px;
-}
-
-
 #search-toolbar{
   background-color: rgba(0,0,0,0.3);
   padding: 10px 10px 0;
   margin: 0;
 }
 
-.carousel-caption > a, p, h1, h2, h3, h4, h5, h6{
-  color: #BBB;
-  text-align: center;
-}
-
 /* Product Container */
 #product-container{
   width: 100%;
-  margin: 10px 0 0;
+  margin: 4em 0 0;
 }
 #product-container .product{
   cursor: pointer;
 }
 
-.right-side, .left-side{
-  max-width: 300px;
-}
-
 .product{
-  margin: 2% 1% -7em;
-  line-height: normal;
+
 }
 
 .product .title{
   z-index: 5;
-  height: 3em;
+  height: 0em;
   text-align: center;
 }
 .product .title p{
+  margin: 0 auto;
   padding: 0.5em 0;
   font-size: 16pt;
-  color: rgba(0,0,0,0.7);
+  color: rgba(0,0,0,0.9);
   background-color: rgba(200,200,200,0.5);
+  max-width: 300px;
 }
 
 .product .photo{
   z-index: -1;
   position: relative;
-  top: -3em;
-}
-
-.extra{
-  /*display: none;*/
-  position: relative;
-  top: -7em;
-  height: 4em;
-}
-.extra img{
-  max-height: 4em;
-}
-
-.extra .details{
+  top: 0em;
   text-align: center;
+}
+
+.product .artisan{
+  height: 4em;
+  position: relative;
+  top: -4em;
+}
+.product .artisan img{
+  height: 4em;
+  display: none;
 }

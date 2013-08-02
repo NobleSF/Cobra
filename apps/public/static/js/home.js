@@ -19,21 +19,15 @@ $('.product').click(function(){
 
 $('.product').hover(
   function(){ //on mouseenter
-    $(this).find('.extra').find('div').find('*').each(function(){
-      $(this).show();
+    $(this).find('.hover-show').each(function(){
+      $(this).fadeIn();
+      //$(this).attr('style','opacity:1');
     });
   },
   function(){//on mouseleave
-    $(this).find('.extra').find('div').find('*').each(function(){
-      $(this).hide();
+    $(this).find('.hover-show').each(function(){
+      $(this).fadeOut();
+      //$(this).attr('style','opacity:0.01');
     });
   }
 );
-
-function findNeighbor(product_area){
-  if ($(product_area).hasClass('pos1') || $(product_area).hasClass('pos2')){
-    return $(product_area).next('.product-area');
-  }else{
-    return $(product_area).prev('.product-area');
-  }
-}

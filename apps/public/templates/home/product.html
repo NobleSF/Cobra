@@ -4,30 +4,16 @@
 <div class='product' data-url="{% url 'product' product.id %}">
 
   <div class='title title-photo'>
-    <p class='hidden-phone'>{{ product.name }}</p>
+    <p>{{ product.name }}</p>
   </div>
 
   <div class='photo'>
     <img src='{{ product.photos.0.thumb_size }}'>
   </div>
 
-  <div class='extra row-fluid'>
-
-    <div class='span8 visible-desktop'>
-      <p>made by {{ product.artisan.name }}</p>
-      <div class='details'>
-        <ul class='inline'>
-          {% for detail in product.details %}
-            <li class='badge badge-info'>{{ detail }}</li>
-          {% endfor %}
-        </ul>
-      </div>
-    </div>
-
-    <div class='span4 visible-desktop'>
-      <img src='{{ product.artisan.image.pinky_size }}'>
-    </div>
-
+  <div class='artisan'>
+    <img class='pull-right hidden-phone hover-show'
+         src='{{ product.artisan.image.pinky_size }}'>
   </div>
 
 </div>
