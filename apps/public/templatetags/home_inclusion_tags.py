@@ -16,20 +16,10 @@ def home_header_tag(request, style): #style options: full, mini, mobile
 
 @register.inclusion_tag('home/product.html')
 def product_tag(product):
-  try:
-    product.photos = product.photo_set.all()
-    #grab only tools and materials
-    utilities = product.assets.filter(ilk='tool') | product.assets.filter(ilk='material')
-    #put name of the first 3 utilities used in 'details' array
-    product.details = []
-    for i in range(2):
-      try: product.details.append(utilities[i].name)
-      except: pass
-
-    #get artisan information
-    product.artisan = product.assets.filter(ilk='artisan')[0]
-  except:
-    product.name = "product by Cooperative"
+  #photos
+  product.photos = product.photo_set.order_by('rank').all()
+  #artisan information
+  product.artisan = product.assets.filter(ilk='artisan')[0]
 
   context = {'product': product}
   return context

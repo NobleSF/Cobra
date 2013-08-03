@@ -25,6 +25,7 @@
   {% compress css %}
     <link href="{{ STATIC_URL }}css/base.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/icon-font.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}css/fonts.css" rel="stylesheet">
     {% block css %}
     {% endblock css %}
   {% endcompress %}
@@ -45,7 +46,7 @@
           <li>
             <a href="{% url 'cart' %}">
               <span class='symbol-cart' title='cart'></span>
-              <span class='hidden-phone'>Cart</span>
+              <span class='hidden-phone title'>Cart</span>
             </a>
           </li>
 
@@ -65,10 +66,10 @@
 
         <ul class='pull-left'>
           <li>
-            <a href="{% url 'home' %}">Home</a>
+            <a class='title' href="{% url 'home' %}">Home</a>
           </li>
           <li>
-            <a href="{% url 'about' %}">About</a>
+            <a class='title' href="{% url 'about' %}">About</a>
           </li>
         </ul>
 
