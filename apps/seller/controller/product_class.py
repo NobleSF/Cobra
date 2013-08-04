@@ -22,9 +22,9 @@ class Product:
   def addPhoto(self, url, rank, photo_id=None):
     if photo_id:
       photo = models.Photo.objects.get(id=photo_id)
+      photo.original = url
     else:
       photo = models.Photo(product=self.product, rank=rank, original=url)
-
     photo.save()
     return photo
 

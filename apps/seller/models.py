@@ -175,6 +175,7 @@ class Photo(models.Model): #Photos are exclusively product pictures.
   product_size = property(_get_product_size)
 
   class Meta:
+    unique_together = ('product', 'rank')
     ordering = ['product','rank',]
 
 class Image(models.Model): #Images are used for navigation, thumbnail size
