@@ -11,6 +11,7 @@
 
 {% block css %}
   <link href="{{ STATIC_URL }}public/css/product.css" rel="stylesheet">
+  <link href="{{ STATIC_URL }}public/css/product.css" rel="stylesheet">
 {% endblock css %}
 
 {% block content %}
@@ -34,7 +35,7 @@
         <a class="carousel-control right" href="#photos" data-slide="next">&rsaquo;</a>
       </div>
 
-      <div id='pinkies' class='hidden-phone'>
+      <div id='pinkies' class='visible-desktop'>
         <ul class='thumbnails'>
           {% for photo in product.photos %}
             <li>
@@ -70,46 +71,100 @@
           <td class='price-qualifier'>free returns.</td>
         </tr>
       </table>
-      <a href="{% url 'cart-add' product.id %}" id='buy-button' class='btn btn-primary btn-success'>
-        Add To Cart
+      <a id='buy-button' class='btn btn-primary btn-success'
+         href="{% url 'cart-add' product.id %}">
+        <h2>Add To Cart</h2>
       </a>
     </div>
 
     <div id='artisan' class='span4'>
-      <img id='artisan-image' src='{{ product.artisans.0.image.thumb_size }}'>
+      <img id='artisan-image' src='{{ product.artisan.image.thumb_size }}'>
       <p>handmade by</p>
-      <h3 id='artisan-name'>{{ product.artisans.0.name }}</h3>
-      <p id='artisan-bio'>{{ product.artisans.0.description|truncatewords:"20" }}</p>
+      <h3 id='artisan-name'>{{ product.artisan.name }}</h3>
+      <p>at</p>
+      <h3 id='store-name'>
+        <a href="{% url 'store' product.seller.id %}">
+          {{ product.seller.name }}
+        </a>
+      </h3>
+      <p id='artisan-bio'>
+        <span class='short-description'>
+          {{ product.artisan.description|truncatewords:"20" }}
+        </span>
+        <small class='read-more'>read more</small>
+        <span class='long-description'>
+          {{ product.artisan.description }}
+        </span>
+      </p>
     </div>
 
   </div>
 
-  <div id='utilities' class='row-fluid'>
-    <ul class='thumbnails'>
-      {% for utility in product.utilities %}
-        <li class='span{{product.utilities_bootstrap_span_length}}'>
-          <div class='utility thumbnail'>
-            {% if utility.image %} <img src='{{ utility.image.thumb_size }}'> {% endif %}
-            {% if utility.name %}  <h4>{{ utility.name }}</h4>           {% endif %}
-            {% if utility.description %}
-              <p>{{ utility.description|truncatewords:"20" }}</p>
-            {% endif %}
-          </div>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
+  {% if product.utilities %}
+    <h4 class='utilities-disclaimer'>
+      This original item was uniquely handmade using the local materials and tools below
+    </h4>
+  {% endif %}
 
-  <!--
-  <div id='seller'>
-    {% if product.seller.image %}<img src='{{ product.seller.image.thumb_size }}'>{% endif %}
-    <h1 class='title'>
-      {{ product.artisans.0.name }}
-      <i>is a member of</i>
-      {{ product.seller.name }}
+  <div id='utilities'><div class='row-fluid'>
+    {% for utility in product.utilities %}
+      <div class='utility span6'>
+        <table>
+          <tr>
+            <td class='utility-image-space'>
+              {% if utility.image %}
+                <img class='small-utility-image' src='{{ utility.image.pinky_size }}'>
+                <!--<img class='large-utility-image' src='{{ utility.image.thumb_size }}'>-->
+              {% endif %}
+            </td>
+            <td>
+              {% if utility.name %}
+                <h4>{{ utility.name }}</h4>
+              {% endif %}
+
+              {% if utility.description %}
+                <p class='utility-description'>
+                  <span class='short-description'>
+                    {{ utility.description|truncatewords:"6" }}
+                  </span>
+                  <small class='read-more'>read more</small>
+                  <span class='long-description'>
+                    {{ utility.description }}
+                  </span>
+                </p>
+              {% endif %}
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      {% cycle "" "</div><div id='utilities' class='row-fluid'>"%}
+
+    {% endfor %}
+  </div></div>
+  <hr>
+
+  {% load home_inclusion_tags %}
+  <div id='store'>
+    <h1 class='text-center'>
+      <a href="{% url 'store' product.seller.id %}">
+        <small>more from</small> {{ product.seller.name }}
+      </a>
+      {% if product.seller.image %}
+        <img src='{{ product.seller.image.pinky_size }}'>
+      {% endif %}
     </h1>
-    <p>{{ product.seller.bio }}</p>
+
+    <div class='product-row row-fluid'>
+      {% for product in more_products %}
+        {% cycle "" "" "" "" "</div><div class='product-row row-fluid'>" %}
+
+        <div class='span3 product-area {% cycle "pos1" "pos2" "pos3" "pos4" %}'>
+          {% product_tag product 'sans_artisan' %}
+        </div>
+
+      {% endfor %}
+    </div>
   </div>
-  -->
 
 {% endblock content %}

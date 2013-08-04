@@ -38,7 +38,7 @@
 }
 
 #buying-table .price{
-  width: 48%;
+  width: 50%;
   font-size: 2.5em;
   line-height: 1em;
   font-weight: 600;
@@ -46,7 +46,7 @@
   padding: 0 0.5em;
 }
 #buying-table .price-qualifier{
-  font-size: 1.5em;
+  font-size: 1.0em;
   font-weight: 600;
 }
 
@@ -63,17 +63,19 @@
 }
 #artisan-image{
   width: 100%;
-  padding-bottom: 1em;
+  padding-bottom: 0.5em;
 }
 #artisan-name{
-  position: relative;
-  top: -0.5em;
+  margin: -0.4em 0;
+}
+#store-name{
+  margin: -0.5em 0 0;
 }
 
 #ratings, #actions, #artisan{
   padding: 0.5em;
-  margin-top: 1em;
-  margin-bottom: 1em;
+  margin-top: 0em;
+  margin-bottom: 0em;
 }
 
 #seller{
@@ -86,9 +88,48 @@
   font-size: 0.5em;
 }
 
-.thumbnails li{
-  max-width: 310px;
-}
-.utility h4{
+.utilities-disclaimer{
   text-align: center;
+  text-decoration: underline;
+  margin: 2em 0;
+}
+
+.read-more{
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.utility-image-space{
+  min-width: 100px;
+  vertical-align: top;
+}
+
+.long-description, .large-utility-image{
+  display: none;
+}
+
+.product{
+  cursor: pointer;
+}
+.product .title{
+  z-index: 5;
+  height: 0em;
+  text-align: center;
+}
+.product .title h3{
+  margin: 0 auto;
+  padding: 0.5em 0;
+  font-size: 18pt;
+  color: rgba(0,0,0,0.9);
+  background-color: rgba(200,200,200,0.5);
+  max-width: 300px;
+}
+.product .photo{
+  z-index: -1;
+  position: relative;
+  top: 0em;
+  text-align: center;
+}
+.product-row{
+  margin-top: 2em;
 }

@@ -15,17 +15,16 @@ def home(request, product_id):
     for photo in product.photos:
       photo.feature_url = photo.product
 
-    product.artisans  = product.assets.filter(ilk='artisan').order_by('?')[:1]
-    product.materials = product.assets.filter(ilk='material').order_by('?')[:3]
-    product.tools     = product.assets.filter(ilk='tool').order_by('?')[:3]
+    product.artisan   = product.assets.filter(ilk='artisan')[0]#.order_by('?')[:1]
+    product.materials = product.assets.filter(ilk='material')#.order_by('?')[:3]
+    product.tools     = product.assets.filter(ilk='tool')#.order_by('?')[:3]
     product.utilities = list(chain(product.materials, product.tools))
 
-    if not len(product.utilities):
-      product.utilities_bootstrap_span_length = 12
-    else:
-      product.utilities_bootstrap_span_length = int(12/len(product.utilities))
+    more_products = product.seller.product_set.exclude(id=product.id)[:8]
 
-    context = {'product':product}
+    context = {'product':       product,
+               'more_products': more_products
+              }
 
   except Product.DoesNotExist:
     raise Http404
