@@ -15,11 +15,13 @@ def home_header_tag(request, style): #style options: full, mini, mobile
   return {'request':request, 'full': full, 'mini':mini, 'mobile':mobile}
 
 @register.inclusion_tag('home/product.html')
-def product_tag(product):
+def product_tag(product, sans_artisan=False):
   #photos
   product.photos = product.photo_set.order_by('rank').all()
+
   #artisan information
-  product.artisan = product.assets.filter(ilk='artisan')[0]
+  if not sans_artisan:
+    product.artisan = product.assets.filter(ilk='artisan')[0]
 
   context = {'product': product}
   return context

@@ -1,19 +1,20 @@
 {% load url from future %}
 
-
 <div class='product' data-url="{% url 'product' product.id %}">
+  <a href='{% url 'product' product.id %}'>
+    <div class='title title-photo'>
+      <h3>{{ product.name }}</h3>
+    </div>
 
-  <div class='title title-photo'>
-    <h3>{{ product.name }}</h3>
-  </div>
-
-  <div class='photo'>
-    <img src='{{ product.photos.0.thumb_size }}'>
-  </div>
-
-  <div class='artisan'>
-    <img class='pull-right hidden-phone hover-show'
-         src='{{ product.artisan.image.pinky_size }}'>
-  </div>
+    <div class='photo'>
+      <img src='{{ product.photos.0.thumb_size }}'>
+    </div>
+  </a>
+  {% if product.artisan %}
+    <div class='artisan'>
+      <img class='pull-right hidden-phone hover-show'
+           src='{{ product.artisan.image.pinky_size }}'>
+    </div>
+  {% endif %}
 
 </div>
