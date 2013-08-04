@@ -39,6 +39,8 @@ def search(request, collection=None, category=None, color=None):
   context = {'products':products, 'search_keywords':search_keywords}
   return render(request, 'home/search.html', context)
 
+def top_stores(request):
+  return render(request, 'home/top_stores.html')
 
 def about(request):
   return render(request, 'home/about.html')
