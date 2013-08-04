@@ -13,21 +13,17 @@ $('#video-image').on('click', function(){
   $('#video').show();
 });
 
-$('.product').click(function(){
-  window.location.href = $(this).attr('data-url');
-});
-
 $('.product').hover(
   function(){ //on mouseenter
     $(this).find('.hover-show').each(function(){
-      $(this).fadeIn();
-      //$(this).attr('style','opacity:1');
+      $(this).show();
     });
+    $(this).find('.title h3').addClass('underline')
   },
   function(){//on mouseleave
     $(this).find('.hover-show').each(function(){
       $(this).fadeOut();
-      //$(this).attr('style','opacity:0.01');
     });
+    $(this).find('.title h3').removeClass('underline')
   }
 );
