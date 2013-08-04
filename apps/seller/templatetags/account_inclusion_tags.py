@@ -20,8 +20,8 @@ def asset_tag(image_form, asset_form, asset=None):
     asset_form.fields["image_url"].initial    = asset.image_id
     asset_form.fields["name"].initial         = asset.name
     asset_form.fields["description"].initial  = asset.description
-    asset_form.fields["category"].initial     = asset.categories.all()[0]
-    image_id = asset.image_id
+    if asset.categories.all():
+      asset_form.fields["category"].initial   = asset.categories.all()[0]
 
   except Exception as e:
     asset = None
@@ -30,8 +30,7 @@ def asset_tag(image_form, asset_form, asset=None):
   context = {
               'asset':      asset,
               'asset_form': asset_form,
-              'image_form': image_form,
-              'image_id':   image_id
+              'image_form': image_form
             }
 
   return context

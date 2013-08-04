@@ -64,12 +64,10 @@ def edit(request):
           seller.coordinates  = seller_data['coordinates']
           seller.currency     = seller_data['currency']
           seller.save()
-          messages.success(request, "Seller info saved")
           return redirect('seller:management home')
         else:
           context['problem'] = "Seller form did not validate"
           context['errors'] = seller_form.errors
-          messages.error(request, "Seller form did not validate")
 
       except Exception as e:
         context['exception'] = e

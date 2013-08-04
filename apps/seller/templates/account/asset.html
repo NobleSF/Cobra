@@ -3,8 +3,11 @@
   <ul>
     <li class='asset-media'>
       <div class='image'>
-        <!-- insert image or placeholder -->
-        {% image_tag image_id %}
+        {% if asset.image %}
+          <img src="{{ asset.image.thumb_size }}" width="300" />
+        {% else %}
+          <img data-src="holder.js/300x225" width="300" />
+        {% endif %}
       </div>
       <div class='progress-holder'>
         <div class="progress">
