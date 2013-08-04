@@ -26,7 +26,7 @@
     <div class='span8'>
 
       <div id='cart' class='part1'>
-        <h3 id='cart-sentance' class='trim'>
+        <h3 id='cart-sentance' class='trim copy-font'>
           You have
           {{ cart.count }}
           item{{ cart.count|pluralize }}
@@ -91,13 +91,13 @@
       </div><!-- end part1 -->
 
       <div id='cart-shortcut' class='part2 part3'>
-        <h3 id='cart-return-button' class=''>
+        <h3 id='cart-return-button' class='copy-font'>
           <a href='#cart-sentance'>
-            <span class='symbol-cart'></span> go back to Cart.
+            <span class='symbol-cart'></span> back to Cart
           </a>
         </h3>
 
-        <h3 id='cart-paragraph' class='trim'>
+        <h3 id='cart-paragraph' class='trim copy-font'>
           You have
           {% for item in cart %}
             {% if forloop.first %}a

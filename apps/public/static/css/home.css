@@ -39,10 +39,10 @@
   height: 0em;
   text-align: center;
 }
-.product .title p{
+.product .title h3{
   margin: 0 auto;
   padding: 0.5em 0;
-  font-size: 16pt;
+  font-size: 18pt;
   color: rgba(0,0,0,0.9);
   background-color: rgba(200,200,200,0.5);
   max-width: 300px;

@@ -10,6 +10,12 @@ h1, h2, h3, h4, h5, .title {
 	font-style: normal;
 }
 
+p, li, span, .copy-font {
+	font-family: 'Merriweather', serif;
+	font-weight: normal;
+	font-style: normal;
+}
+
 i{font-style: normal; font-size: 24pt;}
 a, a:hover, a:active, a:focus{outline: 0;}
 .trim{text-rendering: optimizeSpeed;}
