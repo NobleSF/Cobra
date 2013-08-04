@@ -4,20 +4,13 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 
 def home(request, seller_id):
-  from apps.seller.models import Seller, Asset, Product, Photo
+  from apps.seller.models import Seller
 
   try:
     store = Seller.objects.get(id=seller_id)
+    store.artisans = store.asset_set.filter(ilk='artisan')
 
-    store.assets = Asset.objects.filter(seller=store).order_by('ilk')
-    store.artisans = store.assets.filter(ilk='artisan')
-    #store.utilities = store.assets.filter(ilk='tool') | store.assets.filter(ilk='material')
-
-    products = store.product_set.all()
-    for product in products:
-      product.photos = product.photo_set.all()
-
-    context = {'store':store, 'products':products}
+    context = {'store':store}
 
   except Seller.DoesNotExist:
     return Http404

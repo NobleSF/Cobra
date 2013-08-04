@@ -4,7 +4,7 @@ $(function(){//on page load
 
 });
 
-//activate the 'show more' buttons
+//activate the 'show more' buttons on mobile version
 $('[data-show]').one('click', function(){
   $(this).next().removeClass('hidden')
                 .removeClass('hidden-phone')
@@ -12,4 +12,10 @@ $('[data-show]').one('click', function(){
   $(this).removeClass('visible-phone');
   $('#'+$(this).attr('data-show')).slideDown();
   $(this).hide();
+});
+
+$('.read-more').on('click', function(){
+  $(this).prev('.short-description').hide();
+  $(this).hide();
+  $(this).next('.long-description').show();
 });

@@ -12,62 +12,56 @@
 }
 #artisan-profiles .title{
   position: relative;
-  top: -3em;
+  top: -3.5em;
 }
-#artisan-profiles .description{
-  position: relative;
-  top: -2em;
-}
+
 #info-left #store-bio, .artisan-description{
   text-align: justify;
 }
 
-#products .thumbnail{
-  max-height: 304px;
-  max-width: 300px;
-  border: none;
-  box-shadow: 0 0 0 0;
-  margin: auto;
-}
-#products .thumbnails li{
-  margin-bottom: 0px;
+.read-more{
+  text-decoration: underline;
+  cursor: pointer;
 }
 
-.thumbnail .title{
+.utility-image-space{
+  min-width: 100px;
+  vertical-align: top;
+}
+
+.long-description, .large-utility-image{
+  display: none;
+}
+
+.product{
+  cursor: pointer;
+  margin-top: 2em;
+}
+.product .title, .artisan .title{
   z-index: 5;
-  height: 3em;
+  height: 0em;
   text-align: center;
 }
-.thumbnail .title p{
+.title h3{
+  margin: 0 auto;
   padding: 0.5em 0;
+  font-size: 18pt;
+  color: rgba(0,0,0,0.9);
+  background-color: rgba(200,200,200,0.5);
   max-width: 300px;
-  font-size: 16pt;
-  color: rgba(0,0,0,0.7);
-  background-color: rgba(200,200,200,0.5)
-}
-.thumbnail .photo{
-  z-index: -1;
-  position: relative;
-  top: -3em;
-  margin: 0;
-  padding: 0;
 }
 
-.thumbnail .extra-photos{
+.artisan .title h3{
+  padding: 0;
+  font-size: 16pt;
+}
+
+.product .photo, .artisan .photo{
+  z-index: -1;
   position: relative;
-  top: -3em;
+  top: 0em;
+  text-align: center;
 }
-.extra .pinky{
-  margin: 0px;
-  max-width: 100px;
-  width: 33.333%
-}
-.extra-photos .first-extra-photo{
-  padding: 6px 4px 6px 0px;
-}
-.extra-photos .second-extra-photo{
-  padding: 6px 2px;
-}
-.extra-photos .third-extra-photo{
-  padding: 6px 0px 6px 4px;
+.product-row{
+  margin-top: 2em;
 }
