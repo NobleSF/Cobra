@@ -10,7 +10,7 @@ h1, h2, h3, h4, h5, .title {
 	font-style: normal;
 }
 
-p, a, li, td, span, .copy-font {
+p, li, td, span, .copy-font {
 	font-family: CynthoSlabPro-Regular, serif;
 	font-weight: normal;
 	font-style: normal;
@@ -58,6 +58,10 @@ a, a:hover, a:active, a:focus{outline: 0;}
 }
 #base-navigation a:hover {
   color: #888;
+}
+
+.underline{
+  text-decoration: underline;
 }
 
 /* SYMBOLS AND COLORS */
