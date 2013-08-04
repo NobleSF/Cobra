@@ -10,8 +10,8 @@ h1, h2, h3, h4, h5, .title {
 	font-style: normal;
 }
 
-p, li, span, .copy-font {
-	font-family: 'Merriweather', serif;
+p, a, li, td, span, .copy-font {
+	font-family: CynthoSlabPro-Regular, serif;
 	font-weight: normal;
 	font-style: normal;
 }
