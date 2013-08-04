@@ -110,6 +110,7 @@
 
 .product{
   cursor: pointer;
+  margin-top: 2em;
 }
 .product .title{
   z-index: 5;
