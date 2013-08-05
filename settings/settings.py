@@ -54,25 +54,35 @@ AWS_STORAGE_BUCKET_NAME = 'anou'
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 #CLOUDINARY IMAGE AND PHOTO HOSTING
-CLOUDINARY = {
-  'cloud_name':     'anou',
-  'api_key':        '155257496663982',
-  'api_secret':     'z78hCbzKQ26-6UQoE0FvmguCP9A',
-  'format':         'jpg',
-  'transformation': 't_original'
-}
-THUMBNAIL_ALIASES = {
-  'original': {'size': (1600,1200), 'transformation':"t_original"},
-  'thumb':    {'size': (300, 225),  'transformation':"t_thumb"},
-  'pinky':    {'size': (100, 75),   'transformation':"t_pinky"},
-}
+if PRODUCTION:
+  CLOUDINARY = {
+    'cloud_name':     'hork5h8x1',
+    'api_key':        '697913462329845',
+    'api_secret':     '-dc1wU2_xyJmYaeJP1Yimn2-cuA',
+    'format':         'jpg',
+    'transformation': 't_original'
+  }
+else:
+  CLOUDINARY = {
+    'cloud_name':     'anou',
+    'api_key':        '155257496663982',
+    'api_secret':     'z78hCbzKQ26-6UQoE0FvmguCP9A',
+    'format':         'jpg',
+    'transformation': 't_original'
+  }
 
 #SENDGRID EMAIL BACKEND
 EMAIL_HOST          = 'smtp.sendgrid.net'
-EMAIL_HOST_USER     = 'limetree'
-EMAIL_HOST_PASSWORD = 'H0hner765@'
 EMAIL_PORT          = 587
 EMAIL_USE_TLS       = True
+
+if PRODUCTION:
+  EMAIL_HOST_USER     = 'app15107937@heroku.com'
+  EMAIL_HOST_PASSWORD = 'tmuipovc'
+else:
+  EMAIL_HOST          = 'smtp.sendgrid.net'
+  EMAIL_HOST_USER     = 'limetree'
+  EMAIL_HOST_PASSWORD = 'H0hner765@'
 
 #TELERIVET SMS GATEWAY
 if PRODUCTION:
