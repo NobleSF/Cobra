@@ -1,0 +1,34 @@
+body{padding-top:20px;padding-bottom:40px;background-color:#fffefa;}
+h1,h2,h3,h4,h5,.title{font-family:Savu-Condensed,sans-serif;font-weight:normal;font-style:normal;}
+p,li,td,span,.copy-font{font-family:CynthoSlabPro-Regular,serif;font-weight:normal;font-style:normal;}
+i{font-style:normal;font-size:24pt;}
+a,a:hover,a:active,a:focus{outline:0;}
+.trim{text-rendering:optimizeSpeed;}
+#body{margin-top:50px;}
+#header,#main,#footer{max-width:1200px;margin:0px auto;}
+#header{background-color:#fffefa;border-bottom:2px solid #dcdcf0;}
+#header *{vertical-align:baseline;}
+#base-logo{padding:0 1em 0 0;margin:3px;}
+#base-navigation ul{list-style:none;margin:0;}
+#base-navigation li,#base-navigation li:hover,#base-navigation li:active{padding:0.5em 0.5em 0;display:inline-block;line-height:45px;}
+#base-navigation a,#base-navigation a:hover,#base-navigation a:active{color:#333;font-size:2em;text-decoration:none;}
+#base-navigation a:hover{color:#888;}
+.underline{text-decoration:underline;}
+[class*="symbol-"]:hover{text-decoration:none !important;}
+[class*="symbol-"].black:hover{opacity:1 !important;}
+.anou-blue{color:#417bd9 !important;}
+.blue{color:#417bd9 !important;}
+.black{color:#333 !important;}
+.gray{color:#888 !important;}
+.white{color:#fffefa !important;}
+.red{color:#b33200 !important;}
+.gold{color:#d1b000 !important;}
+.green{color:#259900 !important;}
+.orange{color:#e7a600 !important;}
+.gold{color:#f5b400 !important;}
+.color-rating1{color:#a40000 !important;}
+.color-rating2{color:#fe0000 !important;}
+.color-rating3{color:#ff5353 !important;}
+.color-rating4{color:#7ec684 !important;}
+.color-rating5{color:#018e0b !important;}
+.right-to-left{float:right !important;}
