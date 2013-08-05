@@ -255,7 +255,7 @@ INSTALLED_APPS = (
   #'api',
   'djrill',
   'storages',
-  'compressor',
+  #'compressor',
   'south',
   #'django.contrib.auth',
   'django.contrib.contenttypes',
