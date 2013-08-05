@@ -113,11 +113,12 @@ def login(request, next=None):
           return HttpResponseRedirect(full_path)
         else:
           return redirect('/')
-      else:
-        context = {'problem': "wrong password"}
 
-    except Account.DoesNotExist:
-      context = {'problem': "account does not exist"}
+      elif not account:
+        context = {'incorrect': "wrong username"}
+      else:
+        context = {'incorrect': "wrong password"}
+
     except Exception as e:
       context = {'exception': e}
 
