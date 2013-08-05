@@ -162,7 +162,7 @@ def saveProduct(request): #ajax requests only, not asset-aware
           response['photo'] = "error saving photo"
         else:
           response['photo_id'] = photo.id
-          response['photo'] = "saved photo at rank %d with url %s" % (photo.rank, photo.original)
+          response['photo'] = "saved photo at rank %s with url %s" % (photo.rank, photo.original)
 
       elif attribute == "active":
         if status == "yes":

@@ -1,8 +1,5 @@
 $().ready( function(){
   //run on page load
-  var viewport_width = $(window).width();
-  if (viewport_width < 500){
-  }
   //$(window).resize(function() {});
 
   //only show the first 5 photo upload divs
@@ -58,15 +55,6 @@ $().ready( function(){
 
   applyAutosaveDataToTextAttributes();
   applyAutosaveEvents();
-
-  //set events for updating the summary
-  //$('#photos').find('img').addClass('updates-summary');//just the first photo
-  //$('#id_price').addClass('updates-summary');
-  //$('#id_weight').addClass('updates-summary');
-  //$('#id_shipping_options').addClass('updates-summary');
-  //$('.updates-summary').each(function(){
-  //  $(this).on('change', function(){updateSummary();});
-  //});
 
   //validate form and show confirmation
   $('#submit').bind('click', function(){

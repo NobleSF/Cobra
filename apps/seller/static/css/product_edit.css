@@ -39,10 +39,15 @@ input{
   font-size: 3em;
   width: 3em;
   text-align: center;
+}@media (max-width: 400px){
+  .section input{font-size: 1.5em;width: 3em;height: 3em;}
 }
-.section table i, .section table .units {
+.section table i, .section table .units{
   font-size: 4em;
   padding: 0 .2em;
+}@media (max-width: 400px){
+  .section table i{font-size: 3em;}
+  .section table .units{font-size: 2em;}
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -139,6 +144,8 @@ input::-webkit-inner-spin-button {
   width: 300px;
   height: 225px;
   border: none;
+}@media (max-width: 400px){
+  .summary-image img{width:200px; height:150px;}
 }
 button.symbol-go{
   font-size: 1.5em;
@@ -147,13 +154,18 @@ button.symbol-go{
   min-width: 2em;
   background-color: green;
   border-radius: 0.5em;
+}@media (max-width: 400px){
+  button.symbol-go {font-size: 1em;height: 3em;min-width: 1em;}
 }
+
 #summary-section button{
   font-size: 2.5em;
   width: 310px;
   position: relative;
   top: -75px;
   margin: 0.5em;
+}@media (max-width: 400px){
+  #summary-section button{width: 150px;}
 }
 
 .extra{
@@ -193,6 +205,8 @@ button.symbol-go{
   width: 300px;
   height: 225px;
   border: none;
+}@media (max-width: 400px){
+  #confirmation .image img{width:200px; height:150px;}
 }
 
 .attention {
