@@ -122,6 +122,11 @@ class Rating(models.Model):
   def __unicode__(self):
     return self.value
 
+class Subscription(models.Model):
+  name                = models.CharField(max_length=100, null=True, blank=True)
+  email               = models.CharField(max_length=100, null=True, blank=True)
+  created_at          = models.DateTimeField(auto_now_add = True)
+
 class CustomerActivity(models.Model):
   from apps.seller.models import Product
   # ip address?
