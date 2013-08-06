@@ -27,11 +27,15 @@
               Order Complete!
             {% endif %}
           </h1>
-          <h3>
+          <h3 class='copy-font'>
             Total Charged:
-            <span class='badge'><h3>${{ checkout_data.gross|floatformat:2 }}</h3></span>
+            <span class='badge'><h3 class='copy-font'>
+              ${{ checkout_data.gross|floatformat:2 }}
+            </h3></span>
             Confirmation Number:
-            <span class='badge'><h3>{{ checkout_data.checkout_id }}</h3></span>
+            <span class='badge'><h3 class='copy-font'>
+              {{ checkout_data.checkout_id }}
+            </h3></span>
           </h3>
         </div>
       {% else %}
@@ -40,14 +44,22 @@
 
       <div class='row-fluid'>
         <div id='items' class='span4'>
-          <ul>
-            {% for item in cart %}
-              <li>
-                <img src='{{ item.photo.pinky_size }}' alt='product photo'>
-                <p>{{ item.product.name }}, ${{ item.product.display_price }}</p>
-              </li>
-            {% endfor %}
-          </ul>
+          <fieldset>
+            <legend>Order Items</legend>
+            <ul class='unstyled'>
+              {% for item in cart %}
+                <li>
+                  <img class='product-photo'
+                       src='{{ item.photo.pinky_size }}' alt='product photo'>
+                  <h5 class='product-title'>
+                    {{ item.product.name }}
+                    <span class='copy-font'>${{ item.product.display_price }}</span>
+                  </h5>
+
+                </li>
+              {% endfor %}
+            </ul>
+          </fieldset>
         </div>
 
         <div id='confirmation-details' class='span8'>
@@ -79,7 +91,8 @@
                 </button>
                 <span class='before'>to</span>
                 <span class='after'>You'll</span>
-                receive updates as Anou transforms the world of Fair Trade.
+                receive updates<br>
+                as Anou transforms the world of Fair Trade.
               </p>
             {% endif %}
           </fieldset>
@@ -118,20 +131,20 @@
 
     <div id='information' class='span4'>
       <div class='well'>
-        <h4>When will my order arrive?</h4>
+        <h4>When will my order arrive ?</h4>
         <p>Shipping from rural Morocco can take from 10 to 28 days, but we'll keep you updated on your order's progress by email.</p>
       </div>
       <div class='well'>
-        <h4>What about returns?</h4>
+        <h4>What about returns ?</h4>
         <p>If you need to return part or all of your order for any reason, we will send you a shipping label to cover return shipping. You will be fully refunded for any returned items. Email us at <a href='mailto:hello@theanou.com'>hello@theanou.com</a>, we are happy to assist you.</p>
       </div>
       <div class='well'>
-        <h4>How can Anou be improved?</h4>
-        <p>We genuinely hope you had a positive buying experience and would love to hear from you. We want to hear about what we did right and where we could make some changes...</p>
+        <h4>How can Anou be improved ?</h4>
+        <p>We genuinely want you to have a positive buying experience every time and would love to hear from you. Please write to <a href='mailto:hello@theanou.com'>hello@theanou.com</a>. Whether it's praise or criticism, it's like opening a gift when we get to hear from our customers!</p>
       </div>
       <div class='well'>
-        <h4>What can I do to help?</h4>
-        <p>The "Fair Trade" industry is broken. "Please tell you friends about this show"-AD</p>
+        <h4>What can I do to help ?</h4>
+        <p>The "Fair Trade" industry is broken. "Please tell you friends about this show."-AD</p>
       </div>
     </div>
   </div>

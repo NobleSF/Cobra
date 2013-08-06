@@ -1,3 +1,10 @@
+.product-title{
+  margin: 0 0 1em;
+}
+.product-photo{
+  border: solid 1px black;
+}
+
 /* SUBSCRIBE FORM */
 #subscribe button:nth-child(2),
 #subscribe button:nth-child(3),
