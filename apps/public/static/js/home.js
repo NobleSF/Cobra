@@ -33,8 +33,8 @@ $('.product').hover(
 
 //show submit button if using form
 $('#subscribe-name,#subscribe-email').on('focus', function(){
-  $('#subscribe-buttons button:nth-child(2)').hide();
-  $('#subscribe-buttons button:nth-child(3)').hide();
+  $('#subscribe-buttons button:nth-child(3)').hide('500');//success
+  $('#subscribe-buttons button:nth-child(4)').hide('500');//error
   $('#subscribe-buttons button:nth-child(1)').show();
 });
 
@@ -72,16 +72,15 @@ function processSubscribe(){
 }
 
 function subscribeProgress(){
-  $('#subscribe-buttons button:nth-child(1)').hide('500');//submit
+  $('#subscribe-buttons button').hide('500');//all buttons
   $('#subscribe-buttons button:nth-child(2)').show('500');//in progress
 }
 function subscribeSuccess(){
-  $('#subscribe-buttons button:nth-child(2)').hide('500');//in progress
+  $('#subscribe-buttons button').hide('500');//all buttons
   $('#subscribe-buttons button:nth-child(3)').show('500');//success
 }
 function subscribeFail(){//fail animation
-  $('#subscribe-buttons button:nth-child(2)').hide('500');//in progress
-  $('#subscribe-buttons button:nth-child(3)').hide('500');//success
+  $('#subscribe-buttons button').hide('500');//all butons
   $('#subscribe-buttons button:nth-child(4)').show('500');//error
 }
 
