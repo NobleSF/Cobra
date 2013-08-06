@@ -130,14 +130,13 @@ def saveSeller(request): #ajax requests only, create or update asset
         seller.image = customSaveImage(value)
 
       seller.save()
-      context = {'success': element + " saved with value: " + value}
+      response = {'success': element + " saved with value: " + value}
 
     except Exception as e:
-      context = {'exception':e}
+      response = {'exception':e}
   else:
-    context = {'problem':"not GET"}
+    response = {'problem':"not GET"}
 
-  response = context
   return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 @access_required('seller')
@@ -171,14 +170,13 @@ def saveAsset(request): #ajax requests only, create or update asset
         asset.categories.add(Category.objects.get(id=value))
 
       asset.save()
-      context = {'asset_id':asset.id, 'get':request.GET}
+      response = {'asset_id':asset.id, 'get':request.GET}
 
     except Exception as e:
-      context = {'exception':e}
+      response = {'exception':e}
   else:
-    context = {'problem':"not GET"}
+    response = {'problem':"not GET"}
 
-  response = context
   return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 @access_required('seller')

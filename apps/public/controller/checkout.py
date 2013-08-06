@@ -58,15 +58,14 @@ def cartSave(request): #ajax requests only
     try:
       cart = Cart(request)
       cart.saveData(request.GET['name'], request.GET['value'])
-      context = {'success':request.GET['name']+" saved"}
+      response = {'success':request.GET['name']+" saved"}
 
     except Exception as e:
-      context = {'exception': e}
+      response = {'exception': e}
 
   else:
-    context = {'problem':"not GET"}
+    response = {'problem':"not GET"}
 
-  response = context
   return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 def confirmation(request):
