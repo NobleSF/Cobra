@@ -5,15 +5,13 @@ LOCAL_MACHINES = ['TOMCOUNSELL']
 try:
   if os.environ['COMPUTERNAME'] in LOCAL_MACHINES:
     PRODUCTION = False
+    DEBUG = True
   else:
     PRODUCTION = True
+    DEBUG = False
 except Exception as e:
     PRODUCTION = True
-
-if PRODUCTION:
-  DEBUG = True
-else:
-  DEBUG = True
+    DEBUG = False
 
 PAYMENTS_PRODUCTION = not DEBUG
 TEMPLATE_DEBUG = DEBUG
@@ -80,7 +78,6 @@ if PRODUCTION:
   EMAIL_HOST_USER     = 'app15107937@heroku.com'
   EMAIL_HOST_PASSWORD = 'tmuipovc'
 else:
-  EMAIL_HOST          = 'smtp.sendgrid.net'
   EMAIL_HOST_USER     = 'limetree'
   EMAIL_HOST_PASSWORD = 'H0hner765@'
 
