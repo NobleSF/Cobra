@@ -35,8 +35,8 @@ class Email:
                     body        = self.text_body,
                     from_email  = "hello@theanou.com",
                     to          = self.to
-                    #cc         = ['dump@theanou.com']
                   )
+      #sendgrid settings automatically bcc dump@theanou.com on every email
       self.mail.attach_alternative(self.html_body, "text/html")
       self.mail.send()
     except Exception as e:
