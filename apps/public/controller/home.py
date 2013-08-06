@@ -2,6 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
+from django.utils import simplejson
 from datetime import datetime
 
 def home(request):
@@ -50,6 +51,28 @@ def faq(request):
 
 def contact(request):
   return render(request, 'home/contact.html')
+
+def subscribe(request): #ajax requests only
+  from django.db import IntegrityError
+  from apps.public.models import Subscription
+  try:
+    subscription = Subscription(email=request.GET.get('email'))
+    if request.GET.get('name'):
+      subscription.name = request.GET.get('name')
+    subscription.save()
+    response = {'success': "%s is subscribed" % subscription.email}
+
+  except IntegrityError: #already subscribed
+    if request.GET.get('name'):
+      subscription = Subscription.objects.get(email=request.GET.get('email'))
+      subscription.name = request.GET.get('name')
+      subscription.save()
+    response = {'success': "%s already subscribed" % subscription.email}
+
+  except Exception as e:
+    response = {'exception': str(e)}
+
+  return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 def test_meta(request):
   values = request.META.items()

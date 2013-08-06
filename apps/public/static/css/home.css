@@ -15,16 +15,30 @@
   padding: 2em .5em;
 }
 
+/* SUBSCRIBE FORM */
+#subscribe-text{line-height: 2em;}
+#subscribe-form{margin: 1em;}
+#subscribe-email, #subscribe-name{padding: 1em;}
+
+#subscribe-buttons button:nth-child(2),
+#subscribe-buttons button:nth-child(3),
+#subscribe-buttons button:nth-child(4){display: none;}
+
+.help-inline{display: none;}
+#email-suggestion{display: none;}
+#suggested-email{cursor: pointer;}
+
+/* SEARCH TOOLBAR */
 #search-toolbar{
   background-color: rgba(0,0,0,0.3);
   padding: 10px 10px 0;
   margin: 0;
 }
 
-/* Product Container */
+/* PRODUCT CONTAINER */
 #product-container{
   width: 100%;
-  margin: 4em 0 0;
+  margin: 3em 0 0;
 }
 #product-container .product{
   cursor: pointer;

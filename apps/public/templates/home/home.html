@@ -31,6 +31,43 @@
             style="display:none;"
             src="//www.youtube.com/embed/xquR19Ms2R4?rel=0" frameborder="0" allowfullscreen></iframe>
   </div>
+
+  <div id='subscribe' class='text-center'>
+    <form id='subscribe-form' data-url='{% url 'subscribe' %}'>
+      <ul class='inline'>
+        <li>
+          <p id='subscribe-text'>Subscribe</p>
+        </li>
+        <li>
+          <div class="control-group">
+            <div class="controls">
+
+              <input id='subscribe-email' class='input-large required'
+                type='text' name='email'
+                placeholder='email'>
+
+              <p id='email-suggestion'>
+                Did you mean <a id='suggested-email'></a>?
+              </p>
+              <p class="help-inline">Please provide your email.</p>
+            </div>
+          </div>
+        </li>
+        <li>
+          <input id='subscribe-name' class='input-medium'
+                 type='text' name='name'
+                 placeholder='name (optional)'>
+        </li>
+        <li id='subscribe-buttons'>
+          <button type='button' id='subscribe-submit' class='btn'>Submit</button>
+          <button type='button' class='btn btn-info disabled'>Saving...</button>
+          <button type='button' class='btn btn-success disabled'>Thanks!</button>
+          <button type='button' class='btn btn-danger disabled'>Invalid, please try again</button>
+        </li>
+      </ul>
+    </form>
+  </div>
+
   <!--{% search_bar_tag %}-->
 
   <div id='product-container'>

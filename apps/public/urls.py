@@ -13,12 +13,12 @@ urlpatterns = patterns('',
   # we need a big regex to pull the keywords from the url here instead of putting that logic in the controller
   url(
     r'^search[((/type_(?P<category>\w+))?|(/color_(?P<color>\w+))?|/(?P<collection>\w+))?]+$',
-    home.search, name='search'),
+    home.search, name='search'
+  ),
   #url(r'^search(/(?P<keywords>\w+))+$', home.search, name='search'),
 
   # store page at /store/123 represents a seller profile
   url(r'^store/(?P<seller_id>\d+)$', store.home, name='store'),
-
 
   #checkout pages
   url(r'^checkout/cart$', checkout.cart, name='cart'),
@@ -28,5 +28,6 @@ urlpatterns = patterns('',
   url(r'^checkout/confirmation$', checkout.confirmation, name='confirmation'),
 
   #non-pages, ajax calls
+  url(r'^subscribe$', home.subscribe, name='subscribe'),
   url(r'^test_meta$', home.test_meta, name='test meta'),
 )
