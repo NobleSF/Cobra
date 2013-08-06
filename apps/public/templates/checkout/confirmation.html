@@ -6,11 +6,11 @@
 {% endblock title %}
 
 {% block javascript %}
-
+  <script type="text/javascript" src="{{ STATIC_URL }}public/js/confirmation.min.js"></script>
 {% endblock javascript %}
 
 {% block css %}
-  <link href="{{ STATIC_URL }}public/css/checkout.css" rel="stylesheet">
+  <link href="{{ STATIC_URL }}public/css/confirmation.css" rel="stylesheet">
 {% endblock css %}
 
 {% block content %}
@@ -55,19 +55,32 @@
             <legend>Contact Information</legend>
             <p>
               {% if checkout_data.name %}
-                {{ checkout_data.name}}
+                <span id='subscribe-name'>{{ checkout_data.name}}</span>
               {% else %}
                 No name on file.
               {% endif %}
               <br>
               {% if checkout_data.email %}
-                {{ checkout_data.email}}
+                <span id='subscribe-email'>{{ checkout_data.email}}</span>
               {% else %}
                 No email on file!
               {% endif %}
             </p>
             {% if checkout_data.email %}
-              <p>Subscribe to receive updates as Anou transforms the world of Fair Trade.</p>
+              <p id='subscribe' data-url="{% url 'subscribe' %}">
+                <button type='button' id='subscribe-submit' class='btn btn-success'>
+                  Subscribe
+                </button>
+                <button type='button' class='btn btn-info disabled'>
+                  Saving...
+                </button>
+                <button type='button' class='btn btn-success disabled'>
+                  Thanks!
+                </button>
+                <span class='before'>to</span>
+                <span class='after'>You'll</span>
+                receive updates as Anou transforms the world of Fair Trade.
+              </p>
             {% endif %}
           </fieldset>
 

@@ -1,0 +1,4 @@
+/* SUBSCRIBE FORM */
+#subscribe button:nth-child(2),
+#subscribe button:nth-child(3),
+#subscribe .after{display: none;}
