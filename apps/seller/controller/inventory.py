@@ -51,6 +51,7 @@ def create(request):
 def edit(request, product_id):
   from apps.seller.controller.forms import ProductEditForm, PhotoForm
   from apps.seller.controller.management import signForm
+  from settings.settings import CLOUDINARY
 
   request.product_id = product_id
   product = Product(request)
@@ -80,7 +81,10 @@ def edit(request, product_id):
     'product':          product.product,
     'product_form':     product_form,
     'photo_form':       PhotoForm(),
-    'add_ranks_range':  add_ranks_range
+    'add_ranks_range':  add_ranks_range,
+    'CLOUDINARY':       {'upload_url':   CLOUDINARY['upload_url'],
+                         'download_url': CLOUDINARY['download_url']
+                        }
   }
   return render(request, 'inventory/edit.html', context)
 

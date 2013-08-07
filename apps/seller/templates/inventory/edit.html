@@ -27,6 +27,8 @@
 
   <input type='hidden' id='product-ajax-url' value="{% url 'seller:save product' %}">
   <input type='hidden' id='product-id' value='{{ product.id }}'>
+  <input type='hidden' id='upload-url' value='{{ CLOUDINARY.upload_url }}'>
+  <input type='hidden' id='download-url' value='{{ CLOUDINARY.download_url }}'>
 
   <div id='product-edit-form' class='text-center'>
 

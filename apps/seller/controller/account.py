@@ -20,6 +20,7 @@ def create(account):
 def edit(request):
   from apps.seller.models import Seller, Asset
   from apps.seller.controller.forms import AssetForm, ImageForm, SellerEditForm
+  from settings.settings import CLOUDINARY
 
   try:
     seller = Seller.objects.get(id=request.session['seller_id'])
@@ -39,7 +40,10 @@ def edit(request):
                 'assets':     assets,
                 'asset_form': AssetForm(),
                 'image_form': image_form,
-                'asset_ilks': ['artisan','product','tool','material']
+                'asset_ilks': ['artisan','product','tool','material'],
+                'CLOUDINARY': {'upload_url':   CLOUDINARY['upload_url'],
+                               'download_url': CLOUDINARY['download_url']
+                              }
               }
 
     if request.method == 'POST':

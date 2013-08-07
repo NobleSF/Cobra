@@ -1,4 +1,5 @@
 from django.db import models
+from settings.settings import CLOUDINARY
 
 class Seller(models.Model):
   from apps.admin.models import Account, Country, Currency
@@ -164,7 +165,7 @@ class Photo(models.Model): #Photos are exclusively product pictures.
   updated_at    = models.DateTimeField(auto_now = True)\
 
   def __unicode__(self):
-    return unicode(self.original).replace('http://res.cloudinary.com/anou/image/upload/','')
+    return unicode(self.original).replace(CLOUDINARY['download_url'],'')
 
   def _get_thumb_size(self):
     return u'%s' % self.original.replace("upload", "upload/c_pad,h_225,q_85,w_300")
@@ -189,7 +190,7 @@ class Image(models.Model): #Images are used for navigation, thumbnail size
   updated_at    = models.DateTimeField(auto_now = True)
 
   def __unicode__(self):
-    return unicode(self.original).replace('http://res.cloudinary.com/anou/image/upload/','')
+    return unicode(self.original).replace(CLOUDINARY['download_url'],'')
 
   def _get_thumb_size(self):
     transformation = "c_fill,e_improve,g_center,h_225,q_85,w_300"

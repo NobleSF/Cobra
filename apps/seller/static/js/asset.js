@@ -67,7 +67,7 @@ function fileUploadAction(){
 
     this_file_input.fileupload({
       dataType: 'json',
-      url: "http://api.cloudinary.com/v1_1/anou/image/upload",
+      url: $('#upload-url').val(),
 
       send: function (e, data) {
         progress_div.show();
@@ -82,7 +82,7 @@ function fileUploadAction(){
         response_data = data['response']();
         response = response_data.result;
         //load thumb_url into display div
-        thumb_url = response['url'].replace("upload","upload/t_thumb");
+        thumb_url = response['url'].replace("upload","upload/c_fill,e_improve,g_center,h_225,q_85,w_300");
         this_display_div.html('<img src="' + thumb_url + '">');
         //save image_id in form field
         image_field = this_display_div.closest('.asset, #seller-account').find('.image-url');

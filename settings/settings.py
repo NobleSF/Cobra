@@ -58,7 +58,9 @@ if PRODUCTION:
     'api_key':        '697913462329845',
     'api_secret':     '-dc1wU2_xyJmYaeJP1Yimn2-cuA',
     'format':         'jpg',
-    'transformation': 't_original'
+    'transformation': 't_original',
+    'upload_url':     'http://api.cloudinary.com/v1_1/hork5h8x1/image/upload/',
+    'download_url':   'http://res.cloudinary.com/hork5h8x1/image/upload/'
   }
 else:
   CLOUDINARY = {
@@ -66,7 +68,9 @@ else:
     'api_key':        '155257496663982',
     'api_secret':     'z78hCbzKQ26-6UQoE0FvmguCP9A',
     'format':         'jpg',
-    'transformation': 't_original'
+    'transformation': 't_original',
+    'upload_url':     'http://api.cloudinary.com/v1_1/anou/image/upload/',
+    'download_url':   'http://res.cloudinary.com/anou/image/upload/'
   }
 
 #SENDGRID EMAIL BACKEND

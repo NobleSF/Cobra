@@ -161,7 +161,7 @@ function fileUploadAction(){
   this.apply = function(file_input, display_div){
     var this_file_input = file_input;
     var this_display_div = display_div;
-    var photo_url = "http://res.cloudinary.com/anou/image/upload/_unique_id_.jpg";
+    var photo_url = $('#download-url').val() + "_unique_id_.jpg";
 
     var progress_div = this_file_input.closest('.photo-upload-div').find('.progress');
     var button_div = this_file_input.closest('.photo-upload-div').find('.photo-form');
@@ -177,7 +177,7 @@ function fileUploadAction(){
     this_file_input.fileupload({
       //forceIframeTransport: true,
       dataType: 'json',
-      url: "http://api.cloudinary.com/v1_1/anou/image/upload",
+      url: $('#upload-url').val(),
 
       submit: function(e, data){
         var spinner_id = progress_div.closest('.photo-upload-div').find('.spinner-div').attr('id');
@@ -189,7 +189,7 @@ function fileUploadAction(){
         data.formData = getFormData(form);
 
         //reset and save the url we should get back
-        photo_url = "http://res.cloudinary.com/anou/image/upload/_unique_id_.jpg";
+        photo_url = $('#download-url').val() + "_unique_id_.jpg";
         photo_url = photo_url.replace("_unique_id_", data.formData['public_id']);
       },
 
@@ -272,7 +272,7 @@ function loadPhoto(progress_div, photo_url, spinner){
 }
 
 function loadThumb(url, display_div){ //load thumb_url into display div
-  thumb_url = url.replace("upload","upload/t_thumb");
+  thumb_url = url.replace("upload","upload/c_fill,e_improve,g_center,h_225,q_85,w_300");
   display_div.html('<img src="' + thumb_url + '">');
   //progress_div.closest('.photo-upload-div').find('.photo img').attr('src', photo_url);
 }

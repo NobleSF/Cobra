@@ -69,6 +69,9 @@
 
     </div>
 
+    <input type='hidden' id='upload-url' value='{{ CLOUDINARY.upload_url }}'>
+    <input type='hidden' id='download-url' value='{{ CLOUDINARY.download_url }}'>
+
     <form id='seller-form' action="" method="post">{% csrf_token %}
       <input type='hidden' id='save-seller-url' value='{% url 'seller:save seller' %}'>
 
