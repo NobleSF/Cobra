@@ -45,7 +45,7 @@ def create(request):
     return redirect("%d/edit" % product.product.id)
 
   except Exception as e:
-    return redirect("/seller/")
+    return redirect('seller:management home')
 
 @access_required('seller')
 def edit(request, product_id):

@@ -1,6 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from apps.admin.controller.decorator import access_required
+from django.contrib import messages
 from apps.admin.models import Account
 
 @access_required('account')
@@ -11,35 +12,36 @@ def home(request):
 def create(request):
   from apps.admin.controller.forms import AccountCreateForm
   from django.db import IntegrityError
+  from apps.seller.controller.account import create as createSeller
 
   if request.method == 'POST':
-    form = AccountCreateForm(request.POST)
-    if form.is_valid():
-      try:
-        account = form.save()
-        if request.POST.get('is_seller'): #returns None if doesn't exist
-          from apps.seller.controller.account import create
-          if create(account.id):
-            return login(request)
-          else:
-            Account.objects.get(id=account.id).delete()
-            context = {'problem': "couldn't create seller account"}
+    try:
+      username = request.POST.get('username')
+      password = process_password(request.POST.get('password'))
+      account = Account(username=username, password=password)
+      account.is_admin = (request.POST['account_type'] == 'admin')
+      account.save()
+
+      if account.is_admin:
+        messages.success(request, 'Admin account created.')
+
+      else: #seller account
+        if createSeller(account) == True:
+          #messages.success(request, 'Seller account created.')
+          login(request)
+          return redirect('seller:edit')
         else:
-          return login(request)
+          messages.error(request, 'Error creating seller account.')
+          error_message = createSeller(account)
+          messages.error(request, error_message)
+          account.delete()
 
-      except IntegrityError:
-        context = {'problem': "account exists"}
-      except Exception as e:
-        context = {'exception': e}
+    except IntegrityError:
+      messages.warning(request, 'An account with this username already exists.')
+    except Exception as e:
+      messages.error(request, e)
 
-    else:
-      context = {'problem': "invalid data"}
-
-  else:
-    context = {}
-    form = AccountCreateForm()
-
-  context['form'] = form
+  context = {'form': AccountCreateForm()}
   return render(request, 'account/create.html', context)
 
 @access_required('account')
@@ -112,7 +114,7 @@ def login(request, next=None):
           del request.session['next']
           return HttpResponseRedirect(full_path)
         else:
-          return redirect('/')
+          return redirect('seller:management home')
 
       elif not account:
         context = {'incorrect': "wrong username"}

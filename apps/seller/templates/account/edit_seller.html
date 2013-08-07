@@ -26,7 +26,9 @@
       <h1 id='seller-title' >
         <a href="{% url 'store' seller.id %}"
            class='symbol-name green' title='seller public page'></a>
-        {{ seller.name }}
+        {% if seller.account.name %}
+          {{ seller.account.name }}
+        {% endif %}
       </h1>
     </div>
   </div>

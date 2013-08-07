@@ -2,7 +2,6 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from apps.admin.controller.decorator import access_required
 from django.forms.models import modelformset_factory
-from django.contrib import messages
 from django.utils import simplejson
 from datetime import datetime
 

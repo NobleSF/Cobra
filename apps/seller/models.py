@@ -3,9 +3,6 @@ from django.db import models
 class Seller(models.Model):
   from apps.admin.models import Account, Country, Currency
   account       = models.ForeignKey(Account)
-  name          = models.CharField(max_length=50)
-  email         = models.EmailField(null=True, blank=True)
-  phone         = models.BigIntegerField(null=True, blank=True)
   bio           = models.TextField(null=True, blank=True)
   city          = models.CharField(max_length=50, null=True, blank=True)
   country       = models.ForeignKey(Country, null=True, blank=True)
@@ -16,8 +13,15 @@ class Seller(models.Model):
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
 
+  @property
+  def name(self): return self.account.name if self.account.name else ""
+  @property
+  def email(self): return self.account.email if self.account.email else ""
+  @property
+  def phone(self): return self.account.phone if self.account.phone else ""
+
   def __unicode__(self):
-    return self.name
+    return self.account.name if self.account.name else "No Name"
 
 class Asset(models.Model):
   from apps.admin.models import Category

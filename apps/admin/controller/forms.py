@@ -7,18 +7,16 @@ from django.forms.widgets import TextInput
 class NumberInput(TextInput):
   input_type = 'tel'
 
-class AccountCreateForm(forms.ModelForm):
-  is_seller = forms.BooleanField(label='Seller', required=False)
-  public_key  = forms.CharField(label='', widget=forms.HiddenInput, required=False)
-  class Meta:
-    model = Account
+class AccountCreateForm(forms.Form):
+  username      = forms.CharField(max_length=100)
+  password      = forms.CharField(max_length=100)
+  account_type  = forms.MultipleChoiceField(
+                    widget=forms.Select,
+                    choices=(('admin','admin'),('seller','seller'))
+                  )
 
   def clean_password(self):
     return process_password(self.cleaned_data['password'])
-  def clean_email(self):
-      email = self.cleaned_data['email']
-      if email == '': email = None
-      return email
 
 class AccountEditForm(forms.ModelForm):
   class Meta:

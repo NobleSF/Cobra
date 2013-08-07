@@ -2,17 +2,19 @@ from django.http import HttpResponse
 from django.utils import simplejson
 from django.shortcuts import render, redirect
 from apps.admin.controller.decorator import access_required
+from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
+from django.db import IntegrityError
 
-def create(account_id):
+def create(account):
   try:
     from apps.seller.models import Seller
-    account = Seller(account_id=account_id)
-    account.save()
+    seller_account = Seller(account_id=account.id)
+    seller_account.save()
     return True
   except Exception as e:
     context = {'exception': e}
-    return False
+    return e
 
 @access_required('seller')
 def edit(request):
@@ -54,20 +56,25 @@ def edit(request):
       try: # it must be a post to work
         if seller_form.is_valid():
           seller_data = seller_form.cleaned_data
-          seller.name         = seller_data['name']
-          seller.email        = seller_data['email']
-          seller.phone        = seller_data['phone']
-          seller.bio          = seller_data['bio']
-          #seller.image       = customSaveImage(seller_data['image_url'])
-          seller.city         = seller_data['city']
-          seller.country      = seller_data['country']
-          seller.coordinates  = seller_data['coordinates']
-          seller.currency     = seller_data['currency']
+
+          seller.account.name   = seller_data['name']
+          seller.account.email  = seller_data['email']
+          seller.account.phone  = seller_data['phone']
+          seller.account.save()
+
+          seller.bio            = seller_data['bio']
+          seller.city           = seller_data['city']
+          seller.country        = seller_data['country']
+          seller.coordinates    = seller_data['coordinates']
+          seller.currency       = seller_data['currency']
           seller.save()
+
           return redirect('seller:management home')
         else:
-          context['problem'] = "Seller form did not validate"
-          context['errors'] = seller_form.errors
+          messages.warning(request, seller_form.errors)
+
+      except IntegrityError:
+        messages.warning(request, 'Another account is using this email or phone')
 
       except Exception as e:
         context['exception'] = e
