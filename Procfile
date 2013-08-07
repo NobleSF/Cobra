@@ -1,1 +1,1 @@
-web: gunicorn settings.wsgi --timeout 300
+web: newrelic-admin run-program gunicorn settings.wsgi --timeout 300

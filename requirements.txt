@@ -9,6 +9,7 @@ django_compressor
 django-storages==1.1.6
 djrill
 gunicorn==0.17.2
+newrelic
 numpy==1.6.2
 psycopg2==2.4.5
 pycrypto==2.6
