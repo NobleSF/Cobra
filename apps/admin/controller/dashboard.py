@@ -1,6 +1,7 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from apps.admin.controller.decorator import access_required
+from django.contrib import messages
 from django.forms.models import modelformset_factory
 from django.utils import simplejson
 from datetime import datetime
@@ -20,7 +21,7 @@ def review_products(request):
   return render(request, 'dashboard/review_products.html', context)
 
 @access_required('admin')
-def approve_product(request):
+def approve_product(request): #from AJAX GET request
   from apps.seller.models import Product
   try:
     product_id = request.GET['product_id']
@@ -28,7 +29,7 @@ def approve_product(request):
     product.approved_at = datetime.now()
     product.save()
   except Exception as e:
-    response = {'exception': e}
+    messages.error(request, e)
   else:
     response = {'success': str(product.id) + " approved"}
 
@@ -43,8 +44,9 @@ def country(request):
     formset = CountryFormSet(request.POST)
     try:
       formset.save()
+      messages.success(request, 'Country saved.')
     except Exception as e:
-      context['exception'] = e
+      messages.error(request, e)
   formset = CountryFormSet(queryset=Country.objects.all())
   context['formset'] = formset
   return render(request, 'dashboard/formset.html', context)
@@ -58,8 +60,9 @@ def currency(request):
     formset = CurrencyFormSet(request.POST)
     try:
       formset.save()
+      messages.success(request, 'Currency saved.')
     except Exception as e:
-      context['exception'] = e
+      messages.error(request, e)
   formset = CurrencyFormSet(queryset=Currency.objects.all())
   context['formset'] = formset
   return render(request, 'dashboard/formset.html', context)
@@ -73,8 +76,9 @@ def color(request):
     formset = ColorFormSet(request.POST)
     try:
       formset.save()
+      messages.success(request, 'Color saved.')
     except Exception as e:
-      context['exception'] = e
+      messages.error(request, e)
   formset = ColorFormSet(queryset=Color.objects.all())
   context['formset'] = formset
   return render(request, 'dashboard/formset.html', context)
@@ -88,8 +92,9 @@ def category(request):
     formset = CategoryFormSet(request.POST)
     try:
       formset.save()
+      messages.success(request, 'Category saved.')
     except Exception as e:
-      context['exception'] = e
+      messages.error(request, e)
   formset = CategoryFormSet(queryset=Category.objects.all())
   context['formset'] = formset
   return render(request, 'dashboard/formset.html', context)
@@ -103,8 +108,9 @@ def rating_subject(request):
     formset = RatingSubjectFormSet(request.POST)
     try:
       formset.save()
+      messages.success(request, 'Rating Subject saved.')
     except Exception as e:
-      context['exception'] = e
+      messages.error(request, e)
   formset = RatingSubjectFormSet(queryset=RatingSubject.objects.all())
   context['formset'] = formset
   return render(request, 'dashboard/formset.html', context)
@@ -118,8 +124,9 @@ def shipping_option(request):
     formset = ShippingOptionFormSet(request.POST)
     try:
       formset.save()
+      messages.success(request, 'Shipping Option saved.')
     except Exception as e:
-      context['exception'] = e
+      messages.error(request, e)
   formset = ShippingOptionFormSet(queryset=ShippingOption.objects.all())
   context['formset'] = formset
   return render(request, 'dashboard/formset.html', context)
@@ -133,8 +140,9 @@ def image_object(request):
     formset = ImageFormSet(request.POST)
     try:
       formset.save()
+      messages.success(request, 'Image Object saved.')
     except Exception as e:
-      context['exception'] = e
+      messages.error(request, e)
   formset = ImageFormSet(queryset=Image.objects.all())
   context['formset'] = formset
   return render(request, 'dashboard/formset.html', context)

@@ -61,6 +61,9 @@ def edit(request, account_id=None):
     account_model_form = AccountEditForm(request.POST, instance=account)
     if account_model_form.is_valid():
       account_model_form.save()
+      messages.success(request, 'Account information saved.')
+    else:
+      messages.warning(request, 'Not saved. Some data is invalid.')
 
   else:
     account_model_form = AccountEditForm(instance=account)
