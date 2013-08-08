@@ -3,13 +3,32 @@
 {% block content %}
   {% load url from future %}
 
-  <h3>Admin Tools</h3>
+  <h3>Accounts</h3>
   <ul>
     <li><a href="{% url 'admin:account create' %}">Create New Admin or Seller Account</a></li>
+    <li><a href="{% url 'admin:all_accounts' %}">All Accounts</a></li>
+  </ul>
+
+  <h3>Products</h3>
+  <ul>
     <li><a href="{% url 'admin:review products' %}">Review New Products</a></li>
   </ul>
 
-  <h3>Site Settings</h3>
+  <h3>Orders</h3>
+  <ul>
+    <li>Place Manual Order</li>
+    <li>Edit Order</li>
+    <li>Refund Order</li>
+  </ul>
+
+  <h3>Communication</h3>
+  <ul>
+    <li>Send SMS</li>
+    <li>Lookup SMS</li>
+    <li>Lookup Email</li>
+  </ul>
+
+  <h3>Global Settings</h3>
   <ul>
     <li><a href="{% url 'admin:currency' %}">Currency</a></li>
     <li><a href="{% url 'admin:country' %}">Country</a></li>

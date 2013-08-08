@@ -11,7 +11,8 @@ urlpatterns = patterns('',
     # just to give the user more peace of mind.
 
   url(r'^account/create$', account.create, name='account create'),
-  url(r'^account/edit$', account.edit, name='account edit'),
+  url(r'^account/all_accounts$', account.all_accounts, name='all_accounts'),
+  url(r'^account/(?P<account_id>\d+)/edit$', account.edit, name='account edit'),
   url(r'^account/login$', account.login, name='login'),
   url(r'^account/logout$', account.logout, name='logout'),
   url(r'^account/(?P<username>\w+)$', account.home, name='account'),

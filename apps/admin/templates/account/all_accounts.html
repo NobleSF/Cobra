@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block content %}
+
+<h1>All Accounts</h1>
+
+<table>
+  <thead>
+    <td>Type</td>
+    <td>Name</td>
+    <td>Username</td>
+    <td>Email</td>
+  </thead>
+
+  {% for account in accounts %}
+    <tr>
+      <td>
+        {% if account.is_admin %}admin{% else %}seller{% endif %}
+      </td>
+      <td>
+        <a href="{% url 'admin:account edit' account.id %}">{{ account.name }}</a>
+      </td>
+      <td>
+        {{ account.username }}
+      </td>
+      <td>
+        {{ account.email }}
+      </td>
+    </tr>
+  {% endfor %}
+
+</table>
+
+{% endblock content %}

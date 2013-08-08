@@ -44,11 +44,16 @@ def create(request):
   context = {'form': AccountCreateForm()}
   return render(request, 'account/create.html', context)
 
-@access_required('account')
-def edit(request):
+@access_required('admin')
+def all_accounts(request):
+  context = {'accounts':Account.objects.order_by('is_admin','name')}
+  return render(request, 'account/all_accounts.html', context)
+
+@access_required('admin')
+def edit(request, account_id=None):
   from apps.admin.controller.forms import AccountEditForm
   account = Account.objects.get(
-    id = (request.session.get('admin_id') or request.session.get('admin_id'))
+    id = request.session.get('admin_id')
   )
   form = AccountEditForm()
   return render(request, 'account/edit.html', {'form': form})
