@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 {% load url from future %}
 
+{% block css %}
+  <style>
+    thead td{text-decoration: underline;}
+  </style>
+{% endblock css %}
+
 {% block content %}
 
 <h1>All Accounts</h1>
@@ -11,6 +17,7 @@
     <td>Name</td>
     <td>Username</td>
     <td>Email</td>
+    <td>Phone</td>
   </thead>
 
   {% for account in accounts %}
@@ -19,13 +26,18 @@
         {% if account.is_admin %}admin{% else %}seller{% endif %}
       </td>
       <td>
-        <a href="{% url 'admin:account edit' account.id %}">{{ account.name }}</a>
+        <a href="{% url 'admin:account edit' account.id %}">
+          {% if account.name %}{{ account.name }}{% else %}[no name]{% endif %}
+        </a>
       </td>
       <td>
         {{ account.username }}
       </td>
       <td>
         {{ account.email }}
+      </td>
+      <td>
+        {{ account.phone }}
       </td>
     </tr>
   {% endfor %}

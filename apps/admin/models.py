@@ -6,6 +6,9 @@ class Account(models.Model):
   name          = models.CharField(max_length=50, blank=True, null=True)
   email         = models.EmailField(blank=True, null=True, unique=True)
   phone         = models.CharField(max_length=15, blank=True, null=True, unique=True)
+  bank_name     = models.CharField(max_length=50, blank=True, null=True)
+  bank_account  = models.CharField(max_length=100, blank=True, null=True)
+
   is_admin      = models.BooleanField(default=False, verbose_name='Admin')
                   # we will have to expand for different levels of admin
                   # as well as country specific admin

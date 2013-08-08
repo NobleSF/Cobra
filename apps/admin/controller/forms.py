@@ -21,6 +21,7 @@ class AccountCreateForm(forms.Form):
 class AccountEditForm(forms.ModelForm):
   class Meta:
     model = Account
+    exclude = ['password','is_admin']
 
   def clean_password(self):
     return process_password(self.cleaned_data['password'])

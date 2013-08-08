@@ -52,11 +52,20 @@ def all_accounts(request):
 @access_required('admin')
 def edit(request, account_id=None):
   from apps.admin.controller.forms import AccountEditForm
-  account = Account.objects.get(
-    id = request.session.get('admin_id')
-  )
-  form = AccountEditForm()
-  return render(request, 'account/edit.html', {'form': form})
+
+  if not account_id:
+    account_id = request.session.get('admin_id')
+  account = Account.objects.get(id=account_id)
+
+  if request.method == 'POST':
+    account_model_form = AccountEditForm(request.POST, instance=account)
+    if account_model_form.is_valid():
+      account_model_form.save()
+
+  else:
+    account_model_form = AccountEditForm(instance=account)
+
+  return render(request, 'account/edit.html', {'form': account_model_form})
 
 def login(request, next=None):
   from apps.admin.controller.forms import AccountLoginForm
