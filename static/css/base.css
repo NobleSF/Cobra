@@ -67,6 +67,10 @@ a, a:hover, a:active, a:focus{outline: 0;}
   text-decoration: underline;
 }
 
+@media (max-width: 767px) {
+  .zopim {display: none !important;}
+}
+
 /* SYMBOLS AND COLORS */
 [class*="symbol-"]:hover {
   text-decoration: none !important;
