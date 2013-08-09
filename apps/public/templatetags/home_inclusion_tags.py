@@ -21,7 +21,8 @@ def product_tag(product, sans_artisan=False):
 
   #artisan information
   if not sans_artisan:
-    product.artisan = product.assets.filter(ilk='artisan')[0]
+    try: product.artisan = product.assets.filter(ilk='artisan')[0]
+    except:pass
 
   context = {'product': product}
   return context
