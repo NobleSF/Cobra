@@ -1,4 +1,4 @@
-
+#header{border-bottom: none;}
 .hidden-fields{display: none;}
 
 ul {
@@ -6,10 +6,6 @@ ul {
 }
 input{
   max-width: 150px;
-}
-
-#header{
-  border-bottom: none;
 }
 
 #product-edit-form{
