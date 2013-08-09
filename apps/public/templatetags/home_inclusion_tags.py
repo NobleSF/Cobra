@@ -20,9 +20,9 @@ def product_tag(product, sans_artisan=False):
   product.photos = product.photo_set.order_by('rank').all()
 
   #artisan information
-  if not sans_artisan:
-    try: product.artisan = product.assets.filter(ilk='artisan')[0]
-    except:pass
+  #if not sans_artisan:
+  #  try: product.artisan = product.assets.filter(ilk='artisan')[0]
+  #  except:pass
 
   context = {'product': product}
   return context

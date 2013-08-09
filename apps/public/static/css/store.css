@@ -10,9 +10,17 @@
   box-shadow: 0 0 0 0;
   margin: auto;
 }
-#artisan-profiles .title{
+.artisan{
+  max-width: 300px;
+  margin: 2em auto;
+}
+.artisan .title{
   position: relative;
-  top: -3.5em;
+  top: -4em;
+  height: 0;
+}
+.artisan .title .name{
+  height: 2em
 }
 
 #info-left #store-bio, .artisan-description{
@@ -37,24 +45,33 @@
   cursor: pointer;
   margin-top: 2em;
 }
-.product .title, .artisan .title{
+.product a{
+  text-decoration: none;
+}
+.product .title{
   z-index: 5;
   height: 0em;
   text-align: center;
-}
-.title h3{
+  max-width: 375px;
   margin: 0 auto;
-  padding: 0.5em 0;
-  font-size: 18pt;
-  color: rgba(0,0,0,0.9);
-  background-color: rgba(200,200,200,0.5);
-  max-width: 300px;
 }
 
-.artisan .title h3{
-  padding: 0;
-  font-size: 16pt;
+.product .title .name, .artisan .title .name{
+  padding: 0.5em 0 0;
+  font-size: 18pt;
 }
+.product .title .city{
+  padding:  0 0 0.5em;
+  font-size: 12pt;
+}
+.product .title .name, .product .title .city, .artisan .title .name{
+  margin: 0 auto;
+  color: rgba(0,0,0,0.9);
+  background-color: rgba(200,200,200,0.5);
+  max-width: 100%;
+}
+
+.hover-show{display: none;}
 
 .product .photo, .artisan .photo{
   z-index: -1;

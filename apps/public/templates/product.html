@@ -11,7 +11,6 @@
 
 {% block css %}
   <link href="{{ STATIC_URL }}public/css/product.css" rel="stylesheet">
-  <link href="{{ STATIC_URL }}public/css/product.css" rel="stylesheet">
 {% endblock css %}
 
 {% block content %}
@@ -156,16 +155,14 @@
     </h1>
 
     <div class='product-row row-fluid'>
-      <div class='product-row row-fluid'>
-        {% for product in more_products %}
+      {% for product in more_products %}
 
-          <div class='span4 product-area {% cycle "pos1" "pos2" "pos3" %}'>
-            {% product_tag product 'sans_artisan' %}
-          </div>
+        <div class='span4 product-area {% cycle "pos1" "pos2" "pos3" %}'>
+          {% product_tag product 'sans_artisan' %}
+        </div>
 
-          {% cycle "" "" "</div><div class='product-row row-fluid'>" %}
-        {% endfor %}
-      </div>
+        {% cycle "" "" "</div><div class='product-row row-fluid'>" %}
+      {% endfor %}
     </div>
   </div>
 

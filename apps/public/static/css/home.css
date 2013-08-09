@@ -39,10 +39,10 @@
 /* PRODUCT CONTAINER */
 #product-container{
   width: 100%;
-  margin: 3em 0 0;
 }
 #product-container .product{
   cursor: pointer;
+  margin: 1em 0;
 }
 
 .product a{
@@ -54,15 +54,15 @@
   text-align: center;
 }
 
-.product .title h3{
+.product .title .name{
   padding: 0.5em 0 0;
   font-size: 18pt;
 }
-.product .title h4{
+.product .title .city{
   padding:  0 0 0.5em;
   font-size: 12pt;
 }
-.product .title h3, .product .title h4{
+.product .title .name, .product .title .city{
   margin: 0 auto;
   color: rgba(0,0,0,0.9);
   background-color: rgba(200,200,200,0.5);
@@ -75,6 +75,10 @@
   position: relative;
   top: 0em;
   text-align: center;
+}
+
+.product .photo img{
+  border-radius: 4px;
 }
 
 .product .artisan{

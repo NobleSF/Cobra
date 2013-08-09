@@ -29,7 +29,7 @@
 
         <li id='bio'>
           <a class='read-more visible-phone' data-show='store-bio'>
-            read bio
+            read about {{ store.name }}
           </a>
           <p id='store-bio' class='hidden-phone'>
             <span class='short-description'>
@@ -57,13 +57,13 @@
                 {% endif %}
                 {% if artisan.name %}
                   <div class='title'>
-                    <h3 class='artisan-name' >{{ artisan.name }}</h3>
+                    <h3 class='name' >{{ artisan.name }}</h3>
                   </div>
                 {% endif %}
                 {% if artisan.description %}
                   <div class='description'>
                     <a class='read-more' data-show='artisan-bio-{{ artisan.id }}'>
-                      read bio
+                      about {{ artisan.name }}
                     </a>
                     <p id='artisan-bio-{{ artisan.id }}'
                        class='artisan-description hidden'>
@@ -93,11 +93,11 @@
       <div class='product-row row-fluid'>
         {% for product in store.product_set.all %}
 
-          <div class='span4 product-area {% cycle "pos1" "pos2" "pos3" %}'>
+          <div class='span6 product-area {% cycle "pos1" "pos2" %}'>
             {% product_tag product 'sans_artisan' %}
           </div>
 
-          {% cycle "" "" "</div><div class='product-row row-fluid'>" %}
+          {% cycle "" "</div><div class='product-row row-fluid'>" %}
         {% endfor %}
       </div>
 
