@@ -3,7 +3,7 @@ from settings.settings import CLOUDINARY
 
 class Seller(models.Model):
   from apps.admin.models import Account, Country, Currency
-  account       = models.ForeignKey(Account)
+  account       = models.ForeignKey(Account)#should really be one-to-one relationship
   bio           = models.TextField(null=True, blank=True)
   city          = models.CharField(max_length=50, null=True, blank=True)
   country       = models.ForeignKey(Country, null=True, blank=True)

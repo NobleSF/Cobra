@@ -4,10 +4,6 @@ from apps.admin.controller.decorator import access_required
 from django.contrib import messages
 from apps.admin.models import Account
 
-@access_required('account')
-def home(request):
-  return render(request, 'account/home.html')
-
 @access_required('admin')
 def create(request):
   from apps.admin.controller.forms import AccountCreateForm
@@ -150,6 +146,17 @@ def login(request, next=None):
 
   #context['public_key'] = create new public key
   return render(request, 'account/login.html', context)
+
+@access_required('admin')
+def login_cheat(request):
+  from apps.seller.models import Seller
+
+  seller_id = request.GET.get('seller_id')
+  destination = request.GET.get('destination')
+
+  request.session['seller_id'] = seller_id
+  return HttpResponseRedirect(destination)
+
 
 def logout(request):
   try:

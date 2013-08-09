@@ -13,6 +13,7 @@
 
 <table>
   <thead>
+    <td></td>
     <td>Type</td>
     <td>Name</td>
     <td>Username</td>
@@ -22,6 +23,11 @@
 
   {% for account in accounts %}
     <tr>
+      <td>
+        {% if not account.is_admin %}
+          <a href="{{ account.cheat_login_url }}">Login</a>
+        {% endif %}
+      </td>
       <td>
         {% if account.is_admin %}admin{% else %}seller{% endif %}
       </td>

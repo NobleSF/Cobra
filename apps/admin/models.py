@@ -16,6 +16,17 @@ class Account(models.Model):
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
 
+  @property
+  def cheat_login_url(self):
+    from django.core.urlresolvers import reverse
+    try:
+      url = reverse('admin:login_cheat')
+      url_parameters = "?seller_id=%d&destination=%s" % (self.seller_set.all()[0].id, reverse('seller:management home'))
+    except:
+      return reverse('admin:login')
+    else:
+      return url + url_parameters
+
   def __unicode__(self):
     return self.username
 
