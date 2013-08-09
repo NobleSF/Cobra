@@ -60,7 +60,8 @@ a, a:hover, a:active, a:focus{outline: 0;}
   color: #888;
 }
 
-#messages .success, #messages .warning, #messages .error{color: red;}
+#messages .success{color: green;}
+#messages .warning, #messages .error{color: red;}
 
 .underline{
   text-decoration: underline;
