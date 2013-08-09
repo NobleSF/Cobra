@@ -193,11 +193,11 @@ class Image(models.Model): #Images are used for navigation, thumbnail size
     return unicode(self.original).replace(CLOUDINARY['download_url'],'')
 
   def _get_thumb_size(self):
-    transformation = "c_fill,e_improve,g_center,h_225,q_85,w_300"
+    transformation = "c_fill,g_center,h_225,q_85,w_300"
     return u'%s' % self.original.replace("upload", ("upload/"+transformation))
   thumb_size = property(_get_thumb_size)
 
   def _get_pinky_size(self):
-    transformation = "c_fill,e_improve,g_center,h_75,q_85,w_100"
+    transformation = "c_fill,g_center,h_75,q_85,w_100"
     return u'%s' % self.original.replace("upload", ("upload/"+transformation))
   pinky_size = property(_get_pinky_size)

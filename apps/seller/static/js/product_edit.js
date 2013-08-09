@@ -272,7 +272,7 @@ function loadPhoto(progress_div, photo_url, spinner){
 }
 
 function loadThumb(url, display_div){ //load thumb_url into display div
-  thumb_url = url.replace("upload","upload/c_fill,e_improve,g_center,h_225,q_85,w_300");
+  thumb_url = url.replace("upload","upload/c_fill,g_center,h_225,q_85,w_300");
   display_div.html('<img src="' + thumb_url + '">');
   //progress_div.closest('.photo-upload-div').find('.photo img').attr('src', photo_url);
 }
