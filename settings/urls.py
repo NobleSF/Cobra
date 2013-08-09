@@ -1,11 +1,12 @@
 from django.conf.urls import patterns, include, url
 from apps.public.controller import home
 from django.http import HttpResponseRedirect
-from django.views.generic.simple import direct_to_template
+from django.views.generic.simple import redirect_to, direct_to_template
 
 urlpatterns = patterns('',
   url(r'^$', home.home, name='home'), #fyi, this is home
   (r'^index.php$', lambda x: HttpResponseRedirect('/')), #and this is home too
+  (r'^blog', redirect_to, {'url': 'http://helloanou.wordpress.com/'}),
 
   (r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': {}}),
   url(r'^humans.txt', direct_to_template, {'template':'humans.txt', 'mimetype':'text/plain'}),
