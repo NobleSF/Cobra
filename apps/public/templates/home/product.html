@@ -2,19 +2,24 @@
 
 <div class='product' data-url="{% url 'product' product.id %}">
   <a href='{% url 'product' product.id %}'>
+
     <div class='title title-photo'>
-      <h3>{{ product.name }}</h3>
+      <h3 class='hover-show'>{{ product.name }}</h3>
+      {% if product.artisan %}
+        <h4 class='hover-show'>from {{ product.seller.city }}</h4>
+      {% endif %}
     </div>
 
     <div class='photo'>
       <img src='{{ product.photos.0.thumb_size }}'>
     </div>
-  </a>
-  {% if product.artisan %}
-    <div class='artisan'>
-      <img class='pull-right hidden-phone hover-show'
-           src='{{ product.artisan.image.pinky_size }}'>
-    </div>
-  {% endif %}
 
+    {% if product.artisan %}
+      <div class='artisan'>
+        <img class='pull-right hidden-phone hover-show'
+             src='{{ product.artisan.image.pinky_size }}'>
+      </div>
+    {% endif %}
+
+  </a>
 </div>

@@ -6,22 +6,22 @@ $(function(){//on page load
 
 });
 
-
 $('.read-more').on('click', function(){
   $(this).prev('.short-description').hide();
   $(this).hide();
   $(this).next('.long-description').show();
 });
 
-//$('.product').click(function(){
-//  window.location.href = $(this).attr('data-url');
-//});
-
+//PRODUCT ANIMATION
 $('.product').hover(
   function(){ //on mouseenter
-    $(this).find('.title h3').addClass('underline')
+    $(this).find('.hover-show').each(function(){
+      $(this).show();
+    });
   },
   function(){//on mouseleave
-    $(this).find('.title h3').removeClass('underline')
+    $(this).find('.hover-show').each(function(){
+      $(this).fadeOut();
+    });
   }
 );

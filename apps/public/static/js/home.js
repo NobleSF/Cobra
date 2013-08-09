@@ -12,25 +12,21 @@ $('#video-image').on('click', function(){
   $('#video').show();
 });
 
-
 //PRODUCT ANIMATION
 $('.product').hover(
   function(){ //on mouseenter
     $(this).find('.hover-show').each(function(){
       $(this).show();
     });
-    $(this).find('.title h3').addClass('underline')
   },
   function(){//on mouseleave
     $(this).find('.hover-show').each(function(){
       $(this).fadeOut();
     });
-    $(this).find('.title h3').removeClass('underline')
   }
 );
 
 // SUBSCRIBING FUNCTIONS
-
 //show submit button if using form
 $('#subscribe-name,#subscribe-email').on('focus', function(){
   $('#subscribe-buttons button:nth-child(3)').hide('500');//success

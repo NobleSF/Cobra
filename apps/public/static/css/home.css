@@ -1,6 +1,7 @@
 @media (max-width: 980px) {
   #body{margin-top:0px;}
 }
+#header{border: none;}
 
 .left-navigation li{
   padding: 0.1em 0;
@@ -44,19 +45,30 @@
   cursor: pointer;
 }
 
+.product a{
+  text-decoration: none;
+}
 .product .title{
   z-index: 5;
   height: 0em;
   text-align: center;
 }
+
 .product .title h3{
-  margin: 0 auto;
-  padding: 0.5em 0;
+  padding: 0.5em 0 0;
   font-size: 18pt;
+}
+.product .title h4{
+  padding:  0 0 0.5em;
+  font-size: 12pt;
+}
+.product .title h3, .product .title h4{
+  margin: 0 auto;
   color: rgba(0,0,0,0.9);
   background-color: rgba(200,200,200,0.5);
   max-width: 300px;
 }
+.hover-show{display: none;}
 
 .product .photo{
   z-index: -1;

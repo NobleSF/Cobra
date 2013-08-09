@@ -112,6 +112,9 @@
   cursor: pointer;
   margin-top: 2em;
 }
+.product a{
+  text-decoration: none;
+}
 .product .title{
   z-index: 5;
   height: 0em;
@@ -125,6 +128,7 @@
   background-color: rgba(200,200,200,0.5);
   max-width: 300px;
 }
+.hover-show{display: none;}
 .product .photo{
   z-index: -1;
   position: relative;
