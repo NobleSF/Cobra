@@ -42,7 +42,8 @@
 }
 #product-container .product{
   cursor: pointer;
-  margin: 1em 0;
+  margin: 1em auto;
+  max-width: 375px;
 }
 
 .product a{
@@ -79,6 +80,9 @@
 
 .product .photo img{
   border-radius: 4px;
+}
+.product .title .name{
+  border-radius: 4px 4px 0px 0px;
 }
 
 .product .artisan{

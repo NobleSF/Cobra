@@ -1,8 +1,7 @@
 $(function(){//on page load
 
-  $(this).find('.extra').find('div').find('*').each(function(){
-    $(this).hide();
-  });
+  //PRODUCT PHOTO LOADING
+  $("img").unveil();
 
 });
 

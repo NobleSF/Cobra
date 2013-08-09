@@ -4,6 +4,9 @@ $(function(){//on page load
     interval: false
   })
 
+  //PRODUCT PHOTO LOADING
+  $("img").unveil();
+
 });
 
 $('.read-more').on('click', function(){

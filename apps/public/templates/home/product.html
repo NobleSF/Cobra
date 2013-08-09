@@ -1,4 +1,5 @@
 {% load url from future %}
+{% load static %}
 
 <div class='product' data-url="{% url 'product' product.id %}">
   <a href='{% url 'product' product.id %}'>
@@ -11,7 +12,9 @@
     </div>
 
     <div class='photo'>
-      <img src='{{ product.photos.0.thumb_size }}'>
+      <img src='{{ STATIC_URL }}images/loader.gif'
+           data-src='{{ product.photos.0.thumb_size }}'
+           data-src-retina='{{ product.photos.0.thumb_size_retina }}'>
     </div>
 
     {% if product.artisan %}
