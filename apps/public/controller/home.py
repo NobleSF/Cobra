@@ -10,7 +10,7 @@ def home(request):
   unsold_products = Product.objects.filter(sold_at=None)
   approved_products = unsold_products.filter(approved_at__lte=datetime.today())
   active_products = approved_products.filter(deactive_at=None)
-  top_12_products = active_products[:12]
+  top_12_products = active_products.order_by('approved_at').reverse()
 
   context = {'products':top_12_products}
 

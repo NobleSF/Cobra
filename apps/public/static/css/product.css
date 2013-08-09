@@ -126,7 +126,7 @@
   font-size: 18pt;
   color: rgba(0,0,0,0.9);
   background-color: rgba(200,200,200,0.5);
-  max-width: 300px;
+  max-width: 100%;
 }
 .hover-show{display: none;}
 .product .photo{

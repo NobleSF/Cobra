@@ -89,15 +89,16 @@
   <!--{% search_bar_tag %}-->
 
   <div id='product-container'>
-    {% for product in products %}
-      {% cycle "<div class='product-row row-fluid'>" "" "" "" %}
+    <div class='product-row row-fluid'>
+      {% for product in products %}
 
-        <div class='span3 product-area {% cycle "pos1" "pos2" "pos3" "pos4" %}'>
+        <div class='span4 product-area {% cycle "pos1" "pos2" "pos3" %}'>
           {% product_tag product %}
         </div>
 
-      {% cycle "" "" "" "</div>" %}
-    {% endfor %}
+        {% cycle "" "" "</div><div class='product-row row-fluid'>" %}
+      {% endfor %}
+    </div>
   </div>
 
 {% endblock content %}

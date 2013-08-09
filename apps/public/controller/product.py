@@ -20,7 +20,8 @@ def home(request, product_id):
     product.tools     = product.assets.filter(ilk='tool')#.order_by('?')[:3]
     product.utilities = list(chain(product.materials, product.tools))
 
-    more_products = product.seller.product_set.exclude(id=product.id)[:8]
+    more_products = product.seller.product_set.exclude(id=product.id)
+    more_products = more_products[:3]#django won't cache the original query with this on it
 
     context = {'product':       product,
                'more_products': more_products
