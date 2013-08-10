@@ -8,7 +8,7 @@ def cleanupCarts():
     time_1_hour_ago = datetime.today() - timedelta(hours=1)
     recently_purchased_products = Product.objects.filter(sold_at__gte=time_1_hour_ago)
 
-    #remove sold from any carts that have not checked out yet
+    #remove sold products from any carts that have not checked out yet
     for product in recently_purchased_products:
       if len(product.item_set.all()) > 1:
         for item in product.item_set.all():

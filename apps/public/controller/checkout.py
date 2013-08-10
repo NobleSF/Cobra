@@ -8,6 +8,12 @@ from apps.public.controller.forms import CartForm
 
 def cart(request):
   cart = Cart(request)
+
+  #if the cart is already checked out, make a new cart
+  if cart.cart.checked_out:
+    del request.session['cart_id']
+    cart = Cart(request)
+
   cart_form = CartForm()
   try:
     cart_form.fields['email'].initial = cart.getData('email')
@@ -94,8 +100,8 @@ def confirmation(request):
          checkout_data.get('state') in ['authorized', 'reserved', 'captured']:
         cart.checkout()
         orders = getOrders(checkout_id)
-        try: del request.session['cart_id']
-        except: pass
+        if request.session.get('cart_id') and cart.cart.id == request.session.get('cart_id'):
+          del request.session['cart_id']
       else:
         checkout_data = {'problem': "Payment on order is not complete."}
 
