@@ -67,12 +67,13 @@
         </ul>
 
         <ul class='pull-left'>
-          <li>
-            <a class='title' href="{% url 'home' %}">Home</a>
-          </li>
-          <li>
-            <a class='title' href="{% url 'about' %}">About</a>
-          </li>
+          {% block header_link_1 %}
+            <li><a class='title' href="{% url 'home' %}">Home</a></li>
+          {% endblock header_link_1 %}
+
+          {% block header_link_2 %}
+            <li><a class='title' href="{% url 'about' %}">About</a></li>
+          {% endblock header_link_2 %}
         </ul>
 
       </div>
