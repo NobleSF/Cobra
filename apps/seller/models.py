@@ -70,7 +70,10 @@ class Product(models.Model):
   updated_at    = models.DateTimeField(auto_now = True)
 
   @property
-  def is_active(self): return True if self.active_at and not self.deactive_at else False
+  def was_never_active(self): return True if not self.active_at else False
+
+  @property
+  def is_active(self): return True if (self.active_at and not self.deactive_at) else False
 
   @property
   def is_sold(self): return True if self.sold_at else False

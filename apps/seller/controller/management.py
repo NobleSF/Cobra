@@ -24,7 +24,7 @@ def products(request):
 
   try:
     seller = Seller.objects.get(id=request.session['seller_id'])
-    active_products = seller.product_set.filter(active_at__lte=datetime.today())
+    active_products = seller.product_set.filter(active_at__lte=datetime.today(), deactive_at=None)
     approved_products = active_products.filter(approved_at__lte=datetime.today())
     unsold_products = approved_products.filter(sold_at__isnull=True)
 
