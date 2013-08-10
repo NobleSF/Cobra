@@ -137,11 +137,10 @@ def saveProduct(request): #ajax requests only, not asset-aware
       if 'activate' in request.GET and request.GET['activate'] == "yes":
         product.activate();
 
-      attribute = request.GET['attribute']
-      if 'status' in request.GET:
-        status = request.GET['status']
-      else:
-        status = None
+      attribute = request.GET.get('attribute')
+      status    = request.GET.get('status')
+      if attribute and attribute != "active":
+        product.unapprove()
 
       if attribute == "asset":
         if status == "active":

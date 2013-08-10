@@ -150,6 +150,24 @@ class Product:
     else:
       return True
 
+  def unapprove(self):
+    try:
+      self.product.approved_at = None
+      self.product.save()
+    except:
+      return False
+    else:
+      return True
+
+  def disapprove(self):
+    try:
+      self.product.approved_at = None
+      self.product.save()
+    except:
+      return False
+    else:
+      return True
+
   def mark_sold(self):
     try:
       self.product.sold_at = datetime.now()
