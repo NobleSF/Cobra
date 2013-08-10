@@ -29,14 +29,14 @@ class AccountEditForm(forms.ModelForm):
 
 class AccountLoginForm(forms.Form):
   username  = forms.CharField(widget=NumberInput())
-  password  = forms.CharField(widget=NumberInput())
+  password  = forms.CharField(widget=NumberInput(attrs={'autocomplete':'off'}))
 
   def clean_password(self):
     return process_password(self.cleaned_data['password'])
 
 class AccountPasswordForm(forms.Form):
-  old_password  = forms.CharField(widget=forms.PasswordInput)
-  new_password  = forms.CharField(widget=forms.PasswordInput)
+  old_password  = forms.CharField(widget=forms.PasswordInput(attrs={'autocomplete':'off'}))
+  new_password  = forms.CharField(widget=forms.PasswordInput(attrs={'autocomplete':'off'}))
   #public_key  = forms.CharField(widget=forms.HiddenInput, required=False)
 
   def clean_old_password(self):
