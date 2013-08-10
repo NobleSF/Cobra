@@ -99,6 +99,22 @@
 
   </div>
 
+  <div id='product-description'>
+    <ul class='inline'>
+      <li><h3>{{ product.name }}</h3></li>
+      <li>{{ product.description }}</li>
+    </ul>
+
+    {% if product.english_dimensions %}
+      <ul class='inline'>
+        <li><h3>Approx. Size</h3></li>
+        <li>{{ product.english_dimensions }}</li>
+        <li><h3>or</h3></li>
+        <li>{{ product.metric_dimensions }}</li>
+      </ul>
+    {% endif %}
+  </div>
+
   {% if product.utilities %}
     <h4 class='utilities-disclaimer'>
       This original item was uniquely handmade using the local materials and tools below

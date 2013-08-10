@@ -142,3 +142,7 @@
   top: 0em;
   text-align: center;
 }
+
+#product-description ul{
+  margin: 0 0 -1em;
+}

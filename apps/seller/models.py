@@ -86,6 +86,56 @@ class Product(models.Model):
     return str(self.id)
 
   @property
+  def description(self):
+    return self.assets.filter(ilk='product')[0].description
+
+  @property
+  def metric_dimensions(self):
+    from math import floor
+    from django.contrib.gis.measure import Distance
+    metric_string = ""
+    measurements = sorted([self.width, self.height, self.length], reverse=True)
+
+    for length in measurements:
+      if length and Distance(cm=length).m > 1:
+        meters = floor(Distance(cm=length).m)
+        centimeters = int((Distance(cm=length)-Distance(m=meters)).cm)
+      elif length:
+        meters=None
+        centimeters = int(Distance(cm=length).cm)
+      if length:
+        dimension_string = ("%dm " % meters) if meters else ""
+        dimension_string += "%dcm" % centimeters
+        metric_string += "%s x " % dimension_string
+
+    if metric_string.endswith(" x "):
+      metric_string = rreplace(metric_string, " x ", "", 1)
+    return metric_string
+
+  @property
+  def english_dimensions(self):
+    from math import floor
+    from django.contrib.gis.measure import Distance
+    engish_string = ""
+    measurements = sorted([self.width, self.height, self.length], reverse=True)
+
+    for length in measurements:
+      if length and Distance(cm=length).ft > 1:
+        feet = floor(Distance(cm=length).ft)
+        inches = int((Distance(cm=length) - Distance(ft=feet)).inch)
+      elif length:
+        feet=None
+        inches = int(Distance(cm=length).inch)
+      if length:
+        dimension_string = ("%dft " % feet) if feet else ""
+        dimension_string += "%din" % inches
+        engish_string += "%s x " % dimension_string
+
+    if engish_string.endswith(" x "):
+      engish_string = rreplace(engish_string, " x ", "", 1)
+    return engish_string
+
+  @property
   def anou_fee(self):
     from settings.settings import ANOU_FEE_RATE
     if self.price:
@@ -201,3 +251,8 @@ class Image(models.Model): #Images are used for navigation, thumbnail size
     transformation = "c_fill,g_center,h_75,q_85,w_100"
     return u'%s' % self.original.replace("upload", ("upload/"+transformation))
   pinky_size = property(_get_pinky_size)
+
+
+def rreplace(s, old, new, occurrence):
+  li = s.rsplit(old, occurrence)
+  return new.join(li)
