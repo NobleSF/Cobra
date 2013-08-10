@@ -99,10 +99,11 @@ class Product(models.Model):
     for length in measurements:
       if length and Distance(cm=length).m > 1:
         meters = floor(Distance(cm=length).m)
-        centimeters = int((Distance(cm=length)-Distance(m=meters)).cm)
+        centimeters = int(round((Distance(cm=length)-Distance(m=meters)).cm))
       elif length:
         meters=None
-        centimeters = int(Distance(cm=length).cm)
+        centimeters = int(round(Distance(cm=length).cm))
+        centimeters = centimeters if centimeters > 0 else 1
       if length:
         dimension_string = ("%dm " % meters) if meters else ""
         dimension_string += "%dcm" % centimeters
@@ -122,10 +123,11 @@ class Product(models.Model):
     for length in measurements:
       if length and Distance(cm=length).ft > 1:
         feet = floor(Distance(cm=length).ft)
-        inches = int((Distance(cm=length) - Distance(ft=feet)).inch)
+        inches = int(round((Distance(cm=length) - Distance(ft=feet)).inch))
       elif length:
         feet=None
-        inches = int(Distance(cm=length).inch)
+        inches = int(round(Distance(cm=length).inch))
+        inches = inches if inches > 0 else 1
       if length:
         dimension_string = ("%dft " % feet) if feet else ""
         dimension_string += "%din" % inches
