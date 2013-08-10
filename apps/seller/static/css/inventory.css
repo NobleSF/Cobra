@@ -25,7 +25,7 @@
 .details{
   position: relative;
   top: -5.5em; /*-1 for the remove button plus 4.5 for details or ratings*/
-  max-width: 300px;
+  max-width: 375px;
   z-index: 1;
   height: 0em;
   cursor: pointer;
