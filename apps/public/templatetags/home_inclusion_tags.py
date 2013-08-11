@@ -24,22 +24,10 @@ def product_tag(product, sans_artisan=False):
   #  try: product.artisan = product.assets.filter(ilk='artisan')[0]
   #  except:pass
 
-  context = {'product': product}
-  return context
+  return {'product': product}
 
 @register.inclusion_tag('home/search_bar.html')
 def search_bar_tag(search_keywords=None):
-  from apps.admin.models import Category, Color, Country
+  from apps.admin.models import Category
 
-  #these should be cached queries!!
-  colors = Color.objects.all()
-  categories = Category.objects.all()
-  countries = Country.objects.all()
-  #cached queries!
-
-  context = {
-    'colors':colors,
-    'categories':categories,
-    'countries':countries,
-    'search_keywords':search_keywords
-  }
+  return {'categories':Category.objects.all()}

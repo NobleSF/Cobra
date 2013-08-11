@@ -93,6 +93,10 @@ class Product(models.Model):
     return self.assets.filter(ilk='product')[0].description
 
   @property
+  def category(self):
+    return  self.assets.filter(ilk='product')[0].categories.all()[0].name
+
+  @property
   def metric_dimensions(self):
     from math import floor
     from django.contrib.gis.measure import Distance

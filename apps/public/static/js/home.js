@@ -25,6 +25,47 @@ $('.product').hover(
   }
 );
 
+//SEARCH AND SORTING FUNCTIONS
+$('#search-toolbar .title').on('click', function(){
+  category = $(this).attr('data-category');
+  sortProductsBy(category)
+  $('#search-toolbar .title').removeClass('underline');
+  $(this).addClass('underline');
+});
+
+function sortProductsBy(category){
+  $('.product-area').hide();
+
+  //move the category products first
+  $('#product-container .product-area').each(function(){
+    if ($(this).attr('data-category') == category){
+      $(this).appendTo($('#product-sorting-container'))
+    }
+  });
+  //then move all the rest to follow behind
+  $('#product-container .product-area').each(function(){
+    $(this).appendTo($('#product-sorting-container'))
+  });
+  //all products should be in the sorting container now
+
+  next_position = 0;
+  //now put them all back into rows
+  $('#product-sorting-container .product-area').each(function(){
+    row_number = Math.floor(next_position/3);
+    $(this).appendTo($('#product-container .product-row')[row_number])
+    next_position++;
+  });
+
+  //this_category = $(this).attr('data-category');
+  //this_position = $(this).attr('data-order');
+
+  if (category == 'everything'){
+    $('.product-area').show();
+  }else{
+    $('.product-area[data-category='+category+']').slideDown();
+  }
+}
+
 // SUBSCRIBING FUNCTIONS
 //show submit button if using form
 $('#subscribe-name,#subscribe-email').on('focus', function(){

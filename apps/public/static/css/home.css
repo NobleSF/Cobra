@@ -30,11 +30,16 @@
 #suggested-email{cursor: pointer;}
 
 /* SEARCH TOOLBAR */
-#search-toolbar{
-  background-color: rgba(0,0,0,0.3);
-  padding: 10px 10px 0;
+#search-toolbar ul{
   margin: 0;
 }
+#search-toolbar .title{
+  font-size: 18pt;
+  padding: 0.5em;
+  cursor: pointer
+}
+#search-toolbar .title:hover{text-decoration: underline;}
+.underline{text-decoration: underline;}
 
 /* PRODUCT CONTAINER */
 #product-container{

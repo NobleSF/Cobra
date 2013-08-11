@@ -8,7 +8,7 @@
 {% endblock title %}
 
 {% block javascript %}
-  <script type="text/javascript" src="{{ STATIC_URL }}public/js/home.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}public/js/home.js"></script>
 {% endblock javascript %}
 
 {% block css %}
@@ -90,13 +90,16 @@
     </div>
   </div>
 
-  <!--{% search_bar_tag %}-->
+  {% search_bar_tag %}
 
   <div id='product-container'>
     <div class='product-row row-fluid'>
       {% for product in products %}
 
-        <div class='span4 product-area {% cycle "pos1" "pos2" "pos3" %}'>
+        <div id='product-div-{{ forloop.counter0 }}'
+             class='span4 product-area'
+             data-category='{{ product.category }}'
+             data-order='{{ forloop.counter0 }}'>
           {% product_tag product %}
         </div>
 
@@ -104,5 +107,7 @@
       {% endfor %}
     </div>
   </div>
+
+  <div id='product-sorting-container' class=''></div>
 
 {% endblock content %}
