@@ -101,7 +101,8 @@
       .css('opacity', '0.01');
     });
     $('.chg-type-to-text').on('click', function(){
-      $('input').attr('type', 'text').blur().focus();
+      $('input#id_username').attr('type', 'text').blur().focus();
+      $('input#id_password').attr('type', 'text').blur().focus();
       $(this).remove();
     });
   </script>
