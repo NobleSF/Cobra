@@ -94,7 +94,10 @@ class Product(models.Model):
 
   @property
   def category(self):
-    return  self.assets.filter(ilk='product')[0].categories.all()[0].name
+    try:
+      return  self.assets.filter(ilk='product')[0].categories.all()[0].name
+    except:
+      return ''
 
   @property
   def metric_dimensions(self):
