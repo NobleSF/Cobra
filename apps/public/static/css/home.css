@@ -20,6 +20,7 @@
 #subscribe-text{line-height: 2em;}
 #subscribe-form{margin: 1em;}
 #subscribe-email, #subscribe-name{padding: 1em;}
+#subscribe-name{display: none;}
 
 #subscribe-buttons button:nth-child(2),
 #subscribe-buttons button:nth-child(3),

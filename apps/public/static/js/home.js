@@ -78,9 +78,10 @@ function sortProductsBy(category){
 // SUBSCRIBING FUNCTIONS
 //show submit button if using form
 $('#subscribe-name,#subscribe-email').on('focus', function(){
+  $('#subscribe-name').show();
   $('#subscribe-buttons button:nth-child(3)').hide('500');//success
   $('#subscribe-buttons button:nth-child(4)').hide('500');//error
-  $('#subscribe-buttons button:nth-child(1)').show();
+  $('#subscribe-buttons button:nth-child(1)').show();//submit
 });
 
 $('#subscribe-submit').on('click',function(){
