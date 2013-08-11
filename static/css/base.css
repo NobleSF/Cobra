@@ -53,8 +53,13 @@ a, a:hover, a:active, a:focus{outline: 0;}
 }
 #base-navigation a, #base-navigation a:hover, #base-navigation a:active {
   color: #333;
-  font-size: 2em;
+  font-size: 18pt;
   text-decoration: none;
+}
+@media (max-width: 980px){
+  #base-navigation a, #base-navigation a:hover, #base-navigation a:active {
+    font-size: 12pt;
+  }
 }
 #base-navigation a:hover {
   color: #888;

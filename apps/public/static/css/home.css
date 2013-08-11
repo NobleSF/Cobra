@@ -38,6 +38,11 @@
   padding: 0.5em;
   cursor: pointer
 }
+@media (max-width: 980px){
+  #search-toolbar .title{
+    font-size: 12pt;
+  }
+}
 #search-toolbar .title:hover{text-decoration: underline;}
 .underline{text-decoration: underline;}
 
