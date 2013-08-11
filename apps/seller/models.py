@@ -230,11 +230,11 @@ class Photo(models.Model): #Photos are exclusively product pictures.
     return unicode(self.original).replace(CLOUDINARY['download_url'],'')
 
   def _get_thumb_size(self):
-    return u'%s' % self.original.replace("upload", "upload/c_pad,h_281,q_85,w_375")
+    return u'%s' % self.original.replace("upload", "upload/c_fill,g_center,h_281,q_85,w_375")
   thumb_size= property(_get_thumb_size)
 
   def _get_pinky_size(self):
-    return u'%s' % self.original.replace("upload", "upload/c_pad,h_75,q_70,w_100")
+    return u'%s' % self.original.replace("upload", "upload/c_fill,g_center,h_75,q_70,w_100")
   pinky_size = property(_get_pinky_size)
 
   def _get_product_size(self):
