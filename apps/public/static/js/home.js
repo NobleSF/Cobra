@@ -1,7 +1,7 @@
 $(function(){//on page load
 
   //PRODUCT PHOTO LOADING
-  $("img").unveil();
+  $("img").unveil(200);
 
 });
 
@@ -40,6 +40,7 @@ function sortProductsBy(category){
   $('#product-container .product-area').each(function(){
     if ($(this).attr('data-category') == category){
       $(this).appendTo($('#product-sorting-container'))
+      $(this).find('img').trigger('unveil');
     }
   });
   //then move all the rest to follow behind
@@ -48,19 +49,27 @@ function sortProductsBy(category){
   });
   //all products should be in the sorting container now
 
-  next_position = 0;
-  //now put them all back into rows
-  $('#product-sorting-container .product-area').each(function(){
-    row_number = Math.floor(next_position/3);
-    $(this).appendTo($('#product-container .product-row')[row_number])
-    next_position++;
-  });
+  if (category == 'everything'){
+    $('#product-sorting-container .product-area').each(function(){
+      //find the row it originally belonged to and put it there
+      row_number = Math.floor($(this).attr('data-order')/3)
+      $(this).appendTo($('#product-container .product-row')[row_number])
+    });
+  }else{
+    next_position = 0;
+    //now put them all back into rows - they are already in order
+    $('#product-sorting-container .product-area').each(function(){
+      row_number = Math.floor(next_position/3);
+      $(this).appendTo($('#product-container .product-row')[row_number])
+      next_position++;
+    });
+  }
 
   //this_category = $(this).attr('data-category');
   //this_position = $(this).attr('data-order');
 
   if (category == 'everything'){
-    $('.product-area').show();
+    $('.product-area').slideDown();
   }else{
     $('.product-area[data-category='+category+']').slideDown();
   }
