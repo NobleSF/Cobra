@@ -91,7 +91,7 @@
       {% load home_inclusion_tags %}
 
       <div class='product-row row-fluid'>
-        {% for product in store.product_set.all %}
+        {% for product in products %}
 
           <div class='span6 product-area {% cycle "pos1" "pos2" %}'>
             {% product_tag product 'sans_artisan' %}

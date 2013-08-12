@@ -2,6 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
+from datetime import datetime
 
 def home(request, product_id):
   from apps.seller.models import Product, Photo
@@ -20,11 +21,14 @@ def home(request, product_id):
     product.tools     = product.assets.filter(ilk='tool')#.order_by('?')[:3]
     product.utilities = list(chain(product.materials, product.tools))
 
-    more_products = product.seller.product_set.exclude(id=product.id)
-    more_products = more_products[:3]#django won't cache the original query with this on it
+    seller_products   = product.seller.product_set.exclude(id=product.id)
+    unsold_products   = seller_products.filter(sold_at=None)
+    approved_products = unsold_products.filter(approved_at__lte=datetime.today())
+    active_products   = approved_products.filter(deactive_at=None)
+    ordered_products  = active_products.order_by('approved_at').reverse()
 
     context = {'product':       product,
-               'more_products': more_products
+               'more_products': ordered_products[:3]
               }
 
   except Product.DoesNotExist:
