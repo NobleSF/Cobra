@@ -22,14 +22,12 @@
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-responsive.min.css" rel="stylesheet">
   {% endif %}
 
-
   <link href="{{ STATIC_URL }}css/base.css" rel="stylesheet">
   <link href="{{ STATIC_URL }}css/icon-font.css" rel="stylesheet">
   <link href="{{ STATIC_URL }}css/fonts.css" rel="stylesheet">
   <link href='http://fonts.googleapis.com/css?family=Merriweather' rel='stylesheet' type='text/css'>
   {% block css %}
   {% endblock css %}
-
 
 </head>
 
@@ -66,7 +64,7 @@
           </li>
         </ul>
 
-        <ul class='pull-left'>
+        <ul id='text-links' class=''>
           {% block header_link_1 %}
             <li><a class='title' href="{% url 'home' %}">Home</a></li>
           {% endblock header_link_1 %}
