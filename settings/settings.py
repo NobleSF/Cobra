@@ -88,10 +88,10 @@ else:
 #TELERIVET SMS GATEWAY
 if PRODUCTION:
   TELERIVET = {
-    'api_key':          'NUM4RN3KAHPAN76QR3MF2LCKEEEAZ3AN',
-    'project_id':       'PJ5e901dbfc89c2d4e3b08efcada0ed5ea',
-    'phone_id':         'PNd14ab124cc5676e6062c554c4214bce4',
-    'phone_number':     '0665555555',
+    'api_key':          'DF6UFT49DW643UQWDC436PC2K6LKWEDC',
+    'project_id':       'PJb41b4e785d567945065e25271c8bd1dd',
+    'phone_id':         'PNe5ceaab258b60afe79687a5620c5c265',
+    'phone_number':     '2120623809088',
     'status_url':       'http://www.theanou.com/communication/sms/status_confirmation',
     'status_secret':    'JuiceIsWorthTheSqueeze',
     'webhook_url':      'http://anou-cobra.herokuapp.com/communication/sms/incoming',
@@ -99,11 +99,11 @@ if PRODUCTION:
   }
 else:
   TELERIVET = {
-    'api_key':          '37X4WKLEZ7ECNE4CW3GHECKHGA4FZUP2',
-    'project_id':       'PJ8973e6e346c349cbcdd094fcffa9fcb5',
-    'phone_id':         'PNc238efdc2e8a62af145811e15d7cd653',
+    'api_key':          'DF6UFT49DW643UQWDC436PC2K6LKWEDC',
+    'project_id':       'PJ7b2437d72ffb96a200f05f33318f7809',
+    'phone_id':         'PNf04607c4af8e227a58457b059a9d583c',
     'phone_number':     '0665555555',
-    'status_url':       'http://www.theanou.com/communication/sms/status_confirmation',
+    'status_url':       'http://localcobra.pagekite.me/communication/sms/status_confirmation',
     'status_secret':    'JuiceIsWorthTheSqueeze',
     'webhook_url':      'http://localcobra.pagekite.me/communication/sms/incoming',
     'webhook_secret':   'QNCWR2444MRT6R2G74UDTMTA6QKM2TET'
