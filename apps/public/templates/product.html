@@ -79,8 +79,10 @@
     <div id='artisan' class='span4'>
       <img id='artisan-image' src='{{ product.artisan.image.thumb_size }}'>
       <p>handmade by</p>
-      <h3 id='artisan-name'>{{ product.artisan.name }}</h3>
-      <p>at</p>
+      {% if product.artisan.name %}
+        <h3 id='artisan-name'>{{ product.artisan.name }}</h3>
+        <p>at</p>
+      {% endif %}
       <h3 id='store-name'>
         <a href="{% url 'store' product.seller.id %}">
           {{ product.seller.name }}
