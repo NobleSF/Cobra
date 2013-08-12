@@ -63,7 +63,7 @@
                 {% if artisan.description %}
                   <div class='description'>
                     <a class='read-more' data-show='artisan-bio-{{ artisan.id }}'>
-                      about {{ artisan.name }}
+                      about {% if artisan.name %}{{ artisan.name }}{% endif %}
                     </a>
                     <p id='artisan-bio-{{ artisan.id }}'
                        class='artisan-description hidden'>
