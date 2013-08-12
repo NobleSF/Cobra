@@ -16,7 +16,8 @@ def home(request, product_id):
     for photo in product.photos:
       photo.feature_url = photo.product
 
-    product.artisan   = product.assets.filter(ilk='artisan')[0]#.order_by('?')[:1]
+    try: product.artisan = product.assets.filter(ilk='artisan')[0]#.order_by('?')[:1]
+    except: pass
     product.materials = product.assets.filter(ilk='material')#.order_by('?')[:3]
     product.tools     = product.assets.filter(ilk='tool')#.order_by('?')[:3]
     product.utilities = list(chain(product.materials, product.tools))

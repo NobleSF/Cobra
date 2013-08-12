@@ -47,7 +47,8 @@ class Item(models.Model):
   @property
   def photo(self):
     photos = self.photos
-    return photos[0]
+    try: return photos[0]
+    except: return None
 
   def __unicode__(self):
     #return u'%d units of %s' % (self.quantity, self.product.name)

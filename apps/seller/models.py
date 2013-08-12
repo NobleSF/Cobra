@@ -90,14 +90,13 @@ class Product(models.Model):
 
   @property
   def description(self):
-    return self.assets.filter(ilk='product')[0].description
+    try: return self.assets.filter(ilk='product')[0].description
+    except: return ''
 
   @property
   def category(self):
-    try:
-      return  self.assets.filter(ilk='product')[0].categories.all()[0].name
-    except:
-      return ''
+    try: return  self.assets.filter(ilk='product')[0].categories.all()[0].name
+    except: return ''
 
   @property
   def metric_dimensions(self):
@@ -229,17 +228,17 @@ class Photo(models.Model): #Photos are exclusively product pictures.
   def __unicode__(self):
     return unicode(self.original).replace(CLOUDINARY['download_url'],'')
 
-  def _get_thumb_size(self):
+  @property
+  def thumb_size(self):
     return u'%s' % self.original.replace("upload", "upload/c_fill,g_center,h_281,q_85,w_375")
-  thumb_size= property(_get_thumb_size)
 
-  def _get_pinky_size(self):
+  @property
+  def pinky_size(self):
     return u'%s' % self.original.replace("upload", "upload/c_fill,g_center,h_75,q_70,w_100")
-  pinky_size = property(_get_pinky_size)
 
-  def _get_product_size(self):
+  @property
+  def product_size(self):
     return u'%s' % self.original.replace("upload", "upload/c_pad,h_600,q_70,w_800")
-  product_size = property(_get_product_size)
 
   class Meta:
     unique_together = ('product', 'rank')
@@ -254,16 +253,15 @@ class Image(models.Model): #Images are used for navigation, thumbnail size
   def __unicode__(self):
     return unicode(self.original).replace(CLOUDINARY['download_url'],'')
 
-  def _get_thumb_size(self):
+  @property
+  def thumb_size(self):
     transformation = "c_fill,g_center,h_225,q_85,w_300"
     return u'%s' % self.original.replace("upload", ("upload/"+transformation))
-  thumb_size = property(_get_thumb_size)
 
-  def _get_pinky_size(self):
+  @property
+  def pinky_size(self):
     transformation = "c_fill,g_center,h_75,q_85,w_100"
     return u'%s' % self.original.replace("upload", ("upload/"+transformation))
-  pinky_size = property(_get_pinky_size)
-
 
 def rreplace(s, old, new, occurrence):
   li = s.rsplit(old, occurrence)
