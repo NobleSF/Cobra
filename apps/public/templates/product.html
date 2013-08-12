@@ -46,6 +46,22 @@
         </ul>
       </div>
 
+      <div id='product-description'>
+        <ul class='inline text-left'>
+          <li><h3>{{ product.name }}</h3></li>
+          <li>{{ product.description }}</li>
+        </ul>
+
+        {% if product.english_dimensions %}
+          <ul class='inline text-left'>
+            <li><h3>Approx. Size</h3></li>
+            <li>{{ product.english_dimensions }}</li>
+            <li><h3>or</h3></li>
+            <li>{{ product.metric_dimensions }}</li>
+          </ul>
+        {% endif %}
+      </div>
+
     </div>
     <!--
     <div id='ratings' class='span4 well well-small'>
@@ -70,10 +86,17 @@
           <td class='price-qualifier'>free returns.</td>
         </tr>
       </table>
-      <a id='buy-button' class='btn btn-primary btn-success'
-         href="{% url 'cart-add' product.id %}">
-        <h2>Add To Cart</h2>
-      </a>
+      {% if product.is_sold %}
+        <a id='buy-button' class='btn btn-primary btn-danger disabled'
+           href="">
+          <h2>Sold</h2>
+        </a>
+      {% else %}
+        <a id='buy-button' class='btn btn-primary btn-success'
+           href="{% url 'cart-add' product.id %}">
+          <h2>Add To Cart</h2>
+        </a>
+      {% endif %}
     </div>
 
     <div id='artisan' class='span4'>
@@ -99,22 +122,6 @@
       </p>
     </div>
 
-  </div>
-
-  <div id='product-description'>
-    <ul class='inline'>
-      <li><h3>{{ product.name }}</h3></li>
-      <li>{{ product.description }}</li>
-    </ul>
-
-    {% if product.english_dimensions %}
-      <ul class='inline'>
-        <li><h3>Approx. Size</h3></li>
-        <li>{{ product.english_dimensions }}</li>
-        <li><h3>or</h3></li>
-        <li>{{ product.metric_dimensions }}</li>
-      </ul>
-    {% endif %}
   </div>
 
   {% if product.utilities %}
