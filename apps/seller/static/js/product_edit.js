@@ -59,7 +59,7 @@ $().ready( function(){
   //validate form and show confirmation
   $('#submit').bind('click', function(){
     if (validateForm()){
-      //show progress spinner over button
+      //todo: show progress spinner over button
 
       $.ajax({
         url: $('#product-ajax-url').attr('value'),

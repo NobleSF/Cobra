@@ -61,13 +61,13 @@
 
 .spinner-div {
   position: relative;
-  top: -140px;
+  top: -100px;
   height: 0em;
 }
 
 .progress {
   position: relative;
-  left: 20px;
+  left: 0px;
   top: -50px;
   width: 180px;
 }
