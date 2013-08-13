@@ -15,10 +15,10 @@
 <div class='details text-center'>
   <div class='part1 ratings'>
 
-    {% if rating.product > 3 %}
-      <i class='symbol-happy color-rating{{ rating.product }}' title='likeability'></i>
-    {% else %}
+    {% if rating.product and 0 < rating.product < 4 %}
       <i class='symbol-sad color-rating{{ rating.product }}' title='likeability'></i>
+    {% else %}
+      <i class='symbol-happy color-rating{{ rating.product }}' title='likeability'></i>
     {% endif %}
     <i class='symbol-camera color-rating{{ rating.picture }}' title='picture quality'></i>
     <i class='symbol-money color-rating{{ rating.price }}' title='price accuracy'></i>
