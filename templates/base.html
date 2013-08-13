@@ -11,6 +11,9 @@
     <meta id='page-viewport' name="viewport" content="width=device-width" />
   {% endblock viewport %}
 
+  <!---META TAGS--->
+  <!--LEXITY--><meta name="google-site-verification" content="IyA5WKjOphcbszthj4IWtsJbSP3qk9QlDUEe5sYy4WU"/>
+
   <!--favicon-->
   <link rel="shortcut icon" href="{{ STATIC_URL }}images/favicon_old.ico" />
 
@@ -127,7 +130,7 @@
   {% if 'username' not in request.session and not debug %}
     {% block zopim %}
       <!--ZOPIM-->
-      <script type="text/javascript">window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set._.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute('charset','utf-8');$.src='//cdn.zopim.com/?xlmuDH2WUDECb1kjWcaJOoCY6HHe0F2f';z.t=+new Date;$.type='text/javascript';e.parentNode.insertBefore($,e)})(document,'script');</script>
+      <!--<script type="text/javascript">window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set._.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute('charset','utf-8');$.src='//cdn.zopim.com/?xlmuDH2WUDECb1kjWcaJOoCY6HHe0F2f';z.t=+new Date;$.type='text/javascript';e.parentNode.insertBefore($,e)})(document,'script');</script>-->
       <!--END ZOPIM-->
     {% endblock zopim %}
     {% block google_analytics %}
@@ -142,6 +145,28 @@
       </script>
       <!--END GOOGLE ANALYTICS-->
     {% endblock google_analytics %}
+    {% block lexity %}
+      <!--LEXITY-->
+      <script type="text/javascript">
+      (function(d, w) {
+        var x = d.getElementsByTagName('SCRIPT')[0];
+        var g = d.createElement('SCRIPT');
+        g.type = 'text/javascript';
+        g.async = true;
+        g.src = ('https:' == d.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        x.parentNode.insertBefore(g, x);
+        var f = function () {
+          var s = d.createElement('SCRIPT');
+          s.type = 'text/javascript';
+          s.async = true;
+          s.src = "//np.lexity.com/0db9907e";
+          x.parentNode.insertBefore(s, x);
+        };
+        w.attachEvent ? w.attachEvent('onload', f) : w.addEventListener('load', f, false);
+      }(document, window));
+      </script>
+      <!--END LEXITY-->
+    {% endblock lexit %}
   {% endif %}
 
 </body>
