@@ -71,10 +71,11 @@ $().ready( function(){
         $('#product-edit-form').hide();
         $('#floating-photo').remove();
         $('#confirmation').show();
+        $.scrollTo('#header');
       });
 
     }else{
-      $('body').scrollTo($('.attention').first(), 1100);
+      $.scrollTo($('.attention').first(), 1100);
     }
   });
 
