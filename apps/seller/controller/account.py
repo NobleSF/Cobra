@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from apps.admin.controller.decorator import access_required
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 
 def create(account):
   try:
@@ -78,6 +78,7 @@ def edit(request):
           messages.warning(request, seller_form.errors)
 
       except IntegrityError:
+        transaction.rollback()
         messages.warning(request, 'Another account is using this email or phone')
 
       except Exception as e:
