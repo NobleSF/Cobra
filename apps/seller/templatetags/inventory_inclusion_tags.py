@@ -6,15 +6,7 @@ register = template.Library()
 def product_detail_tag(product):
   product.first_photo = product.photo_set.order_by('rank')[0]
 
-  #placeholder for ratings
-  from settings.settings import DEBUG
-  from random import randint
-  rating = {}
-  (rating['product'], rating['picture'], rating['price']) = (0,0,0)
-  rating['overall'] = int(roundUp(sum([val/3 for val in (0,0,0)])))
-  #placeholder for ratings
-
-  return {'product':product, 'rating':rating}
+  return {'product':product}
 
 @register.inclusion_tag('inventory/sold_product_detail.html')
 def sold_product_detail_tag(product):
