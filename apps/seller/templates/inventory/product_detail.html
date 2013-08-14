@@ -15,20 +15,22 @@
 <div class='details text-center'>
   <div class='part1 ratings'>
 
-    {% if rating.product and 0 < rating.product < 4 %}
-      <i class='symbol-sad color-rating{{ rating.product }}' title='likeability'></i>
-    {% else %}
-      <i class='symbol-happy color-rating{{ rating.product }}' title='likeability'></i>
-    {% endif %}
-    <i class='symbol-camera color-rating{{ rating.picture }}' title='picture quality'></i>
-    <i class='symbol-money color-rating{{ rating.price }}' title='price accuracy'></i>
+    <i class='
+      {% if product.ratings.Appeal and 0 < product.ratings.Appeal and product.ratings.Appeal < 4 %}
+        symbol-sad
+      {% else %}symbol-happy
+      {% endif %}
+      color-rating{{ product.ratings.Appeal }}' title='appeal'></i>
+
+    <i class='symbol-camera color-rating{{ product.ratings.Photography }}' title='photography'></i>
+    <i class='symbol-money color-rating{{ product.ratings.Price }}' title='price'></i>
 
   </div>
 
   <div class='part2 product-id'>
 
     <div class='product-id-tag'>
-      <i class='symbol-solidtag color-rating{{ rating.overall }}' title='product id'></i>
+      <i class='symbol-solidtag color-rating{{ product.rating }}' title='product id'></i>
     </div>
     <div class='product-id-number'>{{ product.id }}</div>
 

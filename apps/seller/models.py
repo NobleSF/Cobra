@@ -99,6 +99,30 @@ class Product(models.Model):
     except: return ''
 
   @property
+  def rating(self):#overall rating
+    from django.db.models import Avg
+    #the rounded average of all ratings
+    try: return int(round(self.rating_set.aggregate(average=Avg('value'))['average']))
+    except: return ''
+
+  @property
+  def ratings(self):#rating by subject
+    from django.db.models import Avg
+    try:
+      #get average rating by subject
+      query = (self.rating_set.values('subject')
+                  .annotate(average=Avg('value'))
+                  .values('subject__name','average')
+                 )
+      #make dictionry: key, value = subject name, rounded rating
+      ratings = {}
+      for rating in query:
+        ratings[rating['subject__name']] = int(round(rating['average']))
+      return ratings
+
+    except: return {}
+
+  @property
   def metric_dimensions(self):
     from math import floor
     from django.contrib.gis.measure import Distance
