@@ -22,6 +22,38 @@
       });
     }
 
+    $('.rate').click(function(){
+      var product_id  = $(this).attr('data-product-id');
+      var subject     = $(this).attr('data-subject');
+      var value       = $(this).attr('data-value');
+      var rating_li   = $(this).parent('li')
+
+      $(rating_li).siblings('li').toggleClass('active');
+
+      if (value > 0){
+        rateProduct(product_id, subject, value, rating_li);
+      }
+    })
+
+    function rateProduct(product_id, subject, value, rating_li){
+      var rate_url = $('#rate-url').val()
+
+      $.get(rate_url, {product_id:product_id,
+                          subject:subject,
+                          value:value
+                         })
+      .error(function(){
+        //remove rating
+        rating_li.removeClass('active')
+        //show no rating
+        no_rating_li = rating_li.siblings('li').last();
+        no_rating_li.removeClass('hide-forever').addClass('active');
+      })
+      .done(function(){
+        rating_li.siblings('li').last().addClass('hide-forever')
+      });
+    }
+
   </script>
 {% endblock javascript %}
 
@@ -31,6 +63,10 @@
     li{padding: 0.5em 0;}
     li a{font-size: 16pt;}
     ul li button{margin: 0 1em 0 0;}
+
+    .rate-group li:not(.active), .hide-forever{display: none;}
+    .rate-group{display: inline-block;}
+
   </style>
 {% endblock css %}
 
@@ -39,6 +75,9 @@
 
   <input id='approve-url' type='hidden'
          value="{% url 'admin:approve product' %}">
+
+  <input id='rate-url' type='hidden'
+         value="{% url 'admin:rate product' %}">
 
   <ul>
     {% for product in products %}
@@ -56,6 +95,31 @@
         <a href="{% url 'store' product.seller.id %}" target='_blank'>
           {{ product.seller.name }}
         </a>
+
+        {% for subject in rating_subjects %}
+          <ul class='rate-group {{ subject }}'>
+            {% for value in rating_values reversed %}
+              <li id='rating-{{subject}}-{{value}}-li'
+                  class='{% if value == 0 %}active{% endif %}'
+              >
+                <i class="rate {{ subject.name }}
+
+                    {% if subject.name == 'Appeal' %}
+                      {% if 0 < value and value < 4 %}symbol-sad{%else%}symbol-happy{%endif%}
+                    {% elif subject.name = 'Photography' %}symbol-camera
+                    {% elif subject.name = 'Price' %}symbol-money
+                    {% endif %}
+
+                    color-rating{{value}}
+                  "
+                  data-product-id="{{ product.id }}"
+                  data-subject="{{ subject.name }}"
+                  data-value="{{ value }}">
+                </i>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endfor %}
 
       </li>
     {% endfor %}

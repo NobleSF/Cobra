@@ -24,6 +24,7 @@ urlpatterns += patterns('',
   url(r'^admin/dashboard$', dashboard.home, name='dashboard'),
   url(r'^admin/review_products$', dashboard.review_products, name='review products'),
   url(r'^admin/approve_product$', dashboard.approve_product, name='approve product'),
+  url(r'^admin/rate_product$', dashboard.rate_product, name='rate product'),
 
 
   url(r'^admin/dashboard/country$', dashboard.country, name='country'),
