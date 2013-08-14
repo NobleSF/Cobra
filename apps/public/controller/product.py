@@ -9,7 +9,6 @@ def home(request, product_id):
   from itertools import chain
 
   try:
-    #product = get_object_or_404(Product, id=product_id)
     product = Product.objects.get(id=product_id)
 
     product.photos = product.photo_set.order_by('rank')
