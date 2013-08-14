@@ -112,33 +112,27 @@ class Order(models.Model):
   def is_seller_paid(self): return True if self.seller_paid_at else False
 
 class Rating(models.Model):
+  from django.contrib.sessions.models import Session
   from apps.seller.models import Product
   from apps.admin.models import Account, RatingSubject
-  #account             = models.ForeignKey(Account)
+
+  session_key         = models.CharField(max_length=32)
   product             = models.ForeignKey(Product)
   subject             = models.ForeignKey(RatingSubject)
   value               = models.SmallIntegerField()
   created_at          = models.DateTimeField(auto_now_add = True)
 
   def __unicode__(self):
-    return self.value
+    return unicode(self.value)
 
 class Subscription(models.Model):
   email               = models.CharField(max_length=100, unique=True)
   name                = models.CharField(max_length=100, null=True, blank=True)
   created_at          = models.DateTimeField(auto_now_add = True)
 
-class CustomerActivity(models.Model):
-  from apps.seller.models import Product
-  # ip address?
-  # account_id?
-  product_id          = models.ForeignKey(Product) # is this neccessary?
-  action              = models.CharField(max_length=10) #what are the options?
-  value               = models.IntegerField() #what's this for?
-  created_at          = models.DateTimeField(auto_now_add = True)
-
-class Visitor(models.Model):
+class Visitor(models.Model):#I don't think we need this
+  #but south isn't handling the deletion of this model very well
+  #it may have never created the relationship table visitor-session
   from django.contrib.sessions.models import Session
-
   sessions            = models.ManyToManyField(Session)
   carts               = models.ForeignKey('Cart', null=True, blank=True)
