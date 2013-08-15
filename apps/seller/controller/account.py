@@ -75,7 +75,7 @@ def edit(request):
 
           return redirect('seller:management home')
         else:
-          messages.warning(request, seller_form.errors)
+          messages.warning(request, 'Invalid information entered')
 
       except IntegrityError:
         transaction.rollback()

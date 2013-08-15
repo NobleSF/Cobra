@@ -5,11 +5,6 @@
   {{ block.super }} Seller
 {% endblock title %}
 
-{% if not request.session.admin_id %}
-  <!-- NO MESSAGES -->
-  {% block messages %}{% endblock messages %}
-{% endif %}
-
 {% block header %}
   <div id='base-logo' class='pull-left'>
     <a href="{% url 'home' %}">

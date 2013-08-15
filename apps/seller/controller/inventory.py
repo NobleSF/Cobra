@@ -103,26 +103,15 @@ def remove(request, product_id): #archive product and return to management home
     request.product_id = product_id
     product = Product(request)
     if product.deactivate():
-      messages.success(request, "product %d removed." % product.product.id)
+      if request.session.get('admin_id'):
+        messages.success(request, "product %d removed." % product.product.id)
     else:
-      messages.error(request, "cannot not remove that product")
+      if request.session.get('admin_id'):
+        messages.error(request, "cannot not remove that product")
   except Exception as e:
     context = {'exception':e}
 
-  return redirect('seller:management home')
-
-@access_required('seller')
-def delete(request, id): #permenantly delete product and return to management home
-  try:
-    product = Product.objects.filter(seller_id=request.session['seller_id']).get(id=product_id)
-    product.delete()
-    messages.success(request, "product " + product.id + " (" + product.name + ") deleted.")
-  except Product.DoesNotExist:
-    messages.error(request, "could not find that seller's product")
-  except Exception as e:
-    context = {'exception': e}
-
-  return redirect('seller:management home')
+  return redirect('seller:management products')
 
 @access_required('seller')
 @csrf_exempt
