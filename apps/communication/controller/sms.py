@@ -53,6 +53,7 @@ def saveSMS(sms_content): #takes Telerivet response content detail at
 def incoming(request): #receives SMS messages via Telerivet, detail at
   #https://telerivet.com/p/PJ8973e6e346c349cbcdd094fcffa9fcb5/api/webhook/receiving
   from apps.communication.controller.events import updateOrder
+  from apps.seller.models import Product
 
   if TELERIVET['webhook_secret'] == request.POST.get('secret'):
     try:
@@ -70,11 +71,27 @@ def incoming(request): #receives SMS messages via Telerivet, detail at
       #msg_data is tuple of ( product_id, data{} ) or
       #just False if not understandable
 
-      if msg_data: #if it was understandable, update the order
+      product_matches_seller_phone = False #we don't know yet
+
+      if msg_data: #if it was understandable
+        try:
+          (product_id, data) = msg_data
+          product = Product.objects.get(id=product_id)
+          product_matches_seller_phone = product.belongsToPhone(request.POST.get('from_number'))
+
+        except Exception as e:
+          if DEBUG:
+            response = {'messages':[{'content':str(e)}]}
+            return HttpResponse(json.dumps(response), mimetype='application/json')
+          else:
+            HttpResponse(status=500)#server error, our fault, Telerivet will try again
+            #todo: do somethign about it
+
+      if msg_data and product_matches_seller_phone: #if it was understandable, update the order
         reply_msg = updateOrder(msg_data, gimme_reply_sms=True)
         #gives us reply string, error string, or False(do not reply)
 
-        if isinstance(reply_msg, basestring) and not reply_msg.startswith("error"):
+        if isinstance(reply_msg, basestring):
           sms.auto_reply = reply_msg
           sms.save()
           #send reply back with response
@@ -94,6 +111,7 @@ def incoming(request): #receives SMS messages via Telerivet, detail at
         return HttpResponse(json.dumps(response), mimetype='application/json')
       else:
         HttpResponse(status=500)#server error, our fault, Telerivet will try again
+        #todo: do somethign about it
 
   else:
     return HttpResponse(status=403)#forbidden, didn't come from Telerivet
