@@ -5,7 +5,6 @@ from django.views.generic.simple import redirect_to, direct_to_template
 
 urlpatterns = patterns('',
   url(r'^$', home.home, name='home'), #fyi, this is home
-  (r'^index.php$', lambda x: HttpResponseRedirect('/')), #and this is home too
   (r'^blog', redirect_to, {'url': 'http://helloanou.wordpress.com/'}),
 
   (r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': {}}),
@@ -31,7 +30,5 @@ urlpatterns += patterns('',
 #backwards compatability with old Anou site
 from apps.communication.controller import sms
 urlpatterns += patterns('',
-
-  url(r'^c9245c94e5478521242f2737521fe5379d1091/bbee2fb6eae7b8908b08b7bdc02cfd16',
-      sms.incoming, name='legacy sms incoming'),
+  (r'^index.php', lambda x: HttpResponseRedirect('/')), #and this is home too
 )

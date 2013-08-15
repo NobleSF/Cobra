@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from controller import account, dashboard
+from controller import account, dashboard, communication
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -25,6 +25,8 @@ urlpatterns += patterns('',
   url(r'^admin/review_products$', dashboard.review_products, name='review products'),
   url(r'^admin/approve_product$', dashboard.approve_product, name='approve product'),
   url(r'^admin/rate_product$', dashboard.rate_product, name='rate product'),
+
+  url(r'^admin/send_sms$', communication.sms, name='send sms'),
 
 
   url(r'^admin/dashboard/country$', dashboard.country, name='country'),

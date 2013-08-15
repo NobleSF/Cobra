@@ -43,3 +43,7 @@ class AccountPasswordForm(forms.Form):
     return process_password(self.cleaned_data['old_password'])
   def clean_new_password(self):
     return process_password(self.cleaned_data['new_password'])
+
+class SMSForm(forms.Form):
+  to_number     = forms.CharField(widget=NumberInput())
+  message       = forms.CharField(widget=forms.Textarea)
