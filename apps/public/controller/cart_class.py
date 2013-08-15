@@ -168,7 +168,7 @@ class Cart:
       wepay = WePay(PAYMENTS_PRODUCTION, WEPAY['access_token'])
 
       if PAYMENTS_PRODUCTION:
-        redirect_uri = "http://anou-cobra.herokuapp.com/checkout/confirmation"
+        redirect_uri = "http://www.theanou.com/checkout/confirmation"
       else:
         redirect_uri = "http://localcobra.pagekite.me/checkout/confirmation"
 
@@ -242,11 +242,11 @@ class Cart:
         #pull address from WePay and save it as our own
 
         #US or international address, all should match up except state, postal_code
-
-        self.cart.address1  = wepay_checkout_data['shipping_address']['address1']
-        self.cart.address2  = wepay_checkout_data['shipping_address']['address2']
-        self.cart.city      = wepay_checkout_data['shipping_address']['city']
-        self.cart.country   = wepay_checkout_data['shipping_address']['country']
+        if wepay_checkout_data.get('shipping_address'):
+          self.cart.address1  = wepay_checkout_data['shipping_address'].get('address1')
+          self.cart.address2  = wepay_checkout_data['shipping_address'].get('address2')
+          self.cart.city      = wepay_checkout_data['shipping_address'].get('city')
+          self.cart.country   = wepay_checkout_data['shipping_address'].get('country')
 
         #check for non-US address first
         if (wepay_checkout_data['shipping_address'].get('region') or

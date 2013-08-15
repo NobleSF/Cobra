@@ -150,7 +150,6 @@ DEBUG_TOOLBAR_CONFIG = {
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = [
   'www.theanou.com',
-  'www.theanu.com',
   'anou-cobra.herokuapp.com',
   'localhost'
 ]
