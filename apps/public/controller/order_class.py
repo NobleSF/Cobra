@@ -1,5 +1,5 @@
 from apps.public import models
-from apps.communication.controller import events
+from apps.communication.controller.order_events import communicateOrderConfirmed, communicateOrdersCreated, communicateOrderShipped, communicateOrderSellerPaid
 from datetime import datetime
 
 def getOrders(wepay_checkout_id):
@@ -28,7 +28,7 @@ def createFromCart(cart):
       #todo: to notify someone about this item.product
       pass
 
-  if events.communicateOrdersCreated(orders):
+  if communicateOrdersCreated(orders):
     for order in orders:
       order.seller_notified_at = datetime.now()
       order.save()
@@ -55,7 +55,7 @@ class Order:
     self.order = models.Order.objects.get(id=order_id)
 
   def seller_confirmed(self):
-    if events.communicateOrderConfirmed(self.order):
+    if communicateOrderConfirmed(self.order):
       self.order.is_seller_confirmed = True
       self.order.save()
     else:
@@ -63,7 +63,7 @@ class Order:
 
   def seller_shipped(self, tracking_number=None):
     from datetime import date
-    if events.communicateOrderShipped(self.order):
+    if communicateOrderShipped(self.order):
       self.order.is_shipped = True
       self.order.shipped_date = date.today()
       if tracking_number:
@@ -73,7 +73,7 @@ class Order:
       raise Exception
 
   def seller_paid(self):
-    if events.communicateOrderSellerPaid(self.order):
+    if communicateOrderSellerPaid(self.order):
       self.order.is_seller_paid = True
       self.order.save()
     else:

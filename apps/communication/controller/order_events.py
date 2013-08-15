@@ -81,13 +81,15 @@ def updateOrder((product_id, data), gimme_reply_sms=False):
         reply += communicateOrderConfirmed(order, gimme_reply_sms)
 
       else: #if everything is already done
-        #their message was redundant
-        reply += "safi"
+        if DEBUG: reply = '(safi) redundant confirmation'
+        else: reply += "safi"
 
-      #order.save()
+  except Proudct.DoesNotExist:
+    if DEBUG: reply = '(xata) This product does not exist.'
+    else: reply = 'xata'
 
   except Exception as e:
-    if DEBUG: reply = str(e)
+    if DEBUG: reply = "(xata) " + str(e)
     else: reply = 'xata'
 
   if gimme_reply_sms:
@@ -98,7 +100,8 @@ def updateOrder((product_id, data), gimme_reply_sms=False):
 
 def communicateOrderConfirmed(order, gimme_reply_sms=False):
   try:
-    sms_reply = "shukran"
+    if DEBUG: sms_reply = '(shukran) order confirmed'
+    else: sms_reply = 'shukran'
 
     #send email to buyer
     email = Email('order/confirmed', order)
@@ -121,11 +124,15 @@ def communicateOrderConfirmed(order, gimme_reply_sms=False):
         #each respectivly return True or exception str
 
   except Exception as e:
-    return "error: " + str(e)
+    if DEBUG: return '(xata) ' + str(e)
+    else:
+      return 'xata'
+      #todo: send error data to dev
 
 def communicateOrderShipped(order, gimme_reply_sms=False):
   try:
-    sms_reply = "shukran"
+    if DEBUG: sms_reply = '(shukran) order confirmed shipped'
+    else: sms_reply = 'shukran'
 
     #send email to buyer
     email = Email('order/shipped', order)
@@ -148,21 +155,21 @@ def communicateOrderShipped(order, gimme_reply_sms=False):
         #each respectivly return True or exception str
 
   except Exception as e:
-    return "error: " + str(e)
+    if DEBUG: return '(xata) ' + str(e)
+    else:
+      return 'xata'
+      #todo: send error data to dev
 
 def communicateOrderSellerPaid(order):
   try:
-    if not reply_sms_sent:
-      pass
-      #sendSMS() to seller
+    pass
+    #sendSMS() to seller
 
   except Exception as e:
     return "error: " + str(e)
 
-def communicateCustomerSubscribed(order):
-  return True
-
 #support functions
+
 def getCustomerEmailFromOrder(order):
   if order.cart.name:
     return "%s <%s>" % (order.cart.name, order.cart.email)
@@ -188,7 +195,3 @@ def getCustomerAddressFromOrder(order, sms_format=False):
 
   address += str(order.cart.country)
   return address
-
-def test_email():
-  from django.core.mail import send_mail
-  send_mail('Subject here', 'Here is the message.', 'hello@theanou.com', ['dev+test@theanou.com'], fail_silently=False)

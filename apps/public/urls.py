@@ -11,10 +11,10 @@ urlpatterns = patterns('',
 
   # search at search/newest or search/carpets/red/length_50-100
   # we need a big regex to pull the keywords from the url here instead of putting that logic in the controller
-  url(
-    r'^search[((/type_(?P<category>\w+))?|(/color_(?P<color>\w+))?|/(?P<collection>\w+))?]+$',
-    home.search, name='search'
-  ),
+  #url(
+  #  r'^search[((/type_(?P<category>\w+))?|(/color_(?P<color>\w+))?|/(?P<collection>\w+))?]+$',
+  #  home.search, name='search'
+  #),
   #url(r'^search(/(?P<keywords>\w+))+$', home.search, name='search'),
 
   # store page at /store/123 represents a seller profile
@@ -27,7 +27,6 @@ urlpatterns = patterns('',
   url(r'^checkout/ajax/cart_save$', checkout.cartSave, name='cart-save'),
   url(r'^checkout/confirmation$', checkout.confirmation, name='confirmation'),
 
-  #non-pages, ajax calls
-  url(r'^subscribe$', home.subscribe, name='subscribe'),
+  #testing
   url(r'^test_meta$', home.test_meta, name='test meta'),
 )
