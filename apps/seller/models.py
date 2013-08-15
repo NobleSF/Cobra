@@ -32,7 +32,7 @@ class Asset(models.Model):
   description   = models.TextField(null=True, blank=True)
   image         = models.ForeignKey('Image', null=True, blank=True, on_delete=models.SET_NULL)
   categories    = models.ManyToManyField(Category, null=True, blank=True)
-  #phone        = models.CharField(max_length=15, null=True, blank=True)
+  phone         = models.CharField(max_length=15, null=True, blank=True)
 
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
