@@ -1,3 +1,5 @@
+from django.http import HttpResponse
+from django.utils import simplejson
 from apps.communication.controller.email_class import Email
 from apps.communication.controller.sms import sendSMS
 from settings.settings import DEBUG
