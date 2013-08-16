@@ -31,4 +31,6 @@ urlpatterns += patterns('',
 from apps.communication.controller import sms
 urlpatterns += patterns('',
   (r'^index.php', lambda x: HttpResponseRedirect('/')), #and this is home too
+  (r'^landing.php', lambda x: HttpResponseRedirect('/')), #and this is home too
+  (r'^a/', lambda x: HttpResponseRedirect('/seller/')), #and this is home too
 )
