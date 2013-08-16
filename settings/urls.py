@@ -33,4 +33,7 @@ urlpatterns += patterns('',
   (r'^index.php', lambda x: HttpResponseRedirect('/')), #and this is home too
   (r'^landing.php', lambda x: HttpResponseRedirect('/')), #and this is home too
   (r'^a/', lambda x: HttpResponseRedirect('/seller/')), #and this is home too
+
+  #for Flickr photo check run by IFTTT every hour to wake up Heroku
+  (r'^logo$', redirect_to, {'url': 'http://s3.amazonaws.com/anou/images/Anou_logo_80x50.png'}),
 )
