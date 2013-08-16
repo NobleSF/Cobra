@@ -35,14 +35,8 @@ class AccountLoginForm(forms.Form):
     return process_password(self.cleaned_data['password'])
 
 class AccountPasswordForm(forms.Form):
-  old_password  = forms.CharField(widget=forms.PasswordInput(attrs={'autocomplete':'off'}))
-  new_password  = forms.CharField(widget=forms.PasswordInput(attrs={'autocomplete':'off'}))
-  #public_key  = forms.CharField(widget=forms.HiddenInput, required=False)
-
-  def clean_old_password(self):
-    return process_password(self.cleaned_data['old_password'])
-  def clean_new_password(self):
-    return process_password(self.cleaned_data['new_password'])
+  #old_password  = forms.CharField(widget=forms.PasswordInput(attrs={'autocomplete':'off'}))
+  new_password  = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'off'}))
 
 class SMSForm(forms.Form):
   to_number     = forms.CharField(widget=NumberInput())

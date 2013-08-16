@@ -42,7 +42,9 @@ def create(request):
 
 @access_required('admin')
 def all_accounts(request):
-  context = {'accounts':Account.objects.order_by('is_admin','name')}
+  context = {
+      'seller_accounts':Account.objects.filter(is_admin=False).order_by('name')
+    }
   return render(request, 'account/all_accounts.html', context)
 
 @access_required('admin')
@@ -64,7 +66,9 @@ def edit(request, account_id=None):
   else:
     account_model_form = AccountEditForm(instance=account)
 
-  return render(request, 'account/edit.html', {'form': account_model_form})
+  context = {'account':account, 'form':account_model_form}
+
+  return render(request, 'account/edit.html', context)
 
 def login(request, next=None):
   from apps.admin.controller.forms import AccountLoginForm
@@ -80,8 +84,7 @@ def login(request, next=None):
       #login with phone number
       if not account:
         try:
-          l = len(username)
-          account = Account.objects.get(phone__endswith=username[l-8:l])
+          account = Account.objects.get(phone__endswith=username[-8:])#last 8 chars
         except: pass
 
       #login with username
@@ -168,63 +171,26 @@ def logout(request):
     context = {'exception': e}
     return render(request, 'public/home.html', context)
 
-@access_required('account')
-def password(request, username, new_password, secret_hash="", old_password=""):
-  from apps.admin.models import Account
+@access_required('admin')
+def reset_password(request, account_id=None):
+  from apps.admin.controller.forms import AccountPasswordForm
+  try:
+    account = Account.objects.get(id=account_id)
 
-  if request.method == 'POST':
-    username = request.POST['username']
-    old_password = request.POST['old_password']
-    new_password = request.POST['new_password']
+    if request.method == 'POST':
+      #old_password = process_password(request.POST.get('old_password'))
+      new_password = process_password(request.POST.get('new_password'))
+      account.password = new_password
+      account.save()
+      messages.success(request, "password changed for %s" % account.name)
+      return redirect('admin:account edit', account.id)
 
-  if request.method == 'GET':
-    username = request.GET['username']
-    secret_hash = request.GET['secret_hash']
-    new_password = request.GET['new_password']
+  except Exception as e:
+    messages.warning(request, "invalid passwords provided")
 
-  # if any of the necessary information is missing
-  if username == None or new_password == None:
-
-    if request.method == 'GET' and secret_hash != "": #came from email link
-      context = {'secret_hash': secret_hash}
-      return render(request, 'account/password.html', context)
-    else: #coming fresh, just go to the page
-      #reset secret_hash, just in case
-      return render(request, 'account/password.html')
-
-  elif old_password != "":
-    try:
-      this_account = Account.objects.get(username=username)
-      if this_account.password == old_password:
-        this_account.password = new_password
-        this_account.save()
-        #reset secret_hash, just in case
-        context = {'success': "password has been changed"}
-      else:
-        context = {'problem': "old password incorrect"}
-    except Exception as e:
-      context = {'exception': e}
-
-    #todo: don't allow password to be same as username
-
-  elif secret_hash != "":
-    try:
-      this_account = Account.objects.get(username=username)
-      if this_account.secret_hash == secret_hash:
-        this_account.password = new_password
-        this_account.save()
-        #reset secret_hash, just in case
-        context = {'success': "password has been changed"}
-      else:
-        context = {'problem': "secret hash out of date"}
-    except Exception as e:
-      context = {'exception': e}
-
-  else:
-    context = {'problem': "issue submitted to the Vogon bureaucracy"}
-
+  context = {'form':AccountPasswordForm()}
   #success or not, take them back where they came from.
-  return render(request, 'account/password.html', context)
+  return render(request, 'account/reset_password.html', context)
 
 def process_password(encrypted): #private function
   from Crypto.Hash import SHA256
