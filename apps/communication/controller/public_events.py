@@ -5,7 +5,7 @@ from apps.communication.controller.sms import sendSMS
 from settings.settings import DEBUG
 
 def subscribe(request): #ajax requests only
-  from django.db import IntegrityError
+  from django.db import IntegrityError, transaction
   from apps.public.models import Subscription
   try:
     subscription = Subscription(email=request.GET.get('email'))
@@ -16,6 +16,7 @@ def subscribe(request): #ajax requests only
 
   except IntegrityError: #already subscribed
     if request.GET.get('name'):
+      transaction.rollback()
       subscription = Subscription.objects.get(email=request.GET.get('email'))
       subscription.name = request.GET.get('name')
       subscription.save()
