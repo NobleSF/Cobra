@@ -6,7 +6,7 @@
 {% endblock title %}
 
 {% block javascript %}
-  <script type="text/javascript" src="{{ STATIC_URL }}public/js/checkout.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}public/js/cart.min.js"></script>
   <!-- WEPAY Script -->
   <script type="text/javascript" src="https://www.wepay.com/min/js/iframe.wepay.js"></script>
   {% if cart.count %}
@@ -17,7 +17,7 @@
 {% endblock javascript %}
 
 {% block css %}
-  <link href="{{ STATIC_URL }}public/css/checkout.css" rel="stylesheet">
+  <link href="{{ STATIC_URL }}public/css/cart.css" rel="stylesheet">
 {% endblock css %}
 
 {% block content %}
@@ -25,6 +25,7 @@
   <div class='row-fluid'>
     <div class='span8'>
 
+      <!----- PART 1 ----->
       <div id='cart' class='part1'>
         <h3 id='cart-sentance' class='trim copy-font'>
           You have
@@ -88,7 +89,8 @@
             </ul>
           </div>
         </div>
-      </div><!-- end part1 -->
+      </div>
+      <!----- END PART 1 ----->
 
       <div id='cart-shortcut' class='part2 part3'>
         <h3 id='cart-return-button' class='copy-font'>
@@ -113,6 +115,7 @@
         </h3>
       </div>
 
+      <!----- PART 2 ----->
       <div id='customer-info' class='part2'>
         <div id='checkout-form'>
           <input type='hidden' id='cart-ajax-url' value="{% url 'cart-save' %}">
@@ -153,7 +156,9 @@
           </div>
         </div>
       </div>
+      <!----- END PART 2 ----->
 
+      <!----- PART 3 ----->
       <div id='payment' class='part3'>
         <small class='trim text-info'>
           <span class='symbol-lock'></span>
@@ -169,6 +174,7 @@
           <span class='symbol-lock'></span>
         </small>
       </div>
+      <!----- END PART 3 ----->
 
     </div><!-- end of left side, span8 -->
 
