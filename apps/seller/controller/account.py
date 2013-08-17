@@ -22,9 +22,8 @@ def edit(request):
   from apps.seller.controller.forms import AssetForm, ImageForm, SellerEditForm
   from settings.settings import CLOUDINARY
 
+  seller = Seller.objects.get(id=request.session['seller_id'])
   try:
-    seller = Seller.objects.get(id=request.session['seller_id'])
-
     try:
       assets = Asset.objects.filter(seller_id=seller.id)
     except:
@@ -106,6 +105,7 @@ def edit(request):
 
   except Exception as e:
     context = {'except':e}
+    context['seller'] = seller
 
   return render(request, 'account/edit_seller.html', context)
 
