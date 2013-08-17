@@ -5,6 +5,20 @@
   Shopping Cart
 {% endblock title %}
 
+{% block viewport %}
+  <meta id='page-viewport' name="viewport" content="width=device-width" />
+  <script>
+    window.onload = function(){
+      var viewport = document.getElementById('page-viewport');
+      if (window.innerWidth < 620){
+        viewport.setAttribute('content','width=620');
+      }else if (window.innerWidth < 800){
+        viewport.setAttribute('content','width=800');
+      }
+    }
+  </script>
+{% endblock viewport %}
+
 {% block javascript %}
   <script type="text/javascript" src="{{ STATIC_URL }}public/js/cart.min.js"></script>
   <!-- WEPAY Script -->
