@@ -16,7 +16,8 @@ def subscribe(request): #ajax requests only
 
   except IntegrityError: #already subscribed
     if request.GET.get('name'):
-      transaction.rollback()
+      try: transaction.rollback()
+      except: pass
       try:
         subscription = Subscription.objects.get(email=request.GET.get('email'))
         subscription.name = request.GET.get('name')
