@@ -154,12 +154,15 @@ def saveProduct(request): #ajax requests only, not asset-aware
           photo_id = request.GET.get('photo_id')
           rank = request.GET.get('rank')
           url = request.GET.get('value')
-          photo = product.addPhoto(url, rank, photo_id)
-        except:
-          response['photo'] = "error saving photo"
+        except: response['photo'] = "error saving photo"
         else:
-          response['photo_id'] = photo.id
-          response['photo'] = "saved photo at rank %s with url %s" % (photo.rank, photo.original)
+          try:
+            photo = product.addPhoto(url, rank, photo_id)
+          except:
+            response['photo'] = "error saving photo"
+          else:
+            response['photo_id'] = photo.id
+            response['photo'] = "saved photo at rank %s with url %s" % (photo.rank, photo.original)
 
       elif attribute == "active":
         if status == "yes":

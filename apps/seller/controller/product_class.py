@@ -20,55 +20,78 @@ class Product:
     return product
 
   def addPhoto(self, url, rank, photo_id=None):
+    photo = None
     if photo_id:
-      photo = models.Photo.objects.get(id=photo_id)
+      try: photo = models.Photo.objects.get(id=photo_id)
+      except: pass
+
+    if not photo:
+      try: photo = models.Photo.objects.filter(product=self.product, rank=rank)[0]
+      except: pass
+
+    if not photo:
+      try: photo = models.Photo(product=self.product, rank=rank, original=url)
+      except: pass
+
+    if photo:
       photo.original = url
+      photo.save()
+      return photo
     else:
-      photo = models.Photo(product=self.product, rank=rank, original=url)
-    photo.save()
-    return photo
+      return None
 
   def photos(self):
     return self.product.photo_set.all().order_by('rank')
 
   def addAsset(self, asset_id):
-    asset = models.Asset.objects.get(id=asset_id)
-    if asset:
+    try:
+      asset = models.Asset.objects.get(id=asset_id)
       self.product.assets.add(asset)
-      return "added asset " + asset.name
-    else:
+      return "added asset " + (asset.name if asset.name else "")
+    except Asset.DoesNotExist:
       return "asset does not exist"
+    except: return ""
 
   def removeAsset(self, asset_id):
-    asset = models.Asset.objects.get(id=asset_id)
-    if asset:
+    try:
+      asset = models.Asset.objects.get(id=asset_id)
       self.product.assets.remove(asset)
+    except: pass
+    finally:
+      return "removed asset"
 
   def addShippingOption(self, shipping_option_id):
-    shipping_option = models.ShippingOption.objects.get(id=shipping_option_id)
-    if shipping_option:
+    try:
+      shipping_option = models.ShippingOption.objects.get(id=shipping_option_id)
       self.product.shipping_options.add(shipping_option)
-      return "added shipping option " + shipping_option.name
-    else:
+      return "added shipping option " + (shipping_option.name if shipping_option.name else "")
+    except ShippingOption.DoesNotExist:
       return "shipping option does not exist"
+    except: return ""
 
   def removeShippingOption(self, shipping_option_id):
-    shipping_option = models.ShippingOption.objects.get(id=shipping_option_id)
-    if shipping_option:
+    try:
+      shipping_option = models.ShippingOption.objects.get(id=shipping_option_id)
       self.product.shipping_options.remove(shipping_option)
+    except: pass
+    finally:
+      return "shipping option removed"
 
   def addColor(self, color_id):
-    color = admin_models.Color.objects.get(id=color_id)
-    if color:
+    try:
+      color = admin_models.Color.objects.get(id=color_id)
       self.product.colors.add(color)
       return "added color " + color.name
-    else:
+    except ShippingOption.DoesNotExist:
       return "color does not exist"
+    except: return ""
 
   def removeColor(self, color_id):
-    color = admin_models.Color.objects.get(id=color_id)
-    if color:
+    try:
+      color = admin_models.Color.objects.get(id=color_id)
       self.product.colors.remove(color)
+    except: pass
+    finally: return "color removed"
 
   def update(self, attribute, value):
     value = value if value else None
