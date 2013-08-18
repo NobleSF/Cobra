@@ -26,9 +26,14 @@ function saveAssetBefore($this_element){
 
 function saveAssetSuccess(data,$this_element){
   //set asset_id data for all elements
-  $this_element.closest('.asset').attr('id','asset-'+data.asset_id);
-  $this_element.closest('.asset').find('#id_asset_id').attr('value',data.asset_id);
-  $this_element.closest('.asset').find('.autosave').attr('data-asset_id',data.asset_id);
+  if (data.asset_id){
+    $this_element.closest('.asset').attr('id','asset-'+data.asset_id);
+    $this_element.closest('.asset').find('#id_asset_id').attr('value',data.asset_id);
+    $this_element.closest('.asset').find('.autosave').attr('data-asset_id',data.asset_id);
+  }else if ($this_element.closest('.asset').find('#id_asset_id').attr('data-asset_id') == 'pending'){
+    $this_element.closest('.asset').find('#id_asset_id').attr('value',"none");
+    $this_element.closest('.asset').find('.autosave').attr('data-asset_id',"none");
+  }
   //finished visual
   $this_element.closest('.asset').removeClass('updating').removeClass('error').addClass('saved');
 }
@@ -36,6 +41,7 @@ function saveAssetSuccess(data,$this_element){
 function saveAssetError(error,$this_element){
   if ($this_element.closest('.asset').find('#id_asset_id').val() == 'pending'){
     $this_element.closest('.asset').find('#id_asset_id').attr('value',"none");
+    $this_element.closest('.asset').find('.autosave').attr('data-asset_id',"none");
   }
   //error visual
   $this_element.closest('.asset').removeClass('updating').addClass('error');

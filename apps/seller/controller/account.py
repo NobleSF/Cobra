@@ -159,18 +159,18 @@ def saveAsset(request): #ajax requests only, create or update asset
 
   if request.method == 'GET': # it must be an ajax get to work
     try:
-      if request.GET['asset_id'] == "none":
+      if (not request.GET.get('asset_id')) or request.GET.get('asset_id') == "none":
         #create new asset
-        asset = Asset(seller_id=request.session['seller_id'])
-      elif request.GET['asset_id'] == "pending":
+        asset = Asset(seller_id=request.session.get('seller_id'))
+      elif request.GET.get('asset_id') == "pending":
         raise Exception("asset_id is already pending")
       else:
-        asset = Asset.objects.get(id=request.GET['asset_id'])
+        asset = Asset.objects.get(id=request.GET.get('asset_id'))
 
-      asset.ilk = request.GET['ilk']#from data-ilk included in every request
+      asset.ilk = request.GET.get('ilk')#from data-ilk included in every request
+      element = request.GET.get('name')
+      value   = request.GET.get('value')
 
-      element = request.GET['name']
-      value   = request.GET['value']
       if element == 'image_url':
         asset.image = customSaveImage(value)
       elif element == 'name':
@@ -185,7 +185,7 @@ def saveAsset(request): #ajax requests only, create or update asset
       response = {'asset_id':asset.id, 'get':request.GET}
 
     except Exception as e:
-      response = {'exception':e}
+      response = {'exception': str(e)}
   else:
     response = {'problem':"not GET"}
 
@@ -210,6 +210,8 @@ def deleteAsset(request): #ajax requests only
 
 def customSaveImage(url):
   from apps.seller.models import Image
-  image_object = Image(original=url)
-  image_object.save()
-  return image_object
+  try:
+    image_object = Image(original=url)
+    image_object.save()
+    return image_object
+  except: return None
