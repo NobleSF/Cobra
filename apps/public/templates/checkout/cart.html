@@ -5,20 +5,6 @@
   Shopping Cart
 {% endblock title %}
 
-{% block viewport %}
-  <meta id='page-viewport' name="viewport" content="width=device-width" />
-  <script>
-    window.onload = function(){
-      var viewport = document.getElementById('page-viewport');
-      if (window.innerWidth < 620){
-        viewport.setAttribute('content','width=620');
-      }else if (window.innerWidth < 800){
-        viewport.setAttribute('content','width=800');
-      }
-    }
-  </script>
-{% endblock viewport %}
-
 {% block javascript %}
   <script type="text/javascript" src="{{ STATIC_URL }}public/js/cart.min.js"></script>
   <!-- WEPAY Script -->
@@ -37,7 +23,7 @@
 {% block content %}
 
   <div class='row-fluid'>
-    <div class='span8'>
+    <div id='main-content' class='span8'>
 
       <!----- PART 1 ----->
       <div id='cart' class='part1'>
@@ -195,7 +181,7 @@
     <div id='information' class='span4'>
       <div class='well'>
         <h4>How much is Shipping ?</h4>
-        <p>Shipping is free to the USA, Europe, or Morocco. Unfortunately we are not able to ship to any other countries right now.</p>
+        <p>Shipping is free to the USA, Europe, or Morocco. At this time, we are not able to ship to any other countries.</p>
       </div>
       <div class='well'>
         <h4>What about returns ?</h4>
