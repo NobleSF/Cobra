@@ -99,6 +99,9 @@ class Order(models.Model):
 
   #derivative attributes
   @property
+  def seller(self): return self.products.all()[0].seller
+
+  @property
   def is_seller_notified(self): return True if self.seller_notified_at else False
   @property
   def is_seller_confirmed(self): return True if self.seller_confirmed_at else False

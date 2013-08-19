@@ -1,6 +1,7 @@
 from apps.communication.controller.email_class import Email
 from apps.communication.controller.sms import sendSMS
 from settings.settings import DEBUG
+from apps.communication.models import SMS
 
 def communicateOrdersCreated(orders):
   try:
@@ -20,10 +21,17 @@ def communicateOrdersCreated(orders):
       address_string = getCustomerAddressFromOrder(order, sms_format=True)
       seller_msg = products_string + "\r\n" + address_string
       seller_phone = order.products.all()[0].seller.phone
-      success = sendSMS(seller_msg, seller_phone)
-      if success is not True:
-        error_message = success #got stored in place of True
+      sms = sendSMSForOrder(seller_msg, seller_phone, order)
+      if not isinstance(sms, SMS):
+        error_message = sms #received in place of SMS object
         #todo: email tom here
+
+      #notify Brahim
+      try:
+        email = Email('order/created_copy_director', order)
+        email.sendTo("brahim@theanou.com")
+      except: pass
+        #todo: emial tom about this problem
 
     #send email to buyer
     email = Email('order/created', orders)
@@ -109,18 +117,18 @@ def communicateOrderConfirmed(order, gimme_reply_sms=False):
 
     if gimme_reply_sms and (email_success == True):
       return sms_reply
-    elif gimmer_reply_sms:
+    elif gimme_reply_sms:
       #error message in email_success string
       return sms_reply
 
     else:
       seller_phone = order.products.all()[0].seller.phone
-      sms_success = sendSMS(sms_reply, seller_phone)
+      sms = sendSMS(sms_reply, seller_phone)
 
-      if (email_success == sms_success == True):
+      if (email_success == True) and isinstance(sms, SMS) :
         return True
       else:
-        return str(email_success) + str(sms_success)
+        return str(email_success) + str(sms)
         #each respectivly return True or exception str
 
   except Exception as e:
@@ -140,18 +148,18 @@ def communicateOrderShipped(order, gimme_reply_sms=False):
 
     if gimme_reply_sms and (email_success == True):
       return sms_reply
-    elif gimmer_reply_sms:
+    elif gimme_reply_sms:
       #error message in email_success string
       return sms_reply
 
     else:
       seller_phone = order.products.all()[0].seller.phone
-      sms_success = sendSMS(msg, seller_phone)
+      sms = sendSMS(sms_reply, seller_phone)
 
-      if (email_success == sms_success == True):
+      if (email_success == True) and isinstance(sms, SMS):
         return True
       else:
-        return str(email_success) + str(sms_success)
+        return str(email_success) + str(sms)
         #each respectivly return True or exception str
 
   except Exception as e:

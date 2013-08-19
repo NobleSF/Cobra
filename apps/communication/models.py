@@ -1,4 +1,5 @@
 from django.db import models
+from apps.public.models import Order
 
 class Email(models.Model):
   from_address    = models.EmailField()
@@ -9,11 +10,14 @@ class Email(models.Model):
   html_body       = models.TextField(null=True, blank=True)
   text_body       = models.TextField(null=True, blank=True)
   attachment      = models.URLField(null=True, blank=True)
+  order           = models.ForeignKey(Order, null=True, blank=True)
+
   created_at      = models.DateTimeField(auto_now_add = True)
 
 class SMS(models.Model):
   from_number     = models.CharField(max_length=15)
   to_number       = models.CharField(max_length=15)
+  order           = models.ForeignKey(Order, null=True, blank=True)
   message         = models.CharField(max_length=160)
   auto_reply      = models.CharField(max_length=160, null=True, blank=True)
 

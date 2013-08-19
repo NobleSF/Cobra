@@ -29,9 +29,19 @@ def sendSMS(msg, to_number, priority='1'): #using Telerivet
 
   else:
     if int(response.status_code) is 200:
-      return saveSMS(response_content) #responds True or exception str
+      return saveSMS(response_content) #responds with SMS object or exception str
     else:
       return "bad request or possible Telerivet error"
+
+def sendSMSForOrder(msg, to_number, order, priority='1'):
+  try:
+    sms = sendSMS(msg, to_number, priority)
+    if isinstance(sms, SMS):
+      sms.order = order
+      sms.save()
+    return sms
+  except Exception as e:
+    return "error: " + str(e)
 
 def saveSMS(sms_content): #takes Telerivet response content detail at
   #https://telerivet.com/p/PJ8973e6e346c349cbcdd094fcffa9fcb5/api/rest/sending
@@ -47,7 +57,7 @@ def saveSMS(sms_content): #takes Telerivet response content detail at
   except Exception as e:
     return "error: " + str(e)
   else:
-    return True
+    return sms
 
 @csrf_exempt
 def incoming(request): #receives SMS messages via Telerivet, detail at
