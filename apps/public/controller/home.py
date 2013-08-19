@@ -8,12 +8,15 @@ from datetime import datetime
 def home(request):
   from apps.seller.models import Product
 
-  unsold_products   = Product.objects.filter(sold_at=None)
-  approved_products = unsold_products.filter(approved_at__lte=datetime.today())
-  active_products   = approved_products.filter(active_at__lte=datetime.today(), deactive_at=None)
-  ordered_products  = active_products.order_by('approved_at').reverse()[0:80]
+  products = (Product.objects.filter(sold_at=None,
+                                    approved_at__lte=datetime.today(),
+                                    active_at__lte=datetime.today(),
+                                    deactive_at=None)
+               .order_by('approved_at')
+               .reverse()[:50]
+             )
 
-  context = {'products':ordered_products}
+  context = {'products':products}
   return render(request, 'home/home.html', context)
 
 def search(request, collection=None, category=None, color=None):

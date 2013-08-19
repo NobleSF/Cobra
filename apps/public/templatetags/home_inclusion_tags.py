@@ -17,7 +17,7 @@ def home_header_tag(request, style): #style options: full, mini, mobile
 @register.inclusion_tag('home/product.html')
 def product_tag(product, sans_artisan=False):
   #photos
-  product.photos = product.photo_set.order_by('rank').all()
+  product.photo = product.photo_set.order_by('rank').all()[0]
 
   #artisan information
   #if not sans_artisan:

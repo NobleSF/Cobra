@@ -16,16 +16,9 @@
 
     <div class='photo'>
       <img src='{% get_static_prefix %}images/loader.gif'
-           data-src='{{ product.photos.0.thumb_size }}'
-           data-src-retina='{{ product.photos.0.thumb_size_retina }}'>
+           data-src='{{ product.photo.thumb_size }}'
+           data-src-retina=''>
     </div>
-
-    {% if product.artisan %}
-      <div class='artisan'>
-        <img class='pull-right hidden-phone hover-show'
-             src='{{ product.artisan.image.pinky_size }}'>
-      </div>
-    {% endif %}
 
   </a>
 </div>
