@@ -1,7 +1,7 @@
 $(function(){//on page load
 
   //resize things for ipad
-  if (768 < $(window).width() < 979){
+  if ((768 < $(window).width()) && ($(window).width() < 979)){
     $('#main-content').removeClass('span8').addClass('span12');
     $('#information').removeClass('span4').addClass('span12');
   }
