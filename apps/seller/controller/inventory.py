@@ -17,8 +17,8 @@ def checkInventory(seller):
   #hacked method: keep first inactive, else delete
   try:
     keep = 1
-    for product in seller.product_set.all():
-      if not product.is_active:
+    for product in seller.product_set.all().order_by('id'):
+      if product.was_never_active:
         if keep <= 0:
           product.delete()
         keep -= 1
@@ -33,16 +33,16 @@ def create(request):
   checkInventory(seller)
   try:
     edit_this_product = None
-    for product in seller.product_set.all():
-      if product.was_never_active:
+    for product in seller.product_set.all().order_by('id'):
+      if product.was_never_active and edit_this_product == None:
         edit_this_product = product
 
     if edit_this_product:
       request.product_id = edit_this_product.id
 
     #if no product id in request at this point, this will create a new one
-    product = Product(request)
-    return redirect("%d/edit" % product.product.id)
+    product_object = Product(request)
+    return redirect("%d/edit" % product_object.product.id)
 
   except Exception as e:
     return redirect('seller:management home')
