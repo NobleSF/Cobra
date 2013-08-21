@@ -36,7 +36,6 @@
     <div class='hidden-fields'>
       {{ product_form.product_id }}
       {{ product_form.assets }}
-      {# product_form.photos #}
       {{ product_form.colors }}
       {{ product_form.shipping_options }}
     </div>
@@ -50,11 +49,8 @@
       <div class='section-number'>2</div>
 
       <div id='photos' class='text-center'>
-        {% for photo in product.photos %}
-          {% photo_upload_tag photo_form product photo=photo %}
-        {% endfor %}
-        {% for rank in add_ranks_range %}
-          {% photo_upload_tag photo_form product rank=rank %}
+        {% for rank in '12345' %}
+          {% photo_upload_tag photo_form product rank %}
         {% endfor %}
       </div>
     </div><!--end photos section-->

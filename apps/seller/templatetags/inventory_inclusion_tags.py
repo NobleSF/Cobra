@@ -16,19 +16,23 @@ def sold_product_detail_tag(product):
   return {'product':product}
 
 @register.inclusion_tag('inventory/photo_upload.html')
-def photo_upload_tag(photo_form, product, rank=None, photo=None):
-  if photo is not None:
-    rank = photo.rank
-    photo_url = photo.thumb_size
-    photo_id = photo.id
-  else:
-    photo_url = None
-    photo_id = None
+def photo_upload_tag(photo_form, product, rank):
+  try:
+    photo = product.photo_set.get(rank=rank)
+  except:
+    photo = None
+
+  photo_url = photo.thumb_size  if photo else None
+  photo_id  = photo.id          if photo else None
 
   photo_form.fields['rank'].initial = rank
   photo_form.fields['product'].initial = product.id
 
-  return {'photo_form':photo_form, 'photo_url':photo_url, 'photo_id':photo_id, 'product_id':product.id}
+  return {'photo_form':photo_form,
+          'photo_url':photo_url,
+          'photo_id':photo_id,
+          'product_id':product.id
+         }
 
 @register.inclusion_tag('inventory/product_asset_choosers/asset_chooser.html')
 def asset_chooser_tag(request, product, ilk):

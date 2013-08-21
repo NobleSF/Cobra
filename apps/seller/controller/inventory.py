@@ -74,19 +74,12 @@ def edit(request, product_id):
 
   product_form.fields['product_id'].initial = product.product.id
 
-  # we want additional ranks for 5 photos total
-  #add_ranks_range = [r for r in range(1,6) if r not in current_ranks]
-  add_ranks_range = range(1,6)
-  for photo in product.product.photo_set.values('rank'):
-    add_ranks_range.remove(photo['rank'])
-
   product.product.photos = product.product.photo_set.order_by('rank')
 
   context = {
     'product':          product.product,
     'product_form':     product_form,
     'photo_form':       PhotoForm(),
-    'add_ranks_range':  add_ranks_range,
     'CLOUDINARY':       {'upload_url':   CLOUDINARY['upload_url'],
                          'download_url': CLOUDINARY['download_url']
                         }
