@@ -13,7 +13,7 @@ def home(request):
                                     active_at__lte=datetime.today(),
                                     deactive_at=None)
                .order_by('approved_at')
-               .reverse()[:50]
+               .reverse()
              )
 
   context = {'products':products}
