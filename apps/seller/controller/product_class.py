@@ -94,7 +94,10 @@ class Product:
     finally: return "color removed"
 
   def update(self, attribute, value):
-    value = value if value else None
+    try:
+      value = int(round(float(value))) if value else None
+    except:
+      value = None
     try:
       if attribute == 'price':
         self.product.price = value
@@ -113,7 +116,7 @@ class Product:
       return "attribute does not exist"
     else:
       self.product.save()
-      return "saved " + attribute + ": " + (value if value else "None")
+      return "saved " + attribute + ": " + (str(value) if value else "None")
 
   def get(self, attribute):
     try:
@@ -131,10 +134,9 @@ class Product:
         raise TypeError('attribute does not exist')
 
     except Exception as e:
-      raise e
+      return "attribute does not exist"
     else:
-      return value
-
+      return str(value) if value else ""
 
   def clear(self):
     try:
