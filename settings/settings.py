@@ -95,7 +95,7 @@ if PRODUCTION:
     'phone_number':     '2120623809088',
     'status_url':       'http://www.theanou.com/communication/sms/status_confirmation',
     'status_secret':    'JuiceIsWorthTheSqueeze',
-    'webhook_url':      'http://anou-cobra.herokuapp.com/communication/sms/incoming',
+    'webhook_url':      'http://www.theanou.com/communication/sms/incoming',
     'webhook_secret':   'NT9NAEQUAGWWGG4WQ7GQHP7WHXPNZR3P'
   }
 else:
