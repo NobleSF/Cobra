@@ -5,19 +5,25 @@ from django.core.mail import EmailMultiAlternatives
 from settings.settings import DEBUG
 
 class Email:
-  def __init__(self, template_dir, data):
+  def __init__(self, template_dir=None, data=None):
     #creates an email using the template and data provided
+    if template_dir and data:
 
-    subject_template = "email/%s/subject.txt" % template_dir
-    text_body_template = "email/%s/text_body.txt" % template_dir
-    html_body_template = "email/%s/html_body.html" % template_dir
+      subject_template = "email/%s/subject.txt" % template_dir
+      text_body_template = "email/%s/text_body.txt" % template_dir
+      html_body_template = "email/%s/html_body.html" % template_dir
 
-    #plaintext_context = Context(autoescape=False)
-    context = {'data':data}
+      #plaintext_context = Context(autoescape=False)
+      context = {'data':data}
 
-    self.subject = render_to_string(subject_template, context)
-    self.text_body = render_to_string(text_body_template, context)
-    self.html_body = render_to_string(html_body_template, context)
+      self.subject = render_to_string(subject_template, context)
+      self.text_body = render_to_string(text_body_template, context)
+      self.html_body = render_to_string(html_body_template, context)
+
+    else:
+      self.subject = 'email subject'
+      self.text_body = 'email body'
+      self.html_body = '<p>email body</p>'
 
   def sendTo(self, to): #sends the email object to the provided email or list of emails
 
