@@ -4,11 +4,20 @@ from datetime import datetime
 from apps.communication.controller import seller_events
 
 class Product:
-  def __init__(self, request):
+  def __init__(self, request=None, product=None):
     try:
-      self.product = models.Product.objects.filter(seller_id=request.session['seller_id']).get(id=request.product_id)
+      if request:
+        self.product = (models.Product.objects
+                      .filter(seller_id=request.session['seller_id'])
+                      .get(id=request.product_id))
+      else:
+        self.product = product
+
     except:
-      self.product = self.new(request)
+      if request:
+        self.product = self.new(request)
+      else:
+        pass #todo: i dunno.
 
   def __iter__(self):
     for asset in self.product.asset_set.all():
