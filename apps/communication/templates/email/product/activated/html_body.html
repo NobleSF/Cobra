@@ -1,0 +1,16 @@
+<p>
+  product {{ data.id }}: {{ data.name }}
+  by {{ data.seller.name }} is awaiting approval
+</p>
+
+<p>
+  Go to
+  <a href="http://www.theanou.com/admin/review_products">
+    Approve Products in the Admin Dashboard
+  </a>
+  <br>
+  Or
+  <a href="http://www.theanou.com/product/{{data.id}}">
+    view the product online
+  </a>
+</p>

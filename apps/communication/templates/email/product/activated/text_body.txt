@@ -1,0 +1,7 @@
+product {{ data.id }}: {{ data.name }} by {{ data.seller.name }} is awaiting approval
+
+Go to Approve Products in the Admin Dashboard:
+http://www.theanou.com/admin/review_products
+
+Or view the product online:
+http://www.theanou.com/product/{{data.id}}
