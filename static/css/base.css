@@ -80,6 +80,7 @@ a, a:hover, a:active, a:focus{outline: 0;}
 .underline{
   text-decoration: underline;
 }
+.nowrap{white-space: nowrap;}
 
 @media (max-width: 767px) {
   .zopim {display: none !important;}

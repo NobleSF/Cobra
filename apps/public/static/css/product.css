@@ -143,6 +143,5 @@
   text-align: center;
 }
 
-#product-description ul{
-  margin: 0 0 -1em;
-}
+#product-description{margin: 2em 0}
+#product-description .title{font-size: 16pt;}

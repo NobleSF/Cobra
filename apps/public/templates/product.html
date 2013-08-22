@@ -47,18 +47,18 @@
       </div>
 
       <div id='product-description'>
-        <ul class='inline text-left'>
-          <li><h3>{{ product.name }}</h3></li>
-          <li>{{ product.description }}</li>
-        </ul>
+        <p>
+          <span class='title'>{{ product.name }}</span>
+          {{ product.description }}
+        </p>
 
         {% if product.english_dimensions %}
-          <ul class='inline text-left'>
-            <li><h3>Approx. Size</h3></li>
-            <li>{{ product.english_dimensions }}</li>
-            <li><h3>or</h3></li>
-            <li>{{ product.metric_dimensions }}</li>
-          </ul>
+          <p>
+            <span class='title'>Approx. Size</span>
+            <span class='nowrap'>{{ product.english_dimensions }}</span>
+            <span class='title'>or</span>
+            <span class='nowrap'>{{ product.metric_dimensions }}</span>
+          </p>
         {% endif %}
       </div>
 
@@ -101,10 +101,12 @@
 
     <div id='artisan' class='span4'>
       <img id='artisan-image' src='{{ product.artisan.image.thumb_size }}'>
-      <p>handmade by</p>
       {% if product.artisan.name %}
+        <p>handmade by</p>
         <h3 id='artisan-name'>{{ product.artisan.name }}</h3>
         <p>at</p>
+      {% else %}
+        <p>handmade at</p>
       {% endif %}
       <h3 id='store-name'>
         <a href="{% url 'store' product.seller.id %}">
@@ -112,13 +114,15 @@
         </a>
       </h3>
       <p id='artisan-bio'>
-        <span class='short-description'>
-          {{ product.artisan.description|truncatewords:"20" }}
-        </span>
-        <small class='read-more'>read more</small>
-        <span class='long-description'>
-          {{ product.artisan.description }}
-        </span>
+        {% if product.artisan.description %}
+          <span class='short-description'>
+            {{ product.artisan.description|truncatewords:"20" }}
+          </span>
+          <small class='read-more'>read more</small>
+          <span class='long-description'>
+            {{ product.artisan.description }}
+          </span>
+        {% endif %}
       </p>
     </div>
 
@@ -138,7 +142,6 @@
             <td class='utility-image-space'>
               {% if utility.image %}
                 <img class='small-utility-image' src='{{ utility.image.pinky_size }}'>
-                <!--<img class='large-utility-image' src='{{ utility.image.thumb_size }}'>-->
               {% endif %}
             </td>
             <td>
