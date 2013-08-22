@@ -1,5 +1,5 @@
 from apps.communication.controller.email_class import Email
-from apps.communication.controller.sms import sendSMS
+from apps.communication.controller.sms import sendSMS, sendSMSForOrder
 from settings.settings import DEBUG
 from apps.communication.models import SMS
 
