@@ -1,5 +1,6 @@
 # Django settings for Anou project.
 import dj_database_url, os, socket
+from people import *
 
 LOCAL_MACHINES = ['TOMCOUNSELL']
 try:
