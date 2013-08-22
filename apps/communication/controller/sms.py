@@ -62,7 +62,7 @@ def saveSMS(sms_content): #takes Telerivet response content detail at
 @csrf_exempt
 def incoming(request): #receives SMS messages via Telerivet, detail at
   #https://telerivet.com/p/PJ8973e6e346c349cbcdd094fcffa9fcb5/api/webhook/receiving
-  from apps.communication.controller.order_events import updateOrder
+  from apps.communication.controller import order_events
   from apps.seller.models import Product
 
   if TELERIVET['webhook_secret'] == request.POST.get('secret'):
@@ -98,7 +98,7 @@ def incoming(request): #receives SMS messages via Telerivet, detail at
             #todo: do somethign about it
 
       if msg_data and product_matches_seller_phone: #if it was understandable, update the order
-        reply_msg = updateOrder(msg_data, gimme_reply_sms=True)
+        reply_msg = order_events.updateOrder(msg_data, gimme_reply_sms=True)
         #gives us reply string, error string, or False(do not reply)
 
         if isinstance(reply_msg, basestring):

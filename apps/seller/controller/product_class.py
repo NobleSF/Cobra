@@ -1,6 +1,7 @@
 from apps.seller import models
 from apps.admin import models as admin_models
 from datetime import datetime
+from apps.communication.controller import seller_events
 
 class Product:
   def __init__(self, request):
@@ -150,11 +151,13 @@ class Product:
 
   def activate(self):
     try:
+      #todo: if self.product.is_complete
       self.product.active_at = datetime.now()
       self.product.save()
     except:
       return False
     else:
+      seller_events.activatedProduct(self.product)
       return True
 
   def deactivate(self):
