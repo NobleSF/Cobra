@@ -71,6 +71,8 @@ class Product(models.Model):
 
   @property
   def was_never_active(self): return True if not self.active_at else False
+  #todo: use property.setter functions too!
+  #(http://docs.python.org/2/library/functions.html#property)
 
   @property
   def is_active(self): return True if (self.active_at and not self.deactive_at) else False
