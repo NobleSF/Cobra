@@ -51,43 +51,43 @@ def createFromCartItem(item, checkout_data):
   order.products.add(item.product)
   return order
 
-class Order:
-  def __init__(self, order_id=None):
-    self.order = models.Order.objects.get(id=order_id)
-
-  def seller_confirmed(self):
-    if order_events.communicateOrderConfirmed(self.order):
-      self.order.is_seller_confirmed = True
-      self.order.save()
-    else:
-      raise Exception
-
-  def seller_shipped(self, tracking_number=None):
-    from datetime import date
-    if order_events.communicateOrderShipped(self.order):
-      self.order.is_shipped = True
-      self.order.shipped_date = date.today()
-      if tracking_number:
-        self.order.tracking_number = tracking_number
-      self.order.save()
-    else:
-      raise Exception
-
-  def seller_paid(self):
-    if order_events.communicateOrderSellerPaid(self.order):
-      self.order.is_seller_paid = True
-      self.order.save()
-    else:
-      raise Exception
-
-  def customer_received(self):
-    from datetime import date
-    self.order.is_received = True
-    self.order.received_date = date.today()
-    self.order.save()
-
-  def update(self):
-    pass
-
-  def refund(self):
-    pass
+#class Order:
+#  def __init__(self, order_id=None):
+#    self.order = models.Order.objects.get(id=order_id)
+#
+#  def seller_confirmed(self):
+#    if order_events.communicateOrderConfirmed(self.order):
+#      self.order.is_seller_confirmed = True
+#      self.order.save()
+#    else:
+#      raise Exception
+#
+#  def seller_shipped(self, tracking_number=None):
+#    from datetime import date
+#    if order_events.communicateOrderShipped(self.order):
+#      self.order.is_shipped = True
+#      self.order.shipped_date = date.today()
+#      if tracking_number:
+#        self.order.tracking_number = tracking_number
+#      self.order.save()
+#    else:
+#      raise Exception
+#
+#  def seller_paid(self):
+#    if order_events.communicateOrderSellerPaid(self.order):
+#      self.order.is_seller_paid = True
+#      self.order.save()
+#    else:
+#      raise Exception
+#
+#  def customer_received(self):
+#    from datetime import date
+#    self.order.is_received = True
+#    self.order.received_date = date.today()
+#    self.order.save()
+#
+#  def update(self):
+#    pass
+#
+#  def refund(self):
+#    pass
