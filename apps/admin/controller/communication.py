@@ -21,8 +21,22 @@ def sendSMS(request):
 
 def allSMS(request):
   from settings.settings import TELERIVET
+  from apps.seller.models import Seller
+
+  sms_messages = SMS.objects.all().order_by('created_at').reverse()[:100]
+
+  for sms in sms_messages:
+    if sms.from_number == TELERIVET['phone_number']:
+      sms.phone_number = sms.to_number
+    else:
+      sms.phone_number = sms.from_number
+
+    try:
+      sms.seller = Seller.objects.get(account__phone=sms.phone_number)
+    except: pass
+
   context = {
-              'sms_messages': SMS.objects.all().order_by('created_at').reverse(),
+              'sms_messages': sms_messages,
               'anou_phone':   TELERIVET['phone_number']
             }
   return render(request, 'communication/all_sms.html', context)

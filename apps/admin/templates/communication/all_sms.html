@@ -8,8 +8,10 @@
   <thead>
     <td>DATE&nbsp;&nbsp;TIME</td>
     <td>INCOMING/OUTGOING</td>
-    <td>NUMBER</td>
+    <td></td>
+    <td>PHONE</td>
     <td>MESSAGE</td>
+    <td>ORDER#</td>
     <td>AUTO-REPLY</td>
   </thead>
 
@@ -19,13 +21,22 @@
 
       {% if sms.to_number == anou_phone %}
         <td style='text-align: center;'>INCOMING</td>
-        <td>{{ sms.from_number }}</td>
       {% else %}
         <td style='text-align: center;'>OUTGOING</td>
-        <td>{{ sms.to_number }}</td>
       {% endif %}
 
+      <td>
+        <i class='symbol-name'
+           title='{% if sms.seller %}{{ sms.seller.name }}{% else %}?{% endif %}'>
+        </i>
+      </td>
+      <td>{{ sms.phone_number }}</td>
+
       <td>{{ sms.message }}</td>
+      <td>
+        {% if sms.order %}{{ sms.order.id }}{% endif %}
+      </td>
+
       <td>
         {% if sms.auto_reply %}{{ sms.auto_reply }}{% endif %}
       </td>
@@ -34,5 +45,9 @@
   {% endfor %}
 
 </table>
+
+<p class='text-center' style='text-decoration: underline; font-size: 20pt;'>
+  see Tom for more
+</p>
 
 {% endblock content %}
