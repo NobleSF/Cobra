@@ -1,0 +1,58 @@
+{% extends "admin_base.html" %}
+{% load url from future %}
+{% block content %}
+
+<h3>ALL ORDERS</h3>
+
+<table class='table table-hover table-condensed'>
+  <thead>
+    <td>DATE&nbsp;&nbsp;TIME</td>
+    <td>SELLER</td>
+    <td>PROD.&nbsp;ID</td>
+    <td>&#8776;CHARGE</td>
+    <td>TO&nbsp;SELLER</td>
+    <td>STATUS</td>
+    <td>TRACKING</td>
+    <td>NOTES</td>
+  </thead>
+
+  {% for order in orders %}
+    <tr>
+      <td>{{ order.created_at|date:"m/d H:i" }}</td>
+      <td>{{ order.products.all.0.seller.name }}</td>
+
+      <td>
+        <a href="{% url 'product' order.products.all.0.id %}">
+          {{ order.products.all.0.id }}
+        </a>
+      </td>
+
+      <td>
+        {{ order.total_charge|floatformat:0 }}
+        <small>{{ order.products.all.0.seller.currency.code }}</small>
+      </td>
+      <td>
+        {{ order.seller_paid_amount|floatformat:0 }}
+        <small>{{ order.products.all.0.seller.currency.code }}</small>
+      </td>
+
+      <td style='white-space: nowrap;'>
+        <i class='symbol-SMS {% if order.is_seller_confirmed  %}green{% else %}red{% endif %}'></i>
+        <i class='symbol-SMS-shipping {% if order.is_shipped %}green{% else %}red{% endif %}'></i>
+        <i class='symbol-shipping {% if order.is_received %}green{% else %}red{% endif %}'></i>
+        <i class='symbol-money {% if order.is_seller_paid %}green{% else %}red{% endif %}'></i>
+      </td>
+
+      <td>{% if order.tracking_number %}{{ order.tracking_number }}{% endif %}</td>
+      <td>{% if order.notes %}{{ order.notes }}{% endif %}</td>
+
+    </tr>
+  {% endfor %}
+
+</table>
+
+<p class='text-center' style='text-decoration: underline; font-size: 20pt;'>
+  see Tom for more
+</p>
+
+{% endblock content %}

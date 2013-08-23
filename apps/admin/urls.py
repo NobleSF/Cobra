@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from controller import dashboard, account, products, communication, site_management
+from controller import dashboard, account, products, orders, communication, site_management
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -30,6 +30,7 @@ urlpatterns += patterns('',
   url(r'^admin/rate_product$', products.rate_product, name='rate product'),
 
   #ORDERS
+  url(r'^admin/all_orders$', orders.allOrders, name='all orders'),
   #url(r'^admin/place_order$', orders.place_order, name='place order'),
 
   #COMMUNICATION
