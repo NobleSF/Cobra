@@ -1,4 +1,3 @@
-Using South: http://stackoverflow.com/questions/4625712/whats-the-recommended-approach-to-resetting-migration-history-using-django-sout
 
 Mobile Integration / API app
 	http://tastypieapi.org/
@@ -8,17 +7,17 @@ Redesign
 	Homepage:
 		http://bxslider.com/
 		http://www.fitgrd.com/
-	Blog:
-		https://www.djangopackages.com/packages/p/django-blog-zinnia/
+
 	Buttons:
 		http://ace-subido.github.com/css3-microsoft-metro-buttons/index.html
 		http://www.red-team-design.com/css3-patterned-buttons
 		http://www.dropzonejs.com/
+
 	Images:
 		Cloudinary for all uploaded images and photos
 		load SVG icons into http://icomoon.io/ and export as icon font
 		Where to find SVG icons: http://game-icons.net/ http://icomoon.io/
-	pages for sold products prominantly display similar products.
+
 	Responsive qualities: http://bradfrost.github.com/this-is-responsive/patterns.html
 
 	Keep use of JS libraries to a minimum for speed
@@ -32,19 +31,3 @@ Redesign
 
 Check code for efficiency:
 	http://flake8.readthedocs.org
-
-Included packages:
-	blueimp.github.com/jQuery-File-Upload/
-	https://github.com/SmileyChris/easy-thumbnails
-	
-Server/Application Monitoring:
-	http://thechangelog.com/log2viz-logs-as-data-for-performance-visibility/
-	need to research our options: django packages vs 3rd party analytics
-
-Super Fast:
-	collectstatic: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/
-	minify everything
-	cache static files and homepage
-
-Security Issues:
-	S3 bucket open for free uploads and file overwrites
