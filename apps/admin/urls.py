@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from controller import account, dashboard, communication
+from controller import dashboard, account, products, communication, site_management
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -22,19 +22,27 @@ urlpatterns = patterns('',
 
 #dashboard pages
 urlpatterns += patterns('',
-  url(r'^admin/dashboard$', dashboard.home, name='dashboard'),
-  url(r'^admin/review_products$', dashboard.review_products, name='review products'),
-  url(r'^admin/approve_product$', dashboard.approve_product, name='approve product'),
-  url(r'^admin/rate_product$', dashboard.rate_product, name='rate product'),
+  url(r'^admin/dashboard$', dashboard.dashboard, name='dashboard'),
 
-  url(r'^admin/send_sms$', communication.sms, name='send sms'),
+  #PRODUCTS
+  url(r'^admin/review_products$', products.review_products, name='review products'),
+  url(r'^admin/approve_product$', products.approve_product, name='approve product'),
+  url(r'^admin/rate_product$', products.rate_product, name='rate product'),
 
+  #ORDERS
+  #url(r'^admin/place_order$', orders.place_order, name='place order'),
 
-  url(r'^admin/dashboard/country$', dashboard.country, name='country'),
-  url(r'^admin/dashboard/currency$', dashboard.currency, name='currency'),
-  url(r'^admin/dashboard/color$', dashboard.color, name='color'),
-  url(r'^admin/admin/dashboard/category$', dashboard.category, name='category'),
-  url(r'^dashboard/rating_subject$', dashboard.rating_subject, name='rating_subject'),
-  url(r'^dashboard/shipping_option$', dashboard.shipping_option, name='shipping_option'),
-  url(r'^dashboard/image_object$', dashboard.image_object, name='image_object'),
+  #COMMUNICATION
+  url(r'^admin/send_sms$', communication.sendSMS, name='send sms'),
+  url(r'^admin/all_sms$', communication.allSMS, name='all sms'),
+  url(r'^admin/all_email$', communication.allEmail, name='all email'),
+
+  #SETTINGS
+  url(r'^admin/management/country$', site_management.country, name='country'),
+  url(r'^admin/management/currency$', site_management.currency, name='currency'),
+  url(r'^admin/management/color$', site_management.color, name='color'),
+  url(r'^admin/management/category$', site_management.category, name='category'),
+  url(r'^admin/management/rating_subject$', site_management.rating_subject, name='rating_subject'),
+  url(r'^admin/management/shipping_option$', site_management.shipping_option, name='shipping_option'),
+  url(r'^admin/management/image_object$', site_management.image_object, name='image_object'),
 )
