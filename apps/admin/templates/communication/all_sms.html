@@ -1,0 +1,38 @@
+{% extends "admin_base.html" %}
+
+{% block content %}
+
+<h3>ALL SMS MESSAGES</h3>
+
+<table class='table table-hover table-condensed'>
+  <thead>
+    <td>DATE&nbsp;&nbsp;TIME</td>
+    <td>INCOMING/OUTGOING</td>
+    <td>NUMBER</td>
+    <td>MESSAGE</td>
+    <td>AUTO-REPLY</td>
+  </thead>
+
+  {% for sms in sms_messages %}
+    <tr>
+      <td>{{ sms.created_at|date:"m/d H:i" }}</td>
+
+      {% if sms.to_number == anou_phone %}
+        <td style='text-align: center;'>INCOMING</td>
+        <td>{{ sms.from_number }}</td>
+      {% else %}
+        <td style='text-align: center;'>OUTGOING</td>
+        <td>{{ sms.to_number }}</td>
+      {% endif %}
+
+      <td>{{ sms.message }}</td>
+      <td>
+        {% if sms.auto_reply %}{{ sms.auto_reply }}{% endif %}
+      </td>
+
+    </tr>
+  {% endfor %}
+
+</table>
+
+{% endblock content %}

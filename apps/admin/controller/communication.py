@@ -4,9 +4,10 @@ from apps.admin.controller.decorator import access_required
 from django.contrib import messages
 from django.utils import simplejson
 from datetime import datetime
+from apps.communication.models import SMS
 
 @access_required('admin')
-def sms(request):
+def sendSMS(request):
   from apps.admin.controller.forms import SMSForm
   from apps.communication.controller.sms import sendSMS
 
@@ -16,4 +17,16 @@ def sms(request):
     sendSMS(message, to_number)
     messages.success(request, "SMS sent!")
 
-  return render(request, 'communication/sms.html', {'form': SMSForm()})
+  return render(request, 'communication/send_sms.html', {'form': SMSForm()})
+
+def allSMS(request):
+  from settings.settings import TELERIVET
+  context = {
+              'sms_messages': SMS.objects.all().order_by('created_at').reverse(),
+              'anou_phone':   TELERIVET['phone_number']
+            }
+  return render(request, 'communication/all_sms.html', context)
+
+
+def allEmail():
+  pass
