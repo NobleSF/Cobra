@@ -1,7 +1,9 @@
 from apps.communication.controller.email_class import Email
 from apps.communication.controller.sms import sendSMS, sendSMSForOrder
-from settings.settings import DEBUG
 from apps.communication.models import SMS
+from settings.settings import DEBUG
+from settings import people
+from datetime import datetime
 
 def communicateOrdersCreated(orders):
   try:
@@ -41,62 +43,50 @@ def communicateOrdersCreated(orders):
     return "error: " + str(e)
 
 def updateOrder((product_id, data), gimme_reply_sms=False):
-  #gets a tuple (of id and data dict) and optional boolean
-  from datetime import datetime
+  """
+      gets a tuple of (id, data-dict) plus optional boolean
+      product_id should have already been validated
+      Step 1. If there is a tracking number, add it and promote the order to shipped
+      Step 2. Else if already confirmed and not shipped, promote to shipped
+      Step 3. Else if not confirmed, promote to confirmed
+      Step 4. Else we can't go any further
+
+  """
   from apps.public.models import Order
   from apps.seller.models import Product
 
-  #if product_id: #we should always have a product id
   try:
     product = Product.objects.get(id=product_id)
     order = product.order_set.all()[0]
 
-    if data.get('remove'): #the product should be removed
-      if product.order_set.all():
-        if order.is_seller_confirmed:
-          reply = 'xata'
-        else:
-          reply = 'shukran'
-          #todo: email dan or tom, or text brahim
-          #cancel order and tell customer
+    reply = str(product_id) + " "
 
-      else:
-        product.deactive_at = datetime.now()
-        product.save()
-        reply = 'shukran'
+    if data.get('tracking_number'): #if tracking number provided
+      #the order is both confirmed and shipped
+      if not order.is_seller_confirmed: order.seller_confirmed_at = datetime.now()
+      order.shipped_at = datetime.now()
+      order.tracking_number = data.get('tracking_number')
+      order.save()
+      reply += communicateOrderShipped(order, gimme_reply_sms)
 
-    else: #update the order of that product_id
-      reply = str(product_id) + " "
+    elif order.is_seller_confirmed and not order.is_shipped: #if order already confirmed
+      #confirm it is shipped
+      order.shipped_at = datetime.now()
+      order.save()
+      reply += communicateOrderShipped(order, gimme_reply_sms)
 
-      if data.get('tracking_number'): #if they provide a tracking number
-        #the order is both confirmed and shipped
-        if not order.is_seller_confirmed: order.seller_confirmed_at = datetime.now()
-        order.shipped_at = datetime.now()
-        order.tracking_number = data.get('tracking_number')
-        order.save()
-        reply += communicateOrderShipped(order, gimme_reply_sms)
+    elif not order.is_seller_confirmed: #if the order is not yet confirmed
+      #confirm the order
+      order.seller_confirmed_at = datetime.now()
+      order.save()
+      reply += communicateOrderConfirmed(order, gimme_reply_sms)
 
-      elif order.is_seller_confirmed and not order.is_shipped: #if order already confirmed
-        #confirm it is shipped
-        order.shipped_at = datetime.now()
-        order.save()
-        reply += communicateOrderShipped(order, gimme_reply_sms)
-
-      elif not order.is_seller_confirmed: #if the order is not yet confirmed
-        #confirm the order
-        order.seller_confirmed_at = datetime.now()
-        order.save()
-        reply += communicateOrderConfirmed(order, gimme_reply_sms)
-
-      else: #if everything is already done
-        if DEBUG: reply = '(safi) redundant confirmation'
-        else: reply += "safi"
-
-  except Proudct.DoesNotExist:
-    if DEBUG: reply = '(xata) This product does not exist.'
-    else: reply = 'xata'
+    else: #if everything is already done
+      if DEBUG: reply = '(safi) redundant confirmation'
+      else: reply += "safi"
 
   except Exception as e:
+    #primary scenario is product does not belong to any orders
     if DEBUG: reply = "(xata) " + str(e)
     else: reply = 'xata'
 
@@ -175,6 +165,12 @@ def communicateOrderSellerPaid(order):
 
   except Exception as e:
     return "error: " + str(e)
+
+def cancelOrder(order):
+  message = 'Cancel order %d, Confirmation# %d' % (order.id, order.cart.wepay_checkout_id)
+  email = Email(message=message)
+  email.sendTo((people.Dan.email,people.Tom.email))
+  #todo: email customer
 
 #support functions
 

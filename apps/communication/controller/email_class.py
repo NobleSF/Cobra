@@ -5,7 +5,7 @@ from django.core.mail import EmailMultiAlternatives
 from settings.settings import DEBUG
 
 class Email:
-  def __init__(self, template_dir=None, data=None):
+  def __init__(self, template_dir=None, data=None, message=None):
     #creates an email using the template and data provided
     if template_dir and data:
 
@@ -21,11 +21,13 @@ class Email:
       self.html_body = render_to_string(html_body_template, context)
 
     else:
-      self.subject = 'email subject'
-      self.text_body = 'email body'
-      self.html_body = '<p>email body</p>'
+      message = message if message else 'test email body'
+      self.subject = 'notification'
+      self.text_body = message
+      self.html_body = '<p>%s</p>' % message
 
   def sendTo(self, to): #sends the email object to the provided email or list of emails
+    import threading
 
     #allow the function to receive a string or a list
     self.to = [to] if isinstance(to, basestring) else to
@@ -44,7 +46,13 @@ class Email:
                   )
       #sendgrid settings automatically bcc dump@theanou.com on every email
       self.mail.attach_alternative(self.html_body, "text/html")
-      self.mail.send()
+
+      # Create a new thread in Daemon mode to send message
+      # as described at http://www.artfulcode.net/articles/threading-django/
+      t = threading.Thread(target=self.mail.send)
+      t.setDaemon(True)
+      t.start()
+
     except Exception as e:
       return "error: " + str(e)
     else:

@@ -2,10 +2,11 @@ import requests
 from requests.auth import HTTPBasicAuth
 from settings.settings import TELERIVET, DEBUG
 import simplejson as json
-import re #using to remove non-digits from phone numbers
+import re #regular expressions
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from apps.communication.models import SMS
+from apps.seller.models import Product
 
 def sendSMS(msg, to_number, priority='1'): #using Telerivet
   try:
@@ -60,12 +61,23 @@ def saveSMS(sms_content): #takes Telerivet response content detail at
     return sms
 
 @csrf_exempt
-def incoming(request): #receives SMS messages via Telerivet, detail at
-  #https://telerivet.com/p/PJ8973e6e346c349cbcdd094fcffa9fcb5/api/webhook/receiving
-  from apps.communication.controller import order_events
-  from apps.seller.models import Product
+def incoming(request):
+  """ receives SMS messages via Telerivet, detail at
+      https://telerivet.com/p/PJ8973e6e346c349cbcdd094fcffa9fcb5/api/webhook/receiving
+  """
+  from apps.communication.controller import order_events, seller_events
 
   if TELERIVET['webhook_secret'] == request.POST.get('secret'):
+    """
+        Step 1. Save the SMS in the db or our record
+        Step 2. Understand the content of the message
+        Step 3. Find a product match for the product ID number
+        Step 4. Pass product removals off to seller_events function
+        Step 5. Pass order updates off to order_events function
+
+        Return EITHER reply message OR 200-ok OR 500-error
+        On DEBUG, return error message as reply in place of 500-error
+    """
     try:
       #save the SMS in db
       sms = SMS(
@@ -81,47 +93,46 @@ def incoming(request): #receives SMS messages via Telerivet, detail at
       #msg_data is tuple of ( product_id, data{} ) or
       #just False if not understandable
 
-      product_matches_seller_phone = False #we don't know yet
+      if not msg_data:#message not understandable
+        #maybe they wanna chat or need help? todo:send someone an email?
+        return HttpResponse(status=200)#OK
 
-      if msg_data: #if it was understandable
-        try:
-          (product_id, data) = msg_data
-          product = Product.objects.get(id=product_id)
-          product_matches_seller_phone = product.belongsToPhone(request.POST.get('from_number'))
+      else: #it was understandable
+        (product_id, data) = msg_data
+        product = Product.objects.get(id=product_id)
 
-        except Exception as e:
-          if DEBUG:
-            response = {'messages':[{'content':str(e)}]}
-            return HttpResponse(json.dumps(response), mimetype='application/json')
+        product_matches_seller_phone = False #we don't know yet
+        product_matches_seller_phone = product.belongsToPhone(request.POST.get('from_number'))
+
+        if product_matches_seller_phone: #if the sender owns the product, update the order
+
+          if data.get('remove'):
+            seller_events.deactivateProduct(product)
+            reply_msg = 'shukran'
           else:
-            HttpResponse(status=500)#server error, our fault, Telerivet will try again
-            #todo: do somethign about it
+            reply_msg = order_events.updateOrder(msg_data, gimme_reply_sms=True)
+            #gives us reply string or True(no reply)
 
-      if msg_data and product_matches_seller_phone: #if it was understandable, update the order
-        reply_msg = order_events.updateOrder(msg_data, gimme_reply_sms=True)
-        #gives us reply string, error string, or False(do not reply)
+          if isinstance(reply_msg, basestring):
+            sms.auto_reply = reply_msg
+            sms.save()
+            #send reply back with response
+            response = {'messages':[{'content':reply_msg}]}
+            return HttpResponse(json.dumps(response), mimetype='application/json')
 
-        if isinstance(reply_msg, basestring):
-          sms.auto_reply = reply_msg
-          sms.save()
-          #send reply back with response
-          response = {'messages':[{'content':reply_msg}]}
-          return HttpResponse(json.dumps(response), mimetype='application/json')
-
+          else:
+            return HttpResponse(status=200)#OK
         else:
-          pass #something wrong updateOrder function
-
-      else: #message not understandable
-        #maybe they wanna chat or need help? send someone an email?
-        return HttpResponse(status=200)#all good
+          return HttpResponse(status=200)#OK
+          #todo: email Brahim about this incoming text product with wrong owner
 
     except Exception as e:
       if DEBUG:
         response = {'messages':[{'content':str(e)}]}
         return HttpResponse(json.dumps(response), mimetype='application/json')
       else:
-        HttpResponse(status=500)#server error, our fault, Telerivet will try again
-        #todo: do somethign about it
+        return HttpResponse(status=500)#server error, our fault, Telerivet will try again
+        #todo: do something about it
 
   else:
     return HttpResponse(status=403)#forbidden, didn't come from Telerivet
@@ -138,20 +149,23 @@ def status_confirmation(request):
     sms = SMS.objects.get(telerivet_id=request.POST['id'])
     sms.status = request.POST['status']
     sms.save()
-    return HttpResponse(status=200)
+    return HttpResponse(status=200)#OK
   else:
-    return HttpResponse(status=403)
+    return HttpResponse(status=403)#forbidden, didn't come from Telerivet
 
 def understandMessage(message): #example message '1234 MAS12312938110'
   #take a message and comprehend the desired action on a product id (or return False)
 
-  data = {}
   try:
     product_id = re.findall('\d+', message)[0].strip()
-  except:
-    product_id = None
+    product_id = Product.objects.get(id=product_id).id
+
+  except Product.DoesNotExist: product_id = None
+    #todo: email Brahim about this incoming text with wrong product id
+  except: product_id = None
 
   if product_id:
+    data = {}
     try:
       tracking_number = re.findall('[C][P]\s?\w+\s?[M][A]', message)[0]
       data['tracking_number'] = tracking_number.replace(' ','')#remove spaces
@@ -161,8 +175,8 @@ def understandMessage(message): #example message '1234 MAS12312938110'
     if re.match('[rR]\s*\d+', message):
       data['remove'] = True
 
-  if product_id:
     return (product_id, data)
     #example ('1234', {'tracking_number':"CP123456789MA"})
+
   else:
     return False
