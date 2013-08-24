@@ -26,9 +26,9 @@
       {% endif %}
 
       <td>
-        <i class='symbol-name'
-           title='{% if sms.seller %}{{ sms.seller.name }}{% else %}?{% endif %}'>
-        </i>
+        {% if sms.seller %}
+          <i class='symbol-name' title='{{ sms.seller.name }}'></i>
+        {% endif %}
       </td>
       <td>{{ sms.phone_number }}</td>
 

@@ -4,7 +4,8 @@ from apps.admin.controller.decorator import access_required
 from django.contrib import messages
 from django.utils import simplejson
 from datetime import datetime
-from apps.communication.models import SMS
+from apps.communication.models import SMS, Email
+from apps.seller.models import Seller
 
 @access_required('admin')
 def sendSMS(request):
@@ -21,7 +22,6 @@ def sendSMS(request):
 
 def allSMS(request):
   from settings.settings import TELERIVET
-  from apps.seller.models import Seller
 
   sms_messages = SMS.objects.all().order_by('created_at').reverse()[:100]
 
@@ -42,5 +42,12 @@ def allSMS(request):
   return render(request, 'communication/all_sms.html', context)
 
 
-def allEmail():
-  pass
+def allEmail(request):
+
+  emails = Email.objects.all().order_by('created_at').reverse()[:100]
+
+  for email in emails:
+    email.seller = Seller.objects.get(account__email=email.to_address)
+
+  context = {'emails':emails}
+  return render(request, 'communication/all_email.html', context)
