@@ -47,7 +47,9 @@ def allEmail(request):
   emails = Email.objects.all().order_by('created_at').reverse()[:100]
 
   for email in emails:
-    email.seller = Seller.objects.get(account__email=email.to_address)
+    try:
+      email.seller = Seller.objects.get(account__email=email.to_address)
+    except: pass
 
   context = {'emails':emails}
   return render(request, 'communication/all_email.html', context)
