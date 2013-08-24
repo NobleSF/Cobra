@@ -7,7 +7,9 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from apps.communication.models import SMS
 from apps.seller.models import Product
+from apps.admin.controller.decorator import postpone
 
+@postpone
 def sendSMS(msg, to_number, priority='1'): #using Telerivet
   try:
     post_url =  'https://api.telerivet.com/v1/projects/'

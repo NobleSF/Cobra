@@ -3,6 +3,7 @@ from django.template import Context
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from settings.settings import DEBUG
+from apps.admin.controller.decorator import postpone
 
 class Email:
   def __init__(self, template_dir=None, data=None, message=None):
@@ -26,6 +27,7 @@ class Email:
       self.text_body = message
       self.html_body = '<p>%s</p>' % message
 
+  @postpone
   def sendTo(self, to): #sends the email object to the provided email or list of emails
     import threading
 
@@ -46,12 +48,7 @@ class Email:
                   )
       #sendgrid settings automatically bcc dump@theanou.com on every email
       self.mail.attach_alternative(self.html_body, "text/html")
-
-      # Create a new thread in Daemon mode to send message
-      # as described at http://www.artfulcode.net/articles/threading-django/
-      t = threading.Thread(target=self.mail.send)
-      t.setDaemon(True)
-      t.start()
+      self.mail.send()
 
     except Exception as e:
       return "error: " + str(e)

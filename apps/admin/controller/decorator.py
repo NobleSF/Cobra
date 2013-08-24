@@ -5,7 +5,6 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from functools import wraps
 
-
 def access_required(permission):
   def decorator(func):
     def inner_decorator(request, *args, **kwargs):
@@ -24,12 +23,16 @@ def access_required(permission):
     return wraps(func)(inner_decorator)
   return decorator
 
-def talkative(original_function):
-  """
-  print a message when original_function starts and finishes
-  """
-  def new_function(*args, **kwargs):
-    print("Entering", original_function.__name__)
-    original_function(*args, **kwargs)
-    print("Exiting ", original_function.__name__)
-  return new_function
+
+# A DECORATOR FOR PYTHON THREADING
+# http://docs.python.org/2/library/threading.html#thread-objects
+
+from threading import Thread
+
+def postpone(function):
+  def decorator(*args, **kwargs):
+    t = Thread(target = function, args=args, kwargs=kwargs)
+    t.daemon = True
+    t.start()
+
+  return decorator
