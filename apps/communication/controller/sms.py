@@ -177,7 +177,7 @@ def understandMessage(message): #example message '1234 MAS12312938110'
   if product_id:
     data = {}
     try:
-      tracking_number = re.findall('[C][P]\s?\w+\s?[M][A]', message)[0]
+      tracking_number = re.findall('[C][P]\s?\w+\s?[M][A]', message.upper())[0]
       data['tracking_number'] = tracking_number.replace(' ','')#remove spaces
     except: pass
 
