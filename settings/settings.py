@@ -104,7 +104,7 @@ else:
     'project_id':       'PJ7b2437d72ffb96a200f05f33318f7809',
     'phone_id':         'PNf04607c4af8e227a58457b059a9d583c',
     'phone_number':     '0665555555',
-    'status_url':       'http://localcobra.pagekite.me/communication/sms/status_confirmation',
+    'status_url':       'http://localcobra.pagekite.me/communication/sms/status_confirmation', #http://respondto.it/anou-sms-status
     'status_secret':    'JuiceIsWorthTheSqueeze',
     'webhook_url':      'http://localcobra.pagekite.me/communication/sms/incoming',
     'webhook_secret':   'QNCWR2444MRT6R2G74UDTMTA6QKM2TET'
