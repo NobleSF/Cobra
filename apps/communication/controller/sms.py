@@ -9,7 +9,6 @@ from apps.communication.models import SMS
 from apps.seller.models import Product
 from apps.admin.controller.decorator import postpone
 
-@postpone
 def sendSMS(msg, to_number, priority='1'): #using Telerivet
   try:
     post_url =  'https://api.telerivet.com/v1/projects/'
@@ -36,15 +35,24 @@ def sendSMS(msg, to_number, priority='1'): #using Telerivet
     else:
       return "bad request or possible Telerivet error"
 
+@postpone #cannot return a value, handle errors internally
 def sendSMSForOrder(msg, to_number, order, priority='1'):
   try:
     sms = sendSMS(msg, to_number, priority)
     if isinstance(sms, SMS):
       sms.order = order
       sms.save()
-    return sms
+    else:
+      error_message = sms
   except Exception as e:
-    return "error: " + str(e)
+    error_message = "Error in communcation/controller/sms.py saveSMS(): " + str(e)
+
+  try:
+    if error_message:
+      from apps.communication.controller.email_class import Email
+      from settings.people import Tom
+      Email(message=error_message).sendTo(Tom.email)
+  except: pass
 
 def saveSMS(sms_content): #takes Telerivet response content detail at
   #https://telerivet.com/p/PJ8973e6e346c349cbcdd094fcffa9fcb5/api/rest/sending

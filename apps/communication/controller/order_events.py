@@ -17,28 +17,25 @@ def communicateOrdersCreated(orders):
         for artisan in product.assets.filter(ilk='artisan'):
           pass
           #artisan assets need phone numbers
-          #sendSMS(artisan_msg, artisan.phone)
+          #sendSMSForOrder(artisan_msg, artisan.phone, order)
 
       #message the seller with the address
       address_string = getCustomerAddressFromOrder(order, sms_format=True)
       seller_msg = products_string + "\r\n" + address_string
       seller_phone = order.products.all()[0].seller.phone
-      sms = sendSMSForOrder(seller_msg, seller_phone, order)
-      if not isinstance(sms, SMS):
-        error_message = sms #received in place of SMS object
-        #todo: email tom here
+      sendSMSForOrder(seller_msg, seller_phone, order)
 
       #notify Brahim
       try:
-        email = Email('order/created_copy_director', order)
-        email.sendTo("brahim@theanou.com")
+        order.seller_msg = seller_msg.replace('\r\n', '<br>')
+        Email('order/created_copy_director', order).sendTo("brahim@theanou.com")
       except: pass
         #todo: emial tom about this problem
 
     #send email to buyer
-    email = Email('order/created', orders)
-    return email.sendTo(getCustomerEmailFromOrder(orders[0]))
-    #returns True or exception string
+    email = Email('order/created', orders).assignToOrder(orders[0])
+    email.sendTo(getCustomerEmailFromOrder(orders[0]))
+    return True
   except Exception as e:
     return "error: " + str(e)
 
@@ -102,24 +99,14 @@ def communicateOrderConfirmed(order, gimme_reply_sms=False):
     else: sms_reply = 'shukran'
 
     #send email to buyer
-    email = Email('order/confirmed', order)
-    email_success = email.sendTo(getCustomerEmailFromOrder(order))
+    Email('order/confirmed', order).assignToOrder(order).sendTo(getCustomerEmailFromOrder(order))
 
-    if gimme_reply_sms and (email_success == True):
-      return sms_reply
-    elif gimme_reply_sms:
-      #error message in email_success string
+    if gimme_reply_sms:
       return sms_reply
 
     else:
       seller_phone = order.products.all()[0].seller.phone
-      sms = sendSMS(sms_reply, seller_phone)
-
-      if (email_success == True) and isinstance(sms, SMS) :
-        return True
-      else:
-        return str(email_success) + str(sms)
-        #each respectivly return True or exception str
+      sendSMSForOrder(sms_reply, seller_phone, order)
 
   except Exception as e:
     if DEBUG: return '(xata) ' + str(e)
@@ -133,24 +120,14 @@ def communicateOrderShipped(order, gimme_reply_sms=False):
     else: sms_reply = 'shukran'
 
     #send email to buyer
-    email = Email('order/shipped', order)
-    email_success = email.sendTo(getCustomerEmailFromOrder(order))
+    Email('order/shipped', order).assignToOrder(order).sendTo(getCustomerEmailFromOrder(order))
 
-    if gimme_reply_sms and (email_success == True):
-      return sms_reply
-    elif gimme_reply_sms:
-      #error message in email_success string
+    if gimme_reply_sms:
       return sms_reply
 
     else:
       seller_phone = order.products.all()[0].seller.phone
-      sms = sendSMS(sms_reply, seller_phone)
-
-      if (email_success == True) and isinstance(sms, SMS):
-        return True
-      else:
-        return str(email_success) + str(sms)
-        #each respectivly return True or exception str
+      sendSMSForOrder(sms_reply, seller_phone, order)
 
   except Exception as e:
     if DEBUG: return '(xata) ' + str(e)
@@ -161,15 +138,14 @@ def communicateOrderShipped(order, gimme_reply_sms=False):
 def communicateOrderSellerPaid(order):
   try:
     pass
-    #sendSMS() to seller
+    #sendSMSForOrder() to seller
 
   except Exception as e:
     return "error: " + str(e)
 
 def cancelOrder(order):
   message = 'Cancel order %d, Confirmation# %d' % (order.id, order.cart.wepay_checkout_id)
-  email = Email(message=message)
-  email.sendTo((people.Dan.email,people.Tom.email))
+  Email(message=message).assignToOrder(order).sendTo((people.Dan.email,people.Tom.email))
   #todo: email customer
 
 #support functions

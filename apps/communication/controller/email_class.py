@@ -27,9 +27,8 @@ class Email:
       self.text_body = message
       self.html_body = '<p>%s</p>' % message
 
-  @postpone
+  @postpone #cannot return a value, handle errors internally
   def sendTo(self, to): #sends the email object to the provided email or list of emails
-    import threading
 
     #allow the function to receive a string or a list
     self.to = [to] if isinstance(to, basestring) else to
@@ -49,23 +48,44 @@ class Email:
       #sendgrid settings automatically bcc dump@theanou.com on every email
       self.mail.attach_alternative(self.html_body, "text/html")
       self.mail.send()
+      save_response = self.save()
+
+      if isinstance(save_response, basestring):
+        error_message = save_response
 
     except Exception as e:
-      return "error: " + str(e)
-    else:
-      return self.save()
+      error_message = "Error in communcation/controller/email_class.py sendTo(): " + str(e)
+
+    try:
+      if error_message:
+        from settings.people import Tom
+        Email(message=error_message).sendTo(Tom.email)
+    except Exception as e2:
+      try:
+        if error_message:
+          from apps.communication.controller.sms import sendSMS
+          from settings.people import Tom
+          sendSMS("THE SKY IS FALLING! \r\n in email_class sendTo()", Tom.phone)
+      except: pass #life is pointless
 
   def save(self):
+    try:    self.order
+    except: self.order = None
+
     try:
       email = models.Email(
-        from_address  = self.mail.from_email,
-        to_address    = ','.join(self.mail.to),
-        subject       = self.mail.subject,
-        text_body     = self.mail.body,
-        html_body     = self.mail.alternatives[0][0]
-      )
+                from_address  = self.mail.from_email,
+                to_address    = ','.join(self.mail.to),
+                subject       = self.mail.subject,
+                text_body     = self.mail.body,
+                html_body     = self.mail.alternatives[0][0],
+                order         = self.order
+              )
     except Exception as e:
       return "error: " + str(e)
     else:
       email.save()
       return True
+
+  def assignToOrder(self, order):
+    self.order = order

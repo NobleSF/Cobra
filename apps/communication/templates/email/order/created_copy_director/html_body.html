@@ -2,6 +2,4 @@
   {{ data.seller.name }}
 </h2>
 
-{% for sms in data.sms_set.all %}
-  <p>{{ sms.message }}</p>
-{% endfor %}
+<p>{{ data.seller_msg }}</p>

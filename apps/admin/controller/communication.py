@@ -15,8 +15,11 @@ def sendSMS(request):
   if request.method == 'POST':
     to_number = request.POST.get('to_number')
     message   = request.POST.get('message')
-    sendSMS(message, to_number)
-    messages.success(request, "SMS sent!")
+    sms = sendSMS(message, to_number)
+    if isinstance(sms, SMS):
+      messages.success(request, "SMS sent!")
+    else:
+      messages.error(request, "SMS failed!")
 
   return render(request, 'communication/send_sms.html', {'form': SMSForm()})
 

@@ -19,7 +19,7 @@ def deactivateProduct(product):
   product = Product(product=product)#use Product class, not model object
   product.deactivate()
 
-  message = "product %d has been remove by seller" % product.product.id
+  message = "product %d has been removed by seller" % product.product.id
   Email(message=message).sendTo(people.Dan.email)
 
 #translation event functions
