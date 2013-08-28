@@ -28,14 +28,18 @@
             {% endif %}
           </h1>
           <h3 class='copy-font'>
-            Total Charged:
-            <span class='badge'><h3 class='copy-font'>
-              ${{ checkout_data.gross|floatformat:2 }}
-            </h3></span>
-            Confirmation Number:
-            <span class='badge'><h3 class='copy-font'>
-              {{ checkout_data.checkout_id }}
-            </h3></span>
+            {% if checkout_data.gross %}
+              Total Charged:
+              <span class='badge'><h3 class='copy-font'>
+                ${{ checkout_data.gross|floatformat:2 }}
+              </h3></span>
+            {% endif %}
+            {% if checkout_data.checkout_id %}
+              Confirmation Number:
+              <span class='badge'><h3 class='copy-font'>
+                {{ checkout_data.checkout_id }}
+              </h3></span>
+            {% endif %}
           </h3>
         </div>
       {% else %}
