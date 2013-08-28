@@ -12,7 +12,12 @@ class Cart(models.Model):
   country             = models.CharField(max_length=50,  null=True, blank=True)
 
   wepay_checkout_id   = models.BigIntegerField(null=True, blank=True)
-  checked_out         = models.BooleanField(default=False)
+  anou_checkout_id    = models.CharField(max_length=15, null=True, blank=True)
+  checked_out         = models.BooleanField(default=False)#does not need to be a date
+
+  #todo: add discount code or note or something
+  receipt             = models.TextField(blank=True, null=True)
+  notes               = models.TextField(blank=True, null=True)
 
   #update history
   created_at          = models.DateTimeField(auto_now_add = True)
@@ -67,7 +72,6 @@ class Order(models.Model):
   discount_charge     = models.DecimalField(max_digits=6, decimal_places=2, default=0)
   discount_reason     = models.CharField(max_length=100, null=True, blank=True)
   total_charge        = models.DecimalField(max_digits=6, decimal_places=2)
-  receipt             = models.TextField(blank=True, null=True)
 
   shipping_option     = models.ForeignKey(ShippingOption, null=True, blank=True)
   #reported weight and cost after shipped
@@ -89,9 +93,7 @@ class Order(models.Model):
   received_at         = models.DateTimeField(null=True, blank=True)
   reviewed_at         = models.DateTimeField(null=True, blank=True)
   seller_paid_at      = models.DateTimeField(null=True, blank=True)
-
   returned_at         = models.DateTimeField(null=True, blank=True)
-  notes               = models.TextField(blank=True, null=True)
 
   #update history
   created_at          = models.DateTimeField(auto_now_add = True)
