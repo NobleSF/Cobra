@@ -158,6 +158,15 @@ class Cart(object):
       return value
 
   @property
+  def checkout_id(self):
+    if self.cart.wepay_checkout_id:
+      return self.cart.wepay_checkout_id
+    elif self.cart.anou_checkout_id:
+      return self.cart.anou_checkout_id
+    else:
+      return False
+
+  @property
   def contact(self):
     if self.cart.name and self.cart.email:
       return '%s (%s)' % (self.cart.name, self.cart.email)

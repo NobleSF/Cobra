@@ -1,1 +1,1 @@
-Anou Order #{{ data.cart.wepay_checkout_id }}
+Anou Order #{{ data.cart.checkout_id }}

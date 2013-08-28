@@ -1,6 +1,6 @@
 Have you received your order?
 
-Your order: http://www.theanou.com/checkout/confirmation?checkout_id={{ data.0.cart.wepay_checkout_id }}
+Your order: http://www.theanou.com/checkout/confirmation?checkout_id={{ data.0.cart.checkout_id }}
 
 Please post a picture of how you're using the item on our Facebook page: www.facebook.com/thean0u
 

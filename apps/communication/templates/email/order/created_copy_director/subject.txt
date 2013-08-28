@@ -1,1 +1,1 @@
-Anou Order #{% if data.cart.wepay_checkout_id %}{{ data.cart.wepay_checkout_id }}{% else %}{{ data.cart.anou_checkout_id }}{% endif %}
+Anou Order #{{ data.cart.checkout_id }}
