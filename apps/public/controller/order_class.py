@@ -2,8 +2,12 @@ from apps.public import models
 from apps.communication.controller import order_events
 from datetime import datetime
 
-def getOrders(wepay_checkout_id):
-  cart = models.Cart.objects.get(wepay_checkout_id = wepay_checkout_id)
+def getOrders(checkout_id):
+  try:
+    cart = models.Cart.objects.get(wepay_checkout_id = checkout_id)
+  except:
+    cart = models.Cart.objects.get(anou_checkout_id = checkout_id)
+
   orders = cart.order_set.all()
   if not orders:
     orders = createFromCart(cart)
@@ -51,7 +55,7 @@ def createFromCartItem(item, checkout_data):
   order.products.add(item.product)
   return order
 
-#class Order:
+#class Order(object):
 #  def __init__(self, order_id=None):
 #    self.order = models.Order.objects.get(id=order_id)
 #
