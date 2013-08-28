@@ -29,11 +29,11 @@ class Cart(object):
 
     #override session cart if valid checkout_id is provided
     if checkout_id:
-      if isinstance(checkout_id, int): #it's a wepay id
-        try: cart_id = models.Cart.objects.get(wepay_checkout_id=checkout_id).id
+      if isinstance(checkout_id, basestring) and checkout_id.startswith('MAN'):
+        try: cart_id = models.Cart.objects.get(anou_checkout_id=checkout_id).id
         except: pass
       else:
-        try: cart_id = models.Cart.objects.get(anou_checkout_id=checkout_id).id
+        try: cart_id = models.Cart.objects.get(wepay_checkout_id=checkout_id).id
         except: pass
 
     if cart_id:
