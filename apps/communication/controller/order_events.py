@@ -28,7 +28,7 @@ def communicateOrdersCreated(orders):
       #notify Brahim
       try:
         order.seller_msg = seller_msg.replace('\r\n', '<br>')
-        Email('order/created_copy_director', order).sendTo("brahim@theanou.com")
+        Email('order/created_copy_director', order).sendTo(people.Brahim.email)
       except: pass
         #todo: emial tom about this problem
 
