@@ -1,4 +1,4 @@
 {{ data.seller.name }}
 
 
-{{ data.seller_msg }}
+{{ data.seller_msg|safe }}

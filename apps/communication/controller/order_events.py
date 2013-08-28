@@ -165,7 +165,7 @@ def getCustomerAddressFromOrder(order, sms_format=False):
   address += "\r\n" if sms_format else "<br>"
 
   if order.cart.address2:
-    address += str(order.cart.address1)
+    address += str(order.cart.address2)
     address += "\r\n" if sms_format else "<br>"
 
   address += str(order.cart.city) + ", "
