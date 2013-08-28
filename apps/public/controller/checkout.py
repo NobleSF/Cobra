@@ -89,7 +89,7 @@ def confirmation(request):
   except:
     #if an admin is logged in, they should not have come without a checkout_id
     if 'admin_id' in request.session:
-      raise "No checkout_id provided. checkout_id is required for admins"
+      raise Exception("No checkout_id provided. checkout_id is required for admins")
     else:
       pass # no worries, use the checkout_id from the session cart
   finally:
@@ -141,7 +141,7 @@ def adminCheckout(request): #ajax requests only
     cart = Cart(request)
 
     if not (cart.contact and cart.shipping_address and cart.notes):
-      raise 'Missing complete shipping address or notes'
+      raise Exception("Missing complete shipping address or notes")
 
     confirmation = reverse('confirmation')+'?checkout_id='+cart.cart.anou_checkout_id
     confirmation_url = request.build_absolute_uri(confirmation)
