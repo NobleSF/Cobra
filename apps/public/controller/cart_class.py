@@ -214,13 +214,17 @@ class Cart(object):
   def getAnouCheckoutId(self, type='manual'):
     from django.utils.dateformat import format
     from datetime import datetime
+
     try:
-      unix_timestamp = format(datetime.now(), u'U')
-      if type == 'manual':
-        anou_checkout_id = "MAN%s" % unix_timestamp
-      #else 'ebay' or 'etsy'
-      self.cart.anou_checkout_id = anou_checkout_id
-      self.cart.save()
+      if self.cart.anou_checkout_id:
+        anou_checkout_id = self.cart.anou_checkout_id
+      else:
+        unix_timestamp = format(datetime.now(), u'U')
+        if type == 'manual':
+          anou_checkout_id = "MAN%s" % unix_timestamp
+        #else 'ebay' or 'etsy'
+        self.cart.anou_checkout_id = anou_checkout_id
+        self.cart.save()
 
     except Exception as e:
       return e
