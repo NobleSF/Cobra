@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 from apps.admin.controller.decorator import access_required
 from django.utils import simplejson as json
 from django.contrib import messages
+from apps.communication.controller.email_class import Email
+from settings import people
 
 from apps.public.controller.cart_class import Cart
 from apps.public.controller.forms import CartForm
@@ -123,7 +125,9 @@ def confirmation(request):
       checkout_data = {'error': "Problem collecting your order information.",
                        'exception': e
                        }
-      #todo: email Tom and CC the customer
+      try: Email(message="Error on order confirmation page: "+str(e)).sendTo(people.Tom.email)
+      except: pass
+      #todo: email the customer that we are aware of the problem
 
   context = {'cart':cart, 'checkout_data':checkout_data}
   try: context['orders'] = orders #if the variable exists
@@ -134,9 +138,6 @@ def confirmation(request):
 @access_required('admin')
 def adminCheckout(request): #ajax requests only
   from django.core.urlresolvers import reverse
-  from apps.communication.controller.email_class import Email
-  from settings.people import Dan
-
   try:
     cart = Cart(request)
 
@@ -147,7 +148,7 @@ def adminCheckout(request): #ajax requests only
     confirmation_url = request.build_absolute_uri(confirmation)
     confirmation_html_link = "<a href='%s'>%s</a>" % (confirmation_url, confirmation_url)
     message = "<p>To complete manual checkout go to: "+confirmation_html_link+"</p>"
-    Email(message=message).sendTo(Dan.email)
+    Email(message=message).sendTo(people.Dan.email)
 
   except Exception as e:
     responseObject = HttpResponse(content=json.dumps({'error':str(e)}),

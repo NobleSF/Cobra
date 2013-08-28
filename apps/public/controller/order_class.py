@@ -1,6 +1,8 @@
 from apps.public import models
 from apps.communication.controller import order_events
 from datetime import datetime
+from apps.communication.controller.email_class import Email
+from settings import people
 
 def getOrders(checkout_id):
   try:
@@ -37,8 +39,8 @@ def createFromCart(cart):
       order.seller_notified_at = datetime.now()
       order.save()
   else:
-    pass
-    #todo: email Tom the error response
+    try: Email(message="problem communicating orders created").sendTo(people.Tom.email)
+    except: pass
 
   return orders
 
