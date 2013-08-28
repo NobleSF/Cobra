@@ -12,6 +12,8 @@ def sendSMS(request):
   from apps.admin.controller.forms import SMSForm
   from apps.communication.controller.sms import sendSMS
 
+  context = {'form': SMSForm()}
+
   if request.method == 'POST':
     to_number = request.POST.get('to_number')
     message   = request.POST.get('message')
@@ -20,8 +22,9 @@ def sendSMS(request):
       messages.success(request, "SMS sent!")
     else:
       messages.error(request, "SMS failed!")
+      context['except'] = str(sms)
 
-  return render(request, 'communication/send_sms.html', {'form': SMSForm()})
+  return render(request, 'communication/send_sms.html', context)
 
 def allSMS(request):
   from settings.settings import TELERIVET

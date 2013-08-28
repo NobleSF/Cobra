@@ -9,7 +9,7 @@ from apps.communication.models import SMS
 from apps.seller.models import Product
 from apps.admin.controller.decorator import postpone
 
-def sendSMS(msg, to_number, priority='1'): #using Telerivet
+def sendSMS(message, to_number, priority='1'): #using Telerivet
   try:
     post_url =  'https://api.telerivet.com/v1/projects/'
     post_url += TELERIVET['project_id'] + '/messages/outgoing'
@@ -17,7 +17,7 @@ def sendSMS(msg, to_number, priority='1'): #using Telerivet
     parameters = {
       'phone_id':       TELERIVET['phone_id'],
       'to_number':      to_number,
-      'content':        msg,
+      'content':        message,
       'message_type':   'sms',
       'priority':       priority,
       'status_url':     TELERIVET['status_url'],
@@ -27,7 +27,7 @@ def sendSMS(msg, to_number, priority='1'): #using Telerivet
     response_content = json.loads(response.content) #dict of response content
 
   except Exception as e:
-    return "error: " + str(e)
+    return "send error: " + str(e)
 
   else:
     if int(response.status_code) is 200:
@@ -36,9 +36,9 @@ def sendSMS(msg, to_number, priority='1'): #using Telerivet
       return "bad request or possible Telerivet error"
 
 @postpone #cannot return a value, handle errors internally
-def sendSMSForOrder(msg, to_number, order, priority='1'):
+def sendSMSForOrder(message, to_number, order, priority='1'):
   try:
-    sms = sendSMS(msg, to_number, priority)
+    sms = sendSMS(message, to_number, priority)
     if isinstance(sms, SMS):
       sms.order = order
       sms.save()
@@ -54,19 +54,33 @@ def sendSMSForOrder(msg, to_number, order, priority='1'):
       Email(message=error_message).sendTo(Tom.email)
   except: pass
 
-def saveSMS(sms_content): #takes Telerivet response content detail at
+def saveSMS(sms_data): #takes Telerivet response content detail at
   #https://telerivet.com/p/PJ8973e6e346c349cbcdd094fcffa9fcb5/api/rest/sending
   try:
-    sms = SMS(
-      from_number   = re.sub("\D", "", sms_content['from_number']),
-      to_number     = re.sub("\D", "", sms_content['to_number']),
-      message       = sms_content['content'],
-      telerivet_id  = sms_content['id'],
-      status        = sms_content['status']
-    )
+    sms_messages = SMS.objects.filter(telerivet_id = sms_data['id'])
+    if sms_messages:
+      sms = sms_messages[0]
+    else:
+      sms = SMS(telerivet_id = sms_data['id'])
+
+    if 'to_number' in sms_data:
+      sms.to_number = re.sub("\D", "", sms_data['to_number'])
+    else:
+      sms.to_number = TELERIVET['phone_number']
+
+    if 'from_number' in sms_data:
+      sms.from_number = re.sub("\D", "", sms_data['from_number'])
+    else:
+      sms.from_number = TELERIVET['phone_number']
+
+    if 'status' in sms_data:
+      sms.status = sms_data['status']
+
+    sms.message = sms_data['content']
     sms.save()
+
   except Exception as e:
-    return "error: " + str(e)
+    return "save error: " + str(e)
   else:
     return sms
 
@@ -90,13 +104,8 @@ def incoming(request):
     """
     try:
       #save the SMS in db
-      sms = SMS(
-        telerivet_id  = request.POST['id'],
-        from_number   = re.sub("\D", "", request.POST['from_number']),
-        to_number     = re.sub("\D", "", request.POST['to_number']),
-        message       = request.POST['content'],
-      )
-      sms.save()
+      data = request.POST.copy()
+      sms = saveSMS(data)
 
       #look at what we received
       msg_data = understandMessage(request.POST['content'])
@@ -105,7 +114,7 @@ def incoming(request):
 
       if not msg_data:#message not understandable
         #maybe they wanna chat or need help? todo:send someone an email?
-        return HttpResponse(status=200)#OK
+        return HttpResponse("hello?", status=200)#OK
 
       else: #it was understandable
         (product_id, data) = msg_data
@@ -156,10 +165,10 @@ def status_confirmation(request):
   #because if it did it wouldn't have come from Telerivet
 
   if request.POST['secret'] == TELERIVET['status_secret']:
-    sms = SMS.objects.get(telerivet_id=request.POST['id'])
-    sms.status = request.POST['status']
-    sms.save()
+    data = request.POST.copy() #dict of response content
+    saveSMS(data)
     return HttpResponse(status=200)#OK
+
   else:
     return HttpResponse(status=403)#forbidden, didn't come from Telerivet
 
