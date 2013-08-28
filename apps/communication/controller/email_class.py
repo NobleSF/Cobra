@@ -5,7 +5,7 @@ from django.core.mail import EmailMultiAlternatives
 from settings.settings import DEBUG
 from apps.admin.controller.decorator import postpone
 
-class Email:
+class Email(object):
   def __init__(self, template_dir=None, data=None, message=None):
     #creates an email using the template and data provided
     if template_dir and data:

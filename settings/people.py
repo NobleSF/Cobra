@@ -1,4 +1,4 @@
-class People:
+class People(object):
   def __init__(self, info):
     self.name   = info[0]
     self.title  = info[1]

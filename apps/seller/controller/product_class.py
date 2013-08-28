@@ -3,7 +3,7 @@ from apps.admin import models as admin_models
 from datetime import datetime
 from apps.communication.controller import seller_events
 
-class Product:
+class Product(object):
   def __init__(self, request=None, product=None):
     try:
       if request:
