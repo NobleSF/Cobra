@@ -74,22 +74,22 @@ class Order(models.Model):
   cart                = models.ForeignKey('Cart')
 
   #charges breakdown in local currency (eg. dirhams in Morocco)
-  products_charge     = models.DecimalField(max_digits=6, decimal_places=2)
-  anou_charge         = models.DecimalField(max_digits=6, decimal_places=2)
-  shipping_charge     = models.DecimalField(max_digits=6, decimal_places=2)
-  discount_charge     = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+  products_charge     = models.DecimalField(max_digits=8, decimal_places=2)
+  anou_charge         = models.DecimalField(max_digits=8, decimal_places=2)
+  shipping_charge     = models.DecimalField(max_digits=8, decimal_places=2)
+  discount_charge     = models.DecimalField(max_digits=8, decimal_places=2, default=0)
   discount_reason     = models.CharField(max_length=100, null=True, blank=True)
-  total_charge        = models.DecimalField(max_digits=6, decimal_places=2)
+  total_charge        = models.DecimalField(max_digits=8, decimal_places=2)
 
   shipping_option     = models.ForeignKey(ShippingOption, null=True, blank=True)
   #reported weight and cost after shipped
   shipping_weight     = models.FloatField(blank=True, null=True)
   shipping_cost       = models.DecimalField(blank=True, null=True,
-                                            max_digits=6, decimal_places=2)
+                                            max_digits=8, decimal_places=2)
   tracking_number     = models.CharField(max_length=50, null=True, blank=True)
 
   seller_paid_amount  = models.DecimalField(blank=True, null=True,
-                                            max_digits=6, decimal_places=2)
+                                            max_digits=8, decimal_places=2)
 
   #order items
   products            = models.ManyToManyField(Product)
