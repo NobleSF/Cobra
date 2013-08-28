@@ -21,17 +21,20 @@ def cleanupCarts():
     return True
 
 # based on https://github.com/bmentges/django-cart
-class Cart:
+class Cart(object):
   def __init__(self, request=None, checkout_id=None, cart_id=None):
-    if not cart_id:
+
+    if request and not cart_id:
       cart_id = request.session.get('cart_id')#if no cart id, returns None
 
     #override session cart if valid checkout_id is provided
     if checkout_id:
-      try:
-        cart_id = models.Cart.objects.get(wepay_checkout_id=checkout_id).id
-      except:
-        pass
+      if isinstance(checkout_id, int): #it's a wepay id
+        try: cart_id = models.Cart.objects.get(wepay_checkout_id=checkout_id).id
+        except: pass
+      else:
+        try: cart_id = models.Cart.objects.get(anou_checkout_id=checkout_id).id
+        except: pass
 
     if cart_id:
       try:
@@ -94,6 +97,7 @@ class Cart:
         self.cart.email = value
       elif attribute == 'name':
         self.cart.name = value
+
       elif attribute == 'address1':
         self.cart.address1 = value
       elif attribute == 'address2':
@@ -106,11 +110,17 @@ class Cart:
         self.cart.postal_code = value
       elif attribute == 'country':
         self.cart.country = value
+
+      elif attribute == 'notes':
+        self.cart.notes = value
+      elif attribute == 'receipt':
+        self.cart.receipt = value
+
       else:
         raise TypeError('attribute ' + attribute + ' cannot be saved in cart')
 
     except Exception as e:
-      raise Exception
+      raise e
     else:
       self.cart.save()
 
@@ -120,6 +130,7 @@ class Cart:
         value = self.cart.email
       elif attribute == 'name':
         value = self.cart.name
+
       elif attribute == 'address1':
         value = self.cart.address1
       elif attribute == 'address2':
@@ -132,13 +143,43 @@ class Cart:
         value = self.cart.postal_code
       elif attribute == 'country':
         value = self.cart.country
+
+      elif attribute == 'notes':
+        value = self.cart.notes
+      elif attribute == 'receipt':
+        value = self.cart.receipt
+
       else:
         raise TypeError('attribute ' + attribute + ' not found in cart')
 
     except Exception as e:
-      raise Exception
+      raise e
     else:
       return value
+
+  @property
+  def contact(self):
+    if self.cart.name and self.cart.email:
+      return '%s (%s)' % (self.cart.name, self.cart.email)
+    else:
+      return False
+
+  @property
+  def shipping_address(self):
+    if (self.cart.address1 and
+        self.cart.city and
+        self.cart.postal_code and
+        self.cart.country):
+      return True #todo: write html shipping address
+    else:
+      return False
+
+  @property
+  def notes(self):
+    if self.cart.notes or self.cart.receipt:
+      return True #todo: write html for notes and receipt combined
+    else:
+      return False
 
   def count(self):
     #result = 0
@@ -160,6 +201,22 @@ class Cart:
     if not self.cart.checked_out:
       self.cart.checked_out = True
       self.cart.save()
+
+  def getAnouCheckoutId(self, type='manual'):
+    from django.utils.dateformat import format
+    from datetime import datetime
+    try:
+      unix_timestamp = format(datetime.now(), u'U')
+      if type == 'manual':
+        anou_checkout_id = "MAN%s" % unix_timestamp
+      #else 'ebay' or 'etsy'
+      self.cart.anou_checkout_id = anou_checkout_id
+      self.cart.save()
+
+    except Exception as e:
+      return e
+    else:
+      return anou_checkout_id
 
   def getWePayCheckoutURI(self):
     from apps.wepay.api import WePay
@@ -209,44 +266,43 @@ class Cart:
         return wepay_response
 
   def getCheckoutData(self):
-    #start with WePay data, then overwrite with our own.
-    wepay_checkout_data = self.getWePayCheckoutData()
 
-    if not wepay_checkout_data:
-      checkout_data = {}
+    wepay_checkout_data = None
 
+    if not str(self.cart.anou_checkout_id).startswith('MAN'):
+      wepay_checkout_data = self.getWePayCheckoutData()
+
+    checkout_data = wepay_checkout_data if wepay_checkout_data else {'manual_order':True}
+
+    #name and email
+    if self.cart.name:
+      checkout_data['name'] = self.cart.name
     else:
-      checkout_data = wepay_checkout_data
+      checkout_data['name'] = wepay_checkout_data.get('payer_name')
+      self.cart.name = wepay_checkout_data.get('payer_name')
+      self.cart.save()
+    if self.cart.email:
+      checkout_data['email'] = self.cart.email
+    else:
+      checkout_data['email'] = wepay_checkout_data.get('payer_email')
+      self.cart.email = wepay_checkout_data.get('payer_email')
+      self.cart.save()
 
-      #name and email
-      if self.cart.name:
-        checkout_data['name'] = self.cart.name
-      else:
-        checkout_data['name'] = wepay_checkout_data.get('payer_name')
-        self.cart.name = wepay_checkout_data.get('payer_name')
-        self.cart.save()
-      if self.cart.email:
-        checkout_data['email'] = self.cart.email
-      else:
-        checkout_data['email'] = wepay_checkout_data.get('payer_email')
-        self.cart.email = wepay_checkout_data.get('payer_email')
-        self.cart.save()
+    #shipping address
+    if not checkout_data.get('shipping_address'):
+      checkout_data['shipping_address'] = {} #create the dict
 
-      #shipping address
-      if not checkout_data.get('shipping_address'):
-        checkout_data['shipping_address'] = {} #create the dict
+    if not (self.cart.address1 and self.cart.city and
+            self.cart.state and self.cart.postal_code):
+      #we do not have an address stored for this order
+      #pull address from WePay and save it as our own
 
-      if not (self.cart.address1 and self.cart.city and
-              self.cart.state and self.cart.postal_code):
-        #we do not have an address stored for this order
-        #pull address from WePay and save it as our own
-
-        #US or international address, all should match up except state, postal_code
-        if wepay_checkout_data.get('shipping_address'):
-          self.cart.address1  = wepay_checkout_data['shipping_address'].get('address1')
-          self.cart.address2  = wepay_checkout_data['shipping_address'].get('address2')
-          self.cart.city      = wepay_checkout_data['shipping_address'].get('city')
-          self.cart.country   = wepay_checkout_data['shipping_address'].get('country')
+      #US or international address, all should match up except state, postal_code
+      if wepay_checkout_data.get('shipping_address'):
+        self.cart.address1  = wepay_checkout_data['shipping_address'].get('address1')
+        self.cart.address2  = wepay_checkout_data['shipping_address'].get('address2')
+        self.cart.city      = wepay_checkout_data['shipping_address'].get('city')
+        self.cart.country   = wepay_checkout_data['shipping_address'].get('country')
 
         #check for non-US address first
         if (wepay_checkout_data['shipping_address'].get('region') or
@@ -259,14 +315,13 @@ class Cart:
           self.cart.state = wepay_checkout_data['shipping_address'].get('state')
           self.cart.postal_code = wepay_checkout_data['shipping_address'].get('zip')
 
-        self.cart.save() #save all our address changes
+      self.cart.save() #save all our address changes
 
-      checkout_data['shipping_address']['address1']     = self.cart.address1
-      checkout_data['shipping_address']['address2']     = self.cart.address2
-      checkout_data['shipping_address']['city']         = self.cart.city
-      checkout_data['shipping_address']['state']        = self.cart.state
-      checkout_data['shipping_address']['postal_code']  = self.cart.postal_code
-      checkout_data['shipping_address']['country']      = self.cart.country
-
+    checkout_data['shipping_address']['address1']     = self.cart.address1
+    checkout_data['shipping_address']['address2']     = self.cart.address2
+    checkout_data['shipping_address']['city']         = self.cart.city
+    checkout_data['shipping_address']['state']        = self.cart.state
+    checkout_data['shipping_address']['postal_code']  = self.cart.postal_code
+    checkout_data['shipping_address']['country']      = self.cart.country
 
     return checkout_data

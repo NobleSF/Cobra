@@ -1,6 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
-from django.utils import simplejson
+from apps.admin.controller.decorator import access_required
+from django.utils import simplejson as json
 from django.contrib import messages
 
 from apps.public.controller.cart_class import Cart
@@ -18,15 +19,19 @@ def cart(request):
   try:
     cart_form.fields['email'].initial = cart.getData('email')
     cart_form.fields['name'].initial  = cart.getData('name')
-  except Exception as e:
-    pass
+  except: pass
   finally:
     context = {'cart':cart, 'cart_form':cart_form}
 
-  if cart.count():
+  if 'admin_id' in request.session:
+    anou_checkout_id = cart.getAnouCheckoutId()
+    if not isinstance(anou_checkout_id, basestring):
+      messages.warning(request, 'You are unable to checkout.')
+
+  elif cart.count():
     wepay_checkout_uri = cart.getWePayCheckoutURI()
-    if not str(wepay_checkout_uri).startswith("http"):
-      context['exception'] = wepay_checkout_uri
+    if not isinstance(wepay_checkout_uri, basestring):
+      context['exception'] = str(wepay_checkout_uri)
       messages.warning(request, 'WePay connection issue. You are unable to checkout.')
     else:
       context['wepay_checkout_uri'] = wepay_checkout_uri
@@ -72,7 +77,7 @@ def cartSave(request): #ajax requests only
   else:
     response = {'problem':"not GET"}
 
-  return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+  return HttpResponse(json.dumps(response), mimetype='application/json')
 
 def confirmation(request):
   from apps.public.controller.order_class import getOrders
@@ -82,12 +87,16 @@ def confirmation(request):
     if request.method == 'GET':
       checkout_id = request.GET.get('checkout_id')
   except:
-    pass # no worries, use the checkout_id from the session cart
+    #if an admin is logged in, they should not have come without a checkout_id
+    if 'admin_id' in request.session:
+      raise "No checkout_id provided. checkout_id is required for admins"
+    else:
+      pass # no worries, use the checkout_id from the session cart
   finally:
-    #Cart() creates a new cart if checkout_id=None and no cart in request.session
     cart = Cart(request, checkout_id)
-    checkout_data = cart.getCheckoutData() #return {} if no data available
-    #also runs checkout processes if necessary
+
+  checkout_data = cart.getCheckoutData() #return {} if no data available
+  #also runs checkout processes if necessary
 
   if not checkout_data: #empty data means no checkout_id created for the cart.
     checkout_data = {'problem': "No order exists with that confirmation number (checkout_id)"}
@@ -96,10 +105,15 @@ def confirmation(request):
     #at this point we know that the order is real
     try:
       #if necessary, remove from session and checkout the cart
-      if checkout_data.get('gross') and \
-         checkout_data.get('state') in ['authorized', 'reserved', 'captured']:
-        cart.checkout()
+      if( checkout_data.get('gross') and
+          checkout_data.get('state') in ['authorized', 'reserved', 'captured']
+      ) or (
+          checkout_data.get('manual_order')
+      ):
         orders = getOrders(checkout_id)
+        if cart.count:
+          cart.checkout()
+
         if request.session.get('cart_id') and cart.cart.id == request.session.get('cart_id'):
           del request.session['cart_id']
       else:
@@ -109,13 +123,42 @@ def confirmation(request):
       checkout_data = {'error': "Problem collecting your order information.",
                        'exception': e
                        }
-      #email Tom and CC the customer
+      #todo: email Tom and CC the customer
 
   context = {'cart':cart, 'checkout_data':checkout_data}
   try: context['orders'] = orders #if the variable exists
   except: pass
 
   return render(request, 'checkout/confirmation.html', context)
+
+@access_required('admin')
+def adminCheckout(request): #ajax requests only
+  from django.core.urlresolvers import reverse
+  from apps.communication.controller.email_class import Email
+  from settings.people import Dan
+
+  try:
+    cart = Cart(request)
+
+    if not (cart.contact and cart.shipping_address and cart.notes):
+      raise 'Missing complete shipping address or notes'
+
+    confirmation = reverse('confirmation')+'?checkout_id='+cart.cart.anou_checkout_id
+    confirmation_url = request.build_absolute_uri(confirmation)
+    confirmation_html_link = "<a href='%s'>%s</a>" % (confirmation_url, confirmation_url)
+    message = "<p>To complete manual checkout go to: "+confirmation_html_link+"</p>"
+    Email(message=message).sendTo(Dan.email)
+
+  except Exception as e:
+    responseObject = HttpResponse(content=json.dumps({'error':str(e)}),
+                                  mimetype='application/json',
+                                  status='500')
+  else:
+    responseObject = HttpResponse(json.dumps({'email':'sent'}),
+                                  mimetype='application/json',
+                                  status='200')
+  finally:
+    return responseObject
 
 def custom_order(request):
   return render(request, 'checkout/custom_order.html')
