@@ -224,6 +224,7 @@ class Cart(object):
           anou_checkout_id = "MAN%s" % unix_timestamp
         #else 'ebay' or 'etsy'
         self.cart.anou_checkout_id = anou_checkout_id
+        self.cart.wepay_checkout_id = None #shouldn't possibly have both
         self.cart.save()
 
     except Exception as e:
