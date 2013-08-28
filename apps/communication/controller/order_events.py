@@ -33,7 +33,8 @@ def communicateOrdersCreated(orders):
         #todo: emial tom about this problem
 
     #send email to buyer
-    email = Email('order/created', orders).assignToOrder(orders[0])
+    email = Email('order/created', orders)
+    email.assignToOrder(orders[0])
     email.sendTo(getCustomerEmailFromOrder(orders[0]))
     return True
   except Exception as e:
@@ -99,7 +100,9 @@ def communicateOrderConfirmed(order, gimme_reply_sms=False):
     else: sms_reply = 'shukran'
 
     #send email to buyer
-    Email('order/confirmed', order).assignToOrder(order).sendTo(getCustomerEmailFromOrder(order))
+    email = Email('order/confirmed', order)
+    email.assignToOrder(order)
+    email.sendTo(getCustomerEmailFromOrder(order))
 
     if gimme_reply_sms:
       return sms_reply
@@ -120,7 +123,9 @@ def communicateOrderShipped(order, gimme_reply_sms=False):
     else: sms_reply = 'shukran'
 
     #send email to buyer
-    Email('order/shipped', order).assignToOrder(order).sendTo(getCustomerEmailFromOrder(order))
+    email = Email('order/shipped', order)
+    email.assignToOrder(order)
+    email.sendTo(getCustomerEmailFromOrder(order))
 
     if gimme_reply_sms:
       return sms_reply
@@ -144,8 +149,10 @@ def communicateOrderSellerPaid(order):
     return "error: " + str(e)
 
 def cancelOrder(order):
-  message = 'Cancel order %d, Confirmation# %d' % (order.id, order.cart.wepay_checkout_id)
-  Email(message=message).assignToOrder(order).sendTo((people.Dan.email,people.Tom.email))
+  message = 'Cancel order %d, Confirmation# %d' % (order.id, order.cart.checkout_id)
+  email = Email(message=message)
+  email.assignToOrder(order)
+  email.sendTo((people.Dan.email,people.Tom.email))
   #todo: email customer
 
 #support functions
