@@ -23,6 +23,15 @@ class Cart(models.Model):
   created_at          = models.DateTimeField(auto_now_add = True)
   updated_at          = models.DateTimeField(auto_now = True)
 
+  @property
+  def checkout_id(self):
+    if self.wepay_checkout_id:
+      return self.wepay_checkout_id
+    elif self.anou_checkout_id:
+      return self.anou_checkout_id
+    else:
+      return False
+
   def discount(self):
     #for when we implement shipping groups and discounts
     return 0
@@ -35,7 +44,6 @@ class Cart(models.Model):
 
 class Item(models.Model):
   from apps.seller.models import Product
-
   cart                = models.ForeignKey('Cart')
   product             = models.ForeignKey(Product)
   #quantity           = models.PositiveIntegerField(default=1)
