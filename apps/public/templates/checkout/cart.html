@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load url from future %}
+{% load checkout_inclusion_tags %}
 
 {% block title %}
   Shopping Cart
@@ -160,19 +161,23 @@
 
       <!----- PART 3 ----->
       <div id='payment' class='part3'>
-        <small class='trim text-info'>
-          <span class='symbol-lock'></span>
-          This container is an SSL (https) encrypted frame secured and hosted by
-          <a href='https://www.wepay.com/security' target='_blank'>WePay</a>
-          <span class='symbol-lock'></span>
-        </small>
-        <div id='wepay-payment'></div>
-        <small class='trim text-info'>
-          <span class='symbol-lock'></span>
-          This container is an SSL (https) encrypted frame secured and hosted by
-          <a href='https://www.wepay.com/security' target='_blank'>WePay</a>
-          <span class='symbol-lock'></span>
-        </small>
+        {% if 'admin_id' in request.session %}
+          {% manual_checkout_tag cart %}
+        {% else %}
+          <small class='trim text-info'>
+            <span class='symbol-lock'></span>
+            This container is an SSL (https) encrypted frame secured and hosted by
+            <a href='https://www.wepay.com/security' target='_blank'>WePay</a>
+            <span class='symbol-lock'></span>
+          </small>
+          <div id='wepay-payment'></div>
+          <small class='trim text-info'>
+            <span class='symbol-lock'></span>
+            This container is an SSL (https) encrypted frame secured and hosted by
+            <a href='https://www.wepay.com/security' target='_blank'>WePay</a>
+            <span class='symbol-lock'></span>
+          </small>
+        {% endif %}
       </div>
       <!----- END PART 3 ----->
 

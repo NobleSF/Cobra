@@ -1,0 +1,40 @@
+{% load url from future %}
+
+<div id='manual-checkout-form'>
+
+  <input type='hidden' id='manual_checkout_url' value="{% url 'admin checkout' %}">
+
+  <h3 class='copy-font'>Manual Checkout for External Purchases</h3>
+
+  <div id='address-div' class=''>
+    <h4 class='copy-font'>Shipping Address</h4>
+    {{ form.address1 }}<br>
+    {{ form.address2 }}<br>
+    {{ form.city }}
+    {{ form.state }}<br>
+    {{ form.postal_code }}
+    {{ form.country }}
+  </div>
+
+  <div id='notes-div' class=''>
+    <h4 class='copy-font'>Notes</h4>
+    {{ form.notes }}
+    <br>
+    <h4 class='copy-font'>Receipt</h4>
+    {{ form.receipt }}
+  </div>
+
+  <div id='submit-div'>
+    <button id='admin-checkout-button' class='btn btn-info'>Submit</button>
+    <button class='admin-checkout-error btn btn-danger' disabled='disabled'>Error</button>
+    <button class='admin-checkout-success btn btn-success' disabled='disabled'>Success</button>
+    <br>
+    <span class='admin-checkout-error'>
+      Please refresh the page and try again or call Tom.
+    </span>
+    <span class='admin-checkout-success'>
+      Order is not complete, check email for confirmation link.
+    </span>
+  </div>
+
+</div>
