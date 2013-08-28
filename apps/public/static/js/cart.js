@@ -67,7 +67,7 @@ $('input.required').on('change', function(){
 
 function validateForm(){
   var complete = true;
-  $('input.required').each(function(){
+  $('#checkout-form  input.required').each(function(){
     $(this).removeClass('error');
     if ($(this).val() == ""){
       complete = false;
@@ -92,6 +92,33 @@ function IsEmail(email) {
   var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
   return regex.test(email);
 }
+
+//MANUAL ADMIN ORDERING FUNCTIONS
+$('#admin-checkout-button').click(function(){
+  if (validateManualCheckout()){
+    manualCheckout();
+  }
+});
+
+function manualCheckout(){
+  var checkout_url = $('#manual_checkout_url').val();
+
+  $.get(checkout_url)
+  .fail(function(){
+    $('#admin-checkout-button').hide('300');
+    $('.admin-checkout-error').show('300');
+  })
+  .done(function(){
+    $('input').attr('disabled', 'disabled');
+    $('#admin-checkout-button').hide('300');
+    $('.admin-checkout-success').show('300');
+  });
+}
+
+function validateManualCheckout(){
+  return true;
+}
+// END MANUAL ADMIN ORDERING FUNCTIONS
 
 //https://github.com/cfurrow/jquery.autosave.js
 //example:

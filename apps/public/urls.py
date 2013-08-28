@@ -25,6 +25,7 @@ urlpatterns = patterns('',
   url(r'^checkout/cart-add/(?P<product_id>\d+)$', checkout.cartAdd, name='cart-add'),
   url(r'^checkout/cart-remove/(?P<product_id>\d+)$', checkout.cartRemove, name='cart-remove'),
   url(r'^checkout/ajax/cart_save$', checkout.cartSave, name='cart-save'),
+  url(r'^checkout/ajax/admin_checkout$', checkout.adminCheckout, name='admin checkout'),
   url(r'^checkout/confirmation$', checkout.confirmation, name='confirmation'),
 
   #testing
