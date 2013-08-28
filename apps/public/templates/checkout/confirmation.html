@@ -71,13 +71,13 @@
             <legend>Contact Information</legend>
             <p>
               {% if checkout_data.name %}
-                <span id='subscribe-name'>{{ checkout_data.name}}</span>
+                <span id='subscribe-name'>{{ checkout_data.name }}</span>
               {% else %}
                 No name on file.
               {% endif %}
               <br>
               {% if checkout_data.email %}
-                <span id='subscribe-email'>{{ checkout_data.email}}</span>
+                <span id='subscribe-email'>{{ checkout_data.email }}</span>
               {% else %}
                 No email on file!
               {% endif %}
@@ -105,7 +105,11 @@
             <legend>Shipping Address</legend>
             <p>
               {% if checkout_data.shipping_address %}
-                {{ checkout_data.shipping_address.name }}<br>
+                {% if checkout_data.shipping_address.name %}
+                  {{ checkout_data.shipping_address.name }}<br>
+                {% elif checkout_data.name %}
+                  {{ checkout_data.name }}<br>
+                {% endif %}
                 {{ checkout_data.shipping_address.address1 }}<br>
                 {% if checkout_data.shipping_address.address2 %}
                   {{ checkout_data.shipping_address.address2 }}<br>
