@@ -59,10 +59,11 @@ class AssetForm(forms.Form):
                   widget=forms.Textarea(
                     attrs={'class':"description autosave", 'data-asset_id':""}),
                     required=False)
-  category    = forms.ModelMultipleChoiceField(
+  category    = forms.ModelChoiceField(
                   widget=forms.Select(
                     attrs={'class':"category autosave", 'data-asset_id':""}),
-                    queryset=Category.objects.all())
+                    queryset=Category.objects.all(),
+                    empty_label="Category:")
   phone       = forms.CharField(
                   widget=NumberInput(
                     attrs={'class':"phone autosave", 'data-asset_id':""}),
