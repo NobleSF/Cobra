@@ -103,6 +103,12 @@ function applyData(asset_div, asset_id, ilk){
     asset_div.find('.asset-category').show();
   }
 
+  if (ilk !=='artisan'){
+    asset_div.find('.asset-phone').hide();
+  }else{
+    asset_div.find('.asset-phone').show();
+  }
+
   //give the image div and input a new unique id
   unique_div_id = ilk + '_image_' + COUNTER.toString();
   unique_input_id = ilk + '_image_' + COUNTER.toString();

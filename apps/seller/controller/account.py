@@ -177,6 +177,8 @@ def saveAsset(request): #ajax requests only, create or update asset
         asset.name = value
       elif element == 'description':
         asset.description = value
+      elif element == 'phone':
+        asset.phone = value
       elif element == 'category':
         asset.categories.clear()
         asset.categories.add(Category.objects.get(id=value))

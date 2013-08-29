@@ -20,6 +20,7 @@ def asset_tag(image_form, asset_form, asset=None):
     asset_form.fields["image_url"].initial    = asset.image_id
     asset_form.fields["name"].initial         = asset.name
     asset_form.fields["description"].initial  = asset.description
+    asset_form.fields["phone"].initial        = asset.phone
     if asset.categories.all():
       asset_form.fields["category"].initial   = asset.categories.all()[0]
 
