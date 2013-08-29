@@ -161,41 +161,71 @@ def status_confirmation(request):
   #confirming that a sent SMS successfully reached it's recipient, detail at
   #https://telerivet.com/p/PJ8973e6e346c349cbcdd094fcffa9fcb5/api/webhook/status
 
-  #don't care to check if it is a POST or has malformed data
-  #because if it did it wouldn't have come from Telerivet
+  #if not POST did not come from Telerivet
+  try:
+    if request.POST['secret'] == TELERIVET['status_secret']:
+      data = request.POST.copy() #dict of response content
+      saveSMS(data)
+      return HttpResponse(status=200)#OK
+    else:
+      raise Exception
 
-  if request.POST['secret'] == TELERIVET['status_secret']:
-    data = request.POST.copy() #dict of response content
-    saveSMS(data)
-    return HttpResponse(status=200)#OK
-
-  else:
+  except:
     return HttpResponse(status=403)#forbidden, didn't come from Telerivet
 
-def understandMessage(message): #example message '1234 MAS12312938110'
+def understandMessage(message): #example message '123 CP123456789MA'
   #take a message and comprehend the desired action on a product id (or return False)
 
-  try:
-    product_id = re.findall('\d+', message)[0].strip()
-    product_id = Product.objects.get(id=product_id).id
+  try: #find the product id
+    #remove leading and trailing whitespace and upper-case all letters
+    message = message.strip().upper()
 
-  except Product.DoesNotExist: product_id = None
+    # regex pattern ^\D{0,2}(\d{1,4})(?![\d])
+    #up to 2 non-digits from start of string,
+    #then product ID 1-4 digits length (captured)
+    #followed by anything but another digit
+
+    pattern = re.compile('^\D{0,2}(\d{1,4})(?![\d])')
+    matches = pattern.match(message)
+    product_id = matches.group(1) #captured product_id
+    product = Product.objects.get(id=product_id)
+
+  except Product.DoesNotExist:
+    product_id = None
     #todo: email Brahim about this incoming text with wrong product id
-  except: product_id = None
+  except:
+    product_id = None
 
-  if product_id:
+  stripped_message = re.sub(r'\W', '', message) #strip out all whitespace
+
+  if product and stripped_message == str(product.id): #only product id
+    return (product.id, {})
+
+  elif product:
+    """ systematically check each possible command/action on the product id
+        1. remove action
+        2. tracking number assignment
+    """
     data = {}
-    try:
-      tracking_number = re.findall('[C][P]\s?\w+\s?[M][A]', message.upper())[0]
-      data['tracking_number'] = tracking_number.replace(' ','')#remove spaces
+
+    try: #check for product remove command "R123"
+      #regex looks for R or X before or after product id
+      pattern = re.compile('^([RX])?(\d{1,4})([RX])?$')
+      matches = pattern.match(stripped_message)
+
+      #if only one match exists, one had to have been an X or R
+      if bool(matches.group(1)) != bool(matches.group(3)):
+        data['remove'] = True
     except: pass
 
-    #if there is an 'R' before or after a product id number
-    if re.match('[rR]\s*\d+', message):
-      data['remove'] = True
+    try: #check for tracking number
+      #regex looks for 2 letters, 6-12 digits, followed by 'MA'
+      pattern = re.compile('\S*([A-Z]{2}\d{6,12}[M][A])\S*')
+      matches = pattern.match(stripped_message)
+      data['tracking_number'] = matches.group(1)
+    except: pass
 
-    return (product_id, data)
-    #example ('1234', {'tracking_number':"CP123456789MA"})
+    return (product.id, data) #like ('1234', {'tracking_number':"CP123456789MA"})
 
   else:
     return False

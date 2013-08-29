@@ -63,6 +63,10 @@ class AssetForm(forms.Form):
                   widget=forms.Select(
                     attrs={'class':"category autosave", 'data-asset_id':""}),
                     queryset=Category.objects.all())
+  phone       = forms.CharField(
+                  widget=NumberInput(
+                    attrs={'class':"phone autosave", 'data-asset_id':""}),
+                    max_length=15, required=False)
 
 class ImageForm(forms.Form):
   from settings.settings import CLOUDINARY
