@@ -42,7 +42,7 @@ class Email(object):
       self.mail = EmailMultiAlternatives(
                     subject     = self.subject,
                     body        = self.text_body,
-                    from_email  = "hello@theanou.com",
+                    from_email  = "Anou <hello@theanou.com>",
                     to          = self.to
                   )
       #sendgrid settings automatically bcc dump@theanou.com on every email
