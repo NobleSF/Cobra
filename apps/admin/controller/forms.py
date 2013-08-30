@@ -39,5 +39,9 @@ class AccountPasswordForm(forms.Form):
   new_password  = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'off'}))
 
 class SMSForm(forms.Form):
-  to_number     = forms.CharField(widget=NumberInput())
-  message       = forms.CharField(widget=forms.Textarea)
+  to_number     = forms.CharField(widget=NumberInput(
+                          attrs={'placeholder':'phone #'}))
+  message       = forms.CharField(widget=forms.TextInput(
+                          attrs={'placeholder':'message'}))
+  order         = forms.CharField(widget=forms.TextInput(
+                          attrs={'placeholder':'order #'}))

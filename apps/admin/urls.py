@@ -31,10 +31,8 @@ urlpatterns += patterns('',
 
   #ORDERS
   url(r'^admin/all_orders$', orders.allOrders, name='all orders'),
-  #url(r'^admin/place_order$', orders.place_order, name='place order'),
 
   #COMMUNICATION
-  url(r'^admin/send_sms$', communication.sendSMS, name='send sms'),
   url(r'^admin/all_sms$', communication.allSMS, name='all sms'),
   url(r'^admin/all_email$', communication.allEmail, name='all email'),
 

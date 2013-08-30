@@ -1,8 +1,32 @@
 {% extends "admin_base.html" %}
 
+{% block css %}
+  <style>
+    .page-title{float: left;}
+
+    #sms-form{float: right; padding: 21m;}
+    #sms-form #id_to_number{width: 7em;}
+    #sms-form #id_message{width: 25em;}
+    #sms-form #id_order{width: 3.5em;}
+
+    .incoming{background-color: rgb(218, 253, 218);}
+    .outgoing{background-color: rgb(225, 225, 252);}
+  </style>
+{% endblock css %}
+
 {% block content %}
 
-<h3>ALL SMS MESSAGES</h3>
+  <h3 class='page-title'>SMS</h3>
+
+  <form id='sms-form' action="" method="post">{% csrf_token %}
+    <ul class='inline'>
+      <li>Send SMS:</li>
+      <li>{{ form.to_number }}</li>
+      <li>{{ form.message }}</li>
+      <li>{{ form.order }}</li>
+      <li><input type="submit" value="Send" /></li>
+    </ul>
+  </form>
 
 <table class='table table-hover table-condensed'>
   <thead>
@@ -16,7 +40,8 @@
   </thead>
 
   {% for sms in sms_messages %}
-    <tr>
+    <tr class='{% if sms.incoming %}incoming{% else %}outgoing{% endif %}'>
+
       <td>{{ sms.created_at|date:"m/d H:i" }}</td>
 
       {% if sms.to_number == anou_phone %}
@@ -37,7 +62,7 @@
         {% if sms.order %}{{ sms.order.id }}{% endif %}
       </td>
 
-      <td>
+      <td class='{% if sms.auto_reply %}outgoing{% endif %}'>
         {% if sms.auto_reply %}{{ sms.auto_reply }}{% endif %}
       </td>
 
