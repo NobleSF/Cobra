@@ -163,10 +163,14 @@ def login_cheat(request):
 
 def logout(request):
   try:
-    if 'username' in request.session: del request.session['username']
-    if 'admin_id' in request.session: del request.session['admin_id']
-    if 'seller_id' in request.session: del request.session['seller_id']
+    if 'username'   in request.session: del request.session['username']
+    if 'admin_id'   in request.session: del request.session['admin_id']
+    if 'seller_id'  in request.session: del request.session['seller_id']
+    if 'next'       in request.session: del request.session['next']
+    if 'cart_id'    in request.session: del request.session['cart_id']
+
     return redirect('home')
+
   except Exception as e:
     context = {'exception': e}
     return render(request, 'public/home.html', context)
