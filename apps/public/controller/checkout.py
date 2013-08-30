@@ -112,9 +112,9 @@ def confirmation(request):
       ) or (
           checkout_data.get('manual_order')
       ):
-        orders = getOrders(checkout_id)
-        if cart.count:
+        if cart.count: #if there are things in the cart
           cart.checkout()
+          orders = getOrders(checkout_id) #must run after cart.checkout()
 
         if request.session.get('cart_id') and cart.cart.id == request.session.get('cart_id'):
           del request.session['cart_id']
