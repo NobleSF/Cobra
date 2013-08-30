@@ -326,7 +326,10 @@ class Cart(object):
           self.cart.address1  = wepay_checkout_data['shipping_address'].get('address1')
           self.cart.address2  = wepay_checkout_data['shipping_address'].get('address2')
           self.cart.city      = wepay_checkout_data['shipping_address'].get('city')
-          self.cart.country   = wepay_checkout_data['shipping_address'].get('country')
+          if wepay_checkout_data['shipping_address'].get('country') == 'US':
+            self.cart.country = 'USA'
+          else:
+            self.cart.country = wepay_checkout_data['shipping_address'].get('country')
 
           #check for non-US address first
           if (wepay_checkout_data['shipping_address'].get('region') or
