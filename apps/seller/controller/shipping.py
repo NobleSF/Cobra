@@ -7,7 +7,9 @@ def calculateShippingCost(weight, shipping_option):
   shipping_cost = 9999
   rates = {}
 
-  if (shipping_option.country.code == 'MA') and (shipping_option.name == 'Envelope'):
+  if (shipping_option.country.code == 'MA' and
+      int(weight) <= 450 and
+      shipping_option.name == 'Envelope'):
     rates = {
       '20': '14',
       '40': '29.5',
@@ -21,13 +23,9 @@ def calculateShippingCost(weight, shipping_option):
       '350': '168.7',
       '400': '181.1',
       '450': '199.8',
-      '500': '202',
-      '750': '202',
-      '1000': '202',
-      '2000': '202'
     }
 
-  elif (shipping_option.country.code == 'MA') and (shipping_option.name == 'Package'):
+  elif (shipping_option.country.code == 'MA'): #Package shipping_option
     rates = {
       '1000': '202',
       '2000': '290',
