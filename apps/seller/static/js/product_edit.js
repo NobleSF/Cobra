@@ -28,6 +28,19 @@ $().ready( function(){
     .css('opacity', '0.01');
   });
 
+  $('#id_weight').on('blur', function(){
+    envelope = $('#shipping-option-chooser-section .asset[store-object_id=2]');
+    if ($(this).val() > 450){
+      //should use a box, so hide the envelope shipping option
+      if ($(envelope).hasClass('selected')){
+        $(envelope).click();
+      }
+      envelope.hide();
+    }else{
+      envelope.show();
+    }
+  });
+
   markAssignedAssetsAsSelected();
 
   //activate the "show more" link in the summary
