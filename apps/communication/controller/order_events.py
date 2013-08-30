@@ -12,12 +12,11 @@ def communicateOrdersCreated(orders):
       for product in order.products.all():
         products_string += "%d  " % product.id
 
-        #message each artisan that their product has sold and for how much
-        artisan_msg = "%d \r\n %d Dh" % (product.id, product.price)
-        for artisan in product.assets.filter(ilk='artisan'):
-          pass
-          #artisan assets need phone numbers
-          #sendSMSForOrder(artisan_msg, artisan.phone, order)
+        try: #message each artisan that their product has sold and for how much
+          artisan_msg = "%d \r\n %d Dh" % (product.id, product.price)
+          for artisan in product.assets.filter(ilk='artisan'):
+            sendSMSForOrder(artisan_msg, artisan.phone, order)
+        except: pass
 
       #message the seller with the address
       address_string = getCustomerAddressFromOrder(order, sms_format=True)
