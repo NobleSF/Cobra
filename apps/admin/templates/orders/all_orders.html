@@ -1,23 +1,50 @@
 {% extends "admin_base.html" %}
 {% load url from future %}
+
+{% block javascript %}
+  <script>
+    $().ready(function(){
+    });
+
+    $('.information-row').on('click', function(){
+      $(this).toggleClass('highlight')
+      $(this).next('.details-row').toggle()
+    })
+
+    $('.load-details').on('click', function(){
+      $(this).html('coming soon ;-)').addClass('disabled');
+    })
+
+  </script>
+{% endblock javascript %}
+
+{% block css %}
+  <style>
+
+    .information-row{cursor: pointer;}
+    .details-row{display: none;}
+    .highlight, .details-row{background-color: #f5f5f5;}
+
+  </style>
+{% endblock css %}
+
 {% block content %}
 
-<h3>ALL ORDERS</h3>
+<h3>ORDERS</h3>
 
 <table class='table table-hover table-condensed'>
   <thead>
     <td>DATE&nbsp;&nbsp;TIME</td>
     <td>SELLER</td>
     <td>PROD.&nbsp;ID</td>
-    <td>&#8776;CHARGE</td>
     <td>TO&nbsp;SELLER</td>
     <td>STATUS</td>
     <td>TRACKING</td>
-    <td>NOTES</td>
   </thead>
 
   {% for order in orders %}
-    <tr>
+    <tr class='information-row'>
+
       <td>{{ order.created_at|date:"m/d H:i" }}</td>
       <td>{{ order.products.all.0.seller.name }}</td>
 
@@ -27,10 +54,6 @@
         </a>
       </td>
 
-      <td>
-        {{ order.total_charge|floatformat:0 }}
-        <small>{{ order.products.all.0.seller.currency.code }}</small>
-      </td>
       <td>
         {{ order.seller_paid_amount|floatformat:0 }}
         <small>{{ order.products.all.0.seller.currency.code }}</small>
@@ -48,8 +71,49 @@
           <a href="https://tools.usps.com/go/TrackConfirmAction_input?qtc_tLabels1={{ order.tracking_number }}" target='_blank'>{{ order.tracking_number }}</a>
         {% endif %}
       </td>
-      <td>{% if order.notes %}{{ order.notes }}{% endif %}</td>
 
+    </tr>
+
+    <tr class='details-row'>
+
+      <td>
+        <a href="{% url 'confirmation' %}?checkout_id={{order.cart.checkout_id}}"
+            target='_blank'>
+          Confirmation<br>
+          {{order.cart.checkout_id}}
+        </a>
+      </td>
+
+      <td>
+        {% if order.shipping_address %}{{ order.shipping_address|safe }}{% endif %}
+      </td>
+
+      {% if order.cart.notes or order.cart.receipt %}
+
+        <td colspan='2'>
+          {% if order.cart.notes %}{{ order.cart.notes }}{% endif %}
+        </td>
+
+        <td colspan='2'>
+          {% if order.cart.receipt %}{{ order.cart.receipt }}{% endif %}
+        </td>
+
+      {% else %}
+
+        <td colspan='4'>
+          <div class='WePay-details text-center'>
+            <button class='load-details btn btn-info'>
+              load details from WePay
+            </button>
+            <!-- content goes here -->
+            <span class='gross'></span>
+            <span class='fee'></span>
+            <span class='revenue'></span>
+            <span class='profit'></span>
+          </div>
+        </td>
+
+      {% endif %}
     </tr>
   {% endfor %}
 
