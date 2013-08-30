@@ -4,6 +4,7 @@ from datetime import datetime
 class Cart(models.Model):
   email               = models.EmailField(blank=True, null=True)
   name                = models.CharField(max_length=100, null=True, blank=True)
+  address_name        = models.CharField(max_length=100, null=True, blank=True)
   address1            = models.CharField(max_length=100, null=True, blank=True)
   address2            = models.CharField(max_length=100, null=True, blank=True)
   city                = models.CharField(max_length=50,  null=True, blank=True)

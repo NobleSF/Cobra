@@ -68,7 +68,7 @@ fieldset legend{
 
 #manual-checkout-form #address-div{margin: 5% 0;}
 
-#id_address1, #id_address2{width: 350px;}
+#id_address_name, #id_address1, #id_address2{width: 350px;}
 #id_city, #id_postal_code{width: 250px;}
 #id_state, #id_country{width: 100px;}
 #id_notes, #id_receipt{width: 350px;}

@@ -98,6 +98,8 @@ class Cart(object):
       elif attribute == 'name':
         self.cart.name = value
 
+      elif attribute == 'address_name':
+        self.cart.address_name = value
       elif attribute == 'address1':
         self.cart.address1 = value
       elif attribute == 'address2':
@@ -131,6 +133,8 @@ class Cart(object):
       elif attribute == 'name':
         value = self.cart.name
 
+      elif attribute == 'address_name':
+        value = self.cart.address_name
       elif attribute == 'address1':
         value = self.cart.address1
       elif attribute == 'address2':
@@ -317,6 +321,8 @@ class Cart(object):
 
         #US or international address, all should match up except state, postal_code
         if wepay_checkout_data.get('shipping_address'):
+
+          self.cart.address_name = wepay_checkout_data['shipping_address'].get('name')
           self.cart.address1  = wepay_checkout_data['shipping_address'].get('address1')
           self.cart.address2  = wepay_checkout_data['shipping_address'].get('address2')
           self.cart.city      = wepay_checkout_data['shipping_address'].get('city')
@@ -335,6 +341,8 @@ class Cart(object):
 
         self.cart.save() #save all our address changes
 
+      if self.cart.address_name:
+        checkout_data['shipping_address']['name']       = self.cart.address_name
       checkout_data['shipping_address']['address1']     = self.cart.address1
       checkout_data['shipping_address']['address2']     = self.cart.address2
       checkout_data['shipping_address']['city']         = self.cart.city

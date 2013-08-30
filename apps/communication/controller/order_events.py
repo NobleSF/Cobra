@@ -165,7 +165,11 @@ def getCustomerEmailFromOrder(order):
 
 def getCustomerAddressFromOrder(order, sms_format=False):
   address  = "\r\n" if sms_format else ""
-  address += str(order.cart.name)
+
+  if order.cart.address_name:
+    address += str(order.cart.address_name)
+  else:
+    address += str(order.cart.name)
   address += "\r\n" if sms_format else "<br>"
 
   address += str(order.cart.address1)

@@ -8,6 +8,7 @@ def manual_checkout_tag(cart):
   form = ManualCheckoutForm()
 
   try:
+    form.fields['address_name'].initial = cart.getData('address_name')
     form.fields['address1'].initial     = cart.getData('address1')
     form.fields['address2'].initial     = cart.getData('address2')
     form.fields['city'].initial         = cart.getData('city')

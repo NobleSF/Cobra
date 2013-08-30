@@ -10,6 +10,8 @@ class CartForm(forms.Form):
 
 class ManualCheckoutForm(forms.Form):
   #SHIPPING ADDRESS
+  address_name= forms.CharField(max_length=100, widget=forms.TextInput(
+                  attrs={'class':"autosave required", 'placeholder':"address name"}))
   address1    = forms.CharField(max_length=100, widget=forms.TextInput(
                   attrs={'class':"autosave required", 'placeholder':"address line 1"}))
   address2    = forms.CharField(max_length=100, widget=forms.TextInput(
