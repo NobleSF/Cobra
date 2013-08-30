@@ -55,8 +55,13 @@ def allSMS(request):
 
 @access_required('admin')
 def allEmail(request):
+  from settings.people import Tom, Dan, Brahim
 
-  emails = Email.objects.all().order_by('created_at').reverse()[:100]
+  emails = (Email.objects.all()
+            .exclude(to_address__contains = Dan.email)
+            .exclude(to_address__contains = Tom.email)
+            .exclude(to_address__contains = Brahim.email)
+            .order_by('created_at').reverse()[:50])
 
   for email in emails:
     try:
