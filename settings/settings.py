@@ -29,7 +29,7 @@ ADMINS = (('Developer', 'dev@theanou.com'),)
 MANAGERS = ADMINS
 
 if PRODUCTION or STAGE:
-  DATABASES['default'] =  dj_database_url.config()
+  DATABASES = {'default': dj_database_url.config()}
   SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 else:
   DATABASES = {
@@ -111,6 +111,9 @@ else:
     'webhook_url':      'http://localcobra.pagekite.me/communication/sms/incoming',
     'webhook_secret':   'QNCWR2444MRT6R2G74UDTMTA6QKM2TET'
   }
+if STAGE:
+  TELERIVET['status_url'] = 'http://anou-cobra-stage.herokuapp.com/communication/sms/status_confirmation'
+  TELERIVET['webhook_url'] = 'http://anou-cobra-stage.herokuapp.com/communication/sms/incoming'
 
 #WEPAY PAYMENT AND CHECKOUT PROCESSING
 if PAYMENTS_PRODUCTION:
@@ -118,15 +121,19 @@ if PAYMENTS_PRODUCTION:
     'client_id':      '114473',
     'client_secret':  '443ad32d57',
     'access_token':   'PRODUCTION_ed41e33671a46b6a3a93e6c6c6d45265fcb62a8f04998d232391bcd3e39749f9',
-    'account_id':     '519238566'
+    'account_id':     '519238566',
+    'redirect_uri':   'http://www.theanou.com/checkout/confirmation'
   }
 else:
   WEPAY = {
     'client_id':      '137470',
     'client_secret':  '463bfe717b',
     'access_token':   'STAGE_3c234c249310a336d4999b8604b73a27ac5ec6e7255ac9a7ef3d0b6c2629079e',
-    'account_id':     '854657449'
+    'account_id':     '854657449',
+    'redirect_uri':   'http://localcobra.pagekite.me/checkout/confirmation'
   }
+if STAGE:
+  WEPAY['redirect_uri'] = 'http://anou-cobra-stage.herokuapp.com/checkout/confirmation'
 
 DEBUG_TOOLBAR_PANELS = (
   'debug_toolbar.panels.version.VersionDebugPanel',
