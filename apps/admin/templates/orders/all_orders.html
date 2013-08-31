@@ -7,8 +7,8 @@
     });
 
     $('.information-row').on('click', function(){
-      $(this).toggleClass('highlight')
-      $(this).next('.details-row').toggle()
+      $(this).toggleClass('highlight');
+      $(this).next('.details-row').toggle();
     })
 
     $('.load-details').on('click', function(){
@@ -49,7 +49,8 @@
       <td>{{ order.products.all.0.seller.name }}</td>
 
       <td>
-        <a href="{% url 'product' order.products.all.0.id %}">
+        <a href="{% url 'product' order.products.all.0.id %}"
+            target='_blank'>
           {{ order.products.all.0.id }}
         </a>
       </td>
@@ -68,7 +69,9 @@
 
       <td>
         {% if order.tracking_number %}
-          <a href="https://tools.usps.com/go/TrackConfirmAction_input?qtc_tLabels1={{ order.tracking_number }}" target='_blank'>{{ order.tracking_number }}</a>
+          <a href="https://tools.usps.com/go/TrackConfirmAction_input?qtc_tLabels1={{ order.tracking_number }}" target='_blank'>
+            {{ order.tracking_number }}
+          </a>
         {% endif %}
       </td>
 
