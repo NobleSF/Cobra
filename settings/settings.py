@@ -193,7 +193,7 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-if PRODUCTION:
+if PRODUCTION or STAGE:
   MEDIA_ROOT = '/media/'
 else:
   MEDIA_ROOT = os.path.join(SITE_ROOT, 'media')
@@ -213,7 +213,7 @@ STATIC_ROOT = '/static/'
 # Example: "http://media.lawrence.com/static/"
 AWS_STATIC_URL = 'http://s3.amazonaws.com/' + AWS_STORAGE_BUCKET_NAME + '/'
 STATIC_URL = AWS_STATIC_URL
-if not PRODUCTION: STATIC_URL = '/static/'
+if not (PRODUCTION or STAGE): STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -238,7 +238,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-if PRODUCTION:
+if PRODUCTION or STAGE:
   SECRET_KEY = 'sx^lszi^cgqdvv#g^djamr56=pkqatt(20=bjeo3++*v8rbue!'
 else:
   SECRET_KEY = 'ie+b=mflibb8_#tzf_3&amp;+l$@=kgbgapj-8odui3b&amp;18a(c!$vz'
@@ -259,7 +259,7 @@ MIDDLEWARE_CLASSES = (
   # Uncomment the next line for simple clickjacking protection:
   # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
-if not PRODUCTION:
+if not (PRODUCTION or STAGE):
   MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
 
 ROOT_URLCONF = 'settings.urls'
@@ -274,7 +274,7 @@ TEMPLATE_DIRS = (
   # Always use forward slashes, even on Windows.
   # Don't forget to use absolute paths, not relative paths.
 )
-if not PRODUCTION:
+if not (PRODUCTION or STAGE):
   TEMPLATE_DIRS += ('C:\django\django-debug-toolbar\debug_toolbar\templates',)
 
 INSTALLED_APPS = (
@@ -299,7 +299,7 @@ INSTALLED_APPS = (
   # Uncomment the next line to enable admin documentation:
   # 'django.contrib.admindocs',
 )
-if not PRODUCTION:
+if not (PRODUCTION or STAGE):
   INSTALLED_APPS += ('debug_toolbar',)
 
 TEMPLATE_CONTEXT_PROCESSORS = (
