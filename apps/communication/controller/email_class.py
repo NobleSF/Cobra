@@ -2,7 +2,7 @@ from apps.communication import models
 from django.template import Context
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
-from settings.settings import DEBUG
+from settings.settings import STAGE, DEBUG
 from apps.admin.controller.decorator import postpone
 
 class Email(object):
@@ -33,7 +33,7 @@ class Email(object):
     #allow the function to receive a string or a list
     self.to = [to] if isinstance(to, basestring) else to
 
-    if DEBUG: #redirect non-production emails
+    if STAGE or DEBUG: #redirect non-production emails
       self.text_body = "*STAGE* To: %s\n %s" % (','.join(self.to), self.text_body)
       self.html_body = "<h2>*STAGE* To: %s</h2> %s" % (','.join(self.to), self.html_body)
       self.to = ['dev+test@theanou.com']

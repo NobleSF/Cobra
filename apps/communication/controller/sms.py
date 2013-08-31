@@ -1,6 +1,6 @@
 import requests
 from requests.auth import HTTPBasicAuth
-from settings.settings import TELERIVET, DEBUG
+from settings.settings import TELERIVET, STAGE, DEBUG
 import simplejson as json
 import re #regular expressions
 from django.http import HttpResponse
@@ -146,7 +146,7 @@ def incoming(request):
           #todo: email Brahim about this incoming text product with wrong owner
 
     except Exception as e:
-      if DEBUG:
+      if STAGE or DEBUG:
         response = {'messages':[{'content':str(e)}]}
         return HttpResponse(json.dumps(response), mimetype='application/json')
       else:
