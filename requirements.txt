@@ -12,7 +12,6 @@ newrelic
 numpy==1.6.2
 psycopg2==2.4.5
 pycrypto==2.6
-pylibmc==1.2.3
 requests
 simplejson==3.1.2
 virtualenv==1.8.2
