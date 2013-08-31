@@ -3,19 +3,20 @@ import dj_database_url, os, socket
 from people import *
 
 LOCAL_MACHINES = ['TOMCOUNSELL']
-try:
-  if os.environ['COMPUTERNAME'] in LOCAL_MACHINES:
-    PRODUCTION = False
-    DEBUG = True
-  else:
-    PRODUCTION = True
-    DEBUG = False
-except Exception as e:
-    PRODUCTION = True
-    DEBUG = False
 
-PAYMENTS_PRODUCTION = not DEBUG
-TEMPLATE_DEBUG = DEBUG
+if 'NAME' in os.environ and os.environ['NAME'] == 'anou-cobra':
+  PRODUCTION = True
+  STAGE = False
+elif 'NAME' in os.environ and os.environ['NAME'] == 'anou-cobra-stage':
+  PRODUCTION = False
+  STAGE = True
+else: #probably on LOCAL_MACHINES
+  PRODUCTION = False
+  STAGE = False
+
+PAYMENTS_PRODUCTION = PRODUCTION
+DEBUG = not PRODUCTION
+TEMPLATE_DEBUG = not (STAGE or PRODUCTION)
 
 ANOU_FEE_RATE = 0.15
 DAYS_UNTIL_PRODUCT_EXPIRES = 120
@@ -24,26 +25,27 @@ UNDER_CONSTRUCTION = False
 INTERNAL_IPS = ('127.0.0.1',)
 SITE_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
-ADMINS = (
-  ('Developer', 'dev@theanou.com'),
-)
+ADMINS = (('Developer', 'dev@theanou.com'),)
 MANAGERS = ADMINS
 
-DATABASES = {
-  'default': {
-    'ENGINE':   'django.db.backends.mysql',   # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-    'NAME':     'cobra',                      # Or path to database file if using sqlite3.
-    'USER':     'Cobra',                      # Not used with sqlite3.
-    'PASSWORD': '4WuPb3eMDyfByVBs',           # Not used with sqlite3.
-    'HOST':     '',                           # Set to empty string for localhost. Not used with sqlite3.
-    'PORT':     '',                           # Set to empty string for default. Not used with sqlite3.
-  }
-}
-if PRODUCTION:
+if PRODUCTION or STAGE:
   DATABASES['default'] =  dj_database_url.config()
   SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+else:
+  DATABASES = {
+    'default': {
+      'ENGINE':   'django.db.backends.mysql',   # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+      'NAME':     'cobra',                      # Or path to database file if using sqlite3.
+      'USER':     'Cobra',                      # Not used with sqlite3.
+      'PASSWORD': '4WuPb3eMDyfByVBs',           # Not used with sqlite3.
+      'HOST':     '',                           # Set to empty string for localhost. Not used with sqlite3.
+      'PORT':     '',                           # Set to empty string for default. Not used with sqlite3.
+    }
+  }
 
 ################## 3RD PARTY SERVICES ##################
+
+#these should all be environment variables, ideally
 
 #AMAZON WEB STORAGE S3, STATIC FILE HOSTING
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
@@ -53,7 +55,7 @@ AWS_STORAGE_BUCKET_NAME = 'anou'
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 #CLOUDINARY IMAGE AND PHOTO HOSTING
-if PRODUCTION:
+if PRODUCTION or STAGE:
   CLOUDINARY = {
     'cloud_name':     'hork5h8x1',
     'api_key':        '697913462329845',
@@ -111,7 +113,7 @@ else:
   }
 
 #WEPAY PAYMENT AND CHECKOUT PROCESSING
-if PRODUCTION:
+if PAYMENTS_PRODUCTION:
   WEPAY = {
     'client_id':      '114473',
     'client_secret':  '443ad32d57',
@@ -152,6 +154,7 @@ DEBUG_TOOLBAR_CONFIG = {
 ALLOWED_HOSTS = [
   'www.theanou.com',
   'anou-cobra.herokuapp.com',
+  'anou-cobra-stage.herokuapp.com',
   'localhost'
 ]
 
