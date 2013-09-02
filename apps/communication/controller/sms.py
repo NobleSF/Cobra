@@ -8,6 +8,8 @@ from django.views.decorators.csrf import csrf_exempt
 from apps.communication.models import SMS
 from apps.seller.models import Product
 from apps.admin.controller.decorator import postpone
+from apps.communication.controller.email_class import Email
+from settings.people import Tom
 
 def sendSMS(message, to_number, priority='1'): #using Telerivet
   try:
@@ -49,8 +51,6 @@ def sendSMSForOrder(message, to_number, order, priority='1'):
 
   try:
     if error_message:
-      from apps.communication.controller.email_class import Email
-      from settings.people import Tom
       Email(message=error_message).sendTo(Tom.email)
   except: pass
 
@@ -150,8 +150,9 @@ def incoming(request):
         response = {'messages':[{'content':str(e)}]}
         return HttpResponse(json.dumps(response), mimetype='application/json')
       else:
+        error_message = "error on incoming SMS: " +  str(e)
+        Email(message=error_message).sendTo(Tom.email)
         return HttpResponse(status=500)#server error, our fault, Telerivet will try again
-        #todo: do something about it
 
   else:
     return HttpResponse(status=403)#forbidden, didn't come from Telerivet
