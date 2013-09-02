@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from apps.admin.controller.decorator import access_required
 from django.contrib import messages
 from django.utils import simplejson
@@ -8,17 +8,15 @@ from apps.communication.models import SMS, Email
 from apps.seller.models import Seller
 
 @access_required('admin')
-def allSMS(request):
-  from settings.settings import TELERIVET
-  from apps.admin.controller.forms import SMSForm
-  from apps.communication.controller.sms import sendSMS
+def sendSMS(request):
+  from apps.communication.controller import sms as sms_controller
 
   if request.method == 'POST':
     to_number = request.POST.get('to_number')
     message   = request.POST.get('message')
     order_id  = request.POST.get('order')
 
-    sms = sendSMS(message, to_number)
+    sms = sms_controller.sendSMS(message, to_number)
     if isinstance(sms, SMS):
       try:
         if order_id:
@@ -29,8 +27,17 @@ def allSMS(request):
       else:
         messages.success(request, "SMS sent!")
     else:
+      from settings.people import Tom
+      error_message = "sendSMS received error in sms: " + str(sms)
+      Email(message=error_message).sendTo(Tom.email)
       messages.error(request, "SMS failed!")
-      context['except'] = str(sms)
+
+  return redirect('admin:all sms')
+
+@access_required('admin')
+def allSMS(request):
+  from settings.settings import TELERIVET
+  from apps.admin.controller.forms import SMSForm
 
   sms_messages = SMS.objects.all().order_by('created_at').reverse()[:100]
 
