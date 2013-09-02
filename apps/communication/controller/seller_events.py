@@ -8,7 +8,8 @@ def createdSeller(account):
  pass
 
 def activatedProduct(product):
-  Email('product/activated', product).sendTo(people.Dan.email)
+  email = Email('product/activated', product).sendFrom('system@theanou.com')
+  email.sendTo(people.Dan.email)
 
 def deactivateProduct(product):
   from apps.seller.controller.product_class import Product

@@ -21,11 +21,19 @@ class Email(object):
       self.text_body = render_to_string(text_body_template, context)
       self.html_body = render_to_string(html_body_template, context)
 
+      #default from address
+      self.from_email = "Anou <hello@theanou.com>"
+
     else:
       message = message if message else 'test email body'
       self.subject = 'notification'
       self.text_body = message
       self.html_body = '<p>%s</p>' % message
+      self.from_email = 'system@theanou.com'
+
+  def sendFrom(self, from_email):
+    self.from_email = from_email
+    return self
 
   @postpone #cannot return a value, handle errors internally
   def sendTo(self, to): #sends the email object to the provided email or list of emails
@@ -34,15 +42,21 @@ class Email(object):
     self.to = [to] if isinstance(to, basestring) else to
 
     if STAGE or DEBUG: #redirect non-production emails
-      self.text_body = "*STAGE* To: %s\n %s" % (','.join(self.to), self.text_body)
-      self.html_body = "<h2>*STAGE* To: %s</h2> %s" % (','.join(self.to), self.html_body)
-      self.to = ['dev+test@theanou.com']
+      server_name = 'STAGE' if STAGE else 'LOCAL'
+      self.text_body = "*%s* To: %s\n %s" % (server_name,
+                                             ','.join(self.to),
+                                             self.text_body)
+      self.html_body = "<h2>*%s* To: %s</h2> %s" % (server_name,
+                                                    ','.join(self.to),
+                                                    self.html_body)
+      self.to = [('dev+test-%s@theanou.com' % server_name)]
+      self.from_email = "stage@theanou.com" if STAGE else "local@theanou.com"
 
     try:
       self.mail = EmailMultiAlternatives(
                     subject     = self.subject,
                     body        = self.text_body,
-                    from_email  = "Anou <hello@theanou.com>",
+                    from_email  = self.from_email,
                     to          = self.to
                   )
       #sendgrid settings automatically bcc dump@theanou.com on every email
@@ -66,7 +80,7 @@ class Email(object):
           from apps.communication.controller.sms import sendSMS
           from settings.people import Tom
           sendSMS("THE SKY IS FALLING! \r\n in email_class sendTo()", Tom.phone)
-      except: pass #life is pointless
+      except: pass #resistance is futile
 
   def save(self):
     try:    self.order
