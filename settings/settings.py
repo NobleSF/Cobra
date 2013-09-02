@@ -1,5 +1,6 @@
 # Django settings for Anou project.
 import dj_database_url, os, socket
+from memcacheify import memcacheify
 from people import *
 
 LOCAL_MACHINES = ['TOMCOUNSELL']
@@ -164,6 +165,8 @@ ALLOWED_HOSTS = [
   'anou-cobra-stage.herokuapp.com',
   'localhost'
 ]
+
+CACHES = memcacheify()
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
