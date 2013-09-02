@@ -136,6 +136,15 @@ else:
 if STAGE:
   WEPAY['redirect_uri'] = 'http://anou-cobra-stage.herokuapp.com/checkout/confirmation'
 
+if PRODUCTION:
+  CACHES = memcacheify()
+else:
+  CACHES = {
+    'default': {
+      'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+  }
+
 DEBUG_TOOLBAR_PANELS = (
   'debug_toolbar.panels.version.VersionDebugPanel',
   'debug_toolbar.panels.timer.TimerDebugPanel',
@@ -165,8 +174,6 @@ ALLOWED_HOSTS = [
   'anou-cobra-stage.herokuapp.com',
   'localhost'
 ]
-
-CACHES = memcacheify()
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

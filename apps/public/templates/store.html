@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load url from future %}
+{% load cache %}
 
 {% block title %}
   {{ store.name }}
@@ -14,6 +15,7 @@
 {% endblock css %}
 
 {% block content %}
+{% cache 600 public_store_content %}
   <div id='store' class='row-fluid'>
     <div id='info-left' class='span4'>
       <ul>
@@ -94,7 +96,7 @@
         {% for product in products %}
 
           <div class='span6 product-area {% cycle "pos1" "pos2" %}'>
-            {% product_tag product 'sans_artisan' %}
+            {% product_tag product %}
           </div>
 
           {% cycle "" "</div><div class='product-row row-fluid'>" %}
@@ -104,5 +106,5 @@
     </div>
   </div>
 
-
+{% endcache %}
 {% endblock content %}

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load url from future %}
+{% load cache %}
 
 {% block title %}
   {{ product.name }} by {{ product.seller.name }}
@@ -14,12 +15,11 @@
 {% endblock css %}
 
 {% block content %}
+{% cache 600 public_product_content product.is_sold %}
   <div id='product' class='row-fluid'>
     <div class='span8'>
       <div id='photos' class='carousel slide'>
-        <ol class='carousel-indicators'>
-
-        </ol>
+        <ol class='carousel-indicators'></ol>
         <!-- Carousel items -->
         <div class='carousel-inner'>
           {% for photo in product.photos %}
@@ -89,7 +89,12 @@
       {% if product.is_sold %}
         <a id='buy-button' class='btn btn-primary btn-danger disabled'
            href="">
-          <h2>Sold</h2>
+          <h2>
+            {% if product.recently_sold %}
+              Sorry, this product just sold today.
+            {% else %}Sold
+            {% endif %}
+          </h2>
         </a>
       {% else %}
         <a id='buy-button' class='btn btn-primary btn-success'
@@ -186,7 +191,7 @@
       {% for product in more_products %}
 
         <div class='span4 product-area {% cycle "pos1" "pos2" "pos3" %}'>
-          {% product_tag product 'sans_artisan' %}
+          {% product_tag product %}
         </div>
 
         {% cycle "" "" "</div><div class='product-row row-fluid'>" %}
@@ -194,4 +199,5 @@
     </div>
   </div>
 
+{% endcache %}
 {% endblock content %}

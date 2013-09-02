@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load url from future %}
+{% load cache %}
 {% load home_inclusion_tags %}
 
 {% block title %}
@@ -24,6 +25,7 @@
 {% endblock header_link_2 %}
 
 {% block content %}
+{% cache 600 home_content %} {# cache for 24 hours minus 1 minute = 86400 sec #}
   <div class='row-fluid'>
     <div class='span8'>
       <img id='video-image'
@@ -108,5 +110,5 @@
   </div>
 
   <div id='product-sorting-container' class=''></div>
-
+{% endcache %}
 {% endblock content %}
