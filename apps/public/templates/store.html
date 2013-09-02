@@ -15,7 +15,7 @@
 {% endblock css %}
 
 {% block content %}
-{% cache 600 public_store_content %}
+{% cache 600 public_store_content store.id %}
   <div id='store' class='row-fluid'>
     <div id='info-left' class='span4'>
       <ul>

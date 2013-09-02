@@ -15,7 +15,7 @@
 {% endblock css %}
 
 {% block content %}
-{% cache 600 public_product_content product.is_sold %}
+{% cache 600 public_product_content product.id product.is_sold %}
   <div id='product' class='row-fluid'>
     <div class='span8'>
       <div id='photos' class='carousel slide'>
