@@ -80,6 +80,9 @@ class Product(models.Model):
   @property
   def is_sold(self): return True if self.sold_at else False
 
+  #@property
+  #def is_recently_sold(self): todo
+
   @property
   def is_approved(self): return True if self.approved_at else False
 
