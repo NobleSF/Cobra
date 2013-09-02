@@ -41,7 +41,7 @@ class AccountPasswordForm(forms.Form):
 class SMSForm(forms.Form):
   to_number     = forms.CharField(widget=NumberInput(
                           attrs={'placeholder':'phone #'}))
-  message       = forms.CharField(widget=forms.TextInput(
+  message       = forms.CharField(widget=forms.Textarea(
                           attrs={'placeholder':'message'}))
   order         = forms.CharField(widget=forms.TextInput(
                           attrs={'placeholder':'order #'}))

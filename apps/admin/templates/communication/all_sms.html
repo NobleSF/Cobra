@@ -1,4 +1,5 @@
 {% extends "admin_base.html" %}
+{% load url from future %}
 
 {% block css %}
   <style>
@@ -6,7 +7,7 @@
 
     #sms-form{float: right; padding: 21m;}
     #sms-form #id_to_number{width: 7em;}
-    #sms-form #id_message{width: 25em;}
+    #sms-form #id_message{width: 20em; height: 2em;}
     #sms-form #id_order{width: 3.5em;}
 
     .incoming{background-color: rgb(218, 253, 218);}
@@ -18,13 +19,13 @@
 
   <h3 class='page-title'>SMS</h3>
 
-  <form id='sms-form' action="" method="post">{% csrf_token %}
+  <form id='sms-form' action="{% url 'admin:send sms'%}" method="post">{% csrf_token %}
     <ul class='inline'>
       <li>Send SMS:</li>
       <li>{{ form.to_number }}</li>
       <li>{{ form.message }}</li>
       <li>{{ form.order }}</li>
-      <li><input type="submit" value="Send" /></li>
+      <li><button type='submit' class='btn btn-large'>Send</button></li>
     </ul>
   </form>
 
@@ -57,7 +58,7 @@
       </td>
       <td>{{ sms.phone_number }}</td>
 
-      <td>{{ sms.message }}</td>
+      <td>{{ sms.message|linebreaksbr }}</td>
       <td>
         {% if sms.order %}{{ sms.order.id }}{% endif %}
       </td>

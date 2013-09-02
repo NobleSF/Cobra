@@ -33,8 +33,9 @@ urlpatterns += patterns('',
   url(r'^admin/all_orders$', orders.allOrders, name='all orders'),
 
   #COMMUNICATION
-  url(r'^admin/all_sms$', communication.allSMS, name='all sms'),
-  url(r'^admin/all_email$', communication.allEmail, name='all email'),
+  url(r'^admin/send_sms$', communication.sendSMS, name='send sms'),
+  url(r'^admin/sms$', communication.allSMS, name='all sms'),
+  url(r'^admin/email$', communication.allEmail, name='all email'),
 
   #SETTINGS
   url(r'^admin/management/country$', site_management.country, name='country'),
