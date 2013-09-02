@@ -167,21 +167,30 @@ def getCustomerAddressFromOrder(order, sms_format=False):
 
   if order.cart.address_name:
     address += str(order.cart.address_name)
-  else:
+    address += "\r\n" if sms_format else "<br>"
+  elif order.cart.name:
     address += str(order.cart.name)
-  address += "\r\n" if sms_format else "<br>"
+    address += "\r\n" if sms_format else "<br>"
 
-  address += str(order.cart.address1)
-  address += "\r\n" if sms_format else "<br>"
+  if order.cart.address1:
+    address += str(order.cart.address1)
+    address += "\r\n" if sms_format else "<br>"
 
   if order.cart.address2:
     address += str(order.cart.address2)
     address += "\r\n" if sms_format else "<br>"
 
-  address += str(order.cart.city) + ", "
-  address += str(order.cart.state) + " "
-  address += str(order.cart.postal_code)
-  address += "\r\n" if sms_format else "<br>"
+  if order.cart.city:
+    address += str(order.cart.city) + ", "
 
-  address += str(order.cart.country)
+  if order.cart.state:
+    address += str(order.cart.state) + " "
+
+  if order.cart.postal_code:
+    address += str(order.cart.postal_code)
+
+  if order.cart.country:
+    address += "\r\n" if sms_format else "<br>"
+    address += str(order.cart.country)
+
   return address
