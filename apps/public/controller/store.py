@@ -1,7 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
-from django.template import RequestContext
 from datetime import datetime
 
 def home(request, seller_id):
