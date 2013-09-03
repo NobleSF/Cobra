@@ -51,31 +51,6 @@ def about(request):
 def faq(request):
   return render(request, 'home/faq.html')
 
-def contact(request):
-  return render(request, 'home/contact.html')
-
-def subscribe(request): #ajax requests only
-  from django.db import IntegrityError
-  from apps.communication.models import Subscription
-  try:
-    subscription = Subscription(email=request.GET.get('email'))
-    if request.GET.get('name'):
-      subscription.name = request.GET.get('name')
-    subscription.save()
-    response = {'success': "%s is subscribed" % subscription.email}
-
-  except IntegrityError: #already subscribed
-    if request.GET.get('name'):
-      subscription = Subscription.objects.get(email=request.GET.get('email'))
-      subscription.name = request.GET.get('name')
-      subscription.save()
-    response = {'success': "%s already subscribed" % subscription.email}
-
-  except Exception as e:
-    response = {'exception': str(e)}
-
-  return HttpResponse(simplejson.dumps(response), mimetype='application/json')
-
 def test_meta(request):
   values = request.META.items()
   values.append(['path', request.path])

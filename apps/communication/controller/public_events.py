@@ -3,7 +3,9 @@ from django.utils import simplejson
 from apps.communication.controller.email_class import Email
 from apps.communication.controller.sms import sendSMS
 from settings.settings import DEBUG
+from django.views.decorators.csrf import csrf_exempt
 
+@csrf_exempt
 def subscribe(request): #ajax requests only
   from django.db import IntegrityError, transaction
   from apps.communication.models import Subscription

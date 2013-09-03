@@ -4,7 +4,6 @@ from controller import home, checkout, product, store
 urlpatterns = patterns('',
   #home (site homepage) url defined in anou/urls.py
   url(r'^about$', home.about, name='about'),
-  url(r'^contact$', home.contact, name='contact'),
 
   # product page at /product/123
   url(r'^product/(?P<product_id>\d+)$', product.home, name='product'),
