@@ -139,11 +139,6 @@ class Rating(models.Model):
   def __unicode__(self):
     return unicode(self.value)
 
-class Subscription(models.Model):
-  email               = models.CharField(max_length=100, unique=True)
-  name                = models.CharField(max_length=100, null=True, blank=True)
-  created_at          = models.DateTimeField(auto_now_add = True)
-
 class Visitor(models.Model):#I don't think we need this
   #but south isn't handling the deletion of this model very well
   #it may have never created the relationship table visitor-session
