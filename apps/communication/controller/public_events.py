@@ -6,7 +6,7 @@ from settings.settings import DEBUG
 
 def subscribe(request): #ajax requests only
   from django.db import IntegrityError, transaction
-  from apps.public.models import Subscription
+  from apps.communication.models import Subscription
   try:
     subscription = Subscription(email=request.GET.get('email'))
     if request.GET.get('name'):
