@@ -136,7 +136,7 @@ else:
 if STAGE:
   WEPAY['redirect_uri'] = 'http://anou-cobra-stage.herokuapp.com/checkout/confirmation'
 
-if PRODUCTION:
+if PRODUCTION or ('CACHEING' in os.environ and os.environ['CACHEING'] == 'ON'):
   CACHES = memcacheify()
 else:
   CACHES = {
