@@ -137,7 +137,7 @@
   {% endblock javascript %}
 
 
-  {% if debug %}{# and not debug  #}
+  {% if 'username' not in request.session %}
     {% block facebook %}
       <div id="fb-root"></div>
       <script>(function(d, s, id) {
@@ -149,6 +149,7 @@
       }(document, 'script', 'facebook-jssdk'));</script>
     {% endblock facebook %}
   {% endif %}
+
   {% if 'username' not in request.session and not debug  %}
     {% block zopim %}
       <!--ZOPIM-->
