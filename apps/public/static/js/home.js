@@ -14,9 +14,11 @@ $('#video-image').on('click', function(){
 //PRODUCT ANIMATION
 $('.product').hover(
   function(){ //on mouseenter
-    $(this).find('.hover-show').each(function(){
-      $(this).show();
-    });
+    if(! navigator.userAgent.match(/(iPhone|iPod|iPad)/i)){
+      $(this).find('.hover-show').each(function(){
+        $(this).show();
+      });
+    }
   },
   function(){//on mouseleave
     $(this).find('.hover-show').each(function(){
