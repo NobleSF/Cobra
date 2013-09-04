@@ -1,8 +1,15 @@
 {% extends "base.html" %}
+{% load url from future %}
 
 {% block title %}
   {{ block.super }} About
 {% endblock title %}
+
+{%block open_graph_type%}{%endblock%}
+{%block open_graph_url%}http://www.theanou.com/about{%endblock%}
+{%block open_graph_title%}About Us{%endblock%}
+{%block open_graph_description%}{{ block.super }}{%endblock%}
+{%block open_graph_image%}{{ block.super }}{%endblock%}
 
 {% block content %}
 
@@ -25,12 +32,22 @@
     <u>independence</u>.
   </h4>
   <br>
+
   <p class='text-center'>
     Anou gives artisans the tools they need to overcome
     the challenges they face when selling internationally.<br>
     Finally you can buy amazing crafts
     directly from the artisan who made it.
   </p>
+
+  <div id='facebook' class='text-center hidden-phone'>
+    <div class="fb-like"
+         data-href="http://www.theanou.com/about"
+         data-width="350" data-layout="button_count"
+         data-show-faces="true" data-send="true">
+    </div>
+  </div>
+
 </div>
 
 <h4>Our Story</h4>
@@ -84,7 +101,11 @@
 <br>
 <div class='row-fluid'>
   <div class='span3'>
-    <p title='pretty awesome when you think about it'>Tom Counsell</p>
+    <p title='Old Snow Beard'>
+      <a href='http://www.linkedin.com/in/tomcounsell/' target='_blank'>
+        Tom Counsell
+      </a>
+    </p>
     <p>Technical Director</p>
     <p>tom@theanou.com</p>
     <img>
@@ -96,7 +117,11 @@
 <br>
 <div class='row-fluid'>
   <div class='span3'>
-    <p title='Batman'>Dan Driscoll</p>
+    <p title='Batman'>
+      <a href='http://www.linkedin.com/pub/lawrence-dan-driscoll/23/43b/266' target='_blank'>
+        Dan Driscoll
+      </a>
+    </p>
     <p>Founder of Anou</p>
     <p>dan@theanou.com</p>
     <img>

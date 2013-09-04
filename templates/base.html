@@ -11,6 +11,18 @@
   {% endblock viewport %}
 
   <!---META TAGS--->
+
+  <!--FACEBOOK AND OPEN GRAPH-->
+  <meta property="fb:app_id"      content="213728322126454" />
+  <meta property="og:site_name"   content="Anou Store" />
+  <meta property="og:type"        content="anoustore:{%block open_graph_type%}{%endblock%}" />
+  <meta property="og:url"         content="{%block open_graph_url%}http://www.theanou.com{%endblock%}" />
+  <meta property="og:title"       content="{%block open_graph_title%}Anou Store{%endblock%}" />
+  <meta property="og:description" content="{%block open_graph_description%}Unique and incredible Moroccan handicrafts sold directly by the artisans making it.{%endblock%}" />
+  <meta property="og:image"       content="{%block open_graph_image%}{{ STATIC_URL }}images/Anou_logo_social.png{%endblock%}" />
+
+  {% block additional_meta_tags %}{% endblock additional_meta_tags %}
+
   <!--LEXITY--><meta name="google-site-verification" content="IyA5WKjOphcbszthj4IWtsJbSP3qk9QlDUEe5sYy4WU"/>
 
   <!--favicon-->
@@ -125,7 +137,19 @@
   {% endblock javascript %}
 
 
-  {% if 'username' not in request.session and not debug %}
+  {% if debug %}{# and not debug  #}
+    {% block facebook %}
+      <div id="fb-root"></div>
+      <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=213728322126454";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
+    {% endblock facebook %}
+  {% endif %}
+  {% if 'username' not in request.session and not debug  %}
     {% block zopim %}
       <!--ZOPIM-->
       <!--<script type="text/javascript">window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set._.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute('charset','utf-8');$.src='//cdn.zopim.com/?xlmuDH2WUDECb1kjWcaJOoCY6HHe0F2f';z.t=+new Date;$.type='text/javascript';e.parentNode.insertBefore($,e)})(document,'script');</script>-->

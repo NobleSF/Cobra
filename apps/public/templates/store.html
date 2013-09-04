@@ -2,9 +2,17 @@
 {% load url from future %}
 {% load cache %}
 
+{% cache 86400 public_store_content store.id store.updated_at %}
+
 {% block title %}
   {{ store.name }}
 {% endblock title %}
+
+{%block open_graph_type%}store{%endblock%}
+{%block open_graph_url%}http://www.theanou.com{% url 'store' store.id %}{%endblock%}
+{%block open_graph_title%}{{ store.name }}{%endblock%}
+{%block open_graph_description%}{{ store.bio|truncatewords:"25" }}{%endblock%}
+{%block open_graph_image%}{{ store.image.thumb_size }}{%endblock%}
 
 {% block javascript %}
   <script type="text/javascript" src="{{ STATIC_URL }}public/js/store.min.js"></script>
@@ -15,7 +23,6 @@
 {% endblock css %}
 
 {% block content %}
-{% cache 600 public_store_content store.id %}
   <div id='store' class='row-fluid'>
     <div id='info-left' class='span4'>
       <ul>
@@ -92,6 +99,14 @@
     <div id='products' class='span8'>
       {% load home_inclusion_tags %}
 
+      <div id='faceboook' class='text-center'>
+        <div class="fb-like hidden-phone"
+             data-href="http://www.theanou.com{% url 'store' store.id %}"
+             data-width="400" data-layout="standard"
+             data-show-faces="false" data-send="true">
+        </div>
+      </div>
+
       <div class='product-row row-fluid'>
         {% for product in products %}
 
@@ -106,5 +121,6 @@
     </div>
   </div>
 
-{% endcache %}
 {% endblock content %}
+
+{% endcache %}

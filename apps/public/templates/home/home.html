@@ -3,9 +3,13 @@
 {% load cache %}
 {% load home_inclusion_tags %}
 
-{% block title %}
-  {{ block.super }}
-{% endblock title %}
+{% block title %}{{ block.super }}{% endblock title %}
+
+{%block open_graph_type%}{%endblock%}
+{%block open_graph_url%}http://www.theanou.com{%endblock%}
+{%block open_graph_title%}{{ block.super }}{%endblock%}
+{%block open_graph_description%}{{ block.super }}{%endblock%}
+{%block open_graph_image%}{{ block.super }}{%endblock%}
 
 {% block javascript %}
   <script type="text/javascript" src="{{ STATIC_URL }}public/js/home.min.js"></script>
@@ -25,7 +29,7 @@
 {% endblock header_link_2 %}
 
 {% block content %}
-{% cache 600 home_content %} {# cache for 24 hours minus 1 minute = 86400 sec #}
+{% cache 86400 home_content %} {# cache for 24 hours minus 1 minute = 86400 sec #}
   <div class='row-fluid'>
     <div class='span8'>
       <img id='video-image'
@@ -74,7 +78,8 @@
       </div>
 
     </div>
-    <div class='span4 hidden-phone'>
+    <div class='span4 text-center hidden-phone'>
+
       <div class='well'>
         <h5 class='text-center visible-desktop' style='margin: 0 auto;'>
           Empowering illiterate artisans
@@ -87,7 +92,16 @@
           Finally you can buy unique and incredible crafts
           directly from the artisan who made it.
         </p>
+
+        <div id='facebook' class='hidden-phone'>
+          <div class="fb-like"
+               data-href="http://www.theanou.com"
+               data-width="100" data-layout="button_count"
+               data-show-faces="false" data-send="true">
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 

@@ -1,4 +1,4 @@
-@media (max-width: 980px) {
+@media (max-width: 980px){/* todo: put this in the base css */
   #body{margin-top:0px;}
 }
 #header{border: none;}
@@ -15,6 +15,9 @@
 .top-navigation li{
   padding: 2em .5em;
 }
+
+/* FACEBOOK LIKE BUTTON */
+#facebook{margin: 1em auto 0;}
 
 /* SUBSCRIBE FORM */
 #subscribe-text{line-height: 2em;}

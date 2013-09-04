@@ -2,9 +2,24 @@
 {% load url from future %}
 {% load cache %}
 
+{% cache 86400 public_product_content product.id product.is_sold product.approved_at %}
+
 {% block title %}
   {{ product.name }} by {{ product.seller.name }}
 {% endblock title %}
+
+{%block open_graph_type%}product{%endblock%}
+{%block open_graph_url%}http://www.theanou.com{% url 'product' product.id %}{%endblock%}
+{%block open_graph_title%}{{ product.name }} by {{ product.seller.name }}{%endblock%}
+{%block open_graph_description%}{{ product.description|truncatewords:"25" }}{%endblock%}
+{%block open_graph_image%}{{ product.photos.0.thumb_size }}{%endblock%}
+
+{% block additional_meta_tags %}
+  <meta property="product:price:amount"           content="{{ product.display_price }}" />
+  <meta property="product:price:currency"         content="USD" />
+  <meta property="product:shipping_cost:amount"   content="0.00" />
+  <meta property="product:shipping_cost:currency" content="USD" />
+{% endblock additional_meta_tags %}
 
 {% block javascript %}
   <script type="text/javascript" src="{{ STATIC_URL }}public/js/product.min.js"></script>
@@ -15,7 +30,6 @@
 {% endblock css %}
 
 {% block content %}
-{% cache 600 public_product_content product.id product.is_sold %}
   <div id='product' class='row-fluid'>
     <div class='span8'>
       <div id='photos' class='carousel slide'>
@@ -78,6 +92,20 @@
 
     <div id='actions' class='span4'>
       <table id='buying-table'>
+
+        <tr id='faceboook' class='text-center' style='margin: 1em 1em 0;'>
+          <div class="fb-like visible-desktop"
+               data-href="http://www.theanou.com{% url 'product' product.id %}"
+               data-width="250" data-layout="standard"
+               data-show-faces="false" data-send="true">
+          </div>
+          <div class="fb-like visible-tablet"
+               data-href="http://www.theanou.com{% url 'product' product.id %}"
+               data-width="100" data-layout="button_count"
+               data-show-faces="false" data-send="true">
+          </div>
+        </tr>
+
         <tr>
           <td rowspan=2 class='price'>${{ product.display_price }}</td>
           <td class='price-qualifier'>free shipping.</td>
@@ -199,5 +227,5 @@
     </div>
   </div>
 
-{% endcache %}
 {% endblock content %}
+{% endcache %}
