@@ -80,11 +80,27 @@ class Product(models.Model):
   @property
   def is_sold(self): return True if self.sold_at else False
 
-  #@property
-  #def is_recently_sold(self): todo
+  @property
+  def is_recently_sold(self):
+    from datetime import datetime, timedelta
+    if self.sold_at:
+      one_day = timedelta(days=100)
+      time_since_sold = datetime.today() - self.sold_at.replace(tzinfo=None)
+      if self.sold_at and one_day > time_since_sold:
+        return True
+      else:
+        return False
+    else:
+      return True
+
 
   @property
   def is_approved(self): return True if self.approved_at else False
+
+  @property
+  def photo(self):
+    photos = self.photo_set.all().order_by('rank')
+    return photos[0] if photos else None
 
   @property
   def name(self):

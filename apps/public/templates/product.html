@@ -118,8 +118,8 @@
         <a id='buy-button' class='btn btn-primary btn-danger disabled'
            href="">
           <h2>
-            {% if product.recently_sold %}
-              Sorry, this product just sold today.
+            {% if product.is_recently_sold %}
+              Oh shoot, someone just bought it!
             {% else %}Sold
             {% endif %}
           </h2>
