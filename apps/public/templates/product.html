@@ -2,7 +2,7 @@
 {% load url from future %}
 {% load cache %}
 
-{% cache 86400 public_product_content product.id product.is_sold product.approved_at %}
+{% cache 86400 public_product_content product.id product.approved_at product.is_recently_sold product.is_sold %}
 
 {% block title %}
   {{ product.name }} by {{ product.seller.name }}
