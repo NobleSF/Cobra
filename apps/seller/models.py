@@ -84,7 +84,7 @@ class Product(models.Model):
   def is_recently_sold(self):
     from datetime import datetime, timedelta
     if self.sold_at:
-      one_day = timedelta(days=100)
+      one_day = timedelta(days=1)
       time_since_sold = datetime.today() - self.sold_at.replace(tzinfo=None)
       if self.sold_at and one_day > time_since_sold:
         return True
