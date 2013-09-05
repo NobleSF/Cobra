@@ -63,7 +63,9 @@
       <div id='product-description'>
         <p>
           <span class='title'>{{ product.name }}</span>
-          {{ product.description }}
+          {% if product.description %}
+            {{ product.description }}
+          {% endif %}
         </p>
 
         {% if product.english_dimensions %}
