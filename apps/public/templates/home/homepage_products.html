@@ -1,0 +1,18 @@
+{% load home_inclusion_tags %}
+{% load url from future %}
+
+<div id='product-container'>
+  <div class='product-row row-fluid'>
+    {% for product in products %}
+
+      <div id='product-div-{{ forloop.counter0 }}'
+           class='span4 product-area'
+           data-category='{{ product.category }}'
+           data-order='{{ forloop.counter0 }}'>
+        {% product_tag product %}
+      </div>
+
+      {% cycle "" "" "</div><div class='product-row row-fluid'>" %}
+    {% endfor %}
+  </div>
+</div>

@@ -5,18 +5,7 @@ from django.utils import simplejson
 from datetime import datetime
 
 def home(request):
-  from apps.seller.models import Product
-
-  products = (Product.objects.filter(sold_at=None,
-                                    approved_at__lte=datetime.today(),
-                                    active_at__lte=datetime.today(),
-                                    deactive_at=None)
-               .order_by('approved_at')
-               .reverse()
-             )
-
-  context = {'products':products}
-  return render(request, 'home/home.html', context)
+  return render(request, 'home/home.html')
 
 def search(request, collection=None, category=None, color=None):
   from apps.seller.models import Product
