@@ -41,13 +41,15 @@
             read about {{ store.name }}
           </a>
           <p id='store-bio' class='hidden-phone'>
-            <span class='short-description'>
-              {{ store.bio|truncatewords:"40" }}
-            </span>
-            <small class='read-more'>read more</small>
-            <span class='long-description'>
-              {{ store.bio }}
-            </span>
+            {% if store.bio %}
+              <span class='short-description'>
+                {{ store.bio|truncatewords:"40" }}
+              </span>
+              <small class='read-more'>read more</small>
+              <span class='long-description'>
+                {{ store.bio }}
+              </span>
+            {% endif %}
           </p>
         </li>
 
