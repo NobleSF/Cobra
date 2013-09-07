@@ -61,10 +61,14 @@
       </td>
 
       <td style='white-space: nowrap;'>
-        <i class='symbol-SMS {% if order.is_seller_confirmed  %}green{% else %}red{% endif %}'></i>
-        <i class='symbol-SMS-shipping {% if order.is_shipped %}green{% else %}red{% endif %}'></i>
-        <i class='symbol-shipping {% if order.is_received %}green{% else %}red{% endif %}'></i>
-        <i class='symbol-money {% if order.is_seller_paid %}green{% else %}red{% endif %}'></i>
+        <i title='{{ order.seller_confirmed_at }}'
+           class='symbol-SMS {% if order.is_seller_confirmed  %}green{% else %}red{% endif %}'></i>
+        <i title='{{ order.shipped_at }}'
+           class='symbol-SMS-shipping {% if order.is_shipped %}green{% else %}red{% endif %}'></i>
+        <i title='{{ order.received_at }}'
+           class='symbol-shipping {% if order.is_received %}green{% else %}red{% endif %}'></i>
+        <i title='{{ order.seller_paid_at }}'
+           class='symbol-money {% if order.is_seller_paid %}green{% else %}red{% endif %}'></i>
       </td>
 
       <td>
