@@ -2,7 +2,7 @@
 {% load url from future %}
 {% load cache %}
 
-{% cache 86400 public_product_content product.id product.approved_at product.is_recently_sold product.is_sold %}
+{% cache 2592000 public_product_header product.id product.approved_at %}
 
 {% block title %}
   {{ product.name }} by {{ product.seller.name }}
@@ -29,7 +29,11 @@
   <link href="{{ STATIC_URL }}public/css/product.css" rel="stylesheet">
 {% endblock css %}
 
+{% endcache public_product_header %}
+
 {% block content %}
+{% cache 2592000 public_product_content product.id product.approved_at product.is_recently_sold product.is_sold %}
+
   <div id='product' class='row-fluid'>
     <div class='span8'>
       <div id='photos' class='carousel slide'>
@@ -203,6 +207,10 @@
       {% cycle "" "</div><div id='utilities' class='row-fluid'>"%}
 
     {% endfor %}
+
+{% endcache public_product_content %}
+
+{% cache 86400 public_product_extras product.id %}
   </div></div>
   <hr>
 
@@ -229,5 +237,5 @@
     </div>
   </div>
 
+{% endcache public_product_extras %}
 {% endblock content %}
-{% endcache %}
