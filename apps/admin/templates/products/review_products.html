@@ -2,76 +2,30 @@
 {% load url from future %}
 
 {% block javascript %}
-  <script>
-
-    $('.approve').click(function(){
-      var product_id = $(this).attr('data-product-id');
-      var product_li = $(this).closest("li")
-      approveProduct(product_id, product_li);
-    })
-
-    function approveProduct(product_id, product_li){
-      var approve_url = $('#approve-url').val()
-
-      $.get(approve_url, {product_id:product_id})
-      .done(function(){
-        product_li.find('button').removeClass('btn-info').addClass('btn-success');
-        product_li.slideUp('slow', function(){
-          $(this).remove()
-        });
-      });
-    }
-
-    $('.rate').click(function(){
-      var product_id  = $(this).attr('data-product-id');
-      var subject     = $(this).attr('data-subject');
-      var value       = $(this).attr('data-value');
-      var rating_li   = $(this).parent('li')
-
-      $(rating_li).siblings('li').toggleClass('active');
-
-      if (value > 0){
-        rateProduct(product_id, subject, value, rating_li);
-      }
-    })
-
-    function rateProduct(product_id, subject, value, rating_li){
-      var rate_url = $('#rate-url').val()
-
-      $.get(rate_url, {product_id:product_id,
-                          subject:subject,
-                          value:value
-                         })
-      .error(function(){
-        //remove rating
-        rating_li.removeClass('active')
-        //show no rating
-        no_rating_li = rating_li.siblings('li').last();
-        no_rating_li.removeClass('hide-forever').addClass('active');
-      })
-      .done(function(){
-        rating_li.siblings('li').last().addClass('hide-forever')
-      });
-    }
-
-  </script>
+  <script type="text/javascript" src="{{ STATIC_URL }}admin/js/review_products.js"></script>
 {% endblock javascript %}
 
 {% block css %}
   <style>
-    ul{list-style: none;}
-    li{padding: 0.5em 0;}
-    li a{font-size: 16pt;}
-    ul li button{margin: 0 1em 0 0;}
+    .table td{text-align: left; vertical-align: middle;}
+    .actions button{margin: 3px;}
 
-    .rate-group li:not(.active), .hide-forever{display: none;}
-    .rate-group{display: inline-block;}
+    .title-row{border-top: solid 2px #BBB;}
+    .title-row .name{max-width: 15em;}
 
+    .actions-row{display: none;}
+    .highlight{background-color: #F5F5F5;}
+
+    .rate-group.chosen span:not(.selected) .rate{
+      opacity: 0.3;
+      font-size: 150%;
+      padding: 7px;
+    }
   </style>
 {% endblock css %}
 
 {% block content %}
-  <h3>New Unapproved Products</h3>
+  <h3>Review Products</h3>
 
   <input id='approve-url' type='hidden'
          value="{% url 'admin:approve product' %}">
@@ -79,50 +33,96 @@
   <input id='rate-url' type='hidden'
          value="{% url 'admin:rate product' %}">
 
-  <ul>
+  <table class='table table-hover table-condensed'>
     {% for product in products %}
-      <li>
-        <button class='approve btn btn-info'
-                data-product-id="{{ product.id }}">
-          Approve
-        </button>
+      <tr class='title-row'>
+        <td class='name'>
+          <h4 class='copy-font'>{{ product.seller.name }}</h4>
+        </td>
 
-        <a href="{% url 'product' product.id %}" target='_blank'>
-          {{ product.id }}:
-          {{ product.name }}
-        </a>
-        by
-        <a href="{% url 'store' product.seller.id %}" target='_blank'>
-          {{ product.seller.name }}
-        </a>
+        <td colspan='5'>
+          {% for photo in product.photo_set.all %}
+            <img src='{{ photo.pinky_size }}'>
+          {% endfor %}
+        </td>
+      </tr>
 
-        {% for subject in rating_subjects %}
-          <ul class='rate-group {{ subject }}'>
-            {% for value in rating_values reversed %}
-              <li id='rating-{{subject}}-{{value}}-li'
-                  class='{% if value == 0 %}active{% endif %}'
-              >
-                <i class="rate {{ subject.name }}
+      <tr class='actions-row highlight'>
 
-                    {% if subject.name == 'Appeal' %}
-                      {% if 0 < value and value < 4 %}symbol-sad{%else%}symbol-happy{%endif%}
-                    {% elif subject.name = 'Photography' %}symbol-camera
-                    {% elif subject.name = 'Price' %}symbol-money
-                    {% endif %}
+        <td class='actions'>
+          <button class='approve-product btn btn-success'
+                  data-product-id="{{ product.id }}">
+            Approve
+          </button>
+          <br>
+          <button class='hold-product btn btn-warning'
+                  data-product-id="{{ product.id }}">
+            On Hold
+          </button>
+          <br>
+          <button class='delete-product btn btn-mini btn-danger'
+                  data-product-id="{{ product.id }}">
+            Delete
+          </button>
+        </td>
 
-                    color-rating{{value}}
-                  "
-                  data-product-id="{{ product.id }}"
-                  data-subject="{{ subject.name }}"
-                  data-value="{{ value }}">
-                </i>
-              </li>
-            {% endfor %}
-          </ul>
-        {% endfor %}
+        <td class='ratings' colspan='2'>
+          {% for subject in rating_subjects %}
+            <div class='rate-group {{ subject }} inline'>
+              {% for value in rating_values %}
+                <span id='rating-{{subject}}-{{value}}-span'
+                    class='{% if value == 0 %}active{% endif %}'
+                >
+                  <i class="rate
 
-      </li>
+                      {% if subject.name == 'Appeal' %}
+                        {% if 0 < value and value < 4 %}symbol-sad{%else%}symbol-happy{%endif%}
+                      {% elif subject.name = 'Photography' %}symbol-camera
+                      {% elif subject.name = 'Price' %}symbol-money
+                      {% endif %}
+
+                      color-rating{{value}}
+                    "
+                    data-product-id="{{ product.id }}"
+                    data-subject="{{ subject.name }}"
+                    data-value="{{ value }}">
+                  </i>
+                </span>
+              {% endfor %}
+            </div>
+          {% endfor %}
+        </td>
+
+        <td class='measures' colspan='2'>
+          <i class='symbol-weight'> {{ product.weight }}</i>
+          <i>g</i>
+          <br>
+          <i class='symbol-shipping'> {{ product.shipping_cost }}</i>
+          <i>Dh</i>
+          <br>
+          <i class='symbol-money'> {{ product.price }}</i>
+          <i>Dh</i>
+        </td>
+
+        <td class='links'>
+          <i class='black'>{{ product.id }}</i>
+          <br>
+          <a href="{% url 'seller:inventory edit' product.id %}" target='_blank'>
+            <i class='symbol-go blue'></i>
+          </a>
+          <br>
+          <a href="{% url 'product' product.id %}" target='_blank'>
+            <i class='symbol-profile green'></i>
+          </a>
+        </td>
+
+      </tr>
+
     {% endfor %}
-  </ul>
+  </table>
+
+  <table id='purgatory'>
+    <!-- for product in purgatory -->
+  </table>
 
 {% endblock content %}
