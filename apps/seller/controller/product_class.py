@@ -7,9 +7,13 @@ class Product(object):
   def __init__(self, request=None, product=None):
     try:
       if request:
-        self.product = (models.Product.objects
-                      .filter(seller_id=request.session['seller_id'])
-                      .get(id=request.product_id))
+        self.product = (models.Product.objects.get(id=request.product_id))
+
+        #don't let sellers edit each others products, but admins can edit anyone's
+        if (not 'admin_id' in request.session and
+            int(request.session['seller_id']) != self.product.seller.id):
+          self.product = None
+
       else:
         self.product = product
 

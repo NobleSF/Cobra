@@ -36,11 +36,8 @@ def photo_upload_tag(photo_form, product, rank):
 
 @register.inclusion_tag('inventory/product_asset_choosers/asset_chooser.html')
 def asset_chooser_tag(request, product, ilk):
-  from apps.seller.models import Asset
   try:
-    seller_id = request.session['seller_id']
-    assets = Asset.objects.filter(seller_id=seller_id, ilk=ilk)
-
+    assets = product.seller.asset_set.filter(ilk=ilk)
   except Exception as e:
     assets = None
 
@@ -48,11 +45,8 @@ def asset_chooser_tag(request, product, ilk):
 
 @register.inclusion_tag('inventory/product_asset_choosers/shipping_option_chooser.html')
 def shipping_option_chooser_tag(request, product):
-  from apps.seller.models import Seller, ShippingOption
   try:
-    country = Seller.objects.get(id=request.session['seller_id']).country
-    shipping_options = ShippingOption.objects.filter(country=country)
-
+    shipping_options = product.seller.country.shippingoption_set.all()
   except Exception as e:
     shipping_options = None
 

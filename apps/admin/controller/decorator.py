@@ -9,13 +9,22 @@ def access_required(permission):
   def decorator(func):
     def inner_decorator(request, *args, **kwargs):
 
-      if permission == 'admin' and 'admin_id' in request.session:
+      if (permission == 'admin' and
+          'admin_id' in request.session):
         return func(request, *args, **kwargs)
-      elif permission == 'seller' and \
-          ('seller_id' in request.session or 'admin id' in request.session):
+
+      elif (permission == 'admin or seller' and
+            ('admin_id' in request.session or
+             'seller_id' in request.session)):
         return func(request, *args, **kwargs)
+
+      elif (permission == 'seller' and
+            'seller_id' in request.session):
+        return func(request, *args, **kwargs)
+
       elif permission == 'account' and 'username' in request.session:
         return func(request, *args, **kwargs)
+
       else:
         from apps.admin.controller.account import login
         return login(request, next=request.get_full_path())
