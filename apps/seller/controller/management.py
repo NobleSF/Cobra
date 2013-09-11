@@ -5,6 +5,7 @@ from django.contrib import messages
 from apps.admin.controller.decorator import access_required
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
+from django.db.models import Q
 
 @access_required('seller')
 def home(request):
@@ -24,11 +25,16 @@ def products(request):
 
   try:
     seller = Seller.objects.get(id=request.session['seller_id'])
-    active_products = seller.product_set.filter(active_at__lte=datetime.today(), deactive_at=None)
-    approved_products = active_products.filter(approved_at__lte=datetime.today())
-    unsold_products = approved_products.filter(sold_at=None)
+    products = (seller.product_set.filter(active_at__lte=datetime.today(),
+                                          deactive_at=None,
+                                          sold_at=None)
+                                  .filter(
+                                    Q(approved_at__lte=datetime.today()) |
+                                    Q(in_holding=True)
+                                  ))
 
-    context = {'seller': seller, 'products': unsold_products}
+
+    context = {'seller': seller, 'products': products}
   except Exception as e:
     context = {'exception': e}
 

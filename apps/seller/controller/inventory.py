@@ -106,7 +106,7 @@ def remove(request, product_id): #archive product and return to management home
 
   return redirect('seller:management products')
 
-@access_required('seller')
+@access_required('admin or seller')
 @csrf_exempt
 def saveProduct(request): #ajax requests only, not asset-aware
   response = {}
