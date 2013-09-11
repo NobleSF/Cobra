@@ -5,32 +5,19 @@ register = template.Library()
 def homepage_products_tag():
   from datetime import datetime
   from apps.seller.models import Product
+  from apps.public.controller.product_ranking import getRankPoints
 
   products = (Product.objects.filter(sold_at=None,
                                     approved_at__lte=datetime.today(),
                                     active_at__lte=datetime.today(),
-                                    deactive_at=None)
-               .order_by('approved_at')
-               .reverse()
-             )
+                                    deactive_at=None))
 
-  top_products = []
-  top_product_ids = [336,88,320,324,30,21,287,133,127,4,125,
-                    16,122,60,44,29,155,136,327,97,113]
+  for p in products:
+    p.points = getRankPoints(p)
 
-  #append top products to list in order by id
-  for id in top_product_ids:
-    try:
-      product = products.filter(id=id)[0]
-      top_products.append(product)
-      products = products.exclude(id=id)
-    except:pass
-
-  #append all the leftovers
-  for product in products:
-    top_products.append(product)
-
-  return {'products':top_products}
+  products = sorted(products, key=lambda p: p.points)
+  products.reverse() #sort by points descending
+  return {'products':products}
 
 @register.inclusion_tag('home/product.html')
 def product_tag(product):
