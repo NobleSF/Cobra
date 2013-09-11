@@ -10,6 +10,11 @@ class Seller(models.Model):
   coordinates   = models.CharField(max_length=30, null=True, blank=True)
   currency      = models.ForeignKey(Currency, null=True, blank=True)
   image         = models.ForeignKey('Image', null=True, blank=True, on_delete=models.SET_NULL)
+
+  #translated_at = models.DateTimeField(null=True, blank=True) #seller add
+  #translated_by = models.ForeignKey(Account, null=True, blank=True)
+  #approved_at   = models.DateTimeField(null=True, blank=True) #seller add
+
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
@@ -61,6 +66,7 @@ class Product(models.Model):
   #lifecycle milestones
   active_at     = models.DateTimeField(null=True, blank=True) #seller add
   deactive_at   = models.DateTimeField(null=True, blank=True) #seller remove
+  in_holding    = models.BooleanField(default=False) #unable to be approved
   approved_at   = models.DateTimeField(null=True, blank=True) #admin approval
   sold_at       = models.DateTimeField(null=True, blank=True)
   #is_orderable  = models.BooleanField(default=False) #for custom orders

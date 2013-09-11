@@ -166,6 +166,7 @@ class Product(object):
     try:
       #todo: if self.product.is_complete
       self.product.active_at = datetime.now()
+      self.product.in_holding = False
       self.product.save()
     except:
       return False
@@ -176,6 +177,7 @@ class Product(object):
   def deactivate(self):
     try:
       self.product.deactive_at = datetime.now()
+      self.product.in_holding = False
       self.product.save()
     except:
       return False
@@ -185,6 +187,7 @@ class Product(object):
   def approve(self):
     try:
       self.product.approved_at = datetime.now()
+      self.product.in_holding = False
       self.product.save()
     except:
       return False
@@ -194,6 +197,7 @@ class Product(object):
   def unapprove(self):
     try:
       self.product.approved_at = None
+      self.product.in_holding = False
       self.product.save()
     except:
       return False
@@ -203,6 +207,7 @@ class Product(object):
   def disapprove(self):
     try:
       self.product.approved_at = None
+      self.product.in_holding = False
       self.product.save()
     except:
       return False
