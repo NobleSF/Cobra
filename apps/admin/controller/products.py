@@ -9,20 +9,20 @@ from datetime import datetime
 @access_required('admin')
 def review_products(request):
   from apps.seller.models import Product
-  from apps.admin.models import RatingSubject
 
-  new_products = Product.objects.filter(active_at__lte=datetime.today())
-  yet_approved = new_products.filter(approved_at=None)
-  products_to_review = yet_approved.order_by('updated_at').reverse()
+  products_to_review = (Product.objects.filter(approved_at=None,
+                                              active_at__lte=datetime.today(),
+                                              in_holding=False)
+                        .order_by('updated_at'))
+
+  products_in_holding = (Product.objects.filter(in_holding=True)
+                        .order_by('updated_at'))
 
   for product in products_to_review:
     product.admin_ratings = product.rating_set.filter(session_key = request.session.session_key)
 
-  rating_subjects = RatingSubject.objects.all()
-
-  context = {'products': products_to_review,
-             'rating_subjects': rating_subjects,
-             'rating_values': range(0,6)
+  context = {'products_to_review': products_to_review,
+             'products_in_holding': products_in_holding
             }
   return render(request, 'products/review_products.html', context)
 
@@ -31,13 +31,24 @@ def approve_product(request): #from AJAX GET request
   from apps.seller.models import Product
   try:
     product_id = request.GET['product_id']
+    action = request.GET['action']
     product = Product.objects.get(id=product_id)
-    product.approved_at = datetime.now()
-    product.save()
+    if action == 'approve':
+      product.in_holding = False
+      product.approved_at = datetime.now()
+      product.save()
+    elif action == 'hold':
+      product.approved_at = None
+      product.in_holding = True
+      product.save()
+    elif action == 'delete':
+      product.delete();
+    else:
+      raise Exception('invalid action: %s' % action)
   except Exception as e:
-    response = {'error': e}
+    response = {'error': str(e)}
   else:
-    response = {'success': "%d approved" % product.id}
+    response = {'success': "%s %s" % (action, product_id)}
 
   return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 

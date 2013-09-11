@@ -1,0 +1,83 @@
+{% load url from future %}
+
+<tr id='title-row-{{ product.id }}' class='title-row'>
+  <td class='name'>
+    <h4 class='copy-font'>{{ product.seller.name }}</h4>
+  </td>
+
+  <td colspan='5'>
+    {% for photo in product.photo_set.all %}
+      <img src='{{ photo.pinky_size }}'>
+    {% endfor %}
+  </td>
+</tr>
+
+<tr id='actions-row-{{ product.id }}' class='actions-row highlight'>
+
+  <td class='actions'>
+    <button class='approve-product btn btn-success'
+            data-product-id="{{ product.id }}">
+      Approve
+    </button>
+    <br>
+    <button class='hold-product btn btn-warning'
+            data-product-id="{{ product.id }}">
+      On Hold
+    </button>
+    <br>
+    <button class='delete-product btn btn-mini btn-danger'
+            data-product-id="{{ product.id }}">
+      Delete
+    </button>
+  </td>
+
+  <td class='ratings' colspan='2'>
+    {% for subject in rating_subjects %}
+      <div class='rate-group {{ subject }} inline'>
+        {% for value in rating_values %}
+          <span id='rating-{{subject}}-{{value}}-span'
+              class='{% if value == 0 %}active{% endif %}'
+          >
+            <i class="rate
+
+                {% if subject.name == 'Appeal' %}
+                  {% if 0 < value and value < 4 %}symbol-sad{%else%}symbol-happy{%endif%}
+                {% elif subject.name = 'Photography' %}symbol-camera
+                {% elif subject.name = 'Price' %}symbol-money
+                {% endif %}
+
+                color-rating{{value}}
+              "
+              data-product-id="{{ product.id }}"
+              data-subject="{{ subject.name }}"
+              data-value="{{ value }}">
+            </i>
+          </span>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </td>
+
+  <td class='measures' colspan='2'>
+    <i class='symbol-weight'> {{ product.weight }}</i>
+    <i>g</i>
+    <br>
+    <i class='symbol-shipping'> {{ product.shipping_cost }}</i>
+    <i>Dh</i>
+    <br>
+    <i class='symbol-money'> {{ product.price }}</i>
+    <i>Dh</i>
+  </td>
+
+  <td class='links'>
+    <i class='black'>{{ product.id }}</i>
+    <br>
+    <a href="{% url 'seller:inventory edit' product.id %}" target='_blank'>
+      <i class='symbol-go blue'></i>
+    </a>
+    <br>
+    <a href="{% url 'product' product.id %}" target='_blank'>
+      <i class='symbol-profile green'></i>
+    </a>
+  </td>
+</tr>

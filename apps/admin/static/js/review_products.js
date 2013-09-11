@@ -5,36 +5,41 @@ $('.title-row').click(function(){
 
 $('.approve-product').click(function(){
   var product_id = $(this).attr('data-product-id');
-  var product_row = $(this).closest("tr");
-  approveProduct(product_id, 'approve', product_row);
+  approveProduct(product_id, 'approve');
 });
 
 $('.hold-product').click(function(){
   var product_id = $(this).attr('data-product-id');
-  var product_row = $(this).closest("tr");
-  approveProduct(product_id, 'hold', product_row);
+  approveProduct(product_id, 'hold');
 });
 
 $('.delete-product').click(function(){
   if (confirm("Permanently Delete Product?")){
     var product_id = $(this).attr('data-product-id');
-    var product_row = $(this).closest("tr");
-    approveProduct(product_id, 'delete', product_row);
+    approveProduct(product_id, 'delete');
   }
 });
 
-function approveProduct(product_id, action, product_row){
+function approveProduct(product_id, action){
   var approve_url = $('#approve-url').val();
+  title_row = $('#title-row-'+product_id)
+  actions_row = $('#actions-row-'+product_id)
 
   $.get(approve_url, {product_id:product_id,action:action})
   .done(function(){
     if (action === 'approve' || action === 'delete'){
-      product_row.slideUp('slow', function(){
+      //remove actions row
+      actions_row.slideUp('slow', function(){
+        $(this).remove();
+      });
+      //remove title row
+      title_row.slideUp('slow', function(){
         $(this).remove();
       });
     }else if (action === 'hold'){
-      product_row.closest('.title-row').appendTo('#purgatory');
-      product_row.closest('.actions-row').appendTo('#purgatory');
+      title_row.appendTo('#purgatory');
+      actions_row.appendTo('#purgatory');
+      title_row.click();
     }
   });
 }
