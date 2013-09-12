@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.forms.models import modelformset_factory
 from django.utils import simplejson
 from datetime import datetime
+from settings.people import Tom
+from apps.communication.controller.email_class import Email
 
 @access_required('admin')
 def review_products(request):
@@ -47,6 +49,7 @@ def approve_product(request): #from AJAX GET request
       raise Exception('invalid action: %s' % action)
   except Exception as e:
     response = {'error': str(e)}
+    Email(message="error on product approval: "+str(e)).sendTo(Tom.email)
   else:
     response = {'success': "%s %s" % (action, product_id)}
 
@@ -83,6 +86,7 @@ def rate_product(request): #from AJAX GET request
 
   except Exception as e:
     response = {'error': e}
+    Email(message="error in logout function: "+str(e)).sendTo(Tom.email)
   else:
     response = {'success': "%s rated" % product_id}
 

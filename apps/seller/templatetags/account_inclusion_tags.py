@@ -2,7 +2,7 @@ from django import template
 register = template.Library()
 
 @register.inclusion_tag('account/image.html')
-def image_tag(image_id=None):
+def image_tag(image_id):
   from apps.seller.models import Image
   try:
     image_url = Image.objects.get(id=image_id).thumb_size

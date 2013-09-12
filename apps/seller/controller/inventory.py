@@ -7,6 +7,8 @@ from apps.admin.controller.decorator import access_required
 from django.views.decorators.csrf import csrf_exempt
 from apps.seller.models import Seller
 from apps.seller.controller.product_class import Product
+from settings.people import Tom
+from apps.communication.controller.email_class import Email
 
 def checkInventory(seller):
   #preferred method
@@ -45,6 +47,7 @@ def create(request):
     return redirect("%d/edit" % product_object.product.id)
 
   except Exception as e:
+    Email(message="error creating product: "+str(e)).sendTo(Tom.email)
     return redirect('seller:management home')
 
 @access_required('admin or seller')
@@ -102,6 +105,7 @@ def remove(request, product_id): #archive product and return to management home
       if request.session.get('admin_id'):
         messages.error(request, "cannot not remove that product")
   except Exception as e:
+    Email(message="error removing product: "+str(e)).sendTo(Tom.email)
     context = {'exception':e}
 
   return redirect('seller:management products')
@@ -174,7 +178,8 @@ def saveProduct(request): #ajax requests only, not asset-aware
       response.update(cost_summary)
 
     except Exception as e:
-      response = {'exception': e}
+      response = {'exception': str(e)}
+      Email(message="error in saveProduct ajax: "+str(e)).sendTo(Tom.email)
 
   else:
     response['problem'] = "not GET"

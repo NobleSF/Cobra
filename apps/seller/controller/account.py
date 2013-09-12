@@ -5,6 +5,8 @@ from apps.admin.controller.decorator import access_required
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.db import IntegrityError, transaction
+from settings.people import Tom
+from apps.communication.controller.email_class import Email
 
 def create(account):
   try:
@@ -105,6 +107,7 @@ def edit(request):
 
   except Exception as e:
     context = {'except':e}
+    Email(message="error on Seller edit page: "+str(e)).sendTo(Tom.email)
     context['seller'] = seller
 
   return render(request, 'account/edit_seller.html', context)
@@ -146,6 +149,7 @@ def saveSeller(request): #ajax requests only, create or update asset
 
     except Exception as e:
       response = {'exception':e}
+      Email(message="error in saveSeller: "+str(e)).sendTo(Tom.email)
   else:
     response = {'problem':"not GET"}
 
@@ -188,6 +192,7 @@ def saveAsset(request): #ajax requests only, create or update asset
 
     except Exception as e:
       response = {'exception': str(e)}
+      Email(message="error in saveAsset ajax: "+str(e)).sendTo(Tom.email)
   else:
     response = {'problem':"not GET"}
 
@@ -205,9 +210,9 @@ def deleteAsset(request): #ajax requests only
                 'asset_id': request.GET['asset_id']
                }
   except Exception as e:
-    response = {'exception': str(e),
-                'asset_id': 'None'
-               }
+    response = {'exception': str(e), 'asset_id': 'None'}
+    Email(message="error in deleteAsset ajax: "+str(e)).sendTo(Tom.email)
+
   return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 def customSaveImage(url):

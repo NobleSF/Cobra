@@ -5,7 +5,6 @@ from django.contrib import messages
 from django.forms.models import modelformset_factory
 from django.utils import simplejson
 
-
 def invalidate_cache(fragment_name, *vary_on):
   try:
     from django.core.cache import cache

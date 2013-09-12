@@ -2,6 +2,8 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from datetime import datetime
+from settings.people import Tom
+from apps.communication.controller.email_class import Email
 
 def home(request, seller_id):
   from apps.seller.models import Seller
@@ -21,6 +23,7 @@ def home(request, seller_id):
     return Http404
 
   except Exception as e:
+    Email(message="error on public product page: "+str(e)).sendTo(Tom.email)
     context = {'except':e}
 
   return render(request, 'store.html', context)

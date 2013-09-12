@@ -1,5 +1,7 @@
 from apps.public import models
 from datetime import datetime, timedelta
+from settings.people import Tom
+from apps.communication.controller.email_class import Email
 
 def cleanupCarts():
   from apps.seller.models import Product
@@ -16,6 +18,7 @@ def cleanupCarts():
             item.delete()
 
   except Exception as e:
+    Email(message="error on cart cleanup: "+str(e)).sendTo(Tom.email)
     return e
   else:
     return True
@@ -77,8 +80,7 @@ class Cart(object):
         cart=self.cart,
         product=product,
       )
-    except Exception as e:
-      pass #i don't care
+    except Exception: pass #i don't care
     else:
       item.delete()
 
@@ -88,8 +90,7 @@ class Cart(object):
         cart=self.cart,
         product=product,
       )
-    except Exception as e:
-      pass
+    except Exception: pass
 
   def saveData(self, attribute, value):
     try:

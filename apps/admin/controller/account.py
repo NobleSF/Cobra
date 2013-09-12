@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from apps.admin.controller.decorator import access_required
 from django.contrib import messages
 from apps.admin.models import Account
+from settings.people import Tom
+from apps.communication.controller.email_class import Email
 
 @access_required('admin')
 def create(request):
@@ -35,6 +37,7 @@ def create(request):
     except IntegrityError:
       messages.warning(request, 'An account with this username already exists.')
     except Exception as e:
+      Email(message="error creating account: "+str(e)).sendTo(Tom.email)
       messages.error(request, e)
 
   context = {'form': AccountCreateForm()}
@@ -138,6 +141,7 @@ def login(request, next=None):
         context = {'incorrect': "wrong password"}
 
     except Exception as e:
+      Email(message="error in login function: "+str(e)).sendTo(Tom.email)
       context = {'exception': e}
 
     context['form'] = AccountLoginForm()#return fresh form
@@ -172,8 +176,8 @@ def logout(request):
     return redirect('home')
 
   except Exception as e:
-    context = {'exception': e}
-    return render(request, 'public/home.html', context)
+    Email(message="error in logout function: "+str(e)).sendTo(Tom.email)
+    return render(request, 'public/home.html', {'exception':e})
 
 @access_required('admin')
 def reset_password(request, account_id=None):
@@ -190,6 +194,7 @@ def reset_password(request, account_id=None):
       return redirect('admin:account edit', account.id)
 
   except Exception as e:
+    Email(message="error on password reset: "+str(e)).sendTo(Tom.email)
     messages.warning(request, "invalid passwords provided")
 
   context = {'form':AccountPasswordForm()}
