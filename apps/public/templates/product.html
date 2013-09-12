@@ -155,12 +155,14 @@
       <p id='artisan-bio'>
         {% if product.artisan.description %}
           <span class='short-description'>
-            {{ product.artisan.description|truncatewords:"20" }}
+            {{ product.artisan.description|truncatewords:20 }}
           </span>
-          <small class='read-more'>read more</small>
-          <span class='long-description'>
-            {{ product.artisan.description }}
-          </span>
+          {% ifnotequal product.artisan.description|truncatewords:20|length product.artisan.description|length %}
+            <small class='read-more'>read more</small>
+            <span class='long-description'>
+              {{ product.artisan.description }}
+            </span>
+          {% endifnotequal %}
         {% endif %}
       </p>
     </div>
@@ -191,12 +193,14 @@
               {% if utility.description %}
                 <p class='utility-description'>
                   <span class='short-description'>
-                    {{ utility.description|truncatewords:"6" }}
+                    {{ utility.description|truncatewords:6 }}
                   </span>
-                  <small class='read-more'>read more</small>
-                  <span class='long-description'>
-                    {{ utility.description }}
-                  </span>
+                  {% ifnotequal utility.description|truncatewords:6|length utility.description|length %}
+                    <small class='read-more'>read more</small>
+                    <span class='long-description'>
+                      {{ utility.description }}
+                    </span>
+                  {% endifnotequal %}
                 </p>
               {% endif %}
             </td>

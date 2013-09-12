@@ -43,12 +43,14 @@
           <p id='store-bio' class='hidden-phone'>
             {% if store.bio %}
               <span class='short-description'>
-                {{ store.bio|truncatewords:"40" }}
+                {{ store.bio|truncatewords:40 }}
               </span>
-              <small class='read-more'>read more</small>
-              <span class='long-description'>
-                {{ store.bio }}
-              </span>
+              {% ifnotequal store.bio|truncatewords:40|length store.bio|length %}
+                <small class='read-more'>read more</small>
+                <span class='long-description'>
+                  {{ store.bio }}
+                </span>
+              {% endifnotequal %}
             {% endif %}
           </p>
         </li>
@@ -80,12 +82,14 @@
                        class='artisan-description hidden'>
 
                       <span class='short-description'>
-                        {{ artisan.description|truncatewords:"30" }}
+                        {{ artisan.description|truncatewords:30 }}
                       </span>
-                      <small class='read-more'>read more</small>
-                      <span class='long-description'>
-                        {{ artisan.description }}
-                      </span>
+                      {% ifnotequal artisan.description|truncatewords:30|length artisan.description|length %}
+                        <small class='read-more'>read more</small>
+                        <span class='long-description'>
+                          {{ artisan.description }}
+                        </span>
+                      {% endifnotequal %}
 
                     </p>
                   </div>
