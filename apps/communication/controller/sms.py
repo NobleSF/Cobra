@@ -6,10 +6,10 @@ import re #regular expressions
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from apps.communication.models import SMS
-from apps.seller.models import Product
+from apps.seller.models import Product, Seller, Asset
 from apps.admin.controller.decorator import postpone
 from apps.communication.controller.email_class import Email
-from settings.people import Tom
+from settings.people import Tom, Dan, Brahim
 
 def sendSMS(message, to_number, priority='1'): #using Telerivet
   try:
@@ -104,26 +104,36 @@ def incoming(request):
     """
     try:
       #save the SMS in db
-      data = request.POST.copy()
-      sms = saveSMS(data)
+      sms_data = request.POST.copy()
+      sms = saveSMS(sms_data)
 
-      #look at what we received
-      msg_data = understandMessage(request.POST['content'])
+      #who is it from?
+      sender = getPhoneOwner(request.POST.get('from_number'))
+      #sender is a dict of a Seller and/or/neither Artisan(asset) as {'type':object}
+
+      #what does it say?
+      msg_data = understandMessage(request.POST.get('content'))
       #msg_data is tuple of ( product_id, data{} ) or
       #just False if not understandable
 
-      if not msg_data:#message not understandable
-        #maybe they wanna chat or need help? todo:send someone an email?
-        return HttpResponse("hello?", status=200)#OK
+      if not msg_data: #message not understood
+        message = "System did not understand incoming SMS"
+        message += " from %s:<br>" % request.POST.get('from_number')
+        message += "%s<br>" % request.POST.get('content')
+        try:
+          for someone in sender:
+            message += "<br>Sent by Anou %s %s." % (someone, sender[someone].name)
+        except: pass
+        Email(message=message).sendTo(Dan.email)
+        return HttpResponse(status=200)#OK
 
       else: #it was understandable
         (product_id, data) = msg_data
         product = Product.objects.get(id=product_id)
 
-        product_matches_seller_phone = False #we don't know yet
-        product_matches_seller_phone = product.belongsToPhone(request.POST.get('from_number'))
+        is_from_product_owner = product.belongsToPhone(request.POST.get('from_number'))
 
-        if product_matches_seller_phone: #if the sender owns the product, update the order
+        if is_from_product_owner: #if the sender owns the product, update the order
 
           if data.get('remove'):
             seller_events.deactivateProduct(product)
@@ -174,6 +184,15 @@ def status_confirmation(request):
   except:
     return HttpResponse(status=403)#forbidden, didn't come from Telerivet
 
+def getPhoneOwner(phone_number):
+  phone_number = phone_number[-8:]
+  sender = {}
+  try: sender['Seller'] = Seller.objects.get(account__phone__endswith=phone_number)
+  except: pass
+  try: sender['Artisan'] = Assets.objects.filter(phone__endswith=phone_number)[0]
+  except: pass
+  return sender
+
 def understandMessage(message): #example message '123 CP123456789MA'
   #take a message and comprehend the desired action on a product id (or return False)
 
@@ -190,12 +209,8 @@ def understandMessage(message): #example message '123 CP123456789MA'
     matches = pattern.match(message)
     product_id = matches.group(1) #captured product_id
     product = Product.objects.get(id=product_id)
-
-  except Product.DoesNotExist:
-    product_id = None
-    #todo: email Brahim about this incoming text with wrong product id
   except:
-    product_id = None
+    product = None
 
   stripped_message = re.sub(r'\W', '', message) #strip out all whitespace
 
