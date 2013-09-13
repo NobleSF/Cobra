@@ -16,12 +16,12 @@
 
   <td class='actions'>
     {% if not product.is_approved %}
-      <button class='close-product btn btn-success'
+      <button class='approve-product btn btn-success'
               data-product-id="{{ product.id }}">
         Approve
       </button>
     {% else %}
-      <button class='approve-product btn btn-success'
+      <button class='close-product btn btn-success'
               data-product-id="{{ product.id }}">
         Done
       </button>
@@ -33,7 +33,7 @@
       On Hold
     </button>
     {% endif %}
-    {% if product.is_active and not product.approved_at %}
+    {% if product.is_active and not product.approved_at or product.in_holding %}
       <br>
       <button class='delete-product btn btn-mini btn-danger'
               data-product-id="{{ product.id }}">
