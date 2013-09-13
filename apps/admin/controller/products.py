@@ -5,28 +5,34 @@ from django.contrib import messages
 from django.forms.models import modelformset_factory
 from django.utils import simplejson
 from datetime import datetime
+from apps.seller.models import Product
 from settings.people import Tom
 from apps.communication.controller.email_class import Email
 
 @access_required('admin')
 def review_products(request):
-  from apps.seller.models import Product
-
   products_to_review = (Product.objects.filter(approved_at=None,
-                                              active_at__lte=datetime.today(),
-                                              in_holding=False)
+                                               active_at__lte=datetime.today(),
+                                               in_holding=False)
                         .order_by('updated_at'))
 
   products_in_holding = (Product.objects.filter(in_holding=True)
                         .order_by('updated_at'))
 
-  for product in products_to_review:
-    product.admin_ratings = product.rating_set.filter(session_key = request.session.session_key)
-
   context = {'products_to_review': products_to_review,
              'products_in_holding': products_in_holding
             }
   return render(request, 'products/review_products.html', context)
+
+@access_required('admin')
+def unrated_products(request):
+  from django.db.models import Count
+  unrated_products = (Product.objects.filter(sold_at=None,
+                                             approved_at__lte=datetime.today())
+                      .annotate(rating_count=Count('rating'))
+                      .filter(rating_count__lt=3))
+
+  return render(request, 'products/unrated_products.html', {'products':unrated_products})
 
 @access_required('admin')
 def approve_product(request): #from AJAX GET request

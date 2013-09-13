@@ -14,10 +14,16 @@ $('.hold-product').click(function(){
 });
 
 $('.delete-product').click(function(){
-  if (confirm("Permanently Delete Product?")){
+  if (confirm("Permanently Delete Product Forever?")){
     var product_id = $(this).attr('data-product-id');
     approveProduct(product_id, 'delete');
   }
+});
+
+$('.close-product').click(function(){
+  var product_id = $(this).attr('data-product-id');
+  $('#title-row-'+product_id).remove()
+  $('#actions-row-'+product_id).remove()
 });
 
 function approveProduct(product_id, action){
@@ -37,8 +43,13 @@ function approveProduct(product_id, action){
         $(this).remove();
       });
     }else if (action === 'hold'){
-      title_row.appendTo('#purgatory');
-      actions_row.appendTo('#purgatory');
+      if ($('#purgatory').length > 0){
+        title_row.appendTo('#purgatory');
+        actions_row.appendTo('#purgatory');
+      }else{
+        title_row.remove();
+        actions_row.remove();
+      }
       title_row.click();
     }
   });

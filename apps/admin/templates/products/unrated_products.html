@@ -1,0 +1,49 @@
+{% extends "admin_base.html" %}
+{% load url from future %}
+{% load product_management_tags %}
+
+{% block javascript %}
+  <script type="text/javascript" src="{{ STATIC_URL }}admin/js/review_products.js"></script>
+{% endblock javascript %}
+
+{% block css %}
+  <style>
+    .table td{text-align: left; vertical-align: middle;}
+    .actions button{margin: 3px;}
+
+    .title-row{border-top: solid 2px #BBB; cursor: pointer;}
+    .title-row .name{max-width: 15em;}
+
+    .actions-row{display: none;}
+    .highlight{background-color: #F5F5F5;}
+
+    .rate-group.chosen span:not(.selected) .rate{
+      opacity: 0.3;
+      font-size: 150%;
+      padding: 7px;
+    }
+  </style>
+{% endblock css %}
+
+{% block content %}
+  <h3>Rate Products</h3>
+
+  <input id='approve-url' type='hidden'
+         value="{% url 'admin:approve product' %}">
+
+  <input id='rate-url' type='hidden'
+         value="{% url 'admin:rate product' %}">
+
+  <table class='table table-hover table-condensed'>
+    {% for product in products %}
+      {% product_review_row product %}
+    {% empty %}
+      <tr>
+        <td colspan='6'>
+          <h4 class='copy-font'>No products waiting approval.</h4>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+
+{% endblock content %}

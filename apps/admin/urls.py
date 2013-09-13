@@ -17,7 +17,6 @@ urlpatterns = patterns('',
   url(r'^account/login$', account.login, name='login'),
   url(r'^account/login_cheat$', account.login_cheat, name='login_cheat'),
   url(r'^account/logout$', account.logout, name='logout'),
-
 )
 
 #dashboard pages
@@ -26,8 +25,9 @@ urlpatterns += patterns('',
 
   #PRODUCTS
   url(r'^admin/review_products$', products.review_products, name='review products'),
-  url(r'^admin/approve_product$', products.approve_product, name='approve product'),
-  url(r'^admin/rate_product$', products.rate_product, name='rate product'),
+  url(r'^admin/unrated_products$', products.unrated_products, name='unrated products'),
+  url(r'^admin/ajax/approve_product$', products.approve_product, name='approve product'),
+  url(r'^admin/ajax/rate_product$', products.rate_product, name='rate product'),
 
   #ORDERS
   url(r'^admin/all_orders$', orders.allOrders, name='all orders'),

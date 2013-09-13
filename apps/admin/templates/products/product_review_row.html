@@ -15,20 +15,31 @@
 <tr id='actions-row-{{ product.id }}' class='actions-row highlight'>
 
   <td class='actions'>
-    <button class='approve-product btn btn-success'
-            data-product-id="{{ product.id }}">
-      Approve
-    </button>
+    {% if not product.is_approved %}
+      <button class='close-product btn btn-success'
+              data-product-id="{{ product.id }}">
+        Approve
+      </button>
+    {% else %}
+      <button class='approve-product btn btn-success'
+              data-product-id="{{ product.id }}">
+        Done
+      </button>
+    {% endif %}
+    {% if not product.in_holding %}
     <br>
     <button class='hold-product btn btn-warning'
             data-product-id="{{ product.id }}">
       On Hold
     </button>
-    <br>
-    <button class='delete-product btn btn-mini btn-danger'
-            data-product-id="{{ product.id }}">
-      Delete
-    </button>
+    {% endif %}
+    {% if product.is_active and not product.approved_at %}
+      <br>
+      <button class='delete-product btn btn-mini btn-danger'
+              data-product-id="{{ product.id }}">
+        Delete
+      </button>
+    {% endif %}
   </td>
 
   <td class='ratings' colspan='2'>
@@ -71,10 +82,12 @@
 
   <td class='links'>
     <i class='black'>{{ product.id }}</i>
-    <br>
-    <a href="{% url 'seller:inventory edit' product.id %}" target='_blank'>
-      <i class='symbol-go blue'></i>
-    </a>
+    {% if product.is_active and not product.approved_at %}
+      <br>
+      <a href="{% url 'seller:inventory edit' product.id %}" target='_blank'>
+        <i class='symbol-go blue'></i>
+      </a>
+    {% endif %}
     <br>
     <a href="{% url 'product' product.id %}" target='_blank'>
       <i class='symbol-profile green'></i>
