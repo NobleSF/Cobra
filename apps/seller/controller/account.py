@@ -20,17 +20,12 @@ def create(account):
 
 @access_required('seller')
 def edit(request):
-  from apps.seller.models import Seller, Asset
+  from apps.seller.models import Seller
   from apps.seller.controller.forms import AssetForm, ImageForm, SellerEditForm
   from settings.settings import CLOUDINARY
 
   seller = Seller.objects.get(id=request.session['seller_id'])
   try:
-    try:
-      assets = Asset.objects.filter(seller_id=seller.id)
-    except:
-      assets = []
-
     image_form = ImageForm()
     image_form.fields['tags'].initial = "asset,seller"+str(request.session['seller_id'])
     image_form.fields['timestamp'].initial = getUnixTimestamp()
@@ -38,7 +33,7 @@ def edit(request):
 
     context = {
                 'seller':     seller,
-                'assets':     assets,
+                'assets':     seller.asset_set.all(),
                 'asset_form': AssetForm(),
                 'image_form': image_form,
                 'asset_ilks': ['artisan','product','tool','material'],
