@@ -17,7 +17,7 @@
 {% block additional_meta_tags %}
   <meta property="product:price:amount"           content="{{ product.display_price }}" />
   <meta property="product:price:currency"         content="USD" />
-  <meta property="product:shipping_cost:amount"   content="0.00" />
+  <meta property="product:shipping_cost:amount"   content="{{ product.display_shipping_price }}" />
   <meta property="product:shipping_cost:currency" content="USD" />
 {% endblock additional_meta_tags %}
 
@@ -28,8 +28,26 @@
 {% block css %}
   <link href="{{ STATIC_URL }}public/css/product.css" rel="stylesheet">
 {% endblock css %}
-
 {% endcache public_product_header %}
+
+{% block header_link_1 %}
+  {% if 'admin_id' in request.session %}
+    <button id='unapprove' class='btn btn-large btn-warning'
+            data-approve-url="{% url 'admin:approve product' %}"
+            data-product-id="{{ product.id }}">
+      {% if product.approved_at %}
+        Unapprove Product
+      {% else %}
+        Unapproved.
+      {% endif %}
+    </button>
+  {% else %}
+    {{ block.super }}
+  {% endif %}
+{% endblock header_link_1 %}
+{% block header_link_2 %}
+  {% if 'admin_id' not in request.session %}{{ block.super }}{% endif  %}
+{% endblock header_link_2 %}
 
 {% block content %}
 {% cache 2592000 public_product_content product.id product.approved_at product.is_recently_sold product.is_sold %}
@@ -120,6 +138,7 @@
           <td class='price-qualifier'>free returns.</td>
         </tr>
       </table>
+
       {% if product.is_sold %}
         <a id='buy-button' class='btn btn-primary btn-danger disabled'
            href="">

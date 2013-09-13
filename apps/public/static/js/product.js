@@ -9,6 +9,15 @@ $(function(){//on page load
 
 });
 
+$('#unapprove').click(function(){
+  button = $(this)
+  $.get($(this).attr('data-approve-url'),
+        {product_id:$(this).attr('data-product-id'), action:"hold"}
+  ).done(function(){
+    button.html('Unapproved.').addClass('disabled');
+  });
+})
+
 $('.read-more').on('click', function(){
   $(this).prev('.short-description').hide();
   $(this).hide();
