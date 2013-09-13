@@ -237,6 +237,10 @@ class Product(models.Model):
     return cost_amalgum_boobs_bomb
 
   @property
+  def display_shipping_price(self, locale='US'):
+    return 0
+
+  @property
   def is_complete(self):
     is_product = has_artisan = has_photo = has_price = False
     if len(self.assets.filter(ilk='product')) > 0:
