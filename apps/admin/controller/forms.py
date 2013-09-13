@@ -12,7 +12,7 @@ class AccountCreateForm(forms.Form):
   password      = forms.CharField(max_length=100)
   account_type  = forms.MultipleChoiceField(
                     widget=forms.Select,
-                    choices=(('admin','admin'),('seller','seller'))
+                    choices=(('seller','seller'),('admin','admin'))
                   )
 
   def clean_password(self):
