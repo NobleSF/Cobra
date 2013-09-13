@@ -14,26 +14,30 @@ def create(request):
 
   if request.method == 'POST':
     try:
-      username = request.POST.get('username')
-      password = process_password(request.POST.get('password'))
-      account = Account(username=username, password=password)
-      account.is_admin = (request.POST['account_type'] == 'admin')
-      account.save()
+      if request.POST.get('username') and request.POST.get('password'):
+        username = request.POST.get('username')
+        password = process_password(request.POST.get('password'))
+        account = Account(username=username, password=password)
+        account.is_admin = (request.POST['account_type'] == 'admin')
+        account.save()
 
-      if account.is_admin:
-        messages.success(request, 'Admin account created.')
-        return redirect('admin:account edit', account.id)
+        if account.is_admin:
+          messages.success(request, 'Admin account created.')
+          return redirect('admin:account edit', account.id)
 
-      else: #seller account
-        if createSeller(account) == True:
-          #messages.success(request, 'Seller account created.')
-          login(request)
-          return redirect('seller:edit')
-        else:
-          messages.error(request, 'Error creating seller account.')
-          error_message = createSeller(account)
-          messages.error(request, error_message)
-          account.delete()
+        else: #seller account
+          if createSeller(account) == True:
+            #messages.success(request, 'Seller account created.')
+            login(request)
+            return redirect('seller:edit')
+          else:
+            messages.error(request, 'Error creating seller account.')
+            error_message = createSeller(account)
+            messages.error(request, error_message)
+            account.delete()
+
+      else:
+        messages.warning(request, 'Missing username or password')
 
     except IntegrityError:
       messages.warning(request, 'An account with this username already exists.')
