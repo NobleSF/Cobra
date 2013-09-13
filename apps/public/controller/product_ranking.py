@@ -8,6 +8,8 @@ WEIGHTS = {'date_posted': 15,
            'appeal':      8,
            'new_store':   6
           }
+DAYS_TO_PROMOTE_NEW_PRODUCT = 2
+DAYS_TO_PROMOTE_NEW_STORE = 14
 
 def getRankPoints(product):
   sum = 0.0
@@ -28,8 +30,10 @@ def datePostedResult(product):
 
 def datePostedValue(product):
   date_posted = product.approved_at.replace(tzinfo=None)
-  difference = datetime.today() - date_posted
-  value = 1.8 * invLog(float(difference.days)) if difference.days > 1 else 1
+  time_difference = datetime.today() - date_posted
+  this_number = time_difference.days - DAYS_TO_PROMOTE_NEW_PRODUCT
+  this_number = 1 if this_number < 0 else this_number + 4
+  value = 1.8 * invLog(this_number) if this_number > 1 else 1
   return value if value < 1 else 1
 
 def photographyResult(product):
@@ -70,8 +74,10 @@ def storeNewnessResult(product):
 
 def storeNewnessValue(product):
   date_live = product.seller.created_at.replace(tzinfo=None)
-  difference = datetime.today() - date_live
-  value = 1.8 * invLog(float(difference.days-12)) if difference.days > 12 else 1
+  time_difference = datetime.today() - date_live
+  this_number = time_difference.days - DAYS_TO_PROMOTE_NEW_STORE
+  this_number = 1 if this_number < 0 else this_number + 4
+  value = 1.8 * invLog(this_number) if this_number > 1 else 1
   return value if value < 1 else 1
 
 def ratingConfidence(numRatings):
