@@ -22,6 +22,7 @@ def create(request):
 
       if account.is_admin:
         messages.success(request, 'Admin account created.')
+        return redirect('admin:account edit', account.id)
 
       else: #seller account
         if createSeller(account) == True:
@@ -103,9 +104,10 @@ def login(request, next=None):
         except: pass
 
       #lower-case first letter (for phones that auto-capitalize it)
-      username_as_list = list(username)
-      username_as_list[0] = username_as_list[0].lower()
-      username = "".join(username_as_list)
+      if len(username) > 0:
+        username_as_list = list(username)
+        username_as_list[0] = username_as_list[0].lower()
+        username = "".join(username_as_list)
       if not account:
         try: account = Account.objects.get(username=username)
         except: pass
