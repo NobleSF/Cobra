@@ -54,7 +54,7 @@
               {% for item in cart %}
                 <li>
                   <img class='product-photo'
-                       src='{{ item.photo.pinky_size }}' alt='product photo'>
+                       src='{{ item.photo.pinky_size }}' alt='{{ item.product.title }}'>
                   <h5 class='product-title'>
                     {{ item.product.name }}
                     <span class='copy-font'>${{ item.product.display_price }}</span>

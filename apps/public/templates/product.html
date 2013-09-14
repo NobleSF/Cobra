@@ -5,9 +5,7 @@
 {% cache 2592000 public_product_header product.id product.approved_at %}
 
 {% block title %}
-  {{ product.name|title }}
-  by {{ product.seller.name }}
-  {{ product.category }}
+  {{ product.long_title }}
   on {{ block.super }}
 {% endblock title %}
 
@@ -19,7 +17,7 @@
 
 {%block open_graph_type%}product{%endblock%}
 {%block open_graph_url%}http://www.theanou.com{% url 'product' product.id %}{%endblock%}
-{%block open_graph_title%}{{ product.name }} by {{ product.seller.name }}{%endblock%}
+{%block open_graph_title%}{{ product.long_title }}{%endblock%}
 {%block open_graph_description%}{{ product.description }}{%endblock%}
 {%block open_graph_image%}{{ product.photos.0.thumb_size }}{%endblock%}
 
@@ -69,7 +67,8 @@
         <div class='carousel-inner'>
           {% for photo in product.photos %}
             <div class='item {% if forloop.first %}active{% endif %}'>
-              <img src='{{ photo.product_size }}' alt='product photo {{ photo.rank }}'>
+              <img src='{{ photo.product_size }}'
+                   alt='{{ product.title }} photo{{ photo.rank }}'>
               <!--<div class='carousel-caption'></div>-->
             </div>
           {% endfor %}
@@ -167,7 +166,8 @@
     </div>
 
     <div id='artisan' class='span4'>
-      <img id='artisan-image' src='{{ product.artisan.image.thumb_size }}'>
+      <img id='artisan-image' src='{{ product.artisan.image.thumb_size }}'
+           alt='{{ product.artisan.title }}'>
       {% if product.artisan.name %}
         <p>handmade by</p>
         <h3 id='artisan-name'>{{ product.artisan.name }}</h3>
@@ -210,7 +210,8 @@
           <tr>
             <td class='utility-image-space'>
               {% if utility.image %}
-                <img class='small-utility-image' src='{{ utility.image.pinky_size }}'>
+                <img class='small-utility-image' src='{{ utility.image.pinky_size }}'
+                     alt='{{ utility.title }}'>
               {% endif %}
             </td>
             <td>
@@ -253,7 +254,8 @@
         <small>more from</small> {{ product.seller.name }}
       </a>
       {% if product.seller.image %}
-        <img src='{{ product.seller.image.pinky_size }}'>
+        <img src='{{ product.seller.image.pinky_size }}'
+             alt='{{ product.seller.title }}'>
       {% endif %}
     </h1>
 

@@ -37,7 +37,7 @@
         {% if store.image %}
           <li>
             <a href="{% url 'store' store.id %}">
-              <img src='{{ store.image.thumb_size }}' title='{{ store.name }} logo'>
+              <img src='{{ store.image.thumb_size }}' alt='{{ store.title }}'>
             </a>
           </li>
         {% endif %}
@@ -74,7 +74,8 @@
             {% for artisan in store.artisans %}
               <div class='artisan-profile artisan'>
                 {% if artisan.image %}
-                  <img class='artisan-image' src='{{ artisan.image.thumb_size }}'>
+                  <img class='artisan-image' src='{{ artisan.image.thumb_size }}'
+                       alt='{{ artisan.title }}'>
                 {% endif %}
                 {% if artisan.name %}
                   <div class='title'>

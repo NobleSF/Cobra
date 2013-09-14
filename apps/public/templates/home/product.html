@@ -15,7 +15,8 @@
     </div>
 
     <div class='photo'>
-      <img src='{% get_static_prefix %}images/loader.gif'
+      <img alt='{{ product.long_title }}'
+           src='{% get_static_prefix %}images/loader.gif'
            data-src='{{ product.photo.thumb_size }}'
            data-src-retina=''>
     </div>

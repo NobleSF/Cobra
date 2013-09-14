@@ -40,7 +40,7 @@
             <div id='item_{{ item.id }}' class='thumbnail row-fluid'>
               <div class='photo span4'>
                 <a href="{% url 'product' item.product.id %}">
-                  <img src='{{ item.photo.thumb_size }}' alt='product photo'>
+                  <img src='{{ item.photo.thumb_size }}' alt='{{ item.product.title }}'>
                 </a>
               </div>
               <div class='details span8'>
