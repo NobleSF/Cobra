@@ -148,16 +148,18 @@
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'facebook-jssdk'));</script>
     {% endblock facebook %}
+    {% block pinterest %}
+      <script type="text/javascript" data-pin-hover="true" src="//assets.pinterest.com/js/pinit.js"></script>
+    {% endblock pinterest %}
   {% endif %}
 
   {% if 'username' not in request.session and not debug  %}
     {% block zopim %}
-      <!--ZOPIM-->
-      <!--<script type="text/javascript">window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set._.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute('charset','utf-8');$.src='//cdn.zopim.com/?xlmuDH2WUDECb1kjWcaJOoCY6HHe0F2f';z.t=+new Date;$.type='text/javascript';e.parentNode.insertBefore($,e)})(document,'script');</script>-->
-      <!--END ZOPIM-->
+      <!--ZOPIM
+      <script type="text/javascript">window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set._.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute('charset','utf-8');$.src='//cdn.zopim.com/?xlmuDH2WUDECb1kjWcaJOoCY6HHe0F2f';z.t=+new Date;$.type='text/javascript';e.parentNode.insertBefore($,e)})(document,'script');</script>
+      END ZOPIM-->
     {% endblock zopim %}
     {% block google_analytics %}
-      <!--GOOGLE ANALYTICS-->
       <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -166,10 +168,8 @@
         ga('create', 'UA-43146187-1', 'theanou.com');
         ga('send', 'pageview');
       </script>
-      <!--END GOOGLE ANALYTICS-->
     {% endblock google_analytics %}
     {% block lexity %}
-      <!--LEXITY-->
       <script type="text/javascript">
       (function(d, w) {
         var x = d.getElementsByTagName('SCRIPT')[0];
@@ -188,10 +188,8 @@
         w.attachEvent ? w.attachEvent('onload', f) : w.addEventListener('load', f, false);
       }(document, window));
       </script>
-      <!--END LEXITY-->
     {% endblock lexity %}
     {% block olark %}
-      <!--OLARK-->
       <script data-cfasync="false" type='text/javascript'>/*<![CDATA[*/window.olark||(function(c){var f=window,d=document,l=f.location.protocol=="https:"?"https:":"http:",z=c.name,r="load";var nt=function(){
       f[z]=function(){
       (a.s=a.s||[]).push(arguments)};var a=f[z]._={
@@ -210,9 +208,7 @@
       loader: "static.olark.com/jsclient/loader0.js",name:"olark",methods:["configure","extend","declare","identify"]});
       /* custom configuration goes here (www.olark.com/documentation) */
       olark.identify('7584-559-10-7143');/*]]>*/</script><noscript><a href="https://www.olark.com/site/7584-559-10-7143/contact" title="Contact us" target="_blank">Questions? Feedback?</a> powered by <a href="http://www.olark.com?welcome" title="Olark live chat software">Olark live chat software</a></noscript>
-      <!--END OLARK-->
     {% endblock olark %}
   {% endif %}
-
 </body>
 </html>
