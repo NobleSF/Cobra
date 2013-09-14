@@ -22,6 +22,8 @@ class Seller(models.Model):
   @property
   def name(self): return self.account.name if self.account.name else ""
   @property
+  def title(self): return "%s from %s, %s" % (self.name, self.city, self.country.name)
+  @property
   def email(self): return self.account.email if self.account.email else ""
   @property
   def phone(self): return self.account.phone if self.account.phone else ""
@@ -55,6 +57,10 @@ class Asset(models.Model):
 
   def __unicode__(self):
     return unicode(self.name)
+
+  @property
+  def title(self):
+    return "%s from %s, %s" % (self.name, self.seller.city, self.seller.country.name)
 
   def get_ilk(self):
     return self._get_ilk_display()
@@ -109,7 +115,6 @@ class Product(models.Model):
     else:
       return True
 
-
   @property
   def is_approved(self): return True if self.approved_at else False
 
@@ -120,10 +125,21 @@ class Product(models.Model):
 
   @property
   def name(self):
-    if len(self.assets.filter(ilk='product')) > 0:
-      if self.assets.filter(ilk='product')[0].name:
-        return self.assets.filter(ilk='product')[0].name
-    return str(self.id)
+    name = None
+    try: name = self.assets.filter(ilk='product')[0].name
+    except: pass
+    return name if name else str(self.id)
+
+  @property
+  def title(self):
+    return "%s by %s %s" % (self.name, self.seller.name, self.category)
+
+  @property
+  def long_title(self):
+    title = self.name
+    title += " by %s %s" % (self.seller.name, self.category)
+    title += " from %s, %s" % (self.seller.city, self.seller.country.name)
+    return title
 
   @property
   def description(self):
