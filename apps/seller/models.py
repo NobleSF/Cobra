@@ -26,6 +26,16 @@ class Seller(models.Model):
   @property
   def phone(self): return self.account.phone if self.account.phone else ""
 
+  @property
+  def categories(self):
+    from datetime import datetime
+    products = self.product_set.filter(approved_at__lte=datetime.today())
+    categories = []
+    for product in products:
+      if product.category not in categories:
+        categories.append(product.category)
+    return categories
+
   def __unicode__(self):
     return self.account.name if self.account.name else "No Name"
 
