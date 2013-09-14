@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from apps.public.controller import home
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.views.generic.simple import redirect_to, direct_to_template
 
 urlpatterns = patterns('',
@@ -19,12 +19,13 @@ urlpatterns += patterns('',
 #BACKWARDS COMPATABILITY WITH OLD ANOU SITE
 from apps.communication.controller import sms
 urlpatterns += patterns('',
-  (r'^index.php', lambda x: HttpResponseRedirect('/')), #and this is home too
-  (r'^landing.php', lambda x: HttpResponseRedirect('/')), #and this is home too
-  (r'^a/', lambda x: HttpResponseRedirect('/seller/')), #and this is home too
+  (r'^index.php', lambda x: HttpResponsePermanentRedirect('/')),
+  (r'^landing.php', lambda x: HttpResponsePermanentRedirect('/')),
+  (r'^a/', lambda x: HttpResponsePermanentRedirect('/seller/')),
 
   #for Flickr photo check run by IFTTT every hour to wake up Heroku
-  (r'^logo$', redirect_to, {'url': 'http://s3.amazonaws.com/anou/images/Anou_logo_80x50.png'}),
+  (r'^logo$', redirect_to,
+   {'url': 'http://s3.amazonaws.com/anou/images/Anou_logo_80x50.png', 'permanent': False}),
 )
 
 #SEO
