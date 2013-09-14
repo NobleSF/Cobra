@@ -40,4 +40,6 @@ urlpatterns += patterns('',
 urlpatterns += patterns('',
   (r'^pinterest-73682.html', direct_to_template,
     {'template': 'site-verifcations/pinterest-73682.html'}),
+  (r'^google79499a3cc417dc54.html', direct_to_template,
+    {'template': 'site-verifcations/google79499a3cc417dc54.html'}),
 )
