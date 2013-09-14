@@ -12,7 +12,9 @@
 {% endblock title %}
 
 {% block description %}
-  {{ product.description }}
+  {% if product.description %}
+    {{ product.description }}
+  {% endif %}
 {% endblock description %}
 
 {%block open_graph_type%}product{%endblock%}

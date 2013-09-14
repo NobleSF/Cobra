@@ -11,7 +11,9 @@
 {% endblock title %}
 
 {% block description %}
-  {{ store.bio|truncatewords:40 }}
+  {% if store.bio %}
+    {{ store.bio|truncatewords:40 }}
+  {% endif %}
 {% endblock description %}
 
 {%block open_graph_type%}store{%endblock%}
