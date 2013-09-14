@@ -5,7 +5,8 @@ from django.views.generic.simple import redirect_to, direct_to_template
 
 urlpatterns = patterns('',
   url(r'^$', home.home, name='home'), #fyi, this is home
-  url(r'^blog', redirect_to, {'url': 'http://helloanou.wordpress.com/'}),
+  url(r'^blog', redirect_to,
+      {'url': 'http://helloanou.wordpress.com/', 'permanent': False}),
 )
 
 urlpatterns += patterns('',
