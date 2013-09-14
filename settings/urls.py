@@ -5,7 +5,7 @@ from django.views.generic.simple import redirect_to, direct_to_template
 
 urlpatterns = patterns('',
   url(r'^$', home.home, name='home'), #fyi, this is home
-  (r'^blog', redirect_to, {'url': 'http://helloanou.wordpress.com/'}),
+  url(r'^blog', redirect_to, {'url': 'http://helloanou.wordpress.com/'}),
 )
 
 urlpatterns += patterns('',
@@ -27,7 +27,7 @@ urlpatterns += patterns('',
 )
 
 #SEO
-urlpatterns = patterns('',
+urlpatterns += patterns('',
   (r'^robots.txt', direct_to_template, {'template':'robots.txt', 'mimetype':'text/plain'}),
   (r'^humans.txt', direct_to_template, {'template':'humans.txt', 'mimetype':'text/plain'}),
 
