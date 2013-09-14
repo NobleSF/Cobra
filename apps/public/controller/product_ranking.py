@@ -2,7 +2,7 @@ from math import log, pow, e, ceil
 from django.db.models import Avg
 from datetime import datetime
 
-WEIGHTS = {'date_posted': 15,
+WEIGHTS = {'date_posted': 12,
            'photography': 10,
            'price':       5,
            'appeal':      8,
