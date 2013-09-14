@@ -6,10 +6,6 @@ from django.views.generic.simple import redirect_to, direct_to_template
 urlpatterns = patterns('',
   url(r'^$', home.home, name='home'), #fyi, this is home
   (r'^blog', redirect_to, {'url': 'http://helloanou.wordpress.com/'}),
-
-  (r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': {}}),
-  url(r'^humans.txt', direct_to_template, {'template':'humans.txt', 'mimetype':'text/plain'}),
-  url(r'^robots.txt', direct_to_template, {'template':'robots.txt', 'mimetype':'text/plain'}),
 )
 
 urlpatterns += patterns('',
@@ -19,15 +15,7 @@ urlpatterns += patterns('',
   url(r'^communication/', include('apps.communication.urls', namespace='communication')),
 )
 
-from django.views.generic.simple import direct_to_template
-urlpatterns += patterns('',
-    (r'^robots\.txt$', direct_to_template,
-     {'template': 'robots.txt', 'mimetype': 'text/plain'}),
-    (r'^humans\.txt$', direct_to_template,
-     {'template': 'humans.txt', 'mimetype': 'text/plain'}),
-)
-
-#backwards compatability with old Anou site
+#BACKWARDS COMPATABILITY WITH OLD ANOU SITE
 from apps.communication.controller import sms
 urlpatterns += patterns('',
   (r'^index.php', lambda x: HttpResponseRedirect('/')), #and this is home too
@@ -36,4 +24,18 @@ urlpatterns += patterns('',
 
   #for Flickr photo check run by IFTTT every hour to wake up Heroku
   (r'^logo$', redirect_to, {'url': 'http://s3.amazonaws.com/anou/images/Anou_logo_80x50.png'}),
+)
+
+#SEO
+urlpatterns = patterns('',
+  (r'^robots.txt', direct_to_template, {'template':'robots.txt', 'mimetype':'text/plain'}),
+  (r'^humans.txt', direct_to_template, {'template':'humans.txt', 'mimetype':'text/plain'}),
+
+  (r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': {}}),
+)
+
+#SITE-VERIFICATIONS
+urlpatterns += patterns('',
+  (r'^pinterest-73682.html', direct_to_template,
+    {'template': 'site-verifcations/pinterest-73682.html'}),
 )
