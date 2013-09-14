@@ -6,12 +6,18 @@
 
 {% block title %}
   {{ store.name }}
+  - {{ store.categories|join:", "}}
+  on {{ block.super }}
 {% endblock title %}
+
+{% block description %}
+  {{ store.bio|truncatewords:40 }}
+{% endblock description %}
 
 {%block open_graph_type%}store{%endblock%}
 {%block open_graph_url%}http://www.theanou.com{% url 'store' store.id %}{%endblock%}
 {%block open_graph_title%}{{ store.name }}{%endblock%}
-{%block open_graph_description%}{{ store.bio|truncatewords:"25" }}{%endblock%}
+{%block open_graph_description%}{{ store.bio|truncatewords:40 }}{%endblock%}
 {%block open_graph_image%}{{ store.image.thumb_size }}{%endblock%}
 
 {% block javascript %}

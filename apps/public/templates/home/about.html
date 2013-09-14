@@ -2,8 +2,11 @@
 {% load url from future %}
 
 {% block title %}
-  {{ block.super }} About
+  About {{ block.super }}
 {% endblock title %}
+{% block description %}
+  Anou Team and Founding Story - The idea for Anou was developed by Dan Driscoll during his Peace Corps service in Morocco from 2008-2010.
+{% endblock description %}
 
 {%block open_graph_type%}{%endblock%}
 {%block open_graph_url%}http://www.theanou.com/about{%endblock%}

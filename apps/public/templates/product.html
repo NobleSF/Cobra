@@ -5,13 +5,20 @@
 {% cache 2592000 public_product_header product.id product.approved_at %}
 
 {% block title %}
-  {{ product.name }} by {{ product.seller.name }}
+  {{ product.name|title }}
+  by {{ product.seller.name }}
+  {{ product.category }}
+  on {{ block.super }}
 {% endblock title %}
+
+{% block description %}
+  {{ product.description }}
+{% endblock description %}
 
 {%block open_graph_type%}product{%endblock%}
 {%block open_graph_url%}http://www.theanou.com{% url 'product' product.id %}{%endblock%}
 {%block open_graph_title%}{{ product.name }} by {{ product.seller.name }}{%endblock%}
-{%block open_graph_description%}{{ product.description|truncatewords:"25" }}{%endblock%}
+{%block open_graph_description%}{{ product.description }}{%endblock%}
 {%block open_graph_image%}{{ product.photos.0.thumb_size }}{%endblock%}
 
 {% block additional_meta_tags %}

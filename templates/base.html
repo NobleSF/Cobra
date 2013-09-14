@@ -4,7 +4,18 @@
 
 <head>
   <meta charset="utf-8">
-  <title>{% block title %}Anou{% endblock title %}</title>
+  {% spaceless %}
+    <title>
+      {% block title %}Anou - Beyond Fair Trade{% endblock title %}
+    </title>
+  {% endspaceless %}
+  {% spaceless %}
+    <meta name="description" content="
+      {%block description%}
+        Buy unique and incredible Moroccan handicrafts and art directly from the artisans who made it.
+      {% endblock description %}
+    " />
+  {% endspaceless %}
 
   {% block viewport %}
     <meta id='page-viewport' name="viewport" content="width=device-width" />
@@ -18,7 +29,7 @@
   <meta property="og:type"        content="anoustore:{%block open_graph_type%}{%endblock%}" />
   <meta property="og:url"         content="{%block open_graph_url%}http://www.theanou.com{%endblock%}" />
   <meta property="og:title"       content="{%block open_graph_title%}Anou Store{%endblock%}" />
-  <meta property="og:description" content="{%block open_graph_description%}Unique and incredible Moroccan handicrafts sold directly by the artisans making it.{%endblock%}" />
+  <meta property="og:description" content="{%block open_graph_description%}Buy unique and incredible Moroccan handicrafts and art directly from the artisans who made it.{%endblock%}" />
   <meta property="og:image"       content="{%block open_graph_image%}{{ STATIC_URL }}images/Anou_logo_social.png{%endblock%}" />
 
   {% block additional_meta_tags %}{% endblock additional_meta_tags %}

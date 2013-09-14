@@ -3,7 +3,9 @@
 {% load cache %}
 {% load home_inclusion_tags %}
 
+{% cache 86400 home_header %}
 {% block title %}{{ block.super }}{% endblock title %}
+{% block description %}{{ block.super }}{% endblock description %}
 
 {%block open_graph_type%}{%endblock%}
 {%block open_graph_url%}http://www.theanou.com{%endblock%}
@@ -19,6 +21,7 @@
   <link href="{{ STATIC_URL }}public/css/home.css" rel="stylesheet">
   <link href="{{ STATIC_URL }}vendor/fitgrid/css/fitgrid.css" rel="stylesheet">
 {% endblock css %}
+{% endcache home_header %}
 
 {% block header_link_1 %}
   <li><a class='title' href="{% url 'about' %}">About</a></li>
@@ -110,5 +113,5 @@
   {% homepage_products_tag %}
 
   <div id='product-sorting-container' class=''></div>
-{% endcache %}
+{% endcache home_content %}
 {% endblock content %}
