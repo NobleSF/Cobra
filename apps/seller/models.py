@@ -178,21 +178,20 @@ class Product(models.Model):
   @property
   def metric_dimensions(self):
     from math import floor
-    from django.contrib.gis.measure import Distance
     metric_string = ""
     measurements = sorted([self.width, self.height, self.length], reverse=True)
 
     for length in measurements:
-      if length and Distance(cm=length).m > 1:
-        meters = floor(Distance(cm=length).m)
-        centimeters = int(round((Distance(cm=length)-Distance(m=meters)).cm))
-      elif length:
-        meters=None
-        centimeters = int(round(Distance(cm=length).cm))
-        centimeters = centimeters if centimeters > 0 else 1
       if length:
+        centimeters = int(round(length))
+        if centimeters >= 100:
+          meters = int(round(centimeters / 100))
+          centimeters = centimeters % 100
+        else:
+          meters = 0
+          centimeters = centimeters if centimeters > 0 else 1
         dimension_string = ("%dm " % meters) if meters else ""
-        dimension_string += "%dcm" % centimeters
+        dimension_string += "%dcm" % centimeters if centimeters else ""
         metric_string += "%s x " % dimension_string
 
     if metric_string.endswith(" x "):
@@ -201,22 +200,20 @@ class Product(models.Model):
 
   @property
   def english_dimensions(self):
-    from math import floor
-    from django.contrib.gis.measure import Distance
     engish_string = ""
     measurements = sorted([self.width, self.height, self.length], reverse=True)
 
     for length in measurements:
-      if length and Distance(cm=length).ft > 1:
-        feet = floor(Distance(cm=length).ft)
-        inches = int(round((Distance(cm=length) - Distance(ft=feet)).inch))
-      elif length:
-        feet=None
-        inches = int(round(Distance(cm=length).inch))
-        inches = inches if inches > 0 else 1
       if length:
+        inches = int(round(length/2.54))
+        if inches > 18:
+          feet = int(inches / 12)
+          inches = inches % 12
+        else:
+          feet = 0
+          inches = inches if inches > 0 else 1
         dimension_string = ("%dft " % feet) if feet else ""
-        dimension_string += "%din" % inches
+        dimension_string += ("%din" % inches) if inches else ""
         engish_string += "%s x " % dimension_string
 
     if engish_string.endswith(" x "):
