@@ -30,7 +30,8 @@ def unrated_products(request):
   unrated_products = (Product.objects.filter(sold_at=None,
                                              approved_at__lte=datetime.today())
                       .annotate(rating_count=Count('rating'))
-                      .filter(rating_count__lt=3))
+                      .filter(rating_count__lte=15)
+                      .exclude(rating__session_key = request.session.session_key))
 
   return render(request, 'products/unrated_products.html', {'products':unrated_products})
 
