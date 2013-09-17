@@ -123,6 +123,9 @@ def login(request, next=None):
         if account.is_admin:
           request.session['admin_id'] = account.id
           request.session['username'] = account.username
+          if 'cart_id' in request.session:
+            del request.session['cart_id']
+
         else:#is seller
           try:
             seller = Seller.objects.get(account_id=account.id)
