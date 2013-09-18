@@ -11,9 +11,14 @@ class Seller(models.Model):
   currency      = models.ForeignKey(Currency, null=True, blank=True)
   image         = models.ForeignKey('Image', null=True, blank=True, on_delete=models.SET_NULL)
 
-  #translated_at = models.DateTimeField(null=True, blank=True) #seller add
-  #translated_by = models.ForeignKey(Account, null=True, blank=True)
-  #approved_at   = models.DateTimeField(null=True, blank=True) #seller add
+  #Original Language
+  #name_ol       = models.CharField(max_length=50, null=True, blank=True)
+  bio_ol = models.TextField(null=True, blank=True)
+
+  #account lifecycle
+  translated_by = models.ForeignKey(Account, null=True, blank=True, related_name='translator')
+  approved_at   = models.DateTimeField(null=True, blank=True) #admin approval
+  deactive_at   = models.DateTimeField(null=True, blank=True) #seller deactivate
 
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
@@ -50,6 +55,10 @@ class Asset(models.Model):
   image         = models.ForeignKey('Image', null=True, blank=True, on_delete=models.SET_NULL)
   categories    = models.ManyToManyField(Category, null=True, blank=True)
   phone         = models.CharField(max_length=15, null=True, blank=True)
+
+  #Original Language
+  name_ol       = models.CharField(max_length=50, null=True, blank=True)
+  description_ol = models.TextField(null=True, blank=True)
 
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
@@ -291,9 +300,7 @@ class ShippingOption(models.Model):
   from apps.admin.models import Country
   name          = models.CharField(max_length=50)
   country       = models.ForeignKey(Country)
-  #cost_formula  = models.CharField(max_length=50, null=True, blank=True)
-  #using varaibles: l,w,h(cm), g=weight(grams)
-  image         = models.ForeignKey('Image')
+  image         = models.ForeignKey('Image', null=True, blank=True, on_delete=models.SET_NULL)
 
   def __unicode__(self):
     return self.name

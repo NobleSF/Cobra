@@ -10,6 +10,8 @@ def homepage_products_tag():
   products = (Product.objects.filter(sold_at=None,
                                     approved_at__lte=datetime.today(),
                                     active_at__lte=datetime.today(),
+                                    seller__approved_at__lte=datetime.today(),
+                                    seller__deactive_at=None,
                                     deactive_at=None))
 
   for p in products:
