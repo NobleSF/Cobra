@@ -2,8 +2,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from apps.admin.controller.decorator import access_required
 from django.contrib import messages
-from django.utils import simplejson
-from datetime import datetime
+from django.utils import simplejson, timezone
+from datetime import timedelta
 from apps.admin.models import Account
 from settings.people import Tom
 from apps.communication.controller.email_class import Email
@@ -88,9 +88,17 @@ def approve_seller(request): #from AJAX GET request
     action = request.GET['action']
     seller = Seller.objects.get(id=seller_id)
     if action == 'approve':
-      seller.approved_at = datetime.now()
+      seller.approved_at = timezone.now()
       seller.save()
-      #reapprove all seller approved products
+
+      #reapprove all seller products that were approved in the last 14 days
+      fourteen_days_ago = timezone.now() - timedelta(days=14)
+      for product in (seller.product_set
+                      .filter(approved_at__lte=timezone.now())
+                      .exclude(approved_at__lte=fourteen_days_ago)):
+        product.approved_at = timezone.now()
+        product.save()
+
     elif action == 'unapprove':
       seller.approved_at = None
       seller.save()
