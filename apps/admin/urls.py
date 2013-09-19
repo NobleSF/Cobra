@@ -1,11 +1,7 @@
 from django.conf.urls import patterns, include, url
 from controller import dashboard, account, products, orders, communication, site_management
 
-# Uncomment the next two lines to enable the admin:
-#from django.contrib import admin
-#admin.autodiscover()
-
-#account pages
+#ACCOUNT PAGES
 urlpatterns = patterns('',
   #Todo: I'd like to add the word "secure" into all account and checkout pages
     # just to give the user more peace of mind.
@@ -19,7 +15,7 @@ urlpatterns = patterns('',
   url(r'^account/logout$', account.logout, name='logout'),
 )
 
-#dashboard pages
+#DASHBOARD PAGES
 urlpatterns += patterns('',
   url(r'^admin/dashboard$', dashboard.dashboard, name='dashboard'),
 
@@ -48,4 +44,11 @@ urlpatterns += patterns('',
   url(r'^admin/management/rating_subject$', site_management.rating_subject, name='rating_subject'),
   url(r'^admin/management/shipping_option$', site_management.shipping_option, name='shipping_option'),
   url(r'^admin/management/image_object$', site_management.image_object, name='image_object'),
+)
+
+#ADMIN ACTION
+urlpatterns += patterns('',
+  url(r'^admin/rebuild_homepage$', site_management.rebuild_homepage, name='rebuild homepage'),
+  url(r'^admin/rebuild_productpage/(?P<product_id>\d+)$', site_management.rebuild_productpage, name='rebuild productpage'),
+  url(r'^admin/rebuild_storepage/(?P<seller_id>\d+)$', site_management.rebuild_storepage, name='rebuild storepage'),
 )

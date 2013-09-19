@@ -2,7 +2,7 @@
 {% load url from future %}
 {% load cache %}
 
-{% cache 86400 public_store_content store.id store.updated_at %}
+{% cache 86400 public_store_header store.id store.updated_at %}
 
 {% block title %}
   {{ store.name }}
@@ -29,7 +29,21 @@
 {% block css %}
   <link href="{{ STATIC_URL }}public/css/store.css" rel="stylesheet">
 {% endblock css %}
+{% endcache public_store_header %}
 
+{% block header_link_1 %}
+  {{ block.super }}
+{% endblock header_link_1 %}
+{% block header_link_2 %}
+  {{ block.super }}
+  {% if 'admin_id' in request.session %}
+    <li><a href="{% url 'admin:rebuild storepage' store.id %}">
+      <button class='btn'>Refresh-Cache</button>
+    </a></li>
+  {% endif %}
+{% endblock header_link_2 %}
+
+{% cache 86400 public_store_content store.id store.updated_at %}
 {% block content %}
   <div id='store' class='row-fluid'>
     <div id='info-left' class='span4'>
@@ -137,5 +151,4 @@
   </div>
 
 {% endblock content %}
-
 {% endcache public_store_content %}

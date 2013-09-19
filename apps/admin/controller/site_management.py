@@ -3,7 +3,40 @@ from django.shortcuts import render, redirect
 from apps.admin.controller.decorator import access_required
 from django.contrib import messages
 from django.forms.models import modelformset_factory
-from django.utils import simplejson
+from apps.public.controller.events import invalidate_cache
+
+@access_required('admin')
+def rebuild_homepage(request):
+
+  if (invalidate_cache('home_header') and invalidate_cache('home_content')):
+    return redirect('home')
+  else:
+    messages.error(request,"Error refreshing cache on homepage")
+    return redirect('admin:dashboard')
+
+@access_required('admin')
+def rebuild_productpage(request, product_id):
+  from apps.seller.models import Product
+  try:
+    product = Product.objects.get(id=product_id)
+    invalidate_cache('public_product_header', product.id, product.approved_at)
+    invalidate_cache('public_product_content', product.id, product.approved_at, product.is_recently_sold, product.is_sold)
+    return redirect('product', product_id)
+  except:
+    messages.error(request,"Error refreshing cache on product page")
+    return redirect('product', product_id)
+
+@access_required('admin')
+def rebuild_storepage(request, seller_id):
+  from apps.seller.models import Seller
+  try:
+    seller = Seller.objects.get(id=seller_id)
+    invalidate_cache('public_store_header', seller.id, seller.updated_at)
+    invalidate_cache('public_store_content', seller.id, seller.updated_at)
+    return redirect('store', seller.id)
+  except:
+    messages.error(request,"Error refreshing cache on store page")
+    return redirect('store', seller_id)
 
 @access_required('admin')
 def country(request):

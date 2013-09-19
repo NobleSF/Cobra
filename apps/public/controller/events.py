@@ -1,10 +1,6 @@
 from django.core.cache import cache
 
-def refresh_homepage_cache():
-  invalidate_cache('homepage_header')
-  invalidate_cache('homepage_content')
-  pass
-
+#async?
 def invalidate_cache(fragment_name, *vary_on):
   try:
     cache_key = template_cache_key(fragment_name, *vary_on)

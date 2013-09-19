@@ -38,8 +38,12 @@
 {% endcache public_product_header %}
 
 {% block header_link_1 %}
+  {{ block.super }}
+{% endblock header_link_1 %}
+{% block header_link_2 %}
+  {{ block.super }}
   {% if 'admin_id' in request.session %}
-    <button id='unapprove' class='btn btn-large btn-warning'
+    <li><button id='unapprove' class='btn btn-warning'
             data-approve-url="{% url 'admin:approve product' %}"
             data-product-id="{{ product.id }}">
       {% if product.approved_at %}
@@ -47,13 +51,11 @@
       {% else %}
         Unapproved.
       {% endif %}
-    </button>
-  {% else %}
-    {{ block.super }}
+    </button></li>
+    <li><a href="{% url 'admin:rebuild productpage' product.id %}">
+      <button class='btn'>Refresh-Cache</button>
+    </a></li>
   {% endif %}
-{% endblock header_link_1 %}
-{% block header_link_2 %}
-  {% if 'admin_id' not in request.session %}{{ block.super }}{% endif  %}
 {% endblock header_link_2 %}
 
 {% block content %}
