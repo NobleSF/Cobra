@@ -11,14 +11,14 @@
       <img src="{{ STATIC_URL }}images/Anou_logo_80x50.png" alt="Anou Homepage">
     </a>
   </div>
+
+  {% if 'admin_id' in request.session %}
+    {% block admin_nav %}{% endblock admin_nav %}
+  {% endif %}
+
   <div id='base-navigation'>
     <ul class='pull-right'>
 
-      <!--<li>
-        <a href="{% url 'admin:logout' %}"
-           class='symbol-logout red' title='logout'>
-        </a>
-      </li>-->
       <li>
         <a href="{% url 'seller:management home' %}"
            class='symbol-go anou-blue' title='artisan account'>
