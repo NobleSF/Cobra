@@ -63,6 +63,7 @@ def edit(request):
           seller.account.save()
 
           seller.bio            = seller_data['bio']
+          seller.bio_ol         = seller_data['bio_ol']
           seller.city           = seller_data['city']
           seller.country        = seller_data['country']
           seller.coordinates    = seller_data['coordinates']
@@ -86,6 +87,7 @@ def edit(request):
       seller_form.fields['email'].initial       = seller.email
       seller_form.fields['phone'].initial       = seller.phone
       seller_form.fields['bio'].initial         = seller.bio
+      seller_form.fields['bio_ol'].initial      = seller.bio_ol
       try: seller_form.fields['image'].initial  = seller.image_id
       except: pass
       seller_form.fields['city'].initial        = seller.city
@@ -174,8 +176,12 @@ def saveAsset(request): #ajax requests only, create or update asset
         asset.image = customSaveImage(value)
       elif element == 'name':
         asset.name = value
+      elif element == 'name_ol':
+        asset.name_ol = value
       elif element == 'description':
         asset.description = value
+      elif element == 'description_ol':
+        asset.description_ol = value
       elif element == 'phone':
         asset.phone = value
       elif element == 'category':

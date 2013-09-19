@@ -15,6 +15,9 @@ class SellerEditForm(forms.Form):
   bio         = forms.CharField(
                   widget=forms.Textarea(attrs={'class':"description"}),
                     required=False)
+  bio_ol      = forms.CharField(
+                  widget=forms.Textarea(attrs={'class':"description"}),
+                    required=False)
 
   #image takes url of image after ajax upload to cloudinary
   image_url   = forms.CharField(
@@ -59,6 +62,16 @@ class AssetForm(forms.Form):
                   widget=forms.Textarea(
                     attrs={'class':"description autosave", 'data-asset_id':""}),
                     required=False)
+
+  name_ol     = forms.CharField(
+                  widget=forms.TextInput(
+                    attrs={'class':"name autosave", 'data-asset_id':""}),
+                    max_length=50, required=False)
+  description_ol= forms.CharField(
+                    widget=forms.Textarea(
+                      attrs={'class':"description autosave", 'data-asset_id':""}),
+                      required=False)
+
   category    = forms.ModelChoiceField(
                   widget=forms.Select(
                     attrs={'class':"category autosave", 'data-asset_id':""}),
@@ -87,26 +100,6 @@ class ImageForm(forms.Form):
                                                     })
                     )
 
-class PhotoFormold(forms.Form):
-  from settings.settings import CLOUDINARY
-
-  timestamp       = forms.CharField(label="", initial="not yet set")
-  signature       = forms.CharField(label="", initial="not yet set")
-  api_key         = forms.CharField(label="", initial=CLOUDINARY['api_key'])
-
-  format          = forms.CharField(label="", initial=CLOUDINARY['format'])
-  transformation  = forms.CharField(label="", initial=CLOUDINARY['transformation'])
-  tags            = forms.CharField(label="")
-
-  file            = forms.FileField(label="",
-                      widget=forms.FileInput(attrs={  'class':'photo-input',
-                                                      'accept':'*',
-                                                      'capture':'camera'
-                                                    })
-                    )
-  product         = forms.CharField(label="")
-  rank            = forms.CharField(label="")
-
 class PhotoForm(forms.Form): #to be run as 2 separate forms on the page
   from settings.settings import CLOUDINARY
 
@@ -134,9 +127,6 @@ class ProductEditForm(forms.Form):
   colors            = forms.CharField(
                         widget=forms.TextInput(),
                         initial=" ")
-
-  #photos            = forms.CharField(
-  #                      widget=forms.TextInput())
 
   price             = forms.CharField(
                         widget=NumberInput(attrs={'class':"autosave giveMeData",

@@ -8,6 +8,7 @@
 {% block css %}
   <link href='{{ STATIC_URL }}seller/css/account_edit.css' rel='stylesheet'>
   <link href='{{ STATIC_URL }}seller/css/asset.css' rel='stylesheet'>
+  <link href='{{ STATIC_URL }}css/flags.css' rel='stylesheet'>
 {% endblock css%}
 
 {% block javascript %}
@@ -17,6 +18,21 @@
   <script src='{{ STATIC_URL }}seller/js/account_edit.min.js'></script>
   <script src='{{ STATIC_URL }}seller/js/asset.min.js'></script>
 {% endblock javascript%}
+
+{% block admin_nav %}
+  <ul class='inline pull-left'>
+    <li>
+      <div id='language-selector' class='btn-group'>
+        <button class='btn language-btn btn-success' data-lang='ol'>
+          <img src="{{ STATIC_URL }}images/flags/{{ seller.country.code }}.png">
+        </button>
+        <button class='btn language-btn' data-lang='us'>
+          <img src="{{ STATIC_URL }}images/flags/US.png">
+        </button>
+      </div>
+    </li>
+  </ul>
+{% endblock admin_nav %}
 
 {% block content %}
   {% load account_inclusion_tags %}
@@ -113,9 +129,13 @@
             <i class='add-on symbol-profile black' title='name'></i>
             {{ seller_form.name }}
           </li>
-          <li class='input-prepend'>
+          <li class='lang lang-us input-prepend'>
             <i class='add-on symbol-description black' title='bio'></i>
             {{ seller_form.bio }}
+          </li>
+          <li class='lang lang-ol input-prepend'>
+            <i class='add-on symbol-description black' title='bio'></i>
+            {{ seller_form.bio_ol }}
           </li>
         </ul>
 

@@ -1,5 +1,19 @@
 #header{border-bottom: none;}
 
+/*LANGUAGE*/
+#language-selector{
+  margin: 0;
+}
+.language{
+  padding: 5px;
+  line-height: 0;
+}
+
+.lang-ol{}
+.lang-us{display: none;}
+
+/*END LANGUAGE*/
+
 #asset-tabs{
   margin: 20px 0 10px;
 }
@@ -15,7 +29,7 @@
   list-style: none;
 }
 
-#seller-account ul li{
+#seller-account ul li:not(.lang){
   display: block;
 }
 

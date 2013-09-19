@@ -15,6 +15,14 @@ $().ready( function(){
 
 });//end .ready
 
+$('.language-btn').click(function(){
+  language = $(this).attr('data-lang');
+  $('.lang').hide();
+  $('.lang-'+language).show();
+  $('.language-btn').removeClass('btn-success');
+  $(this).addClass('btn-success');
+});
+
 $('.asset-tab').click(function(){//when an asset tab is clicked
   //make this tab active
   $('.asset-tab').removeClass('active');
