@@ -43,7 +43,7 @@ def approve_product(request): #from AJAX GET request
     product = Product.objects.get(id=product_id)
     if action == 'approve':
       product.in_holding = False
-      product.approved_at = datetime.now()
+      product.approved_at = timezone.now()
       product.save()
     elif action == 'hold':
       product.approved_at = None
