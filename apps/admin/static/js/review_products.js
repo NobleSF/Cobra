@@ -59,7 +59,7 @@ $('.rate').click(function(){
   var product_id  = $(this).attr('data-product-id');
   var subject     = $(this).attr('data-subject');
   var value       = $(this).attr('data-value');
-  var rating_span   = $(this).parent('span');
+  var rating_span = $(this).parent('span');
 
   if (value > 0){
     rateProduct(product_id, subject, value, rating_span);

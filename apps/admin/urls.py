@@ -23,6 +23,9 @@ urlpatterns = patterns('',
 urlpatterns += patterns('',
   url(r'^admin/dashboard$', dashboard.dashboard, name='dashboard'),
 
+  #SELLER ACCOUNTS
+  url(r'^admin/ajax/approve_seller$', account.approve_seller, name='approve seller'),
+
   #PRODUCTS
   url(r'^admin/review_products$', products.review_products, name='review products'),
   url(r'^admin/unrated_products$', products.unrated_products, name='unrated products'),

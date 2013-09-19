@@ -1,6 +1,10 @@
 {% extends "admin_base.html" %}
 {% load url from future %}
 
+{% block javascript %}
+  <script type="text/javascript" src="{{ STATIC_URL }}admin/js/all_accounts.js"></script>
+{% endblock javascript %}
+
 {% block css %}
   <style>
     td{min-width: 50px;}
@@ -13,6 +17,8 @@
 {% block content %}
 
 <h3>Seller Accounts</h3>
+
+<input id='approve-url' type='hidden' value="{% url 'admin:approve seller' %}">
 
 <table class='table table-hover'>
   {% for account in seller_accounts %}
@@ -28,6 +34,7 @@
 
       <td class='login'>
         <a href="{{ account.cheat_login_url }}"><i class='symbol-go anou-blue'></i></a>
+        {{ account.username }}
       </td>
 
       <td class='phone'>
@@ -35,12 +42,26 @@
         {{ account.phone }}
       </td>
 
-      <td>{{ account.username }}</td>
-      <td>{{ account.email }}</td>
+      <td>
+          <span id='approve-button-{{ account.sellers.all.0.id }}'
+                  class='btn btn-mini
+                    {% if account.sellers.all.0.approved_at %}
+                      unapprove-seller btn-danger
+                    {% else %}
+                      approve-seller btn-success
+                    {% endif %}
+                  '
+                  data-seller-id='{{ account.sellers.all.0.id }}'>
+            {% if account.sellers.all.0.approved_at %}
+              Un-Approve
+            {% else %}
+              Approve
+            {% endif %}
+          </span>
+      </td>
     </tr>
 
   {% endfor %}
-
 </table>
 
 {% endblock content %}

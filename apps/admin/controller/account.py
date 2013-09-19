@@ -2,6 +2,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from apps.admin.controller.decorator import access_required
 from django.contrib import messages
+from django.utils import simplejson
+from datetime import datetime
 from apps.admin.models import Account
 from settings.people import Tom
 from apps.communication.controller.email_class import Email
@@ -77,6 +79,33 @@ def edit(request, account_id=None):
   context = {'account':account, 'form':account_model_form}
 
   return render(request, 'account/edit.html', context)
+
+@access_required('admin')
+def approve_seller(request): #from AJAX GET request
+  from apps.seller.models import Seller
+  try:
+    seller_id = request.GET['seller_id']
+    action = request.GET['action']
+    seller = Seller.objects.get(id=seller_id)
+    if action == 'approve':
+      seller.approved_at = datetime.now()
+      seller.save()
+      #reapprove all seller approved products
+    elif action == 'unapprove':
+      seller.approved_at = None
+      seller.save()
+      #todo: refresh homepage cache
+    elif action == 'delete':
+      seller.delete();
+    else:
+      raise Exception('invalid action: %s' % action)
+  except Exception as e:
+    response = {'error': str(e)}
+    Email(message="error on seller approval: "+str(e)).sendTo(Tom.email)
+  else:
+    response = {'success': "%s %s" % (action, seller_id)}
+
+  return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 def login(request, next=None):
   from apps.admin.controller.forms import AccountLoginForm
