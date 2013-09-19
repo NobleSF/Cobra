@@ -3,8 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from apps.admin.controller.decorator import access_required
 from django.contrib import messages
 from django.forms.models import modelformset_factory
-from django.utils import simplejson
-from datetime import datetime
+from django.utils import simplejson, timezone
 from apps.seller.models import Product
 from settings.people import Tom
 from apps.communication.controller.email_class import Email
@@ -12,7 +11,7 @@ from apps.communication.controller.email_class import Email
 @access_required('admin')
 def review_products(request):
   products_to_review = (Product.objects.filter(approved_at=None,
-                                               active_at__lte=datetime.today(),
+                                               active_at__lte=timezone.now(),
                                                in_holding=False)
                         .order_by('updated_at'))
 
@@ -28,7 +27,7 @@ def review_products(request):
 def unrated_products(request):
   from django.db.models import Count
   unrated_products = (Product.objects.filter(sold_at=None,
-                                             approved_at__lte=datetime.today())
+                                             approved_at__lte=timezone.now())
                       .annotate(rating_count=Count('rating'))
                       .filter(rating_count__lte=15)
                       .exclude(rating__session_key = request.session.session_key))

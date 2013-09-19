@@ -1,6 +1,6 @@
 from math import log, pow, e, ceil
 from django.db.models import Avg
-from datetime import datetime
+from django.utils import timezone
 
 WEIGHTS = {'date_posted': 12,
            'photography': 10,
@@ -29,8 +29,7 @@ def datePostedResult(product):
   return createResult(W,V,C)
 
 def datePostedValue(product):
-  date_posted = product.approved_at.replace(tzinfo=None)
-  time_difference = datetime.today() - date_posted
+  time_difference = timezone.now() - product.approved_at
   this_number = time_difference.days - DAYS_TO_PROMOTE_NEW_PRODUCT
   this_number = 1 if this_number < 0 else this_number + 4
   value = 1.8 * invLog(this_number) if this_number > 1 else 1
@@ -73,8 +72,7 @@ def storeNewnessResult(product):
   return createResult(W,V,C)
 
 def storeNewnessValue(product):
-  date_live = product.seller.created_at.replace(tzinfo=None)
-  time_difference = datetime.today() - date_live
+  time_difference = timezone.now() - product.seller.created_at
   this_number = time_difference.days - DAYS_TO_PROMOTE_NEW_STORE
   this_number = 1 if this_number < 0 else this_number + 4
   value = 1.8 * invLog(this_number) if this_number > 1 else 1

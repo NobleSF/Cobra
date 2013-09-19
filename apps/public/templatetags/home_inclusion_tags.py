@@ -3,14 +3,14 @@ register = template.Library()
 
 @register.inclusion_tag('home/homepage_products.html')
 def homepage_products_tag():
-  from datetime import datetime
+  from django.utils import timezone
   from apps.seller.models import Product
   from apps.public.controller.product_ranking import getRankPoints
 
   products = (Product.objects.filter(sold_at=None,
-                                    approved_at__lte=datetime.today(),
-                                    active_at__lte=datetime.today(),
-                                    seller__approved_at__lte=datetime.today(),
+                                    approved_at__lte=timezone.now(),
+                                    active_at__lte=timezone.now(),
+                                    seller__approved_at__lte=timezone.now(),
                                     seller__deactive_at=None,
                                     deactive_at=None))
 

@@ -109,8 +109,8 @@ def edit(request):
 
 def getUnixTimestamp():
   from django.utils.dateformat import format
-  from datetime import datetime
-  return format(datetime.now(), u'U')
+  from django.utils import timezone
+  return format(timezone.now(), u'U')
 
 def getSignatureHash(image_form):
   from settings.settings import CLOUDINARY

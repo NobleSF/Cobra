@@ -35,8 +35,8 @@ class Seller(models.Model):
 
   @property
   def categories(self):
-    from datetime import datetime
-    products = self.product_set.filter(approved_at__lte=datetime.today())
+    from django.utils import timezone
+    products = self.product_set.filter(approved_at__lte=timezone.now())
     categories = []
     for product in products:
       if product.category not in categories:
@@ -113,10 +113,11 @@ class Product(models.Model):
 
   @property
   def is_recently_sold(self):
-    from datetime import datetime, timedelta
+    from django.utils import timezone
+    from datetime import timedelta
     if self.sold_at:
       one_day = timedelta(days=1)
-      time_since_sold = datetime.today() - self.sold_at.replace(tzinfo=None)
+      time_since_sold = timezone.now() - self.sold_at
       if self.sold_at and one_day > time_since_sold:
         return True
       else:

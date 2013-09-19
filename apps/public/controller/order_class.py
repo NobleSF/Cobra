@@ -1,6 +1,6 @@
 from apps.public import models
 from apps.communication.controller import order_events
-from datetime import datetime
+from django.utils import timezone
 from apps.communication.controller.email_class import Email
 from settings import people
 
@@ -27,7 +27,7 @@ def createFromCart(cart):
   for item in cart: #or for item in cart.cart.item_set.all()
     if item.product.sold_at == None:
       orders.append(createFromCartItem(item, checkout_data))
-      item.product.sold_at = datetime.now()
+      item.product.sold_at = timezone.now()
       item.product.save()
     else:
       #we have a problem, the customer was just charged for a product someone else already bought
@@ -36,7 +36,7 @@ def createFromCart(cart):
 
   if order_events.communicateOrdersCreated(orders) == True:
     for order in orders:
-      order.seller_notified_at = datetime.now()
+      order.seller_notified_at = timezone.now()
       order.save()
   else:
     try: Email(message="problem communicating orders created").sendTo(people.Tom.email)
@@ -69,7 +69,6 @@ def createFromCartItem(item, checkout_data):
 #      raise Exception
 #
 #  def seller_shipped(self, tracking_number=None):
-#    from datetime import date
 #    if order_events.communicateOrderShipped(self.order):
 #      self.order.is_shipped = True
 #      self.order.shipped_date = date.today()
@@ -87,7 +86,6 @@ def createFromCartItem(item, checkout_data):
 #      raise Exception
 #
 #  def customer_received(self):
-#    from datetime import date
 #    self.order.is_received = True
 #    self.order.received_date = date.today()
 #    self.order.save()

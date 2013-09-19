@@ -1,5 +1,4 @@
 from django.db import models
-from datetime import datetime
 
 class Cart(models.Model):
   email               = models.EmailField(blank=True, null=True)

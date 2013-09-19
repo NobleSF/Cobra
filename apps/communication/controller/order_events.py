@@ -3,7 +3,7 @@ from apps.communication.controller.sms import sendSMS, sendSMSForOrder
 from apps.communication.models import SMS
 from settings.settings import DEBUG
 from settings import people
-from datetime import datetime
+from django.utils import timezone
 
 def communicateOrdersCreated(orders):
   try:
@@ -60,21 +60,21 @@ def updateOrder((product_id, data), gimme_reply_sms=False):
 
     if data.get('tracking_number'): #if tracking number provided
       #the order is both confirmed and shipped
-      if not order.is_seller_confirmed: order.seller_confirmed_at = datetime.now()
-      order.shipped_at = datetime.now()
+      if not order.is_seller_confirmed: order.seller_confirmed_at = timezone.now()
+      order.shipped_at = timezone.now()
       order.tracking_number = data.get('tracking_number')
       order.save()
       reply += communicateOrderShipped(order, gimme_reply_sms)
 
     elif order.is_seller_confirmed and not order.is_shipped: #if order already confirmed
       #confirm it is shipped
-      order.shipped_at = datetime.now()
+      order.shipped_at = timezone.now()
       order.save()
       reply += communicateOrderShipped(order, gimme_reply_sms)
 
     elif not order.is_seller_confirmed: #if the order is not yet confirmed
       #confirm the order
-      order.seller_confirmed_at = datetime.now()
+      order.seller_confirmed_at = timezone.now()
       order.save()
       reply += communicateOrderConfirmed(order, gimme_reply_sms)
 

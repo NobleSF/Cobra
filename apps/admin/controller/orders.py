@@ -2,8 +2,6 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from apps.admin.controller.decorator import access_required
 from django.contrib import messages
-from django.utils import simplejson
-from datetime import datetime
 from apps.public.models import Order
 
 @access_required('admin')

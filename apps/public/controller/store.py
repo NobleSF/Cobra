@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
-from datetime import datetime
+from django.utils import timezone
 from settings.people import Tom
 from apps.communication.controller.email_class import Email
 
@@ -13,7 +13,7 @@ def home(request, seller_id):
     store.artisans = store.asset_set.filter(ilk='artisan')
 
     unsold_products   = store.product_set.filter(sold_at=None)
-    approved_products = unsold_products.filter(approved_at__lte=datetime.today())
+    approved_products = unsold_products.filter(approved_at__lte=timezone.now())
     active_products   = approved_products.filter(deactive_at=None)
     ordered_products  = active_products.order_by('approved_at').reverse()
 

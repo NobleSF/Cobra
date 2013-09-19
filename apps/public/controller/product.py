@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.shortcuts import render
 from django.views.decorators.cache import cache_page
-from datetime import datetime
+from django.utils import timezone
 from settings.people import Tom
 from apps.communication.controller.email_class import Email
 
@@ -24,7 +24,7 @@ def home(request, product_id):
 
     seller_products   = product.seller.product_set.exclude(id=product.id)
     unsold_products   = seller_products.filter(sold_at=None)
-    approved_products = unsold_products.filter(approved_at__lte=datetime.today())
+    approved_products = unsold_products.filter(approved_at__lte=timezone.now())
     active_products   = approved_products.filter(deactive_at=None)
     ordered_products  = active_products.order_by('approved_at').reverse()
 

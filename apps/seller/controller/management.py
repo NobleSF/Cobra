@@ -1,10 +1,9 @@
 from django.http import HttpResponse
-from django.utils import simplejson
+from django.utils import simplejson, timezone
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from apps.admin.controller.decorator import access_required
 from django.views.decorators.csrf import csrf_exempt
-from datetime import datetime
 from django.db.models import Q
 from settings.people import Tom
 from apps.communication.controller.email_class import Email
@@ -28,11 +27,11 @@ def products(request):
 
   try:
     seller = Seller.objects.get(id=request.session['seller_id'])
-    products = (seller.product_set.filter(active_at__lte=datetime.today(),
+    products = (seller.product_set.filter(active_at__lte=timezone.now(),
                                           deactive_at=None,
                                           sold_at=None)
                                   .filter(
-                                    Q(approved_at__lte=datetime.today()) |
+                                    Q(approved_at__lte=timezone.now()) |
                                     Q(in_holding=True)
                                   ))
 
@@ -50,7 +49,7 @@ def orders(request):
 
   try:
     seller = Seller.objects.get(id=request.session['seller_id'])
-    sold_products = seller.product_set.filter(sold_at__lte=datetime.today())
+    sold_products = seller.product_set.filter(sold_at__lte=timezone.now())
     for product in sold_products:
       product.order = product.order_set.all()[0]
     context = {'seller': seller, 'products': sold_products}
@@ -113,8 +112,8 @@ def signForm(photo_form, tags=""):
 
 def getUnixTimestamp():
   from django.utils.dateformat import format
-  from datetime import datetime
-  return format(datetime.now(), u'U')
+  from django.utils import timezone
+  return format(timezone.now(), u'U')
 
 def getSignatureHash(photo_form):
   from settings.settings import CLOUDINARY

@@ -1,6 +1,6 @@
 from apps.seller import models
 from apps.admin import models as admin_models
-from datetime import datetime
+from django.utils import timezone
 from apps.communication.controller import seller_events
 
 class Product(object):
@@ -165,7 +165,7 @@ class Product(object):
   def activate(self):
     try:
       #todo: if self.product.is_complete
-      self.product.active_at = datetime.now()
+      self.product.active_at = timezone.now()
       self.product.in_holding = False
       self.product.save()
     except:
@@ -176,7 +176,7 @@ class Product(object):
 
   def deactivate(self):
     try:
-      self.product.deactive_at = datetime.now()
+      self.product.deactive_at = timezone.now()
       self.product.in_holding = False
       self.product.save()
     except:
@@ -186,7 +186,7 @@ class Product(object):
 
   def approve(self):
     try:
-      self.product.approved_at = datetime.now()
+      self.product.approved_at = timezone.now()
       self.product.in_holding = False
       self.product.save()
     except:
@@ -216,7 +216,7 @@ class Product(object):
 
   def mark_sold(self):
     try:
-      self.product.sold_at = datetime.now()
+      self.product.sold_at = timezone.now()
       self.product.save()
     except:
       return False

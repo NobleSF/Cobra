@@ -1,5 +1,6 @@
 from apps.public import models
-from datetime import datetime, timedelta
+from django.utils import timezone
+from datetime import timedelta
 from settings.people import Tom
 from apps.communication.controller.email_class import Email
 
@@ -7,7 +8,7 @@ def cleanupCarts():
   from apps.seller.models import Product
 
   try:
-    time_1_hour_ago = datetime.today() - timedelta(hours=1)
+    time_1_hour_ago = timezone.now() - timedelta(hours=1)
     recently_purchased_products = Product.objects.filter(sold_at__gte=time_1_hour_ago)
 
     #remove sold products from any carts that have not checked out yet
@@ -218,13 +219,12 @@ class Cart(object):
 
   def getAnouCheckoutId(self, type='manual'):
     from django.utils.dateformat import format
-    from datetime import datetime
 
     try:
       if self.cart.anou_checkout_id:
         anou_checkout_id = self.cart.anou_checkout_id
       else:
-        unix_timestamp = format(datetime.now(), u'U')
+        unix_timestamp = format(timezone.now(), u'U')
         if type == 'manual':
           anou_checkout_id = "MAN%s" % unix_timestamp
         #else 'ebay' or 'etsy'
