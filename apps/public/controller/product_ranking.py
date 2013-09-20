@@ -41,7 +41,7 @@ def photographyResult(product):
   numRatings = product.rating_set.filter(subject__name='Photography').count()
 
   W = float(WEIGHTS['photography'])
-  V = float(ratingQuery['average'] / 5) if ratingQuery['average'] else 3
+  V = float(ratingQuery['average']-1) / 4 if ratingQuery['average'] >= 1 else 0.5
   C = float(ratingConfidence(numRatings)) if numRatings else 0
   return createResult(W,V,C)
 
@@ -51,7 +51,7 @@ def priceResult(product):
   numRatings = product.rating_set.filter(subject__name='Price').count()
 
   W = float(WEIGHTS['price'])
-  V = float(ratingQuery['average'] / 5) if ratingQuery['average'] else 3
+  V = float(ratingQuery['average']-1) / 4 if ratingQuery['average'] >= 1 else 0.5
   C = float(ratingConfidence(numRatings)) if numRatings else 0
   return createResult(W,V,C)
 
@@ -61,7 +61,7 @@ def appealResult(product):
   numRatings = product.rating_set.filter(subject__name='Appeal').count()
 
   W = float(WEIGHTS['appeal'])
-  V = float(ratingQuery['average'] / 5) if ratingQuery['average'] else 3
+  V = float(ratingQuery['average']-1) / 4 if ratingQuery['average'] >= 1 else 0.5
   C = float(ratingConfidence(numRatings)) if numRatings else 0
   return createResult(W,V,C)
 
