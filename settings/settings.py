@@ -5,19 +5,20 @@ from people import *
 
 LOCAL_MACHINES = ['TOMCOUNSELL']
 
+PRODUCTION = STAGE = DEMO = False
+
 if 'NAME' in os.environ and os.environ['NAME'] == 'anou-cobra':
   PRODUCTION = True
-  STAGE = False
 elif 'NAME' in os.environ and os.environ['NAME'] == 'anou-cobra-stage':
-  PRODUCTION = False
   STAGE = True
+elif 'NAME' in os.environ and os.environ['NAME'] == 'anou-cobra-demo':
+  DEMO = True
 else: #probably on LOCAL_MACHINES
-  PRODUCTION = False
-  STAGE = False
+  pass
 
 PAYMENTS_PRODUCTION = PRODUCTION
-DEBUG = not PRODUCTION
-TEMPLATE_DEBUG = not (STAGE or PRODUCTION)
+DEBUG = not (PRODUCTION or DEMO)
+TEMPLATE_DEBUG = not (STAGE or PRODUCTION or DEMO)
 
 ANOU_FEE_RATE = 0.15
 DAYS_UNTIL_PRODUCT_EXPIRES = 120
@@ -29,7 +30,7 @@ SITE_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 ADMINS = (('Developer', 'dev@theanou.com'),)
 MANAGERS = ADMINS
 
-if PRODUCTION or STAGE:
+if PRODUCTION or STAGE or DEMO:
   DATABASES = {'default': dj_database_url.config()}
   SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 else:
@@ -54,12 +55,14 @@ AWS_ACCESS_KEY_ID = 'AKIAISBCAIGR4FHXJKBQ'
 AWS_SECRET_ACCESS_KEY = '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'
 if PRODUCTION:
   AWS_STORAGE_BUCKET_NAME = 'anou'
-else:
+elif DEMO:
+  AWS_STORAGE_BUCKET_NAME = 'anou-demo'
+elif STAGE:
   AWS_STORAGE_BUCKET_NAME = 'anou-stage'
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 #CLOUDINARY IMAGE AND PHOTO HOSTING
-if PRODUCTION or STAGE:
+if PRODUCTION or STAGE or DEMO:
   CLOUDINARY = {
     'cloud_name':     'hork5h8x1',
     'api_key':        '697913462329845',
@@ -118,6 +121,9 @@ else:
 if STAGE:
   TELERIVET['status_url'] = 'http://anou-cobra-stage.herokuapp.com/communication/sms/status_confirmation'
   TELERIVET['webhook_url'] = 'http://anou-cobra-stage.herokuapp.com/communication/sms/incoming'
+if DEMO:
+  TELERIVET['status_url'] = 'http://anou-cobra-demo.herokuapp.com/communication/sms/status_confirmation'
+  TELERIVET['webhook_url'] = 'http://anou-cobra-demo.herokuapp.com/communication/sms/incoming'
 
 #WEPAY PAYMENT AND CHECKOUT PROCESSING
 if PAYMENTS_PRODUCTION:
@@ -138,6 +144,8 @@ else:
   }
 if STAGE:
   WEPAY['redirect_uri'] = 'http://anou-cobra-stage.herokuapp.com/checkout/confirmation'
+if DEMO:
+  WEPAY['redirect_uri'] = 'http://anou-cobra-demo.herokuapp.com/checkout/confirmation'
 
 if PRODUCTION or ('CACHEING' in os.environ and os.environ['CACHEING'] == 'ON'):
   CACHES = memcacheify()
@@ -175,6 +183,7 @@ ALLOWED_HOSTS = [
   'www.theanou.com',
   'anou-cobra.herokuapp.com',
   'anou-cobra-stage.herokuapp.com',
+  'anou-cobra-demo.herokuapp.com',
   'localhost'
 ]
 
@@ -206,7 +215,7 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-if PRODUCTION or STAGE:
+if PRODUCTION or STAGE or DEMO:
   MEDIA_ROOT = '/media/'
 else:
   MEDIA_ROOT = os.path.join(SITE_ROOT, 'media')
@@ -226,7 +235,7 @@ STATIC_ROOT = '/static/'
 # Example: "http://media.lawrence.com/static/"
 AWS_STATIC_URL = 'http://s3.amazonaws.com/' + AWS_STORAGE_BUCKET_NAME + '/'
 STATIC_URL = AWS_STATIC_URL
-if not (PRODUCTION or STAGE): STATIC_URL = '/static/'
+if not (PRODUCTION or STAGE or DEMO): STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -251,7 +260,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-if PRODUCTION or STAGE:
+if PRODUCTION or STAGE or DEMO:
   SECRET_KEY = 'sx^lszi^cgqdvv#g^djamr56=pkqatt(20=bjeo3++*v8rbue!'
 else:
   SECRET_KEY = 'ie+b=mflibb8_#tzf_3&amp;+l$@=kgbgapj-8odui3b&amp;18a(c!$vz'
@@ -272,7 +281,7 @@ MIDDLEWARE_CLASSES = (
   # Uncomment the next line for simple clickjacking protection:
   # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
-if not (PRODUCTION or STAGE):
+if not (PRODUCTION or STAGE or DEMO):
   MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
 
 ROOT_URLCONF = 'settings.urls'
@@ -287,7 +296,7 @@ TEMPLATE_DIRS = (
   # Always use forward slashes, even on Windows.
   # Don't forget to use absolute paths, not relative paths.
 )
-if not (PRODUCTION or STAGE):
+if not (PRODUCTION or STAGE or DEMO):
   TEMPLATE_DIRS += ('C:\django\django-debug-toolbar\debug_toolbar\templates',)
 
 INSTALLED_APPS = (
@@ -312,7 +321,7 @@ INSTALLED_APPS = (
   # Uncomment the next line to enable admin documentation:
   # 'django.contrib.admindocs',
 )
-if not (PRODUCTION or STAGE):
+if not (PRODUCTION or STAGE or DEMO):
   INSTALLED_APPS += ('debug_toolbar',)
 
 TEMPLATE_CONTEXT_PROCESSORS = (
