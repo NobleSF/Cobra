@@ -2,11 +2,11 @@ from math import log, pow, e, ceil
 from django.db.models import Avg
 from django.utils import timezone
 
-WEIGHTS = {'date_posted': 12,
+WEIGHTS = {'date_posted': 6,
            'photography': 10,
            'price':       5,
            'appeal':      8,
-           'new_store':   6
+           'new_store':   4
           }
 DAYS_TO_PROMOTE_NEW_PRODUCT = 2
 DAYS_TO_PROMOTE_NEW_STORE = 14
