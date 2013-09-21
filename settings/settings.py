@@ -57,7 +57,7 @@ if PRODUCTION:
   AWS_STORAGE_BUCKET_NAME = 'anou'
 elif DEMO:
   AWS_STORAGE_BUCKET_NAME = 'anou-demo'
-elif STAGE:
+else:
   AWS_STORAGE_BUCKET_NAME = 'anou-stage'
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
@@ -107,6 +107,17 @@ if PRODUCTION:
     'webhook_url':      'http://www.theanou.com/communication/sms/incoming',
     'webhook_secret':   'NT9NAEQUAGWWGG4WQ7GQHP7WHXPNZR3P'
   }
+elif DEMO:
+  TELERIVET = {
+    'api_key':          'H3P3UPFQ2CKMXLDLFX446FCPXMDK42CL',
+    'project_id':       'PJ6ff0b172f5c2b56a',
+    'phone_id':         'PN5b6a6b06369c5812',
+    'phone_number':     '5551212',
+    'status_url':       'http://anou-cobra-demo.herokuapp.com/communication/sms/status_confirmation',
+    'status_secret':    'JuiceIsWorthTheSqueeze',
+    'webhook_url':      'http://anou-cobra-demo.herokuapp.com/communication/sms/incoming',
+    'webhook_secret':   'QNCWR2444MRT6R2G74UDTMTA6QKM2TET'
+  }
 else:
   TELERIVET = {
     'api_key':          'DF6UFT49DW643UQWDC436PC2K6LKWEDC',
@@ -121,9 +132,6 @@ else:
 if STAGE:
   TELERIVET['status_url'] = 'http://anou-cobra-stage.herokuapp.com/communication/sms/status_confirmation'
   TELERIVET['webhook_url'] = 'http://anou-cobra-stage.herokuapp.com/communication/sms/incoming'
-if DEMO:
-  TELERIVET['status_url'] = 'http://anou-cobra-demo.herokuapp.com/communication/sms/status_confirmation'
-  TELERIVET['webhook_url'] = 'http://anou-cobra-demo.herokuapp.com/communication/sms/incoming'
 
 #WEPAY PAYMENT AND CHECKOUT PROCESSING
 if PAYMENTS_PRODUCTION:
