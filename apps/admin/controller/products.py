@@ -15,7 +15,8 @@ def review_products(request):
                                                in_holding=False)
                         .order_by('updated_at'))
 
-  products_in_holding = (Product.objects.filter(in_holding=True)
+  products_in_holding = (Product.objects.filter(in_holding=True,
+                                                active_at__lte=timezone.now())
                         .order_by('updated_at'))
 
   context = {'products_to_review': products_to_review,
