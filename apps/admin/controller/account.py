@@ -53,7 +53,7 @@ def create(request):
 @access_required('admin')
 def all_accounts(request):
   context = {
-      'seller_accounts':Account.objects.filter(is_admin=False).order_by('name')
+      'seller_accounts':Account.objects.exclude(is_admin=True).order_by('name')
     }
   return render(request, 'account/all_accounts.html', context)
 

@@ -44,12 +44,14 @@ class Seller(models.Model):
     return categories
 
   def __unicode__(self):
-    return self.account.name if self.account.name else "No Name"
+    return self.account.name if self.account.name else ""
 
 class Asset(models.Model):
   from apps.admin.models import Category
   seller        = models.ForeignKey('Seller')
   ilk           = models.CharField(max_length=10)#product,artisan,tool,material
+  rank          = models.SmallIntegerField(null=True, blank=True)
+  #todo: give all assets ranks and remove "nullable"
   name          = models.CharField(max_length=50, null=True, blank=True)
   description   = models.TextField(null=True, blank=True)
   image         = models.ForeignKey('Image', null=True, blank=True, on_delete=models.SET_NULL)
@@ -73,6 +75,11 @@ class Asset(models.Model):
 
   def get_ilk(self):
     return self._get_ilk_display()
+
+  class Meta:
+    #unique_together = ('seller', 'ilk', 'rank')
+    #todo: turn on once rank not nullable
+    ordering = ['rank', 'created_at']
 
 class Product(models.Model):
   from apps.admin.models import Color
@@ -296,6 +303,9 @@ class Product(models.Model):
 
   def __unicode__(self):
     return self.name + ' by ' + self.seller.name
+
+  class Meta:
+    ordering = ['-sold_at', '-id']
 
 class ShippingOption(models.Model):
   from apps.admin.models import Country
