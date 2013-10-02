@@ -323,7 +323,7 @@ class Photo(models.Model): #Photos are exclusively product pictures.
   original      = models.URLField(max_length=200)
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
-  updated_at    = models.DateTimeField(auto_now = True)\
+  updated_at    = models.DateTimeField(auto_now = True)
 
   def __unicode__(self):
     return unicode(self.original).replace(CLOUDINARY['download_url'],'')
