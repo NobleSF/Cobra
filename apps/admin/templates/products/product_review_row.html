@@ -82,7 +82,7 @@
 
   <td class='links'>
     <i class='black'>{{ product.id }}</i>
-    {% if product.is_active and not product.approved_at %}
+    {% if product.in_holding or not product.is_approved %}
       <br>
       <a href="{% url 'seller:inventory edit' product.id %}" target='_blank'>
         <i class='symbol-go blue'></i>

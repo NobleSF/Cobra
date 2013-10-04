@@ -12,11 +12,15 @@ from apps.communication.controller.email_class import Email
 def review_products(request):
   products_to_review = (Product.objects.filter(approved_at=None,
                                                active_at__lte=timezone.now(),
+                                               deactive_at=None,
+                                               sold_at=None,
                                                in_holding=False)
                         .order_by('updated_at'))
 
   products_in_holding = (Product.objects.filter(in_holding=True,
-                                                active_at__lte=timezone.now())
+                                                active_at__lte=timezone.now(),
+                                                deactive_at=None,
+                                                sold_at=None)
                         .order_by('updated_at'))
 
   context = {'products_to_review': products_to_review,
