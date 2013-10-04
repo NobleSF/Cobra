@@ -45,26 +45,22 @@ def cartAdd(request, product_id):
   cart = Cart(request)
   try:
     product = Product.objects.get(id=product_id)
-  except Exception as e:
-    context = {'problem':"Received bad product id"}
-    return HttpResponseRedirect(request.META["HTTP_REFERER"], context)
-  else:
     cart.add(product)
-    context = {'success':"added product to cart"}
     return redirect('cart')
+  except Exception as e:
+    Email(message="Error on cartAdd: "+str(e)).sendTo(people.Tom.email)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def cartRemove(request, product_id):
   from apps.seller.models import Product
   cart = Cart(request)
   try:
     product = Product.objects.get(id=product_id)
-  except Exception as e:
-    context = {'problem':"Received bad product id"}
-    return HttpResponseRedirect(request.META["HTTP_REFERER"], context)
-  else:
     cart.remove(product)
-    context = {'success':"removed product from cart"}
     return redirect('cart')
+  except Exception as e:
+    Email(message="Error on cartRemove: "+str(e)).sendTo(people.Tom.email)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def cartSave(request): #ajax requests only
   if request.method == 'GET': # it must be an ajax GET to work
