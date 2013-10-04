@@ -56,38 +56,43 @@ def edit(request, product_id):
   from apps.seller.controller.management import signForm
   from settings.settings import CLOUDINARY
 
-  request.product_id = product_id
-  product = Product(request)
+  try:
+    request.product_id = product_id
+    product = Product(request)
 
-  product_form = ProductEditForm()
-  product_form.fields['price'].initial  = product.get('price')
-  product_form.fields['length'].initial = product.get('length')
-  product_form.fields['width'].initial  = product.get('width')
-  product_form.fields['height'].initial = product.get('height')
-  product_form.fields['weight'].initial = product.get('weight')
+    product_form = ProductEditForm()
+    product_form.fields['price'].initial  = product.get('price')
+    product_form.fields['length'].initial = product.get('length')
+    product_form.fields['width'].initial  = product.get('width')
+    product_form.fields['height'].initial = product.get('height')
+    product_form.fields['weight'].initial = product.get('weight')
 
-  for asset in product.product.assets.all():
-    product_form.fields['assets'].initial += str(asset.id)+" "
+    for asset in product.product.assets.all():
+      product_form.fields['assets'].initial += str(asset.id)+" "
 
-  for color in product.product.colors.all():
-    product_form.fields['colors'].initial += str(color.id)+" "
+    for color in product.product.colors.all():
+      product_form.fields['colors'].initial += str(color.id)+" "
 
-  for shipping_option in product.product.shipping_options.all():
-    product_form.fields['shipping_options'].initial += str(shipping_option.id)+" "
+    for shipping_option in product.product.shipping_options.all():
+      product_form.fields['shipping_options'].initial += str(shipping_option.id)+" "
 
-  product_form.fields['product_id'].initial = product.product.id
+    product_form.fields['product_id'].initial = product.product.id
 
-  product.product.photos = product.product.photo_set.order_by('rank')
+    product.product.photos = product.product.photo_set.order_by('rank')
 
-  context = {
-    'product':          product.product,
-    'product_form':     product_form,
-    'photo_form':       PhotoForm(),
-    'CLOUDINARY':       {'upload_url':   CLOUDINARY['upload_url'],
-                         'download_url': CLOUDINARY['download_url']
-                        }
-  }
-  return render(request, 'inventory/edit.html', context)
+    context = {
+      'product':          product.product,
+      'product_form':     product_form,
+      'photo_form':       PhotoForm(),
+      'CLOUDINARY':       {'upload_url':   CLOUDINARY['upload_url'],
+                           'download_url': CLOUDINARY['download_url']
+                          }
+    }
+    return render(request, 'inventory/edit.html', context)
+
+  except Exception as e:
+    Email(message="error loading product-edit: "+str(e)).sendTo(Tom.email)
+    return redirect('seller:management home')
 
 @access_required('seller') #it's the 'r' in crud, but is it even needed?
 def detail(request, product_id):
