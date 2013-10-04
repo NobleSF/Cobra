@@ -41,45 +41,51 @@ class SellerEditForm(forms.Form):
       raise forms.ValidationError("number of digits incorrect")
 
 class AssetForm(forms.Form):
-  asset_id    = forms.CharField(
-                  widget=forms.TextInput(attrs={'class':"asset-id"}), initial="none")
+  #this form is never meant to be submitted or validated
+  #all editable elements are autosaved with ajax
 
+  #no asset-id required in form
+  #with seller_id, ilk, and rank together, the asset is unique
   ilk         = forms.CharField(
                   widget=forms.TextInput(attrs={'class':"ilk"}))
+  rank        = forms.CharField(
+                  widget=forms.TextInput(attrs={'class':"rank"}))
+
   image_url   = forms.CharField(
                   widget=forms.TextInput(
-                    attrs={'class':"image-url autosave", 'data-asset_id':""}))
+                    attrs={'class':"image-url autosave"}))
                   #image takes url of image after ajax upload to cloudinary
+
   DELETE      = forms.BooleanField(
                   widget=forms.CheckboxInput(
-                    attrs={'class':"delete autosave", 'data-asset_id':""}))
+                    attrs={'class':"delete autosave"}))
 
   name        = forms.CharField(
                   widget=forms.TextInput(
-                    attrs={'class':"name autosave", 'data-asset_id':""}),
+                    attrs={'class':"name autosave"}),
                     max_length=50, required=False)
   description = forms.CharField(
                   widget=forms.Textarea(
-                    attrs={'class':"description autosave", 'data-asset_id':""}),
+                    attrs={'class':"description autosave"}),
                     required=False)
 
   name_ol     = forms.CharField(
                   widget=forms.TextInput(
-                    attrs={'class':"name autosave", 'data-asset_id':""}),
+                    attrs={'class':"name autosave"}),
                     max_length=50, required=False)
   description_ol= forms.CharField(
                     widget=forms.Textarea(
-                      attrs={'class':"description autosave", 'data-asset_id':""}),
+                      attrs={'class':"description autosave"}),
                       required=False)
 
   category    = forms.ModelChoiceField(
                   widget=forms.Select(
-                    attrs={'class':"category autosave", 'data-asset_id':""}),
+                    attrs={'class':"category autosave"}),
                     queryset=Category.objects.all(),
                     empty_label="Category:")
   phone       = forms.CharField(
                   widget=NumberInput(
-                    attrs={'class':"phone autosave", 'data-asset_id':""}),
+                    attrs={'class':"phone autosave"}),
                     max_length=15, required=False)
 
 class ImageForm(forms.Form):

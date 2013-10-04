@@ -144,18 +144,6 @@
       </div>
 
     </form>
-
-  </div>
-
-  <div id='asset-forms'>
-    {% asset_tag image_form asset_form %}
-
-    {% for asset in assets %}
-      {% asset_tag image_form asset_form asset %}
-    {% endfor %}
-
-    <input type='hidden' id='save-asset-url' value='{% url 'seller:save asset' %}'>
-    <input type='hidden' id='delete-asset-url' value='{% url 'seller:delete asset' %}'>
   </div>
 
   <ul id='asset-tabs' class='nav nav-tabs text-center'>
@@ -174,5 +162,18 @@
     <div id='{{ asset_ilk }}_container' class='asset-container'>
     </div>
   {% endfor %}
+
+  <div id='asset-forms'>
+    <!--a blank asset form to copy from for new assets-->
+    {% asset_tag image_form asset_form %}
+
+    <!--existing assets-->
+    {% for asset in assets %}
+      {% asset_tag image_form asset_form asset %}
+    {% endfor %}
+
+    <input type='hidden' id='save-asset-url' value='{% url 'seller:save asset' %}'>
+    <input type='hidden' id='delete-asset-url' value='{% url 'seller:delete asset' %}'>
+  </div>
 
 {% endblock content %}

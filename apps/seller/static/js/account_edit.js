@@ -1,12 +1,14 @@
 $().ready( function(){
-  COUNTER = 1;//for creating unique id numbers
+
   //assign bootstrap classes
   $('#asset-tabs').children('li').first().addClass('active');//first tab active
   $('#artisan_tab').trigger('click');//activate first tab
 
   //run on page load for seller form
-  applyData($('#seller-account'), 'seller', 'seller');//add data- attributes
-  applyEvents($('#seller-account'), to_assets=false);//for seller image
+  //autosave requires data- attributes
+  //set ilk and rank to dummy value ('seller')
+  applyDataAttrs($('#seller-account'), 'seller', 'seller');
+  applyEvents($('#seller-account'), to_assets=false);//just for seller image now
   applySellerAutosave();//autosave seller form elements
 
   //run on page load for assets
@@ -57,12 +59,14 @@ function saveSellerError(error,$this_element){
 
 function arrangeAssetForms(){
   $('#asset-forms .asset').each(function(){
-    //move to proper asset container
-    var ilk = $(this).find('#id_ilk').val();
-    var asset_id = $(this).find('#id_asset_id').val();
-    applyData($(this), asset_id, ilk);
+    //autosave requires data- attributes
+    applyDataAttrs($(this));
+    //apply autosave and any other js event handlers
     applyEvents($(this));
+
+    var ilk = $(this).find('#id_ilk').val();
     if (ilk != ''){
+      //move to proper asset container
       $(this).appendTo('#'+ilk+'_container');
     }
   });
@@ -73,16 +77,16 @@ function addAssetForms(){
 
   //for each asset container
   $('.asset-container').each(function(){
-    num_forms = 0;
-    num_empty_forms = 0;
+    var this_container = $(this);
+    var num_empty_forms = 0;
 
     //for each asset form inside the containter
-    $(this).children('.asset').each(function(){
+    this_container.children('.asset').each(function(){
+      this_asset = $(this);
+
       //count empty forms
-      if ($(this).find('#id_asset_id').val() == 'none'){
+      if (this_asset.hasClass('empty')){
         num_empty_forms++;
-      }else{
-        num_forms++;
       }
     });
 
@@ -90,20 +94,38 @@ function addAssetForms(){
     if (num_empty_forms == 0){
 
       //grab an empty form from the hidden .asset-forms div
-      new_asset = $('#asset-forms .asset').first().clone(false);
-      var ilk = $(this).attr('id').replace('_container','');
-      var asset_id = new_asset.find('#id_asset_id').val();
+      var new_asset = $('#asset-forms .asset').first().clone(false);
+      var ilk = this_container.attr('id').replace('_container','');
+
+      //calculate what the next rank should be
+      var highest_rank = 0;
+      $('.asset').each(function(){
+        var this_rank = $(this).find('input#id_rank').val();
+        if (parseInt(this_rank) > highest_rank){
+          highest_rank = parseInt(this_rank);
+        }
+      })
+      var next_rank = highest_rank + 1;
+      new_asset.find('input#id_rank').attr('value', next_rank);
+      new_asset.find('input#id_ilk').attr('value', ilk);
+
+      new_asset.attr('id', ('asset-'+ilk+next_rank));
 
       //place it in the container
-      new_asset.appendTo($(this));
-      applyData(new_asset, asset_id, ilk);
+      new_asset.appendTo(this_container);
+      applyDataAttrs(new_asset);
       applyEvents(new_asset);
 
     }//end if
   });//end for each asset-container
 }
 
-function applyData(asset_div, asset_id, ilk){
+function applyDataAttrs(asset_div, ilk, rank){
+  //organize input fields and add data- attributes for autosave ajax
+
+  ilk = ilk || asset_div.find('#id_ilk').val();
+  rank = rank || asset_div.find('#id_rank').val();
+
   //if not product container, hide category element
   if ( ilk !== 'product'){
     asset_div.find('.asset-category').hide();
@@ -117,20 +139,15 @@ function applyData(asset_div, asset_id, ilk){
     asset_div.find('.asset-phone').show();
   }
 
-  //give the image div and input a new unique id
-  unique_div_id = ilk + '_image_' + COUNTER.toString();
-  unique_input_id = ilk + '_image_' + COUNTER.toString();
-  image_div = asset_div.find('.image');
-  image_div.attr('id', unique_div_id);
-  image_input = asset_div.find('.image-input');
-  image_input.attr('id', unique_input_id);
+  //give the image div a new unique id
+  asset_div.find('.image').attr('id', (ilk+rank+'-image-div'));
 
-  //tell form and autosave elements the asset_id and ilk
-  asset_div.find('.autosave').attr('data-asset_id', asset_id);
-  asset_div.find('#id_ilk').attr('value', ilk);
+  //give the image input a new unique id
+  asset_div.find('.image-input').attr('id', (ilk+rank+'-image-input'));
+
+  //tell form and autosave elements the ilk and rank
   asset_div.find('.autosave').attr('data-ilk', ilk);
-
-  COUNTER++;
+  asset_div.find('.autosave').attr('data-rank', rank);
 }
 
 function applyEvents(asset_div, to_assets){
@@ -141,9 +158,15 @@ function applyEvents(asset_div, to_assets){
   uploader.apply(image_input, image_div);
 
   //for input fields
-  to_assets = to_assets || true;//parameter defaults to true
+  to_assets = to_assets || true;//parameter defaults to true if not provided
   if (to_assets){
     applyAssetAutosave(asset_div);
     applyAssetDeleteAction(asset_div);
   }
 }
+
+//https://github.com/cfurrow/jquery.autosave.js
+//example:
+//  $("input").autosave({url:"/save",success:function(){},error:function(){}});
+//
+jQuery.fn.autosave=function(e){function n(e){var n=/^data\-(\w+)$/,r={};r.value=e.value;r.name=e.name;t.each(e.attributes,function(e,t){n.test(t.nodeName)&&(r[n.exec(t.nodeName)[1]]=t.value)});return r}var t=jQuery;t.each(this,function(){var r=t(this),i={data:{},event:"change",success:function(){},error:function(){},before:function(){}};e=t.extend(i,e);var s=n(this),o=s.event||e.event;r.on(o,function(){var r=t(this);s.value=r.val();s=t.extend(s,n(this));var i=s.url?s.url:e.url;e.before&&e.before.call(this,r);t.ajax({url:i,data:s,success:function(t){e.success(t,r)},error:function(t){e.error(t,r)}})})})};

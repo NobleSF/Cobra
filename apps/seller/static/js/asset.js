@@ -12,52 +12,46 @@ function applyAssetAutosave(asset_div) {
 }
 
 function saveAssetBefore($this_element){
-  //start 'updating' visual
-  $this_element.closest('.asset').removeClass('error').removeClass('saved').addClass('updating');
-  //if no asset_id, set pending asset_id data for all elements
-  if ($this_element.closest('.asset').find('#id_asset_id').val() == 'none'){
-    $this_element.closest('.asset').attr('id','asset-pending');
-    $this_element.closest('.asset').find('#id_asset_id').attr('value',"pending");
-    $this_element.closest('.asset').find('.autosave').attr('data-asset_id',"pending");
-    //probably need a new asset form
-    addAssetForms();
-  }
+  var this_asset = $this_element.closest('.asset');
+  //set to 'saving'
+  this_asset.removeClass('empty');
+  this_asset.removeClass('error');
+  this_asset.removeClass('saved');
+  this_asset.addClass('saving');
+
+  //check if we need a new asset form
+  addAssetForms();
 }
 
-function saveAssetSuccess(data,$this_element){
-  //set asset_id data for all elements
-  if (data.asset_id){
-    $this_element.closest('.asset').attr('id','asset-'+data.asset_id);
-    $this_element.closest('.asset').find('#id_asset_id').attr('value',data.asset_id);
-    $this_element.closest('.asset').find('.autosave').attr('data-asset_id',data.asset_id);
-  }else if ($this_element.closest('.asset').find('#id_asset_id').attr('data-asset_id') == 'pending'){
-    $this_element.closest('.asset').find('#id_asset_id').attr('value',"none");
-    $this_element.closest('.asset').find('.autosave').attr('data-asset_id',"none");
-  }
-  //finished visual
-  $this_element.closest('.asset').removeClass('updating').removeClass('error').addClass('saved');
+function saveAssetSuccess(data, $this_element){
+  var this_asset = $this_element.closest('.asset');
+  //set to 'saved'
+  this_asset.removeClass('saving');
+  this_asset.addClass('saved');
 }
 
 function saveAssetError(error,$this_element){
-  if ($this_element.closest('.asset').find('#id_asset_id').val() == 'pending'){
-    $this_element.closest('.asset').find('#id_asset_id').attr('value',"none");
-    $this_element.closest('.asset').find('.autosave').attr('data-asset_id',"none");
-  }
-  //error visual
-  $this_element.closest('.asset').removeClass('updating').addClass('error');
+  var this_asset = $this_element.closest('.asset');
+  //set to 'saving'
+  this_asset.removeClass('saving');
+  this_asset.addClass('error');
 }
 
 function applyAssetDeleteAction(asset_div){
   asset_div.find('.delete-asset').click(function(){
-    $(this).closest('.asset').addClass('soon-dead');
-    var asset_id = $(this).closest('.asset').find('#id_asset_id').val();
+    var asset = $(this).closest('.asset');
+
+    //set asset to 'soon-dead'
+    asset.addClass('soon-dead');
+
     $.ajax({
       url:$('#delete-asset-url').val(),
-      data:{'asset_id':asset_id}
+      data:{'ilk':  asset.find('input#id_ilk').val(),
+            'rank': asset.find('input#id_rank').val()}
     })
     .success(function(data){
       //slideUp animation and delete element and events from DOM
-      $('#asset-'+data.asset_id).slideUp(500, function(){$(this).remove()});
+      asset.slideUp(500, function(){asset.remove();});
     });
   });
 }
@@ -100,9 +94,3 @@ function fileUploadAction(){
     });//end fileupload
   }
 }
-
-//https://github.com/cfurrow/jquery.autosave.js
-//example:
-//  $("input").autosave({url:"/save",success:function(){},error:function(){}});
-//
-jQuery.fn.autosave=function(e){function n(e){var n=/^data\-(\w+)$/,r={};r.value=e.value;r.name=e.name;t.each(e.attributes,function(e,t){n.test(t.nodeName)&&(r[n.exec(t.nodeName)[1]]=t.value)});return r}var t=jQuery;t.each(this,function(){var r=t(this),i={data:{},event:"change",success:function(){},error:function(){},before:function(){}};e=t.extend(i,e);var s=n(this),o=s.event||e.event;r.on(o,function(){var r=t(this);s.value=r.val();s=t.extend(s,n(this));var i=s.url?s.url:e.url;e.before&&e.before.call(this,r);t.ajax({url:i,data:s,success:function(t){e.success(t,r)},error:function(t){e.error(t,r)}})})})};

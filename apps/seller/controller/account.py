@@ -33,7 +33,7 @@ def edit(request):
 
     context = {
                 'seller':     seller,
-                'assets':     seller.asset_set.all(),
+                'assets':     seller.asset_set.order_by('id'),
                 'asset_form': AssetForm(),
                 'image_form': image_form,
                 'asset_ilks': ['artisan','product','tool','material'],
@@ -154,48 +154,42 @@ def saveSeller(request): #ajax requests only, create or update asset
 
 @access_required('seller')
 @csrf_exempt
-def saveAsset(request): #ajax requests only, create or update asset
+def saveAsset(request): #ajax get requests only, create or update asset
   from apps.seller.models import Asset
   from apps.admin.models import Category
 
-  if request.method == 'GET': # it must be an ajax get to work
-    try:
-      if (not request.GET.get('asset_id')) or request.GET.get('asset_id') == "none":
-        #create new asset
-        asset = Asset(seller_id=request.session.get('seller_id'))
-      elif request.GET.get('asset_id') == "pending":
-        raise Exception("asset_id is already pending")
-      else:
-        asset = Asset.objects.get(id=request.GET.get('asset_id'))
+  try:
+    asset, is_new = Asset.objects.get_or_create(
+                        seller_id = request.session['seller_id'],
+                        ilk = request.GET['ilk'],
+                        rank = request.GET['rank']
+                      )
 
-      asset.ilk = request.GET.get('ilk')#from data-ilk included in every request
-      element = request.GET.get('name')
-      value   = request.GET.get('value')
+    element = request.GET.get('name')
+    value   = request.GET.get('value')
 
-      if element == 'image_url':
-        asset.image = customSaveImage(value)
-      elif element == 'name':
-        asset.name = value
-      elif element == 'name_ol':
-        asset.name_ol = value
-      elif element == 'description':
-        asset.description = value
-      elif element == 'description_ol':
-        asset.description_ol = value
-      elif element == 'phone':
-        asset.phone = value
-      elif element == 'category':
-        asset.categories.clear()
-        asset.categories.add(Category.objects.get(id=value))
+    if element == 'image_url':
+      asset.image = customSaveImage(value)
+    elif element == 'name':
+      asset.name = value
+    elif element == 'name_ol':
+      asset.name_ol = value
+    elif element == 'description':
+      asset.description = value
+    elif element == 'description_ol':
+      asset.description_ol = value
+    elif element == 'phone':
+      asset.phone = value
+    elif element == 'category':
+      asset.categories.clear()
+      asset.categories.add(Category.objects.get(id=value))
 
-      asset.save()
-      response = {'asset_id':asset.id, 'get':request.GET}
+    asset.save()
+    response = {'asset_id':asset.id, 'get':request.GET}
 
-    except Exception as e:
-      response = {'exception': str(e)}
-      Email(message="error in saveAsset ajax: "+str(e)).sendTo(Tom.email)
-  else:
-    response = {'problem':"not GET"}
+  except Exception as e:
+    response = {'exception': str(e)}
+    Email(message="error in saveAsset ajax: "+str(e)).sendTo(Tom.email)
 
   return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
@@ -204,14 +198,16 @@ def saveAsset(request): #ajax requests only, create or update asset
 def deleteAsset(request): #ajax requests only
   from apps.seller.models import Asset
   try:
-    asset = Asset.objects.get(id=request.GET['asset_id'])
-    #todo: what do we do with products using this asset?
+    asset = Asset.objects.get(
+              seller_id = request.session['seller_id'],
+              ilk = request.GET['ilk'],
+              rank = request.GET['rank']
+            )
     asset.delete()
-    response = {'deleted': "asset has been permanently deleted",
-                'asset_id': request.GET['asset_id']
-               }
+    response = {'deleted': "asset has been permanently deleted"}
+
   except Exception as e:
-    response = {'exception': str(e), 'asset_id': 'None'}
+    response = {'exception': str(e)}
     Email(message="error in deleteAsset ajax: "+str(e)).sendTo(Tom.email)
 
   return HttpResponse(simplejson.dumps(response), mimetype='application/json')

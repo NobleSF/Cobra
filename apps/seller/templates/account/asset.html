@@ -1,5 +1,7 @@
 {% load account_inclusion_tags %}
-<div id='asset-{{ asset_form.asset_id.value }}' class='asset'>
+<div id='asset-{{ asset.ilk }}{{ asset.rank }}' class='asset
+  {% if not asset %}empty{% endif %}
+'>
   <ul>
     <li class='asset-media'>
       <div class='image'>
@@ -35,8 +37,8 @@
     <li class='asset-form'>
       <form>
         <div class='hidden-fields'>
-          {{ asset_form.asset_id }}
           {{ asset_form.ilk }}
+          {{ asset_form.rank }}
           {{ asset_form.image_url }}
           {{ asset_form.DELETE }}
         </div>
