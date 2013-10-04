@@ -31,10 +31,12 @@ def review_products(request):
 @access_required('admin')
 def unrated_products(request):
   from django.db.models import Count
-  unrated_products = (Product.objects.filter(sold_at=None,
-                                             approved_at__lte=timezone.now())
+  unrated_products = (Product.objects.filter(in_holding=False,
+                                             active_at__lte=timezone.now(),
+                                             deactive_at=None,
+                                             sold_at=None)
                       .annotate(rating_count=Count('rating'))
-                      .filter(rating_count__lte=15)
+                      .filter(rating_count__lt=15)
                       .exclude(rating__session_key = request.session.session_key))
 
   return render(request, 'products/unrated_products.html', {'products':unrated_products})
