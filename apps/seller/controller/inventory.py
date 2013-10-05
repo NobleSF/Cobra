@@ -7,7 +7,7 @@ from apps.admin.controller.decorator import access_required
 from django.views.decorators.csrf import csrf_exempt
 from apps.seller.models import Seller
 from apps.seller.controller.product_class import Product
-from settings.people import Tom
+from settings.people import Tom, Dan
 from apps.communication.controller.email_class import Email
 
 def checkInventory(seller):
@@ -99,19 +99,20 @@ def detail(request, product_id):
   return render(request, 'inventory/detail.html')
 
 @access_required('seller')
-def remove(request, product_id): #archive product and return to management home
+def remove(request, product_id): #seller deactivate product
   try:
     request.product_id = product_id
     product = Product(request)
     if product.deactivate():
-      if request.session.get('admin_id'):
-        messages.success(request, "product %d removed." % product.product.id)
+      message = "Product %d deactivated." % product.product.id
+      Email(message=message+" It is no longer available for sale").sendTo(Dan.email)
+      if request.session.get('admin_id'): messages.success(request, message)
     else:
-      if request.session.get('admin_id'):
-        messages.error(request, "cannot not remove that product")
+      message = "Unable to deactivate product."
+      if request.session.get('admin_id'): messages.warning(request, message)
+
   except Exception as e:
-    Email(message="error removing product: "+str(e)).sendTo(Tom.email)
-    context = {'exception':e}
+    Email(message="error while removing product: "+str(e)).sendTo(Tom.email)
 
   return redirect('seller:management products')
 
