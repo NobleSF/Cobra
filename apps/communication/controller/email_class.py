@@ -25,7 +25,7 @@ class Email(object):
       self.from_email = "Anou <hello@theanou.com>"
 
     else:
-      message = message if message else 'test email body'
+      message = str(message) if message else 'test email body'
       self.subject = 'notification'
       self.text_body = message
       self.html_body = '<p>%s</p>' % message
