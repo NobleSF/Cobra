@@ -6,9 +6,9 @@ from settings.settings import STAGE, DEBUG, DEMO
 from apps.admin.controller.decorator import postpone
 
 class Email(object):
-  def __init__(self, template_dir=None, data=None, message=None):
+  def __init__(self, template_dir=None, data={}, message=None):
     #creates an email using the template and data provided
-    if template_dir and data:
+    if template_dir:
 
       subject_template = "email/%s/subject.txt" % template_dir
       text_body_template = "email/%s/text_body.txt" % template_dir

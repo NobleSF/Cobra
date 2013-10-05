@@ -16,6 +16,8 @@ def subscribe(request): #ajax requests only
     subscription.save()
     response = {'success': "%s is subscribed" % subscription.email}
 
+    Email("subscription/new").sendTo(subscription.email)
+
   except IntegrityError: #already subscribed
     if request.GET.get('name'):
       try: transaction.rollback()
