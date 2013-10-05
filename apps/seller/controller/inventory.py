@@ -22,9 +22,11 @@ def checkInventory(seller):
     for product in seller.product_set.all().order_by('id'):
       if product.was_never_active:
         if keep <= 0:
-          product.delete()
+          #product.delete()
+          Email(message="Seller has multiple products in edit process.").sendTo(Tom.email)
         keep -= 1
   except:
+    Email(message="Error in checkInventory.").sendTo(Tom.email)
     return False
   else:
     return True
