@@ -27,6 +27,11 @@ class Account(models.Model):
     else:
       return url + url_parameters
 
+  @property
+  def seller(self):
+    try: return self.sellers.all()[0]
+    except: return None
+
   def __unicode__(self):
     return self.username
 
