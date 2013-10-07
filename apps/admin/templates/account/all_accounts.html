@@ -29,7 +29,8 @@
       </td>
 
       <td class='name'>
-        {% if account.name %}{{ account.name }}{% else %}-name-{% endif %}
+        {% if account.name %}{{ account.name }}{% else %}----------{% endif %}
+        {% if account.seller.city %}, {{ account.seller.city }}{% endif %}
       </td>
 
       <td class='login'>
