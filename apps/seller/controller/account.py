@@ -45,11 +45,14 @@ def edit(request):
     if request.method == 'POST':
       POST = request.POST.copy()
 
-      #fields only editable by admin
+      #fields only editable by admin, overwrite their values
       if 'admin_id' not in request.session:
-        for fieldname in ['name', 'city', 'coordinates']:
+        for fieldname in ['name', 'username',
+                          'bio', 'city', 'coordinates',
+                          'bank_name', 'bank_account']:
           POST[fieldname] = eval("seller."+fieldname)
-        for fieldname in ['country', 'currency']:
+
+        for fieldname in ['country']:
           POST[fieldname] = eval("seller."+fieldname+".id")
 
       seller_form = SellerEditForm(POST)
@@ -57,17 +60,19 @@ def edit(request):
         if seller_form.is_valid():
           seller_data = seller_form.cleaned_data
 
-          seller.account.name   = seller_data['name']
-          seller.account.email  = seller_data['email']
-          seller.account.phone  = seller_data['phone']
+          seller.account.name         = seller_data['name']
+          seller.account.username     = seller_data['username']
+          seller.account.email        = seller_data['email']
+          seller.account.phone        = seller_data['phone']
+          seller.account.bank_name    = seller_data['bank_name']
+          seller.account.bank_account = seller_data['bank_account']
           seller.account.save()
 
-          seller.bio            = seller_data['bio']
-          seller.bio_ol         = seller_data['bio_ol']
-          seller.city           = seller_data['city']
-          seller.country        = seller_data['country']
-          seller.coordinates    = seller_data['coordinates']
-          seller.currency       = seller_data['currency']
+          seller.bio                  = seller_data['bio']
+          seller.bio_ol               = seller_data['bio_ol']
+          seller.country              = seller_data['country']
+          seller.city                 = seller_data['city']
+          seller.coordinates          = seller_data['coordinates']
           seller.save()
 
           return redirect('seller:management home')
@@ -83,21 +88,24 @@ def edit(request):
 
     else: #not POST
       seller_form = SellerEditForm()
-      seller_form.fields['name'].initial        = seller.name
-      seller_form.fields['email'].initial       = seller.email
-      seller_form.fields['phone'].initial       = seller.phone
-      seller_form.fields['bio'].initial         = seller.bio
-      seller_form.fields['bio_ol'].initial      = seller.bio_ol
-      try: seller_form.fields['image'].initial  = seller.image_id
-      except: pass
-      seller_form.fields['city'].initial        = seller.city
-      seller_form.fields['country'].initial     = seller.country
-      seller_form.fields['coordinates'].initial = seller.coordinates
-      seller_form.fields['currency'].initial    = seller.currency
+      seller_form.fields['username'].initial      = seller.username
+      seller_form.fields['email'].initial         = seller.email
+      seller_form.fields['phone'].initial         = seller.phone
+
+      seller_form.fields['name'].initial          = seller.name
+      seller_form.fields['bio'].initial           = seller.bio
+      seller_form.fields['bio_ol'].initial        = seller.bio_ol
+
+      seller_form.fields['city'].initial          = seller.city
+      seller_form.fields['country'].initial       = seller.country
+      seller_form.fields['coordinates'].initial   = seller.coordinates
+
+      seller_form.fields['bank_name'].initial     = seller.bank_name
+      seller_form.fields['bank_account'].initial  = seller.bank_account
 
       #disable fields only editable by admin
       if 'admin_id' not in request.session:
-        for fieldname in ['name', 'city', 'country', 'coordinates', 'currency']:
+        for fieldname in ['name', 'username']:
           seller_form.fields[fieldname].widget.attrs['disabled'] = True
 
     context['seller_form'] = seller_form

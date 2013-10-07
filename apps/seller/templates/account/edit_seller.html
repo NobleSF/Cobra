@@ -41,7 +41,7 @@
     <div class='span12'>
       <h1 id='seller-title' >
         <a href="{% url 'store' seller.id %}"
-           class='symbol-name green' title='seller public page'></a>
+           class='symbol-profile green' title='seller public page'></a>
         {% if seller.account.name %}
           {{ seller.account.name }}
         {% endif %}
@@ -96,6 +96,46 @@
           <li>{{ seller_form.image_url }}</li>
         </ul>
         <ul class='seller-details'>
+
+          <li class='input-prepend'>
+            <i class='add-on symbol-profile black' title='name'></i>
+            {{ seller_form.name }}
+          </li>
+          <li class='lang lang-ol input-prepend'>
+            <i class='add-on symbol-description black' title='bio'></i>
+            {{ seller_form.bio_ol }}
+          </li>
+
+          {% if 'admin_id' in request.session %}
+            <li class='lang lang-us input-prepend'>
+              <i class='add-on symbol-description black' title='bio'></i>
+              {{ seller_form.bio }}
+            </li>
+            <li class='input-prepend'>
+              <i class='add-on symbol-country black' title='country'></i>
+              {{ seller_form.country }}
+            </li>
+            <li class='input-prepend'>
+              <i class='add-on symbol-city black' title='city'></i>
+              {{ seller_form.city }}
+            </li>
+            <li class='input-prepend'>
+              <i class='add-on symbol-location black' title='GPS coordinates'></i>
+              {{ seller_form.coordinates }}
+            </li>
+          {% endif %}
+
+        </ul>
+      </div>
+
+      <div class='pull-left'>
+        <ul>
+
+          <li class='input-prepend'>
+            <i class='add-on symbol-name black' title='username'></i>
+            {{ seller_form.username }}
+          </li>
+
           <li class='input-prepend'>
             <i class='add-on symbol-email black' title='email'></i>
             {{ seller_form.email }}
@@ -104,39 +144,18 @@
             <i class='add-on symbol-phone black' title='phone number'></i>
             {{ seller_form.phone }}
           </li>
-          <li class='input-prepend'>
-            <i class='add-on symbol-city black' title='city'></i>
-            {{ seller_form.city }}
-          </li>
-          <li class='input-prepend'>
-            <i class='add-on symbol-country black' title='country'></i>
-            {{ seller_form.country }}
-          </li>
-          <li class='input-prepend'>
-            <i class='add-on symbol-location black' title='GPS coordinates'></i>
-            {{ seller_form.coordinates }}
-          </li>
-          <li class='input-prepend'>
-            <i class='add-on symbol-money black' title='currency'></i>
-            {{ seller_form.currency }}
-          </li>
-        </ul>
-      </div>
 
-      <div class='pull-left'>
-        <ul>
-          <li class='input-prepend'>
-            <i class='add-on symbol-profile black' title='name'></i>
-            {{ seller_form.name }}
-          </li>
-          <li class='lang lang-us input-prepend'>
-            <i class='add-on symbol-description black' title='bio'></i>
-            {{ seller_form.bio }}
-          </li>
-          <li class='lang lang-ol input-prepend'>
-            <i class='add-on symbol-description black' title='bio'></i>
-            {{ seller_form.bio_ol }}
-          </li>
+          {% if 'admin_id' in request.session %}
+            <li class='input-prepend'>
+              <i class='add-on black' title='bank name'>$</i>
+              {{ seller_form.bank_name }}
+            </li>
+            <li class='input-prepend'>
+              <i class='add-on black' title='bank account number'>#</i>
+              {{ seller_form.bank_account }}
+            </li>
+          {% endif %}
+
         </ul>
 
         <button type="submit" id='seller-form-submit'

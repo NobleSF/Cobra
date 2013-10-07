@@ -307,8 +307,10 @@ class Product(models.Model):
       return False
 
   def belongsToPhone(self, phone_number):
-    seller_phone = self.seller.account.phone
-    return True if (phone_number[-8:] == seller_phone[-8:]) else False
+    if self.seller.account.phone:
+      seller_phone = self.seller.account.phone
+      return True if (phone_number[-8:] == seller_phone[-8:]) else False
+    else: return False
 
   def __unicode__(self):
     return self.name + ' by ' + self.seller.name

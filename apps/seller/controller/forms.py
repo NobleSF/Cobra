@@ -8,26 +8,31 @@ class NumberInput(TextInput):
   input_type = 'tel'
 
 class SellerEditForm(forms.Form):
-  from apps.admin.models import Country, Currency
-  name        = forms.CharField()
-  email       = forms.EmailField(required=False)
-  phone       = forms.CharField(required=False)
-  bio         = forms.CharField(
-                  widget=forms.Textarea(attrs={'class':"description"}),
-                    required=False)
-  bio_ol      = forms.CharField(
-                  widget=forms.Textarea(attrs={'class':"description"}),
-                    required=False)
+  from apps.admin.models import Country
+
+  name          = forms.CharField()
+  username      = forms.CharField()
+  email         = forms.EmailField(required=False)
+  phone         = forms.CharField(required=False)
+
+  bank_name     = forms.CharField(required=False)
+  bank_account  = forms.CharField(required=False)
+
+  bio           = forms.CharField(
+                    widget=forms.Textarea(attrs={'class':"description"}),
+                      required=False)
+  bio_ol        = forms.CharField(
+                    widget=forms.Textarea(attrs={'class':"description"}),
+                      required=False)
 
   #image takes url of image after ajax upload to cloudinary
-  image_url   = forms.CharField(
-                  widget=forms.TextInput(attrs={'class':"image-url autosave"}),
-                    required=False)
+  image_url     = forms.CharField(
+                    widget=forms.TextInput(attrs={'class':"image-url autosave"}),
+                      required=False)
 
-  city        = forms.CharField(required=False)
-  country     = forms.ModelChoiceField(queryset=Country.objects.all())
-  coordinates = forms.CharField(required=False)
-  currency    = forms.ModelChoiceField(queryset=Currency.objects.all())
+  city          = forms.CharField(required=False)
+  country       = forms.ModelChoiceField(queryset=Country.objects.all())
+  coordinates   = forms.CharField(required=False)
 
   def clean_phone(self):
     import re #regular expressions
