@@ -8,7 +8,6 @@ class Seller(models.Model):
   city          = models.CharField(max_length=50, null=True, blank=True)
   country       = models.ForeignKey(Country, null=True, blank=True)
   coordinates   = models.CharField(max_length=30, null=True, blank=True)
-  currency      = models.ForeignKey(Currency, null=True, blank=True)
   image         = models.ForeignKey('Image', null=True, blank=True, on_delete=models.SET_NULL)
 
   #Original Language
@@ -25,13 +24,23 @@ class Seller(models.Model):
   updated_at    = models.DateTimeField(auto_now = True)
 
   @property
+  def title(self): return "%s from %s, %s" % (self.name, self.city, self.country.name)
+
+  @property
   def name(self): return self.account.name if self.account.name else ""
   @property
-  def title(self): return "%s from %s, %s" % (self.name, self.city, self.country.name)
+  def username(self): return self.account.username
   @property
   def email(self): return self.account.email if self.account.email else ""
   @property
   def phone(self): return self.account.phone if self.account.phone else ""
+
+  @property
+  def bank_name(self):
+    return self.account.bank_name if self.account.bank_name else ""
+  @property
+  def bank_account(self):
+    return self.account.bank_account if self.account.bank_account else ""
 
   @property
   def categories(self):
@@ -44,7 +53,7 @@ class Seller(models.Model):
     return categories
 
   def __unicode__(self):
-    return self.account.name if self.account.name else ""
+    return self.name
 
 class Asset(models.Model):
   from apps.admin.models import Category
@@ -272,7 +281,7 @@ class Product(models.Model):
   def display_price(self, locale='US'):
     cost_amalgum_boobs_bomb = self.local_price
     #convert to USD and round to the nearest $1
-    cost_amalgum_boobs_bomb /= self.seller.currency.exchange_rate_to_USD
+    cost_amalgum_boobs_bomb /= self.seller.country.currency.exchange_rate_to_USD
     cost_amalgum_boobs_bomb = int(round(cost_amalgum_boobs_bomb))
     return cost_amalgum_boobs_bomb
 
