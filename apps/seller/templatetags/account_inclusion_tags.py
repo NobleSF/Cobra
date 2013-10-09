@@ -1,16 +1,6 @@
 from django import template
 register = template.Library()
 
-@register.inclusion_tag('account/image.html')
-def image_tag(image_id):
-  from apps.seller.models import Image
-  try:
-    image_url = Image.objects.get(id=image_id).thumb_size
-
-  except Exception as e:
-    image_url = None
-  return {'image_url': image_url}
-
 @register.inclusion_tag('account/asset.html')
 def asset_tag(image_form, asset_form, asset=None):
   from apps.seller.models import Asset
@@ -38,3 +28,21 @@ def asset_tag(image_form, asset_form, asset=None):
             }
 
   return context
+
+@register.inclusion_tag('account/image_upload.html')
+def image_upload_tag(image_form, asset=None, seller=None):
+
+  if asset:
+    image_url = asset.image.thumb_size if asset.image else None
+    image_form.fields['ilk'].initial  = asset.ilk
+    image_form.fields['rank'].initial = asset.rank
+  elif seller:
+    image_url = seller.image.thumb_size if seller.image else None
+    image_form.fields['ilk'].initial  = "seller"
+    image_form.fields['rank'].initial = 0
+  else:
+    image_url = ""
+
+  return {'image_form':image_form,
+          'image_url':image_url
+         }

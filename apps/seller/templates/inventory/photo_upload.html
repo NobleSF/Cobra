@@ -3,9 +3,8 @@
 
 <div class='photo-upload-div'>
   <div class='photo'>
-    {% if photo_url %}
-      <img src="{{ photo_url }}" width='300' height='225' />
-    {% endif %}
+    <img src="{{ photo_url|default_if_none:'' }}"
+         width='300' height='225' />
   </div>
 
   <div id='spinner{{ photo_form.rank.value }}' class='spinner-div'></div>
