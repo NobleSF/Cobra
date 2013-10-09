@@ -1,5 +1,6 @@
 {% extends "seller_base.html" %}
 {% load url from future %}
+{% load inventory_inclusion_tags %}
 
 {% block title %}edit {{ product.id }}{% endblock title %}
 
@@ -18,13 +19,13 @@
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.iframe-transport.min.js'></script>
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.fileupload.min.js'></script>
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/load-image.min.js'></script>
-  <script src='{{ STATIC_URL }}seller/js/product_edit.js'></script>
+  <script src='{{ STATIC_URL }}seller/js/product_edit.min.js'></script>
+  <script src='{{ STATIC_URL }}seller/js/product_photo_upload.min.js'></script>
 {% endblock javascript%}
 
 {% block new_product_active %}active{% endblock %}
 
 {% block content %}
-  {% load inventory_inclusion_tags %}
 
   <input type='hidden' id='product-ajax-url' value="{% url 'seller:save product' %}">
   <input type='hidden' id='product-id' value='{{ product.id }}'>

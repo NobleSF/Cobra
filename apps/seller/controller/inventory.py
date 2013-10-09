@@ -55,7 +55,6 @@ def create(request):
 @access_required('admin or seller')
 def edit(request, product_id):
   from apps.seller.controller.forms import ProductEditForm, PhotoForm
-  from apps.seller.controller.management import signForm
   from settings.settings import CLOUDINARY
 
   try:
