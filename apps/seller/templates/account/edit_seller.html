@@ -8,6 +8,7 @@
 {% block css %}
   <link href='{{ STATIC_URL }}seller/css/account_edit.css' rel='stylesheet'>
   <link href='{{ STATIC_URL }}seller/css/asset.css' rel='stylesheet'>
+  <link href='{{ STATIC_URL }}seller/css/image_upload.css' rel='stylesheet'>
   <link href='{{ STATIC_URL }}css/flags.css' rel='stylesheet'>
 {% endblock css%}
 
@@ -50,45 +51,24 @@
   </div>
 
   <div id='seller-account' class='row-fluid'>
-    <div class='pull-left'>
-
-      <ul>
-        <li class='seller-media'>
-          <div class='image'>
-            <!-- insert image or placeholder -->
-            {% image_tag seller.image.id %}
-          </div>
-          <div class='progress-holder'>
-            <div class="progress progress-striped">
-              <div class="bar" style="width: 0%;"></div>
-            </div>
-          </div>
-          <div class='image-form'>
-            <form>
-              <div class='hidden-fields'>
-                {{ image_form.timestamp }}
-                {{ image_form.signature }}
-                {{ image_form.api_key }}
-                {{ image_form.format }}
-                {{ image_form.transformation }}
-                {{ image_form.tags }}
-                <input class='image-input' type='hidden' id='asset_ilk' name='asset_ilk'>
-              </div>
-              <span class='file-wrapper'>
-                {{ image_form.file }}
-                <span class='file-button btn'><i class="symbol-camera"></i></span>
-              </span>
-            </form>
-          </div>
-        </li>
-      </ul>
-
-    </div>
-
     <input type='hidden' id='upload-url' value='{{ CLOUDINARY.upload_url }}'>
     <input type='hidden' id='download-url' value='{{ CLOUDINARY.download_url }}'>
 
-    <form id='seller-form' action="" method="post">{% csrf_token %}
+    <div class='pull-left asset'>
+      <ul>
+        <li class='asset-media'>
+          {% image_upload_tag image_form seller=seller %}
+        </li>
+      </ul>
+      <ul class='hidden-fields'>
+        <li>{{ seller_form.image_url }}</li>
+        <input id='id_ilk' type='hidden' value='seller'>
+        <input id='id_rank' type='hidden' value='seller'>
+      </ul>
+    </div>
+
+    <form id='seller-form' action="" method="post" onsubmit='return false;'>
+      {% csrf_token %}
       <input type='hidden' id='save-seller-url' value='{% url 'seller:save seller' %}'>
 
       <div class='pull-left'>
@@ -159,7 +139,8 @@
         </ul>
 
         <button type="submit" id='seller-form-submit'
-          class='symbol-go white'></button>
+          class='symbol-go white'
+          onclick="form.submit();"></button>
       </div>
 
     </form>

@@ -6,12 +6,12 @@ urlpatterns = patterns('',
   url(r'^$', management.home, name='management home'), #seller dashboard, live products
   url(r'^products$', management.products, name='management products'), #products
   url(r'^orders$', management.orders, name='management orders'), #orders
-  url(r'^test$', management.test, name='management test'), #testing page
 
   url(r'^edit$', account.edit, name='edit'), #edit seller info
   url(r'^ajax/seller_save$', account.saveSeller, name='save seller'),
   url(r'^ajax/asset_save$', account.saveAsset, name='save asset'),
   url(r'^ajax/asset_delete$', account.deleteAsset, name='delete asset'),
+  url(r'^ajax/image_form_data$', management.imageFormData, name='image form data'),
 
   url(r'^ajax/product_save$', inventory.saveProduct, name='save product'),
   url(r'^ajax/photo_form_data$', management.photoFormData, name='photo form data'),

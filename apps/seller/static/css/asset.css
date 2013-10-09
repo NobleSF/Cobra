@@ -29,3 +29,11 @@
 .delete-asset{cursor: pointer;}
 
 .soon-dead{opacity: 0.3;}
+
+/* IMAGES */
+.image-upload-div{
+  height: 250px;
+}
+.image-upload-div div{
+  margin: 0 auto;
+}

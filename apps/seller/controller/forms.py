@@ -56,10 +56,10 @@ class AssetForm(forms.Form):
   rank        = forms.CharField(
                   widget=forms.TextInput(attrs={'class':"rank"}))
 
+  #image takes url of image after ajax upload to cloudinary
   image_url   = forms.CharField(
                   widget=forms.TextInput(
                     attrs={'class':"image-url autosave"}))
-                  #image takes url of image after ajax upload to cloudinary
 
   DELETE      = forms.BooleanField(
                   widget=forms.CheckboxInput(
@@ -93,16 +93,9 @@ class AssetForm(forms.Form):
                     attrs={'class':"phone autosave"}),
                     max_length=15, required=False)
 
-class ImageForm(forms.Form):
-  from settings.settings import CLOUDINARY
-
-  timestamp       = forms.CharField(label="", initial="not yet set")
-  signature       = forms.CharField(label="", initial="not yet set")
-  api_key         = forms.CharField(label="", initial=CLOUDINARY['api_key'])
-
-  format          = forms.CharField(label="", initial=CLOUDINARY['format'])
-  transformation  = forms.CharField(label="", initial=CLOUDINARY['transformation'])
-  tags            = forms.CharField(label="")
+class ImageForm(forms.Form): #to be run as 2 separate forms on the page
+  ilk             = forms.CharField(label="")
+  rank            = forms.CharField(label="")
 
   file            = forms.FileField(label="",
                       widget=forms.FileInput(attrs={  'class':'image-input',
@@ -112,8 +105,6 @@ class ImageForm(forms.Form):
                     )
 
 class PhotoForm(forms.Form): #to be run as 2 separate forms on the page
-  from settings.settings import CLOUDINARY
-
   product         = forms.CharField(label="")
   rank            = forms.CharField(label="")
 

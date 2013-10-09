@@ -26,16 +26,11 @@ def edit(request):
 
   seller = Seller.objects.get(id=request.session['seller_id'])
   try:
-    image_form = ImageForm()
-    image_form.fields['tags'].initial = "asset,seller"+str(request.session['seller_id'])
-    image_form.fields['timestamp'].initial = getUnixTimestamp()
-    image_form.fields['signature'].initial = getSignatureHash(image_form)
-
     context = {
                 'seller':     seller,
                 'assets':     seller.asset_set.order_by('id'),
                 'asset_form': AssetForm(),
-                'image_form': image_form,
+                'image_form': ImageForm(),
                 'asset_ilks': ['artisan','product','tool','material'],
                 'CLOUDINARY': {'upload_url':   CLOUDINARY['upload_url'],
                                'download_url': CLOUDINARY['download_url']
@@ -116,24 +111,6 @@ def edit(request):
     context['seller'] = seller
 
   return render(request, 'account/edit_seller.html', context)
-
-def getUnixTimestamp():
-  from django.utils.dateformat import format
-  from django.utils import timezone
-  return format(timezone.now(), u'U')
-
-def getSignatureHash(image_form):
-  from settings.settings import CLOUDINARY
-  import hashlib
-  cloudinary_string  = 'format=' + image_form.fields['format'].initial
-  cloudinary_string += '&tags=' + image_form.fields['tags'].initial
-  cloudinary_string += '&timestamp=' + image_form.fields['timestamp'].initial
-  cloudinary_string += '&transformation=' + image_form.fields['transformation'].initial
-  cloudinary_string += CLOUDINARY['api_secret']
-
-  h = hashlib.new('sha1')
-  h.update(cloudinary_string)
-  return h.hexdigest()
 
 @access_required('seller')
 @csrf_exempt

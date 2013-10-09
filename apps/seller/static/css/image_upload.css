@@ -1,0 +1,72 @@
+.hidden-fields{display: none;}
+.description{height: 5em;}
+
+.image{
+  width: 300px;
+  height: 225px;
+  background-color: #EEE;
+}/*@media (max-width: 400px){
+  .image{width:200px; height:150px;}
+}*/
+
+/* hide the "choose file input" behind button
+ * http://viget.com/inspire/custom-file-inputs-with-a-bit-of-jquery
+ */
+.image-form {
+  position: relative;
+  top: -100px;
+  left: 100px;
+  width: 90px;
+  padding: 0;
+  margin: 0 auto;
+}/*@media (max-width: 400px){
+  .image-form{left: 60px;}
+}*/
+
+.file-wrapper {
+  cursor: pointer;
+  display: inline-block;
+  overflow: hidden;
+  position: relative;
+}
+.file-wrapper .file-button {
+  background: rgb(63, 172, 48);
+  cursor: pointer;
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+.file-wrapper input {
+  cursor: pointer;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  filter: alpha(opacity=1);
+  -moz-opacity: 0.01;
+  opacity: 0.01;
+  font-size: 100px;
+}
+/* end file button hiding */
+
+.spinner-div {
+  position: relative;
+  top: -100px;
+  height: 0em;
+}
+
+.progress {
+  position: relative;
+  left: 0px;
+  top: -50px;
+  width: 180px;
+}
+
+.bar {
+    height: 18px;
+    background: green;
+}
+
+.symbol-camera{
+  font-size: 50px;
+}

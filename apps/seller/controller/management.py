@@ -61,27 +61,42 @@ def orders(request):
   return render(request, 'management/orders.html', context)
 
 @access_required('seller')
-def test(request):
-  from apps.seller.controller.forms import PhotoForm2
-  from apps.seller.models import Product
+@csrf_exempt
+def imageFormData(request):
+  from settings.settings import CLOUDINARY
+  if request.method == "POST":
+    seller_id   = request.session['seller_id']
+    ilk         = request.POST['ilk']
+    rank        = request.POST['rank']
+    timestamp   = getUnixTimestamp()
 
-  context = {
-    'photo_form': PhotoForm(),
-    'product':    Product.objects.get(id=1)
-  }
-  if request.method == 'GET':
-    context['data'] = request.GET
+    #uniquely name every image e.g. "seller23_ilkartisan_rank1_time1380924180"
+    image_id  = "seller"+str(seller_id)
+    image_id += "_ilk"+str(ilk)
+    image_id += "_rank"+str(rank)
+    image_id += "_time"+str(timestamp)
+    #tag image with seller_id and asset_ilk
+    tags = "seller"+str(seller_id)+",asset"+str(ilk)
 
-  return render(request, 'management/test.html', context)
+    form_data = {
+      'public_id':      image_id,
+      'tags':           tags,
+      'api_key':        CLOUDINARY['api_key'],
+      'format':         CLOUDINARY['format'],
+      'transformation': CLOUDINARY['transformation'],
+      'timestamp':      timestamp,
+    }
+    form_data['signature'] = createSignature(form_data)
+  return HttpResponse(simplejson.dumps(form_data), mimetype='application/json')
 
-@access_required('seller')
+@access_required('admin or seller')
 @csrf_exempt
 def photoFormData(request):
   from settings.settings import CLOUDINARY
   if request.method == "POST":
+    seller_id   = request.session['seller_id']
     product_id  = request.POST['product']
     rank        = request.POST['rank']
-    seller_id   = request.session['seller_id']
     timestamp   = getUnixTimestamp()
 
     #uniquely name every photo e.g. "seller23_product1024_rank1"
@@ -100,35 +115,15 @@ def photoFormData(request):
       'transformation': CLOUDINARY['transformation'],
       'timestamp':      timestamp,
     }
-    form_data['signature'] = getSignature(form_data)
+    form_data['signature'] = createSignature(form_data)
   return HttpResponse(simplejson.dumps(form_data), mimetype='application/json')
-
-
-def signForm(photo_form, tags=""):
-  photo_form.fields['tags'].initial = tags
-  photo_form.fields['timestamp'].initial = getUnixTimestamp()
-  photo_form.fields['signature'].initial = getSignatureHash(photo_form)
-  return photo_form
 
 def getUnixTimestamp():
   from django.utils.dateformat import format
   from django.utils import timezone
   return format(timezone.now(), u'U')
 
-def getSignatureHash(photo_form):
-  from settings.settings import CLOUDINARY
-  import hashlib
-  cloudinary_string  = 'format=' + photo_form.fields['format'].initial
-  cloudinary_string += '&tags=' + photo_form.fields['tags'].initial
-  cloudinary_string += '&timestamp=' + photo_form.fields['timestamp'].initial
-  cloudinary_string += '&transformation=' + photo_form.fields['transformation'].initial
-  cloudinary_string += CLOUDINARY['api_secret']
-
-  h = hashlib.new('sha1')
-  h.update(cloudinary_string)
-  return h.hexdigest()
-
-def getSignature(data):
+def createSignature(data):
   from settings.settings import CLOUDINARY
   import hashlib
   cloudinary_string  = 'format='          + data['format']

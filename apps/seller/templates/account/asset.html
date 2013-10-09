@@ -1,41 +1,16 @@
+{% load url from future %}
+{% load static %}
 {% load account_inclusion_tags %}
+
 <div id='asset-{{ asset.ilk }}{{ asset.rank }}' class='asset
   {% if not asset %}empty{% endif %}
 '>
   <ul>
     <li class='asset-media'>
-      <div class='image'>
-        {% if asset.image %}
-          <img src="{{ asset.image.thumb_size }}" width="300" />
-        {% else %}
-          <img data-src="" width="300" height="225" />
-        {% endif %}
-      </div>
-      <div class='progress-holder'>
-        <div class="progress progress-striped">
-          <div class="bar" style="width: 0%;"></div>
-        </div>
-      </div>
-      <div class='image-form'>
-        <form>
-          <div class='hidden-fields'>
-            {{ image_form.timestamp }}
-            {{ image_form.signature }}
-            {{ image_form.api_key }}
-            {{ image_form.format }}
-            {{ image_form.transformation }}
-            {{ image_form.tags }}
-            <input class='image-input' type='hidden' id='asset_ilk' name='asset_ilk'>
-          </div>
-          <span class='file-wrapper'>
-            {{ image_form.file }}
-            <span class='file-button btn'><i class="symbol-camera"></i></span>
-          </span>
-        </form>
-      </div>
+      {% image_upload_tag image_form asset=asset %}
     </li>
     <li class='asset-form'>
-      <form>
+      <form onsubmit='return false;'>
         <div class='hidden-fields'>
           {{ asset_form.ilk }}
           {{ asset_form.rank }}
@@ -48,7 +23,7 @@
               {{ asset_form.name }}
               <i class='delete-asset symbol-remove red'></i>
             </li>
-            <li class='lang lang-ol'>
+            <li class='lang lang-ol input-append'>
               {{ asset_form.name_ol }}
               <i class='delete-asset symbol-remove red'></i>
             </li>
@@ -61,9 +36,9 @@
             <li class='asset-category'>
               {{ asset_form.category }}
             </li>
-            <li class='asset-phone'>
+            <li class='asset-phone input-append'>
               {{ asset_form.phone }}
-              <i class='symbol-phone  black'></i>
+              <i class='symbol-phone black add-on'></i>
             </li>
           </ul>
         </div>
