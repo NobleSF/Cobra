@@ -101,7 +101,7 @@ if PRODUCTION:
     'api_key':          'DF6UFT49DW643UQWDC436PC2K6LKWEDC',
     'project_id':       'PJb41b4e785d567945065e25271c8bd1dd',
     'phone_id':         'PNe5ceaab258b60afe79687a5620c5c265',
-    'phone_number':     '2120623809088',
+    'phone_number':     '212637637566',#2120623809088
     'status_url':       'http://www.theanou.com/communication/sms/status_confirmation',
     'status_secret':    'JuiceIsWorthTheSqueeze',
     'webhook_url':      'http://www.theanou.com/communication/sms/incoming',
@@ -132,6 +132,7 @@ else:
 if STAGE:
   TELERIVET['status_url'] = 'http://anou-cobra-stage.herokuapp.com/communication/sms/status_confirmation'
   TELERIVET['webhook_url'] = 'http://anou-cobra-stage.herokuapp.com/communication/sms/incoming'
+TELERIVET['past_numbers'] = ['212637637566','2120623809088','5551212','0665555555']
 
 #WEPAY PAYMENT AND CHECKOUT PROCESSING
 if PAYMENTS_PRODUCTION:

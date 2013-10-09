@@ -45,7 +45,7 @@
 
       <td>{{ sms.created_at|date:"m/d H:i" }}</td>
 
-      {% if sms.to_number == anou_phone %}
+      {% if sms.to_number in anou_phones %}
         <td style='text-align: center;'>INCOMING</td>
       {% else %}
         <td style='text-align: center;'>OUTGOING</td>

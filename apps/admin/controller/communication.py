@@ -40,7 +40,7 @@ def allSMS(request):
   sms_messages = SMS.objects.all().order_by('created_at').reverse()[:100]
 
   for sms in sms_messages:
-    if sms.from_number == TELERIVET['phone_number']:
+    if sms.from_number in TELERIVET['past_numbers']:
       sms.phone_number = sms.to_number
       sms.incoming = False
     else:
@@ -54,7 +54,7 @@ def allSMS(request):
   context = {
               'form':         SMSForm(),
               'sms_messages': sms_messages,
-              'anou_phone':   TELERIVET['phone_number']
+              'anou_phones':  TELERIVET['past_numbers']
             }
   return render(request, 'communication/all_sms.html', context)
 
