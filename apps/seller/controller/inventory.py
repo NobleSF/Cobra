@@ -54,7 +54,7 @@ def create(request):
 
 @access_required('admin or seller')
 def edit(request, product_id):
-  from apps.seller.controller.forms import ProductEditForm, PhotoForm
+  from apps.seller.controller.forms import ProductEditForm
   from settings.settings import CLOUDINARY
 
   try:
@@ -84,7 +84,6 @@ def edit(request, product_id):
     context = {
       'product':          product.product,
       'product_form':     product_form,
-      'photo_form':       PhotoForm(),
       'CLOUDINARY':       {'upload_url':   CLOUDINARY['upload_url'],
                            'download_url': CLOUDINARY['download_url']
                           }
@@ -155,18 +154,16 @@ def saveProduct(request): #ajax requests only, not asset-aware
 
       elif attribute == "photo":
         try:
-          photo_id = request.GET.get('photo_id')
           rank = request.GET.get('rank')
           url = request.GET.get('value')
         except: response['photo'] = "error saving photo"
         else:
-          try:
-            photo = product.addPhoto(url, rank, photo_id)
-          except:
-            response['photo'] = "error saving photo"
-          else:
+          photo = product.addPhoto(url, rank)
+          if photo:
             response['photo_id'] = photo.id
             response['photo'] = "saved photo at rank %s with url %s" % (photo.rank, photo.original)
+          else:
+            response['photo'] = "error saving photo"
 
       elif attribute == "active":
         if status == "yes":

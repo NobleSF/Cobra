@@ -1,38 +1,42 @@
 {% load url from future %}
 {% load static %}
 
-<div class='photo-upload-div'>
-  <div class='photo'>
-    <img src="{{ photo_url|default_if_none:'' }}"
+<div id='photo-{{ rank }}-upload-div' class='photo-upload-div'>
+
+  <div id='photo-{{rank}}' class='photo'>
+    <img src="{{ photo.thumb_size|default_if_none:'' }}"
          width='300' height='225' />
   </div>
 
-  <div id='spinner{{ photo_form.rank.value }}' class='spinner-div'></div>
+  <div id='spinner-{{ rank }}' class='spinner-div'></div>
 
-  <div class="progress progress-striped">
-    <div class="bar" style="width: 0%;"></div>
+  <div id='progress-{{ rank }}' class="progress progress-striped">
+    <div id='progress-bar-{{ rank }}' class="bar" style="width: 0%;"></div>
   </div>
 
-  <div class='photo-form'>
-    <form class='data-form' method='post' action='{% url "seller:photo form data" %}'>
-      <div class='hidden-fields'>
-        {{ photo_form.product }}
-        {{ photo_form.rank }}
-        <input type='hidden' class='photo-id-save autosave' value=''
-               id='photo{{ photo_form.rank.value }}'
-               name='photo{{ photo_form.rank.value }}'
-               data-product_id='{{ product_id }}'
-               data-attribute='photo'
-               data-photo_id='{{ photo_id|default_if_none:'' }}'
-               data-rank='{{ photo_form.rank.value }}'
-               >
-      </div>
+  <div id='photo-forms-{{ rank }}' class='photo-forms'>
+    <form id='data-form-{{ rank }}' class='data-form'
+          method='post' action='{% url "seller:photo form data" %}'>
+
+      <input type='hidden' name='product' class='product'
+             id='photo-{{ rank }}-product'
+             value='{{ product.id }}'>
+
+      <input type='hidden' name='rank' class='rank'
+             id='photo-{{ rank }}-rank'
+             value='{{ rank }}'>
+
     </form>
 
-    <form>
+    <form id='upload-form-{{ rank }}' class='upload-form'>
       <span class='file-wrapper'>
-        {{ photo_form.file }}
-        <span class='file-button btn symbol-camera{{ photo_form.rank.value }} black'></span>
+
+        <input type='file' name='file' class='photo-input'
+               id='photo-input-{{ rank }}'
+               accept='*'
+               capture='camera'>
+
+        <span class='file-button btn symbol-camera{{ rank }} black'></span>
       </span>
     </form>
   </div>

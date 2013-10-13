@@ -31,8 +31,8 @@ def products(request):
                                           deactive_at=None,
                                           sold_at=None)
                                   .filter(
-                                    Q(approved_at__lte=timezone.now()) |
-                                    Q(in_holding=True)
+                                          Q(approved_at__lte=timezone.now()) |
+                                          Q(in_holding=True)
                                   ))
 
 
@@ -59,80 +59,3 @@ def orders(request):
     context = {'exception': e}
 
   return render(request, 'management/orders.html', context)
-
-@access_required('seller')
-@csrf_exempt
-def imageFormData(request):
-  from settings.settings import CLOUDINARY
-  if request.method == "POST":
-    seller_id   = request.session['seller_id']
-    ilk         = request.POST['ilk']
-    rank        = request.POST['rank']
-    timestamp   = getUnixTimestamp()
-
-    #uniquely name every image e.g. "seller23_ilkartisan_rank1_time1380924180"
-    image_id  = "seller"+str(seller_id)
-    image_id += "_ilk"+str(ilk)
-    image_id += "_rank"+str(rank)
-    image_id += "_time"+str(timestamp)
-    #tag image with seller_id and asset_ilk
-    tags = "seller"+str(seller_id)+",asset"+str(ilk)
-
-    form_data = {
-      'public_id':      image_id,
-      'tags':           tags,
-      'api_key':        CLOUDINARY['api_key'],
-      'format':         CLOUDINARY['format'],
-      'transformation': CLOUDINARY['transformation'],
-      'timestamp':      timestamp,
-    }
-    form_data['signature'] = createSignature(form_data)
-  return HttpResponse(simplejson.dumps(form_data), mimetype='application/json')
-
-@access_required('admin or seller')
-@csrf_exempt
-def photoFormData(request):
-  from settings.settings import CLOUDINARY
-  if request.method == "POST":
-    seller_id   = request.session['seller_id']
-    product_id  = request.POST['product']
-    rank        = request.POST['rank']
-    timestamp   = getUnixTimestamp()
-
-    #uniquely name every photo e.g. "seller23_product1024_rank1"
-    photo_id  = "seller"+str(seller_id)
-    photo_id += "_product"+str(product_id)
-    photo_id += "_rank"+str(rank)
-    photo_id += "_time"+str(timestamp)
-    #tag photo with product_id and seller_id
-    tags = "product"+str(product_id)+",seller"+str(seller_id)
-
-    form_data = {
-      'public_id':      photo_id,
-      'tags':           tags,
-      'api_key':        CLOUDINARY['api_key'],
-      'format':         CLOUDINARY['format'],
-      'transformation': CLOUDINARY['transformation'],
-      'timestamp':      timestamp,
-    }
-    form_data['signature'] = createSignature(form_data)
-  return HttpResponse(simplejson.dumps(form_data), mimetype='application/json')
-
-def getUnixTimestamp():
-  from django.utils.dateformat import format
-  from django.utils import timezone
-  return format(timezone.now(), u'U')
-
-def createSignature(data):
-  from settings.settings import CLOUDINARY
-  import hashlib
-  cloudinary_string  = 'format='          + data['format']
-  cloudinary_string += '&public_id='      + data['public_id']
-  cloudinary_string += '&tags='           + data['tags']
-  cloudinary_string += '&timestamp='      + data['timestamp']
-  cloudinary_string += '&transformation=' + data['transformation']
-  cloudinary_string += CLOUDINARY['api_secret']
-
-  h = hashlib.new('sha1')
-  h.update(cloudinary_string)
-  return h.hexdigest()

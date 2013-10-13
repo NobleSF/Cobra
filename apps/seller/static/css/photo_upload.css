@@ -1,28 +1,28 @@
 .hidden-fields{display: none;}
 .description{height: 5em;}
 
-.image{
+.image {
   width: 300px;
   height: 225px;
   padding: 3px;
   margin: 0 auto 10px;
   border: 2px solid #F0F0F0;
 }@media (max-width: 400px){
-  .image{width:200px; height:150px;}
+  .image {width:200px; height:150px;}
 }
 
-.photo{
+.photo {
   width: 300px;
   height: 225px;
   background-color: #EEE;
 }@media (max-width: 400px){
-  .photo{width:200px; height:150px;}
+  .photo {width:200px; height:150px;}
 }
 
 /* hide the "choose file input" behind button
  * http://viget.com/inspire/custom-file-inputs-with-a-bit-of-jquery
  */
-.photo-form {
+.photo-forms {
   position: relative;
   top: -100px;
   left: 90px;
@@ -30,7 +30,7 @@
   padding: 0;
   margin: 0;
 }@media (max-width: 400px){
-  .photo-form{left: 60px;}
+  .photo-forms {left: 60px;}
 }
 
 .file-wrapper {

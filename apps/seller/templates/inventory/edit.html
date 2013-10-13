@@ -18,7 +18,6 @@
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/vendor/jquery.ui.widget.min.js'></script>
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.iframe-transport.min.js'></script>
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.fileupload.min.js'></script>
-  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/load-image.min.js'></script>
   <script src='{{ STATIC_URL }}seller/js/product_edit.min.js'></script>
   <script src='{{ STATIC_URL }}seller/js/product_photo_upload.min.js'></script>
 {% endblock javascript%}
@@ -29,8 +28,18 @@
 
   <input type='hidden' id='product-ajax-url' value="{% url 'seller:save product' %}">
   <input type='hidden' id='product-id' value='{{ product.id }}'>
+
+  <!-- the location to upload photos to -->
   <input type='hidden' id='upload-url' value='{{ CLOUDINARY.upload_url }}'>
-  <input type='hidden' id='download-url' value='{{ CLOUDINARY.download_url }}'>
+
+  <!-- to give cloudinary so they can tell our server when upload is complete -->
+  <input type='hidden' id='upload-complete-url'
+         value="{% url 'seller:complete upload' %}">
+
+  <!-- for JS to check upload completion and get thumb_url -->
+  <input type='hidden' id='upload-check-url'
+         value="{% url 'seller:check photo upload' %}">
+
 
   <div id='product-edit-form' class='text-center'>
 
@@ -51,7 +60,7 @@
 
       <div id='photos' class='text-center'>
         {% for rank in '12345' %}
-          {% photo_upload_tag photo_form product rank %}
+          {% photo_upload_tag product rank %}
         {% endfor %}
       </div>
     </div><!--end photos section-->

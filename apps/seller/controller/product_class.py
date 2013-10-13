@@ -33,26 +33,19 @@ class Product(object):
     request.product_id = product.id
     return product
 
-  def addPhoto(self, url, rank, photo_id=None):
-    photo = None
-    if photo_id:
-      try: photo = models.Photo.objects.get(id=photo_id)
-      except: pass
-
-    if not photo:
-      try: photo = models.Photo.objects.filter(product=self.product, rank=rank)[0]
-      except: pass
-
-    if not photo:
-      try: photo = models.Photo(product=self.product, rank=rank, original=url)
-      except: pass
-
-    if photo:
+  def addPhoto(self, url, rank):
+    from apps.seller.models import Photo
+    try:
+      photo, is_new = Photo.objects.get_or_create(
+                        product = self.product,
+                        rank = rank
+                      )
       photo.original = url
       photo.save()
-      return photo
+    except Exception as e:
+      return str(e)
     else:
-      return None
+      return photo
 
   def photos(self):
     return self.product.photo_set.all().order_by('rank')

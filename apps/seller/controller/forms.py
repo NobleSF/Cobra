@@ -104,17 +104,6 @@ class ImageForm(forms.Form): #to be run as 2 separate forms on the page
                                                     })
                     )
 
-class PhotoForm(forms.Form): #to be run as 2 separate forms on the page
-  product         = forms.CharField(label="")
-  rank            = forms.CharField(label="")
-
-  file            = forms.FileField(label="",
-                      widget=forms.FileInput(attrs={  'class':'photo-input',
-                                                      'accept':'*',
-                                                      'capture':'camera'
-                                                    })
-                    )
-
 class ProductEditForm(forms.Form):
   product_id        = forms.CharField(
                         widget=forms.TextInput(),
