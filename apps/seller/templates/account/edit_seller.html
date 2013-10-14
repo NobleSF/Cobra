@@ -70,9 +70,8 @@
         </li>
       </ul>
       <ul class='hidden-fields'>
-        <li>{{ seller_form.image_url }}</li>
         <input id='id_ilk' type='hidden' value='seller'>
-        <input id='id_rank' type='hidden' value='seller'>
+        <input id='id_rank' type='hidden' value='0'>
       </ul>
     </div>
 
@@ -80,9 +79,6 @@
       {% csrf_token %}
 
       <div class='pull-left'>
-        <ul class='hidden-fields'>
-          <li>{{ seller_form.image_url }}</li>
-        </ul>
         <ul class='seller-details'>
 
           <li class='input-prepend'>

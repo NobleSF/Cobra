@@ -5,10 +5,8 @@ register = template.Library()
 def asset_tag(asset_form, asset=None):
   from apps.seller.models import Asset
   try:
-    #asset_form.fields["asset_id"].initial       = asset.id
     asset_form.fields["ilk"].initial            = asset.ilk
     asset_form.fields["rank"].initial           = asset.rank
-    asset_form.fields["image_url"].initial      = asset.image_id
     asset_form.fields["name"].initial           = asset.name
     asset_form.fields["name_ol"].initial        = asset.name_ol
     asset_form.fields["description"].initial    = asset.description

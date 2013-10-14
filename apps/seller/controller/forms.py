@@ -25,11 +25,6 @@ class SellerEditForm(forms.Form):
                     widget=forms.Textarea(attrs={'class':"description"}),
                       required=False)
 
-  #image takes url of image after ajax upload to cloudinary
-  image_url     = forms.CharField(
-                    widget=forms.TextInput(attrs={'class':"image-url autosave"}),
-                      required=False)
-
   city          = forms.CharField(required=False)
   country       = forms.ModelChoiceField(queryset=Country.objects.all())
   coordinates   = forms.CharField(required=False)
@@ -55,11 +50,6 @@ class AssetForm(forms.Form):
                   widget=forms.TextInput(attrs={'class':"ilk"}))
   rank        = forms.CharField(
                   widget=forms.TextInput(attrs={'class':"rank"}))
-
-  #image takes url of image after ajax upload to cloudinary
-  image_url   = forms.CharField(
-                  widget=forms.TextInput(
-                    attrs={'class':"image-url autosave"}))
 
   DELETE      = forms.BooleanField(
                   widget=forms.CheckboxInput(
