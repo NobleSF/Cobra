@@ -7,7 +7,7 @@
 '>
   <ul>
     <li class='asset-media'>
-      {% image_upload_tag image_form asset=asset %}
+      {% image_upload_tag asset=asset %}
     </li>
     <li class='asset-form'>
       <form onsubmit='return false;'>
@@ -19,7 +19,7 @@
         </div>
         <div class='asset-fields'>
           <ul>
-            <li class='lang lang-us'>
+            <li class='lang lang-us input-append'>
               {{ asset_form.name }}
               <i class='delete-asset symbol-remove red'></i>
             </li>

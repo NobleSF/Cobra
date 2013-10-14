@@ -6,10 +6,10 @@ $().ready( function(){
 
   //run on page load for seller form
   //autosave requires data- attributes
-  //set ilk and rank to dummy value ('seller')
-  applyDataAttrs($('#seller-account'), 'seller', 'seller');
+  //set ilk, rank to dummy values 'seller', '0'
+  applyDataAttrs($('#seller-account'), 'seller', '0');
   applyEvents($('#seller-account'), to_assets="no");//just for seller image now
-  applySellerAutosave();//autosave seller form elements
+  //applySellerAutosave();//autosave seller form elements
 
   //run on page load for assets
   arrangeAssetForms();//move assets to their respective tab
@@ -35,27 +35,27 @@ $('.asset-tab').click(function(){//when an asset tab is clicked
   $('#'+asset_ilk+'_container').show();
 });
 
-function applySellerAutosave() {
-  $('#seller-account').find('.autosave').autosave({
-    url:$('#save-seller-url').val(),
-    before:saveSellerBefore,
-    success:saveSellerSuccess,
-    error:saveSellerError
-  });
-}
-
-function saveSellerBefore($this_element){
-  //start 'updating' visual
-  $this_element.closest('#seller-account').removeClass('error').removeClass('saved').addClass('updating');
-}
-function saveSellerSuccess(data,$this_element){
-  //finished visual
-  $this_element.closest('.asset').removeClass('updating').addClass('saved');
-}
-function saveSellerError(error,$this_element){
-  //error visual
-  $this_element.closest('.asset').removeClass('updating').addClass('error');
-}
+//function applySellerAutosave() {
+//  $('#seller-account').find('.autosave').autosave({
+//    url:$('#save-seller-url').val(),
+//    before:saveSellerBefore,
+//    success:saveSellerSuccess,
+//    error:saveSellerError
+//  });
+//}
+//
+//function saveSellerBefore($this_element){
+//  //start 'updating' visual
+//  $this_element.closest('#seller-account').removeClass('error').removeClass('saved').addClass('updating');
+//}
+//function saveSellerSuccess(data,$this_element){
+//  //finished visual
+//  $this_element.closest('.asset').removeClass('updating').addClass('saved');
+//}
+//function saveSellerError(error,$this_element){
+//  //error visual
+//  $this_element.closest('.asset').removeClass('updating').addClass('error');
+//}
 
 function arrangeAssetForms(){
   $('#asset-forms .asset').each(function(){
@@ -106,14 +106,13 @@ function addAssetForms(){
         }
       })
       var next_rank = highest_rank + 1;
-      new_asset.find('input#id_rank').attr('value', next_rank);
-      new_asset.find('input#id_ilk').attr('value', ilk);
-
+      new_asset.find('input.rank').attr('value', next_rank);
+      new_asset.find('input.ilk').attr('value', ilk);
       new_asset.attr('id', ('asset-'+ilk+next_rank));
 
       //place it in the container
       new_asset.appendTo(this_container);
-      applyDataAttrs(new_asset);
+      applyDataAttrs(new_asset, ilk, next_rank);
       applyEvents(new_asset);
 
     }//end if
@@ -121,10 +120,23 @@ function addAssetForms(){
 }
 
 function applyDataAttrs(asset_div, ilk, rank){
-  //organize input fields and add data- attributes for autosave ajax
+  //make unique id's and add data- attributes to autosave inputs
 
-  ilk = ilk || asset_div.find('#id_ilk').val();
-  rank = rank || asset_div.find('#id_rank').val();
+  ilk = ilk || asset_div.find('input.ilk').val();
+  rank = rank || asset_div.find('input.rank').val();
+
+  //give all elements unique ids
+  asset_div.find('[id*="-ilkrank"]').each(function(){
+    var id = $(this).attr('id');
+    var new_id = id.replace('ilkrank', (ilk+rank));
+    $(this).attr('id', new_id);
+  });
+
+  //give all autosave elements new ilk, rank values
+  asset_div.find('.autosave').each(function(){
+    $(this).attr('data-ilk', ilk)
+    $(this).attr('data-rank', rank)
+  });
 
   //if not product container, hide category element
   if ( ilk !== 'product'){
@@ -138,27 +150,11 @@ function applyDataAttrs(asset_div, ilk, rank){
   }else{
     asset_div.find('.asset-phone').show();
   }
-
-  //give the image div and input a new unique id
-  asset_div.find('.image').attr('id', (ilk+rank+'-image'));
-  asset_div.find('.image-input').attr('id', (ilk+rank+'-image-save'));
-  asset_div.find('.image-input').attr('id', (ilk+rank+'-image-input'));
-
-  //give the spinner and progress bar a unique id
-  asset_div.find('.spinner-div').attr('id', ('spinner'+ilk+rank))
-  asset_div.find('.progress').attr('id', ('progress'+ilk+rank))
-
-  //tell form and autosave elements the ilk and rank
-  asset_div.find('.autosave').attr('data-ilk', ilk);
-  asset_div.find('.autosave').attr('data-rank', rank);
 }
 
 function applyEvents(asset_div, to_assets){
-  //for images uploader
-  var file_input = asset_div.find('.image-input');
-  var display_div = asset_div.find('.image');
   uploader = new fileUploadAction();
-  uploader.apply(file_input, display_div);
+  uploader.apply(asset_div.find('.image-input'));
 
   //for input fields
   to_assets = to_assets || "yes";//parameter defaults to true if not provided
@@ -168,13 +164,13 @@ function applyEvents(asset_div, to_assets){
   }
 }
 
-//https://github.com/cfurrow/jquery.autosave.js
+//AUTOSAVE from https://github.com/cfurrow/jquery.autosave.js
 //example:
 //  $("input").autosave({url:"/save",success:function(){},error:function(){}});
 //
 jQuery.fn.autosave=function(e){function n(e){var n=/^data\-(\w+)$/,r={};r.value=e.value;r.name=e.name;t.each(e.attributes,function(e,t){n.test(t.nodeName)&&(r[n.exec(t.nodeName)[1]]=t.value)});return r}var t=jQuery;t.each(this,function(){var r=t(this),i={data:{},event:"change",success:function(){},error:function(){},before:function(){}};e=t.extend(i,e);var s=n(this),o=s.event||e.event;r.on(o,function(){var r=t(this);s.value=r.val();s=t.extend(s,n(this));var i=s.url?s.url:e.url;e.before&&e.before.call(this,r);t.ajax({url:i,data:s,success:function(t){e.success(t,r)},error:function(t){e.error(t,r)}})})})};
 
-//http://fgnass.github.io/spin.js/
+//SPINNER from http://fgnass.github.io/spin.js/
 //example:
 //  var target = document.getElementById('foo');
 //  var spinner = new Spinner(opts).spin(target);

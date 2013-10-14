@@ -26,60 +26,41 @@ def completeUpload(request):#for cloudinary to post info on completed uploads
 
 #cache response
 def checkImageUpload(request):#for our JS to check upload status and get thumb_url
+  from apps.seller.models import Asset, Seller
   try:
     upload = Upload.objects.get(public_id = request.GET['public_id'])
     if upload.is_complete:
-      response = {'complete':'yes'}
+      image = Image(original=upload.url)
+      image.save()
 
-      if request.GET['for_object'] == 'asset':
+      if request.GET['ilk'] == 'seller':
+        seller = Seller.objects.get(id=request.session['seller_id'])
+        seller.image = image
+        seller.save()
 
+      else: #asset
         asset, is_new = Asset.objects.get_or_create(
                           seller_id = request.session['seller_id'],
                           ilk = request.GET['ilk'],
                           rank = request.GET['rank']
                         )
 
-        asset.image = Image(original=upload.url)
-        asset.image.save()
+        asset.image = image
         asset.save()
-        response['thumb_url'] = asset.image.thumb_size
 
-      elif request.GET['for_object'] == 'seller':
-        pass
-
-    else:
-      response = {'complete':'no'}
-  except Exception as e:
-    response = {'complete':'no', 'except':str(e)}
-
-  return HttpResponse(simplejson.dumps(response), mimetype='application/json')
-
-@access_required('seller')
-#cache response
-@csrf_exempt
-def checkPhotoUpload(request):#for our JS to check upload status and get thumb_url
-  from apps.seller.controller.product_class import Product
-
-  try:
-    upload = Upload.objects.get(public_id = request.GET['public_id'])
-    if upload.is_complete:
-      request.product_id = request.GET['product_id']
-      product = Product(request)
-
-      photo = product.addPhoto(upload.url, request.GET['rank'])
-      response = {'thumb_url': photo.thumb_size}
-
+      response = {'thumb_url': image.thumb_size}
       return HttpResponse(simplejson.dumps(response),
                           mimetype='application/json',
                           status='200')
+
     else:
       return HttpResponse("did not find upload", status='204')
 
   except Exception as e:
-    response = {'complete':'no', 'except':str(e)}
+    response = {'except':str(e)}
     return HttpResponse(simplejson.dumps(response),
                         mimetype='application/json',
-                        status='200')
+                        status='500')
 
 @access_required('seller')
 @csrf_exempt
@@ -88,7 +69,7 @@ def imageFormData(request):
     seller_id   = request.session['seller_id']
     ilk         = request.POST['ilk']
     rank        = request.POST['rank']
-    timestamp   = getUnixTimestamp()
+    timestamp   = dateformat.format(timezone.now(), u'U')#unix timestamp
 
     #uniquely name every image e.g. "seller23_ilkartisan_rank1_time1380924180"
     image_id  = "seller"+str(seller_id)
@@ -113,6 +94,32 @@ def imageFormData(request):
     form_data['signature'] = createSignature(form_data)
   return HttpResponse(simplejson.dumps(form_data), mimetype='application/json')
 
+@access_required('seller')
+#cache response
+@csrf_exempt
+def checkPhotoUpload(request):#for our JS to check upload status and get thumb_url
+  from apps.seller.controller.product_class import Product
+  try:
+    upload = Upload.objects.get(public_id = request.GET['public_id'])
+    if upload.is_complete:
+      request.product_id = request.GET['product_id']
+      product = Product(request)
+
+      photo = product.addPhoto(upload.url, request.GET['rank'])
+      response = {'thumb_url': photo.thumb_size}
+
+      return HttpResponse(simplejson.dumps(response),
+                          mimetype='application/json',
+                          status='200')
+    else:
+      return HttpResponse("did not find upload", status='204')
+
+  except Exception as e:
+    response = {'except':str(e)}
+    return HttpResponse(simplejson.dumps(response),
+                        mimetype='application/json',
+                        status='500')
+
 @access_required('admin or seller')
 @csrf_exempt
 def photoFormData(request):
@@ -120,7 +127,7 @@ def photoFormData(request):
     seller_id   = request.session['seller_id']
     product_id  = request.POST['product']
     rank        = request.POST['rank']
-    timestamp   = getUnixTimestamp()
+    timestamp   = dateformat.format(timezone.now(), u'U')#unix timestamp
 
     #uniquely name every photo e.g. "seller12_product123_rank1_time1380924180"
     photo_id  = "seller"+str(seller_id)
@@ -147,15 +154,9 @@ def photoFormData(request):
     form_data['signature'] = createSignature(form_data)
   return HttpResponse(simplejson.dumps(form_data), mimetype='application/json')
 
-def getUnixTimestamp():
-  #format the current time/date as a unix timestamp integer
-  return dateformat.format(timezone.now(), u'U')
-
 def createSignature(data):
   import hashlib
-
   #in alphabetical order by parameter name, then api_secret last
-
   cloudinary_string  = 'format='            + data['format']
   cloudinary_string += '&notification_url=' + data['notification_url']
   cloudinary_string += '&public_id='        + data['public_id']

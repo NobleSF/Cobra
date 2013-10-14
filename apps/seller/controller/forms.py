@@ -93,17 +93,6 @@ class AssetForm(forms.Form):
                     attrs={'class':"phone autosave"}),
                     max_length=15, required=False)
 
-class ImageForm(forms.Form): #to be run as 2 separate forms on the page
-  ilk             = forms.CharField(label="")
-  rank            = forms.CharField(label="")
-
-  file            = forms.FileField(label="",
-                      widget=forms.FileInput(attrs={  'class':'image-input',
-                                                      'accept':'*',
-                                                      'capture':'camera'
-                                                    })
-                    )
-
 class ProductEditForm(forms.Form):
   product_id        = forms.CharField(
                         widget=forms.TextInput(),

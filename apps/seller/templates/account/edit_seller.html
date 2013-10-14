@@ -51,13 +51,22 @@
   </div>
 
   <div id='seller-account' class='row-fluid'>
+    <!-- the location to upload photos to -->
     <input type='hidden' id='upload-url' value='{{ CLOUDINARY.upload_url }}'>
-    <input type='hidden' id='download-url' value='{{ CLOUDINARY.download_url }}'>
+    <!-- to give cloudinary so they can tell our server when upload is complete -->
+    <input type='hidden' id='upload-complete-url'
+           value="{% url 'seller:complete upload' %}">
+    <!-- for JS to check upload completion and get thumb_url -->
+    <input type='hidden' id='upload-check-url'
+           value="{% url 'seller:check image upload' %}">
+
+    <input type='hidden' id='save-asset-url' value='{% url 'seller:save asset' %}'>
+    <input type='hidden' id='delete-asset-url' value='{% url 'seller:delete asset' %}'>
 
     <div class='pull-left asset'>
       <ul>
         <li class='asset-media'>
-          {% image_upload_tag image_form seller=seller %}
+          {% image_upload_tag seller=seller %}
         </li>
       </ul>
       <ul class='hidden-fields'>
@@ -165,15 +174,12 @@
 
   <div id='asset-forms'>
     <!--a blank asset form to copy from for new assets-->
-    {% asset_tag image_form asset_form %}
+    {% asset_tag asset_form %}
 
     <!--existing assets-->
     {% for asset in assets %}
-      {% asset_tag image_form asset_form asset %}
+      {% asset_tag asset_form asset %}
     {% endfor %}
-
-    <input type='hidden' id='save-asset-url' value='{% url 'seller:save asset' %}'>
-    <input type='hidden' id='delete-asset-url' value='{% url 'seller:delete asset' %}'>
   </div>
 
 {% endblock content %}

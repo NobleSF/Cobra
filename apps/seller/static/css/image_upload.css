@@ -12,7 +12,7 @@
 /* hide the "choose file input" behind button
  * http://viget.com/inspire/custom-file-inputs-with-a-bit-of-jquery
  */
-.image-form {
+.image-forms {
   position: relative;
   top: -100px;
   left: 100px;

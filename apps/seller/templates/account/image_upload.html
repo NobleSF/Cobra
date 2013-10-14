@@ -1,35 +1,41 @@
 {% load url from future %}
 {% load static %}
 
-<div class='image-upload-div'>
-  <div class='image'>
-    <img src="{{ image_url|default_if_none:'' }}"
+<div id='image-{{ilk}}{{rank}}-upload-div' class='image-upload-div'>
+
+  <div id='image-{{ilk}}{{rank}}' class='image'>
+    <img src="{{ image.thumb_size|default_if_none:'' }}"
          width="300" height="225" />
   </div>
 
-  <div id='spinner{{ image_form.rank.value }}' class='spinner-div'></div>
+  <div id='spinner-{{ilk}}{{rank}}' class='spinner-div'></div>
 
-  <div class="progress progress-striped">
-    <div class="bar" style="width: 0%;"></div>
+  <div id='progress-{{ilk}}{{rank}}' class="progress progress-striped">
+    <div id='progress-bar-{{ilk}}{{rank}}' class="bar" style="width: 0%;"></div>
   </div>
 
-  <div class='image-form'>
-    <form class='data-form' method='post' action='{% url "seller:image form data" %}'>
-      <div class='hidden-fields'>
-        {{ image_form.ilk }}
-        {{ image_form.rank }}
-        <input type='hidden' class='image-save autosave' value=''
-          id='image-save'
-          name='image-save'
-          data-ilk='{{ image_form.ilk.value }}'
-          data-rank='{{ image_form.rank.value }}'
-          >
-      </div>
+  <div id='image-forms-{{ilk}}{{rank}}' class='image-forms'>
+    <form id='data-form-{{ilk}}{{rank}}' class='data-form'
+          method='post' action='{% url "seller:image form data" %}'>
+
+      <input type='hidden' name='ilk' class='ilk'
+             id='image-{{ilk}}{{rank}}-ilk'
+             value='{{ ilk }}'>
+
+      <input type='hidden' name='rank' class='rank'
+             id='image-{{ilk}}{{rank}}-rank'
+             value='{{ rank }}'>
+
     </form>
 
-    <form onsubmit='return false;'>
+    <form id='upload-form-{{ilk}}{{rank}}' class='upload-form' onsubmit='return false;'>
       <span class='file-wrapper'>
-        {{ image_form.file }}
+
+        <input type='file' name='file' class='image-input'
+               id='image-input-{{ilk}}{{rank}}'
+               accept='*'
+               capture='camera'>
+
         <span class='file-button btn symbol-camera black'></span>
       </span>
     </form>

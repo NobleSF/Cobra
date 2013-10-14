@@ -21,7 +21,7 @@ def create(account):
 @access_required('seller')
 def edit(request):
   from apps.seller.models import Seller
-  from apps.seller.controller.forms import AssetForm, ImageForm, SellerEditForm
+  from apps.seller.controller.forms import AssetForm, SellerEditForm
   from settings.settings import CLOUDINARY
 
   seller = Seller.objects.get(id=request.session['seller_id'])
@@ -30,7 +30,6 @@ def edit(request):
                 'seller':     seller,
                 'assets':     seller.asset_set.order_by('id'),
                 'asset_form': AssetForm(),
-                'image_form': ImageForm(),
                 'asset_ilks': ['artisan','product','tool','material'],
                 'CLOUDINARY': {'upload_url':   CLOUDINARY['upload_url'],
                                'download_url': CLOUDINARY['download_url']
@@ -112,30 +111,27 @@ def edit(request):
 
   return render(request, 'account/edit_seller.html', context)
 
-@access_required('seller')
-@csrf_exempt
-def saveSeller(request): #ajax requests only, create or update asset
-  from apps.seller.models import Seller
-
-  if request.method == 'GET': # it must be an ajax post to work
-    try:
-      seller = Seller.objects.get(id=request.session['seller_id'])
-      element = request.GET['name']
-      value   = request.GET['value']
-
-      if element == 'image_url':
-        seller.image = customSaveImage(value)
-
-      seller.save()
-      response = {'success': element + " saved with value: " + value}
-
-    except Exception as e:
-      response = {'exception':e}
-      Email(message="error in saveSeller: "+str(e)).sendTo(Tom.email)
-  else:
-    response = {'problem':"not GET"}
-
-  return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+#@access_required('seller')
+#@csrf_exempt
+#def saveSeller(request): #ajax requests only, create or update asset
+#  from apps.seller.models import Seller
+#
+#  if request.method == 'GET': # it must be an ajax post to work
+#    try:
+#      seller = Seller.objects.get(id=request.session['seller_id'])
+#      element = request.GET['name']
+#      value   = request.GET['value']
+#
+#      seller.save()
+#      response = {'success': element + " saved with value: " + value}
+#
+#    except Exception as e:
+#      response = {'exception':e}
+#      Email(message="error in saveSeller: "+str(e)).sendTo(Tom.email)
+#  else:
+#    response = {'problem':"not GET"}
+#
+#  return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 @access_required('seller')
 @csrf_exempt
@@ -153,9 +149,7 @@ def saveAsset(request): #ajax get requests only, create or update asset
     element = request.GET.get('name')
     value   = request.GET.get('value')
 
-    if element == 'image_url':
-      asset.image = customSaveImage(value)
-    elif element == 'name':
+    if element == 'name':
       asset.name = value
     elif element == 'name_ol':
       asset.name_ol = value
@@ -196,11 +190,3 @@ def deleteAsset(request): #ajax requests only
     Email(message="error in deleteAsset ajax: "+str(e)).sendTo(Tom.email)
 
   return HttpResponse(simplejson.dumps(response), mimetype='application/json')
-
-def customSaveImage(url):
-  from apps.seller.models import Image
-  try:
-    image_object = Image(original=url)
-    image_object.save()
-    return image_object
-  except: return None

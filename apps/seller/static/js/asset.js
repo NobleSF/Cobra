@@ -57,55 +57,60 @@ function applyAssetDeleteAction(asset_div){
 }
 
 function fileUploadAction(){
-  this.apply = function(file_input, display_div){
-    var this_file_input = file_input;
-    var this_display_div = display_div;
-    //prepare to predict the url in advance
-    var image_url = $('#download-url').val() + "_unique_id_.jpg";
-
-    var progress_div = this_file_input.closest('.asset-media').find('.progress');
-    var button_div = this_file_input.closest('.image-upload-div').find('.image-form');
-    progress_div.hide();
-    button_div.show();
-    var progress_bar = progress_div.find('.bar');
+  this.apply = function(file_input){
     var iframe_fallback = false;
 
-    var spinner_id = progress_div.closest('.image-upload-div').find('.spinner-div').attr('id');
-    var spinner_target = document.getElementById(spinner_id);
+    var this_file_input = file_input;
+    var image_data = {}
     var spinner = new Spinner()
+    var spinner_div = this_file_input.closest('.image-upload-div').find('.spinner-div');
+    var forms_div = this_file_input.closest('.image-upload-div').find('.image-forms');
 
+    //hide progress
+    this_file_input.closest('.asset-media').find('.progress').hide();
+    //show user actionable items
+    this_file_input.closest('.image-upload-div').find('.image-forms');
+
+    //apply upload action callbacks
     this_file_input.fileupload({
       //forceIframeTransport: true,
       dataType: 'json',
       url: $('#upload-url').val(),
 
       submit: function(e, data){
-        var spinner_id = progress_div.closest('.image-upload-div').find('.spinner-div').attr('id');
-        var spinner_target = document.getElementById(spinner_id);
-        spinner.spin(spinner_target);
-
         // call server to get signed form data
-        var form = progress_bar.closest('.image-upload-div').find('.data-form');
-        data.formData = getFormData(form);
+        var data_form = forms_div.find('.data-form');
+        data.formData = getFormData(data_form);
 
-        //reset and save the url we should get back
-        image_url = image_url.replace("_unique_id_", data.formData['public_id']);
+        image_data = data.formData;
+        image_data['ilk'] = $(forms_div).find('.ilk').val();
+        image_data['rank'] = $(forms_div).find('.rank').val();
+        image_data['ilkrank'] = image_data.ilk + image_data.rank
       },
 
       send: function (e, data) {
-        if (data.dataType.indexOf('iframe') >= 0){
-          //using iframe fallback, so use loadImage to bring it back later
-          iframe_fallback = true;
-          //download the image afterwards
-          setTimeout(function(){
-            loadImage(progress_div, image_url, spinner);
-          }, 20000); //wait 20 seconds
+        //using iframe fallback?
+        if (data.dataType.indexOf('iframe') >= 0){iframe_fallback = true;}
 
-        }else{
-          //not using iframe, so we can show a progress bar
-          progress_bar.css('width', '0%');
-          progress_div.show();
-          button_div.hide();
+        if (data.files[0].name.length > 0){//because Android will try to send nothing
+
+          if (iframe_fallback){
+            //we don't know when the download will finish
+            //set timer to try loadImage in 10 sec
+            setTimeout(function(){
+              loadImage(image_data);
+            }, 10000); //wait 10 seconds
+
+          }else{
+            //not using iframe, so we can show a progress bar
+            $('#progress-bar-'+image_data.ilkrank).css('width', '0%');
+            $('#progress-'+image_data.ilkrank).show();
+          }
+
+          //show loading and hide interaction elements
+          spinner.spin(document.getElementById($(spinner_div).attr('id')));
+          $(spinner_div).show();
+          forms_div.hide();
         }
       },
 
@@ -113,78 +118,90 @@ function fileUploadAction(){
       //and the following callbacks don't even happen on Android 2.3
 
       progress: function (e, data) {
-        var progress = parseInt(data.loaded / data.total * 100, 10);
-        progress_bar.css('width', progress + '%');
+        //animate the progress bar during upload
+        var progress = parseInt(data.loaded / data.total * 95, 10);
+        $('#progress-bar-'+image_data.ilkrank).css('width', progress + '%');
       },
 
       done: function (e, data) {
-        response_data = data['response']();
-        response = response_data.result;
+        //the data cloudinary returns, but we don't need it.
+        //response_data = data['response']();
+        //response = response_data.result;
 
-        //load thumb_url into display div
         if (!iframe_fallback){
-          loadThumb(response['url'], this_display_div);
-          storeImageURL(response['url'], this_display_div);
-          spinner.stop();
+
+          //confirm success on server, load thumbnail
+          loadImage(image_data);
         }
       },
 
       always: function (e, data) {
         //we're done here, hide the progress bar
-        progress_bar.css('width', '0%');
-        progress_div.hide();
-        button_div.show();
+        $('#progress-'+image_data.ilkrank).hide();
+        spinner.stop();
+        forms_div.show();
       }
     });//end fileupload
   }
 }
 
-function getFormData(form){
+function getFormData(form){//just a generic ajax call that returns resulting response
   var form_data = {};
   $.ajax({
-    async: false,
-    cache: false,
+    async: false, //function needs the result before it can continue
+    cache: false, //don't cache, time-sensitive variables
     type: form.attr('method'),
     url: form.attr('action'),
     data: form.serialize(),
+    dataType: 'json',
+
     success: function(data){
-      form_data = data
-      //form_data['api_key'] = data.api_key;
+      form_data = data //dictionary object of values cloudinary needs
     },
   });
   return form_data;
 }
 
-function loadImage(progress_div, image_url, spinner){
+function loadImage(image_data){
+  //ask our server if the upload completed and get the thumb_url to load the image
+
   $.ajax({
-      url: image_url,
-      type:'HEAD',
-      cache: false, //in case it caches a 404 before the image is ready to download
-      processData: false,
+    async: false,
+    url: $('#upload-check-url').val(),
+    cache: false,
+    data: image_data,
+    dataType: 'json',
+  })
 
-  }).success(function(){
-    //image exists, so load it up and and hide the loading animation
-    display_div = progress_div.closest('.image-upload-div').find('.image');
-    loadThumb(image_url, display_div);
-    storeImageURL(image_url, display_div);
-    spinner.stop();
+  .done(function(data, textStatus, jqXHR){
+    switch(jqXHR.status){
 
-  }).error(function(){
-    //image doesn't exist yet, wiat 10 sec and try again.
-    setTimeout(function(){
-      loadImage(progress_div, image_url, spinner);
-    }, 5000); //wait 5 seconds and try again
+      case 200: //image exists, load it and hide loading animations
+        $('#image-'+image_data.ilkrank).find('img').attr('src', data.thumb_url);
+        $('#progress-'+image_data.ilkrank).hide();
+        $('#spinner-'+image_data.ilkrank).hide();
+        $('#image-forms-'+image_data.ilkrank).show();
+
+        //update the asset
+        $('#asset-'+image_data.ilk+image_data.rank)
+        .removeClass('empty')
+        .removeClass('error')
+        .addClass('saved');
+
+        addAssetForms();
+        break;
+
+      case 204: //image does not exist yet, wait and try again
+        setTimeout(function(){
+          loadImage(image_data);
+        }, 2000); //wait 2 seconds and try again
+
+      case 404: //internet cut out
+        //todo: reload page?
+        break;
+    }
+  })
+  .fail(function(){ //well.. that sucks
+    $('#asset-'+image_data.ilk+image_data.rank).addClass('error');
   });
-}
-
-function loadThumb(url, display_div){ //load thumb_url into display div
-  thumb_url = url.replace("upload","upload/c_fill,g_center,h_225,q_85,w_300");
-  display_div.html('<img src="' + thumb_url + '">');
-  //progress_div.closest('.image-upload-div').find('.image img').attr('src', image_url);
-}
-
-function storeImageURL(url, display_div){
-  image_save_input = display_div.closest('.asset').find('#id_image_url');
-  image_save_input.attr('value', url);
-  image_save_input.trigger('change');
 }

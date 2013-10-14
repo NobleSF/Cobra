@@ -2,7 +2,7 @@ from django import template
 register = template.Library()
 
 @register.inclusion_tag('account/asset.html')
-def asset_tag(image_form, asset_form, asset=None):
+def asset_tag(asset_form, asset=None):
   from apps.seller.models import Asset
   try:
     #asset_form.fields["asset_id"].initial       = asset.id
@@ -21,28 +21,24 @@ def asset_tag(image_form, asset_form, asset=None):
     asset = None
     image_id = None
 
-  context = {
-              'asset':      asset,
-              'asset_form': asset_form,
-              'image_form': image_form
-            }
-
-  return context
+  return {'asset':      asset,
+          'asset_form': asset_form
+         }
 
 @register.inclusion_tag('account/image_upload.html')
-def image_upload_tag(image_form, asset=None, seller=None):
+def image_upload_tag(asset=None, seller=None):
 
   if asset:
-    image_url = asset.image.thumb_size if asset.image else None
-    image_form.fields['ilk'].initial  = asset.ilk
-    image_form.fields['rank'].initial = asset.rank
+    image = asset.image
+    (ilk, rank) = (asset.ilk, asset.rank)
   elif seller:
-    image_url = seller.image.thumb_size if seller.image else None
-    image_form.fields['ilk'].initial  = "seller"
-    image_form.fields['rank'].initial = 0
+    image = seller.image
+    (ilk, rank) = ('seller', 0)
   else:
-    image_url = ""
+    image = None
+    (ilk, rank) = ('ilk', 'rank')
 
-  return {'image_form':image_form,
-          'image_url':image_url
-         }
+  return {'image': image,
+          'ilk': ilk,
+          'rank': rank
+          }
