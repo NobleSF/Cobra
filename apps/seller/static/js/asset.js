@@ -1,5 +1,15 @@
 $().ready( function(){
   //run on page load
+
+  //show exit-button when focused on input (mobile)
+  $('input,textarea').on('focus', function(){
+    $(this).closest('.asset-fields').find('.go').show();
+    $(this).closest('.asset-fields').find('.delete-asset').hide();
+  });
+  $('.go').on('click', function(){
+    $(this).closest('.asset-fields').find('.go').hide();
+  });
+
 });
 
 function applyAssetAutosave(asset_div) {

@@ -26,7 +26,8 @@
   border: 2px solid #F0F0F0;
 }
 
-.delete-asset{cursor: pointer;}
+.delete-asset, .go{cursor: pointer;}
+.go{display: none;}
 
 .soon-dead{opacity: 0.3;}
 
