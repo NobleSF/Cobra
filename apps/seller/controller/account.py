@@ -111,28 +111,6 @@ def edit(request):
 
   return render(request, 'account/edit_seller.html', context)
 
-#@access_required('seller')
-#@csrf_exempt
-#def saveSeller(request): #ajax requests only, create or update asset
-#  from apps.seller.models import Seller
-#
-#  if request.method == 'GET': # it must be an ajax post to work
-#    try:
-#      seller = Seller.objects.get(id=request.session['seller_id'])
-#      element = request.GET['name']
-#      value   = request.GET['value']
-#
-#      seller.save()
-#      response = {'success': element + " saved with value: " + value}
-#
-#    except Exception as e:
-#      response = {'exception':e}
-#      Email(message="error in saveSeller: "+str(e)).sendTo(Tom.email)
-#  else:
-#    response = {'problem':"not GET"}
-#
-#  return HttpResponse(simplejson.dumps(response), mimetype='application/json')
-
 @access_required('seller')
 @csrf_exempt
 def saveAsset(request): #ajax get requests only, create or update asset

@@ -9,7 +9,6 @@ $().ready( function(){
   //set ilk, rank to dummy values 'seller', '0'
   applyDataAttrs($('#seller-account'), 'seller', '0');
   applyEvents($('#seller-account'), to_assets="no");//just for seller image now
-  //applySellerAutosave();//autosave seller form elements
 
   //run on page load for assets
   arrangeAssetForms();//move assets to their respective tab
@@ -34,28 +33,6 @@ $('.asset-tab').click(function(){//when an asset tab is clicked
   asset_ilk = $(this).attr('id').replace('_tab','');
   $('#'+asset_ilk+'_container').show();
 });
-
-//function applySellerAutosave() {
-//  $('#seller-account').find('.autosave').autosave({
-//    url:$('#save-seller-url').val(),
-//    before:saveSellerBefore,
-//    success:saveSellerSuccess,
-//    error:saveSellerError
-//  });
-//}
-//
-//function saveSellerBefore($this_element){
-//  //start 'updating' visual
-//  $this_element.closest('#seller-account').removeClass('error').removeClass('saved').addClass('updating');
-//}
-//function saveSellerSuccess(data,$this_element){
-//  //finished visual
-//  $this_element.closest('.asset').removeClass('updating').addClass('saved');
-//}
-//function saveSellerError(error,$this_element){
-//  //error visual
-//  $this_element.closest('.asset').removeClass('updating').addClass('error');
-//}
 
 function arrangeAssetForms(){
   $('#asset-forms .asset').each(function(){
