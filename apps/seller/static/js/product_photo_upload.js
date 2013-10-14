@@ -2,9 +2,8 @@ $().ready( function(){
 
   //apply events for photo uploads
   $('.photo-upload-div').each(function(){
-    var file_input = $(this).find('.photo-input');
     uploader = new fileUploadAction();
-    uploader.apply(file_input);
+    uploader.apply($(this).find('.photo-input'));
   });
 
 });//end .ready
@@ -96,7 +95,7 @@ function fileUploadAction(){
   }
 }
 
-function getFormData(form){ //just a generic ajax call that returns resulting response
+function getFormData(form){//just a generic ajax call that returns resulting response
   var form_data = {};
   $.ajax({
     async:    false, //function needs the result before it can continue

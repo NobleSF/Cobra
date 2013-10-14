@@ -31,11 +31,9 @@
 
   <!-- the location to upload photos to -->
   <input type='hidden' id='upload-url' value='{{ CLOUDINARY.upload_url }}'>
-
   <!-- to give cloudinary so they can tell our server when upload is complete -->
   <input type='hidden' id='upload-complete-url'
          value="{% url 'seller:complete upload' %}">
-
   <!-- for JS to check upload completion and get thumb_url -->
   <input type='hidden' id='upload-check-url'
          value="{% url 'seller:check photo upload' %}">
