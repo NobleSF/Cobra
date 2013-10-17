@@ -32,16 +32,6 @@ class Cart(models.Model):
     else:
       return False
 
-  def discount(self):
-    #for when we implement shipping groups and discounts
-    return 0
-
-  def total(self):
-    sum = 0
-    for item in self.items:
-      sum += item.price
-    return sum
-
 class Item(models.Model):
   from apps.seller.models import Product
   cart                = models.ForeignKey('Cart')
@@ -73,7 +63,6 @@ class Item(models.Model):
 
 class Order(models.Model):
   from apps.seller.models import Product, ShippingOption
-  from apps.admin.models import Account
 
   cart                = models.ForeignKey('Cart')
 
@@ -81,8 +70,6 @@ class Order(models.Model):
   products_charge     = models.DecimalField(max_digits=8, decimal_places=2)
   anou_charge         = models.DecimalField(max_digits=8, decimal_places=2)
   shipping_charge     = models.DecimalField(max_digits=8, decimal_places=2)
-  discount_charge     = models.DecimalField(max_digits=8, decimal_places=2, default=0)
-  discount_reason     = models.CharField(max_length=100, null=True, blank=True)
   total_charge        = models.DecimalField(max_digits=8, decimal_places=2)
 
   shipping_option     = models.ForeignKey(ShippingOption, null=True, blank=True)
@@ -135,9 +122,8 @@ class Order(models.Model):
     else: return False
 
 class Rating(models.Model):
-  from django.contrib.sessions.models import Session
   from apps.seller.models import Product
-  from apps.admin.models import Account, RatingSubject
+  from apps.admin.models import RatingSubject
 
   session_key         = models.CharField(max_length=32)
   product             = models.ForeignKey(Product)
@@ -147,10 +133,3 @@ class Rating(models.Model):
 
   def __unicode__(self):
     return unicode(self.value)
-
-class Visitor(models.Model):#I don't think we need this
-  #but south isn't handling the deletion of this model very well
-  #it may have never created the relationship table visitor-session
-  from django.contrib.sessions.models import Session
-  sessions            = models.ManyToManyField(Session)
-  carts               = models.ForeignKey('Cart', null=True, blank=True)
