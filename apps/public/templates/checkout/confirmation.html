@@ -41,7 +41,19 @@
               </h3></span>
             {% endif %}
           </h3>
+
+          {% for item in cart %}
+            {% if item.order.tracking_number %}
+              <h3 class='copy-font'>
+                Tracking {{ item.product.name }} at
+                <a href="{{ item.order.tracking_url }}" target='_blank'>
+                  {{ item.order.tracking_number }}
+                </a>.
+              </h3>
+            {% endif %}
+          {% endfor %}
         </div>
+
       {% else %}
         <h3>Oh no, can't find your order!</h3>
       {% endif %}

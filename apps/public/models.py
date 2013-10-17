@@ -49,6 +49,10 @@ class Item(models.Model):
   #quantity           = models.PositiveIntegerField(default=1)
 
   @property
+  def order(self):
+    return self.product.order_set.get(cart=self.cart)
+
+  @property
   def price(self):
     return self.product.display_price
 
