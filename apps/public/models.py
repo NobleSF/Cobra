@@ -124,6 +124,12 @@ class Order(models.Model):
   @property
   def is_seller_paid(self): return True if self.seller_paid_at else False
 
+  @property
+  def tracking_url(self):
+    if self.tracking_number:
+      return "https://tools.usps.com/go/TrackConfirmAction_input?qtc_tLabels1=" + self.tracking_number
+    else: return False
+
 class Rating(models.Model):
   from django.contrib.sessions.models import Session
   from apps.seller.models import Product
