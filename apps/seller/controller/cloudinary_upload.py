@@ -7,6 +7,7 @@ from apps.communication.controller.email_class import Email
 from settings.people import Tom
 from apps.seller.models import Upload, Image, Photo
 from settings.settings import CLOUDINARY
+#from django.core.cache import cache
 
 @csrf_exempt
 def completeUpload(request):#for cloudinary to post info on completed uploads
@@ -22,10 +23,14 @@ def completeUpload(request):#for cloudinary to post info on completed uploads
     Email(message=str(e)).sendTo(Tom.email)
     return HttpResponse(str(e), status=500)
   else:
+    #cache.expire('check_'+request_data.get('public_id'))
     return HttpResponse(status=200)
 
-#cache response
 def checkImageUpload(request):#for our JS to check upload status and get thumb_url
+  #cached_response = cache.get('check_'+request.GET['public_id'])
+  #if cached_response:
+  #  return cached_response
+  #else:
   from apps.seller.models import Asset, Seller
   try:
     upload = Upload.objects.get(public_id = request.GET['public_id'])
@@ -54,6 +59,7 @@ def checkImageUpload(request):#for our JS to check upload status and get thumb_u
                           status='200')
 
     else:
+      #cache.set('check_'+request.GET['public_id'], 300) #5 minutes
       return HttpResponse("did not find upload", status='204')
 
   except Exception as e:
