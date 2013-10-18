@@ -1,8 +1,9 @@
 from apps.public import models
 from django.utils import timezone
 from datetime import timedelta
-from settings.people import Tom
 from apps.communication.controller.email_class import Email
+from settings.people import Tom
+from apps.public.controller.promotion_rules import discount_for_cart_promotion
 
 def cleanupCarts():
   from apps.seller.models import Product
@@ -207,6 +208,17 @@ class Cart(object):
     for item in self.cart.item_set.all():
       result += item.product.display_price
     return '%.2f' % result
+
+  def add_promotion(self, promotion):
+    #self.cart.promotions.add(promotion)
+    pass
+
+  def discounts(self):
+    discounts = {}
+    for promotion in self.cart.promotions:
+      discounts[promotion.name] = discount_for_cart_promotion(self.cart, promotion)
+    discounts['summary'] = sum(discounts.values())
+    return discounts
 
   def clear(self):
     for item in self.cart.item_set.all():

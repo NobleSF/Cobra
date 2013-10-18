@@ -1,6 +1,8 @@
 from django.db import models
 
 class Cart(models.Model):
+  #from apps.admin.models import Currency
+
   email               = models.EmailField(blank=True, null=True)
   name                = models.CharField(max_length=100, null=True, blank=True)
   address_name        = models.CharField(max_length=100, null=True, blank=True)
@@ -11,11 +13,22 @@ class Cart(models.Model):
   postal_code         = models.CharField(max_length=15,  null=True, blank=True)
   country             = models.CharField(max_length=50,  null=True, blank=True)
 
+  #promotions          = models.ManyToManyField('Promotion')
+
   wepay_checkout_id   = models.BigIntegerField(null=True, blank=True)
   anou_checkout_id    = models.CharField(max_length=15, null=True, blank=True)
   checked_out         = models.BooleanField(default=False)#does not need to be a date
 
-  #todo: add discount code or note or something
+  #total_charge        = models.DecimalField(max_digits=8, decimal_places=2,
+  #                                          null=True, blank=True)
+  #total_discount      = models.DecimalField(max_digits=8, decimal_places=2,
+  #                                          null=True, blank=True)
+  #total_paid          = models.DecimalField(max_digits=8, decimal_places=2,
+  #                                          null=True, blank=True)
+  #total_refunded      = models.DecimalField(max_digits=8, decimal_places=2,
+  #                                          null=True, blank=True)
+  #currency            = models.ForeignKey(Currency, null=True, blank=True)
+
   receipt             = models.TextField(blank=True, null=True)
   notes               = models.TextField(blank=True, null=True)
 
@@ -59,7 +72,19 @@ class Item(models.Model):
 
   def __unicode__(self):
     #return u'%d units of %s' % (self.quantity, self.product.name)
-    return self.product.name
+    return unicode(self.product.name)
+
+class Promotion(models.Model):
+  name                = models.CharField(max_length=50,  null=True, blank=True)
+  #description         = models.CharField(max_length=200, null=True, blank=True)
+  #code                = models.CharField(max_length=50,  null=True, blank=True)
+  #automatic           = models.BooleanField(default=False) #auto apply to cart
+
+  #valid_on            = models.DateTimeField(null=True, blank=True)
+  #expires_on          = models.DateTimeField(null=True, blank=True)
+
+  def __unicode__(self):
+    return unicode(self.name)
 
 class Order(models.Model):
   from apps.seller.models import Product, ShippingOption

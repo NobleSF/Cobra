@@ -111,6 +111,7 @@ class Product(models.Model):
   approved_at   = models.DateTimeField(null=True, blank=True) #admin approval
   sold_at       = models.DateTimeField(null=True, blank=True)
   #is_orderable  = models.BooleanField(default=False) #for custom orders
+  #is_hidden     = being sold on another platform (etys, ebay)
 
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
@@ -376,7 +377,6 @@ class Image(models.Model): #Images are used for navigation, thumbnail size
 
 class Upload(models.Model): #images and photos before they exist
   public_id     = models.CharField(max_length=100, unique=True)
-
   created_at    = models.DateTimeField(auto_now_add = True)
   complete_at   = models.DateTimeField(null=True, blank=True)
   url           = models.URLField(max_length=200, null=True, blank=True)
