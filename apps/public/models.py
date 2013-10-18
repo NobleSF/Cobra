@@ -13,7 +13,7 @@ class Cart(models.Model):
   postal_code         = models.CharField(max_length=15,  null=True, blank=True)
   country             = models.CharField(max_length=50,  null=True, blank=True)
 
-  #promotions          = models.ManyToManyField('Promotion')
+  promotions          = models.ManyToManyField('Promotion')
 
   wepay_checkout_id   = models.BigIntegerField(null=True, blank=True)
   anou_checkout_id    = models.CharField(max_length=15, null=True, blank=True)
