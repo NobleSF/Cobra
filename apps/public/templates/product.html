@@ -63,6 +63,19 @@
 
   <div id='product' class='row-fluid'>
     <div class='span8'>
+
+      <div id='product-title'>
+        <h1>
+          {{ product.name }}
+          in
+          {{ product.category }}
+          by
+          <a href="{% url 'store' product.seller.id %}">
+            {{ product.seller.name }}
+          </a>
+        </h1>
+      </div>
+
       <div id='photos' class='carousel slide'>
         <ol class='carousel-indicators'></ol>
         <!-- Carousel items -->
@@ -70,7 +83,7 @@
           {% for photo in product.photos %}
             <div class='item {% if forloop.first %}active{% endif %}'>
               <img src='{{ photo.product_size }}'
-                   alt='{{ product.title }} photo{{ photo.rank }}'>
+                   alt='{{ product.title }}'>
               <!--<div class='carousel-caption'></div>-->
             </div>
           {% endfor %}
@@ -94,7 +107,6 @@
 
       <div id='product-description'>
         <p>
-          <span class='title'>{{ product.name }}</span>
           {% if product.description %}
             {{ product.description }}
           {% endif %}
@@ -142,10 +154,10 @@
 
         <tr>
           <td rowspan=2 class='price'>${{ product.display_price }}</td>
-          <td class='price-qualifier'>free shipping.</td>
+          <td class='price-qualifier nowrap'>free shipping.</td>
         </tr>
         <tr>
-          <td class='price-qualifier'>free returns.</td>
+          <td class='price-qualifier nowrap'>free returns.</td>
         </tr>
       </table>
 
@@ -224,9 +236,9 @@
               {% if utility.description %}
                 <p class='utility-description'>
                   <span class='short-description'>
-                    {{ utility.description|truncatewords:6 }}
+                    {{ utility.description|truncatewords:15 }}
                   </span>
-                  {% ifnotequal utility.description|truncatewords:6|length utility.description|length %}
+                  {% ifnotequal utility.description|truncatewords:15|length utility.description|length %}
                     <small class='read-more'>read more</small>
                     <span class='long-description'>
                       {{ utility.description }}

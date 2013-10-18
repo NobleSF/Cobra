@@ -1,6 +1,3 @@
-@media (max-width: 980px){/* todo: put this in the base css */
-  #body{margin-top:0px;}
-}
 #header{border: none;}
 
 .left-navigation li{

@@ -1,4 +1,3 @@
-
 #product div{
   text-align: center;
 }
@@ -143,5 +142,10 @@
   text-align: center;
 }
 
-#product-description{margin: 2em 0}
-#product-description .title{font-size: 16pt;}
+#product-title h1{
+  font-size: 18pt;
+  margin: 0 1em;
+}@media (max-width: 415px){
+  #product-title h1{font-size: 12pt;}
+}
+#product-description{margin: 1em 0}
