@@ -63,7 +63,9 @@ class Color(models.Model):
 
 class Category(models.Model):
   name          = models.CharField(max_length=50)
-  #parent category?
+  keywords      = models.CharField(max_length=50)
+  parent_category = models.ForeignKey('self', related_name="child_category_set",
+                                      blank=True, null=True)
 
   def __unicode__(self):
     return self.name
