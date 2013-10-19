@@ -55,6 +55,10 @@ class Seller(models.Model):
   def __unicode__(self):
     return self.name
 
+  def get_absolute_url(self):
+    from django.core.urlresolvers import reverse
+    return reverse('store', args=[str(self.id)])
+
 class Asset(models.Model):
   from apps.admin.models import Category
   seller        = models.ForeignKey('Seller')
@@ -315,6 +319,10 @@ class Product(models.Model):
 
   def __unicode__(self):
     return self.name + ' by ' + self.seller.name
+
+  def get_absolute_url(self):
+    from django.core.urlresolvers import reverse
+    return reverse('product', args=[str(self.id)])
 
   class Meta:
     ordering = ['-sold_at', '-id']

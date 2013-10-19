@@ -2,11 +2,12 @@ from django.conf.urls import patterns, include, url
 from apps.public.controller import home
 from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.views.generic.simple import redirect_to, direct_to_template
+from .sitemaps import sitemaps
 
 urlpatterns = patterns('',
   url(r'^$', home.home, name='home'), #fyi, this is home
   url(r'^blog', redirect_to,
-      {'url': 'http://helloanou.wordpress.com/', 'permanent': False}),
+      {'url': 'http://helloanou.wordpress.com/', 'permanent': False}, name='blog'),
 )
 
 urlpatterns += patterns('',
@@ -30,10 +31,12 @@ urlpatterns += patterns('',
 
 #SEO
 urlpatterns += patterns('',
-  (r'^robots.txt', direct_to_template, {'template':'robots.txt', 'mimetype':'text/plain'}),
-  (r'^humans.txt', direct_to_template, {'template':'humans.txt', 'mimetype':'text/plain'}),
-
-  (r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': {}}),
+  (r'^robots\.txt', direct_to_template, {'template':'robots.txt', 'mimetype':'text/plain'}),
+  (r'^humans\.txt', direct_to_template, {'template':'humans.txt', 'mimetype':'text/plain'}),
+)
+urlpatterns += patterns('django.contrib.sitemaps.views',
+    (r'^sitemap\.xml$', 'index', {'sitemaps': sitemaps}),
+    (r'^sitemap-(?P<section>.+)\.xml$', 'sitemap', {'sitemaps': sitemaps}),
 )
 
 #SITE-VERIFICATIONS
