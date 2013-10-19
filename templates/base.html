@@ -24,13 +24,18 @@
   <!---META TAGS--->
 
   <!--FACEBOOK AND OPEN GRAPH-->
-  <meta property="fb:app_id"      content="213728322126454" />
-  <meta property="og:site_name"   content="Anou Store" />
-  <meta property="og:type"        content="anoustore:{%block open_graph_type%}{%endblock%}" />
-  <meta property="og:url"         content="{%block open_graph_url%}http://www.theanou.com{%endblock%}" />
-  <meta property="og:title"       content="{%block open_graph_title%}Anou Store{%endblock%}" />
-  <meta property="og:description" content="{%block open_graph_description%}Buy unique and incredible Moroccan handicrafts and art directly from the artisans who made it.{%endblock%}" />
-  <meta property="og:image"       content="{%block open_graph_image%}{{ STATIC_URL }}images/Anou_logo_social.png{%endblock%}" />
+  <meta property="fb:app_id"          content="213728322126454" />
+  <meta property="og:site_name"       content="Anou" />
+  <meta property="og:type"            content="{%block open_graph_type%}{%endblock%}" />
+  <meta property="og:price:amount"    content="{%block open_graph_price%}{%endblock%}" />
+  <meta property="og:price:currency"  content="USD" />
+  <meta property="og:url"             content="{%block open_graph_url%}http://www.theanou.com{%endblock%}" />
+  <meta property="og:title"           content="{%block open_graph_title%}Anou Store{%endblock%}" />
+  <meta property="og:description"     content="{%block open_graph_description%}Buy unique and incredible Moroccan handicrafts and art directly from the artisans who made it.{%endblock%}" />
+  <meta property="og:image"           content="{%block open_graph_image%}{{ STATIC_URL }}images/Anou_logo_social.png{%endblock%}" />
+  <meta property="og:upc"             content="{%block open_graph_upc%}{%endblock%}" />
+  <meta property="og:availability"    content="{%block open_graph_availability%}{%endblock%}" />
+
 
   {% block additional_meta_tags %}{% endblock additional_meta_tags %}
 
