@@ -23,8 +23,39 @@ class AccountEditForm(forms.ModelForm):
     model = Account
     exclude = ['password','is_admin']
 
-  def clean_password(self):
-    return process_password(self.cleaned_data['password'])
+  def clean_phone(self):
+    data = str(self.cleaned_data['phone'])
+
+    #must be blank or number
+    if data and not data.isdigit():
+      raise forms.ValidationError("Phone must be a number.")
+
+    #must be blank or 8 or more characters
+    if data and len(data) < 8:
+      raise forms.ValidationError("Phone must be at least 8 digits.")
+
+    #must not have the same ending 8 characters as any other phone
+    if len(Account.objects.filter(phone__endswith=data[-8:])) > 1:
+      raise forms.ValidationError("Account with this Phone already exists.")
+
+    return data
+
+  def clean_username(self):
+    data = str(self.cleaned_data['username'])
+
+    #must not begin with a digit
+    if data[0].isdigit():
+      raise forms.ValidationError("Username must not begin with a number.")
+
+    #must not end with 8 digits
+    if data[-8:].isdigit():
+      raise forms.ValidationError("Username may not end with those numbers.")
+
+    #must not have @ in it
+    if data.find("@") > -1:
+      raise forms.ValidationError("Username may not contain @ symbol.")
+
+    return data
 
 
 class AccountLoginForm(forms.Form):
@@ -35,7 +66,6 @@ class AccountLoginForm(forms.Form):
     return process_password(self.cleaned_data['password'])
 
 class AccountPasswordForm(forms.Form):
-  #old_password  = forms.CharField(widget=forms.PasswordInput(attrs={'autocomplete':'off'}))
   new_password  = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'off'}))
 
 class SMSForm(forms.Form):
