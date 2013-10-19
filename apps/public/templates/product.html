@@ -61,11 +61,11 @@
 {% block content %}
 {% cache 2592000 public_product_content product.id product.approved_at product.is_recently_sold product.is_sold %}
 
-  <div id='product' class='row-fluid'>
+  <div id='product' class='row-fluid' itemscope itemtype="http://schema.org/Product">
     <div class='span8'>
 
       <div id='product-title'>
-        <h1>
+        <h1 itemprop="name">
           {{ product.name }}
           in
           {{ product.category }}
@@ -83,7 +83,8 @@
           {% for photo in product.photos %}
             <div class='item {% if forloop.first %}active{% endif %}'>
               <img src='{{ photo.product_size }}'
-                   alt='{{ product.title }}'>
+                   alt='{{ product.title }}'
+                   {% if forloop.first %}itemprop="image"{% endif %}>
               <!--<div class='carousel-caption'></div>-->
             </div>
           {% endfor %}
@@ -106,7 +107,7 @@
       </div>
 
       <div id='product-description'>
-        <p>
+        <p itemprop="description">
           {% if product.description %}
             {{ product.description }}
           {% endif %}
@@ -152,8 +153,10 @@
           </div>
         </tr>
 
-        <tr>
-          <td rowspan=2 class='price'>${{ product.display_price }}</td>
+        <tr itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+          <td rowspan=2 class='price' itemprop="price">
+            ${{ product.display_price }}
+          </td>
           <td class='price-qualifier nowrap'>free shipping.</td>
         </tr>
         <tr>
