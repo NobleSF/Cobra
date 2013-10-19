@@ -16,7 +16,8 @@ def communicateOrdersCreated(orders):
           artisan_msg = "%d \r\n %d Dh" % (product.id, product.price)
           for artisan in product.assets.filter(ilk='artisan'):
             sendSMSForOrder(artisan_msg, artisan.phone, order)
-        except: pass
+        except Exception as e:
+          Email(message="error sending SMS to artisans: "+str(e)).sendTo(people.Tom.email)
 
       #message the seller with the address
       address_string = getCustomerAddressFromOrder(order, sms_format=True)
@@ -28,8 +29,8 @@ def communicateOrdersCreated(orders):
       try:
         order.seller_msg = seller_msg.replace('\r\n', '<br>')
         Email('order/created_copy_director', order).sendTo(people.Brahim.email)
-      except: pass
-        #todo: emial tom about this problem
+      except Exception as e:
+        Email(message="error sending copy to Brahim: "+str(e)).sendTo(people.Tom.email)
 
     #send email to buyer
     email = Email('order/created', orders)
@@ -37,7 +38,10 @@ def communicateOrdersCreated(orders):
     email.sendTo(getCustomerEmailFromOrder(orders[0]))
     return True
   except Exception as e:
-    return "error: " + str(e)
+    try:
+      Email(message="error in communicateOrdersCreated: "+str(e)).sendTo(people.Tom.email)
+    except: pass
+    return False
 
 def updateOrder((product_id, data), gimme_reply_sms=False):
   """

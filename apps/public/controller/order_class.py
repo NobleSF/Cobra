@@ -2,45 +2,51 @@ from apps.public import models
 from apps.communication.controller import order_events
 from django.utils import timezone
 from apps.communication.controller.email_class import Email
-from settings import people
+from settings.people import Tom, Dan
 
 def getOrders(checkout_id):
   try:
-    cart = models.Cart.objects.get(wepay_checkout_id = checkout_id)
-  except:
-    cart = models.Cart.objects.get(anou_checkout_id = checkout_id)
+    try:
+      cart = models.Cart.objects.get(wepay_checkout_id = checkout_id)
+    except:
+      cart = models.Cart.objects.get(anou_checkout_id = checkout_id)
 
-  orders = cart.order_set.all()
-  if not orders:
-    orders = createFromCart(cart)
-    #after creating an order, run cleanup
-    from apps.public.controller.cart_class import cleanupCarts
-    cleanupCarts()
-  return orders
+    orders = cart.order_set.all()
+    if not orders:
+      orders = createFromCart(cart)
+      #after creating an order, run cleanup
+      from apps.public.controller.cart_class import cleanupCarts
+      cleanupCarts()
+    return orders
+
+  except Exception as e:
+    Email(message="error in getOrders: "+str(e)).sendTo(Tom.email)
+    return []
 
 def createFromCart(cart):
   from apps.public.controller.cart_class import Cart
-  cart = Cart(cart_id=cart.id)
-  checkout_data = cart.getCheckoutData()
-
   orders = []
-  for item in cart: #or for item in cart.cart.item_set.all()
-    if item.product.sold_at == None:
-      orders.append(createFromCartItem(item, checkout_data))
-      item.product.sold_at = timezone.now()
-      item.product.save()
-    else:
-      #we have a problem, the customer was just charged for a product someone else already bought
-      #todo: to notify someone about this item.product
-      pass
 
-  if order_events.communicateOrdersCreated(orders) == True:
-    for order in orders:
-      order.seller_notified_at = timezone.now()
-      order.save()
-  else:
-    try: Email(message="problem communicating orders created").sendTo(people.Tom.email)
-    except: pass
+  try:
+    cart = Cart(cart_id=cart.id)
+    checkout_data = cart.getCheckoutData()
+
+    for item in cart:
+      if item.product.sold_at == None:
+        orders.append(createFromCartItem(item, checkout_data))
+        item.product.sold_at = timezone.now()
+        item.product.save()
+      else:
+        email = Email(message="customer was just charged for a product someone else already bought")
+        email.sendTo([Tom.email, Dan.email])
+
+    if order_events.communicateOrdersCreated(orders):
+      for order in orders:
+        order.seller_notified_at = timezone.now()
+        order.save()
+
+  except Exception as e:
+    Email(message="error in craeteFromCart: "+str(e)).sendTo(Tom.email)
 
   return orders
 
