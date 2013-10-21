@@ -48,7 +48,7 @@ class Product(object):
       return photo
 
   def photos(self):
-    return self.product.photo_set.all().order_by('rank')
+    return self.product.photos.all().order_by('rank')
 
   def addAsset(self, asset_id):
     try:

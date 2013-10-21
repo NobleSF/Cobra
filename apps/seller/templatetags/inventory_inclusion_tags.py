@@ -4,21 +4,17 @@ register = template.Library()
 
 @register.inclusion_tag('inventory/product_detail.html')
 def product_detail_tag(product):
-  product.first_photo = product.photo_set.order_by('rank')[0]
-
   return {'product':product}
 
 @register.inclusion_tag('inventory/sold_product_detail.html')
 def sold_product_detail_tag(product):
-  product.first_photo = product.photo_set.order_by('rank')[0]
   product.total_cost = product.shipping_cost + product.local_price
-
   return {'product':product}
 
 @register.inclusion_tag('inventory/photo_upload.html')
 def photo_upload_tag(product, rank):
 
-  try: photo = product.photo_set.get(rank=rank)
+  try: photo = product.photos.get(rank=rank)
   except: photo = None
 
   return {'product':product,

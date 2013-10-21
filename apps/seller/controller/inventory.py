@@ -79,7 +79,7 @@ def edit(request, product_id):
 
     product_form.fields['product_id'].initial = product.product.id
 
-    product.product.photos = product.product.photo_set.order_by('rank')
+    product.product.photos = product.product.photos.order_by('rank')
 
     context = {
       'product':          product.product,

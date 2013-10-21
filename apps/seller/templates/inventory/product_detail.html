@@ -7,7 +7,7 @@
 
 <div class='product-image'>
   <a href='{% url 'seller:inventory edit' product.id %}'>
-    <img id='product{{ product.id }}-image' src="{{ product.first_photo.thumb_size }}"
+    <img id='product{{ product.id }}-image' src="{{ product.photo.thumb_size }}"
          style="width: 300; height: 225;"/>
   </a>
 </div>

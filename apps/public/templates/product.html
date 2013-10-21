@@ -16,7 +16,7 @@
 {% endblock description %}
 
 {%block open_graph_type%}product{%endblock%}
-{%block open_graph_url%}http://www.theanou.com{% url 'product' product.id %}{%endblock%}
+{%block open_graph_url%}{% url 'product' product.id %}{%endblock%}
 {%block open_graph_title%}{{ product.long_title }}{%endblock%}
 {%block open_graph_description%}{{ product.description }}{%endblock%}
 {%block open_graph_image%}{{ product.photos.0.original }}{%endblock%}
@@ -68,6 +68,13 @@
     <div class='span8'>
 
       <div id='product-title'>
+        <div id='pinterest-button'>
+          <a href="{{ product.pinterest_url }}"
+             data-pin-do="buttonPin" data-pin-config="none">
+            <img src="//assets.pinterest.com/images/pidgets/pin_it_button.png" />
+          </a>
+        </div>
+
         <h1 itemprop="name">
           {{ product.name }}
           in
@@ -83,7 +90,7 @@
         <ol class='carousel-indicators'></ol>
         <!-- Carousel items -->
         <div class='carousel-inner'>
-          {% for photo in product.photos %}
+          {% for photo in product.photos.all %}
             <div class='item {% if forloop.first %}active{% endif %}'>
               <img src='{{ photo.product_size }}'
                    alt='{{ product.title }}'
@@ -99,7 +106,7 @@
 
       <div id='pinkies' class='visible-desktop'>
         <ul class='thumbnails'>
-          {% for photo in product.photos %}
+          {% for photo in product.photos.all %}
             <li>
               <img class='thumbnail {% if forloop.first %}active{% endif %}'
                    data-target='#photos' data-slide-to='{{ forloop.counter0 }}'

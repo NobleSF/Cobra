@@ -151,8 +151,10 @@ class Product(models.Model):
 
   @property
   def photo(self):
-    photos = self.photo_set.all().order_by('rank')
-    return photos[0] if photos else None
+    try:
+      return self.photos.all()[0]
+    except:
+      return None
 
   @property
   def name(self):
@@ -304,17 +306,11 @@ class Product(models.Model):
 
   @property
   def is_complete(self):
-    is_product = has_artisan = has_photo = has_price = False
-    if len(self.assets.filter(ilk='product')) > 0:
-      is_product = True
-    if len(self.assets.filter(ilk='artisan')) > 0:
-      has_artisan = True
-    if len(self.photo_set.all()) > 0:
-      has_photo = True
-    if self.display_price:
-      has_price = True
-
-    if is_product and has_artisan and has_photo and has_price:
+    if (self.assets.filter(ilk='product').count() and #has product type
+        self.assets.filter(ilk='artisan').count() and #has artisan
+        self.photos.count() and #has photo
+        self.display_price #has price
+    ):
       return True
     else:
       return False
@@ -346,7 +342,7 @@ class ShippingOption(models.Model):
 
 class Photo(models.Model): #Photos are exclusively product pictures.
   from settings.settings import MEDIA_URL
-  product       = models.ForeignKey(Product)
+  product       = models.ForeignKey(Product, related_name="photos")
   rank          = models.SmallIntegerField()
   original      = models.URLField(max_length=200)
   #update history
