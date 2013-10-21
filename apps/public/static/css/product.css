@@ -142,9 +142,14 @@
   text-align: center;
 }
 
+#pinterest-button{
+  float: left;
+  padding: 5px 0;
+}
+
 #product-title h1{
   font-size: 18pt;
-  margin: 0 1em;
+  margin: 0 2em;
 }@media (max-width: 415px){
   #product-title h1{font-size: 12pt;}
 }

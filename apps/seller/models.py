@@ -147,7 +147,7 @@ class Product(models.Model):
       return False
 
   @property
-  def is_approved(self): return True if (self.approved_at and not self.is_active) else False
+  def is_approved(self): return True if (self.approved_at and self.is_active) else False
 
   @property
   def photo(self):

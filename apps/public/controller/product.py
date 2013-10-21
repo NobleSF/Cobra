@@ -12,24 +12,29 @@ def home(request, product_id):
   try:
     product = Product.objects.get(id=product_id)
 
-    product.photos = product.photo_set.order_by('rank')
-    for photo in product.photos:
-      photo.feature_url = photo.product
-
     try: product.artisan = product.assets.filter(ilk='artisan')[0]#.order_by('?')[:1]
     except: pass
     product.materials = product.assets.filter(ilk='material')#.order_by('?')[:3]
     product.tools     = product.assets.filter(ilk='tool')#.order_by('?')[:3]
     product.utilities = list(chain(product.materials, product.tools))
 
-    seller_products   = product.seller.product_set.exclude(id=product.id)
-    unsold_products   = seller_products.filter(sold_at=None)
-    approved_products = unsold_products.filter(approved_at__lte=timezone.now())
-    active_products   = approved_products.filter(deactive_at=None)
-    ordered_products  = active_products.order_by('approved_at').reverse()
+    try:
+      product.pinterest_url = ("http://www.pinterest.com/pin/create/button/" +
+                               "?url=" + product.get_absolute_url() +
+                               "&media=" + product.photo.original +
+                               "&description=" + product.long_title)
+
+    except: pass #if something here broke, it probably doesn't need to be working anyway
+
+    more_products = (product.seller.product_set
+                     .exclude(id=product.id)
+                     .filter(sold_at=None)
+                     .filter(approved_at__lte=timezone.now())
+                     .filter(deactive_at=None)
+                     .order_by('approved_at').reverse())
 
     context = {'product':       product,
-               'more_products': ordered_products[:3]
+               'more_products': more_products[:3]
               }
 
   except Product.DoesNotExist:
