@@ -144,10 +144,10 @@ class Product(models.Model):
       else:
         return False
     else:
-      return True
+      return False
 
   @property
-  def is_approved(self): return True if self.approved_at else False
+  def is_approved(self): return True if (self.approved_at and not self.is_active) else False
 
   @property
   def photo(self):
@@ -162,12 +162,20 @@ class Product(models.Model):
     return name if name else str(self.id)
 
   @property
+  def color_adjective(self):
+    try:
+      return self.colors.all()[0].name
+    except:
+      return None
+
+  @property
   def title(self):
     return "%s by %s %s" % (self.name, self.seller.name, self.category)
 
   @property
   def long_title(self):
-    title = self.name
+    title = ("%s " % self.color_adjective) if self.color_adjective else ""
+    title += "%s" % self.name
     title += " by %s %s" % (self.seller.name, self.category)
     title += " from %s, %s" % (self.seller.city, self.seller.country.name)
     return title

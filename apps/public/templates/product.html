@@ -2,7 +2,7 @@
 {% load url from future %}
 {% load cache %}
 
-{% cache 2592000 public_product_header product.id product.approved_at %}
+{% cache 2592000 public_product_header product.id product.is_approved product.is_sold %}
 
 {% block title %}
   {{ product.long_title }}
@@ -22,7 +22,7 @@
 {%block open_graph_image%}{{ product.photos.0.original }}{%endblock%}
 {%block open_graph_price%}{{ product.display_price }}{%endblock%}
 {%block open_graph_upc%}{{ product.id }}{%endblock%}
-{%block open_graph_availability%}{% if product.is_sold %}out of stock{% else %}in stock{% endif %}{%endblock%}
+{%block open_graph_availability%}{% if product.is_sold or not product.is_approved %}out of stock{% else %}in stock{% endif %}{%endblock%}
 
 {% block additional_meta_tags %}
   <meta property="product:price:amount"           content="{{ product.display_price }}" />
@@ -62,7 +62,7 @@
 {% endblock header_link_2 %}
 
 {% block content %}
-{% cache 2592000 public_product_content product.id product.approved_at product.is_recently_sold product.is_sold %}
+{% cache 2592000 public_product_content product.id product.is_approved product.is_sold product.is_recently_sold %}
 
   <div id='product' class='row-fluid' itemscope itemtype="http://schema.org/Product">
     <div class='span8'>
@@ -167,13 +167,15 @@
         </tr>
       </table>
 
-      {% if product.is_sold %}
-        <a id='buy-button' class='btn btn-primary btn-danger disabled'
-           href="">
+      {% if product.is_sold or not product.is_approved %}
+        <a id='buy-button' class='btn btn-primary btn-danger disabled'>
           <h2>
             {% if product.is_recently_sold %}
               Oh shoot, someone just bought it!
-            {% else %}Sold
+            {% elif product.is_sold %}
+              Sold
+            {% else %}
+              Sorry, unavailable at this time
             {% endif %}
           </h2>
         </a>
