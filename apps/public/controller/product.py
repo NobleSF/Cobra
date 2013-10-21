@@ -20,7 +20,7 @@ def home(request, product_id):
 
     try:
       product.pinterest_url = ("http://www.pinterest.com/pin/create/button/" +
-                               "?url=" + product.get_absolute_url() +
+                               "?url=http://www.theanou.com" + product.get_absolute_url() +
                                "&media=" + product.photo.original +
                                "&description=" + product.long_title)
 
