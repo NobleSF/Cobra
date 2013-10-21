@@ -91,7 +91,9 @@ def edit(request, product_id):
     return render(request, 'inventory/edit.html', context)
 
   except Exception as e:
-    Email(message="error loading product-edit: "+str(e)).sendTo(Tom.email)
+    try:
+      Email(message="error loading product-edit on "+product_id+": "+str(e)).sendTo(Tom.email)
+    except: pass
     return redirect('seller:management home')
 
 @access_required('seller') #it's the 'r' in crud, but is it even needed?
