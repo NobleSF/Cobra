@@ -3,7 +3,7 @@ from django.db.models import Avg
 from django.utils import timezone
 
 WEIGHTS = {'date_posted': 6,
-           'photography': 10,
+           'photography': 14,
            'price':       5,
            'appeal':      8,
            'new_store':   4
