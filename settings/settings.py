@@ -20,7 +20,7 @@ PAYMENTS_PRODUCTION = PRODUCTION
 DEBUG = not (PRODUCTION or DEMO)
 TEMPLATE_DEBUG = not (STAGE or PRODUCTION or DEMO)
 
-ANOU_FEE_RATE = 0.15
+ANOU_FEE_RATE = 0.10
 DAYS_UNTIL_PRODUCT_EXPIRES = 120
 
 UNDER_CONSTRUCTION = False
@@ -156,6 +156,33 @@ if STAGE:
 if DEMO:
   WEPAY['redirect_uri'] = 'http://anou-cobra-demo.herokuapp.com/checkout/confirmation'
 
+#ETSY
+ETSY = {
+  'app_name': 'Anou',
+  'api_key':  'x9kq7bnqh6gtp2z0574cvhax',
+  'secret':   'zgo8l3t7o3',
+  'api_url':  'https://openapi.etsy.com/v2/'
+}
+if not PRODUCTION: #etsy sandbox mode
+  ETSY['api_url'] = "https://openapi.etsy.com/v2/sandbox/"
+
+#EBAY
+if PRODUCTION: #PRODUCTION KEYS
+  EBAY = {
+    'devid':    'dca4ff8e-a86d-4d7d-8456-624da567fdf6',
+    'AppID':    'Anou39016-4d5e-47a0-a4c3-3a0e2cccf81',
+    'CertID':   '50329b1e-c7e9-4f1c-ad69-a55df7ed21a6'
+  }
+else: #SANDBOX KEYS
+  EBAY = {
+    'devid':    'dca4ff8e-a86d-4d7d-8456-624da567fdf6',
+    'AppID':    'Anoudf080-d04f-4a53-b21b-3ec11a9c2b9',
+    'CertID':   '33586a2a-6ce7-4ab3-baea-8eacbd35dc54'
+  }
+#EBAY['login_username'] = 'anoudev'
+#EBAY['login_password'] = 'EA*B*80008$'
+
+#MEMCACHE
 if PRODUCTION or ('CACHEING' in os.environ and os.environ['CACHEING'] == 'ON'):
   CACHES = memcacheify()
 else:
@@ -165,6 +192,7 @@ else:
     }
   }
 
+#DEBUG TOOLBAR
 DEBUG_TOOLBAR_PANELS = (
   'debug_toolbar.panels.version.VersionDebugPanel',
   'debug_toolbar.panels.timer.TimerDebugPanel',
@@ -176,7 +204,6 @@ DEBUG_TOOLBAR_PANELS = (
   'debug_toolbar.panels.signals.SignalDebugPanel',
   'debug_toolbar.panels.logger.LoggingPanel',
 )
-
 DEBUG_TOOLBAR_CONFIG = {
   'INTERCEPT_REDIRECTS': False,
   #'HIDE_DJANGO_SQL': False,
@@ -253,6 +280,8 @@ STATICFILES_DIRS = (
   ('seller', os.path.join(SITE_ROOT, 'apps/seller/static')),
   ('admin', os.path.join(SITE_ROOT, 'apps/admin/static')),
   ('communication', os.path.join(SITE_ROOT, 'apps/communication/static')),
+  ('etsy', os.path.join(SITE_ROOT, 'apps/etsy/static')),
+  ('ebay', os.path.join(SITE_ROOT, 'apps/ebay/static')),
 
   # Put strings here, like "/home/html/static" or "C:/www/django/static".
   # Always use forward slashes, even on Windows.
@@ -313,6 +342,8 @@ INSTALLED_APPS = (
   'apps.seller',
   'apps.admin',
   'apps.communication',
+  'apps.etsy',
+  'apps.ebay',
   #'api',
   #'djrill',
   'storages',
@@ -328,7 +359,7 @@ INSTALLED_APPS = (
   # Uncomment the next line to enable the admin:
   #'django.contrib.admin',
   # Uncomment the next line to enable admin documentation:
-  # 'django.contrib.admindocs',
+  #'django.contrib.admindocs',
 )
 if not (PRODUCTION or STAGE or DEMO):
   INSTALLED_APPS += ('debug_toolbar',)
