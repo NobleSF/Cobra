@@ -4,17 +4,21 @@ from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.views.generic.simple import redirect_to, direct_to_template
 from .sitemaps import sitemaps
 
+#HOMEPAGE
 urlpatterns = patterns('',
-  url(r'^$', home.home, name='home'), #fyi, this is home
+  url(r'^$', home.home, name='home'),
   url(r'^blog', redirect_to,
       {'url': 'http://helloanou.wordpress.com/', 'permanent': False}, name='blog'),
 )
 
+#INSTALLED APPS
 urlpatterns += patterns('',
   url(r'^', include('apps.public.urls')),
   url(r'^', include('apps.admin.urls', namespace='admin')),
   url(r'^seller/', include('apps.seller.urls', namespace='seller')),
   url(r'^communication/', include('apps.communication.urls', namespace='communication')),
+  url(r'^etsy/', include('apps.etsy.urls', namespace='etsy')),
+  url(r'^ebay/', include('apps.ebay.urls', namespace='ebay')),
 )
 
 #BACKWARDS COMPATABILITY WITH OLD ANOU SITE

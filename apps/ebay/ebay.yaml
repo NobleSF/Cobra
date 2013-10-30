@@ -1,0 +1,29 @@
+# eBay SDK Defaults
+
+name: ebay_api_config
+
+# Trading API Sandbox - https://www.x.com/developers/ebay/products/trading-api
+api.sandbox.ebay.com:
+    compatability: 719
+    appid: Anoudf080-d04f-4a53-b21b-3ec11a9c2b9
+    certid: 33586a2a-6ce7-4ab3-baea-8eacbd35dc54
+    devid: dca4ff8e-a86d-4d7d-8456-624da567fdf6
+    token: ENTER_YOUR_TOKEN_HERE
+
+# Trading API - https://www.x.com/developers/ebay/products/trading-api
+api.ebay.com:
+    version: 719
+    appid: Anou39016-4d5e-47a0-a4c3-3a0e2cccf81
+    certid: 50329b1e-c7e9-4f1c-ad69-a55df7ed21a6
+    devid: dca4ff8e-a86d-4d7d-8456-624da567fdf6
+    token: ENTER_YOUR_TOKEN_HERE
+
+# Finding API - https://www.x.com/developers/ebay/products/finding-api
+svcs.ebay.com:
+    appid: ENTER_YOUR_APPID_HERE
+    version: 1.0.0
+
+# Shopping API - https://www.x.com/developers/ebay/products/shopping-api
+open.api.ebay.com:
+    appid: ENTER_YOUR_APPID_HERE
+    version: 671
