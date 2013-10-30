@@ -7,7 +7,7 @@
 
       <div id='product-div-{{ forloop.counter0 }}'
            class='span4 product-area'
-           data-category='{{ product.category }}'
+           data-category='{{ product.category.name }}'
            data-order='{{ forloop.counter0 }}'>
         {% product_tag product %}
       </div>

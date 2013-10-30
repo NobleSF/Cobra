@@ -8,7 +8,6 @@ def product_detail_tag(product):
 
 @register.inclusion_tag('inventory/sold_product_detail.html')
 def sold_product_detail_tag(product):
-  product.total_cost = product.shipping_cost + product.local_price
   return {'product':product}
 
 @register.inclusion_tag('inventory/photo_upload.html')
