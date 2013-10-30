@@ -2,3 +2,5 @@ User-agent: *
 Disallow: /admin/
 Disallow: /seller/
 Disallow: /checkout/
+Disallow: /etsy/
+Disallow: /ebay/
