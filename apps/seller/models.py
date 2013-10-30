@@ -48,8 +48,8 @@ class Seller(models.Model):
     products = self.product_set.filter(approved_at__lte=timezone.now())
     categories = []
     for product in products:
-      if product.category not in categories:
-        categories.append(product.category)
+      if product.category.name not in categories:
+        categories.append(product.category.name)
     return categories
 
   def __unicode__(self):
@@ -172,13 +172,13 @@ class Product(models.Model):
 
   @property
   def title(self):
-    return "%s by %s %s" % (self.name, self.seller.name, self.category)
+    return "%s by %s %s" % (self.name, self.seller.name, self.category.name)
 
   @property
   def long_title(self):
     title = ("%s " % self.color_adjective) if self.color_adjective else ""
     title += "%s" % self.name
-    title += " by %s %s" % (self.seller.name, self.category)
+    title += " by %s %s" % (self.seller.name, self.category.name)
     title += " from %s, %s" % (self.seller.city, self.seller.country.name)
     return title
 
@@ -189,8 +189,8 @@ class Product(models.Model):
 
   @property
   def category(self):
-    try: return  self.assets.filter(ilk='product')[0].categories.all()[0].name
-    except: return ''
+    try: return  self.assets.filter(ilk='product')[0].categories.all()[0]
+    except: return None
 
   @property
   def rating(self):#overall rating
@@ -215,6 +215,18 @@ class Product(models.Model):
       return ratings
 
     except: return {}
+
+  @property
+  def rank_position_by_seller(self):
+    #try:
+    #  contenders = self.seller.product_set.filter(active_at__lte=timezone.now())
+    #  for contender in contenders:
+    #    contender.rank_value = calc_rank_value_for_product(contender)
+    #  contenders.order_by(rank_value)
+    #  return get_position(self.product, contenders)
+    #except:
+    #  return '__LAST__'
+    return 1
 
   @property
   def metric_dimensions(self):
@@ -265,8 +277,8 @@ class Product(models.Model):
   def anou_fee(self):
     from settings.settings import ANOU_FEE_RATE
     if self.price:
-      fee = self.price * ANOU_FEE_RATE
-      return int(round(fee))
+      fee = self.price * ANOU_FEE_RATE / (1-ANOU_FEE_RATE)
+      return int(round(fee)) #round off for local currencies
     else:
       return 0
 
@@ -293,16 +305,58 @@ class Product(models.Model):
       return 0
 
   @property
-  def display_price(self, locale='US'):
-    cost_amalgum_boobs_bomb = self.local_price
-    #convert to USD and round to the nearest $1
-    cost_amalgum_boobs_bomb /= self.seller.country.currency.exchange_rate_to_USD
-    cost_amalgum_boobs_bomb = int(round(cost_amalgum_boobs_bomb))
-    return cost_amalgum_boobs_bomb
+  def usd_price(self): #convert to USD
+    if self.local_price:
+      local_currency = self.seller.country.currency
+      return self.local_price/float(local_currency.exchange_rate_to_USD)
+    else:
+      return 0
+
+  @property
+  def ebay_fee(self): #eBay + PayPal fee is $0.30 plus 12.9% of total
+    if self.usd_price:
+      fee = 0.30
+      fee += (0.129/(1-0.129)) * (self.usd_price + fee)
+      return fee
+    else:
+      return 0
+
+  @property
+  def ebay_price(self): #add fees and round to the nearest $1
+    if self.usd_price:
+      return int(round(self.usd_price + self.ebay_fee))
+    else:
+      return 0
+
+  @property
+  def etsy_fee(self): #Etsy + EtsyCheckout fee is $0.45 plus 6.5% of total
+    if self.usd_price:
+      fee = 0.40
+      fee+= (0.065/(1-0.065)) * (self.usd_price + fee)
+      return fee
+    else:
+      return 0
+
+  @property
+  def etsy_price(self): #add fees and round to the nearest $1
+    return int(round(self.usd_price + self.etsy_fee))
+
+  @property
+  def wepay_fee(self):#wepay fee is $0.30 plus 2.9% of total
+    if self.usd_price:
+      fee = 0.30
+      fee += (0.029/(1-0.029)) * (self.usd_price + fee)
+      return fee
+    else:
+      return 0
 
   @property
   def display_shipping_price(self, locale='US'):
     return 0
+
+  @property
+  def display_price(self): #round to the nearest $1
+    return int(round(self.usd_price + self.wepay_fee - self.display_shipping_price))
 
   @property
   def is_complete(self):
@@ -335,7 +389,8 @@ class ShippingOption(models.Model):
   from apps.admin.models import Country
   name          = models.CharField(max_length=50)
   country       = models.ForeignKey(Country)
-  image         = models.ForeignKey('Image', null=True, blank=True, on_delete=models.SET_NULL)
+  image         = models.ForeignKey('Image', null=True, blank=True,
+                                    on_delete=models.SET_NULL)
 
   def __unicode__(self):
     return self.name
