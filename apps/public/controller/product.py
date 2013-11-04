@@ -45,8 +45,3 @@ def home(request, product_id):
     context = {'except':e}
 
   return render(request, 'product.html', context)
-
-def collection(request, group, name=None):
-  return render(request, 'collection.html',
-    {'group':group}
-  )

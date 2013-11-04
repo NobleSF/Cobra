@@ -2,7 +2,7 @@
 {% load url from future %}
 {% load cache %}
 
-{% cache 2592000 public_product_header product.id product.is_approved product.is_sold %}
+{% cache 86400 public_product_header product.id product.is_approved product.is_sold %}
 
 {% block title %}
   {{ product.long_title }}
@@ -62,7 +62,7 @@
 {% endblock header_link_2 %}
 
 {% block content %}
-{% cache 2592000 public_product_content product.id product.is_approved product.is_sold product.is_recently_sold %}
+{% cache 86400 public_product_content product.id product.is_approved product.is_sold product.is_recently_sold %}
 
   <div id='product' class='row-fluid' itemscope itemtype="http://schema.org/Product">
     <div class='span8'>

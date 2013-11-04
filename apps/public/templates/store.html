@@ -6,8 +6,8 @@
 
 {% block title %}
   {{ store.name }}
-  - {{ store.categories|join:", "}}
   on {{ block.super }}
+  - {{ store.categories|join:", "}}
 {% endblock title %}
 
 {% block description %}

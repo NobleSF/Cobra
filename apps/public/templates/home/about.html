@@ -1,16 +1,22 @@
 {% extends "base.html" %}
 {% load url from future %}
+{% load cache %}
+
+{% cache 86400 about %}
 
 {% block title %}
-  About {{ block.super }}
+  About Us,
+  {{ block.super }}
 {% endblock title %}
+
 {% block description %}
-  Anou Team and Founding Story - The idea for Anou was developed by Dan Driscoll during his Peace Corps service in Morocco from 2008-2010.
+  Anou is an artisan community selling their work independently.
+  The founding team developed vital language-free technologies so that even illiterate artisans can engage with their end customers, representing a fundamental shift in the fair-trade industry.
 {% endblock description %}
 
 {%block open_graph_type%}{%endblock%}
 {%block open_graph_url%}http://www.theanou.com/about{%endblock%}
-{%block open_graph_title%}About Us{%endblock%}
+{%block open_graph_title%}About Us and FAQ{%endblock%}
 {%block open_graph_description%}{{ block.super }}{%endblock%}
 {%block open_graph_image%}{{ block.super }}{%endblock%}
 
@@ -28,7 +34,7 @@
 {% endblock header_link_1 %}
 
 {% block header_link_2 %}
-  <li><a class='title' href="#faq">FAQ</a></li>
+  <li><a class='title' href="http://helloanou.wordpress.com">BLOG</a></li>
 {% endblock header_link_2 %}
 
 {% block content %}
@@ -246,3 +252,4 @@
   </li>
 </ul>
 {% endblock content %}
+{% endcache about %}
