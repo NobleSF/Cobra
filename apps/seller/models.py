@@ -166,17 +166,35 @@ class Product(models.Model):
   @property
   def color_adjective(self):
     try:
-      return self.colors.all()[0].name
+      colors = self.colors.all()
+      if colors.count() == 1:
+        return "%s " % colors[0].name
+      elif colors.count() == 2:
+        return "%s and %s " % (colors[0].name, colors[1].name)
+      elif colors.count() > 2:
+        return "Colored "
+      else:
+        return None
     except:
       return None
 
   @property
+  def short_title(self):
+    title  = self.color_adjective if self.color_adjective else ""
+    title += "%s from %s" % (self.name, self.seller.country.name)
+    return title
+
+  @property
   def title(self):
-    return "%s by %s %s" % (self.name, self.seller.name, self.category)
+    title  = self.color_adjective if self.color_adjective else ""
+    title += "%s" % self.name
+    title += " by %s" % self.seller.name
+    title += ", %s" % self.seller.country.name
+    return title
 
   @property
   def long_title(self):
-    title = ("%s " % self.color_adjective) if self.color_adjective else ""
+    title  = self.color_adjective if self.color_adjective else ""
     title += "%s" % self.name
     title += " by %s %s" % (self.seller.name, self.category)
     title += " from %s, %s" % (self.seller.city, self.seller.country.name)
@@ -321,12 +339,26 @@ class Product(models.Model):
       return True if (phone_number[-8:] == seller_phone[-8:]) else False
     else: return False
 
-  def __unicode__(self):
-    return self.name + ' by ' + self.seller.name
+  @property
+  def slug(self):
+    try:
+      from django.template.defaultfilters import slugify
+      return slugify(self.short_title)
+    except:
+      return None
 
   def get_absolute_url(self):
     from django.core.urlresolvers import reverse
-    return reverse('product', args=[str(self.id)])
+    if self.slug:
+      return reverse('product_w_slug', args=[str(self.id), self.slug])
+    else:
+      return reverse('product', args=[str(self.id)])
+
+  def __unicode__(self):
+    if self.color_adjective:
+      return "%s%s" % (self.color_adjective, self.name)
+    else:
+      return self.name
 
   class Meta:
     ordering = ['-sold_at', '-id']

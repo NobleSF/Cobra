@@ -5,7 +5,7 @@ from django.utils import timezone
 from settings.people import Tom
 from apps.communication.controller.email_class import Email
 
-def home(request, product_id):
+def home(request, product_id, slug=None):
   from apps.seller.models import Product, Photo
   from itertools import chain
 

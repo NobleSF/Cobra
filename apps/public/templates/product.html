@@ -16,7 +16,7 @@
 {% endblock description %}
 
 {%block open_graph_type%}product{%endblock%}
-{%block open_graph_url%}{% url 'product' product.id %}{%endblock%}
+{%block open_graph_url%}{{ product.get_absolute_url }}{%endblock%}
 {%block open_graph_title%}{{ product.long_title }}{%endblock%}
 {%block open_graph_description%}{{ product.description }}{%endblock%}
 {%block open_graph_image%}{{ product.photos.0.original }}{%endblock%}
@@ -152,12 +152,12 @@
 
         <tr id='faceboook' class='text-center' style='margin: 1em 1em 0;'>
           <div class="fb-like visible-desktop"
-               data-href="http://www.theanou.com{% url 'product' product.id %}"
+               data-href="http://www.theanou.com{{ product.get_absolute_url }}"
                data-width="250" data-layout="standard"
                data-show-faces="false" data-send="true">
           </div>
           <div class="fb-like visible-tablet"
-               data-href="http://www.theanou.com{% url 'product' product.id %}"
+               data-href="http://www.theanou.com{{ product.get_absolute_url }}"
                data-width="100" data-layout="button_count"
                data-show-faces="false" data-send="true">
           </div>

@@ -6,7 +6,9 @@ urlpatterns = patterns('',
   url(r'^about$', home.about, name='about'),
 
   # product page at /product/123
-  url(r'^product/(?P<product_id>\d+)$', product.home, name='product'),
+  url(r'^product/(?P<product_id>\d+)', product.home, name='product'),
+  url(r'^product/(?P<product_id>\d+)-(?P<slug>\w+)', product.home, name='product_w_slug'),
+
 
   # store page at /store/123 represents a seller profile
   url(r'^store/(?P<seller_id>\d+)$', store.home, name='store'),
