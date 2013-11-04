@@ -61,6 +61,9 @@ class Color(models.Model):
   def __unicode__(self):
     return self.name
 
+  class Meta:
+    ordering = ['id']
+
 class Category(models.Model):
   name          = models.CharField(max_length=50)
   keywords      = models.CharField(max_length=50, blank=True, null=True)
