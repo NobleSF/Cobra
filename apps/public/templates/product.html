@@ -4,15 +4,12 @@
 
 {% cache 86400 public_product_header product.id product.is_approved product.is_sold %}
 
-{% block title %}
-  {{ product.long_title }}
-  on {{ block.super }}
+{% block title %}{# 70 chars or less #}
+  {{ product.short_title }} | Fair Trade {{ product.seller.country.name }} Anou
 {% endblock title %}
 
-{% block description %}
-  {% if product.description %}
-    {{ product.description }}
-  {% endif %}
+{% block description %}{# 160 chars or less #}
+  {{ product.long_title }}
 {% endblock description %}
 
 {%block open_graph_type%}product{%endblock%}

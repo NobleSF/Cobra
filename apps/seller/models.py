@@ -158,47 +158,77 @@ class Product(models.Model):
 
   @property
   def name(self):
-    name = None
-    try: name = self.assets.filter(ilk='product')[0].name
-    except: pass
-    return name if name else str(self.id)
+    try:
+      return self.assets.filter(ilk='product')[0].name
+    except:
+      return str(self.id)
 
   @property
-  def color_adjective(self):
+  def color_adjective(self): #5-15 chars
     try:
       colors = self.colors.all()
       if colors.count() == 1:
-        return "%s " % colors[0].name
-      elif colors.count() == 2:
-        return "%s and %s " % (colors[0].name, colors[1].name)
-      elif colors.count() > 2:
-        return "Colored "
+        return "%s" % colors[0].name
+      elif colors.count() <= 3:
+        return "%s, %s" % (colors[0].name, colors[1].name)
+      elif colors.count() > 3:
+        return "Colored"
       else:
-        return None
+        return ""
+    except:
+      return ""
+
+  @property
+  def materials_name_string(self):
+    try:
+      list = []
+      materials = self.assets.filter(ilk='material')
+      for material in materials:
+        list.append(material.name)
+      return ", and".join(", ".join(list).rsplit(",",1))
     except:
       return None
 
   @property
-  def short_title(self):
-    title  = self.color_adjective if self.color_adjective else ""
-    title += "%s from %s" % (self.name, self.seller.country.name)
-    return title
+  def tools_name_string(self):
+    try:
+      list = []
+      tools = self.assets.filter(ilk='tool')
+      for tool in tools:
+        list.append(tool.name)
+      return ", and".join(", ".join(list).rsplit(",",1))
+    except:
+      return None
+
+  @property
+  def short_title(self): # <40 chars
+    return "%s %s" % (self.color_adjective, self.name)
 
   @property
   def title(self):
-    title  = self.color_adjective if self.color_adjective else ""
+    title  = "%s " % self.color_adjective if self.color_adjective else ""
     title += "%s" % self.name
     title += " by %s" % self.seller.name
     title += ", %s" % self.seller.country.name
     return title
 
   @property
-  def long_title(self):
-    title  = self.color_adjective if self.color_adjective else ""
-    title += "%s" % self.name
-    title += " by %s %s" % (self.seller.name, self.category)
-    title += " from %s, %s" % (self.seller.city, self.seller.country.name)
-    return title
+  def long_title(self): # <160 chars
+    try:
+      title  = "%s by %s: This " % (self.category, self.seller.name)
+      title += "%s " % self.color_adjective if self.color_adjective else ""
+      title += "%s is uniquely handmade" % self.name
+      title += " by artisans from %s, %s" % (self.seller.city, self.seller.country.name)
+      if self.materials_name_string:
+        title += " with %s" % self.materials_name_string
+      if self.tools_name_string and (len(title) + len(self.tools_name_string)) < 160:
+        title += " using %s" % self.tools_name_string
+      title += "."
+      title += " Qty: 1" if len(title <= 150) else ""
+      return title
+    except:
+      return ("Artisan craft handmade made in Morocco. " +
+              "For sale on Anou - Beyond Fair Trade.")
 
   @property
   def description(self):
