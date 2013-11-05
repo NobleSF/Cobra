@@ -30,6 +30,7 @@ urlpatterns += patterns('',
 
   #ORDERS
   url(r'^admin/all_orders$', orders.allOrders, name='all orders'),
+  url(r'^admin/price_calc$', orders.priceCalculator, name='price calculator'),
 
   #COMMUNICATION
   url(r'^admin/send_sms$', communication.sendSMS, name='send sms'),
