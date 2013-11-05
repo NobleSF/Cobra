@@ -196,6 +196,7 @@ class Product(models.Model):
       tools = self.assets.filter(ilk='tool')
       for tool in tools:
         list.append(tool.name)
+      #join list with commas, replace last comma with ", and "
       return ", and".join(", ".join(list).rsplit(",",1))
     except:
       return None
@@ -224,10 +225,10 @@ class Product(models.Model):
       if self.tools_name_string and (len(title) + len(self.tools_name_string)) < 160:
         title += " using %s" % self.tools_name_string
       title += "."
-      title += " Qty: 1" if len(title <= 150) else ""
+      title += " Qty: 1" if len(title) <= 150 else ""
       return title
     except:
-      return ("Artisan craft handmade made in Morocco. " +
+      return ("Artisan craft handmade made in Morocco. Qty: 1 " +
               "For sale on Anou - Beyond Fair Trade.")
 
   @property
