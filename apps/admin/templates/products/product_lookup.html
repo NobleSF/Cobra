@@ -76,18 +76,18 @@ Information:
 This item was crafted in {{ product.seller.city }}, {{ product.seller.country.name }} and posted by the members of {{ product.seller.name }} using Anou's online-mobile platform.
 
 
-About the maker:
+About The Artisan:
 {{ product.artisan.name}}
 {{ product.artisan.description}}
 
 
-{% if product.materials%}Materials used:
+{% if product.materials%}Materials Used:
 {% for material in product.materials %}
   {{ material.name }}
   {{ material.description }}
 {% endfor %}{% endif %}
 
-{% if product.tools %}Tools used:
+{% if product.tools %}Tools Used:
 {% for tool in product.tools %}
   {{ tool.name }}
   {{ tool.description }}
@@ -102,7 +102,7 @@ Shipping Weight:
 {{ product.weight }} kilograms
 
 
-Shipping and Tracking:
+Shipping And Tracking:
 This item will be sent from {{ product.seller.city }}, {{ product.seller.country.name }} and may take 2-4 weeks to arrive. We will provide a tracking number once the item is shipped!
 
 Returns:
