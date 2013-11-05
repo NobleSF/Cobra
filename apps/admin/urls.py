@@ -27,10 +27,10 @@ urlpatterns += patterns('',
   url(r'^admin/unrated_products$', products.unrated_products, name='unrated products'),
   url(r'^admin/ajax/approve_product$', products.approve_product, name='approve product'),
   url(r'^admin/ajax/rate_product$', products.rate_product, name='rate product'),
+  url(r'^admin/product_lookup$', products.product_lookup, name='product lookup'),
 
   #ORDERS
   url(r'^admin/all_orders$', orders.allOrders, name='all orders'),
-  url(r'^admin/price_calc$', orders.priceCalculator, name='price calculator'),
 
   #COMMUNICATION
   url(r'^admin/send_sms$', communication.sendSMS, name='send sms'),

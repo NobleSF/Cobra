@@ -14,27 +14,3 @@ def allOrders(request):
 
   context = {'orders': orders}
   return render(request, 'orders/all_orders.html', context)
-
-@access_required('admin')
-def priceCalculator(request):
-  from apps.seller.models import Product
-
-  context = {}
-  if request.method == "POST":
-    try:
-      product = Product.objects.get(id=request.POST.get('product_id'))
-
-      context = {
-        'product_id': product.id,
-        'anou_price': product.display_price,
-        'etsy_price': product.etsy_price,
-        'ebay_price': product.ebay_price,
-      }
-    except Product.DoesNotExist:
-      context['problem'] = "No Product with that ID"
-
-    except Exception as e:
-      context['problem'] = str(e)
-
-
-  return render(request, 'orders/price_calculator.html', context)
