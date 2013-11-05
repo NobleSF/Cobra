@@ -253,7 +253,7 @@ class Product(models.Model):
     if (len(self.name) +
         len(self.materials_name_string) +
         len(self.color_adjective) +
-        len(self.seller.country.name)) <= 51: #51-2 space chars
+        len(self.seller.country.name)) <= 49: #51-2 space chars
       return "%s %s %s" % (self.color_adjective, self.materials_name_string, self.name)
     else:
       return "%s %s" % (self.color_adjective, self.name)
@@ -274,7 +274,7 @@ class Product(models.Model):
         title += " using %s." % self.materials_name_string
       title += " Crafted by %s" % self.seller.name
       title += " from %s, %s." % (self.seller.city, self.seller.country.name)
-      title += " Ships to USA and Europe" if len(title) <= 145 else ""
+      title += " Ships to USA and Europe" if len(title) <= 135 else ""
       title += " Qty: 1" if len(title) <= 150 else ""
       return title
     except:
