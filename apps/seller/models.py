@@ -197,7 +197,10 @@ class Product(models.Model):
   @property
   def name(self):
     try:
-      return self.assets.filter(ilk='product')[0].name
+      if self.assets.filter(ilk='product')[0].name:
+        return self.assets.filter(ilk='product')[0].name
+      else:
+        return str(self.id)
     except:
       return str(self.id)
 
