@@ -5,16 +5,16 @@
 {% cache 86400 public_product_header product.id product.is_approved product.is_sold %}
 
 {% block title %}{# 70 chars or less #}
-  {{ product.short_title }} | Fair Trade {{ product.seller.country.name }} Anou
+  {{ product.title }} | Fair Trade {{ product.seller.country.name }} Anou
 {% endblock title %}
 
 {% block description %}{# 160 chars or less #}
-  {{ product.long_title }}
+  {{ product.title_description }}
 {% endblock description %}
 
 {%block open_graph_type%}product{%endblock%}
 {%block open_graph_url%}{{ product.get_absolute_url }}{%endblock%}
-{%block open_graph_title%}{{ product.long_title }}{%endblock%}
+{%block open_graph_title%}{{ product.standard_title }}{%endblock%}
 {%block open_graph_description%}{{ product.description }}{%endblock%}
 {%block open_graph_image%}{{ product.photos.0.original }}{%endblock%}
 {%block open_graph_price%}{{ product.display_price }}{%endblock%}
@@ -74,8 +74,6 @@
 
         <h1 itemprop="name">
           {{ product.name }}
-          in
-          {{ product.category }}
           by
           <a href="{% url 'store' product.seller.id %}">
             {{ product.seller.name }}
@@ -117,6 +115,8 @@
         <p itemprop="description">
           {% if product.description %}
             {{ product.description }}
+          {% else %}
+            {{ product.title_description }}
           {% endif %}
         </p>
 

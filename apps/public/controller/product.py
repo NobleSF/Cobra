@@ -22,7 +22,7 @@ def home(request, product_id, slug=None):
       product.pinterest_url = ("http://www.pinterest.com/pin/create/button/" +
                                "?url=http://www.theanou.com" + product.get_absolute_url() +
                                "&media=" + product.photo.original +
-                               "&description=" + product.long_title)
+                               "&description=" + product.title_description)
 
     except: pass #if something here broke, it probably doesn't need to be working anyway
 

@@ -185,9 +185,12 @@ class Product(models.Model):
       materials = self.assets.filter(ilk='material')
       for material in materials:
         list.append(material.name)
-      return ", and".join(", ".join(list).rsplit(",",1))
+      if len(materials) > 2:
+        return ", and ".join(", ".join(list).rsplit(", ",1))
+      else:
+        return " and ".join(list)
     except:
-      return None
+      return ""
 
   @property
   def tools_name_string(self):
@@ -196,17 +199,26 @@ class Product(models.Model):
       tools = self.assets.filter(ilk='tool')
       for tool in tools:
         list.append(tool.name)
-      #join list with commas, replace last comma with ", and "
-      return ", and".join(", ".join(list).rsplit(",",1))
+      if len(tools) > 2:
+        #join list with commas, replace last comma with ", and "
+        return ", and ".join(", ".join(list).rsplit(", ",1))
+      else:
+        return " and ".join(list)
     except:
-      return None
+      return ""
 
   @property
-  def short_title(self): # <40 chars
-    return "%s %s" % (self.color_adjective, self.name)
+  def title(self): # <=51 chars counting but not using country name
+    if (len(self.name) +
+        len(self.materials_name_string) +
+        len(self.color_adjective) +
+        len(self.seller.country.name)) <= 51: #51-2 space chars
+      return "%s %s %s" % (self.color_adjective, self.materials_name_string, self.name)
+    else:
+      return "%s %s" % (self.color_adjective, self.name)
 
   @property
-  def title(self):
+  def standard_title(self):
     title  = "%s " % self.color_adjective if self.color_adjective else ""
     title += "%s" % self.name
     title += " by %s" % self.seller.name
@@ -214,17 +226,14 @@ class Product(models.Model):
     return title
 
   @property
-  def long_title(self): # <160 chars
+  def title_description(self): # <=160 chars
     try:
-      title  = "%s by %s: This " % (self.category, self.seller.name)
-      title += "%s " % self.color_adjective if self.color_adjective else ""
-      title += "%s is uniquely handmade" % self.name
-      title += " by artisans from %s, %s" % (self.seller.city, self.seller.country.name)
+      title  = "%s: %s Uniquely handmade by artisans" % (self.category, self.name)
       if self.materials_name_string:
-        title += " with %s" % self.materials_name_string
-      if self.tools_name_string and (len(title) + len(self.tools_name_string)) < 160:
-        title += " using %s" % self.tools_name_string
-      title += "."
+        title += " using %s." % self.materials_name_string
+      title += " Crafted by %s" % self.seller.name
+      title += " from %s, %s." % (self.seller.city, self.seller.country.name)
+      title += " Ships to USA and Europe" if len(title) <= 145 else ""
       title += " Qty: 1" if len(title) <= 150 else ""
       return title
     except:
@@ -374,7 +383,7 @@ class Product(models.Model):
   def slug(self):
     try:
       from django.template.defaultfilters import slugify
-      return slugify(self.short_title)
+      return slugify(self.title)
     except:
       return None
 
