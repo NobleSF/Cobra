@@ -24,7 +24,23 @@ class Seller(models.Model):
   updated_at    = models.DateTimeField(auto_now = True)
 
   @property
-  def title(self): return "%s from %s, %s" % (self.name, self.city, self.country.name)
+  def title(self):
+    return "%s from %s, %s" % (self.name, self.city, self.country.name)
+
+  @property
+  def title_description(self):
+    try:
+      if self.categories_name_string:
+        title = "Find %s" % self.categories_name_string
+      else:
+        title = "Products"
+      title += " each uniquly handmade by the artisans of %s" % self.name
+      title += " sent to you direct from %s, %s." % (self.city, self.country.name)
+      return title
+    except:
+      return ("Artisans crafts handmade in Morocco." +
+              "Our store ships direct from original artisans. " +
+              "Made possible by Anou - Beyond Fair Trade.")
 
   @property
   def name(self): return self.account.name if self.account.name else ""
@@ -52,12 +68,34 @@ class Seller(models.Model):
         categories.append(product.category)
     return categories
 
-  def __unicode__(self):
-    return self.name
+  @property
+  def categories_name_string(self):
+    try:
+      names_list= self.categories
+      if len(names_list) > 2:
+        return ", and ".join(", ".join(names_list).rsplit(", ",1))
+      else:
+        return " and ".join(list)
+    except:
+      return ""
+
+  @property
+  def slug(self):
+    try:
+      from django.template.defaultfilters import slugify
+      return slugify(self.title.replace('from ',''))
+    except:
+      return None
 
   def get_absolute_url(self):
     from django.core.urlresolvers import reverse
-    return reverse('store', args=[str(self.id)])
+    if self.slug:
+      return reverse('store_w_slug', args=[str(self.id), self.slug])
+    else:
+      return reverse('store', args=[str(self.id)])
+
+  def __unicode__(self):
+    return self.name
 
 class Asset(models.Model):
   from apps.admin.models import Category

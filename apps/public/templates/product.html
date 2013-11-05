@@ -75,7 +75,7 @@
         <h1 itemprop="name">
           {{ product.name }}
           by
-          <a href="{% url 'store' product.seller.id %}">
+          <a href="{{ product.seller.get_absolute_url }}">
             {{ product.seller.name }}
           </a>
         </h1>
@@ -202,7 +202,7 @@
         <p>handmade at</p>
       {% endif %}
       <h3 id='store-name'>
-        <a href="{% url 'store' product.seller.id %}">
+        <a href="{{ product.seller.get_absolute_url }}">
           {{ product.seller.name }}
         </a>
       </h3>
@@ -276,7 +276,7 @@
   {% load home_inclusion_tags %}
   <div id='store'>
     <h1 class='text-center'>
-      <a href="{% url 'store' product.seller.id %}">
+      <a href="{{ product.seller.get_absolute_url }}">
         <small>more from</small> {{ product.seller.name }}
       </a>
       {% if product.seller.image %}

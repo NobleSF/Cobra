@@ -5,19 +5,15 @@
 {% cache 86400 public_store_header store.id store.updated_at %}
 
 {% block title %}
-  {{ store.name }}
-  on {{ block.super }}
-  - {{ store.categories|join:", "}}
+  {{ store.title }} | Fair Trade Anou
 {% endblock title %}
 
 {% block description %}
-  {% if store.bio %}
-    {{ store.bio|truncatewords:40 }}
-  {% endif %}
+  {{ store.title_description }}
 {% endblock description %}
 
 {%block open_graph_type%}store{%endblock%}
-{%block open_graph_url%}http://www.theanou.com{% url 'store' store.id %}{%endblock%}
+{%block open_graph_url%}http://www.theanou.com{{ store.get_absolute_url }}{%endblock%}
 {%block open_graph_title%}{{ store.name }}{%endblock%}
 {%block open_graph_description%}{{ store.bio|truncatewords:40 }}{%endblock%}
 {%block open_graph_image%}{{ store.image.thumb_size }}{%endblock%}
@@ -50,7 +46,7 @@
       <ul>
         {% if store.image %}
           <li>
-            <a href="{% url 'store' store.id %}">
+            <a href="{{ store.get_absolute_url }}">
               <img src='{{ store.image.thumb_size }}' alt='{{ store.title }}'>
             </a>
           </li>
@@ -130,7 +126,7 @@
 
       <div id='faceboook' class='text-center'>
         <div class="fb-like hidden-phone"
-             data-href="http://www.theanou.com{% url 'store' store.id %}"
+             data-href="http://www.theanou.com{{ store.get_absolute_url }}"
              data-width="400" data-layout="standard"
              data-show-faces="false" data-send="true">
         </div>
