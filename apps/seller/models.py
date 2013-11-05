@@ -364,8 +364,8 @@ class Product(models.Model):
   def anou_fee(self):
     from settings.settings import ANOU_FEE_RATE
     if self.price:
-      fee = self.price * ANOU_FEE_RATE
-      return int(round(fee))
+      fee = self.price * ANOU_FEE_RATE / (1-ANOU_FEE_RATE)
+      return int(round(fee)) #round off for local currencies
     else:
       return 0
 
@@ -392,16 +392,59 @@ class Product(models.Model):
       return 0
 
   @property
-  def display_price(self, locale='US'):
-    cost_amalgum_boobs_bomb = self.local_price
-    #convert to USD and round to the nearest $1
-    cost_amalgum_boobs_bomb /= self.seller.country.currency.exchange_rate_to_USD
-    cost_amalgum_boobs_bomb = int(round(cost_amalgum_boobs_bomb))
-    return cost_amalgum_boobs_bomb
+  def usd_price(self): #convert to USD
+    if self.local_price:
+      local_currency = self.seller.country.currency
+      return self.local_price/float(local_currency.exchange_rate_to_USD)
+    else:
+      return 0
+
+  @property
+  def ebay_fee(self): #eBay + PayPal fee is $0.30 plus 12.9% of total
+    if self.usd_price:
+      fee = 0.30
+      fee += (0.129/(1-0.129)) * (self.usd_price + fee)
+      return fee
+    else:
+      return 0
+
+  @property
+  def ebay_price(self): #add fees and round to the nearest $1
+    if self.usd_price:
+      return int(round(self.usd_price + self.ebay_fee))
+    else:
+      return 0
+
+  @property
+  def etsy_fee(self): #Etsy + EtsyCheckout fee is $0.45 plus 6.5% of total
+    if self.usd_price:
+      fee = 0.40
+      fee+= (0.065/(1-0.065)) * (self.usd_price + fee)
+      return fee
+    else:
+      return 0
+
+  @property
+  def etsy_price(self): #add fees and round to the nearest $1
+    return int(round(self.usd_price + self.etsy_fee))
+
+  @property
+  def wepay_fee(self):#wepay fee is $0.30 plus 2.9% of total
+    if self.usd_price:
+      fee = 0.30
+      fee += (0.029/(1-0.029)) * (self.usd_price + fee)
+      return fee
+    else:
+      return 0
 
   @property
   def display_shipping_price(self, locale='US'):
     return 0
+
+  @property
+  def display_price(self): #round to the nearest $1
+    return int(round(self.usd_price + self.wepay_fee - self.display_shipping_price))
+
 
   @property
   def is_complete(self):
