@@ -159,12 +159,10 @@ if DEMO:
 #ETSY
 ETSY = {
   'app_name': 'Anou',
-  'api_key':  'x9kq7bnqh6gtp2z0574cvhax',
-  'secret':   'zgo8l3t7o3',
+  'api_key':  '5nl1vqtm7lzf57otuni286u5',
+  'secret':   'moto494i1h',
   'api_url':  'https://openapi.etsy.com/v2/'
 }
-if not PRODUCTION: #etsy sandbox mode
-  ETSY['api_url'] = "https://openapi.etsy.com/v2/sandbox/"
 
 #EBAY
 if PRODUCTION: #PRODUCTION KEYS

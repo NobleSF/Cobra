@@ -138,3 +138,18 @@ class Listing(object):
       'overwrite':              True,
     }
 
+  def createShippingTemplate(self):
+    """
+    https://www.etsy.com/developers/documentation/reference/shippingtemplate#method_createshippingtemplate
+    """
+    etsy = api.Etsy()
+    method  = "GET"
+    uri     = "shipping/templates/%d" % self.shipping_template_id
+
+    parameters = {
+                  'title':                  'USA',
+                  'origin_country_id':      147, #morocco
+                  'destination_country_id': 209, #USA
+                  'primary_cost':           0.00,
+                  'secondary_cost':         0.00,
+                  }
