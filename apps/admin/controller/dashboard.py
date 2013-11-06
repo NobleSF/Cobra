@@ -34,5 +34,4 @@ def dashboard(request):
     context['avg_rating_change'] = (avg - before) / before
 
   except: pass
-
   return render(request, 'dashboard.html', context)

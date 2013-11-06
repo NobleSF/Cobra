@@ -5,7 +5,7 @@ from django.utils import timezone
 from settings.people import Tom
 from apps.communication.controller.email_class import Email
 
-def home(request, product_id):
+def home(request, product_id, slug=None):
   from apps.seller.models import Product, Photo
   from itertools import chain
 
@@ -22,7 +22,7 @@ def home(request, product_id):
       product.pinterest_url = ("http://www.pinterest.com/pin/create/button/" +
                                "?url=http://www.theanou.com" + product.get_absolute_url() +
                                "&media=" + product.photo.original +
-                               "&description=" + product.long_title)
+                               "&description=" + product.title_description)
 
     except: pass #if something here broke, it probably doesn't need to be working anyway
 
@@ -45,8 +45,3 @@ def home(request, product_id):
     context = {'except':e}
 
   return render(request, 'product.html', context)
-
-def collection(request, group, name=None):
-  return render(request, 'collection.html',
-    {'group':group}
-  )

@@ -9,6 +9,23 @@ from settings.people import Tom
 from apps.communication.controller.email_class import Email
 
 @access_required('admin')
+def product_lookup(request):
+  context = {}
+  if request.method == "POST":
+    try:
+      product = Product.objects.get(id=request.POST.get('product_id'))
+      product.artisan = product.assets.filter(ilk='artisan')[0]
+      product.materials = product.assets.filter(ilk='material')
+      product.tools     = product.assets.filter(ilk='tool')
+      context['product'] = product
+
+    except Product.DoesNotExist:
+      context['problem'] = "No Product with that ID"
+    except Exception as e:
+      context['problem'] = str(e)
+  return render(request, 'products/product_lookup.html', context)
+
+@access_required('admin')
 def review_products(request):
   products_to_review = (Product.objects.filter(approved_at=None,
                                                active_at__lte=timezone.now(),

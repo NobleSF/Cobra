@@ -40,7 +40,7 @@
   <div class='row-fluid'>
     <div class='span12'>
       <h1 id='seller-title' >
-        <a href="{% url 'store' seller.id %}"
+        <a href="{{ seller.get_absolute_url }}"
            class='symbol-profile green' title='seller public page'></a>
         {% if seller.account.name %}
           {{ seller.account.name }}

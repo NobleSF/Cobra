@@ -1,8 +1,8 @@
 {% load url from future %}
 {% load static %}
 
-<div class='product' data-url="{% url 'product' product.id %}">
-  <a href='{% url 'product' product.id %}'>
+<div class='product' data-url="{{ product.get_absolute_url }}">
+  <a href='{{ product.get_absolute_url }}'>
 
     <div class='title title-photo'>
       <h3 class='name hover-show'>{{ product.name }}</h3>
@@ -15,7 +15,7 @@
     </div>
 
     <div class='photo'>
-      <img alt='{{ product.long_title }}'
+      <img alt='{{ product.title }}'
            src='{% get_static_prefix %}images/loader.gif'
            data-src='{{ product.photo.thumb_size }}'
            data-src-retina=''>

@@ -2,22 +2,19 @@
 {% load url from future %}
 {% load cache %}
 
-{% cache 2592000 public_product_header product.id product.is_approved product.is_sold %}
+{% cache 86400 public_product_header product.id product.is_approved product.is_sold %}
 
-{% block title %}
-  {{ product.long_title }}
-  on {{ block.super }}
+{% block title %}{# 70 chars or less #}
+  {{ product.title }} | Fair Trade {{ product.seller.country.name }} Anou
 {% endblock title %}
 
-{% block description %}
-  {% if product.description %}
-    {{ product.description }}
-  {% endif %}
+{% block description %}{# 160 chars or less #}
+  {{ product.title_description }}
 {% endblock description %}
 
 {%block open_graph_type%}product{%endblock%}
-{%block open_graph_url%}{% url 'product' product.id %}{%endblock%}
-{%block open_graph_title%}{{ product.long_title }}{%endblock%}
+{%block open_graph_url%}{{ product.get_absolute_url }}{%endblock%}
+{%block open_graph_title%}{{ product.standard_title }}{%endblock%}
 {%block open_graph_description%}{{ product.description }}{%endblock%}
 {%block open_graph_image%}{{ product.photos.0.original }}{%endblock%}
 {%block open_graph_price%}{{ product.display_price }}{%endblock%}
@@ -62,7 +59,7 @@
 {% endblock header_link_2 %}
 
 {% block content %}
-{% cache 2592000 public_product_content product.id product.is_approved product.is_sold product.is_recently_sold %}
+{% cache 86400 public_product_content product.id product.is_approved product.is_sold product.is_recently_sold %}
 
   <div id='product' class='row-fluid' itemscope itemtype="http://schema.org/Product">
     <div class='span8'>
@@ -77,10 +74,8 @@
 
         <h1 itemprop="name">
           {{ product.name }}
-          in
-          {{ product.category }}
           by
-          <a href="{% url 'store' product.seller.id %}">
+          <a href="{{ product.seller.get_absolute_url }}">
             {{ product.seller.name }}
           </a>
         </h1>
@@ -120,6 +115,8 @@
         <p itemprop="description">
           {% if product.description %}
             {{ product.description }}
+          {% else %}
+            {{ product.title_description }}
           {% endif %}
         </p>
 
@@ -152,12 +149,12 @@
 
         <tr id='faceboook' class='text-center' style='margin: 1em 1em 0;'>
           <div class="fb-like visible-desktop"
-               data-href="http://www.theanou.com{% url 'product' product.id %}"
+               data-href="http://www.theanou.com{{ product.get_absolute_url }}"
                data-width="250" data-layout="standard"
                data-show-faces="false" data-send="true">
           </div>
           <div class="fb-like visible-tablet"
-               data-href="http://www.theanou.com{% url 'product' product.id %}"
+               data-href="http://www.theanou.com{{ product.get_absolute_url }}"
                data-width="100" data-layout="button_count"
                data-show-faces="false" data-send="true">
           </div>
@@ -205,7 +202,7 @@
         <p>handmade at</p>
       {% endif %}
       <h3 id='store-name'>
-        <a href="{% url 'store' product.seller.id %}">
+        <a href="{{ product.seller.get_absolute_url }}">
           {{ product.seller.name }}
         </a>
       </h3>
@@ -279,7 +276,7 @@
   {% load home_inclusion_tags %}
   <div id='store'>
     <h1 class='text-center'>
-      <a href="{% url 'store' product.seller.id %}">
+      <a href="{{ product.seller.get_absolute_url }}">
         <small>more from</small> {{ product.seller.name }}
       </a>
       {% if product.seller.image %}

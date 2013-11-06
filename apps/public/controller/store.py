@@ -20,7 +20,7 @@ def home(request, seller_id):
     context = {'store':store, 'products':ordered_products}
 
   except Seller.DoesNotExist:
-    return Http404
+    raise Http404
 
   except Exception as e:
     Email(message="error on public product page: "+str(e)).sendTo(Tom.email)

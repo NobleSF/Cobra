@@ -19,8 +19,11 @@ def rebuild_productpage(request, product_id):
   from apps.seller.models import Product
   try:
     product = Product.objects.get(id=product_id)
-    invalidate_cache('public_product_header', product.id, product.approved_at)
-    invalidate_cache('public_product_content', product.id, product.approved_at, product.is_recently_sold, product.is_sold)
+    invalidate_cache('public_product_header',
+                     product.id, product.is_approved, product.is_sold)
+    invalidate_cache('public_product_content',
+                     product.id, product.is_approved, product.is_sold,
+                     product.is_recently_sold)
     return redirect('product', product_id)
   except:
     messages.error(request,"Error refreshing cache on product page")

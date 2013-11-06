@@ -24,7 +24,23 @@ class Seller(models.Model):
   updated_at    = models.DateTimeField(auto_now = True)
 
   @property
-  def title(self): return "%s from %s, %s" % (self.name, self.city, self.country.name)
+  def title(self):
+    return "%s from %s, %s" % (self.name, self.city, self.country.name)
+
+  @property
+  def title_description(self):
+    try:
+      if self.categories_name_string:
+        title = "Find %s" % self.categories_name_string
+      else:
+        title = "Products"
+      title += " each uniquly handmade by the artisans of %s" % self.name
+      title += " sent to you direct from %s, %s." % (self.city, self.country.name)
+      return title
+    except:
+      return ("Artisans crafts handmade in Morocco." +
+              "Our store ships direct from original artisans. " +
+              "Made possible by Anou - Beyond Fair Trade.")
 
   @property
   def name(self): return self.account.name if self.account.name else ""
@@ -52,24 +68,47 @@ class Seller(models.Model):
         categories.append(product.category.name)
     return categories
 
-  def __unicode__(self):
-    return self.name
+  @property
+  def categories_name_string(self):
+    try:
+      names_list= self.categories
+      if len(names_list) > 2:
+        return ", and ".join(", ".join(names_list).rsplit(", ",1))
+      else:
+        return " and ".join(list)
+    except:
+      return ""
+
+  @property
+  def slug(self):
+    try:
+      from django.template.defaultfilters import slugify
+      return slugify(self.title.replace('from ',''))
+    except:
+      return None
 
   def get_absolute_url(self):
     from django.core.urlresolvers import reverse
-    return reverse('store', args=[str(self.id)])
+    if self.slug:
+      return reverse('store_w_slug', args=[str(self.id), self.slug])
+    else:
+      return reverse('store', args=[str(self.id)])
+
+  def __unicode__(self):
+    return self.name
 
 class Asset(models.Model):
   from apps.admin.models import Category
   seller        = models.ForeignKey('Seller')
   ilk           = models.CharField(max_length=10)#product,artisan,tool,material
-  rank          = models.SmallIntegerField(null=True, blank=True)
+  rank          = models.SmallIntegerField()
   #todo: give all assets ranks and remove "nullable"
   name          = models.CharField(max_length=50, null=True, blank=True)
   description   = models.TextField(null=True, blank=True)
   image         = models.ForeignKey('Image', null=True, blank=True, on_delete=models.SET_NULL)
   categories    = models.ManyToManyField(Category, null=True, blank=True)
   phone         = models.CharField(max_length=15, null=True, blank=True)
+  #important     = models.BooleanField(default=False)
 
   #Original Language
   name_ol       = models.CharField(max_length=50, null=True, blank=True)
@@ -90,8 +129,7 @@ class Asset(models.Model):
     return self._get_ilk_display()
 
   class Meta:
-    #unique_together = ('seller', 'ilk', 'rank')
-    #todo: turn on once rank not nullable
+    unique_together = ('seller', 'ilk', 'rank')
     ordering = ['rank', 'created_at']
 
 class Product(models.Model):
@@ -158,29 +196,100 @@ class Product(models.Model):
 
   @property
   def name(self):
-    name = None
-    try: name = self.assets.filter(ilk='product')[0].name
-    except: pass
-    return name if name else str(self.id)
-
-  @property
-  def color_adjective(self):
     try:
-      return self.colors.all()[0].name
+      if self.assets.filter(ilk='product')[0].name:
+        return self.assets.filter(ilk='product')[0].name
+      else:
+        return str(self.id)
     except:
-      return None
+      return str(self.id)
 
   @property
+  def color_adjective(self): #5-15 chars
+    try:
+      colors = self.colors.all()
+      if colors.count() == 1:
+        return "%s" % colors[0].name
+      elif colors.count() <= 3:
+        return "%s, %s" % (colors[0].name, colors[1].name)
+      elif colors.count() > 3:
+        return "Colored"
+      else:
+        return ""
+    except:
+      return ""
+
+  @property
+<<<<<<< HEAD
   def title(self):
     return "%s by %s %s" % (self.name, self.seller.name, self.category.name)
+=======
+  def materials_name_string(self):
+    try:
+      list = []
+      materials = self.assets.filter(ilk='material')
+      for material in materials:
+        list.append(material.name)
+      if len(materials) > 2:
+        return ", and ".join(", ".join(list).rsplit(", ",1))
+      else:
+        return " and ".join(list)
+    except:
+      return ""
+>>>>>>> origin/master
 
   @property
-  def long_title(self):
-    title = ("%s " % self.color_adjective) if self.color_adjective else ""
+  def tools_name_string(self):
+    try:
+      list = []
+      tools = self.assets.filter(ilk='tool')
+      for tool in tools:
+        list.append(tool.name)
+      if len(tools) > 2:
+        #join list with commas, replace last comma with ", and "
+        return ", and ".join(", ".join(list).rsplit(", ",1))
+      else:
+        return " and ".join(list)
+    except:
+      return ""
+
+  @property
+  def title(self): # <=51 chars counting but not using country name
+    if (len(self.name) +
+        len(self.materials_name_string) +
+        len(self.color_adjective) +
+        len(self.seller.country.name)) <= 49: #51-2 space chars
+      return "%s %s %s" % (self.color_adjective, self.materials_name_string, self.name)
+    else:
+      return "%s %s" % (self.color_adjective, self.name)
+
+  @property
+  def standard_title(self):
+    title  = "%s " % self.color_adjective if self.color_adjective else ""
     title += "%s" % self.name
+<<<<<<< HEAD
     title += " by %s %s" % (self.seller.name, self.category.name)
     title += " from %s, %s" % (self.seller.city, self.seller.country.name)
+=======
+    title += " by %s" % self.seller.name
+    title += ", %s" % self.seller.country.name
+>>>>>>> origin/master
     return title
+
+  @property
+  def title_description(self): # <=160 chars
+    try:
+      title  = "%s: %s Uniquely handmade by artisans" % (self.category, self.name)
+      if self.materials_name_string:
+        title += " using %s." % self.materials_name_string
+      title += " Crafted by %s" % self.seller.name
+      title += " from %s, %s." % (self.seller.city, self.seller.country.name)
+      title += " Ships to USA and Europe" if len(title) <= 135 else ""
+      title += " Qty: 1" if len(title) <= 150 else ""
+      return title
+    except:
+      return ("Artisan craft handmade made in Morocco. Qty: 1 " +
+              "For sale on Anou - Beyond Fair Trade.")
 
   @property
   def description(self):
@@ -358,6 +467,10 @@ class Product(models.Model):
   def display_price(self): #round to the nearest $1
     return int(round(self.usd_price + self.wepay_fee - self.display_shipping_price))
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
   @property
   def is_complete(self):
     if (self.assets.filter(ilk='product').count() and #has product type
@@ -375,12 +488,26 @@ class Product(models.Model):
       return True if (phone_number[-8:] == seller_phone[-8:]) else False
     else: return False
 
-  def __unicode__(self):
-    return self.name + ' by ' + self.seller.name
+  @property
+  def slug(self):
+    try:
+      from django.template.defaultfilters import slugify
+      return slugify(self.title)
+    except:
+      return None
 
   def get_absolute_url(self):
     from django.core.urlresolvers import reverse
-    return reverse('product', args=[str(self.id)])
+    if self.slug:
+      return reverse('product_w_slug', args=[str(self.id), self.slug])
+    else:
+      return reverse('product', args=[str(self.id)])
+
+  def __unicode__(self):
+    if self.color_adjective:
+      return "%s%s" % (self.color_adjective, self.name)
+    else:
+      return self.name
 
   class Meta:
     ordering = ['-sold_at', '-id']

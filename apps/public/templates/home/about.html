@@ -1,16 +1,22 @@
 {% extends "base.html" %}
 {% load url from future %}
+{% load cache %}
+
+{% cache 86400 about %}
 
 {% block title %}
-  About {{ block.super }}
+  About Us,
+  {{ block.super }}
 {% endblock title %}
+
 {% block description %}
-  Anou Team and Founding Story - The idea for Anou was developed by Dan Driscoll during his Peace Corps service in Morocco from 2008-2010.
+  Anou is an artisan community selling their work independently.
+  The founding team developed vital language-free technologies so that even illiterate artisans can engage with their end customers, representing a fundamental shift in the fair-trade industry.
 {% endblock description %}
 
 {%block open_graph_type%}{%endblock%}
 {%block open_graph_url%}http://www.theanou.com/about{%endblock%}
-{%block open_graph_title%}About Us{%endblock%}
+{%block open_graph_title%}About Us and FAQ{%endblock%}
 {%block open_graph_description%}{{ block.super }}{%endblock%}
 {%block open_graph_image%}{{ block.super }}{%endblock%}
 
@@ -21,6 +27,15 @@
     }
   </style>
 {% endblock css %}
+
+
+{% block header_link_1 %}
+  <li><a class='title' href="{% url 'home' %}">Store</a></li>
+{% endblock header_link_1 %}
+
+{% block header_link_2 %}
+  <li><a class='title' href="http://helloanou.wordpress.com">BLOG</a></li>
+{% endblock header_link_2 %}
 
 {% block content %}
 <h5 class='text-center'>
@@ -58,9 +73,16 @@
     </div>
   </div>
 
+<!--  <ul class='text-center inline'>
+    <li><a href='#story'>Our Story</a></li>
+    <li><a href='#team'>Anou Team</a></li>
+    <li><a href='#faq'>FAQ</a></li>
+    <li><a href='#thanks'>Special Thanks</a></li>
+  </ul>-->
+
 </div>
 
-<h4>Our Story</h4>
+<h4 id='story'>Our Story</h4>
 <p>
   The idea for Anou was developed by Dan Driscoll during his Peace Corps service in Morocco from 2008-2010. When Dan started his service in Morocco he began working with a woodcarving shop that was deemed illegal by the Moroccan government. He opened up negotiations between the carvers and the government and an agreement was made that the carvers would plant a tree for every item they sold.
   <br><br>
@@ -68,10 +90,10 @@
   <br><br>
   With the Internet just introduced into the valley, Dan focused on training the carvers how to use Etsy.com, an American e-commerce website. After six months, the carvers were independently managing their own store and keeping all of the profit on sales. They also chose to reinvest the income back into their community! It proved that artisans, no matter how rural, could sell their work independently and then thrive because of it.
   <br><br>
-  Unfortunately for the carvers, Etsy was not a long-term solution. The site was made for English-speaking, computer-literate users and was simply too difficult for artisans in Morocco to use. As a result, Dan and the carvers decided to build Anou, an entirely new platform, designed specifically for artisans throughout Morocco. Today, Anou is an artisan-led e-commerce platform enabling hundreds of Moroccan artisans to overcome the barriers that have traditionally held them out of the global market place. As a result, they can thrive independent of the middleman resellers.
-  <br><br>
+  Unfortunately for the carvers, Etsy was not a long-term solution. The site was made for English-speaking, computer-literate users and was simply too difficult for artisans in Morocco to use. As a result, Dan and the carvers decided to build Anou, an entirely new platform, designed specifically for artisans throughout Morocco. Today, Anou is an artisan-led e-commerce platform enabling hundreds of Moroccan artisans to overcome the barriers that have traditionally held them out of the global market place. As a result, they now thrive, independent of the middleman resellers.
 </p>
 
+<br id='team'><br><br>
 <h4>Our Team</h4>
 
 <div class='row-fluid'>
@@ -141,7 +163,13 @@
   </div>
 </div>
 
-<br><br>
+<br id='faq'><br><br>
+<h4 class="text-center">
+  Frequently Asked Questions
+</h4>
+
+
+<br id='thanks'><br><br>
 <h4 class="text-center">
   Partners and Supporters
 </h4>
@@ -222,7 +250,6 @@
       <h3>Riad 9</h3>
     </a>
   </li>
-
-
 </ul>
 {% endblock content %}
+{% endcache about %}

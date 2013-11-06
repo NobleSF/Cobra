@@ -1,0 +1,116 @@
+{% extends "admin_base.html" %}
+
+{% block javascript %}
+  <script>
+    //auto select-all on click
+    $("input,textarea").on("click", function () {
+      $(this).select();
+    });
+  </script>
+{% endblock javascript %}
+
+{% block content %}
+  {% load url from future %}
+
+  <form method='post' action="{% url 'admin:product lookup' %}">{% csrf_token %}
+    <ul class='inline'>
+      <li>
+        <label for='product_id'>Product ID:</label>
+      </li>
+      <li>
+        <input type='text' class='input-mini'
+               id='product_id' name='product_id'
+               value='{{ product.id }}'>
+      </li>
+      <li>
+        <button type='submit' class='btn'>Go</button>
+      </li>
+    </ul>
+  </form>
+
+  <h2 style='color:red;'>{{ problem }}</h2>
+
+  <table>
+    <tr><td colspan='2' style='width:250px;'></td></tr>
+    <tr>
+      <td>Anou Store Price:</td>
+      <td>$<input class='input-mini' value="{{ product.display_price }}"></td>
+    </tr>
+    <tr>
+      <td>Etsy Price:</td>
+      <td>$<input class='input-mini' value="{{ product.etsy_price }}"></td>
+    </tr>
+    <tr>
+      <td>Ebay Price:</td>
+      <td>$<input class='input-mini' value="{{ product.ebay_price }}"></td>
+    </tr>
+  </table>
+  <br>
+  <br>
+{% if product %}
+
+Product Title:
+<textarea style="width: 100%;">
+  {{ product.title_description }}
+</textarea>
+
+Product Description:
+<textarea style="width: 100%;">
+  {{ product.description }}
+</textarea>
+
+Artisan Image:
+<textarea style="width: 100%;">
+  {{ product.artisan.image.original }}
+</textarea>
+
+Product Photos:
+{% for photo in product.photos.all %}
+<textarea style="width: 100%;">
+  {{ photo.original }}
+</textarea>
+{% endfor %}
+
+Information:
+<textarea style="width: 100%; height: 1000px;">
+This item was crafted in {{ product.seller.city }}, {{ product.seller.country.name }} and posted by the members of {{ product.seller.name }} using Anou's online-mobile platform.
+
+
+About The Artisan:
+{{ product.artisan.name}}
+{{ product.artisan.description}}
+
+
+{% if product.materials%}Materials Used:
+{% for material in product.materials %}
+  {{ material.name }}
+  {{ material.description }}
+{% endfor %}{% endif %}
+
+{% if product.tools %}Tools Used:
+{% for tool in product.tools %}
+  {{ tool.name }}
+  {{ tool.description }}
+{% endfor %}{% endif %}
+
+Dimensions:
+{{ product.english_dimensions }}
+or
+{{ product.metric_dimensions }}
+
+Shipping Weight:
+{{ product.weight }} kilograms
+
+
+Shipping And Tracking:
+This item will be sent from {{ product.seller.city }}, {{ product.seller.country.name }} and may take 2-4 weeks to arrive. We will provide a tracking number once the item is shipped!
+
+Returns:
+We'll issue full refunds for any reason. We'll even cover the return shipping!
+
+Note:
+This item was posted by {{ product.seller.name }} in {{ product.seller.city }}, {{ product.seller.country.name }} using Anou's mobile-online platform. To learn more, review our policy page.
+</textarea>
+{% endif %}
+
+{% endblock content %}
