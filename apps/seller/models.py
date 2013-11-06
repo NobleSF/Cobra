@@ -543,6 +543,11 @@ class Image(models.Model): #Images are used for navigation, thumbnail size
     transformation = "c_fill,g_center,h_75,q_85,w_100"
     return u'%s' % self.original.replace("upload", ("upload/"+transformation))
 
+  @property
+  def peephole(self):
+    transformation = "c_fill,g_center,h_75,q_85,w_75,r_max"
+    return u'%s' % self.original.replace("upload", ("upload/"+transformation))
+
 class Upload(models.Model): #images and photos before they exist
   public_id     = models.CharField(max_length=100, unique=True)
   created_at    = models.DateTimeField(auto_now_add = True)
