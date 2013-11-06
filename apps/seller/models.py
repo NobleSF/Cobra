@@ -101,13 +101,14 @@ class Asset(models.Model):
   from apps.admin.models import Category
   seller        = models.ForeignKey('Seller')
   ilk           = models.CharField(max_length=10)#product,artisan,tool,material
-  rank          = models.SmallIntegerField(null=True, blank=True)
+  rank          = models.SmallIntegerField()
   #todo: give all assets ranks and remove "nullable"
   name          = models.CharField(max_length=50, null=True, blank=True)
   description   = models.TextField(null=True, blank=True)
   image         = models.ForeignKey('Image', null=True, blank=True, on_delete=models.SET_NULL)
   categories    = models.ManyToManyField(Category, null=True, blank=True)
   phone         = models.CharField(max_length=15, null=True, blank=True)
+  #important     = models.BooleanField(default=False)
 
   #Original Language
   name_ol       = models.CharField(max_length=50, null=True, blank=True)
@@ -128,8 +129,7 @@ class Asset(models.Model):
     return self._get_ilk_display()
 
   class Meta:
-    #unique_together = ('seller', 'ilk', 'rank')
-    #todo: turn on once rank not nullable
+    unique_together = ('seller', 'ilk', 'rank')
     ordering = ['rank', 'created_at']
 
 class Product(models.Model):
