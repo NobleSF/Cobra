@@ -220,10 +220,6 @@ class Product(models.Model):
       return ""
 
   @property
-<<<<<<< HEAD
-  def title(self):
-    return "%s by %s %s" % (self.name, self.seller.name, self.category.name)
-=======
   def materials_name_string(self):
     try:
       list = []
@@ -236,7 +232,6 @@ class Product(models.Model):
         return " and ".join(list)
     except:
       return ""
->>>>>>> origin/master
 
   @property
   def tools_name_string(self):
@@ -267,13 +262,8 @@ class Product(models.Model):
   def standard_title(self):
     title  = "%s " % self.color_adjective if self.color_adjective else ""
     title += "%s" % self.name
-<<<<<<< HEAD
-    title += " by %s %s" % (self.seller.name, self.category.name)
-    title += " from %s, %s" % (self.seller.city, self.seller.country.name)
-=======
     title += " by %s" % self.seller.name
     title += ", %s" % self.seller.country.name
->>>>>>> origin/master
     return title
 
   @property
@@ -467,10 +457,6 @@ class Product(models.Model):
   def display_price(self): #round to the nearest $1
     return int(round(self.usd_price + self.wepay_fee - self.display_shipping_price))
 
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
   @property
   def is_complete(self):
     if (self.assets.filter(ilk='product').count() and #has product type
