@@ -179,7 +179,7 @@ def login(request, next=None):
           del request.session['next']
           return HttpResponseRedirect(full_path)
         else:
-          return redirect('seller:management home')
+          return redirect('seller:home')
 
       elif not account:
         context = {'incorrect': "wrong username"}

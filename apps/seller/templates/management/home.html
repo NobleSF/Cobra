@@ -52,10 +52,10 @@
 
 {% block content %}
   <div id='primary-nav'>
-    <a id='orders' href="{% url 'seller:management orders' %}">
+    <a id='orders' href="{% url 'seller:orders' %}">
       <i class='symbol-orders gold' title='Sold Products'></i>
     </a>
-    <a id='products' href="{% url 'seller:management products' %}">
+    <a id='products' href="{% url 'seller:products' %}">
       <i class='symbol-products blue' title='Current Products'></i>
     </a>
     <a id='new-product' href="{% url 'seller:inventory create' %}">
@@ -79,5 +79,7 @@
 {% block footer %}
   {% if request.session.admin_id %}
     <a href="{% url 'admin:dashboard' %}">Admin Dashboard</a>
+    <a href="{% url 'seller:etsy' %}">Etsy Shop</a>
+    <a href="{# url 'seller:ebay' #}">eBay Listings</a>
   {% endif %}
 {% endblock footer %}

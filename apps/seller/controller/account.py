@@ -69,7 +69,7 @@ def edit(request):
           seller.coordinates          = seller_data['coordinates']
           seller.save()
 
-          return redirect('seller:management home')
+          return redirect('seller:home')
         else:
           messages.warning(request, 'Invalid information entered')
 

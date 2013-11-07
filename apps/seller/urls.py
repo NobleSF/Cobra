@@ -3,9 +3,12 @@ from controller import account, inventory, management, cloudinary_upload
 
 urlpatterns = patterns('',
 
-  url(r'^$', management.home, name='management home'), #seller dashboard, live products
-  url(r'^products$', management.products, name='management products'), #products
-  url(r'^orders$', management.orders, name='management orders'), #orders
+  url(r'^$', management.home, name='home'), #seller dashboard, live products
+  url(r'^products$', management.products, name='products'), #products
+  url(r'^orders$', management.orders, name='orders'), #orders
+
+  url(r'^etsy$', management.etsy, name='etsy'), #etsy
+  url(r'^ebay$', management.ebay, name='ebay'), #ebay
 
   #SELLER ACCOUNT
   url(r'^edit$', account.edit, name='edit'), #edit seller info

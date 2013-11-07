@@ -50,7 +50,7 @@ def create(request):
 
   except Exception as e:
     Email(message="error creating product: "+str(e)).sendTo(Tom.email)
-    return redirect('seller:management home')
+    return redirect('seller:home')
 
 @access_required('admin or seller')
 def edit(request, product_id):
@@ -94,7 +94,7 @@ def edit(request, product_id):
     try:
       Email(message="error loading product-edit on "+product_id+": "+str(e)).sendTo(Tom.email)
     except: pass
-    return redirect('seller:management home')
+    return redirect('seller:home')
 
 @access_required('seller') #it's the 'r' in crud, but is it even needed?
 def detail(request, product_id):

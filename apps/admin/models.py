@@ -21,7 +21,7 @@ class Account(models.Model):
     from django.core.urlresolvers import reverse
     try:
       url = reverse('admin:login_cheat')
-      url_parameters = "?seller_id=%d&destination=%s" % (self.sellers.all()[0].id, reverse('seller:management home'))
+      url_parameters = "?seller_id=%d&destination=%s" % (self.sellers.all()[0].id, reverse('seller:home'))
     except:
       return reverse('admin:login')
     else:
