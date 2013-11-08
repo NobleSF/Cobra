@@ -1,25 +1,31 @@
 from django.db import models
+from django.utils import timezone
 from apps.seller.models import Seller, Product, Image
 
 class Shop(models.Model):
-  seller          = models.OneToOneField(Seller, related_name='etsy_shop')
+  seller            = models.OneToOneField(Seller, related_name='etsy_shop')
 
-  user_id         = models.CharField(max_length=10)
-  login_name      = models.CharField(max_length=50)
-  #oauth key?
+  user_id           = models.CharField(max_length=10)
+  login_name        = models.CharField(max_length=50)
+  auth_token        = models.TextField(null=True, blank=True)
+  auth_token_secret = models.TextField(null=True, blank=True)
 
-  shop_id         = models.BigIntegerField()
-  shop_name       = models.CharField(max_length=50)
-  title           = models.CharField(max_length=50, null=True, blank=True)
-  banner_image    = models.ForeignKey(Image, null=True, blank=True,
-                                      on_delete=models.SET_NULL)
+  shop_id           = models.BigIntegerField()
+  shop_name         = models.CharField(max_length=50)
+  title             = models.CharField(max_length=50, null=True, blank=True)
+  banner_image      = models.ForeignKey(Image, null=True, blank=True,
+                                        on_delete=models.SET_NULL)
 
   #Etsy update history
-  synced_at       = models.DateTimeField(null=True, blank=True)
+  synced_at         = models.DateTimeField(null=True, blank=True)
 
   #update history
-  created_at      = models.DateTimeField(auto_now_add = True)
-  updated_at      = models.DateTimeField(auto_now = True)
+  created_at        = models.DateTimeField(auto_now_add = True)
+  updated_at        = models.DateTimeField(auto_now = True)
+
+  @property
+  def is_authorized(self):
+    return True if (self.auth_token and self.auth_token_secret) else False
 
   @property
   def user_email(self):
@@ -60,30 +66,30 @@ class Shop(models.Model):
 
 
 class Listing(models.Model):
-  product         = models.OneToOneField(Product, related_name='etsy_listing')
-  listing_id      = models.BigIntegerField(null=True, blank=True)
+  product           = models.OneToOneField(Product, related_name='etsy_listing')
+  listing_id        = models.BigIntegerField(null=True, blank=True)
 
   #active, removed, sold_out, expired, etc...
 
-  shop            = models.ForeignKey(Shop)
-  shop_section_id = models.IntegerField(null=True, blank=True)
-  category_id     = models.IntegerField(null=True, blank=True)#listing category
+  shop              = models.ForeignKey(Shop)
+  shop_section_id   = models.IntegerField(null=True, blank=True)
+  category_id       = models.IntegerField(null=True, blank=True)#listing category
 
-  listed_price    = models.DecimalField(max_digits=6, decimal_places=2,
-                                        null=True, blank=True)
-  listed_shipping = models.DecimalField(max_digits=6, decimal_places=2,
-                                        null=True, blank=True)
+  listed_price      = models.DecimalField(max_digits=6, decimal_places=2,
+                                          null=True, blank=True)
+  listed_shipping   = models.DecimalField(max_digits=6, decimal_places=2,
+                                          null=True, blank=True)
 
   #Etsy update history
-  listed_at       = models.DateTimeField(null=True, blank=True)
-  unlisted_at     = models.DateTimeField(null=True, blank=True)
-  synced_at       = models.DateTimeField(null=True, blank=True)
-  sold_at         = models.DateTimeField(null=True, blank=True)
+  listed_at         = models.DateTimeField(null=True, blank=True)
+  unlisted_at       = models.DateTimeField(null=True, blank=True)
+  synced_at         = models.DateTimeField(null=True, blank=True)
+  sold_at           = models.DateTimeField(null=True, blank=True)
   #unlisted_at
 
   #update history
-  created_at      = models.DateTimeField(auto_now_add = True)
-  updated_at      = models.DateTimeField(auto_now = True)
+  created_at        = models.DateTimeField(auto_now_add = True)
+  updated_at        = models.DateTimeField(auto_now = True)
 
   @property
   def title(self): return self.product.long_title
@@ -151,22 +157,22 @@ class Listing(models.Model):
 class Transaction(models.Model):
   from apps.public.models import Order
 
-  transaction_id  = models.BigIntegerField()
-  shop            = models.ForeignKey(Shop)
-  listing         = models.ForeignKey(Listing)
-  order           = models.ForeignKey(Order)
+  transaction_id    = models.BigIntegerField()
+  shop              = models.ForeignKey(Shop)
+  listing           = models.ForeignKey(Listing)
+  order             = models.ForeignKey(Order)
 
-  receipt_id      = models.BigIntegerField()
+  receipt_id        = models.BigIntegerField()
 
-  paid_at         = models.DateTimeField()
+  paid_at           = models.DateTimeField()
 
-  price_paid      = models.DecimalField(max_digits=8, decimal_places=2,
-                                        null=True, blank=True)
-  currency        = models.CharField(max_length=5, null=True, blank=True)
+  price_paid        = models.DecimalField(max_digits=8, decimal_places=2,
+                                          null=True, blank=True)
+  currency          = models.CharField(max_length=5, null=True, blank=True)
 
   #update history
-  created_at      = models.DateTimeField(auto_now_add = True)
-  updated_at      = models.DateTimeField(auto_now = True)
+  created_at        = models.DateTimeField(auto_now_add = True)
+  updated_at        = models.DateTimeField(auto_now = True)
 
   @property
   def shipped_at(self):

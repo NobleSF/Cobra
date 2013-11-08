@@ -1,0 +1,61 @@
+{% extends "seller_base.html" %}
+{% load url from future %}
+
+{% block title %}
+  {{ block.super }} Etsy Shop
+{% endblock title %}
+
+{% block css %}
+
+{% endblock css%}
+
+{% block javascript %}
+{% endblock javascript%}
+
+{% block content %}
+
+  {% if etsy_shop %}
+    <h3 class='copy-font'>{{etsy_shop.shop_name}}</h3>
+
+
+    {% if not etsy_shop.is_authorized %}
+      <p><a href="{{ signin_url }}" target='_blank'>Connect Etsy Shop</a></p>
+      <!--<p>here is your login username and password</p>-->
+
+      <form method='POST' action="{% url 'seller:etsy' %}">{% csrf_token %}
+        <label for='shop_name'>Shop Name</label>
+        <input type='text' id='shop_name' name='shop_name'
+               value='{{ etsy_shop.shop_name }}'>
+
+        <label for='auth_code'>Verification Code</label>
+        <input type='text' id='auth_code' name='auth_code'>
+
+        <button class='btn'>Connect Shop</button>
+      </form>
+    {% endif %}
+
+  {% else %}
+
+    You must first create an account and shop on Etsy.com
+
+    If your account is ready, provide the name of your etsy shop
+    Your shop name is in your shop's url: www.etsy.com/your/shops/MyShopName
+
+    <form method='POST' action="{% url 'seller:etsy' %}">{% csrf_token %}
+      <input type='text' id='shop_name' name='shop_name'>
+      <button class='btn'>Connect Shop</button>
+    </form>
+
+  {% endif %}
+
+  <p>
+    {% for key, value in etsy_data.items %}
+      {{key}}:{{value}}<br>
+    {% endfor %}
+  </p>
+
+  <br>
+  <br>
+  <p>The term 'Etsy' is a trademark of Etsy, Inc. This application uses the Etsy API but is not endorsed or certified by Etsy, Inc.</p>
+
+{% endblock content %}

@@ -161,7 +161,7 @@ ETSY = {
   'app_name': 'Anou',
   'api_key':  '5nl1vqtm7lzf57otuni286u5',
   'secret':   'moto494i1h',
-  'api_url':  'https://openapi.etsy.com/v2/'
+  'api_url':  'http://openapi.etsy.com/v2'
 }
 
 #EBAY
