@@ -186,13 +186,13 @@ class Ranking(models.Model):
   @property
   def weighted_average(self):
     from apps.public.controller.product_ranking import WEIGHTS
-    sum  = 0.0
-    sum += self.photography * WEIGHTS['photography']
-    sum += self.price       * WEIGHTS['price']
-    sum += self.appeal      * WEIGHTS['appeal']
-    sum += self.new_product * WEIGHTS['new_product']
-    sum += self.new_store   * WEIGHTS['new_store']
-    return int(100 * sum / sum(WEIGHTS.values()))
+    avg  = 0.0
+    avg += float(self.photography * WEIGHTS['photography'])
+    avg += float(self.price       * WEIGHTS['price'])
+    avg += float(self.appeal      * WEIGHTS['appeal'])
+    avg += float(self.new_product * WEIGHTS['new_product'])
+    avg += float(self.new_store   * WEIGHTS['new_store'])
+    return int(100 * avg / sum(WEIGHTS.values()))
 
   @property
   def weights_sum(self):
@@ -201,3 +201,6 @@ class Ranking(models.Model):
     for key in WEIGHTS:
       sum += WEIGHTS[key]
     return sum
+
+#signal receivers are in here
+from apps.public.controller import product_ranking

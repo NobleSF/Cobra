@@ -5,7 +5,7 @@ register = template.Library()
 def homepage_products_tag():
   from django.utils import timezone
   from apps.seller.models import Product
-  from apps.public.controller.product_ranking import getRankPoints
+  from apps.public.controller.product_ranking import updateRankings
 
   products = (Product.objects.filter(sold_at=None,
                                     approved_at__lte=timezone.now(),
@@ -15,9 +15,11 @@ def homepage_products_tag():
                                     deactive_at=None))
 
   for p in products:
-    p.points = getRankPoints(p)
+    try: p.ranking
+    except:
+      updateRankings(p)
 
-  products = sorted(products, key=lambda p: p.points)
+  products = sorted(products, key=lambda p: p.ranking.weighted_average)
   products.reverse() #sort by points descending
   return {'products':products}
 
