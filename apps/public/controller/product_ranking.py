@@ -23,9 +23,11 @@ def createRanking(sender, instance, created, **kwargs):
 
 def updateRankings(product, except_ratings=False):
   try:
+    #get ranking objects
     ranking = product.ranking
     ranking.new_product = newProductResult(product)
   except Ranking.DoesNotExist:
+    #create one
     ranking = Ranking(product = product,
                       new_product = newProductResult(product))
 
@@ -43,9 +45,7 @@ def updateRatingRankings(sender, instance, created, **kwargs):
   ranking = rating.product.ranking
 
   if rating.subject.name == 'Photography':
-    print True
     ranking.photography = photographyResult(rating.product)
-    print "saving %d in photography ranking" % ranking.photography
   elif rating.subject.name == 'Price':
     ranking.price = priceResult(rating.product)
   elif rating.subject.name == 'Appeal':
@@ -53,31 +53,40 @@ def updateRatingRankings(sender, instance, created, **kwargs):
   ranking.save()
 
 def photographyResult(product):
-  ratingQuery = (product.rating_set.filter(subject__name='Photography')
-                                   .aggregate(average=Avg('value')))
-  numRatings = product.rating_set.filter(subject__name='Photography').count()
+  try:
+    ratings = (product.rating_set.filter(subject__name='Photography')
+                                     .aggregate(average=Avg('value')))
+    num_ratings = product.rating_set.filter(subject__name='Photography').count()
 
-  V = float(ratingQuery['average']-1) / 4 if ratingQuery['average'] >= 1 else 0.5
-  C = float(ratingConfidence(numRatings)) if numRatings else 0
-  return createResult(V,C)
+    V = float(ratings['average']-1) / 4 if ratings['average'] >= 1 else 0.5
+    C = float(ratingConfidence(num_ratings)) if num_ratings else 0
+    return createResult(V,C)
+  except:
+    return 0.5
 
 def priceResult(product):
-  ratingQuery = (product.rating_set.filter(subject__name='Price')
-                                   .aggregate(average=Avg('value')))
-  numRatings = product.rating_set.filter(subject__name='Price').count()
+  try:
+    ratings = (product.rating_set.filter(subject__name='Price')
+                                     .aggregate(average=Avg('value')))
+    num_ratings = product.rating_set.filter(subject__name='Price').count()
 
-  V = float(ratingQuery['average']-1) / 4 if ratingQuery['average'] >= 1 else 0.5
-  C = float(ratingConfidence(numRatings)) if numRatings else 0
-  return createResult(V,C)
+    V = float(ratings['average']-1) / 4 if ratings['average'] >= 1 else 0.5
+    C = float(ratingConfidence(num_ratings)) if num_ratings else 0
+    return createResult(V,C)
+  except:
+    return 0.5
 
 def appealResult(product):
-  ratingQuery = (product.rating_set.filter(subject__name='Appeal')
-                                   .aggregate(average=Avg('value')))
-  numRatings = product.rating_set.filter(subject__name='Appeal').count()
+  try:
+    ratings = (product.rating_set.filter(subject__name='Appeal')
+                                     .aggregate(average=Avg('value')))
+    num_ratings = product.rating_set.filter(subject__name='Appeal').count()
 
-  V = float(ratingQuery['average']-1) / 4 if ratingQuery['average'] >= 1 else 0.5
-  C = float(ratingConfidence(numRatings)) if numRatings else 0
-  return createResult(V,C)
+    V = float(ratings['average']-1) / 4 if ratings['average'] >= 1 else 0.5
+    C = float(ratingConfidence(num_ratings)) if num_ratings else 0
+    return createResult(V,C)
+  except:
+    return 0.5
 
 def newProductResult(product):
   V = float(newProductValue(product))
@@ -103,9 +112,9 @@ def newStoreValue(product):
   value = 1.8 * invLog(this_number) if this_number > 1 else 1
   return value if value < 1 else 1
 
-def ratingConfidence(numRatings):
-  numRatings = float(numRatings) if numRatings > 3 else 3.0
-  return 1 - (invLog((numRatings-2)*2) / 2)
+def ratingConfidence(num_ratings):
+  num_ratings = float(num_ratings) if num_ratings > 3 else 3.0
+  return 1 - (invLog((num_ratings-2)*2) / 2)
 
 def createResult(V, C):
   # Value usually within range[0,1]

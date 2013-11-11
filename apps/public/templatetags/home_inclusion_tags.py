@@ -4,6 +4,7 @@ register = template.Library()
 @register.inclusion_tag('home/homepage_products.html')
 def homepage_products_tag():
   from django.utils import timezone
+  from datetime import timedelta
   from apps.seller.models import Product
   from apps.public.controller.product_ranking import updateRankings
 
@@ -14,8 +15,12 @@ def homepage_products_tag():
                                     seller__deactive_at=None,
                                     deactive_at=None))
 
+  yesterday = timezone.now() - timedelta(days=1)
+
   for p in products:
-    try: p.ranking
+    try:
+      if p.ranking.updated_at <= yesterday:
+        updateRankings(p, except_ratings=True)
     except:
       updateRankings(p)
 
