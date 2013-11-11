@@ -13,7 +13,7 @@ def homepage_products_tag():
                                     active_at__lte=timezone.now(),
                                     seller__approved_at__lte=timezone.now(),
                                     seller__deactive_at=None,
-                                    deactive_at=None))
+                                    deactive_at=None))[:50]
 
   yesterday = timezone.now() - timedelta(days=1)
 
