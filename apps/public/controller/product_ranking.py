@@ -89,9 +89,12 @@ def appealResult(product):
     return 0.5
 
 def newProductResult(product):
-  V = float(newProductValue(product))
-  C = 1.00
-  return createResult(V,C)
+  try:
+    V = float(newProductValue(product))
+    C = 1.00
+    return createResult(V,C)
+  except:
+    return 0.5
 
 def newProductValue(product):
   time_difference = timezone.now() - product.approved_at
@@ -101,9 +104,12 @@ def newProductValue(product):
   return value if value < 1 else 1
 
 def newStoreResult(product):
-  V = float(newStoreValue(product))
-  C = 1.00
-  return createResult(V,C)
+  try:
+    V = float(newStoreValue(product))
+    C = 1.00
+    return createResult(V,C)
+  except:
+    return 0.5
 
 def newStoreValue(product):
   time_difference = timezone.now() - product.seller.created_at
