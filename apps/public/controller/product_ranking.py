@@ -42,15 +42,25 @@ def updateRankings(product, except_ratings=False):
 def updateRatingRankings(sender, instance, created, **kwargs):
   print "We have arrived!"
   rating = instance
-  ranking = rating.product.ranking
+  try:
+    ranking = rating.product.ranking
+  except Ranking.DoesNotExist:
+    #create one
+    ranking = Ranking(product = rating.product,
+                      new_product = newProductResult(rating.product))
+  except:
+    pass#todo email someone
 
-  if rating.subject.name == 'Photography':
-    ranking.photography = photographyResult(rating.product)
-  elif rating.subject.name == 'Price':
-    ranking.price = priceResult(rating.product)
-  elif rating.subject.name == 'Appeal':
-    ranking.appeal = appealResult(rating.product)
-  ranking.save()
+  try:
+    if rating.subject.name == 'Photography':
+      ranking.photography = photographyResult(rating.product)
+    elif rating.subject.name == 'Price':
+      ranking.price = priceResult(rating.product)
+    elif rating.subject.name == 'Appeal':
+      ranking.appeal = appealResult(rating.product)
+    ranking.save()
+  except:
+    pass#todo email someone
 
 def photographyResult(product):
   try:

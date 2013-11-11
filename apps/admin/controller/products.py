@@ -116,7 +116,7 @@ def rate_product(request): #from AJAX GET request
 
   except Exception as e:
     response = {'error': e}
-    Email(message="error in logout function: "+str(e)).sendTo(Tom.email)
+    Email(message="error in rate_product function: "+str(e)).sendTo(Tom.email)
   else:
     response = {'success': "%s rated" % product_id}
 
