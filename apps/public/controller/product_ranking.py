@@ -18,8 +18,8 @@ DAYS_TO_PROMOTE_NEW_STORE   = 14
 @receiver(post_save, sender=Product)
 def createRanking(sender, instance, created, **kwargs):
   if created:
-    ranking = Ranking(product = product,
-                      new_product = newProductResult(product))
+    ranking = Ranking(product = instance,
+                      new_product = newProductResult(instance))
 
 def updateRankings(product, except_ratings=False):
   try:

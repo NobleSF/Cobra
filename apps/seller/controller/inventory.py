@@ -38,7 +38,7 @@ def create(request):
   try:
     edit_this_product = None
     for product in seller.product_set.all().order_by('id'):
-      if product.was_never_active and edit_this_product == None:
+      if not edit_this_product and product.was_never_active:
         edit_this_product = product
 
     if edit_this_product:
