@@ -54,7 +54,7 @@ def unrated_products(request):
                                              sold_at=None)
                       .annotate(rating_count=Count('rating'))
                       .filter(rating_count__lt=15)
-                      .exclude(rating__session_key = request.session.session_key))
+                      .exclude(rating__session_key=request.session.session_key)[:50])
 
   return render(request, 'products/unrated_products.html', {'products':unrated_products})
 
