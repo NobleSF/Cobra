@@ -1,9 +1,46 @@
 $(function(){//on page load
 
-  //PRODUCT PHOTO LOADING
-  $("img").unveil(200);
+  //LAZY PHOTO LOADING
+  $('img').unveil(400);
+  //HOVER ANIMATION
+  addHoverAnimation($('.product'));
+
+  //LOAD MORE PRODUCTS
+  if ($('.product-area.load-me-later').length > 0){
+    load_products_interval_id = setInterval(function(){loadMoreProducts()}, 2000);
+  }
 
 });
+
+//LOAD MORE PRODUCTS
+function loadMoreProducts(){
+  var product_ids = $('.product-area.load-me-later').slice(0,50)
+        .map(function(){return $(this).attr('data-product-id');}).get();
+
+  var url = $('#load-products-url').val();
+  $.ajax({
+    type: "GET",
+    url: url,
+    data: {product_ids:product_ids.join()},
+    async: false
+  })
+  .done(function(response){
+    for (var key in response) {
+      if (response.hasOwnProperty(key)){
+        var product_area = $(".product-area[data-product-id='"+key+"']")
+        $(product_area).html(response[key]);
+        $(product_area).find('img').unveil(400);
+        addHoverAnimation($(product_area).find('.product'));
+        $(product_area).removeClass('load-me-later');
+      }
+    }
+  })
+  .always(function(){
+    if ($('.product-area.load-me-later').length == 0){
+      clearInterval(load_products_interval_id);
+    }
+  });
+}
 
 //BOOTSTRAP CAROUSEL
 $('#video-image').on('click', function(){
@@ -12,20 +49,22 @@ $('#video-image').on('click', function(){
 });
 
 //PRODUCT ANIMATION
-$('.product').hover(
-  function(){ //on mouseenter
-    if(! navigator.userAgent.match(/(iPhone|iPod|iPad)/i)){
+function addHoverAnimation(selection){
+  $(selection).hover(
+    function(){ //on mouseenter
+      if(! navigator.userAgent.match(/(iPhone|iPod|iPad)/i)){
+        $(this).find('.hover-show').each(function(){
+          $(this).show();
+        });
+      }
+    },
+    function(){//on mouseleave
       $(this).find('.hover-show').each(function(){
-        $(this).show();
+        $(this).fadeOut();
       });
     }
-  },
-  function(){//on mouseleave
-    $(this).find('.hover-show').each(function(){
-      $(this).fadeOut();
-    });
-  }
-);
+  );
+}
 
 //SEARCH AND SORTING FUNCTIONS
 $('#search-toolbar .title').on('click', function(){

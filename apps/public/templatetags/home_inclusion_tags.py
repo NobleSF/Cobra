@@ -26,14 +26,14 @@ def homepage_products_tag():
 
   products = sorted(products, key=lambda p: p.ranking.weighted_average)
   products.reverse() #sort by points descending
+
   return {'products':products}
 
 @register.inclusion_tag('home/product.html')
 def product_tag(product):
-  return {'product': product}
+  return {'product':product}
 
 @register.inclusion_tag('home/search_bar.html')
 def search_bar_tag(search_keywords=None):
   from apps.admin.models import Category
-
-  return {'categories':Category.objects.all()}
+  return {'categories': Category.objects.all()}

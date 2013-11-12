@@ -1,9 +1,32 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
+from django.utils import simplejson as json
+from django.views.decorators.cache import cache_page
 
 def home(request):
   return render(request, 'home/home.html')
+
+@cache_page(86400) #cache for 24 hours just like homepage in-template cache
+def loadProducts(request):
+  from apps.seller.models import Product
+  from django.template.loader import render_to_string
+
+  if request.method == "GET":
+
+    product_ids = request.GET.get('product_ids')
+    print product_ids
+
+    ids_list = product_ids.split(',')
+
+    product_html = {}
+
+    for product_id in ids_list:
+      product = Product.objects.get(id=product_id)
+      html = render_to_string('home/product.html', {'product':product})
+      product_html[str(product.id)] = html
+
+    return HttpResponse(json.dumps(product_html), mimetype='application/json')
 
 def about(request):
   return render(request, 'home/about.html')

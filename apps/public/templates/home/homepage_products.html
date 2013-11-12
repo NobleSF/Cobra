@@ -2,14 +2,22 @@
 {% load url from future %}
 
 <div id='product-container'>
+  <input id='load-products-url' type='hidden' value='{% url 'load products' %}'>
+
   <div class='product-row row-fluid'>
     {% for product in products %}
 
       <div id='product-div-{{ forloop.counter0 }}'
-           class='span4 product-area'
+           class='span4 product-area
+              {% if forloop.counter0 >= 50 %}
+                load-me-later
+              {% endif %}'
            data-category='{{ product.category }}'
-           data-order='{{ forloop.counter0 }}'>
-        {% product_tag product %}
+           data-order='{{ forloop.counter0 }}'
+           data-product-id='{{ product.id }}'>
+        {% if forloop.counter0 < 50 %}
+          {% product_tag product %}
+        {% endif %}
       </div>
 
       {% cycle "" "" "</div><div class='product-row row-fluid'>" %}
