@@ -1,9 +1,10 @@
 from apps.communication import models
+from apps.admin.utils.exception_handling import ExceptionHandler
 from django.template import Context
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from settings.settings import STAGE, DEBUG, DEMO
-from apps.admin.controller.decorator import postpone
+from apps.admin.utils.decorator import postpone
 
 class Email(object):
   def __init__(self, template_dir=None, data={}, message=None):
@@ -70,25 +71,10 @@ class Email(object):
       #sendgrid settings automatically bcc dump@theanou.com on every email
       self.mail.attach_alternative(self.html_body, "text/html")
       self.mail.send()
-      save_response = self.save()
-
-      if isinstance(save_response, basestring):
-        error_message = save_response
+      self.save()
 
     except Exception as e:
-      error_message = "Error in communcation/controller/email_class.py sendTo(): " + str(e)
-
-    try:
-      if error_message:
-        from settings.people import Tom
-        Email(message=error_message).sendTo(Tom.email)
-    except Exception as e2:
-      try:
-        if error_message:
-          from apps.communication.controller.sms import sendSMS
-          from settings.people import Tom
-          sendSMS("THE SKY IS FALLING! \r\n in email_class sendTo()", Tom.phone)
-      except: pass #resistance is futile
+      ExceptionHandler(e, "in email_class.sendTo", sentry_only=True)
 
   def save(self):
     try:    self.order
@@ -104,10 +90,9 @@ class Email(object):
                 order         = self.order
               )
     except Exception as e:
-      return "error: " + str(e)
+      ExceptionHandler(e, "in email_class.save")
     else:
       email.save()
-      return True
 
   def assignToOrder(self, order):
     self.order = order

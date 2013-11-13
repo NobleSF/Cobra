@@ -1,9 +1,8 @@
 from django.http import Http404
 from django.shortcuts import render
+from apps.admin.utils.exception_handling import ExceptionHandler
 from django.views.decorators.cache import cache_page
 from django.utils import timezone
-from settings.people import Tom
-from apps.communication.controller.email_class import Email
 
 def home(request, product_id, slug=None):
   from apps.seller.models import Product, Photo
@@ -41,7 +40,7 @@ def home(request, product_id, slug=None):
     raise Http404
 
   except Exception as e:
-    Email(message="error on public product page: "+str(e)).sendTo(Tom.email)
-    context = {'except':e}
+    ExceptionHandler(e, "in product.home")
+    context = {'exception', str(e)}
 
   return render(request, 'product.html', context)

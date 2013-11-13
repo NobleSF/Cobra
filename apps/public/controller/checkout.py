@@ -1,10 +1,8 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
-from apps.admin.controller.decorator import access_required
+from apps.admin.utils.decorator import access_required
 from django.utils import simplejson as json
 from django.contrib import messages
-from apps.communication.controller.email_class import Email
-from settings import people
 
 from apps.public.controller.cart_class import Cart
 from apps.public.controller.forms import CartForm
@@ -43,24 +41,34 @@ def cart(request):
 def cartAdd(request, product_id):
   from apps.seller.models import Product
   cart = Cart(request)
+
   try:
     product = Product.objects.get(id=product_id)
     cart.add(product)
     return redirect('cart')
+
   except Exception as e:
-    Email(message="Error on cartAdd: "+str(e)).sendTo(people.Tom.email)
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    ExceptionHandler(e, "in checkout.cartAdd")
+    if 'HTTP_REFERER' in request.META:
+      return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    else:
+      return redirect('cart')
 
 def cartRemove(request, product_id):
   from apps.seller.models import Product
   cart = Cart(request)
+
   try:
     product = Product.objects.get(id=product_id)
     cart.remove(product)
     return redirect('cart')
+
   except Exception as e:
-    Email(message="Error on cartRemove: "+str(e)).sendTo(people.Tom.email)
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    ExceptionHandler(e, "in checkout.cartRemove")
+    if 'HTTP_REFERER' in request.META:
+      return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    else:
+      return redirect('cart')
 
 def cartSave(request): #ajax requests only
   if request.method == 'GET': # it must be an ajax GET to work
@@ -118,11 +126,10 @@ def confirmation(request):
         checkout_data = {'problem': "Payment on order is not complete."}
 
     except Exception as e:
+      ExceptionHandler(e, "in checkout.confirmation")
       checkout_data = {'error': "Problem collecting your order information.",
                        'exception': e
                        }
-      try: Email(message="Error on order confirmation page: "+str(e)).sendTo(people.Tom.email)
-      except: pass
       #todo: email the customer that we are aware of the problem
 
   context = {'cart':cart, 'checkout_data':checkout_data}
@@ -134,6 +141,9 @@ def confirmation(request):
 @access_required('admin')
 def adminCheckout(request): #ajax requests only
   from django.core.urlresolvers import reverse
+  from apps.communication.controller.email_class import Email
+  from settings.people import Dan
+
   try:
     cart = Cart(request)
 
@@ -144,7 +154,7 @@ def adminCheckout(request): #ajax requests only
     confirmation_url = request.build_absolute_uri(confirmation)
     confirmation_html_link = "<a href='%s'>%s</a>" % (confirmation_url, confirmation_url)
     message = "<p>To complete manual checkout go to: "+confirmation_html_link+"</p>"
-    Email(message=message).sendTo(people.Dan.email)
+    Email(message=message).sendTo(Dan.email)
 
   except Exception as e:
     responseObject = HttpResponse(content=json.dumps({'error':str(e)}),

@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from apps.admin.controller.decorator import access_required
+from apps.admin.utils.decorator import access_required
+from apps.admin.utils.exception_handling import ExceptionHandler
 from django.contrib import messages
 from apps.communication.models import SMS, Email
 from apps.seller.models import Seller
@@ -25,9 +26,8 @@ def sendSMS(request):
       else:
         messages.success(request, "SMS sent!")
     else:
-      from settings.people import Tom
-      error_message = "sendSMS received error in sms: " + str(sms)
-      Email(message=error_message).sendTo(Tom.email)
+      e = Exception('unknown response from sms_controller.sendSMS')
+      ExceptionHandler(e, "in communication.sendSMS")
       messages.error(request, "SMS failed!")
 
   return redirect('admin:all sms')

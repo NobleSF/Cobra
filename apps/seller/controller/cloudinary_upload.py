@@ -1,10 +1,9 @@
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.utils import simplejson, timezone, dateformat
-from apps.admin.controller.decorator import access_required
+from apps.admin.utils.decorator import access_required
+from apps.admin.utils.exception_handling import ExceptionHandler
 from django.views.decorators.csrf import csrf_exempt
-from apps.communication.controller.email_class import Email
-from settings.people import Tom
 from apps.seller.models import Upload, Image, Photo
 from settings.settings import CLOUDINARY
 #from django.core.cache import cache
@@ -20,13 +19,14 @@ def completeUpload(request):#for cloudinary to post info on completed uploads
       upload.save()
 
   except Exception as e:
-    Email(message=str(e)).sendTo(Tom.email)
+    ExceptionHandler(e, "in cloudinary_upload.completeUpload")
     return HttpResponse(str(e), status=500)
   else:
-    #cache.expire('check_'+request_data.get('public_id'))
+    #todo: cache.expire('check_'+request_data.get('public_id'))
     return HttpResponse(status=200)
 
 def checkImageUpload(request):#for our JS to check upload status and get thumb_url
+  #todo:
   #cached_response = cache.get('check_'+request.GET['public_id'])
   #if cached_response:
   #  return cached_response
@@ -59,11 +59,13 @@ def checkImageUpload(request):#for our JS to check upload status and get thumb_u
                           status='200')
 
     else:
+      #todo:
       #cache.set('check_'+request.GET['public_id'], 300) #5 minutes
       return HttpResponse("did not find upload", status='204')
 
   except Exception as e:
-    response = {'except':str(e)}
+    ExceptionHandler(e, "in cloudinary_upload.checkImageUpload", sentry_only=True)
+    response = {'exception':str(e)}
     return HttpResponse(simplejson.dumps(response),
                         mimetype='application/json',
                         status='500')
@@ -99,11 +101,11 @@ def imageFormData(request):
     }
     form_data['signature'] = createSignature(form_data)
   return HttpResponse(simplejson.dumps(form_data), mimetype='application/json')
+  #todo: handle exceptions?
 
 @access_required('seller')
-#cache response
 @csrf_exempt
-def checkPhotoUpload(request):#for our JS to check upload status and get thumb_url
+def checkPhotoUpload(request):#for our JS to check upload status and get thumb_url todo:cache response
   from apps.seller.controller.product_class import Product
   try:
     upload = Upload.objects.get(public_id = request.GET['public_id'])
@@ -121,7 +123,8 @@ def checkPhotoUpload(request):#for our JS to check upload status and get thumb_u
       return HttpResponse("did not find upload", status='204')
 
   except Exception as e:
-    response = {'except':str(e)}
+    ExceptionHandler(e, "in cloudinary_upload.checkPhotoUpload", sentry_only=True)
+    response = {'exception':str(e)}
     return HttpResponse(simplejson.dumps(response),
                         mimetype='application/json',
                         status='500')
@@ -159,6 +162,7 @@ def photoFormData(request):
     }
     form_data['signature'] = createSignature(form_data)
   return HttpResponse(simplejson.dumps(form_data), mimetype='application/json')
+  #todo: handle exceptions?
 
 def createSignature(data):
   import hashlib

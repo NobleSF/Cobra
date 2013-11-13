@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from apps.admin.controller.decorator import access_required
+from apps.admin.utils.decorator import access_required
 from django.contrib import messages
 from apps.public.models import Order
 

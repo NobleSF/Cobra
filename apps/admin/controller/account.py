@@ -1,12 +1,11 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
-from apps.admin.controller.decorator import access_required
+from apps.admin.utils.decorator import access_required
+from apps.admin.utils.exception_handling import ExceptionHandler
 from django.contrib import messages
 from django.utils import simplejson, timezone
 from datetime import timedelta
 from apps.admin.models import Account
-from settings.people import Tom
-from apps.communication.controller.email_class import Email
 
 @access_required('admin')
 def create(request):
@@ -44,7 +43,7 @@ def create(request):
     except IntegrityError:
       messages.warning(request, 'An account with this username already exists.')
     except Exception as e:
-      Email(message="error creating account: "+str(e)).sendTo(Tom.email)
+      ExceptionHandler(e, "error creating account")
       messages.error(request, e)
 
   context = {'form': AccountCreateForm()}
@@ -108,8 +107,8 @@ def approve_seller(request): #from AJAX GET request
     else:
       raise Exception('invalid action: %s' % action)
   except Exception as e:
+    ExceptionHandler(e, "error on seller approval")
     response = {'error': str(e)}
-    Email(message="error on seller approval: "+str(e)).sendTo(Tom.email)
   else:
     response = {'success': "%s %s" % (action, seller_id)}
 
@@ -187,7 +186,7 @@ def login(request, next=None):
         context = {'incorrect': "wrong password"}
 
     except Exception as e:
-      Email(message="error in login function: "+str(e)).sendTo(Tom.email)
+      ExceptionHandler(e, "error in login function")
       context = {'exception': e}
 
     context['form'] = AccountLoginForm()#return fresh form
@@ -222,7 +221,7 @@ def logout(request):
     return redirect('home')
 
   except Exception as e:
-    Email(message="error in logout function: "+str(e)).sendTo(Tom.email)
+    ExceptionHandler(e, "error in logout function")
     return render(request, 'public/home.html', {'exception':e})
 
 @access_required('admin')
@@ -240,7 +239,7 @@ def reset_password(request, account_id=None):
       return redirect('admin:account edit', account.id)
 
   except Exception as e:
-    Email(message="error on password reset: "+str(e)).sendTo(Tom.email)
+    ExceptionHandler(e, "error on password reset")
     messages.warning(request, "invalid passwords provided")
 
   context = {'form':AccountPasswordForm()}

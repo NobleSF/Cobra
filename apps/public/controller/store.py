@@ -1,9 +1,8 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
+from apps.admin.utils.exception_handling import ExceptionHandler
 from django.utils import timezone
-from settings.people import Tom
-from apps.communication.controller.email_class import Email
 
 def home(request, seller_id):
   from apps.seller.models import Seller
@@ -23,7 +22,7 @@ def home(request, seller_id):
     raise Http404
 
   except Exception as e:
-    Email(message="error on public product page: "+str(e)).sendTo(Tom.email)
-    context = {'except':e}
+    ExceptionHandler(e, "in store.home")
+    context = {'exception', str(e)}
 
   return render(request, 'store.html', context)

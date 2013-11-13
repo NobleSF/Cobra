@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from apps.admin.controller.decorator import access_required
+from apps.admin.utils.decorator import access_required
 from django.contrib import messages
 from django.forms.models import modelformset_factory
 from apps.public.controller.events import invalidate_cache

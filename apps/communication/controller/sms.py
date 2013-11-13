@@ -5,11 +5,14 @@ import simplejson as json
 import re #regular expressions
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.communication.models import SMS
 from apps.seller.models import Product, Seller, Asset
-from apps.admin.controller.decorator import postpone
+from apps.admin.utils.decorator import postpone
 from apps.communication.controller.email_class import Email
-from settings.people import Tom, Dan, Brahim
+from settings.people import Dan, Brahim
+
+#todo: this should be a class, not bunch of functions
 
 def sendSMS(message, to_number, priority='1'): #using Telerivet
   try:
@@ -29,30 +32,26 @@ def sendSMS(message, to_number, priority='1'): #using Telerivet
     response_content = json.loads(response.content) #dict of response content
 
   except Exception as e:
-    return "send error: " + str(e)
+    ExceptionHandler(e, "in sms.sendSMS-A")
+    return None
 
   else:
     if int(response.status_code) is 200:
       return saveSMS(response_content) #responds with SMS object or exception str
     else:
-      return "bad request or possible Telerivet error"
+      e = Exception('bad request or possible Telerivet error')
+      ExceptionHandler(e, "in sms.sendSMS-B")
+      return None
 
 @postpone #cannot return a value, handle errors internally
 def sendSMSForOrder(message, to_number, order, priority='1'):
   try:
     sms = sendSMS(message, to_number, priority)
-    if isinstance(sms, SMS):
-      sms.order = order
-      sms.save()
-    else:
-      error_message = sms
-  except Exception as e:
-    error_message = "Error in communcation/controller/sms.py saveSMS(): " + str(e)
+    sms.order = order
+    sms.save()
 
-  try:
-    if error_message:
-      Email(message=error_message).sendTo(Tom.email)
-  except: pass
+  except Exception as e:
+    ExceptionHandler(e, "in sms.sendSMSForOrder")
 
 def saveSMS(sms_data): #takes Telerivet response content detail at
   #https://telerivet.com/p/PJ8973e6e346c349cbcdd094fcffa9fcb5/api/rest/sending
@@ -156,12 +155,12 @@ def incoming(request):
           #todo: email Brahim about this incoming text product with wrong owner
 
     except Exception as e:
+      ExceptionHandler(e, "in sms.incoming")
+
       if DEMO or STAGE or DEBUG:
         response = {'messages':[{'content':str(e)}]}
         return HttpResponse(json.dumps(response), mimetype='application/json')
       else:
-        error_message = "error on incoming SMS: " +  str(e)
-        Email(message=error_message).sendTo(Tom.email)
         return HttpResponse(status=500)#server error, our fault, Telerivet will try again
 
   else:
