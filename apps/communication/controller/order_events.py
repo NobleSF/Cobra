@@ -1,3 +1,4 @@
+from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.communication.controller.email_class import Email
 from apps.communication.controller.sms import sendSMS, sendSMSForOrder
 from apps.communication.models import SMS
@@ -17,7 +18,7 @@ def communicateOrdersCreated(orders):
           for artisan in product.assets.filter(ilk='artisan'):
             sendSMSForOrder(artisan_msg, artisan.phone, order)
         except Exception as e:
-          Email(message="error sending SMS to artisans: "+str(e)).sendTo(people.Tom.email)
+          ExceptionHandler(e, "in order_events.communicateOrdersCreated-A")
 
       #message the seller with the address
       address_string = getCustomerAddressFromOrder(order, sms_format=True)
@@ -30,7 +31,7 @@ def communicateOrdersCreated(orders):
         order.seller_msg = seller_msg.replace('\r\n', '<br>')
         Email('order/created_copy_director', order).sendTo(people.Brahim.email)
       except Exception as e:
-        Email(message="error sending copy to Brahim: "+str(e)).sendTo(people.Tom.email)
+        ExceptionHandler(e, "in order_events.communicateOrdersCreated-B")
 
     #send email to buyer
     email = Email('order/created', orders)
@@ -38,9 +39,7 @@ def communicateOrdersCreated(orders):
     email.sendTo(getCustomerEmailFromOrder(orders[0]))
     return True
   except Exception as e:
-    try:
-      Email(message="error in communicateOrdersCreated: "+str(e)).sendTo(people.Tom.email)
-    except: pass
+    ExceptionHandler(e, "in order_events.communicateOrdersCreated-C")
     return False
 
 def updateOrder((product_id, data), gimme_reply_sms=False):

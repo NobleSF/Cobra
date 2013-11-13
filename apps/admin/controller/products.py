@@ -1,12 +1,11 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
-from apps.admin.controller.decorator import access_required
+from apps.admin.utils.decorator import access_required
 from django.contrib import messages
+from apps.admin.utils.exception_handling import ExceptionHandler
 from django.forms.models import modelformset_factory
 from django.utils import simplejson, timezone
 from apps.seller.models import Product
-from settings.people import Tom
-from apps.communication.controller.email_class import Email
 
 @access_required('admin')
 def product_lookup(request):
@@ -78,8 +77,8 @@ def approve_product(request): #from AJAX GET request
     else:
       raise Exception('invalid action: %s' % action)
   except Exception as e:
+    ExceptionHandler(e, "error on approve_product")
     response = {'error': str(e)}
-    Email(message="error on product approval: "+str(e)).sendTo(Tom.email)
   else:
     response = {'success': "%s %s" % (action, product_id)}
 
@@ -115,8 +114,8 @@ def rate_product(request): #from AJAX GET request
       rating.save()
 
   except Exception as e:
-    response = {'error': e}
-    Email(message="error in rate_product function: "+str(e)).sendTo(Tom.email)
+    ExceptionHandler(e, "error on rate_product")
+    response = {'error': str(e)}
   else:
     response = {'success': "%s rated" % product_id}
 

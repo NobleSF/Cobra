@@ -43,7 +43,7 @@ def unsubscribe(request):
 def communicateUnsubscribed():
   pass
 
-from apps.admin.controller.decorator import access_required
+from apps.admin.utils.decorator import access_required
 @access_required('admin')
 def test_email():
   from django.core.mail import send_mail

@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.utils import simplejson
-from apps.admin.controller.decorator import access_required
+from apps.admin.utils.decorator import access_required
+from apps.admin.utils.exception_handling import ExceptionHandler
 from django.views.decorators.csrf import csrf_exempt
 from apps.seller.models import Seller
 from apps.seller.controller.product_class import Product
@@ -23,10 +24,11 @@ def checkInventory(seller):
       if product.was_never_active:
         if keep <= 0:
           #product.delete()
-          Email(message="Seller has multiple products in edit process.").sendTo(Tom.email)
+          e = Exception('Seller has multiple products in edit process.')
+          ExceptionHandler(e, "in inventory.checkInventory")
         keep -= 1
-  except:
-    Email(message="Error in checkInventory.").sendTo(Tom.email)
+  except Exception as e:
+    ExceptionHandler(e, "in inventory.checkInventory")
     return False
   else:
     return True
@@ -49,7 +51,7 @@ def create(request):
     return redirect("%d/edit" % product_object.product.id)
 
   except Exception as e:
-    Email(message="error creating product: "+str(e)).sendTo(Tom.email)
+    ExceptionHandler(e, "in inventory.create")
     return redirect('seller:management home')
 
 @access_required('admin or seller')
@@ -91,9 +93,8 @@ def edit(request, product_id):
     return render(request, 'inventory/edit.html', context)
 
   except Exception as e:
-    try:
-      Email(message="error loading product-edit on "+product_id+": "+str(e)).sendTo(Tom.email)
-    except: pass
+    error_message = "in inventory.edit with product %s" % str(product_id)
+    ExceptionHandler(e, error_message)
     return redirect('seller:management home')
 
 @access_required('seller') #it's the 'r' in crud, but is it even needed?
@@ -106,15 +107,15 @@ def remove(request, product_id): #seller deactivate product
     request.product_id = product_id
     product = Product(request)
     if product.deactivate():
-      message = "Product %d deactivated." % product.product.id
-      Email(message=message+" It is no longer available for sale").sendTo(Dan.email)
+      message = "Product %d deactivated by seller. No longer for sale." % product.product.id
+      Email(message=message).sendTo(Dan.email)
       if request.session.get('admin_id'): messages.success(request, message)
     else:
       message = "Unable to deactivate product."
       if request.session.get('admin_id'): messages.warning(request, message)
 
   except Exception as e:
-    Email(message="error while removing product: "+str(e)).sendTo(Tom.email)
+    ExceptionHandler(e, "in inventory.remove")
 
   return redirect('seller:management products')
 
@@ -184,8 +185,8 @@ def saveProduct(request): #ajax requests only, not asset-aware
       response.update(cost_summary)
 
     except Exception as e:
+      ExceptionHandler(e, "in inventory.saveProduct")
       response = {'exception': str(e)}
-      Email(message="error in saveProduct ajax: "+str(e)).sendTo(Tom.email)
 
   else:
     response['problem'] = "not GET"

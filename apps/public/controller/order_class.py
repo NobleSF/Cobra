@@ -1,8 +1,7 @@
 from apps.public import models
+from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.communication.controller import order_events
 from django.utils import timezone
-from apps.communication.controller.email_class import Email
-from settings.people import Tom, Dan
 
 def getOrders(checkout_id):
   try:
@@ -20,11 +19,14 @@ def getOrders(checkout_id):
     return orders
 
   except Exception as e:
-    Email(message="error in getOrders: "+str(e)).sendTo(Tom.email)
+    ExceptionHandler(e, "in order_class.getOrders")
     return []
 
 def createFromCart(cart):
+  from apps.communication.controller.email_class import Email
+  from settings.people import Tom, Dan
   from apps.public.controller.cart_class import Cart
+
   orders = []
 
   try:
@@ -46,7 +48,7 @@ def createFromCart(cart):
         order.save()
 
   except Exception as e:
-    Email(message="error in craeteFromCart: "+str(e)).sendTo(Tom.email)
+    ExceptionHandler(e, "in order_class.createFromCart")
 
   return orders
 

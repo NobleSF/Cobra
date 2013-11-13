@@ -1,8 +1,7 @@
 from apps.public import models
+from apps.admin.utils.exception_handling import ExceptionHandler
 from django.utils import timezone
 from datetime import timedelta
-from apps.communication.controller.email_class import Email
-from settings.people import Tom
 from apps.public.controller.promotion_rules import discount_for_cart_promotion
 
 def cleanupCarts():
@@ -20,10 +19,7 @@ def cleanupCarts():
             item.delete()
 
   except Exception as e:
-    Email(message="error on cart cleanup: "+str(e)).sendTo(Tom.email)
-    return e
-  else:
-    return True
+    ExceptionHandler(e, "error on cart cleanup")
 
 # based on https://github.com/bmentges/django-cart
 class Cart(object):

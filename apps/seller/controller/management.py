@@ -2,11 +2,10 @@ from django.http import HttpResponse
 from django.utils import simplejson, timezone
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from apps.admin.controller.decorator import access_required
+from apps.admin.utils.decorator import access_required
+from apps.admin.utils.exception_handling import ExceptionHandler
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-from settings.people import Tom
-from apps.communication.controller.email_class import Email
 
 @access_required('seller')
 def home(request):
@@ -16,7 +15,7 @@ def home(request):
     seller = Seller.objects.get(id=request.session['seller_id'])
     context = {'seller': seller}
   except Exception as e:
-    Email(message="error on seller home: "+str(e)).sendTo(Tom.email)
+    ExceptionHandler(e, "in management.home")
     context = {'exception': e}
 
   return render(request, 'management/home.html', context)
@@ -38,7 +37,7 @@ def products(request):
 
     context = {'seller': seller, 'products': products}
   except Exception as e:
-    Email(message="error on seller products page: "+str(e)).sendTo(Tom.email)
+    ExceptionHandler(e, "in management.products")
     context = {'exception': e}
 
   return render(request, 'management/products.html', context)
@@ -55,7 +54,7 @@ def orders(request):
     context = {'seller': seller, 'products': sold_products}
 
   except Exception as e:
-    Email(message="error on seller orders page: "+str(e)).sendTo(Tom.email)
+    ExceptionHandler(e, "in management.products")
     context = {'exception': e}
 
   return render(request, 'management/orders.html', context)
