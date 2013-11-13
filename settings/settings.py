@@ -184,6 +184,9 @@ DEBUG_TOOLBAR_CONFIG = {
   #'ENABLE_STACKTRACES' : True,
 }
 
+RAVEN_CONFIG = {
+  'dsn': 'https://f590888e182a4110b137b51e58352072:b4289579833c4f47950a36fd340746b3@app.getsentry.com/12262',
+}
 ############## END 3RD PARTY SERVICES ##################
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
@@ -330,6 +333,9 @@ INSTALLED_APPS = (
   # Uncomment the next line to enable admin documentation:
   # 'django.contrib.admindocs',
 )
+if PRODUCTION:
+  INSTALLED_APPS += ('raven.contrib.django.raven_compat',) #Sentry
+
 if not (PRODUCTION or STAGE or DEMO):
   INSTALLED_APPS += ('debug_toolbar',)
 
