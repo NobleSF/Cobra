@@ -7,10 +7,11 @@
       Everything
     </li>
 
-    {% for category in categories %}
+    {% for parent, children in categories.items %}
       <li class='title'
-          data-category='{{ category }}'>
-        {{ category }}
+          data-category='{{ parent }}'
+          >
+        {{ parent }}
       </li>
     {% endfor %}
 
