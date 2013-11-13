@@ -32,13 +32,16 @@ def sendSMS(message, to_number, priority='1'): #using Telerivet
     response_content = json.loads(response.content) #dict of response content
 
   except Exception as e:
-    return "send error: " + str(e)
+    ExceptionHandler(e, "in sms.sendSMS-A")
+    return None
 
   else:
     if int(response.status_code) is 200:
       return saveSMS(response_content) #responds with SMS object or exception str
     else:
-      return "bad request or possible Telerivet error"
+      e = Exception('bad request or possible Telerivet error')
+      ExceptionHandler(e, "in sms.sendSMS-B")
+      return None
 
 @postpone #cannot return a value, handle errors internally
 def sendSMSForOrder(message, to_number, order, priority='1'):
