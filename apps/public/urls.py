@@ -3,6 +3,7 @@ from controller import home, checkout, product, store
 
 urlpatterns = patterns('',
   #home (site homepage) url defined in anou/urls.py
+  url(r'^load_products$', home.loadProducts, name='load products'),
   url(r'^about$', home.about, name='about'),
 
   # product page at /product/123

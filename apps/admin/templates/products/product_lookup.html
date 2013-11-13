@@ -3,11 +3,32 @@
 {% block javascript %}
   <script>
     //auto select-all on click
-    $("input,textarea").on("click", function () {
+    $('input,textarea').on('click', function(){
       $(this).select();
+    });
+
+    $('#etsy-info-btn').on('click', function(){
+      $('#etsy-info').show();
+      $('#ebay-info').hide();
+    });
+    $('#ebay-info-btn').on('click', function(){
+      $('#ebay-info').show();
+      $('#etsy-info').hide();
     });
   </script>
 {% endblock javascript %}
+
+{% block css %}
+  <style>
+    #etsy-info, #ebay-info{
+      display: none;
+      width: 100%;
+      height: 1000px;
+    }
+    #etsy-info-btn{}
+    #ebay-info-btn{}
+  </style>
+{% endblock css %}
 
 {% block content %}
   {% load url from future %}
@@ -72,7 +93,10 @@ Product Photos:
 {% endfor %}
 
 Information:
-<textarea style="width: 100%; height: 1000px;">
+<button id='etsy-info-btn' class='btn'>Etsy</button>
+<button id='ebay-info-btn' class='btn'>Ebay</button>
+
+<textarea id='etsy-info'>
 This item was crafted in {{ product.seller.city }}, {{ product.seller.country.name }} and posted by the members of {{ product.seller.name }} using Anou's online-mobile platform.
 
 
@@ -111,6 +135,70 @@ We'll issue full refunds for any reason. We'll even cover the return shipping!
 Note:
 This item was posted by {{ product.seller.name }} in {{ product.seller.city }}, {{ product.seller.country.name }} using Anou's mobile-online platform. To learn more, review our policy page.
 </textarea>
-{% endif %}
 
+<textarea id='ebay-info'>
+<div style='text-align: center; margin: auto;'>
+  <img src="http://s3.amazonaws.com/anou/images/Anou_logo_80x50.png" title='anou-logo'>
+
+  <h2>Directly Connecting You With Artisans Across Morocco</h2>
+
+  <p>When you buy this item, you will buy directly from {{ product.seller.name }}. This item and the following information was posted for sale by {{ product.seller.name }} in {{ product.seller.city }}, {{ product.seller.country.name }} using Anou's online-mobile platform.</p>
+
+  <div style='text-align: center; margin: auto; max-width: 800px'>
+    {% for photo in product.photos.all %}
+      <img src='{{ photo.product_size }}'>
+    {% endfor %}
+  </div>
+
+  <h2 style='padding-top:50px'>
+    This {{ product.name }} Was Handmade By:
+  </h2>
+  <img src='{{ product.artisan.image.headshot }}'>
+  <h4>{{ product.artisan.name }}</h4>
+  <p>{{ product.artisan.description }}</p>
+
+  <h2 style='padding-top:50px'>
+    This {{ product.name }} Was Handmade With:
+  </h2>
+
+  {% for material in product.materials %}
+    <img src='{{ material.image.peephole }}'>
+    <h4>{{ material.name }}</h4>
+    <p>{{ material.description }}</p>
+  {% endfor %}
+
+  {% for tool in product.tools %}
+    <img src='{{ tool.image.peephole }}'>
+    <h4>{{ tool.name }}</h4>
+    <p>{{ tool.description }}</p>
+  {% endfor %}
+
+  <h2 style='padding-top:50px'>
+    Learn More About {{ product.artisan.name }}'s Cooperative: {{ product.seller.name }}
+  </h2>
+  <p>{{ product.seller.bio }}</p>
+
+  <h2 style='padding-top:50px'>
+    Anou Has Been Featured By:
+  </h2>
+
+  <ul style="list-style-type:none;">
+
+    <li style="display:inline; padding: 20px;">
+      <img src="http://res.cloudinary.com/hork5h8x1/image/upload/c_fit,w_170/v1383764158/pc_1_tgowq3.jpg">
+    </li>
+
+    <li style="display:inline; padding: 20px;">
+      <img src="http://res.cloudinary.com/hork5h8x1/image/upload/c_fit,w_170/v1383764197/ted_dark_200x200_1_mwjzws.jpg">
+    </li>
+
+    <li style="display:inline; padding: 20px;">
+      <img src="http://res.cloudinary.com/hork5h8x1/image/upload/c_fit,w_170/v1383764222/wamda-2-0-profile_1_nhcnwm.jpg"/>
+    </li>
+  </ul>
+
+</div>
+</textarea>
+
+{% endif %}
 {% endblock content %}
