@@ -73,11 +73,26 @@ class AssetForm(forms.Form):
                       attrs={'class':"description autosave"}),
                       required=False)
 
-  category    = forms.ModelChoiceField(
-                  widget=forms.Select(
-                    attrs={'class':"category autosave"}),
-                    queryset=Category.objects.all(),
-                    empty_label="Category:")
+  # choices must be formatted like [('group_title',(('1','opt1'),('2','opt2'))),]
+  CATEGORY_ITEMS = []
+  parent_categories = [c for c in Category.objects.all() if c.is_parent_category]
+  for parent in parent_categories:
+    sub_cats = ((str(parent.id),'other %s' % parent.name),)
+    for sub in parent.sub_categories.all():
+      keyword_string = " (%s)" % sub.keywords if sub.keywords else ""
+      sub_cats = ((str(sub.id), "%s%s" % (sub.name,keyword_string)),) + sub_cats
+
+    parent_keyword_string = " (%s)" % parent.keywords if parent.keywords else ""
+    group = ("%s%s" % (parent.name, parent_keyword_string), sub_cats)
+    CATEGORY_ITEMS.append(group)
+
+  CATEGORY_ITEMS = [('','Category: None')] + CATEGORY_ITEMS
+
+  category    = forms.ChoiceField(
+                  widget=forms.Select(attrs={'class':"category autosave"}),
+                  choices = CATEGORY_ITEMS,
+                  required = False)
+
   phone       = forms.CharField(
                   widget=NumberInput(
                     attrs={'class':"phone autosave"}),

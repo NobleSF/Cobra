@@ -12,7 +12,7 @@
               {% if forloop.counter0 >= 50 %}
                 load-me-later
               {% endif %}'
-           data-category='{{ product.category }}'
+           data-category='{{ product.parent_category.name }}'
            data-order='{{ forloop.counter0 }}'
            data-product-id='{{ product.id }}'>
         {% if forloop.counter0 < 50 %}

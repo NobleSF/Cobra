@@ -36,4 +36,10 @@ def product_tag(product):
 @register.inclusion_tag('home/search_bar.html')
 def search_bar_tag(search_keywords=None):
   from apps.admin.models import Category
-  return {'categories': Category.objects.all()}
+  categories = {}
+
+  parent_categories = [c for c in Category.objects.all() if c.is_parent_category]
+  for parent in parent_categories:
+    categories[parent.name] = []#[sub.name for sub in parent.sub_categories.all()]
+
+  return {'categories': categories}

@@ -64,14 +64,14 @@ class Seller(models.Model):
     products = self.product_set.filter(approved_at__lte=timezone.now())
     categories = []
     for product in products:
-      if product.category.name not in categories:
-        categories.append(product.category.name)
+      if product.parent_category not in categories:
+        categories.append(product.parent_category)
     return categories
 
   @property
   def categories_name_string(self):
     try:
-      names_list= self.categories
+      names_list = [c.name for c in self.categories]
       if len(names_list) > 2:
         return ", and ".join(", ".join(names_list).rsplit(", ",1))
       else:
@@ -287,9 +287,21 @@ class Product(models.Model):
     except: return ''
 
   @property
+  def parent_category(self):
+    try:
+      category = self.assets.filter(ilk='product')[0].categories.all()[0]
+      if category.is_parent_category:
+        return category
+      else:
+        return category.parent_category
+    except: return ''
+
+  @property
   def category(self):
-    try: return  self.assets.filter(ilk='product')[0].categories.all()[0]
-    except: return None
+    try:
+      return self.assets.filter(ilk='product')[0].categories.all()[0]
+    except:
+      return None
 
   @property
   def rating(self):#overall rating
