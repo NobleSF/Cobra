@@ -12,8 +12,8 @@ def asset_tag(asset_form, asset=None):
     asset_form.fields["description"].initial    = asset.description
     asset_form.fields["description_ol"].initial = asset.description_ol
     asset_form.fields["phone"].initial          = asset.phone
-    if asset.categories.all():
-      asset_form.fields["category"].initial     = asset.categories.all()[0]
+    if asset.categories.count():
+      asset_form.fields["category"].initial     = asset.categories.all()[0].id
 
   except Exception as e:
     asset = None
