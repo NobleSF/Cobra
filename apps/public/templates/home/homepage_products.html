@@ -8,12 +8,6 @@
     {% for product in products %}
 
       <div id='product-div-{{ forloop.counter0 }}'
-<<<<<<< HEAD
-           class='span4 product-area'
-           data-category='{{ product.category.name }}'
-           data-order='{{ forloop.counter0 }}'>
-        {% product_tag product %}
-=======
            class='span4 product-area
               {% if forloop.counter0 >= 50 %}
                 load-me-later
@@ -24,7 +18,6 @@
         {% if forloop.counter0 < 50 %}
           {% product_tag product %}
         {% endif %}
->>>>>>> origin/master
       </div>
 
       {% cycle "" "" "</div><div class='product-row row-fluid'>" %}

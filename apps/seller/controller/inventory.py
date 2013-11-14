@@ -51,13 +51,8 @@ def create(request):
     return redirect("%d/edit" % product_object.product.id)
 
   except Exception as e:
-<<<<<<< HEAD
-    Email(message="error creating product: "+str(e)).sendTo(Tom.email)
-    return redirect('seller:home')
-=======
     ExceptionHandler(e, "in inventory.create")
     return redirect('seller:management home')
->>>>>>> origin/master
 
 @access_required('admin or seller')
 def edit(request, product_id):
@@ -98,16 +93,9 @@ def edit(request, product_id):
     return render(request, 'inventory/edit.html', context)
 
   except Exception as e:
-<<<<<<< HEAD
-    try:
-      Email(message="error loading product-edit on "+product_id+": "+str(e)).sendTo(Tom.email)
-    except: pass
-    return redirect('seller:home')
-=======
     error_message = "in inventory.edit with product %s" % str(product_id)
     ExceptionHandler(e, error_message)
     return redirect('seller:management home')
->>>>>>> origin/master
 
 @access_required('seller') #it's the 'r' in crud, but is it even needed?
 def detail(request, product_id):

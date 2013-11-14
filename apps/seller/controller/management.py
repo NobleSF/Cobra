@@ -6,12 +6,7 @@ from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-<<<<<<< HEAD
-from settings.people import Tom
-from apps.communication.controller.email_class import Email
 from apps.seller.models import Seller
-=======
->>>>>>> origin/master
 
 @access_required('seller')
 def home(request):
