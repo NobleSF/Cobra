@@ -77,10 +77,10 @@ class AssetForm(forms.Form):
   CATEGORY_ITEMS = []
   parent_categories = [c for c in Category.objects.all() if c.is_parent_category]
   for parent in parent_categories:
-    sub_categories = ((str(parent.id),'%s other' % parent.name),)
+    sub_cats = ((str(parent.id),'other %s' % parent.name),)
     for sub in parent.sub_categories.all():
-      sub_categories = ((str(sub.id),str(sub.name)),) + sub_categories
-    group = (str(parent), sub_categories)
+      sub_cats = ((str(sub.id), "%s (%s)" % (sub.name,sub.keywords)),) + sub_cats
+    group = ("%s (%s)" % (parent.name, parent.keywords), sub_cats)
     CATEGORY_ITEMS.append(group)
   CATEGORY_ITEMS = [('','Category: None')] + CATEGORY_ITEMS
 
