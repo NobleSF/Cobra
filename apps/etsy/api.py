@@ -12,26 +12,25 @@ class Etsy(object):
   def __init__(self, oauth_shop=None):
     #self.call_headers = {'Content-Type':  'application/json',
     #                     'User-Agent':    'Anou Etsy App'}
-    if oauth_shop:
-      self.requires_auth = True
+    self.requires_auth = True if oauth_shop else False
+
+    if self.requires_auth:
       self.token = oauth.Token(oauth_shop.auth_token, oauth_shop.auth_token_secret)
       self.auth = Auth(self.token)
+
 
   def call(self, uri, method='GET', parameters={}):
     """
     Actually do the request, and raise exception if an error comes back.
     """
-
-    if method is not "POST": #GET, PUT, DELETE
+    if parameters:
       parameters['api_key'] = ETSY['api_key']
+
+    if method is not 'POST': #GET, PUT, DELETE
       uri += "?%s" % urllib.urlencode(parameters) if parameters else ""
 
-    else:
-      pass #need to puth the api_key in parameters still?
-
-    url = ETSY['api_url'] + uri
     print "calling %s at %s" % (method, uri)
-
+    print ("doing auth" if self.requires_auth else "no auth")
 
     if self.requires_auth:
       (response, content) = self.auth.do_oauth_request(uri, method)
@@ -40,6 +39,7 @@ class Etsy(object):
       #return content
 
     else:
+      url = ETSY['api_url'] + uri
       try:
         request = urllib2.Request(url)
         response = urllib2.urlopen(request, timeout=30)

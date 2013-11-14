@@ -36,7 +36,7 @@ class Shop(object):
     login_name = login_name if login_name else self.shop.login_name
 
     etsy = api.Etsy()
-    user_method = "GET"
+    method = "GET"
     uri = "/users/" + (login_name if login_name else str(self.shop.user_id))
 
     data = etsy.call(uri, method)
@@ -57,27 +57,22 @@ class Shop(object):
     """
     https://www.etsy.com/developers/documentation/reference/shop#method_getshop
     """
-    shop_name = shop_name if shop_name else self.shop.shop_name
-
-    etsy = api.Etsy()
     method = "GET"
     uri = "/shops/%s" % (shop_name if shop_name else str(self.shop.shop_id))
 
+    etsy = api.Etsy()
     data = etsy.call(uri, method)
+
     if data['count'] == 1 and data['type'] == 'Shop':
       return data['results'][0]
-
-
-
 
 
   def updateShop(self):
     """
     https://www.etsy.com/developers/documentation/reference/shop#method_updateshop
     """
-    method  = "PUT"
+    method  = 'PUT'
     uri     = '/shops/%s' % self.shop.shop_name
-    etsy    = api.Etsy(self.shop)
 
     parameters = {
       'title':              self.shop.title or self.shop.default_title,
@@ -90,37 +85,19 @@ class Shop(object):
       'policy_additional':  self.shop.policy_additional
     }
 
-    ############## BEGIN MOVE LOGIC TO etsy.call ###############
-
-    #from apps.etsy.controller.oauth import EtsyOAuthClient as Auth
-    #import urllib
-    #from settings.settings import ETSY
-    #import oauth2 as oauth
-    #
-    #self.token = oauth.Token(self.shop.auth_token, self.shop.auth_token_secret)
-    #auth = Auth(self.token)
-    #
-    #if parameters:
-    #  uri += '?api_key=' + ETSY['api_key']
-    #  uri += '&' + urllib.urlencode(parameters)
-    #
-    #print "calling %s at %s" % (method, uri)
-    #
-    #(response, content) = auth.do_oauth_request(uri, method)
-    #print response
-    #print content
-
-    ################ END MOVED TO etsy.call ####################
+    etsy = api.Etsy(self.shop)
+    data = etsy.call(uri, method, parameters)
 
 
-    etsy.call(uri, method, parameters)
-    #if all goes well?
-      #return True
+  def findAllUserAddresses(self):
+    """
+    https://www.etsy.com/developers/documentation/reference/useraddress#method_findalluseraddresses
+    """
+    method  = 'GET'
+    uri     = '/users/%s/addresses' % str(self.shop.user_id)
 
-
-
-
-
+    etsy = api.Etsy(self.shop)
+    data = etsy.call(uri, method)
 
 
 
@@ -154,32 +131,17 @@ class Shop(object):
     """
     https://www.etsy.com/developers/documentation/reference/shop#method_uploadshopbanner
     """
-    method  = "POST"
-    uri     = "shops/%d/appearance/banner" % self.shop.shop_id
+    method  = 'POST'
+    uri     = 'shops/%d/appearance/banner' % self.shop.shop_id
     #image file
-
-
 
 
   def checkPermissions(self):
     """
     https://www.etsy.com/developers/documentation/getting_started/oauth#section_checking_permission_scopes_after_authentication
     """
-    from apps.etsy.controller.oauth import EtsyOAuthClient as OAuth
-    import urllib
-    import oauth2 as oauth
+    method  = 'GET'
+    uri     = '/oauth/scopes'
 
-
-    from settings.settings import ETSY
-
-    etsy = api.Etsy()
-    method = "GET"
-    uri = '/oauth/scopes'
-    uri += '?api_key=' + ETSY['api_key']
-
-    self.token = oauth.Token(self.shop.auth_token, self.shop.auth_token_secret)
-    auth = OAuth(self.token)
-
-    print "calling %s at %s" % (method, uri)
-    (response, content) = auth.do_oauth_request(uri, method)
-    print content
+    etsy = api.Etsy(self.shop)
+    data = etsy.call(uri, method)
