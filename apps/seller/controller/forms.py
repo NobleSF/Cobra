@@ -79,9 +79,13 @@ class AssetForm(forms.Form):
   for parent in parent_categories:
     sub_cats = ((str(parent.id),'other %s' % parent.name),)
     for sub in parent.sub_categories.all():
-      sub_cats = ((str(sub.id), "%s (%s)" % (sub.name,sub.keywords)),) + sub_cats
-    group = ("%s (%s)" % (parent.name, parent.keywords), sub_cats)
+      keyword_string = " (%s)" % sub.keywords if sub.keywords else ""
+      sub_cats = ((str(sub.id), "%s%s" % (sub.name,keyword_string)),) + sub_cats
+
+    parent_keyword_string = " (%s)" % parent.keywords if parent.keywords else ""
+    group = ("%s%s" % (parent.name, parent_keyword_string), sub_cats)
     CATEGORY_ITEMS.append(group)
+
   CATEGORY_ITEMS = [('','Category: None')] + CATEGORY_ITEMS
 
   category    = forms.ChoiceField(
