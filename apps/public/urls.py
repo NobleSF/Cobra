@@ -23,5 +23,6 @@ urlpatterns = patterns('',
   url(r'^checkout/confirmation$', checkout.confirmation, name='confirmation'),
 
   #testing
+  url(r'^product_data', product.product_data, name='product_data'),
   url(r'^test_meta$', home.test_meta, name='test meta'),
 )
