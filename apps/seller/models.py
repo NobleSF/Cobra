@@ -102,7 +102,6 @@ class Asset(models.Model):
   seller        = models.ForeignKey('Seller')
   ilk           = models.CharField(max_length=10)#product,artisan,tool,material
   rank          = models.SmallIntegerField()
-  #todo: give all assets ranks and remove "nullable"
   name          = models.CharField(max_length=50, null=True, blank=True)
   description   = models.TextField(null=True, blank=True)
   image         = models.ForeignKey('Image', null=True, blank=True, on_delete=models.SET_NULL)
@@ -294,7 +293,8 @@ class Product(models.Model):
         return category
       else:
         return category.parent_category
-    except: return ''
+    except:
+      return None
 
   @property
   def category(self):
