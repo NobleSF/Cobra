@@ -58,10 +58,10 @@ def product_data(request=None, version=1):
       'description':            product.description,
       'url':                    product.get_absolute_url(),
 
-      'category':               product.category.name,
-      'keywords':               product.category.keywords,
-      'parent_category':        product.parent_category.name,
-      'parent_keywords':        product.parent_category.keywords,
+      'category':               product.category.name if product.category else "",
+      'keywords':               product.category.keywords if product.category else "",
+      'parent_category':        product.parent_category.name if product.parent_category else "",
+      'parent_keywords':        product.parent_category.keywords if product.parent_category else "",
 
       'price':                  product.display_price,
       'shipping_price':         product.display_shipping_price,
@@ -111,8 +111,8 @@ def product_data(request=None, version=1):
         'name':           artisan.name,
         'title':          artisan.title,
         'description':    artisan.description,
-        'image':          artisan.image.thumb_size,
-        'headshot':       artisan.image.headshot,
+        'image':          artisan.image.thumb_size if artisan.image else None,
+        'headshot':       artisan.image.headshot if artisan.image else None,
       })
     product_data['artisans'] = artisans
 
@@ -123,8 +123,8 @@ def product_data(request=None, version=1):
         'ilk':            utility.ilk,
         'name':           utility.name,
         'description':    utility.description,
-        'image':          utility.image.thumb_size,
-        'peephole':       utility.image.peephole,
+        'image':          utility.image.thumb_size if utility.image else None,
+        'peephole':       utility.image.peephole if utility.image else None,
       })
     product_data['utilities'] = utilities
 
