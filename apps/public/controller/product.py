@@ -52,9 +52,9 @@ def product_data(request=None):
 
   try:
     page = request.GET['page']
-    (start, end) = ((page-1)*100, (page * 100))
+    (start, end) = ((page-1)*50, (page * 50))
   except:
-    (start, end) = (0, 100)
+    (start, end) = (0, 50)
 
   for product in Product.objects.filter(approved_at__lte=timezone.now())[start:end]:
 
