@@ -81,9 +81,9 @@ def product_data(request=None, version=1):
       'seller_name':            product.seller.name,
       'seller_bio':             product.seller.bio,
       'seller_city':            product.seller.city,
-      'seller_country':         product.seller.country.name,
+      'seller_country':         product.seller.country.name if product.seller.country else "",
       'seller_coordinates':     product.seller.coordinates,
-      'seller_image':           product.seller.image.original,
+      'seller_image':           product.seller.image.original if product.seller.image else "",
       'seller_url':             product.seller.get_absolute_url(),
     }
 
