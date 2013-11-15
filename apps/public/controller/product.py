@@ -46,11 +46,17 @@ def home(request, product_id, slug=None):
   return render(request, 'product.html', context)
 
 @cache_page(172800) #cache for 48 hours
-def product_data(request=None, version=1):
+def product_data(request=None):
   from django.utils import timezone
   product_amalgam_bomb = []
 
-  for product in Product.objects.filter(approved_at__lte=timezone.now()):
+  try:
+    page = request.GET['page']
+    (start, end) = ((page-1)*100, (page * 100))
+  except:
+    (start, end) = (0, 100)
+
+  for product in Product.objects.filter(approved_at__lte=timezone.now())[start:end]:
 
     product_data = {
       'id':                     product.id,
