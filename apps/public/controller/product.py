@@ -51,10 +51,11 @@ def product_data(request=None):
   product_amalgam_bomb = []
 
   try:
-    page = request.GET['page']
+    page = int(request.GET['page'])
     (start, end) = ((page-1)*50, (page * 50))
-  except:
+  except Exception as e:
     (start, end) = (0, 50)
+    ExceptionHandler(e)
 
   for product in Product.objects.filter(approved_at__lte=timezone.now())[start:end]:
 
