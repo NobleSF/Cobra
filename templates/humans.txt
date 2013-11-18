@@ -1,14 +1,14 @@
 /* TEAM */
 
 Founder: Dan Driscoll
-Contact: dan 'at 'theanou.com
-Residence: Imouzzer-Kandar, Morocco
-From: San Diego, California, USA
+Contact: dan@theanou.com
+Residence: Morocco
+Origin: San Diego, California, USA
 
 Technical Director: Tom Counsell
-Contact: tom 'at' theanou.com
+Contact: tom@theanou.com
 Residence: Figuig, Morocco
-From: Indianapolis, Indiana, USA
+Origin: Indianapolis, Indiana, USA
 
 /* SPECIAL THANKS */
 
