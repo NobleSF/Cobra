@@ -7,3 +7,104 @@ Anou
 10131 Toledo Rd.
 Spring Valley, CA
 91977
+
+Anou's Open Product Database:
+
+www.theanou.com/product_data
+returns a json response with the public data for 50 products
+products are paginated with 50 products on each 'page'
+retreive more product data with the GET parameter 'page'
+example: www.theanou.com/product_data?page=2
+
+the data responses are cached for 48 hours, but you can add any custom 'version' parameter to generate a new copy at any time
+example: http://www.theanou.com/product_data?page=1&version=TomsCopyFrom2AM
+this custom version will also cache for 48 hours
+
+the json format is defined here:
+
+{
+	'products':[
+		'id': int,
+		'name': string,
+		'description': string,
+		'url': uri_string,
+
+		'category': string,
+		'keywords': string,
+		'parent_category': string,
+		'parent_keywords': string,
+
+		'price': int,
+		'shipping_price': int,
+
+		'ratings':
+			{
+				'Photography': int,
+				'Appeal': int,
+				'Price': int,
+			},
+		'avg_rating': int,
+
+		'width': int,
+		'height': int,
+		'length': int,
+		'weight': int,
+
+		'humanized_metric_dimensions': string,
+		'humanized_english_dimensions': string,
+
+		'seller_id': int,
+		'seller_name': string,
+		'seller_bio': string,
+		'seller_city': string,
+		'seller_country': string,
+		'seller_coordinates': string,
+		'seller_image': string,
+		'seller_url': uri_string,
+
+		'colors':
+			[
+				{
+					'hex_value': string,
+					'name': string,
+				},
+				...
+			],
+
+		'photos':
+			[
+				{
+					'rank': int,
+					'original': url,
+					'thumbnail': url,
+					'pinkynail': url,
+				},
+				...
+			],
+
+		'artisans':
+			[
+				{
+					'name': string,
+					'title': string,
+					'description': string,
+					'image': url,
+					'headshot': url,
+				},
+				...
+			],
+
+		'utilities':
+			[
+				{
+					'ilk': string,
+					'name': string,
+					'description': string,
+					'image': url,
+					'peephole': url,
+				},
+				...
+			],
+	],
+	...
+}
