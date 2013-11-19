@@ -9,13 +9,13 @@
 
       <div id='product-div-{{ forloop.counter0 }}'
            class='span4 product-area
-              {% if forloop.counter0 >= 50 %}
+              {% if forloop.counter0 >= 6 %}
                 load-me-later
               {% endif %}'
            data-category='{{ product.parent_category.name }}'
            data-order='{{ forloop.counter0 }}'
            data-product-id='{{ product.id }}'>
-        {% if forloop.counter0 < 50 %}
+        {% if forloop.counter0 < 6 %}
           {% product_tag product %}
         {% endif %}
       </div>

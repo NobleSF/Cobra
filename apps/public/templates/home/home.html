@@ -3,7 +3,7 @@
 {% load cache %}
 {% load home_inclusion_tags %}
 
-{% cache 86400 home_header %}
+{% cache 172800 home_header %}
 {% block title %}{{ block.super }}{% endblock title %}
 {% block description %}{{ block.super }}{% endblock description %}
 
@@ -35,7 +35,7 @@
 {% endblock header_link_2 %}
 
 {% block content %}
-{% cache 86400 home_content %} {# cache for 24 hours minus 1 minute = 86400 sec #}
+{% cache 172800 home_content %} {# cache for 48 hours #}
   <div class='row-fluid'>
     <div class='span8'>
       <a href="http://helloanou.wordpress.com/2013/11/18/anou-and-disaster-relief-efforts-in-the-philippines/"

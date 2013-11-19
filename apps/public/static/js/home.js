@@ -14,7 +14,7 @@ $(function(){//on page load
 
 //LOAD MORE PRODUCTS
 function loadMoreProducts(){
-  var product_ids = $('.product-area.load-me-later').slice(0,50)
+  var product_ids = $('.product-area.load-me-later').slice(0,21)
         .map(function(){return $(this).attr('data-product-id');}).get();
 
   var url = $('#load-products-url').val();
