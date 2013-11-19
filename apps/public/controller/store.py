@@ -11,12 +11,12 @@ def home(request, seller_id):
     store = Seller.objects.get(id=seller_id)
     store.artisans = store.asset_set.filter(ilk='artisan')
 
-    unsold_products   = store.product_set.filter(sold_at=None)
-    approved_products = unsold_products.filter(approved_at__lte=timezone.now())
-    active_products   = approved_products.filter(deactive_at=None)
-    ordered_products  = active_products.order_by('approved_at').reverse()
+    products = (store.product_set.filter(sold_at=None,
+                                         approved_at__lte=timezone.now(),
+                                         deactive_at=None)
+                .order_by('approved_at').reverse())
 
-    context = {'store':store, 'products':ordered_products}
+    context = {'store':store, 'products':products}
 
   except Seller.DoesNotExist:
     raise Http404

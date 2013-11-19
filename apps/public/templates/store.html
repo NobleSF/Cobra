@@ -132,11 +132,21 @@
         </div>
       </div>
 
+      <input id='load-products-url' type='hidden' value='{% url 'load products' %}'>
+
       <div class='product-row row-fluid'>
         {% for product in products %}
 
-          <div class='span6 product-area {% cycle "pos1" "pos2" %}'>
-            {% product_tag product %}
+          <div  class='span6 product-area {% cycle "pos1" "pos2" %}
+                  {% if forloop.counter0 >= 6 %}
+                    load-me-later
+                  {% endif %}'
+                data-order='{{ forloop.counter0 }}'
+                data-product-id='{{ product.id }}'>
+
+            {% if forloop.counter0 < 6 %}
+              {% product_tag product %}
+            {% endif %}
           </div>
 
           {% cycle "" "</div><div class='product-row row-fluid'>" %}
