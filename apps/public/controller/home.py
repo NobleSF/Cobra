@@ -7,7 +7,7 @@ from django.views.decorators.cache import cache_page
 def home(request):
   return render(request, 'home/home.html')
 
-@cache_page(86400) #cache for 24 hours just like homepage in-template cache
+@cache_page(176400) #49hrs an hour over homepage in-template cache
 def loadProducts(request):
   from apps.seller.models import Product
   from django.template.loader import render_to_string
