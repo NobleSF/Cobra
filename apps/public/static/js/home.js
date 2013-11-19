@@ -59,9 +59,11 @@ function addHoverAnimation(selection){
       }
     },
     function(){//on mouseleave
-      $(this).find('.hover-show').each(function(){
-        $(this).fadeOut();
-      });
+      if(! navigator.userAgent.match(/(iPhone|iPod|iPad)/i)){
+        $(this).find('.hover-show').each(function(){
+          $(this).fadeOut();
+        });
+      }
     }
   );
 }
