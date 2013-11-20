@@ -1,46 +1,12 @@
 $(function(){//on page load
 
-  //LAZY PHOTO LOADING
-  $('img').unveil(400);
+  //LAZY PRODUCT LOADING
+  $('.lazy-load').lazyload();
+
   //HOVER ANIMATION
   addHoverAnimation($('.product'));
 
-  //LOAD MORE PRODUCTS
-  if ($('.product-area.load-me-later').length > 0){
-    load_products_interval_id = setInterval(function(){loadMoreProducts()}, 2000);
-  }
-
 });
-
-//LOAD MORE PRODUCTS
-function loadMoreProducts(){
-  var product_ids = $('.product-area.load-me-later').slice(0,21)
-        .map(function(){return $(this).attr('data-product-id');}).get();
-
-  var url = $('#load-products-url').val();
-  $.ajax({
-    type: "GET",
-    url: url,
-    data: {product_ids:product_ids.join()},
-    async: false
-  })
-  .done(function(response){
-    for (var key in response) {
-      if (response.hasOwnProperty(key)){
-        var product_area = $(".product-area[data-product-id='"+key+"']")
-        $(product_area).html(response[key]);
-        $(product_area).find('img').unveil(400);
-        addHoverAnimation($(product_area).find('.product'));
-        $(product_area).removeClass('load-me-later');
-      }
-    }
-  })
-  .always(function(){
-    if ($('.product-area.load-me-later').length == 0){
-      clearInterval(load_products_interval_id);
-    }
-  });
-}
 
 //BOOTSTRAP CAROUSEL
 $('#video-image').on('click', function(){
@@ -83,7 +49,6 @@ function sortProductsBy(category){
   $('#product-container .product-area').each(function(){
     if ($(this).attr('data-category') == category){
       $(this).appendTo($('#product-sorting-container'))
-      $(this).find('img').trigger('unveil');
     }
   });
   //then move all the rest to follow behind
@@ -99,7 +64,7 @@ function sortProductsBy(category){
       $(this).appendTo($('#product-container .product-row')[row_number])
     });
   }else{
-    next_position = 0;
+    var next_position = 0;
     //now put them all back into rows - they are already in order
     $('#product-sorting-container .product-area').each(function(){
       row_number = Math.floor(next_position/3);
@@ -107,16 +72,72 @@ function sortProductsBy(category){
       next_position++;
     });
   }
+  $('.lazy-load:lt(5)').trigger('loadnow');
 
   //this_category = $(this).attr('data-category');
   //this_position = $(this).attr('data-order');
 
   if (category == 'everything'){
-    $('.product-area').slideDown();
+    $('.product-area').show();
   }else{
-    $('.product-area[data-category='+category+']').slideDown();
+    $('.product-area[data-category='+category+']').show();
   }
 }
+
+// Lazy Load products based on jQuery Unveil at http://luis-almeida.github.com/unveil
+;(function($) {
+  $.fn.lazyload = function(given_threshold) {
+
+    var $w = $(window),
+        threshold = given_threshold || 0, //default visibility threshold of 0 pixels
+        containers = this,
+        url = $('#load-products-url').val(),
+        loaded, inview, product_areas, product_ids;
+
+    this.on("loadnow", function() {
+      //get unloaded products
+      product_areas = $(this).children('.unloaded').removeClass('unloaded');
+
+      if (product_areas.length){ //if any products, load them
+        product_ids = product_areas.map(function(){ //get id list
+          return $(this).attr('data-product-id');
+        }).get();
+
+        $.ajax({type:"GET", url:url, data:{product_ids:product_ids.join()}})
+        .done(function(response){
+          for (var key in response){ //for each (id, html) in response
+            if (response.hasOwnProperty(key)){
+              var product_area = $(".product-area[data-product-id='"+key+"']")
+              $(product_area).html(response[key]);
+              $(product_area).addClass('loaded'); //mark loaded
+              addHoverAnimation($(product_area).find('.product'));
+            }
+          }
+        })
+        .fail(function(){
+          product_areas.addClass('unloaded');
+        });
+      }
+    }); //end loading function
+
+    function lazyload(){ //find objects within range that need loading
+      inview = containers.filter(function() {
+        var $e = $(this),
+            wt = $w.scrollTop(),
+            wb = wt + $w.height(),
+            et = $e.offset().top,
+            eb = et + $e.height();
+        return eb >= wt - threshold && et <= wb + threshold;
+      });
+      inview.trigger("loadnow"); //always keep triggering, products can hop in and out
+    }
+
+    $w.scroll(lazyload); //run on window scroll
+    $w.resize(lazyload); //run on window resize
+    lazyload(); //run right now
+    return this;
+  };
+})(window.jQuery);
 
 // SUBSCRIBING FUNCTIONS
 //show submit button if using form

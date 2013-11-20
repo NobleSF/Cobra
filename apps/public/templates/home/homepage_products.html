@@ -4,23 +4,25 @@
 <div id='product-container'>
   <input id='load-products-url' type='hidden' value='{% url 'load products' %}'>
 
-  <div class='product-row row-fluid'>
+  <div class='product-row row-fluid lazy-load'>
     {% for product in products %}
 
       <div id='product-div-{{ forloop.counter0 }}'
            class='span4 product-area
-              {% if forloop.counter0 >= 6 %}
-                load-me-later
+              {% if forloop.counter0 < 3 %}
+                loaded
+              {% else %}
+                unloaded
               {% endif %}'
            data-category='{{ product.parent_category.name }}'
            data-order='{{ forloop.counter0 }}'
            data-product-id='{{ product.id }}'>
-        {% if forloop.counter0 < 6 %}
+        {% if forloop.counter0 < 3 %}
           {% product_tag product %}
         {% endif %}
       </div>
 
-      {% cycle "" "" "</div><div class='product-row row-fluid'>" %}
+      {% cycle "" "" "</div><div class='product-row row-fluid lazy-load'>" %}
     {% endfor %}
   </div>
 </div>

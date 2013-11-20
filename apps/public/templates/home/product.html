@@ -1,5 +1,4 @@
 {% load url from future %}
-{% load static %}
 {% spaceless %}
 
 <div class='product' data-url="{{ product.get_absolute_url }}">
@@ -17,8 +16,8 @@
 
     <div class='photo'>
       <img alt='{{ product.title }}'
-           src='{% get_static_prefix %}images/loader.gif'
-           data-src='{{ product.photo.thumb_size }}'>
+           src='{{ product.photo.thumb_size }}'
+           width='375' height='281'>
     </div>
 
   </a>
