@@ -262,16 +262,14 @@
           </tr>
         </table>
       </div>
-
       {% cycle "" "</div><div id='utilities' class='row-fluid'>"%}
-
     {% endfor %}
+  </div></div>
+  <hr>
 
 {% endcache public_product_content %}
 
-{% cache 86400 public_product_extras product.id %}
-  </div></div>
-  <hr>
+{% cache 432000 public_product_extras product.id %}
 
   {% load home_inclusion_tags %}
   <div id='store'>

@@ -4,9 +4,6 @@ $(function(){//on page load
     interval: false
   })
 
-  //PRODUCT PHOTO LOADING
-  $("img").unveil();
-
 });
 
 $('#unapprove').click(function(){
@@ -34,8 +31,10 @@ $('.product').hover(
     }
   },
   function(){//on mouseleave
-    $(this).find('.hover-show').each(function(){
-      $(this).fadeOut();
-    });
+    if(! navigator.userAgent.match(/(iPhone|iPod|iPad)/i)){
+      $(this).find('.hover-show').each(function(){
+        $(this).fadeOut();
+      });
+    }
   }
 );

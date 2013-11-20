@@ -1,7 +1,7 @@
 $(function(){//on page load
 
   //LAZY PRODUCT LOADING
-  $('.lazy-load').lazyload();
+  $('.lazy-load').lazyload(800);
 
   //HOVER ANIMATION
   addHoverAnimation($('.product'));
