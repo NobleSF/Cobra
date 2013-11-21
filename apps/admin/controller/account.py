@@ -122,8 +122,8 @@ def login(request, next=None):
     form = AccountLoginForm(request.POST)
     try:
       account = None
-      username = request.POST['username']
-      password = process_password(request.POST['password'])
+      username = request.POST.get('username', '')
+      password = process_password(request.POST.get('password', ''))
 
       #login with phone number
       if not account:

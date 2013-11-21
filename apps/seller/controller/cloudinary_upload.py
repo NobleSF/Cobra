@@ -18,6 +18,8 @@ def completeUpload(request):#for cloudinary to post info on completed uploads
       upload.url = request_data.get('url')
       upload.save()
 
+  except Upload.DoesNotExist as e:
+    ExceptionHandler(e, "in cloudinary_upload.completeUpload, upload public id %s does not exist" % request_data.get('public_id'))
   except Exception as e:
     ExceptionHandler(e, "in cloudinary_upload.completeUpload")
     return HttpResponse(str(e), status=500)

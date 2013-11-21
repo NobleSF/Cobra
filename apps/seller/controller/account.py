@@ -124,7 +124,7 @@ def saveAsset(request): #ajax get requests only, create or update asset
                       )
 
     element = request.GET.get('name')
-    value   = request.GET.get('value')
+    value   = request.GET.get('value', None)
 
     if element == 'name':
       asset.name = value
@@ -138,7 +138,8 @@ def saveAsset(request): #ajax get requests only, create or update asset
       asset.phone = value
     elif element == 'category':
       asset.categories.clear()
-      asset.categories.add(Category.objects.get(id=value))
+      if value:
+        asset.categories.add(Category.objects.get(id=value))
 
     asset.save()
     response = {'asset_id':asset.id, 'get':request.GET}
