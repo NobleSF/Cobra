@@ -31,3 +31,27 @@ Brahim = People(info = (
           '212673753163',
         )
       )
+
+Rabha = People(info = (
+          'Rabha Akkaouai',
+          'Trainer',
+          'tounfite.products@gmail.com',
+          '212623045998',
+        )
+      )
+
+Mustapha = People(info = (
+          'Mustapha Chaouai',
+          'Trainer',
+          'oued.ifrane.nahda@gmail.com',
+          '212637637569',
+        )
+      )
+
+Kenza = People(info = (
+          'Kenza',
+          'Trainer',
+          'kenza.tithrite1@gmail.com',
+          '0637637565',
+        )
+      )

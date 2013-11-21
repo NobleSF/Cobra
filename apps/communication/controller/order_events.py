@@ -29,7 +29,9 @@ def communicateOrdersCreated(orders):
       #notify Brahim
       try:
         order.seller_msg = seller_msg.replace('\r\n', '<br>')
-        Email('order/created_copy_director', order).sendTo(people.Brahim.email)
+        everybody = [people.Tom.email, people.Dan.email, people.Brahim.email,
+                     people.Rabha.email, people.Kenza.email, people.Mustapha.email]
+        Email('order/created_copy_director', order).sendTo(everybody)
       except Exception as e:
         ExceptionHandler(e, "in order_events.communicateOrdersCreated-B")
 
