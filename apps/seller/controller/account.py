@@ -40,7 +40,7 @@ def edit(request):
 
       #fields only editable by admin, overwrite their values
       if 'admin_id' not in request.session:
-        for fieldname in ['name', 'username',
+        for fieldname in ['name',
                           'bio', 'city', 'coordinates',
                           'bank_name', 'bank_account']:
           POST[fieldname] = eval("seller."+fieldname)
@@ -54,7 +54,6 @@ def edit(request):
           seller_data = seller_form.cleaned_data
 
           seller.account.name         = seller_data['name']
-          seller.account.username     = seller_data['username']
           seller.account.email        = seller_data['email']
           seller.account.phone        = seller_data['phone']
           seller.account.bank_name    = seller_data['bank_name']
@@ -81,7 +80,6 @@ def edit(request):
 
     else: #not POST
       seller_form = SellerEditForm()
-      seller_form.fields['username'].initial      = seller.username
       seller_form.fields['email'].initial         = seller.email
       seller_form.fields['phone'].initial         = seller.phone
 
@@ -98,7 +96,7 @@ def edit(request):
 
       #disable fields only editable by admin
       if 'admin_id' not in request.session:
-        for fieldname in ['name', 'username']:
+        for fieldname in ['name',]:
           seller_form.fields[fieldname].widget.attrs['disabled'] = True
 
     context['seller_form'] = seller_form

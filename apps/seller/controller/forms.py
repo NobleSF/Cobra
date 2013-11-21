@@ -11,7 +11,6 @@ class SellerEditForm(forms.Form):
   from apps.admin.models import Country
 
   name          = forms.CharField()
-  username      = forms.CharField()
   email         = forms.EmailField(required=False)
   phone         = forms.CharField(required=False)
 
