@@ -52,10 +52,9 @@ def product_data(request=None):
 
   try:
     page = int(request.GET['page'])
-    (start, end) = ((page-1)*50, (page * 50))
+    (start, end) = ((page-1)*10, (page * 10))
   except Exception as e:
-    (start, end) = (0, 50)
-    ExceptionHandler(e)
+    (start, end) = (0, 10)
 
   for product in Product.objects.filter(approved_at__lte=timezone.now())[start:end]:
 
