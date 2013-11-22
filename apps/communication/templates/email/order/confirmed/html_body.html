@@ -1,11 +1,67 @@
-<p>
-  The artisan that made your product has confirmed your order and is now preparing to ship the item.
-</p>
+{# data = order #}
 
-<p>
-  You'll be notified again soon when the artisan ships the product.
-</p>
+{% extends "email_base.html" %}
+{% load url from future %}
 
-<p>
-  For more information,<!-- please check out our FAQ section at www.theanou.com/faq, or simply--> contact us at hello@theanou.com.
-</p>
+{% block snippet %}
+  Thank you for your purchase at Anou!
+{% endblock snippet %}
+
+{% block headline %}
+  Item Confirmed
+{% endblock headline %}
+
+{% block tagline %}
+  <a href="http://www.theanou.com/checkout/confirmation?checkout_id={{ data.cart.checkout_id }}">
+    view order online
+  </a>
+{% endblock tagline %}
+
+{% block body %}
+
+  Hi {{ data.cart.name }},<br>
+  <br>
+  Your order for the
+  <a href="http://www.theanou.com{{ data.products.all.0.get_absolute_url }}">
+    {{ data.products.all.0.name }}
+    from
+    {{ data.products.all.0.seller.city }}, Morocco
+  </a>
+  was just confirmed by
+  <a href="http://www.theanou.com{{ data.products.all.0.seller.get_absolute_url }}">
+    {{ data.products.all.0.seller.name }}
+  </a>
+  and they are preparing to send it to you.
+  We will notify you again when they send it.<br>
+  <br>
+  That should be soon, barring any banking holidays or family weddings (those can last a couple days). We also hope to provide you with the package tracking number, but not every post office provides them.<br>
+  <br>
+  Item Confirmed:<br>
+  <table>
+      <tr>
+        <td>
+          <a href="http://www.theanou.com{{ data.products.all.0.get_absolute_url }}">
+            <img src="{{ data.products.all.0.photo.pinky_size }}" width="75" height="75">
+          </a>
+        </td>
+        <td valign="middle">
+          <a href="http://www.theanou.com{{ data.products.all.0.get_absolute_url }}">
+            {{ data.products.all.0.name }}
+            from
+            {{ data.products.all.0.seller.city }}, Morocco
+          </a>
+        </td>
+      </tr>
+      {{ data.products.0.name }}
+  </table>
+{% endblock body %}
+
+{% block closing %}
+  If you are having anything short of the most satisfying experience,
+  please reply to this email or write to us at
+  <a href="mailto:hello@theanou.com">hello@theanou.com</a>.
+  We would love to hear from you!<br>
+  <br>
+  Sincerely,<br>
+  The Anou Team
+{% endblock closing %}

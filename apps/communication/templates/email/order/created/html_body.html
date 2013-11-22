@@ -1,23 +1,59 @@
-<h2>
-  Thanks for your order!
-</h2>
+{# data = [list of orders] #}
 
-<p>
-  Your order confirmation at <a href="http://www.theanou.com/checkout/confirmation?checkout_id={{ data.0.cart.checkout_id }}">http://www.theanou.com/checkout/confirmation?checkout_id={{ data.0.cart.checkout_id }}</a>
-</p>
+{% extends "email_base.html" %}
+{% load url from future %}
 
-<p>
-  We have contacted the artisan{{ orders|length|pluralize}} you ordered from and we will notify you when they have confirmed the sale. We will also notify you by email when your order has been shipped.
-</p>
+{% block snippet %}
+  Thank you for your purchase at Anou!
+{% endblock snippet %}
 
-<p>
-  For more information, <!--please check out our FAQ section at <a href="www.theanou.com/faq">www.theanou.com/faq</a>, or simply--> contact us at <a href="mailto:hello@theanou.com">hello@theanou.com</a>.
-</p>
+{% block headline %}
+  Order Placed
+{% endblock headline %}
 
-<p>
-  Thanks for purchasing on Anou!
-</p>
+{% block tagline %}
+  <a href="http://www.theanou.com/checkout/confirmation?checkout_id={{ data.0.cart.checkout_id }}">
+    view order online
+  </a>
+{% endblock tagline %}
 
-<p>
-  Dan, Brahim, and the rest of the Anou team.
-</p>
+{% block body %}
+
+  Hi {{ data.0.cart.name }},<br>
+  <br>
+  The artisan{{ data|length|pluralize}} you purchased from just received an SMS message!
+  They will make sure your item{{ data|length|pluralize:" is,s are" }}
+  ready to ship and confirm
+  {{ data|length|pluralize:"it,each one" }} soon.<br>
+  <br>
+  Item{{ data|length|pluralize}} Ordered:<br>
+  <table>
+    {% for order in data %}
+      <tr>
+        <td>
+          <a href="http://www.theanou.com{{ order.products.all.0.get_absolute_url }}">
+            <img src="{{ order.products.all.0.photo.pinky_size }}" width="75" height="75">
+          </a>
+        </td>
+        <td valign="middle">
+          <a href="http://www.theanou.com{{ order.products.all.0.get_absolute_url }}">
+            {{ order.products.all.0.name }}
+            from
+            {{ order.products.all.0.seller.city }}, Morocco
+          </a>
+        </td>
+      </tr>
+      {{ order.products.0.name }}
+    {% endfor %}
+  </table>
+{% endblock body %}
+
+{% block closing %}
+  If you are having anything short of the most satisfying experience,
+  please reply to this email or write to us at
+  <a href="mailto:hello@theanou.com">hello@theanou.com</a>.
+  We would love to hear from you!<br>
+  <br>
+  Sincerely,<br>
+  The Anou Team
+{% endblock closing %}

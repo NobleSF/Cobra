@@ -1,36 +1,80 @@
 {# data = order #}
-<h2>
-  An item in your order has shipped!
-</h2>
 
-<p>
+{% extends "email_base.html" %}
+{% load url from future %}
+
+{% block snippet %}
+  Thank you for your purchase at Anou!
+{% endblock snippet %}
+
+{% block headline %}
+  Item Shipped!
   {% if data.tracking_number %}
-    Your tracking number is:
-      <a href="{{ data.tracking_url }}">
-        {{ data.tracking_number }}
-      </a>
+    (and with a tracking number!)
   {% endif %}
-  View your order at:
+{% endblock headline %}
+
+{% block tagline %}
   <a href="http://www.theanou.com/checkout/confirmation?checkout_id={{ data.cart.checkout_id }}">
-    http://www.theanou.com/checkout/confirmation?checkout_id={{ data.cart.checkout_id }}
+    view order online
   </a>
-</p>
+{% endblock tagline %}
 
-<p>
-  Your item should arrive in about two weeks. In rare cases, products from rural Morocco can take up to 4 weeks at the most.
-</p>
+{% block body %}
 
-<p>
-  For more information,
-  <!--please check out our FAQ section at <a href="www.theanou.com/faq">www.theanou.com/faq</a>, or simply-->
-  contact us at
+  Hi {{ data.cart.name }},<br>
+  <br>
+  Your order for the
+  <a href="http://www.theanou.com{{ data.products.all.0.get_absolute_url }}">
+    {{ data.products.all.0.name }}
+    from
+    {{ data.products.all.0.seller.city }}, Morocco
+  </a>
+  was just shipped by
+  <a href="http://www.theanou.com{{ data.products.all.0.seller.get_absolute_url }}">
+    {{ data.products.all.0.seller.name }}
+  </a>.
+  Your item should arrive in about two weeks. Sometimes in rare cases items from rural areas can take up to 4 weeks to arrive.<br>
+  <br>
+  {% if data.tracking_number %}
+    Your tracking number is
+    <a href="{{ data.tracking_url }}">
+      {{ data.tracking_number }}
+    </a>
+    <br>
+    It is probably not active at the moment you are receiving this email, but it will show up in the USPS system once it passes throuth Casablanca.<br>
+    <br>
+  {% endif %}
+
+  You'll get to enjoy your purchase soon!<br>
+  <br>
+
+  Item Shipped:<br>
+  <table>
+      <tr>
+        <td>
+          <a href="http://www.theanou.com{{ data.products.all.0.get_absolute_url }}">
+            <img src="{{ data.products.all.0.photo.pinky_size }}" width="75" height="75">
+          </a>
+        </td>
+        <td valign="middle">
+          <a href="http://www.theanou.com{{ data.products.all.0.get_absolute_url }}">
+            {{ data.products.all.0.name }}
+            from
+            {{ data.products.all.0.seller.city }}, Morocco
+          </a>
+        </td>
+      </tr>
+      {{ data.products.0.name }}
+  </table>
+{% endblock body %}
+
+{% block closing %}
+  If you are having anything short of the most satisfying experience,
+  please reply to this email or write to us at
   <a href="mailto:hello@theanou.com">hello@theanou.com</a>.
-</p>
-
-<p>
-  Enjoy your new purchase soon!
-</p>
-
-<p>
-  Dan, Brahim, and the rest of the Anou team.
-</p>
+  We would love to hear from you!<br>
+  <br>
+  Sincerely,<br>
+  The Anou Team
+{% endblock closing %}

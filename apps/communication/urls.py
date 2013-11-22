@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from controller import sms, public_events, seller_events, order_events
+from controller import sms, public_events, seller_events, order_events, testing
 
 urlpatterns = patterns('',
   #email
@@ -12,4 +12,7 @@ urlpatterns = patterns('',
   #events
   url(r'^subscribe$', public_events.subscribe, name='subscribe'),
   url(r'^unsubscribe$', public_events.unsubscribe, name='unsubscribe'),
+
+  #testing
+  url(r'^order_emails$', testing.orders, name='order emails'),
 )
