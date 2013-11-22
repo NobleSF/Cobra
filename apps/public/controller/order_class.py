@@ -10,7 +10,7 @@ def getOrders(checkout_id):
     except:
       cart = models.Cart.objects.get(anou_checkout_id = checkout_id)
 
-    orders = cart.order_set.all()
+    orders = cart.orders.all()
     if not orders:
       orders = createFromCart(cart)
       #after creating an order, run cleanup

@@ -89,7 +89,7 @@ class Promotion(models.Model):
 class Order(models.Model):
   from apps.seller.models import Product, ShippingOption
 
-  cart                = models.ForeignKey('Cart')
+  cart                = models.ForeignKey('Cart', related_name='orders')
 
   #charges breakdown in local currency (eg. dirhams in Morocco)
   products_charge     = models.DecimalField(max_digits=8, decimal_places=2)
