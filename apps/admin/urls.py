@@ -31,6 +31,8 @@ urlpatterns += patterns('',
 
   #ORDERS
   url(r'^admin/all_orders$', orders.allOrders, name='all orders'),
+  url(r'^admin/order/(?P<order_id>\d+)$', orders.order, name='order'),
+  url(r'^admin/ajax/update_order$', orders.updateOrder, name='update order'),
 
   #COMMUNICATION
   url(r'^admin/send_sms$', communication.sendSMS, name='send sms'),

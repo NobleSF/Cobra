@@ -1,0 +1,168 @@
+{% extends "admin_base.html" %}
+{% load url from future %}
+
+{% block javascript %}
+<script>
+  $().ready(function(){
+  });
+
+  $('.changeable').click(function(){
+    var confirm_message
+    var url = "{% url 'admin:update order' %}";
+    var icon = $(this);
+
+    if ($(this).hasClass("seller_paid")){
+      confirm_message = "This seller was paid?";
+      data = {'order_id': icon.attr('data-order-id'),
+              'action':"seller paid"
+              };
+    }
+
+    if (confirm(confirm_message)){
+      $.ajax({url: url, data: data})
+      .done(function(data){
+        icon.removeClass('changeable').removeClass('red').addClass('green')
+      })
+      .fail(function(){
+        alert("update failed.")
+      });
+    }
+  });
+
+</script>
+{% endblock javascript %}
+
+{% block css %}
+<style>
+
+  .changeable{cursor: pointer;}
+
+</style>
+{% endblock css %}
+
+{% block content %}
+
+<p><a href="{% url 'admin:all orders' %}">back to All Orders</a></p>
+
+<h3 class='copy-font'>
+  ORDER {{ order.id }} at {{ order.created_at|date:"m/d  H:i" }}
+</h3>
+
+<h3 class='copy-font'>
+  <a href="{{ order.products.all.0.get_absolute_url }}" target='_blank'>
+    {{ order.products.all.0.title }}
+  </a><br>
+  by
+  {{ order.products.all.0.seller.name }}<br>
+  from
+  {{ order.products.all.0.seller.city }}, Morocco
+</h3>
+
+<h3 class='copy-font'>
+
+</h3>
+
+<table>
+  <thead><td style='width:100px;'></td><td></td></thead>
+  <tr>
+    <td>
+      <i class='symbol-SMS {% if order.is_seller_confirmed  %}green{% else %}red{% endif %}'></i>
+    </td>
+    <td>
+      {% if order.is_seller_confirmed  %}{{ order.seller_confirmed_at }}{% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <i class='symbol-SMS-shipping {% if order.is_shipped %}green{% else %}red{% endif %}'></i>
+    </td>
+    <td>
+      {% if order.is_shipped %}{{ order.shipped_at }}{% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <i class='symbol-shipping {% if order.tracking_number %}green{% else %}red{% endif %}'></i>
+    </td>
+    <td>
+      <a href="{{ order.tracking_url }}" target='_blank'>
+        {% if order.tracking_number %}{{ order.tracking_number }}{% endif %}
+      </a>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <i class='symbol-money
+        {% if order.is_seller_paid %}green
+        {% else %}red changeable seller_paid
+        {% endif %}'
+      data-order-id='{{order.id}}'
+      ></i>
+    </td>
+    <td>
+      {% if order.is_seller_paid %}{{ order.seller_paid_at }}{% endif %}
+    </td>
+  </tr>
+</table>
+<br>
+
+<p>
+  Customer Confirmation:
+  <a href="{% url 'confirmation' %}?checkout_id={{order.cart.checkout_id}}"
+     target='_blank'>
+    {{order.cart.checkout_id}}
+  </a>
+</p>
+
+<p>
+  Shipping Address:<br>
+  <div style='border: solid 1px black'>
+    {% if order.shipping_address %}{{ order.shipping_address|safe }}{% endif %}
+  </div>
+</p>
+
+{% if order.cart.notes %}
+  <p>Notes:<br>
+    <div style='border: solid 1px black'>
+      {{ order.cart.notes }}
+    </div>
+  </p>
+{% endif %}
+
+{% if order.cart.receipt %}
+  <p>Receipt:<br>
+    <div style='border: solid 1px black'>
+      {{ order.cart.receipt }}
+    </div>
+  </p>
+{% endif %}
+
+<table>
+  <thead><td style='width:100px;'></td><td align='right' style='width:100px;'></td></thead>
+  <tr>
+    <td>artisan price</td>
+    <td>{{ order.products.all.0.price }} MAD</td>
+  </tr>
+
+  <tr>
+    <td>shipping</td>
+    <td>{{ order.products.all.0.shipping_cost }} MAD</td>
+  </tr>
+
+  <tr>
+    <td>Anou fee</td>
+    <td>{{ order.products.all.0.anou_fee }} MAD</td>
+  </tr>
+
+  <tr>
+    <td>total</td>
+    <td>{{ order.products.all.0.local_price }} MAD</td>
+  </tr>
+</table>
+
+<img src="{{ order.products.all.0.photo.product_size }}">
+
+{% endblock content %}
