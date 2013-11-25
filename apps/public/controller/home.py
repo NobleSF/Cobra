@@ -12,7 +12,7 @@ def loadProducts(request):
   from apps.seller.models import Product
   from django.template.loader import render_to_string
 
-  if request.method == "GET":
+  if request.method == "GET" and request.GET.get('product_ids'):
 
     product_ids = request.GET.get('product_ids')
     print product_ids
@@ -27,6 +27,8 @@ def loadProducts(request):
       product_html[str(product.id)] = html
 
     return HttpResponse(json.dumps(product_html), mimetype='application/json')
+  else:
+    return HttpResponse(json.dumps({}), mimetype='application/json')
 
 def about(request):
   return render(request, 'home/about.html')

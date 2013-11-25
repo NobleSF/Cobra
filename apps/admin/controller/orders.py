@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from apps.admin.utils.decorator import access_required
 from django.contrib import messages
 from apps.public.models import Order
@@ -14,10 +14,13 @@ def allOrders(request):
 @access_required('admin')
 def order(request, order_id):
   from apps.communication.controller.order_events import getCustomerAddressFromOrder
-  order = Order.objects.get(id=order_id)
-  order.shipping_address = getCustomerAddressFromOrder(order)#todo: make this a model property
+  try:
+    order = Order.objects.get(id=order_id)
+    order.shipping_address = getCustomerAddressFromOrder(order)#todo: make this a model property
 
-  return render(request, 'orders/order.html', {'order': order})
+    return render(request, 'orders/order.html', {'order': order})
+  except:
+    return redirect('admin:all orders')
 
 @access_required('admin')
 def updateOrder(request):
