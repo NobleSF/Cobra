@@ -14,7 +14,8 @@
               {% else %}
                 unloaded
               {% endif %}'
-           data-category='{{ product.parent_category.name }}'
+           data-parent-category='{{ product.parent_category.name }}'
+           data-child-category='{{ product.category.name }}'
            data-order='{{ forloop.counter0 }}'
            data-product-id='{{ product.id }}'>
         {% if forloop.counter0 < 3 %}

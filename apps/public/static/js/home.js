@@ -36,28 +36,70 @@ function addHoverAnimation(selection){
 
 //SEARCH AND SORTING FUNCTIONS
 $('#search-toolbar .title').on('click', function(){
-  category = $(this).attr('data-category');
-  sortProductsBy(category)
+  parent_category = $(this).attr('data-parent-category');
+  //remove all underlines
   $('#search-toolbar .title').removeClass('underline');
+
+  child_category = $(this).attr('data-child-category');
+  //underlined the clicked one
   $(this).addClass('underline');
+  //hide all child categories
+  $('#search-toolbar .title.child').hide()
+  //show relevent child categories
+  $('#search-toolbar .title.child[data-parent-category='+parent_category+']').show()
+  //underline clicked child category
+  if ($(this).hasClass('child')){
+    $('#search-toolbar .title.parent[data-child-category='+parent_category+']').addClass('underline');
+  }
+  //sort products according to chosen cateogories
+  sortProductsBy(parent_category, child_category)
 });
 
-function sortProductsBy(category){
+function sortProductsBy(parent_category, child_category){
+  // everything, everything shows all
+  // parent, parent shows all in parent category
+  // parent, child shows all in child category
+  // parent, other shows all where child == parent
+
+  //hide all products
   $('.product-area').hide();
 
   //move the category products first
-  $('#product-container .product-area').each(function(){
-    if ($(this).attr('data-category') == category){
-      $(this).appendTo($('#product-sorting-container'))
-    }
-  });
+  if (parent_category == "everything"){
+    //nothing to do here
+
+  }else if (parent_category == child_category){//all in parent
+    $('#product-container .product-area').each(function(){
+      if ($(this).attr('data-parent-category') == parent_category){
+        $(this).appendTo($('#product-sorting-container'))
+      }
+    });
+
+  }else if(child_category == "other"){//all child == parent
+    $('#product-container .product-area').each(function(){
+      if ($(this).attr('data-parent-category') == parent_category &&
+          $(this).attr('data-child-category') == parent_category){
+        $(this).appendTo($('#product-sorting-container'))
+      }
+    });
+
+  }else if(parent_category != child_category){//child only
+    $('#product-container .product-area').each(function(){
+      if ($(this).attr('data-parent-category') == parent_category &&
+          $(this).attr('data-child-category') == child_category){
+        $(this).appendTo($('#product-sorting-container'))
+      }
+    });
+  }
+
   //then move all the rest to follow behind
   $('#product-container .product-area').each(function(){
     $(this).appendTo($('#product-sorting-container'))
   });
   //all products should be in the sorting container now
 
-  if (category == 'everything'){
+  //move all products back into rows
+  if (child_category == 'everything'){
     $('#product-sorting-container .product-area').each(function(){
       //find the row it originally belonged to and put it there
       row_number = Math.floor($(this).attr('data-order')/3)
@@ -77,10 +119,17 @@ function sortProductsBy(category){
   //this_category = $(this).attr('data-category');
   //this_position = $(this).attr('data-order');
 
-  if (category == 'everything'){
+  if (parent_category == 'everything'){//everything
     $('.product-area').show();
-  }else{
-    $('.product-area[data-category='+category+']').show();
+
+  }else if (parent_category == child_category){//all in parent
+    $('.product-area[data-parent-category='+parent_category+']').show();
+
+  }else if(child_category == "other"){//all child == parent
+    $('.product-area[data-child-category='+parent_category+']').show();
+
+  }else if(parent_category != child_category){//child only
+    $('.product-area[data-parent-category='+parent_category+'][data-child-category='+child_category+']').show();
   }
 }
 

@@ -40,6 +40,6 @@ def search_bar_tag(search_keywords=None):
 
   parent_categories = [c for c in Category.objects.all() if c.is_parent_category]
   for parent in parent_categories:
-    categories[parent.name] = []#[sub.name for sub in parent.sub_categories.all()]
+    categories[parent.name] = [sub.name for sub in parent.sub_categories.all()]
 
   return {'categories': categories}

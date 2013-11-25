@@ -289,6 +289,7 @@ class Product(models.Model):
   def parent_category(self):
     try:
       category = self.assets.filter(ilk='product')[0].categories.all()[0]
+      #todo change to -> if self.category.is_parent_category:
       if category.is_parent_category:
         return category
       else:

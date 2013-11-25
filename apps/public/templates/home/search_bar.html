@@ -2,18 +2,39 @@
 <div id='search-toolbar' class='well well-small'>
   <ul class='inline text-center'>
 
-    <li class='title underline'
-        data-category='everything'>
+    <li class='everything title underline'
+        data-parent-category='everything'
+        data-child-category='everything'>
       Everything
     </li>
 
-    {% for parent, children in categories.items %}
-      <li class='title'
-          data-category='{{ parent }}'
+    {% for parent, subcategories in categories.items %}
+      <li class='parent title'
+          data-parent-category='{{ parent }}'
+          data-child-category='{{ parent }}'
           >
         {{ parent }}
       </li>
     {% endfor %}
-
   </ul>
+
+  <ul class='inline text-center'>
+    {% for parent, subcategories in categories.items %}
+      {% for child in subcategories %}
+        <li class='child title' style='display: none;'
+            data-parent-category='{{ parent }}'
+            data-child-category='{{ child }}'
+            >
+          {{ child }}
+        </li>
+      {% endfor %}
+      <li class='child title' style='display: none;'
+          data-parent-category='{{ parent }}'
+          data-child-category='other'
+          >
+        other
+      </li>
+    {% endfor %}
+  </ul>
+
 </div>
