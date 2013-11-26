@@ -52,7 +52,8 @@ urlpatterns += patterns('',
 
 #ADMIN ACTION
 urlpatterns += patterns('',
-  url(r'^admin/rebuild_homepage$', site_management.rebuild_homepage, name='rebuild homepage'),
-  url(r'^admin/rebuild_productpage/(?P<product_id>\d+)$', site_management.rebuild_productpage, name='rebuild productpage'),
-  url(r'^admin/rebuild_storepage/(?P<seller_id>\d+)$', site_management.rebuild_storepage, name='rebuild storepage'),
+  url(r'^admin/re_homepg$', site_management.rebuildHomePage, name='rebuild homepage'),
+  url(r'^admin/re_productpg/(?P<product_id>\d+)$', site_management.rebuildProductPage, name='rebuild productpage'),
+  url(r'^admin/re_storepg/(?P<seller_id>\d+)$', site_management.rebuildStorePage, name='rebuild storepage'),
+  url(r'^admin/re_prod_ranks$', site_management.rebuildProductRankings, name='rebuild product rankings'),
 )

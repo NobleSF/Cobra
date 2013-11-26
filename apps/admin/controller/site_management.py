@@ -6,8 +6,13 @@ from django.forms.models import modelformset_factory
 from apps.public.controller.events import invalidate_cache
 
 @access_required('admin')
-def rebuild_homepage(request):
+def rebuildProductRankings(request):
+  from apps.public.controller.events import rebuildRankings
+  rebuildRankings()
+  return redirect('home')
 
+@access_required('admin')
+def rebuildHomePage(request):
   if (invalidate_cache('home_header') and invalidate_cache('home_content')):
     return redirect('home')
   else:
@@ -15,31 +20,23 @@ def rebuild_homepage(request):
     return redirect('admin:dashboard')
 
 @access_required('admin')
-def rebuild_productpage(request, product_id):
+def rebuildProductPage(request=None, product_id=None):
   from apps.seller.models import Product
+  from apps.public.controller.events import invalidate_product_cache
   try:
-    product = Product.objects.get(id=product_id)
-    invalidate_cache('public_product_header',
-                     product.id, product.is_approved, product.is_sold)
-    invalidate_cache('public_product_content',
-                     product.id, product.is_approved, product.is_sold,
-                     product.is_recently_sold)
-    return redirect('product', product_id)
+    invalidate_product_cache(product_id)
   except:
     messages.error(request,"Error refreshing cache on product page")
-    return redirect('product', product_id)
+  return redirect('product', product_id)
 
 @access_required('admin')
-def rebuild_storepage(request, seller_id):
-  from apps.seller.models import Seller
+def rebuildStorePage(request, seller_id):
+  from apps.public.controller.events import invalidate_seller_cache
   try:
-    seller = Seller.objects.get(id=seller_id)
-    invalidate_cache('public_store_header', seller.id, seller.updated_at)
-    invalidate_cache('public_store_content', seller.id, seller.updated_at)
-    return redirect('store', seller.id)
+    invalidate_seller_cache(seller_id)
   except:
     messages.error(request,"Error refreshing cache on store page")
-    return redirect('store', seller_id)
+  return redirect('store', seller_id)
 
 @access_required('admin')
 def country(request):

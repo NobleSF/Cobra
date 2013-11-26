@@ -28,6 +28,9 @@
 {% block header_link_2 %}
   <li><a class='title' href="http://helloanou.wordpress.com">Blog</a></li>
   {% if 'admin_id' in request.session %}
+    <li><a href="{% url 'admin:rebuild product rankings' %}">
+      <button class='btn'>Rebuild Ranks</button>
+    </a></li>
     <li><a href="{% url 'admin:rebuild homepage' %}">
       <button class='btn'>Refresh-Cache</button>
     </a></li>

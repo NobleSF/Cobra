@@ -15,18 +15,8 @@ def homepage_products_tag():
                                     seller__deactive_at=None,
                                     deactive_at=None))
 
-  yesterday = timezone.now() - timedelta(days=1)
-
-  for p in products:
-    try:
-      if p.ranking.updated_at <= yesterday:
-        updateRankings(p, except_ratings=True)
-    except:
-      updateRankings(p)
-
   products = sorted(products, key=lambda p: p.ranking.weighted_average)
   products.reverse() #sort by points descending
-
   return {'products':products}
 
 @register.inclusion_tag('home/product.html')
