@@ -28,6 +28,7 @@ urlpatterns += patterns('',
   url(r'^admin/ajax/approve_product$', products.approve_product, name='approve product'),
   url(r'^admin/ajax/rate_product$', products.rate_product, name='rate product'),
   url(r'^admin/product_lookup$', products.product_lookup, name='product lookup'),
+  url(r'^admin/price_calc$', products.priceCalc, name='price calc'),
 
   #ORDERS
   url(r'^admin/all_orders$', orders.allOrders, name='all orders'),

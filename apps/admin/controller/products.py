@@ -120,3 +120,9 @@ def rate_product(request): #from AJAX GET request
     response = {'success': "%s rated" % product_id}
 
   return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+
+
+def priceCalc(request):
+  from apps.admin.models import Currency
+  exchange_rate = Currency.objects.get(code='MAD').exchange_rate_to_USD
+  return render(request, 'products/price_calc.html', {'exchange_rate':exchange_rate})

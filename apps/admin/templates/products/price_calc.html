@@ -1,0 +1,67 @@
+{% extends "admin_base.html" %}
+{% load url from future %}
+
+{% block javascript %}
+  <script>
+
+    $('.editable').blur(function(){
+      var artisan_price = parseInt($('#artisan_price').val());
+      var shipping_cost = parseInt($('#shipping_cost').val());
+      var exchange_rate = parseFloat($('#exchange_rate').val());
+      "50".valueOf
+
+      if (artisan_price > 0 && shipping_cost > 0 && exchange_rate > 0){
+
+        var anou_fee = artisan_price * (10 / 90)
+        var local_price = artisan_price + shipping_cost + anou_fee
+        var usd_price = local_price / exchange_rate
+        var wepay_fee = 0.3 + ((0.029/(1-0.029))*(usd_price + 0.3))
+        var anou_store_price = usd_price + wepay_fee
+
+        $('#anou_fee').val(anou_fee.toFixed(2))
+        $('#local_price').val(local_price.toFixed(2))
+        $('#usd_price').val(usd_price.toFixed(2))
+        $('#wepay_fee').val(wepay_fee.toFixed(2))
+        $('#anou_store_price').val(anou_store_price.toFixed(2))
+      }
+    })
+
+
+  </script>
+{% endblock javascript %}
+
+{% block css %}
+  <style>
+
+  </style>
+{% endblock css %}
+
+{% block content %}
+
+  <form>
+    <label for='artisan_price'>Artisan Price:</label>
+    <input id='artisan_price' type='text' class='editable'>Dh
+
+    <label for='shipping_cost'>Shipping Cost:</label>
+    <input id='shipping_cost' type='text' class='editable'>Dh
+
+    <label for='anou_fee'>Anou Fee:</label>
+    <input id='anou_fee' type='text' disabled='disabled'>Dh
+
+    <label for='local_price'>Local Price:</label>
+    <input id='local_price' type='text' disabled='disabled'>Dh
+
+    <label for='exchange_rate'>USD Exchange Rate:</label>
+    <input id='exchange_rate' type='text' value='{{exchange_rate}}' class='editable'>Dh/USD
+
+    <label for='usd_price'>USD Price:</label>
+    <input id='usd_price' type='text' disabled='disabled'>USD
+
+    <label for='wepay_fee'>Wepay Fee:</label>
+    <input id='wepay_fee' type='text' disabled='disabled'>USD
+
+    <label for='anou_store_price'>Anou Store Price:</label>
+    <input id='anou_store_price' type='text' disabled='disabled'>USD
+  </form>
+
+{% endblock content %}
