@@ -158,6 +158,8 @@ class Product(models.Model):
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
 
+  slug          = models.CharField(max_length=150, null=True, blank=True)
+
   @property
   def was_never_active(self): return True if not self.active_at else False
   #todo: use property.setter functions too!
@@ -476,20 +478,18 @@ class Product(models.Model):
       return True if (phone_number[-8:] == seller_phone[-8:]) else False
     else: return False
 
-  @property
-  def slug(self):
-    try:
-      from django.template.defaultfilters import slugify
-      return slugify(self.title)
-    except:
-      return None
-
   def get_absolute_url(self):
     from django.core.urlresolvers import reverse
     if self.slug:
       return reverse('product_w_slug', args=[str(self.id), self.slug])
     else:
-      return reverse('product', args=[str(self.id)])
+      try:
+        from django.template.defaultfilters import slugify
+        self.slug = slugify(self.title)
+        self.save()
+        return reverse('product_w_slug', args=[str(self.id), self.slug])
+      except:
+        return reverse('product', args=[str(self.id)])
 
   def __unicode__(self):
     if self.color_adjective:
