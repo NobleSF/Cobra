@@ -45,6 +45,7 @@ def invalidate_seller_cache(seller_id):
 @postpone
 def rebuildRankings():
   from apps.public.controller.product_ranking import updateRankings
+  from django.utils import timezone
 
   products = Product.objects.filter(sold_at=None,
                                     approved_at__lte=timezone.now(),
