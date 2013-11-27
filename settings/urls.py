@@ -45,4 +45,6 @@ urlpatterns += patterns('',
     {'template': 'site-verifcations/pinterest-73682.html'}),
   (r'^google79499a3cc417dc54.html', direct_to_template,
     {'template': 'site-verifcations/google79499a3cc417dc54.html'}),
+  (r'^loaderio-26fc148a154773260da4400ae4adb1a6.txt', direct_to_template,
+    {'template': 'site-verifcations/loaderio-26fc148a154773260da4400ae4adb1a6.txt'}),
 )
