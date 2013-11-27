@@ -13,15 +13,9 @@ def loadProducts(request):
   from django.template.loader import render_to_string
 
   if request.method == "GET" and request.GET.get('product_ids'):
-
-    product_ids = request.GET.get('product_ids')
-    print product_ids
-
-    ids_list = product_ids.split(',')
-
     product_html = {}
 
-    for product_id in ids_list:
+    for product_id in request.GET.get('product_ids').split(','):
       product = Product.objects.get(id=product_id)
       html = render_to_string('home/product.html', {'product':product})
       product_html[str(product.id)] = html
