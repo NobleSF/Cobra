@@ -15,7 +15,6 @@ class Email(object):
       text_body_template = "email/%s/text_body.txt" % template_dir
       html_body_template = "email/%s/html_body.html" % template_dir
 
-      #plaintext_context = Context(autoescape=False)
       context = {'data':data}
 
       self.subject = render_to_string(subject_template, context)
