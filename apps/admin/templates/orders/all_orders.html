@@ -98,21 +98,18 @@
            ></i>
       </td>
 
-      {% if not order.is_seller_paid %}
-        <td>
-          {{ order.products.all.0.seller.name }}{# todo: make seller a model property #}
-          <br>
-          {{ order.products.all.0.seller.account.bank_name }}
-        </td>
-        <td>
-          {{ order.seller_paid_amount|floatformat:0 }}
-          <small>{{ order.products.all.0.seller.country.currency.code }}</small>
-          <br>
-          {{ order.products.all.0.seller.account.bank_account }}
-        </td>
-      {% else %}
-        <td colspan='2'></td>
-      {% endif %}
+
+      <td {% if not order.is_seller_paid %}style='font-weight: 800;'{% endif %}>
+        {{ order.products.all.0.seller.name }}{# todo: make seller a model property #}
+        <br>
+        {{ order.products.all.0.seller.account.bank_name }}
+      </td>
+      <td {% if not order.is_seller_paid %}style='font-weight: 800;'{% endif %}>
+        {{ order.seller_paid_amount|floatformat:0 }}
+        <small>{{ order.products.all.0.seller.country.currency.code }}</small>
+        <br>
+        {{ order.products.all.0.seller.account.bank_account }}
+      </td>
 
     </tr>
   {% endfor %}
