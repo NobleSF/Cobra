@@ -8,7 +8,7 @@ $(function(){//on page load
 
   $('.flexslider').flexslider({
     animation: "slide"
-    ,slideshow: false
+    //,slideshow: false
   });
 
 });
