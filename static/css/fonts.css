@@ -23,11 +23,62 @@
 */
 @font-face {font-family: 'Savu-Condensed';src: url('../fonts/Savu-Condensed.eot');src: url('../fonts/Savu-Condensed.eot?#iefix') format('embedded-opentype'),url('../fonts/Savu-Condensed.woff') format('woff'),url('../fonts/Savu-Condensed.ttf') format('truetype');}
 
-/*@font-face {font-family: 'Sketchetik';src: url('../fonts/Sketchetik.eot');src: url('../fonts/Sketchetik.eot?#iefix') format('embedded-opentype'),url('../fonts/Sketchetik.woff') format('woff'),url('../fonts/Sketchetik.ttf') format('truetype');}
- */
 
 @font-face {font-family: 'CynthoSlabPro-Regular';src: url('../fonts/CynthoSlabPro-Regular.eot');src: url('../fonts/CynthoSlabPro-Regular.eot?#iefix') format('embedded-opentype'),url('../fonts/CynthoSlabPro-Regular.woff') format('woff'),url('../fonts/CynthoSlabPro-Regular.ttf') format('truetype');}
 
 
-/*@font-face {font-family: 'Ashbury-Light';src: url('../fonts/Ashbury-Light.eot');src: url('../fonts/Ashbury-Light.eot?#iefix') format('embedded-opentype'),url('../fonts/Ashbury-Light.woff') format('woff'),url('../fonts/Ashbury-Light.ttf') format('truetype');}
-*/
+@font-face {
+    font-family: 'bembobold';
+    src: url('../fonts/bembo_bold-webfont.eot');
+    src: url('../fonts/bembo_bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/bembo_bold-webfont.woff') format('woff'),
+         url('../fonts/bembo_bold-webfont.ttf') format('truetype'),
+         url('../fonts/bembo_bold-webfont.svg#bembobold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'bembo_stdregular';
+    src: url('../fonts/bembo-std_6601-webfont.eot');
+    src: url('../fonts/bembo-std_6601-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/bembo-std_6601-webfont.woff') format('woff'),
+         url('../fonts/bembo-std_6601-webfont.ttf') format('truetype'),
+         url('../fonts/bembo-std_6601-webfont.svg#bembo_stdregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'bikoregular';
+    src: url('../fonts/biko_regular-webfont.eot');
+    src: url('../fonts/biko_regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/biko_regular-webfont.woff') format('woff'),
+         url('../fonts/biko_regular-webfont.ttf') format('truetype'),
+         url('../fonts/biko_regular-webfont.svg#bikoregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'bikobold';
+    src: url('../fonts/biko_bold-webfont.eot');
+    src: url('../fonts/biko_bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/biko_bold-webfont.woff') format('woff'),
+         url('../fonts/biko_bold-webfont.ttf') format('truetype'),
+         url('../fonts/biko_bold-webfont.svg#bikobold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'bikoblack';
+    src: url('../fonts/biko_black-webfont.eot');
+    src: url('../fonts/biko_black-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/biko_black-webfont.woff') format('woff'),
+         url('../fonts/biko_black-webfont.ttf') format('truetype'),
+         url('../fonts/biko_black-webfont.svg#bikoblack') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
