@@ -1,19 +1,19 @@
 
-<div id='search-toolbar' class='well well-small'>
+<div id='search-toolbar' class='toolbar'>
   <ul class='inline text-center'>
 
-    <li class='everything title underline'
+    <li class='everything category title-font selected'
         data-parent-category='everything'
         data-child-category='everything'>
       Everything
     </li>
 
     {% for parent, subcategories in categories.items %}
-      <li class='parent title'
+      <li class='parent category title-font'
           data-parent-category='{{ parent }}'
           data-child-category='{{ parent }}'
           >
-        {{ parent }}
+        {{ parent|title }}
       </li>
     {% endfor %}
   </ul>
@@ -21,18 +21,18 @@
   <ul class='inline text-center'>
     {% for parent, subcategories in categories.items %}
       {% for child in subcategories %}
-        <li class='child title' style='display: none;'
+        <li class='child category title-font' style='display: none;'
             data-parent-category='{{ parent }}'
             data-child-category='{{ child }}'
             >
-          {{ child }}
+          {{ child|title }}
         </li>
       {% endfor %}
-      <li class='child title' style='display: none;'
+      <li class='child category title-font' style='display: none;'
           data-parent-category='{{ parent }}'
           data-child-category='other'
           >
-        other
+        Other
       </li>
     {% endfor %}
   </ul>

@@ -7,7 +7,7 @@ Redesign
 	Homepage:
 		http://bxslider.com/
 		http://www.fitgrd.com/
-
+		http://www.colorhexa.com/407bd9
 	Buttons:
 		http://ace-subido.github.com/css3-microsoft-metro-buttons/index.html
 		http://www.red-team-design.com/css3-patterned-buttons

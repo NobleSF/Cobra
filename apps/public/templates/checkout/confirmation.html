@@ -27,16 +27,16 @@
               Order Complete!
             {% endif %}
           </h1>
-          <h3 class='copy-font'>
+          <h3 class=''>
             {% if checkout_data.gross %}
               Total Charged:
-              <span class='badge'><h3 class='copy-font'>
+              <span class='badge'><h3 class=''>
                 ${{ checkout_data.gross|floatformat:2 }}
               </h3></span>
             {% endif %}
             {% if checkout_data.checkout_id %}
               Confirmation Number:
-              <span class='badge'><h3 class='copy-font'>
+              <span class='badge'><h3 class=''>
                 {{ checkout_data.checkout_id }}
               </h3></span>
             {% endif %}
@@ -44,7 +44,7 @@
 
           {% for item in cart %}
             {% if item.order.tracking_number %}
-              <h3 class='copy-font'>
+              <h3 class=''>
                 Tracking {{ item.product.name }} at
                 <a href="{{ item.order.tracking_url }}" target='_blank'>
                   {{ item.order.tracking_number }}
@@ -69,7 +69,7 @@
                        src='{{ item.photo.pinky_size }}' alt='{{ item.product.title }}'>
                   <h5 class='product-title'>
                     {{ item.product.name }}
-                    <span class='copy-font'>${{ item.product.display_price }}</span>
+                    <span class=''>${{ item.product.display_price }}</span>
                   </h5>
 
                 </li>
@@ -175,7 +175,7 @@
       </div>
       <div class='well'>
         <h4>What can I do to help ?</h4>
-        <p>The "Fair Trade" industry is broken. "Please tell you friends about this show."-AD</p>
+        <p>When your purchase arrives, pleas send us a picture or post it to our <a href="http://www.facebook.com/TheAn0u">Facebook page</a>. Our artisans always love to see how you are using their products so they can improve their designs.</p>
       </div>
     </div>
   </div>

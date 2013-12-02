@@ -14,11 +14,13 @@
 {%block open_graph_image%}{{ block.super }}{%endblock%}
 
 {% block javascript %}
+  <script type="text/javascript" src="{{ STATIC_URL }}vendor/flexslider/js/jquery.flexslider-min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}public/js/home.min.js"></script>
 {% endblock javascript %}
 
 {% block css %}
   <link href="{{ STATIC_URL }}public/css/home.css" rel="stylesheet">
+  <link href="{{ STATIC_URL }}vendor/flexslider/css/flexslider.css" rel="stylesheet">
 {% endblock css %}
 {% endcache home_header %}
 
@@ -40,86 +42,63 @@
 {% block content %}
 {% cache 172800 home_content %} {# cache for 48 hours #}
   <div class='row-fluid'>
-    <div class='span8'>
-      <a href="http://helloanou.wordpress.com/2013/11/18/anou-and-disaster-relief-efforts-in-the-philippines/"
-         target="_blank">
-      <img id='temp-image'
-           alt='With each purchase, Anou makes a donation to Philippines Disaster Relief'
-           src='http://res.cloudinary.com/hork5h8x1/image/upload/ANOU-PHILIPPINES_vesrhl.jpg'>
+    <div class='span12'>
 
-      </a>
-           <!--alt='watch how Anou got started at http://youtu.be/xquR19Ms2R4'
-           src='http://res.cloudinary.com/anou/image/upload/c_fill,g_center,h_350,w_1200/v1375396116/meet_brahim_e1g9op_lezgqo.jpg'
-           >
+      <div class="flexslider">
+        <ul class="slides">
 
-      <iframe id='video'
-              width="100%" height="350"
-              style="display:none;"
-              src="//www.youtube.com/embed/xquR19Ms2R4?rel=0" frameborder="0" allowfullscreen></iframe>-->
+          <li>
+            <div class='slide-text'>
+              <p class='title'>GOOD-BYE MIDDLEMEN</p>
+              <p class='verse title-font'>
+                Anou's artisan-managed store
+                enables you to buy directly from artisans
+                <br>
+                <a href="http://helloanou.wordpress.com/2013/07/15/the-economics-of-a-single-moroccan-reed-basket/" class='button'>Learn More</a>
+              </p>
+            </div>
+            <img src="{{ STATIC_URL }}images/slide3.jpg" />
+          </li>
 
-      <div id='subscribe' class='text-center'>
-        <form id='subscribe-form' data-url='{% url 'communication:subscribe' %}'>
-          <ul class='inline'>
-            <li>
-              <p id='subscribe-text'>Stay Updated with Anou</p>
-            </li>
-            <li>
-              <div class="control-group">
-                <div class="controls">
+          <li>
+            <div class='slide-text'>
+              <p class='title'>A COMMUNITY OF ARTISANS</p>
+              <p class='verse title-font'>
+                Anou's store is owned and operated by Moroccan artisans
+                and each purchase supports the growth of our vibrant community
+                <br>
+                <a href="{% url 'about' %}" class='button'>Join Our Community</a>
+              </p>
 
-                  <input id='subscribe-email' class='input-large required'
-                    type='text' name='email'
-                    placeholder='email'>
+            </div>
+            <img src="{{ STATIC_URL }}images/slide2.jpg" />
+          </li>
 
-                  <p id='email-suggestion'>
-                    Did you mean <a id='suggested-email'></a>?
-                  </p>
-                  <p class="help-inline">Please provide your email.</p>
-                </div>
-              </div>
-            </li>
-            <li>
-              <input id='subscribe-name' class='input-medium'
-                     type='text' name='name'
-                     placeholder='name (optional)'>
-            </li>
-            <li id='subscribe-buttons'>
-              <button type='button' id='subscribe-submit' class='btn'>Subscribe</button>
-              <button type='button' class='btn btn-info disabled'>Saving...</button>
-              <button type='button' class='btn btn-success disabled'>Thanks!</button>
-              <button type='button' class='btn btn-danger disabled'>Invalid, please try again</button>
-            </li>
-          </ul>
-        </form>
-      </div>
+          <li>
+            <div class='slide-text'>
+              <p class='title'>FROM VILLAGES TO YOUR HOME</p>
+              <p class='verse title-font'>
+                Our platform bridges the two using culturally-responsive design
+                <br>
+                <a href="{% url 'about' %}" class='button'>Learn How</a>
+              </p>
+            </div>
+            <img src="{{ STATIC_URL }}images/slide1.jpg" />
+          </li>
 
-    </div>
-    <div class='span4 text-center hidden-phone'>
-
-      <div class='well'>
-        <h5 class='text-center visible-desktop' style='margin: 0 auto;'>
-          Empowering illiterate artisans
-          to sell their work independently.
-        </h5>
-        <br class='visible-desktop'>
-        <p class='text-center'>
-          Unique and incredible crafts
-          directly from the artisan who made it.<br>
-          Yes, Direct!<br>
-          Physically mailed from their doorstep to yours.
-        </p>
-
-        <div id='facebook' class='hidden-phone'>
-          <div class="fb-like"
-               data-href="http://www.theanou.com"
-               data-width="100" data-layout="button_count"
-               data-show-faces="false" data-send="true">
-          </div>
-        </div>
+        </ul>
       </div>
 
     </div>
   </div>
+
+  <!--<div>
+    <ul class='inline text-center'>
+      <li><span class='explore-bar'>&nbsp;</span></li>
+      <li class='explore title-font'>explore</li>
+      <li><span class='explore-bar'>&nbsp;</span></li>
+    </ul>
+  </div>-->
 
   {% search_bar_tag %}
 

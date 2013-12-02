@@ -73,10 +73,10 @@
         </div>
 
         <h1 itemprop="name">
-          {{ product.name }}
+          {{ product.name|title }}
           by
           <a href="{{ product.seller.get_absolute_url }}">
-            {{ product.seller.name }}
+            {{ product.seller.name|title }}
           </a>
         </h1>
       </div>
@@ -161,13 +161,13 @@
         </tr>
 
         <tr itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-          <td rowspan=2 class='price' itemprop="price">
+          <td rowspan=2 class='price title-font' itemprop="price">
             ${{ product.display_price }}
           </td>
-          <td class='price-qualifier nowrap'>free shipping.</td>
+          <td class='price-qualifier nowrap title-font'>Free Shipping</td>
         </tr>
         <tr>
-          <td class='price-qualifier nowrap'>free returns.</td>
+          <td class='price-qualifier nowrap title-font'>Free Returns</td>
         </tr>
       </table>
 
@@ -196,14 +196,14 @@
            alt='{{ product.artisan.title }}'>
       {% if product.artisan.name %}
         <p>handmade by</p>
-        <h3 id='artisan-name'>{{ product.artisan.name }}</h3>
+        <h3 id='artisan-name'>{{ product.artisan.name|title }}</h3>
         <p>at</p>
       {% else %}
         <p>handmade at</p>
       {% endif %}
       <h3 id='store-name'>
         <a href="{{ product.seller.get_absolute_url }}">
-          {{ product.seller.name }}
+          {{ product.seller.name|title }}
         </a>
       </h3>
       <p id='artisan-bio'>
@@ -224,8 +224,8 @@
   </div>
 
   {% if product.utilities %}
-    <h4 class='utilities-disclaimer'>
-      This original item was uniquely handmade using the local materials and tools below
+    <h4 class='utilities-disclaimer copy-font'>
+      This Original Item was Handmade using the Local Materials and Tools Below
     </h4>
   {% endif %}
 

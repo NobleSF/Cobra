@@ -20,11 +20,35 @@
 {%block open_graph_description%}{{ block.super }}{%endblock%}
 {%block open_graph_image%}{{ block.super }}{%endblock%}
 
+{% block javascript %}
+  <script type="text/javascript" src="{{ STATIC_URL }}public/js/about.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}vendor/fitvids/js/jquery.fitvids.js"></script>
+{% endblock javascript %}
+
 {% block css %}
   <style>
     #thanks-list li{
       padding: 15px;
     }
+
+    /* FACEBOOK LIKE BUTTON */
+    #facebook{margin: 1em auto 0;}
+
+    /* SUBSCRIBE FORM */
+    #subscribe-text{line-height: 2em;}
+    #subscribe-form{margin: 1em;}
+    #subscribe-form ul li *{margin: 0.1em;}
+
+    #subscribe-name{display: none;}
+
+    #subscribe-buttons button:nth-child(2),
+    #subscribe-buttons button:nth-child(3),
+    #subscribe-buttons button:nth-child(4){display: none;}
+
+    .help-inline{display: none;}
+    #email-suggestion{display: none;}
+    #suggested-email{cursor: pointer;}
+
   </style>
 {% endblock css %}
 
@@ -34,34 +58,59 @@
 {% endblock header_link_1 %}
 
 {% block header_link_2 %}
-  <li><a class='title' href="http://helloanou.wordpress.com">BLOG</a></li>
+  <li><a class='title' href="http://helloanou.wordpress.com">Blog</a></li>
 {% endblock header_link_2 %}
 
 {% block content %}
-<h5 class='text-center'>
 
-  <img id='header_photo'
-      src="http://res.cloudinary.com/anou/image/upload/c_scale,w_800/v1375390688/ait_bougamez_dan_pano_mthyxt.jpg"
-      alt='Dan overlooking the Ait Bougamez valley'>
-  <br>
-  <p>Dan overlooking the valley of Ait Bougamez near Brahim's home</p>
+<div id='video' class='text-centex'>
+  <iframe src="//player.vimeo.com/video/80725132?title=0&amp;byline=0&amp;color=ffffff" width="940" height="528" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+</div>
 
-</h5>
+<div id='subscribe' class='text-center' style=''>
+  <form id='subscribe-form' data-url='{% url 'communication:subscribe' %}'>
+    <h3 id='subscribe-text'>Subscribe to our Monthly Newsletter</h3>
+    <ul class='inline'>
+      <li>
+        <div class="control-group">
+          <div class="controls">
+
+            <input id='subscribe-email' class='input-large required'
+              type='text' name='email'
+              placeholder='email'>
+
+            <p id='email-suggestion'>
+              Did you mean <a id='suggested-email'></a>?
+            </p>
+            <p class="help-inline">Please provide your email.</p>
+          </div>
+        </div>
+      </li>
+      <li>
+        <input id='subscribe-name' class='input-medium'
+               type='text' name='name'
+               placeholder='name (optional)'>
+      </li>
+      <li id='subscribe-buttons'>
+        <button type='button' id='subscribe-submit' class='btn'>Subscribe</button>
+        <button type='button' class='btn btn-info disabled'>Saving...</button>
+        <button type='button' class='btn btn-success disabled'>Thanks!</button>
+        <button type='button' class='btn btn-danger disabled'>Invalid, please try again</button>
+      </li>
+    </ul>
+  </form>
+</div>
 
 <div class='well'>
-  <h4 class='text-center' style='margin: 0 auto;'>
-    <u>Anou</u><br>
-    is an artisan-managed <u>platform</u><br>
-    that <u>empowers</u> illiterate artisans<br>
-    to sell their work with<br>
-    <u>independence</u>.
+  <h4 class='text-center' style='margin: 0 auto; font-size: 22pt; line-height: 22pt;'>
+    Anou is a community of artisans<br>
+    establishing equal access to the free market.
+    <br>
   </h4>
   <br>
-
-  <p class='text-center'>
-    Anou gives artisans the tools they need to overcome
-    the challenges they face when selling internationally.<br>
-    Finally you can buy amazing crafts
+  <p class='text-center' style='margin: 0 auto; font-size: 16pt; line-height: 16pt;'>
+    The big difference is that
+    finally you can buy amazing crafts
     directly from the artisan who made it.
   </p>
 
@@ -82,7 +131,17 @@
 
 </div>
 
-<h4 id='story'>Our Story</h4>
+<h5 id='story' class='text-center'>
+
+  <img id='header_photo'
+      src="http://res.cloudinary.com/anou/image/upload/c_scale,w_1170/v1375390688/ait_bougamez_dan_pano_mthyxt.jpg"
+      alt='Dan overlooking the Ait Bougamez valley'>
+  <br>
+  <p>Dan overlooking the valley of Ait Bougamez near Brahim's home</p>
+
+</h5>
+
+<h4>Our Story</h4>
 <p>
   The idea for Anou was developed by Dan Driscoll during his Peace Corps service in Morocco from 2008-2010. When Dan started his service in Morocco he began working with a woodcarving shop that was deemed illegal by the Moroccan government. He opened up negotiations between the carvers and the government and an agreement was made that the carvers would plant a tree for every item they sold.
   <br><br>

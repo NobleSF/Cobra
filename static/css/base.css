@@ -9,14 +9,14 @@ body {
   }
 }
 
-h1, h2, h3, h4, h5, .title {
-	font-family: Savu-Condensed, sans-serif;
+h1, h2, h3, h4, h5, legend, .title, .title-font {
+	font-family: bikobold, sans-serif;
 	font-weight: normal;
 	font-style: normal;
 }
 
-p, li, td, span, .copy-font {
-	font-family: CynthoSlabPro-Regular, serif;
+p, li, td, .copy-font {
+	font-family: bembobold, serif;
 	font-weight: normal;
 	font-style: normal;
 }
@@ -37,7 +37,7 @@ a, a:hover, a:active, a:focus{outline: 0;}
 
 #header{
   background-color: #fffefa;
-  border-bottom: 2px solid rgb(220,220,240);
+  /*border-bottom: 2px solid rgb(220,220,240);*/
 }
 #header *{
   vertical-align: baseline;
@@ -58,15 +58,19 @@ a, a:hover, a:active, a:focus{outline: 0;}
   line-height: 45px;
 }
 #base-navigation a, #base-navigation a:hover, #base-navigation a:active {
-  color: #333;
-  font-size: 18pt;
-  text-decoration: none;
-}
-@media (max-width: 980px){
+	color: #808080;
+	font-size: 22pt;
+	text-decoration: none;
+}@media (max-width: 980px){
   #base-navigation a, #base-navigation a:hover, #base-navigation a:active {
-    font-size: 12pt;
+    font-size: 18pt;
+  }
+}@media (max-width: 768px){
+  #base-navigation a, #base-navigation a:hover, #base-navigation a:active {
+    font-size: 14pt;
   }
 }
+
 @media (max-width: 400px){
   #base-navigation #text-links li{line-height: 18px}
 }

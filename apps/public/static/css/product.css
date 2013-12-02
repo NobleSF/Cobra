@@ -121,13 +121,23 @@
 }
 
 .product .title .name{
-  padding: 0.5em 0 0;
-  font-size: 18pt;
+  padding: 0.5em 0 0.1em;
+  font-size: 28pt;
+}@media (max-width: 980px){
+  .product .title .name{font-size: 22pt;}
+}@media (max-width: 768px){
+  .product .title .name{font-size: 26pt;}
+}@media (max-width: 450px){
+  .product .title .name{font-size: 20pt;}
 }
+
 .product .title .city{
   padding:  0 0 0.5em;
-  font-size: 12pt;
+  font-size: 14pt;
+}@media (max-width: 980px){
+  .product .title .city{font-size: 12pt;}
 }
+
 .product .title .name, .product .title .city{
   margin: 0 auto;
   color: rgba(0,0,0,0.9);

@@ -28,7 +28,7 @@
 
       <!----- PART 1 ----->
       <div id='cart' class='part1'>
-        <h3 id='cart-sentance' class='trim copy-font'>
+        <h3 id='cart-sentance' class='trim'>
           You have
           {{ cart.count }}
           item{{ cart.count|pluralize }}
@@ -63,18 +63,18 @@
         <div id='summary' class='fluid-row'>
           <div class='span5'>
             <ul>
-              <li>Shipping</li>
-              <li>Total</li>
-              <li><a href="{% url 'home' %}">Continue Shopping</a></li>
+              <li class='title-font'>Shipping</li>
+              <li class='title-font'>Total</li>
+              <li class='title-font'><a href="{% url 'home' %}">Continue Shopping</a></li>
             </ul>
           </div>
           <div class='span7'>
             <ul>
-              <li class='amount'>0.00</li>
-              <li class='amount'>
+              <li class='amount title-font'>0.00</li>
+              <li class='amount title-font'>
                 $<span id='order-total'>{{ cart.summary }}</span>
               </li>
-              <li>
+              <li class='title-font'>
                 {% if cart.count %}
                   <button id='checkout-button'
                      class='btn btn-large btn-success'>
@@ -94,13 +94,13 @@
       <!----- END PART 1 ----->
 
       <div id='cart-shortcut' class='part2 part3'>
-        <h3 id='cart-return-button' class='copy-font'>
+        <h3 id='cart-return-button' class=''>
           <a href='#cart-sentance'>
             <span class='symbol-cart'></span> back to Cart
           </a>
         </h3>
 
-        <h3 id='cart-paragraph' class='trim copy-font'>
+        <h3 id='cart-paragraph' class='trim '>
           You have
           {% for item in cart %}
             {% if forloop.first %}a
