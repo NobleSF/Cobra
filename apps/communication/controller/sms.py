@@ -39,7 +39,8 @@ def sendSMS(message, to_number, priority='1'): #using Telerivet
     if int(response.status_code) is 200:
       return saveSMS(response_content) #responds with SMS object or exception str
     else:
-      e = Exception('bad request or possible Telerivet error')
+      details = "status:%d" % response.status_code if response.status_code else ""
+      e = Exception('bad request or possible Telerivet error, %s' % details)
       ExceptionHandler(e, "in sms.sendSMS-B")
       return None
 
