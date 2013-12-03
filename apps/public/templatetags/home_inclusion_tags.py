@@ -13,7 +13,8 @@ def homepage_products_tag():
                                     active_at__lte=timezone.now(),
                                     seller__approved_at__lte=timezone.now(),
                                     seller__deactive_at=None,
-                                    deactive_at=None))
+                                    deactive_at=None)
+                              .exclude(ranking=None))
 
   products = sorted(products, key=lambda p: p.ranking.weighted_average)
   products.reverse() #sort by points descending
