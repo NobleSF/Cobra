@@ -26,12 +26,14 @@ def communicateOrdersCreated(orders):
       seller_phone = order.products.all()[0].seller.phone
       sendSMSForOrder(seller_msg, seller_phone, order)
 
-      #notify Brahim
+      #notify the team
       try:
         order.seller_msg = seller_msg.replace('\r\n', '<br>')
-        everybody = [people.Tom.email, people.Dan.email, people.Brahim.email,
-                     people.Rabha.email, people.Kenza.email, people.Mustapha.email]
-        Email('order/created_copy_director', order).sendTo(everybody)
+        emails = [people.Dan.email, people.Brahim.email,
+                  people.Rabha.email, people.Kenza.email, people.Mustapha.email]
+        for address in emails:
+          Email('order/created_copy_director', order).sendTo(address)
+
       except Exception as e:
         ExceptionHandler(e, "in order_events.communicateOrdersCreated-B")
 
