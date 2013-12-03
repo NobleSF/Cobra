@@ -40,7 +40,6 @@ def updateRankings(product, except_ratings=False):
 
 @receiver(post_save, sender=Rating)
 def updateRatingRankings(sender, instance, created, **kwargs):
-  print "We have arrived!"
   rating = instance
   try:
     ranking = rating.product.ranking
