@@ -20,9 +20,12 @@ def completeUpload(request):#for cloudinary to post info on completed uploads
 
   except Upload.DoesNotExist as e:
     ExceptionHandler(e, "in cloudinary_upload.completeUpload, upload public id %s does not exist" % request_data.get('public_id'))
+    return HttpResponse(status=406)#no upload with that public_id
+
   except Exception as e:
     ExceptionHandler(e, "in cloudinary_upload.completeUpload")
     return HttpResponse(str(e), status=500)
+
   else:
     #todo: cache.expire('check_'+request_data.get('public_id'))
     return HttpResponse(status=200)
@@ -34,43 +37,52 @@ def checkImageUpload(request):#for our JS to check upload status and get thumb_u
   #  return cached_response
   #else:
   from apps.seller.models import Asset, Seller
-  try:
-    upload = Upload.objects.get(public_id = request.GET['public_id'])
-    if upload.is_complete:
-      image = Image(original=upload.url)
-      image.save()
 
-      if request.GET['ilk'] == 'seller':
-        seller = Seller.objects.get(id=request.session['seller_id'])
-        seller.image = image
-        seller.save()
+  if request.method != 'GET' or 'public_id' in request.GET:
+    return HttpResponse("public_id required", status=406)#Not acceptable
 
-      else: #asset
-        asset, is_new = Asset.objects.get_or_create(
-                          seller_id = request.session['seller_id'],
-                          ilk = request.GET['ilk'],
-                          rank = request.GET['rank']
-                        )
-
-        asset.image = image
-        asset.save()
-
-      response = {'thumb_url': image.thumb_size}
-      return HttpResponse(simplejson.dumps(response),
-                          mimetype='application/json',
-                          status='200')
-
+  else:
+    try:
+      upload = Upload.objects.get(public_id = request.GET['public_id'])
+    except:
+      return HttpResponse(status=410)#Gone, it failed, stop asking
     else:
-      #todo:
-      #cache.set('check_'+request.GET['public_id'], 300) #5 minutes
-      return HttpResponse("did not find upload", status='204')
+      try:
+        if upload.is_complete:
+          image = Image(original=upload.url)
+          image.save()
 
-  except Exception as e:
-    ExceptionHandler(e, "in cloudinary_upload.checkImageUpload", sentry_only=True)
-    response = {'exception':str(e)}
-    return HttpResponse(simplejson.dumps(response),
-                        mimetype='application/json',
-                        status='500')
+          if request.GET['ilk'] == 'seller':
+            seller = Seller.objects.get(id=request.session['seller_id'])
+            seller.image = image
+            seller.save()
+
+          else: #asset
+            asset, is_new = Asset.objects.get_or_create(
+                              seller_id = request.session['seller_id'],
+                              ilk = request.GET['ilk'],
+                              rank = request.GET['rank']
+                            )
+
+            asset.image = image
+            asset.save()
+
+          response = {'thumb_url': image.thumb_size}
+          return HttpResponse(simplejson.dumps(response),
+                              mimetype='application/json',
+                              status='200')
+
+        else:
+          #todo:
+          #cache.set('check_'+request.GET['public_id'], 300) #5 minutes
+          return HttpResponse("did not find upload", status='204')
+
+      except Exception as e:
+        ExceptionHandler(e, "in cloudinary_upload.checkImageUpload", sentry_only=True)
+        response = {'exception':str(e)}
+        return HttpResponse(simplejson.dumps(response),
+                            mimetype='application/json',
+                            status='500')
 
 @access_required('seller')
 @csrf_exempt
@@ -109,27 +121,36 @@ def imageFormData(request):
 @csrf_exempt
 def checkPhotoUpload(request):#for our JS to check upload status and get thumb_url todo:cache response
   from apps.seller.controller.product_class import Product
-  try:
-    upload = Upload.objects.get(public_id = request.GET['public_id'])
-    if upload.is_complete:
-      request.product_id = request.GET['product_id']
-      product = Product(request)
 
-      photo = product.addPhoto(upload.url, request.GET['rank'])
-      response = {'thumb_url': photo.thumb_size}
+  if request.method != 'GET' or 'public_id' not in request.GET:
+    return HttpResponse("public_id required", status=406)#Not acceptable
 
-      return HttpResponse(simplejson.dumps(response),
-                          mimetype='application/json',
-                          status='200')
+  else:
+    try:
+      upload = Upload.objects.get(public_id = request.GET['public_id'])
+    except:
+      return HttpResponse(status=410)#Gone, it failed, stop asking
     else:
-      return HttpResponse("did not find upload", status='204')
+      try:
+        if upload.is_complete:
+          request.product_id = request.GET['product_id']
+          product = Product(request)
 
-  except Exception as e:
-    ExceptionHandler(e, "in cloudinary_upload.checkPhotoUpload", sentry_only=True)
-    response = {'exception':str(e)}
-    return HttpResponse(simplejson.dumps(response),
-                        mimetype='application/json',
-                        status='500')
+          photo = product.addPhoto(upload.url, request.GET['rank'])
+          response = {'thumb_url': photo.thumb_size}
+
+          return HttpResponse(simplejson.dumps(response),
+                              mimetype='application/json',
+                              status='200')
+        else:
+          return HttpResponse("did not find upload", status='204')
+
+      except Exception as e:
+        ExceptionHandler(e, "in cloudinary_upload.checkPhotoUpload", sentry_only=True)
+        response = {'exception':str(e)}
+        return HttpResponse(simplejson.dumps(response),
+                            mimetype='application/json',
+                            status='500')
 
 @access_required('admin or seller')
 @csrf_exempt
