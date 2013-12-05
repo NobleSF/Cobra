@@ -45,7 +45,7 @@
           {% for item in cart %}
             {% if item.order.tracking_number %}
               <h3 class=''>
-                Tracking {{ item.product.name }} at
+                Track your {{ item.product.name }} at
                 <a href="{{ item.order.tracking_url }}" target='_blank'>
                   {{ item.order.tracking_number }}
                 </a>.
