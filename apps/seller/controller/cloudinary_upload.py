@@ -38,7 +38,7 @@ def checkImageUpload(request):#for our JS to check upload status and get thumb_u
   #else:
   from apps.seller.models import Asset, Seller
 
-  if request.method != 'GET' or 'public_id' in request.GET:
+  if request.method != 'GET' or 'public_id' not in request.GET:
     return HttpResponse("public_id required", status=406)#Not acceptable
 
   else:
