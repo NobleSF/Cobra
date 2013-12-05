@@ -56,7 +56,8 @@
                   enables you to buy directly from artisans
                 </span>
                 <br>
-                <a href="http://helloanou.wordpress.com/2013/07/15/the-economics-of-a-single-moroccan-reed-basket/" class='button'>Learn More</a>
+                <a class='button' href="http://helloanou.wordpress.com/2013/07/15/the-economics-of-a-single-moroccan-reed-basket/">Learn more</a>
+                <a class='button shop' href="#store">Shop</a>
               </p>
             </div>
             <img src="{{ STATIC_URL }}images/slide3.jpg" />
@@ -71,7 +72,8 @@
                   and each purchase supports the growth of our vibrant community
                 </span>
                 <br>
-                <a href="{% url 'about' %}" class='button'>Join Our Community</a>
+                <a href="{% url 'about' %}" class='button'>Join our community</a>
+                <a class='button shop' href="#store">Shop</a>
               </p>
 
             </div>
@@ -86,7 +88,8 @@
                   Our platform bridges the two using culturally-responsive design
                 </span>
                 <br>
-                <a href="{% url 'about' %}" class='button'>Learn How</a>
+                <a href="{% url 'about' %}" class='button'>Learn how</a>
+                <a class='button shop' href="#store">Shop</a>
               </p>
             </div>
             <img src="{{ STATIC_URL }}images/slide1.jpg" />
@@ -105,6 +108,8 @@
       <li><span class='explore-bar'>&nbsp;</span></li>
     </ul>
   </div>-->
+
+  <div id='store'></div>
 
   {% search_bar_tag %}
 
