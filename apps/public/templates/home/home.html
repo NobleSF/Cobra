@@ -15,11 +15,11 @@
 
 {% block javascript %}
   <script type="text/javascript" src="{{ STATIC_URL }}vendor/flexslider/js/jquery.flexslider-min.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}public/js/home.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}public/js/home.min.js?v=2"></script>
 {% endblock javascript %}
 
 {% block css %}
-  <link href="{{ STATIC_URL }}public/css/home.css" rel="stylesheet">
+  <link href="{{ STATIC_URL }}public/css/home.css?v=2" rel="stylesheet">
   <link href="{{ STATIC_URL }}vendor/flexslider/css/flexslider.css" rel="stylesheet">
 {% endblock css %}
 {% endcache home_header %}
@@ -57,7 +57,7 @@
                 </span>
                 <br>
                 <a class='button' href="http://helloanou.wordpress.com/2013/07/15/the-economics-of-a-single-moroccan-reed-basket/">Learn more</a>
-                <a class='button shop' href="#store">Shop</a>
+                <a class='button shop'>Shop</a>
               </p>
             </div>
             <img src="{{ STATIC_URL }}images/slide3.jpg" />
@@ -73,7 +73,7 @@
                 </span>
                 <br>
                 <a href="{% url 'about' %}" class='button'>Join our community</a>
-                <a class='button shop' href="#store">Shop</a>
+                <a class='button shop'>Shop</a>
               </p>
 
             </div>
@@ -89,7 +89,7 @@
                 </span>
                 <br>
                 <a href="{% url 'about' %}" class='button'>Learn how</a>
-                <a class='button shop' href="#store">Shop</a>
+                <a class='button shop'>Shop</a>
               </p>
             </div>
             <img src="{{ STATIC_URL }}images/slide1.jpg" />

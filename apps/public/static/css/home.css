@@ -91,6 +91,7 @@ ol.flex-control-paging{display: none;}
   color: #FFF;
   padding: 10px 20px;
   line-height: 75pt;
+  cursor: pointer;
 }@media (max-width: 768px){
   .slides .slide-text .button {
     padding: 10px;
