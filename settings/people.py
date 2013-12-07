@@ -25,7 +25,7 @@ Tom = People(info = (
       )
 
 Brahim = People(info = (
-          'Brahim Mansouri',
+          'Brahim El Mansouri',
           'Director',
           'brahim@theanou.com',
           '212673753163',
@@ -49,9 +49,17 @@ Mustapha = People(info = (
       )
 
 Kenza = People(info = (
-          'Kenza',
+          'Kenza Oulaghda',
           'Trainer',
           'kenza.tithrite1@gmail.com',
           '0637637565',
+        )
+      )
+
+hicham = People(info = (
+          'Hicham Kartouchi',
+          'Trainer',
+          '',
+          ''
         )
       )
