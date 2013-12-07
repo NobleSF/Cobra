@@ -26,30 +26,7 @@
 {% endblock javascript %}
 
 {% block css %}
-  <style>
-    #thanks-list li{
-      padding: 15px;
-    }
-
-    /* FACEBOOK LIKE BUTTON */
-    #facebook{margin: 1em auto 0;}
-
-    /* SUBSCRIBE FORM */
-    #subscribe-text{line-height: 2em;}
-    #subscribe-form{margin: 1em;}
-    #subscribe-form ul li *{margin: 0.1em;}
-
-    #subscribe-name{display: none;}
-
-    #subscribe-buttons button:nth-child(2),
-    #subscribe-buttons button:nth-child(3),
-    #subscribe-buttons button:nth-child(4){display: none;}
-
-    .help-inline{display: none;}
-    #email-suggestion{display: none;}
-    #suggested-email{cursor: pointer;}
-
-  </style>
+  <link href="{{ STATIC_URL }}public/css/about.css" rel="stylesheet">
 {% endblock css %}
 
 
@@ -63,13 +40,54 @@
 
 {% block content %}
 
-<div id='video' class='text-centex'>
-  <iframe src="//player.vimeo.com/video/80725132?title=0&amp;byline=0&amp;color=ffffff" width="940" height="528" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+<!--<div id='introduction' class=''>
+  <div class='message'>
+    <h2>
+      What is Anou?
+    </h2>
+  </div>
+  <img src='{{ STATIC_URL }}images/about_page/about_photo.jpg' title='photo of Zaouia Oued Ifrane'>
+</div>-->
+
+<div id='headline'>
+  <div class='row-fluid section'>
+    <div class='span6'>
+      <h1 class='copy-font'>
+        Anou is a community of artisans working together
+        to establish equal access to the free market via the internet.
+      </h1>
+
+      <h2 class='copy-font'>
+        Finally, artisans now have the freedom to set their own prices and engage directly with you.
+      </h2>
+
+      <!--<div id='facebook' class='text-center hidden-phone'>
+        <div class="fb-like"
+             data-href="http://www.theanou.com/about"
+             data-width="350" data-layout="button_count"
+             data-show-faces="true" data-send="true">
+        </div>
+      </div>-->
+    </div>
+
+    <div class='span6 video'>
+      <div id='video' class='text-centex'>
+        <iframe src="//player.vimeo.com/video/80725132?title=0&amp;byline=0&amp;color=ffffff" width="585" height="330" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div id='subscribe' class='text-center' style=''>
+<!--<ul class='text-center inline'>
+  <li><a href='#story'>Our Story</a></li>
+  <li><a href='#team'>Anou Team</a></li>
+  <li><a href='#faq'>FAQ</a></li>
+  <li><a href='#thanks'>Special Thanks</a></li>
+</ul>-->
+
+<div id='subscribe' class='section well text-center'>
   <form id='subscribe-form' data-url='{% url 'communication:subscribe' %}'>
-    <h3 id='subscribe-text'>Subscribe to our Monthly Newsletter</h3>
+    <h3 id='subscribe-text' class='copy-font'>Subscribe to our Monthly Newsletter</h3>
     <ul class='inline'>
       <li>
         <div class="control-group">
@@ -101,126 +119,337 @@
   </form>
 </div>
 
-<div class='well'>
-  <h4 class='text-center' style='margin: 0 auto; font-size: 22pt; line-height: 22pt;'>
-    Anou is a community of artisans<br>
-    establishing equal access to the free market.
-    <br>
-  </h4>
-  <br>
-  <p class='text-center' style='margin: 0 auto; font-size: 16pt; line-height: 16pt;'>
-    The big difference is that
-    finally you can buy amazing crafts
-    directly from the artisan who made it.
-  </p>
 
-  <div id='facebook' class='text-center hidden-phone'>
-    <div class="fb-like"
-         data-href="http://www.theanou.com/about"
-         data-width="350" data-layout="button_count"
-         data-show-faces="true" data-send="true">
+<div id='community' class='section row-fluid'>
+
+  <div class='span6 text'>
+    <p>
+      <span class='quote'>&ldquo;</span>Anou represents a fundamental shift in the fair-trade industry. Instead of asking how organizations can help, we ask how can we build a resilient community of artisans where outside help and fair-trade organizations are no longer needed.<span class='quote'>&rdquo;</span>
+      <br><br>
+      <span class='credit'>- Dan Driscoll</span>
+      <br>
+      <span class='credit'>&nbsp;&nbsp;Anou Founder, RPCV</span>
+      </span>
+    </p>
+  </div>
+  <div class='offset1 span4 image'>
+    <img src="{{ STATIC_URL }}images/about_page/community.jpg">
+  </div>
+</div>
+
+<div id='process'>
+  <div class='section-title copy-font'>
+    Our Process
+  </div>
+
+  <div class='section row-fluid'>
+    <div class='span4'>
+      <table>
+        <tr><td class='image'>
+          <img src="{{ STATIC_URL }}images/about_page/1.jpg">
+        </td></tr>
+        <tr><td><h3 class='copy-font'>1. Artisan Led</h3></td></tr>
+        <tr><td>
+          <p>
+            When a new artisan expresses interest in joining Anou's community, they are connected with and trained by more experienced and successful artisans on how Anou's platform works. This builds the foundation for Anou's artisan led model.
+          </p>
+        </td></tr>
+      </table>
+    </div>
+
+    <div class='span4'>
+      <table>
+        <tr><td class='image'>
+          <img src="{{ STATIC_URL }}images/about_page/2.jpg">
+        </td></tr>
+        <tr><td><h3 class='copy-font'>2. Technology</h3></td></tr>
+        <tr><td>
+          <p>
+            Training new members of the Anou artisan community begins by building their custom language-free account. The interface pictured above allows them to (from right to left) add products, manage inventory, and track orders. Using culturally responsive, language-free design, we adapt the user interface to suit first-time technology users.
+          </p>
+        </td></tr>
+      </table>
+    </div>
+
+    <div class='span4'>
+      <table>
+        <tr><td class='image'>
+          <img src="{{ STATIC_URL }}images/about_page/3.jpg">
+        </td></tr>
+        <tr><td><h3 class='copy-font'>3. Training</h3></td></tr>
+        <tr><td>
+          <p>
+            All trainings take place at the new artisan's workshop to gauruntee their work is authentic, and to address local obstacles to success. For the same reason, the training is conducted using existing technology and infrastructure. With this investment of quality time spent with the artisan, they become contributing members of Anou's greater community.
+          </p>
+        </td></tr>
+      </table>
     </div>
   </div>
 
-<!--  <ul class='text-center inline'>
-    <li><a href='#story'>Our Story</a></li>
-    <li><a href='#team'>Anou Team</a></li>
-    <li><a href='#faq'>FAQ</a></li>
-    <li><a href='#thanks'>Special Thanks</a></li>
-  </ul>-->
 
-</div>
+  <div class='section row-fluid'>
+    <div class='span4'>
+      <table>
+        <tr><td class='image'>
+          <img src="{{ STATIC_URL }}images/about_page/4.jpg">
+        </td></tr>
+        <tr><td><h3 class='copy-font'>4. Photography</h3></td></tr>
+        <tr><td>
+          <p>
+            During each training, artisans practice basic photography skills focused on emphasizing the connection between the product, where it was made, and the person who made it. All pictures on the Anou store are taken and uploaded by the artisan themselves using their own cameras or phones.
+          </p>
+        </td></tr>
+      </table>
+    </div>
 
-<h5 id='story' class='text-center'>
+    <div class='span4'>
+      <table>
+        <tr><td class='image'>
+          <img src="{{ STATIC_URL }}images/about_page/5.jpg">
+        </td></tr>
+        <tr><td><h3 class='copy-font'>5. Orders</h3></td></tr>
+        <tr><td>
+          <p>
+            When a product is purchased, the artisan immediately receives an SMS text message including the shipping address. Artisans then reply back with SMS text messages to confirm shipments and send in tracking numbers. Post office staff assist Anou's illiterate members in writing out address labels.
+          </p>
+        </td></tr>
+      </table>
+    </div>
 
-  <img id='header_photo'
-      src="http://res.cloudinary.com/anou/image/upload/c_scale,w_1170/v1375390688/ait_bougamez_dan_pano_mthyxt.jpg"
-      alt='Dan overlooking the Ait Bougamez valley'>
-  <br>
-  <p>Dan overlooking the valley of Ait Bougamez near Brahim's home</p>
-
-</h5>
-
-<h4>Our Story</h4>
-<p>
-  The idea for Anou was developed by Dan Driscoll during his Peace Corps service in Morocco from 2008-2010. When Dan started his service in Morocco he began working with a woodcarving shop that was deemed illegal by the Moroccan government. He opened up negotiations between the carvers and the government and an agreement was made that the carvers would plant a tree for every item they sold.
-  <br><br>
-  However, this created another problem: the woodcarvers couldn't afford to plant the trees. The carvers had traditionally depended on middlemen and fair-trade organizations to sell their work. But these organizations would not provide the carvers enough profit to cover the cost of planting a $1 tree. The organizations would then resell the items for 400% mark ups.
-  <br><br>
-  With the Internet just introduced into the valley, Dan focused on training the carvers how to use Etsy.com, an American e-commerce website. After six months, the carvers were independently managing their own store and keeping all of the profit on sales. They also chose to reinvest the income back into their community! It proved that artisans, no matter how rural, could sell their work independently and then thrive because of it.
-  <br><br>
-  Unfortunately for the carvers, Etsy was not a long-term solution. The site was made for English-speaking, computer-literate users and was simply too difficult for artisans in Morocco to use. As a result, Dan and the carvers decided to build Anou, an entirely new platform, designed specifically for artisans throughout Morocco. Today, Anou is an artisan-led e-commerce platform enabling hundreds of Moroccan artisans to overcome the barriers that have traditionally held them out of the global market place. As a result, they now thrive, independent of the middleman resellers.
-</p>
-
-<br id='team'><br><br>
-<h4>Our Team</h4>
-
-<div class='row-fluid'>
-  <div class='span3'>
-    <p>Brahim Mansouri</p>
-    <p>Director of Anou</p>
-    <p>brahim@theanou.com</p>
-  </div>
-  <div class='span9'>
-    <p>Brahim grew up in the Ait Bougamez valley carving wood and tending his ever growing apple orchards. Brahim, a woodcarver at trade, has always been focused on developing his community and in 2006 founded Association Ighrem, a highly successful Moroccan association, in his home village to address its development needs. View Association Ighrem's shop on Anou here. Over the years, Brahim has evolved into a professionally recognized social innovator and artisan from the rural Ait Bougamez valley in Morocco. Now, Brahim manages the day-to-day operations of Anou. He is married and has two daughters, Raja and Yasmina.</p>
-    <p><a href="http://www.theanou.com/store/5">Visit Brahim's Association</a></p>
-  </div>
-</div>
-<br>
-<div class='row-fluid'>
-  <div class='span3'>
-    <p>Rabha Akkoui</p>
-    <p>Anou Trainer</p>
-  </div>
-  <div class='span9'>
-    <p>Rabha is the president of Cooperative Chorouk - a weaving cooperative in the Middle Atlas of Morocco (visit Cooperative Chorouk's store here). Rabha and her women were one of Anou's pilot artisans and they have since excelled, becoming one of the top sellers on Anou. Rabha has demonstrated a long history of supporting not just the women in her village, but all artisans across Morocco. She has organized numerous natural dye workshops for cooperatives in Morocco and has also led many other trainings. As a result of her training skill, she has joined Anou as an Anou Trainer and is now the primary trainer for female led cooperatives in Morocco.</p>
-    <p><a href="http://www.theanou.com/store/3">Visit Rabha's Cooperative</a></p>
+    <div class='span4'>
+      <table>
+        <tr><td class='image'>
+          <img src="{{ STATIC_URL }}images/about_page/6.jpg">
+        </td></tr>
+        <tr><td><h3 class='copy-font'>6. Community</h3></td></tr>
+        <tr><td>
+          <p>
+            A small portion of every sale is set aside to pay Anou's artisan trainers as they support the existing community and train new artisans. This ensures that the cost of Anou's non-profit operations are reinvested back into a thriving artisan community. This practice adds a special beauty to every item that you place in your home.
+          </p>
+        </td></tr>
+      </table>
+    </div>
   </div>
 </div>
-<br>
-<div class='row-fluid'>
-  <div class='span3'>
-    <p>Hoda Mansouri</p>
-    <p>Translator</p>
-    <p>hoda@theanou.com</p>
-    <img>
+
+<div id='story'>
+  <div class='story-title'>
+    <h3 class='copy-font'>The Anou Story</h3>
   </div>
-  <div class='span9'>
-    <p>Hoda was born in Rich, Morocco, a quiet town on the southern foothills of the High Atlas. Hoda studied English in the imperial city of Meknes. After graduating, she started working as a language and cultural adviser with Peace Corps and is widely known as one of Peace Corps' best language teachers. Hoda is largely responsible for the translation of profile information compiled by Brahim and Rabha.</p>
-  </div>
-</div>
-<br>
-<div class='row-fluid'>
-  <div class='span3'>
-    <p title='Old Snow Beard'>
-      <a href='http://www.linkedin.com/in/tomcounsell/' target='_blank'>
-        Tom Counsell
-      </a>
+
+  <div class='paragraph'>
+    <p>
+      Serving as a Peace Corps Volunteer in the Ait Bouguemez Valley of Morocco, Dan Driscoll grew frustrated when he learned that the carvers he worked with remained poor even after selling to fair-trade organizations. While working with the carvers, they showed him that that the only way to grow would be to ensure that they were able to sell their work independently without middlemen.
     </p>
-    <p>Technical Director</p>
-    <p>tom@theanou.com</p>
-    <img>
   </div>
-  <div class='span9'>
-    <p>Tom is a current Peace Corps volunteer, living in Morocco since March of 2012. Even before completing his Computer Science degree from Purdue University, Tom has excelled at using technology to dream up innovative solutions to unsolved problems. He's also not afraid to get his hands dirty and try anything for a learning opportunity.</p>
-  </div>
-</div>
-<br>
-<div class='row-fluid'>
-  <div class='span3'>
-    <p title='Batman'>
-      <a href='http://www.linkedin.com/pub/lawrence-dan-driscoll/23/43b/266' target='_blank'>
-        Dan Driscoll
-      </a>
+
+  <div class='paragraph'>
+    <p>
+      As technology transformed the Ait Bouguemez valley (Dan had internet, but no running water in his mud house), he decided to train the carvers to sell on Etsy and eBay. The carvers had so much success selling online that they poured the excess profits of their sales into the local community. Today, the carvers continue to self-fund their own solutions to local problems and have built a thriving community in the valley. For Dan, this represented true sustainable development.
     </p>
-    <p>Founder of Anou</p>
-    <p>dan@theanou.com</p>
-    <img>
   </div>
-  <div class='span9'>
-    <p>Dan served as a Peace Corps Volunteer in Morocco from 2008 to 2010 in the environment sector. Prior to Peace Corps, Dan earned his degree in Environmental Policy at University of California - Irvine where he also ran competitively. After his Peace Corps service, Dan worked as a communications consultant for USAID's Responsive Governance Project in Yemen and also helped contribute to the growth of the National Yemen, a Yemeni newspaper based in Sana'a, Yemen. Dan speaks Classical Arabic, multiple dialects of Amazigh (Berber) and is also fluent in American Sign Language.</p>
+
+  <div class='paragraph'>
+    <p>
+      Etsy and Ebay began as good solutions for the carvers. However, illiteracy, lack of confidence, and geographic isolation prevented the vast majority of Moroccan artisans from being able to benefit from these platforms. As a result, Dan and Brahim El Mansouri, the president of the woodcarving association in Ait Bouguemez, teamed up to begin building the community of Anou.
+    </p>
+  </div>
+
+  <div class='paragraph'>
+    <p style='text-align: center; font-size: .5em;'>
+      <img src="http://res.cloudinary.com/anou/image/upload/c_scale,w_1170/v1375390688/ait_bougamez_dan_pano_mthyxt.jpg"
+        alt='Dan overlooking the Ait Bougamez valley'>
+      The Ait Bouguemez Valley, birthplace of Anou.
+    </p>
+  </div>
+
+</div>
+
+
+<div id='quotes'>
+  <div class='section row-fluid'>
+    <div class='span6 text'>
+      <p>
+        <span class='quote'>&ldquo;</span>The only way the middleman dilemma can be fixed is to create a community of artisans that is able to do the work of selling by themselves.<span class='quote'>&rdquo;</span>
+        <br>
+        <span class='credit'>- Brahim Mansouri</span>
+        <br>
+        <span class='credit'>&nbsp;&nbsp;Wood Carver, Anou Trainer</span>
+      </p>
+    </div>
+
+    <div class='span6 text'>
+      <p>
+        <span class='quote'>&ldquo;</span>My experience as an Anou trainer has taught me how to better sell and make my own products in order to help the women in my village. I now understand the problems artisans face across Morocco and I believe I can help.<span class='quote'>&rdquo;</span>
+        <br>
+        <span class='credit'>- Rabha Akkaoui</span>
+        <br>
+        <span class='credit'>&nbsp;&nbsp;Weaver, Anou Trainer</span>
+      </p>
+    </div>
   </div>
 </div>
+
+<div id='team' class='section'>
+
+  <div class='row-fluid'>
+    <div class='offset2 span4'>
+      <ul class='unstyled'>
+        <li class='headshot'>
+          <img title='Brahim' src='http://res.cloudinary.com/hork5h8x1/image/upload/c_scale,r_max,w_250/v1386338828/brahim_tqlpj8.jpg'>
+        </li>
+        <li class='name'>
+          Brahim Mansouri
+        </li>
+        <li class='description'>
+          Wood Carver
+          <br>
+          Anou Director
+        </li>
+        <li class='contact'>
+          <a href="{% url 'store' 5 %}">
+            <em>visit Brahim's store</em>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class='span4'>
+      <ul class='unstyled'>
+        <li class='headshot'>
+          <img title='Rabha' src='http://res.cloudinary.com/hork5h8x1/image/upload/c_scale,r_max,w_250/v1386338828/rabha_umnkw3.jpg'>
+        </li>
+        <li class='name'>
+          Rabha Akkaoui
+        </li>
+        <li class='description'>
+          Weaver
+          <br>
+          Anou Trainer
+        </li>
+        <li class='contact'>
+          <a href="{% url 'store' 3 %}">
+            <em>visit Rabha's store</em>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class='row-fluid'>
+    <div class='span4'>
+      <ul class='unstyled'>
+        <li class='headshot'>
+          <img title='Mustapha' src='http://res.cloudinary.com/hork5h8x1/image/upload/c_scale,r_max,w_250/v1386338828/mustapha_knjbo1.jpg'>
+        </li>
+        <li class='name'>
+          Mustapha Chaouai
+        </li>
+        <li class='description'>
+          Metalsmith
+          <br>
+          Anou Trainer
+        </li>
+        <li class='contact'>
+          <a href="{% url 'store' 9 %}">
+            <em>visit Mustapha's store</em>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class='span4'>
+      <ul class='unstyled'>
+        <li class='headshot'>
+          <img title='Kenza' src='http://res.cloudinary.com/hork5h8x1/image/upload/c_scale,r_max,w_250/v1386338828/kenza_y0idvo.jpg'>
+        </li>
+        <li class='name'>
+          Kenza Oulaghda
+        </li>
+        <li class='description'>
+          Weaver
+          <br>
+          Anou Trainer
+        </li>
+        <li class='contact'>
+          <a href="{% url 'store' 13 %}">
+            <em>visit Kenza's store</em>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class='span4'>
+      <ul class='unstyled'>
+        <li class='headshot'>
+          <img title='Hicham' src='http://res.cloudinary.com/hork5h8x1/image/upload/c_scale,r_max,w_250/v1386338828/hicham_xolleu.jpg'>
+        </li>
+        <li class='name'>
+          Hicham Kartouchi
+        </li>
+        <li class='description'>
+          Reed Weaver
+          <br>
+          Anou Trainer
+        </li>
+        <li class='contact'>
+          <a href="{% url 'store' 4 %}">
+            <em>visit Hicham's store</em>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class='row-fluid'>
+    <div class='offset2 span4'>
+      <ul class='unstyled'>
+        <li class='headshot'>
+          <img title='Dan' src='http://res.cloudinary.com/hork5h8x1/image/upload/c_scale,r_max,w_250/v1386338828/brahim_tqlpj8.jpg'>
+        </li>
+        <li class='name'>
+          Dan Driscoll
+        </li>
+        <li class='description'>
+          Anou Founder
+        </li>
+        <li class='contact'>
+          <a href="mailto:dan@theanou.com">
+            <em>dan@theanou.com</em>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class='span4'>
+      <ul class='unstyled'>
+        <li class='headshot'>
+          <img title='Tom' src='http://res.cloudinary.com/hork5h8x1/image/upload/c_scale,r_max,w_250/v1386338828/rabha_umnkw3.jpg'>
+        </li>
+        <li class='name'>
+          Tom Counsell
+        </li>
+        <li class='description'>
+          Techincal Director
+        </li>
+        <li class='contact'>
+          <a href="mailto:tom@theanou.com">
+            <em>tom@theanou.com</em>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
 
 <br id='faq'><br><br>
 <h4 class="text-center">
