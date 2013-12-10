@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from controller import account, inventory, management, cloudinary_upload
+from controller import account, inventory, management, cloudinary_upload, custom_order
 
 urlpatterns = patterns('',
 
@@ -28,5 +28,8 @@ urlpatterns = patterns('',
   url(r'^ajax/chk_img_up$', cloudinary_upload.checkImageUpload, name='check image upload'),
 
   url(r'^ajax/complete_up$', cloudinary_upload.completeUpload, name='complete upload'),
+
+  #CUSTOM ORDERS
+  url(r'^ajax/req_cust_order$', custom_order.requestCustomOrder, name='request custom order'),
 
 )

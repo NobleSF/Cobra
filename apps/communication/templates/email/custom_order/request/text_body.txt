@@ -1,0 +1,9 @@
+Custom Changes Request for product #{{ data.product.id }}
+{{ data.product.name }} by {{ data.product.seller.name }}
+http://www.theanou.com/{{ data.product.get_absolute_url}}
+
+Changes:
+{{ data.message }}
+
+
+from {{ data.customer_email }}
