@@ -93,4 +93,7 @@
   margin-top: 2em;
 }
 
-#past-inventory h3 {margin: 50px 0 0;}
+#past-inventory h3 {
+  margin: 50px 0 0;
+  text-decoration: underline;
+}
