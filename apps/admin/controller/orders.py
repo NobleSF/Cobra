@@ -1,8 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.core.urlresolvers import reverse
 from apps.admin.utils.decorator import access_required
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from apps.public.models import Order
+from settings.settings import CLOUDINARY
 
 @access_required('admin')
 def allOrders(request):
@@ -18,7 +21,7 @@ def order(request, order_id):
     order = Order.objects.get(id=order_id)
     order.shipping_address = getCustomerAddressFromOrder(order)#todo: make this a model property
 
-    return render(request, 'orders/order.html', {'order': order})
+    return render(request, 'orders/order.html', {'order': order, 'CLOUDINARY':CLOUDINARY})
   except:
     return redirect('admin:all orders')
 
@@ -40,3 +43,43 @@ def updateOrder(request):
 
   else:
     return HttpResponse(status=402)#bad request
+
+
+@access_required('admin')
+@csrf_exempt #find a way to add csrf
+def imageFormData(request):
+  from django.utils import timezone, dateformat, simplejson
+  from apps.seller.controller.cloudinary_upload import createSignature
+  from apps.seller.models import Upload
+
+  if request.method == "POST" and 'order_id' in request.POST:
+    order = Order.objects.get(id=request.POST['order_id'])
+    timestamp   = dateformat.format(timezone.now(), u'U')#unix timestamp
+
+    #uniquely name every image e.g. "seller23_order123_receipt_time1380924180"
+    image_id  = "seller"+str(order.seller.id)
+    image_id += "_order"+str(order.id)
+    image_id += "_receipt"
+    image_id += "_time"+str(timestamp)
+    #tag image with seller_id and asset_ilk
+    tags = "seller"+str(order.seller.id)+",order"+str(order.id)+",receipt"
+
+    #save as a pending upload
+    Upload(public_id = image_id).save()
+
+    form_data = {
+      'public_id':        image_id,
+      'tags':             tags,
+      'api_key':          CLOUDINARY['api_key'],
+      'format':           CLOUDINARY['format'],
+      'transformation':   CLOUDINARY['transformation'],
+      'timestamp':        timestamp,
+      'notification_url': request.build_absolute_uri(reverse('seller:complete upload')),
+    }
+    form_data['signature'] = createSignature(form_data)
+
+    return HttpResponse(simplejson.dumps(form_data), mimetype='application/json')
+
+  else:
+    return HttpResponse(status=500)
+    #todo: handle exceptions?

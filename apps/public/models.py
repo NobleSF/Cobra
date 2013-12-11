@@ -87,7 +87,7 @@ class Promotion(models.Model):
     return unicode(self.name)
 
 class Order(models.Model):
-  from apps.seller.models import Product, ShippingOption
+  from apps.seller.models import Product, ShippingOption, Image
 
   cart                = models.ForeignKey('Cart', related_name='orders')
 
@@ -106,6 +106,7 @@ class Order(models.Model):
 
   seller_paid_amount  = models.DecimalField(blank=True, null=True,
                                             max_digits=8, decimal_places=2)
+  seller_paid_receipt = models.ForeignKey(Image, blank=True, null=True)
 
   #order items
   products            = models.ManyToManyField(Product)

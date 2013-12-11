@@ -23,6 +23,7 @@ def dashboard(request):
                 product__in_holding=False,
                 product__approved_at__lte=timezone.now()))
 
+    #todo: cache this
     avg_rating = ratings.aggregate(average=Avg('value'))['average']
     avg_rating_before_month = (ratings
                                 .exclude(product__updated_at__gte=first_of_month)
@@ -31,7 +32,7 @@ def dashboard(request):
 
     context['avg_rating'] = avg = (avg_rating-1)/4 * 100
     context['avg_rating_before_month'] = before = (avg_rating_before_month-1)/4 * 100
-    context['avg_rating_change'] = (avg - before) / before
+    context['avg_rating_change'] = (avg - before)
 
   except: pass
   return render(request, 'dashboard.html', context)

@@ -52,12 +52,12 @@ def checkImageUpload(request):#for our JS to check upload status and get thumb_u
           image = Image(original=upload.url)
           image.save()
 
-          if request.GET['ilk'] == 'seller':
+          if 'seller' == request.GET.get('ilk'):
             seller = Seller.objects.get(id=request.session['seller_id'])
             seller.image = image
             seller.save()
 
-          else: #asset
+          elif 'ilk' in request.GET: #asset
             asset, is_new = Asset.objects.get_or_create(
                               seller_id = request.session['seller_id'],
                               ilk = request.GET['ilk'],
@@ -66,6 +66,12 @@ def checkImageUpload(request):#for our JS to check upload status and get thumb_u
 
             asset.image = image
             asset.save()
+
+          elif 'order_id' in request.GET:#order receipt
+            from apps.public.models import Order
+            order = Order.objects.get(id=request.GET['order_id'])
+            order.seller_paid_receipt = image
+            order.save()
 
           response = {'thumb_url': image.thumb_size}
           return HttpResponse(simplejson.dumps(response),
@@ -85,7 +91,7 @@ def checkImageUpload(request):#for our JS to check upload status and get thumb_u
                             status='500')
 
 @access_required('seller')
-@csrf_exempt
+@csrf_exempt #find a way to add csrf
 def imageFormData(request):
   if request.method == "POST":
     seller_id   = request.session['seller_id']

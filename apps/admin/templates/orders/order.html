@@ -2,45 +2,29 @@
 {% load url from future %}
 
 {% block javascript %}
-<script>
-  $().ready(function(){
-  });
-
-  $('.changeable').click(function(){
-    var confirm_message
-    var url = "{% url 'admin:update order' %}";
-    var icon = $(this);
-
-    if ($(this).hasClass("seller_paid")){
-      confirm_message = "This seller was paid?";
-      data = {'order_id': icon.attr('data-order-id'),
-              'action':"seller paid"
-              };
-    }
-
-    if (confirm(confirm_message)){
-      $.ajax({url: url, data: data})
-      .done(function(data){
-        icon.removeClass('changeable').removeClass('red').addClass('green')
-      })
-      .fail(function(){
-        alert("update failed.")
-      });
-    }
-  });
-
-</script>
+  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/vendor/jquery.ui.widget.min.js'></script>
+  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.iframe-transport.min.js'></script>
+  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.fileupload.min.js'></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}admin/js/order.min.js"></script>
 {% endblock javascript %}
 
 {% block css %}
-<style>
-
-  .changeable{cursor: pointer;}
-
-</style>
+  <link href="{{ STATIC_URL }}admin/css/order.css" rel="stylesheet">
 {% endblock css %}
 
 {% block content %}
+
+
+<!-- the location to upload photos to -->
+<input type='hidden' id='upload-url' value='{{ CLOUDINARY.upload_url }}'>
+
+<!-- to give cloudinary so they can tell our server when upload is complete -->
+<input type='hidden' id='upload-complete-url' value="{% url 'seller:complete upload' %}">
+
+<!-- for JS to check upload completion and get thumb_url -->
+<input type='hidden' id='upload-check-url' value="{% url 'seller:check image upload' %}">
+
+<input type='hidden' id='update-order-url' value='{% url 'admin:update order' %}'>
 
 <p><a href="{% url 'admin:all orders' %}">back to All Orders</a></p>
 
@@ -100,8 +84,54 @@
       data-order-id='{{order.id}}'
       ></i>
     </td>
-    <td>
-      {% if order.is_seller_paid %}{{ order.seller_paid_at }}{% endif %}
+    <td id='seller-paid'>
+
+      <div id='image-{{ order.id }}-upload-div' class='image-upload-div'>
+
+        <div id='image-{{ order.id }}' class='image'>
+          <a
+            {% if order.seller_paid_receipt %}
+              href="{{ order.seller_paid_receipt.original }}"
+              target="_blank"
+            {% endif %}
+            >
+            <img src="{{ order.seller_paid_receipt.pinky_size|default_if_none:'' }}"
+                 width="100" height="75" />
+          </a>
+        </div>
+
+        <div id='spinner-{{ order.id }}' class='spinner-div'></div>
+
+        <div id='progress-{{ order.id }}' class="progress progress-striped">
+          <div id='progress-bar-{{ order.id }}' class="bar" style="width: 0%;"></div>
+        </div>
+
+        <div id='image-forms-{{ order.id }}' class='image-forms'>
+          <form id='data-form-{{ order.id }}' class='data-form'
+                method='post' action='{% url "admin:image form data" %}'>
+
+            <input type='hidden' name='order_id' class='order-id'
+                   id='image-{{ order.id }}-order-id'
+                   value='{{ order.id }}'>
+
+          </form>
+
+          <form id='upload-form-{{ order.id }}' class='upload-form' onsubmit='return false;'>
+            <span class='file-wrapper'>
+
+              <input type='file' name='file' class='image-input'
+                     id='image-input-{{ order.id }}'
+                     accept='*'
+                     capture='camera'>
+
+              <span class='file-button btn symbol-camera black'></span>
+            </span>
+          </form>
+        </div>
+      </div>
+
+      {% if order.is_seller_paid %}marked paid on {{ order.seller_paid_at }}{% endif %}
+
     </td>
   </tr>
 </table>
