@@ -213,7 +213,7 @@
       <input id='custom-order-customer-email'
              name='custom-order-customer-email' type='text'>
       <br>
-      <label for='message'>Breifly describe changes</label>
+      <label for='message'>Briefly describe the changes you would like</label>
       <textarea id='custom-order-message'
                 name='custom-order-message' rows='4'></textarea>
 
@@ -255,7 +255,7 @@
             {{ product.artisan.description|truncatewords:20 }}
           </span>
           {% ifnotequal product.artisan.description|truncatewords:20|length product.artisan.description|length %}
-            <small class='read-more'>read more</small>
+            <small class='read-more'>show more</small>
             <span class='long-description'>
               {{ product.artisan.description }}
             </span>
@@ -294,7 +294,7 @@
                     {{ utility.description|truncatewords:15 }}
                   </span>
                   {% ifnotequal utility.description|truncatewords:15|length utility.description|length %}
-                    <small class='read-more'>read more</small>
+                    <small class='read-more'>show more</small>
                     <span class='long-description'>
                       {{ utility.description }}
                     </span>

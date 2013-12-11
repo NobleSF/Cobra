@@ -64,7 +64,7 @@
                 {{ store.bio|truncatewords:40 }}
               </span>
               {% ifnotequal store.bio|truncatewords:40|length store.bio|length %}
-                <small class='read-more'>read more</small>
+                <small class='read-more'>show more</small>
                 <span class='long-description'>
                   {{ store.bio }}
                 </span>
@@ -104,7 +104,7 @@
                         {{ artisan.description|truncatewords:30 }}
                       </span>
                       {% ifnotequal artisan.description|truncatewords:30|length artisan.description|length %}
-                        <small class='read-more'>read more</small>
+                        <small class='read-more'>show more</small>
                         <span class='long-description'>
                           {{ artisan.description }}
                         </span>
@@ -151,8 +151,40 @@
             {% endif %}
           </div>
 
-          {% cycle "" "</div><div class='product-row row-fluid lazy-load'>" %}
+          {% if forloop.counter|divisibleby:2 %}
+      </div>
+      <div class='product-row row-fluid lazy-load'>
+          {% endif %}
+
         {% endfor %}
+
+        {% if not products.count|divisibleby:2 %}
+      </div>
+        {% endif %}
+
+      <div id='past-inventory' class='row-fluid'>
+        <div class='span12'>
+          <h3 class='text-center'>Previously Made Products</h3>
+        </div>
+      </div>
+
+      <div class='product-row row-fluid lazy-load'>
+        {% for product in sold_products %}
+          <div  class='span6 product-area {% cycle "pos1" "pos2" %} unloaded'
+                data-order='{{ forloop.counter0 }}'
+                data-product-id='{{ product.id }}'>
+          </div>
+          {% if forloop.counter|divisibleby:2 %}
+      </div>
+      <div class='product-row row-fluid lazy-load'>
+          {% endif %}
+
+        {% endfor %}
+
+        {% if not products.count|divisibleby:2 %}
+      </div>
+        {% endif %}
+
       </div>
 
     </div>

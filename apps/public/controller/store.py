@@ -16,7 +16,12 @@ def home(request, seller_id):
                                          deactive_at=None)
                 .order_by('approved_at').reverse())
 
-    context = {'store':store, 'products':products}
+    sold_products = (store.product_set.filter(sold_at__lte=timezone.now(),
+                                         approved_at__lte=timezone.now(),
+                                         deactive_at=None)
+                .order_by('sold_at').reverse())
+
+    context = {'store':store, 'products':products, 'sold_products':sold_products}
 
   except Seller.DoesNotExist:
     raise Http404
