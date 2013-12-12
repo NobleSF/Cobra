@@ -151,6 +151,16 @@ This item was posted by {{ product.seller.name }} in {{ product.seller.city }}, 
   </div>
 
   <h2 style='padding-top:50px'>
+    Dimensions:
+  </h2>
+  <p>{{ product.english_dimensions }}</p>
+  <p>{{ product.metric_dimensions }}</p>
+  <h2 style='padding-top:50px'>
+    Shipping Weight:
+  </h2>
+  <p>{{ product.weight }} kilograms</p>
+
+  <h2 style='padding-top:50px'>
     This {{ product.name }} Was Handmade By:
   </h2>
   <img src='{{ product.artisan.image.headshot }}'>
