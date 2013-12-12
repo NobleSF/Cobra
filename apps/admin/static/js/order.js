@@ -159,7 +159,7 @@ function loadImage(image_data){
       case 204: //image does not exist yet, wait and try again
         setTimeout(function(){
           loadImage(image_data);
-        }, 20000); //wait 2 seconds and try again
+        }, 2000); //wait 2 seconds and try again
 
       case 404: //internet cut out
         //todo: reload page?
