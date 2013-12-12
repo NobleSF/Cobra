@@ -48,7 +48,7 @@ def allSMS(request):
       sms.incoming = True
 
     try:
-      sms.seller = Seller.objects.get(account__phone=sms.phone_number)
+      sms.seller = Seller.objects.get(account__phone__contains=sms.phone_number[-8:])
     except: pass
 
   context = {
