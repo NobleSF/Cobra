@@ -99,6 +99,7 @@ function addAssetForms(){
 function applyDataAttrs(asset_div, ilk, rank){
   //make unique id's and add data- attributes to autosave inputs
 
+  seller_id = asset_div.find('input.seller-id').val();
   ilk = ilk || asset_div.find('input.ilk').val();
   rank = rank || asset_div.find('input.rank').val();
 
@@ -109,8 +110,9 @@ function applyDataAttrs(asset_div, ilk, rank){
     $(this).attr('id', new_id);
   });
 
-  //give all autosave elements new ilk, rank values
+  //give all autosave elements seller_id and new ilk, rank values
   asset_div.find('.autosave').each(function(){
+    $(this).attr('data-seller_id', seller_id)
     $(this).attr('data-ilk', ilk)
     $(this).attr('data-rank', rank)
   });

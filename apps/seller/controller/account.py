@@ -117,32 +117,36 @@ def saveAsset(request): #ajax get requests only, create or update asset
   from apps.admin.models import Category
 
   try:
-    asset, is_new = Asset.objects.get_or_create(
-                        seller_id = request.session['seller_id'],
-                        ilk = request.GET['ilk'],
-                        rank = request.GET['rank']
-                      )
+    if request.session['seller_id'] == request.GET['seller_id']:
+      asset, is_new = Asset.objects.get_or_create(
+                          seller_id = request.GET['seller_id'],
+                          ilk = request.GET['ilk'],
+                          rank = request.GET['rank']
+                        )
 
-    element = request.GET.get('name')
-    value   = request.GET.get('value', None)
+      element = request.GET.get('name')
+      value   = request.GET.get('value', None)
 
-    if element == 'name':
-      asset.name = value
-    elif element == 'name_ol':
-      asset.name_ol = value
-    elif element == 'description':
-      asset.description = value
-    elif element == 'description_ol':
-      asset.description_ol = value
-    elif element == 'phone':
-      asset.phone = value
-    elif element == 'category':
-      asset.categories.clear()
-      if value:
-        asset.categories.add(Category.objects.get(id=value))
+      if element == 'name':
+        asset.name = value
+      elif element == 'name_ol':
+        asset.name_ol = value
+      elif element == 'description':
+        asset.description = value
+      elif element == 'description_ol':
+        asset.description_ol = value
+      elif element == 'phone':
+        asset.phone = value
+      elif element == 'category':
+        asset.categories.clear()
+        if value:
+          asset.categories.add(Category.objects.get(id=value))
 
-    asset.save()
-    response = {'asset_id':asset.id, 'get':request.GET}
+      asset.save()
+      response = {'asset_id':asset.id, 'get':request.GET}
+
+    else:
+      response = {'problem': "logged in as wrong user"}
 
   except Exception as e:
     ExceptionHandler(e, "in account.saveAsset")

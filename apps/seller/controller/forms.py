@@ -45,6 +45,8 @@ class AssetForm(forms.Form):
 
   #no asset-id required in form
   #with seller_id, ilk, and rank together, the asset is unique
+  seller_id   = forms.CharField(
+                  widget=forms.TextInput(attrs={'class':"seller-id"}))
   ilk         = forms.CharField(
                   widget=forms.TextInput(attrs={'class':"ilk"}))
   rank        = forms.CharField(
