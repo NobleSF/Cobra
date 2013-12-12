@@ -6,27 +6,8 @@
   $().ready(function(){
   });
 
-  $('.changeable').click(function(){
-    var confirm_message
-    var url = "{% url 'admin:update order' %}";
-    var icon = $(this);
-
-    if ($(this).hasClass("seller_paid")){
-      confirm_message = "This seller was paid?";
-      data = {'order_id': icon.attr('data-order-id'),
-              'action':"seller paid"
-              };
-    }
-
-    if (confirm(confirm_message)){
-      $.ajax({url: url, data: data})
-      .done(function(data){
-        icon.removeClass('changeable').removeClass('red').addClass('green')
-      })
-      .fail(function(){
-        alert("update failed.")
-      });
-    }
+  $('.has-info').click(function(){
+    alert($(this).attr('data-info'));
   });
 
 </script>
@@ -35,7 +16,7 @@
 {% block css %}
 <style>
 
-  .changeable{cursor: pointer;}
+  .has-info{cursor: pointer;}
 
 </style>
 {% endblock css %}
@@ -71,30 +52,34 @@
       </td>
 
       <td style='white-space: nowrap;'>
-        <i title='{{ order.seller_confirmed_at }}'
-           class='symbol-SMS {% if order.is_seller_confirmed  %}green{% else %}red{% endif %}'
+        <i title='{{ order.seller_confirmed_at|date:"m/d  H:i" }}'
+           class='symbol-SMS
+                  {% if order.is_seller_confirmed  %}green has-info
+                  {% else %}red{% endif %}'
+           data-info='{{ order.seller_confirmed_at|date:"m/d  H:i" }}'
            ></i>
 
-        <i title='{{ order.shipped_at }}'
-           class='symbol-SMS-shipping {% if order.is_shipped %}green{% else %}red{% endif %}'
+        <i title='{{ order.shipped_at|date:"m/d  H:i" }}'
+           class='symbol-SMS-shipping
+                  {% if order.is_shipped %}green has-info
+                  {% else %}red{% endif %}'
+           data-info='{{ order.shipped_at|date:"m/d  H:i" }}'
            ></i>
 
-        {% if order.tracking_number %}
-          <a href="{{ order.tracking_url }}" target='_blank'>
-            <i title='{{ order.tracking_number }}'
-               class='symbol-shipping green'
-               ></i>
-          </a>
-        {% else %}
-          <i class='symbol-shipping red'></i>
-        {% endif %}
 
-        <i title='{{ order.seller_paid_at }}'
+
+        <i title='{{ order.tracking_number }}'
+           class='symbol-shipping
+                  {% if order.tracking_number %}green has-info
+                  {% else %}red{% endif %}'
+           data-info='{{ order.tracking_number }}'
+           ></i>
+
+        <i title='{{ order.seller_paid_at|date:"m/d  H:i" }}'
            class='symbol-money
-              {% if order.is_seller_paid %}green
-              {% else %}red changeable seller_paid
-              {% endif %}'
-           data-order-id='{{order.id}}'
+              {% if order.is_seller_paid %}green has-info
+              {% else %}red{% endif %}'
+           data-info='{{ order.seller_paid_at|date:"m/d  H:i" }}'
            ></i>
       </td>
 

@@ -22,7 +22,8 @@ def order(request, order_id):
     order.shipping_address = getCustomerAddressFromOrder(order)#todo: make this a model property
 
     return render(request, 'orders/order.html', {'order': order, 'CLOUDINARY':CLOUDINARY})
-  except:
+  except Exception as e:
+    print str(e)
     return redirect('admin:all orders')
 
 @access_required('admin')

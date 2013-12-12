@@ -10,13 +10,17 @@ $('.changeable').click(function(){
   var icon = $(this);
 
   if ($(this).hasClass("seller_paid")){
-    confirm_message = "This seller was paid?";
-    data = {'order_id': icon.attr('data-order-id'),
-            'action':"seller paid"
-            };
+    if ($('#seller-paid .image img').attr('src')){
+      confirm_message = "This seller was paid?";
+      data = {'order_id': icon.attr('data-order-id'),
+              'action':"seller paid"
+              };
+    }else{
+      alert('upload photo of receipt.')
+    }
   }
 
-  if (confirm(confirm_message)){
+  if (confirm_message && confirm(confirm_message)){
     $.ajax({url: url, data: data})
     .done(function(data){
       icon.removeClass('changeable').removeClass('red').addClass('green')
