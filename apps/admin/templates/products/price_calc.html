@@ -4,11 +4,18 @@
 {% block javascript %}
   <script>
 
+    $('.editable').keyup(function(){
+      $('#anou_fee').val('')
+      $('#local_price').val('')
+      $('#usd_price').val('')
+      $('#wepay_fee').val('')
+      $('#anou_store_price').val('')
+    });
+
     $('.editable').blur(function(){
       var artisan_price = parseInt($('#artisan_price').val());
       var shipping_cost = parseInt($('#shipping_cost').val());
       var exchange_rate = parseFloat($('#exchange_rate').val());
-      "50".valueOf
 
       if (artisan_price > 0 && shipping_cost > 0 && exchange_rate > 0){
 
@@ -25,7 +32,6 @@
         $('#anou_store_price').val(anou_store_price.toFixed(2))
       }
     })
-
 
   </script>
 {% endblock javascript %}
