@@ -131,20 +131,28 @@
       </div>
 
     </div>
-    <!--
-    <div id='ratings' class='span4 well well-small'>
-      {% for rating in '123' %}
-        <div class='rating'>
-          {% for star in '12345' %}
-            <i class="icon-star-empty"></i>
-          {% endfor %}
-          <span class='rating-subject'>Rating Subject</span>
-        </div>
-      {% endfor %}
-    </div>
-    -->
 
     <div id='actions' class='span4'>
+
+      {% comment %}
+      Load all of this in with ajax after page load.
+      That way we can custom display based on login/past use
+      instead of messing with product page cache.
+
+      <div id='rating' class='well well-small'>
+        {% for category in rating_categories %}
+          Category Name<br>
+          {% for rating_number in '12345' %}
+            <i class="rating-star icon-star-empty"
+               data-rating-value='{{ rating_number }}'
+               ></i>
+          {% endfor %}
+          <span class='rating-subject'>{{ category }}</span>
+          <br>
+        {% endfor %}
+      </div>
+      {% endcomment %}
+
       <table id='buying-table'>
 
         <tr id='faceboook' class='text-center' style='margin: 1em 1em 0;'>
