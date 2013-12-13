@@ -5,6 +5,7 @@ from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.views.decorators.csrf import csrf_exempt
 from apps.seller.models import Upload, Image, Photo
+from django.db import IntegrityError
 from settings.settings import CLOUDINARY
 #from django.core.cache import cache
 
@@ -108,7 +109,10 @@ def imageFormData(request):
     tags = "seller"+str(seller_id)+",asset"+str(ilk)
 
     #save as a pending upload
-    Upload(public_id = image_id).save()
+    try:
+      Upload(public_id = image_id).save()
+    except IntegrityError:
+      pass
 
     form_data = {
       'public_id':        image_id,
