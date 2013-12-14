@@ -3,6 +3,16 @@ $(function(){//on page load
   //LAZY PRODUCT LOADING
   $('.lazy-load').lazyload(800);
 
+  //SEARCH AND SORTING
+  parent_category = window.location.hash.split("#")[1]
+  child_category = window.location.hash.split("#")[2]
+  if (child_category !== "everything"){
+    //MARK SELECTED CATEGORIES IN SEARCH BAR
+    selectCategories(parent_category, child_category);
+    //SORT PRODUCTS ACCORDING TO CHOSEN CATEOGORIES
+    sortProductsBy(parent_category, child_category)
+  }
+
   //HOVER ANIMATION
   addHoverAnimation($('.product'));
 
@@ -41,34 +51,53 @@ function addHoverAnimation(selection){
 //SEARCH AND SORTING FUNCTIONS
 $('#search-toolbar .category').on('click', function(){
   parent_category = $(this).attr('data-parent-category');
-  //remove all selected
-  $('#search-toolbar .category').removeClass('selected');
-
   child_category = $(this).attr('data-child-category');
-  //select the clicked one
-  $(this).addClass('selected');
-  //hide all child categories
-  $('#search-toolbar .category.child').hide()
-  //show relevent child categories
-  $('#search-toolbar .category.child[data-parent-category='+parent_category+']').show()
-  //selecte clicked child category
-  if ($(this).hasClass('child')){
-    $('#search-toolbar .category.parent[data-child-category='+parent_category+']').addClass('selected');
-  }
-  //sort products according to chosen cateogories
+
+  //MARK SELECTED CATEGORIES IN SEARCH BAR
+  selectCategories(parent_category, child_category);
+  //SORT PRODUCTS ACCORDING TO CHOSEN CATEOGORIES
   sortProductsBy(parent_category, child_category)
+
+  state = {parent_category: parent_category, child_category: child_category}
+  if (parent_category === child_category){
+    url_hash = "#" + parent_category
+  }else{
+    url_hash = "#" + parent_category + "#" + child_category
+  }
+  history.replaceState(state, "filter", url_hash)
 });
 
-function sortProductsBy(parent_category, child_category){
-  // everything, everything shows all
-  // parent, parent shows all in parent category
-  // parent, child shows all in child category
-  // parent, other shows all where child == parent
+function selectCategories(parent_category, child_category){
+  //REMOVE ALL SELECTED
+  $('#search-toolbar .category').removeClass('selected');
 
-  //hide all products
+  //SELECT THE PARENT
+  $('#search-toolbar .category.parent[data-child-category='+parent_category+']')
+    .addClass('selected');
+
+  //HIDE ALL CHILD CATEGORIES
+  $('#search-toolbar .category.child').hide();
+
+  //SHOW RELEVENT CHILD CATEGORIES
+  $('#search-toolbar .category.child[data-parent-category='+parent_category+']').show()
+
+  //SELECT CLICKED CHILD CATEGORY
+  if (parent_category !== child_category){
+    $('#search-toolbar .category.child[data-child-category='+child_category+']')
+      .addClass('selected');
+  }
+}
+
+function sortProductsBy(parent_category, child_category){
+  // EVERYTHING, EVERYTHING SHOWS ALL
+  // PARENT, PARENT SHOWS ALL IN PARENT CATEGORY
+  // PARENT, CHILD SHOWS ALL IN CHILD CATEGORY
+  // PARENT, OTHER SHOWS ALL WHERE CHILD == PARENT
+
+  //HIDE ALL PRODUCTS
   $('.product-area').hide();
 
-  //move the category products first
+  //MOVE THE CATEGORY PRODUCTS FIRST
   if (parent_category == "everything"){
     //nothing to do here
 
@@ -96,22 +125,22 @@ function sortProductsBy(parent_category, child_category){
     });
   }
 
-  //then move all the rest to follow behind
+  //THEN MOVE ALL THE REST TO FOLLOW BEHIND
   $('#product-container .product-area').each(function(){
     $(this).appendTo($('#product-sorting-container'))
   });
-  //all products should be in the sorting container now
+  //ALL PRODUCTS SHOULD BE IN THE SORTING CONTAINER NOW
 
-  //move all products back into rows
+  //MOVE ALL PRODUCTS BACK INTO ROWS
   if (child_category == 'everything'){
     $('#product-sorting-container .product-area').each(function(){
-      //find the row it originally belonged to and put it there
+      //FIND THE ROW IT ORIGINALLY BELONGED TO AND PUT IT THERE
       row_number = Math.floor($(this).attr('data-order')/3)
       $(this).appendTo($('#product-container .product-row')[row_number])
     });
   }else{
     var next_position = 0;
-    //now put them all back into rows - they are already in order
+    //NOW PUT THEM ALL BACK INTO ROWS - THEY ARE ALREADY IN ORDER
     $('#product-sorting-container .product-area').each(function(){
       row_number = Math.floor(next_position/3);
       $(this).appendTo($('#product-container .product-row')[row_number])
@@ -137,7 +166,7 @@ function sortProductsBy(parent_category, child_category){
   }
 }
 
-// Lazy Load products based on jQuery Unveil at http://luis-almeida.github.com/unveil
+// LAZY LOAD PRODUCTS BASED ON JQUERY UNVEIL AT http://luis-almeida.github.com/unveil
 ;(function($) {
   $.fn.lazyload = function(given_threshold) {
 
