@@ -25,7 +25,7 @@ $(function(){//on page load
 
 $('.button.shop').click(function(){
   $.scrollTo($('#store').first(), 600);
-  $.scrollTo("-=50px", 400, {axis:'y'})
+  $.scrollTo("-=50px", 400, {axis:'y'});
 });
 
 //PRODUCT ANIMATION
