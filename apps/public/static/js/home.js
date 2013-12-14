@@ -5,7 +5,7 @@ $(function(){//on page load
 
   //SEARCH AND SORTING
   parent_category = window.location.hash.split("#")[1]
-  child_category = window.location.hash.split("#")[2]
+  child_category = window.location.hash.split("#")[2] || parent_category
   if (parent_category && parent_category !== "everything"){
     //MARK SELECTED CATEGORIES IN SEARCH BAR
     selectCategories(parent_category, child_category);
