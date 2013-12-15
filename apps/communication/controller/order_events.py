@@ -21,14 +21,14 @@ def communicateOrdersCreated(orders):
           ExceptionHandler(e, "in order_events.communicateOrdersCreated-A")
 
       #message the seller with the address
-      address_string = getCustomerAddressFromOrder(order, sms_format=True)
+      address_string = order.cart.shipping_address.replace('\n','\n\r')
       seller_msg = products_string + "\r\n" + address_string
       seller_phone = order.products.all()[0].seller.phone
       sendSMSForOrder(seller_msg, seller_phone, order)
 
       #notify the team
       try:
-        order.seller_msg = seller_msg.replace('\r\n', '<br>')
+        order.seller_msg = seller_msg.replace('\n', '<br>')
         emails = [people.Dan.email, people.Brahim.email,
                   people.Rabha.email, people.Kenza.email, people.Mustapha.email]
         for address in emails:
@@ -40,7 +40,7 @@ def communicateOrdersCreated(orders):
     #send email to buyer
     email = Email('order/created', orders)
     email.assignToOrder(orders[0])
-    email.sendTo(getCustomerEmailFromOrder(orders[0]))
+    email.sendTo(orders[0].cart.email_with_name)
     return True
   except Exception as e:
     ExceptionHandler(e, "in order_events.communicateOrdersCreated-C")
@@ -108,7 +108,7 @@ def communicateOrderConfirmed(order, gimme_reply_sms=False):
     #send email to buyer
     email = Email('order/confirmed', order)
     email.assignToOrder(order)
-    email.sendTo(getCustomerEmailFromOrder(order))
+    email.sendTo(order.cart.email_with_name)
 
     if gimme_reply_sms:
       return sms_reply
@@ -131,7 +131,7 @@ def communicateOrderShipped(order, gimme_reply_sms=False):
     #send email to buyer
     email = Email('order/shipped', order)
     email.assignToOrder(order)
-    email.sendTo(getCustomerEmailFromOrder(order))
+    email.sendTo(order.cart.email_with_name)
 
     if gimme_reply_sms:
       return sms_reply
@@ -160,44 +160,3 @@ def cancelOrder(order):
   email.assignToOrder(order)
   email.sendTo((people.Dan.email,people.Tom.email))
   #todo: email customer
-
-#support functions
-
-def getCustomerEmailFromOrder(order):
-  if order.cart.name:
-    return "%s <%s>" % (order.cart.name, order.cart.email)
-  else:
-    return order.cart.email
-
-def getCustomerAddressFromOrder(order, sms_format=False):
-  address  = "\r\n" if sms_format else ""
-
-  if order.cart.address_name:
-    address += str(order.cart.address_name)
-    address += "\r\n" if sms_format else "<br>"
-  elif order.cart.name:
-    address += str(order.cart.name)
-    address += "\r\n" if sms_format else "<br>"
-
-  if order.cart.address1:
-    address += str(order.cart.address1)
-    address += "\r\n" if sms_format else "<br>"
-
-  if order.cart.address2:
-    address += str(order.cart.address2)
-    address += "\r\n" if sms_format else "<br>"
-
-  if order.cart.city:
-    address += str(order.cart.city) + ", "
-
-  if order.cart.state:
-    address += str(order.cart.state) + " "
-
-  if order.cart.postal_code:
-    address += str(order.cart.postal_code)
-
-  if order.cart.country:
-    address += "\r\n" if sms_format else "<br>"
-    address += str(order.cart.country)
-
-  return address

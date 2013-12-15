@@ -45,6 +45,24 @@ class Cart(models.Model):
     else:
       return False
 
+  @property
+  def email_with_name(self):
+    if self.name and self.email:
+      return "%s <%s>" % (self.name, self.email)
+    else:
+      return self.email
+
+  @property
+  def shipping_address(self):
+    address  = "%s\n" % (self.address_name or self.name or "")
+    address += ("%s\n" % self.address1) if self.address1 else ""
+    address += ("%s\n" % self.address2) if self.address2 else ""
+    address += ("%s, " % self.city) if self.city else ""
+    address += ("%s " % self.state) if self.state else ""
+    address += self.postal_code if self.postal_code else ""
+    address += ("\n%s" % self.country) if self.country else ""
+    return address
+
 class Item(models.Model):
   from apps.seller.models import Product
   cart                = models.ForeignKey('Cart')

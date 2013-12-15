@@ -16,10 +16,9 @@ def allOrders(request):
 
 @access_required('admin')
 def order(request, order_id):
-  from apps.communication.controller.order_events import getCustomerAddressFromOrder
   try:
     order = Order.objects.get(id=order_id)
-    order.shipping_address = getCustomerAddressFromOrder(order)#todo: make this a model property
+    order.shipping_address = order.cart.shipping_address.replace('\n','<br>')
 
     return render(request, 'orders/order.html', {'order': order, 'CLOUDINARY':CLOUDINARY})
   except Exception as e:
