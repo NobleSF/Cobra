@@ -47,8 +47,7 @@ def updateRatingRankings(sender, instance, created, **kwargs):
     #create one
     ranking = Ranking(product = rating.product,
                       new_product = newProductResult(rating.product))
-  except:
-    pass#todo email someone
+  except: pass
 
   try:
     if rating.subject.name == 'Photography':

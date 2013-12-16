@@ -290,12 +290,7 @@ class Product(models.Model):
   @property
   def parent_category(self):
     try:
-      category = self.assets.filter(ilk='product')[0].categories.all()[0]
-      #todo change to -> if self.category.is_parent_category:
-      if category.is_parent_category:
-        return category
-      else:
-        return category.parent_category
+      return self.category if self.category.is_parent_category else self.category.parent_category
     except:
       return None
 
