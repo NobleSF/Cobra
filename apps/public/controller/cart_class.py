@@ -178,11 +178,8 @@ class Cart(object):
 
   @property
   def shipping_address(self):
-    if (self.cart.address1 and
-        self.cart.city and
-        self.cart.postal_code and
-        self.cart.country):
-      return True #todo: write html shipping address
+    if (self.cart.city and self.cart.country):
+      return self.cart.shipping_address
     else:
       return False
 
