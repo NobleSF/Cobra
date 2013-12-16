@@ -55,8 +55,7 @@ $().ready( function(){
   //validate form and show confirmation
   $('#submit').bind('click', function(){
     if (validateForm()){
-      //todo: show progress spinner over button
-      //and but bring back button if upload fails
+      //todo: bring back button if upload fails
 
       $.ajax({
         url: $('#product-ajax-url').attr('value'),
