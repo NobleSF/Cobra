@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from apps.admin.utils.decorator import access_required
 from django.views.decorators.csrf import csrf_exempt
+from apps.admin.utils.exception_handling import ExceptionHandler
 from django.contrib import messages
 from apps.public.models import Order
 from settings.settings import CLOUDINARY
@@ -80,6 +81,9 @@ def imageFormData(request):
 
     return HttpResponse(simplejson.dumps(form_data), mimetype='application/json')
 
-  else:
+  elif request.method == "POST":
+    ExceptionHandler(e, "in orders.imageFormData")
     return HttpResponse(status=500)
-    #todo: handle exceptions?
+
+  else:
+    return HttpResponse(status=402)#bad request
