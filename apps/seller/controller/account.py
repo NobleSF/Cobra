@@ -104,8 +104,6 @@ def edit(request):
   except Exception as e:
     ExceptionHandler(e, "in account.edit")
     context = {'exception': str(e)}
-
-  if 'seller' not in context:#todo: clean this up
     context['seller'] = seller
 
   return render(request, 'account/edit_seller.html', context)

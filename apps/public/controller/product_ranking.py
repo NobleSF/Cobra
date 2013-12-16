@@ -59,7 +59,7 @@ def updateRatingRankings(sender, instance, created, **kwargs):
       ranking.appeal = appealResult(rating.product)
     ranking.save()
   except:
-    pass#todo email someone
+    pass
 
 def photographyResult(product):
   try:
