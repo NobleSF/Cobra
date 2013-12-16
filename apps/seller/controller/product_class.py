@@ -2,6 +2,7 @@ from apps.seller import models
 from apps.admin import models as admin_models
 from django.utils import timezone
 from apps.communication.controller import seller_events
+from apps.admin.utils.exception_handling import ExceptionHandler
 
 class Product(object):
   def __init__(self, request=None, product=None):
@@ -17,11 +18,11 @@ class Product(object):
       else:
         self.product = product
 
-    except:
+    except Exception as e:
       if request:
         self.product = self.new(request)
       else:
-        pass #todo: i dunno.
+        ExceptionHandler(e, "problem in product_class.Product.__init__")
 
   def __iter__(self):
     for asset in self.product.asset_set.all():
