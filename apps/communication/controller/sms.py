@@ -132,9 +132,8 @@ def incoming(request):
         (product_id, data) = msg_data
         product = Product.objects.get(id=product_id)
 
-        is_from_product_owner = product.belongsToPhone(request.POST.get('from_number'))
-
-        if is_from_product_owner: #if the sender owns the product, update the order
+        if product.belongsToPhone(request.POST.get('from_number')):
+          #if the sender owns the product, update the order
 
           if data.get('remove'):
             seller_events.deactivateProduct(product)
@@ -153,7 +152,10 @@ def incoming(request):
           else:
             return HttpResponse(status=200)#OK
         else:
+          message = "This SMS not from product owner: " + request.POST.get('content')
+          Email(message=message).sendTo(Dan.email)
           return HttpResponse(status=200)#OK
+
           #todo: email Brahim about this incoming text product with wrong owner
 
     except Exception as e:
