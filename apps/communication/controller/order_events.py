@@ -121,7 +121,7 @@ def communicateOrderConfirmed(order, gimme_reply_sms=False):
     if DEBUG: return '(xata) ' + str(e)
     else:
       return 'xata'
-      #todo: send error data to dev
+      ExceptionHandler(e, "in order_events.communicateOrderConfimed")
 
 def communicateOrderShipped(order, gimme_reply_sms=False):
   try:
@@ -144,7 +144,7 @@ def communicateOrderShipped(order, gimme_reply_sms=False):
     if DEBUG: return '(xata) ' + str(e)
     else:
       return 'xata'
-      #todo: send error data to dev
+      ExceptionHandler(e, "in order_events.communicateOrderShipped")
 
 def communicateOrderSellerPaid(order):
   try:
