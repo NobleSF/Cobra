@@ -37,12 +37,12 @@
     {{ order.products.all.0.title }}
   </a><br>
   by
-  {{ order.products.all.0.seller.name }}<br>
+  {{ order.seller.name }}<br>
   from
-  {{ order.products.all.0.seller.city }}, Morocco
+  {{ order.seller.city }}, Morocco
 </h3>
 
-<p>phone: {{ order.products.all.0.seller.account.phone }}</p>
+<p>phone: {{ order.seller.account.phone }}</p>
 
 <table>
   <thead><td style='width:100px;'></td><td></td></thead>

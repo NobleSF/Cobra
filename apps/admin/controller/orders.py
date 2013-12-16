@@ -54,36 +54,37 @@ def imageFormData(request):
   from apps.seller.models import Upload
 
   if request.method == "POST" and 'order_id' in request.POST:
-    order = Order.objects.get(id=request.POST['order_id'])
-    timestamp   = dateformat.format(timezone.now(), u'U')#unix timestamp
+    try:
+      order = Order.objects.get(id=request.POST['order_id'])
+      timestamp   = dateformat.format(timezone.now(), u'U')#unix timestamp
 
-    #uniquely name every image e.g. "seller23_order123_receipt_time1380924180"
-    image_id  = "seller"+str(order.seller.id)
-    image_id += "_order"+str(order.id)
-    image_id += "_receipt"
-    image_id += "_time"+str(timestamp)
-    #tag image with seller_id and asset_ilk
-    tags = "seller"+str(order.seller.id)+",order"+str(order.id)+",receipt"
+      #uniquely name every image e.g. "seller23_order123_receipt_time1380924180"
+      image_id  = "seller"+str(order.seller.id)
+      image_id += "_order"+str(order.id)
+      image_id += "_receipt"
+      image_id += "_time"+str(timestamp)
+      #tag image with seller_id and asset_ilk
+      tags = "seller"+str(order.seller.id)+",order"+str(order.id)+",receipt"
 
-    #save as a pending upload
-    Upload(public_id = image_id).save()
+      #save as a pending upload
+      Upload(public_id = image_id).save()
 
-    form_data = {
-      'public_id':        image_id,
-      'tags':             tags,
-      'api_key':          CLOUDINARY['api_key'],
-      'format':           CLOUDINARY['format'],
-      'transformation':   CLOUDINARY['transformation'],
-      'timestamp':        timestamp,
-      'notification_url': request.build_absolute_uri(reverse('seller:complete upload')),
-    }
-    form_data['signature'] = createSignature(form_data)
+      form_data = {
+        'public_id':        image_id,
+        'tags':             tags,
+        'api_key':          CLOUDINARY['api_key'],
+        'format':           CLOUDINARY['format'],
+        'transformation':   CLOUDINARY['transformation'],
+        'timestamp':        timestamp,
+        'notification_url': request.build_absolute_uri(reverse('seller:complete upload')),
+      }
+      form_data['signature'] = createSignature(form_data)
 
-    return HttpResponse(simplejson.dumps(form_data), mimetype='application/json')
+      return HttpResponse(simplejson.dumps(form_data), mimetype='application/json')
 
-  elif request.method == "POST":
-    ExceptionHandler(e, "in orders.imageFormData")
-    return HttpResponse(status=500)
+    except Exception as e:
+      ExceptionHandler(e, "in orders.imageFormData")
+      return HttpResponse(status=500)#server error
 
   else:
     return HttpResponse(status=402)#bad request

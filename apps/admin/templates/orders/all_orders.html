@@ -85,15 +85,15 @@
 
 
       <td {% if not order.is_seller_paid %}style='font-weight: 800;'{% endif %}>
-        {{ order.products.all.0.seller.name }}{# todo: make seller a model property #}
+        {{ order.seller.name }}
         <br>
-        {{ order.products.all.0.seller.account.bank_name }}
+        {{ order.seller.account.bank_name }}
       </td>
       <td {% if not order.is_seller_paid %}style='font-weight: 800;'{% endif %}>
         {{ order.seller_paid_amount|floatformat:0 }}
-        <small>{{ order.products.all.0.seller.country.currency.code }}</small>
+        <small>{{ order.seller.country.currency.code }}</small>
         <br>
-        {{ order.products.all.0.seller.account.bank_account }}
+        {{ order.seller.account.bank_account }}
       </td>
 
     </tr>

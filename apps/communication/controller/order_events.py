@@ -23,7 +23,7 @@ def communicateOrdersCreated(orders):
       #message the seller with the address
       address_string = order.cart.shipping_address.replace('\n','\n\r')
       seller_msg = products_string + "\r\n" + address_string
-      seller_phone = order.products.all()[0].seller.phone
+      seller_phone = order.seller.phone
       sendSMSForOrder(seller_msg, seller_phone, order)
 
       #notify the team
@@ -114,7 +114,7 @@ def communicateOrderConfirmed(order, gimme_reply_sms=False):
       return sms_reply
 
     else:
-      seller_phone = order.products.all()[0].seller.phone
+      seller_phone = order.seller.phone
       sendSMSForOrder(sms_reply, seller_phone, order)
 
   except Exception as e:
@@ -137,7 +137,7 @@ def communicateOrderShipped(order, gimme_reply_sms=False):
       return sms_reply
 
     else:
-      seller_phone = order.products.all()[0].seller.phone
+      seller_phone = order.seller.phone
       sendSMSForOrder(sms_reply, seller_phone, order)
 
   except Exception as e:
