@@ -48,7 +48,7 @@ def sendSMS(message, to_number, priority='1'): #using Telerivet
 def sendSMSForOrder(message, to_number, order, priority='1'):
   try:
     sms = sendSMS(message, to_number, priority)
-    if order:
+    if sms and order:
       sms.order = order
     sms.save()
 
