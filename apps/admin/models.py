@@ -10,8 +10,9 @@ class Account(models.Model):
   bank_account  = models.CharField(max_length=100, blank=True, null=True)
 
   is_admin      = models.BooleanField(default=False, verbose_name='Admin')
-                  # we will have to expand for different levels of admin
-                  # as well as country specific admin
+  admin_type    = models.CharField(max_length=20, null=True)#super,country,trainer,translator
+                  #todo: create priveledges table with country assignments
+
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
