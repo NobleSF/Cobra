@@ -21,7 +21,7 @@ class AccountCreateForm(forms.Form):
 class AccountEditForm(forms.ModelForm):
   class Meta:
     model = Account
-    exclude = ['password','is_admin']
+    exclude = ['password','admin_type']
 
   def clean_phone(self):
     data = str(self.cleaned_data['phone'])

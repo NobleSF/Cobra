@@ -9,13 +9,15 @@ class Account(models.Model):
   bank_name     = models.CharField(max_length=50, blank=True, null=True)
   bank_account  = models.CharField(max_length=100, blank=True, null=True)
 
-  is_admin      = models.BooleanField(default=False, verbose_name='Admin')
   admin_type    = models.CharField(max_length=20, null=True)#super,country,trainer,translator
                   #todo: create priveledges table with country assignments
 
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
+
+  @property
+  def is_admin(self): return True if self.admin_type else False
 
   @property
   def cheat_login_url(self):
