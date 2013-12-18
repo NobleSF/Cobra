@@ -14,8 +14,8 @@ def create(account):
     seller_account.save()
     return True
   except Exception as e:
-    context = {'exception': e}
-    return e
+    ExceptionHandler(e, "in account.create")
+    return False
 
 @access_required('seller')
 def edit(request):

@@ -38,17 +38,16 @@ def create(request):
   seller = Seller.objects.get(id=request.session['seller_id'])
   checkInventory(seller)
   try:
-    edit_this_product = None
+    product_to_edit = None
     for product in seller.product_set.all().order_by('id'):
-      if not edit_this_product and product.was_never_active:
-        edit_this_product = product
+      if not product_to_edit and product.was_never_active:
+        product_to_edit = product
 
-    if edit_this_product:
-      request.product_id = edit_this_product.id
-
-    #if no product id in request at this point, this will create a new one
-    product_object = Product(request)
-    return redirect("%d/edit" % product_object.product.id)
+    if product_to_edit:
+      return redirect("%d/edit" % product_to_edit.id)
+    else:
+      new_product = Product(request=request)
+      return redirect("%d/edit" % new_product.id)
 
   except Exception as e:
     ExceptionHandler(e, "in inventory.create")
@@ -60,8 +59,7 @@ def edit(request, product_id):
   from settings.settings import CLOUDINARY
 
   try:
-    request.product_id = product_id
-    product = Product(request)
+    product = Product(product_id, request)
 
     product_form = ProductEditForm()
     product_form.fields['price'].initial  = product.get('price')
@@ -104,8 +102,7 @@ def detail(request, product_id):
 @access_required('seller')
 def remove(request, product_id): #seller deactivate product
   try:
-    request.product_id = product_id
-    product = Product(request)
+    product = Product(product_id)
     if product.deactivate():
       message = "Product %d deactivated by seller. No longer for sale." % product.product.id
       Email(message=message).sendTo(Dan.email)
@@ -126,10 +123,9 @@ def saveProduct(request): #ajax requests only, not asset-aware
 
   if request.method == 'GET': # it must be an ajax GET to work
     try:
-      request.product_id = request.GET['product_id']
-      product = Product(request)
+      product = Product(request.GET.get('product_id'))
 
-      if 'activate' in request.GET and request.GET['activate'] == "yes":
+      if request.GET.get('activate') == "yes":
         product.activate();
 
       attribute = request.GET.get('attribute')
@@ -139,26 +135,26 @@ def saveProduct(request): #ajax requests only, not asset-aware
 
       if attribute == "asset":
         if status == "active":
-          response['asset'] = product.addAsset(request.GET['asset_id'])
+          response['asset'] = product.addAsset(request.GET.get('asset_id'))
         else:
-          response['asset'] = product.removeAsset(request.GET['asset_id'])
+          response['asset'] = product.removeAsset(request.GET.get('asset_id'))
 
       elif attribute == "shipping option":
         if status == "active":
-          response['shipping_option'] = product.addShippingOption(request.GET['shipping_option_id'])
+          response['shipping_option'] = product.addShippingOption(request.GET.get('shipping_option_id'))
         else:
-          response['shipping_option'] = product.removeShippingOption(request.GET['shipping_option_id'])
+          response['shipping_option'] = product.removeShippingOption(request.GET.get('shipping_option_id'))
 
       elif attribute == "color":
         if status == "active":
-          response['color'] = product.addColor(request.GET['color_id'])
+          response['color'] = product.addColor(request.GET.get('color_id'))
         else:
-          response['color'] = product.removeColor(request.GET['color_id'])
+          response['color'] = product.removeColor(request.GET.get('color_id'))
 
       elif attribute == "photo":
         try:
-          rank = request.GET.get('rank')
-          url = request.GET.get('value')
+          rank = request.GET['rank']
+          url = request.GET['value']
         except: response['photo'] = "error saving photo"
         else:
           photo = product.addPhoto(url, rank)
@@ -175,7 +171,7 @@ def saveProduct(request): #ajax requests only, not asset-aware
           response['active'] = not product.deactivate()
 
       else:
-        success_message = product.update(attribute, request.GET['value'])
+        success_message = product.update(attribute, request.GET.get('value'))
         response['success'] = success_message
 
       cost_summary = {

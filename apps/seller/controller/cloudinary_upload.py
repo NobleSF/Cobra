@@ -143,8 +143,7 @@ def checkPhotoUpload(request):#for our JS to check upload status and get thumb_u
     else:
       try:
         if upload.is_complete:
-          request.product_id = request.GET['product_id']
-          product = Product(request)
+          product = Product(request.GET['product_id'])
 
           photo = product.addPhoto(upload.url, request.GET['rank'])
           response = {'thumb_url': photo.thumb_size}

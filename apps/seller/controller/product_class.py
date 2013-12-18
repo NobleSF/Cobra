@@ -1,38 +1,56 @@
 from apps.seller import models
 from apps.admin import models as admin_models
 from django.utils import timezone
-from apps.communication.controller import seller_events
 from apps.admin.utils.exception_handling import ExceptionHandler
+from apps.communication.controller.email_class import Email
+from settings import people
 
 class Product(object):
-  def __init__(self, request=None, product=None):
+  def __init__(self, product_id=None, request=None):
     try:
-      if request:
-        self.product = (models.Product.objects.get(id=request.product_id))
+      if product_id:
+        self.product = (models.Product.objects.get(id=product_id))
 
-        #don't let sellers edit each others products, but admins can edit anyone's
-        if (not 'admin_id' in request.session and
-            int(request.session['seller_id']) != self.product.seller.id):
-          self.product = None
+        if request:
+          #admin_type = request.session.get('admin_type')
+          #admin_type not in ['master', 'country', 'trainer']
+
+          #don't let sellers edit each others products, but admins can edit anyone's
+          if (not 'admin_id' in request.session and
+              int(request.session['seller_id']) != self.product.seller.id):
+            self.product = None
+            raise Exception("Not Authorized")
+
+      elif request and 'seller_id' in request.session:
+        self.new(request.session['seller_id'])
 
       else:
-        self.product = product
+        raise Exception("No product_id or valid request object")
 
     except Exception as e:
-      if request:
-        self.product = self.new(request)
-      else:
-        ExceptionHandler(e, "problem in product_class.Product.__init__")
+      #possibly bad product id or no seller_id in request.session
+      ExceptionHandler(e, "problem in product_class.Product.__init__")
 
   def __iter__(self):
     for asset in self.product.asset_set.all():
       yield asset
 
-  def new(self, request):
-    product = models.Product(seller_id = request.session['seller_id'])
-    product.save()
-    request.product_id = product.id
-    return product
+  def new(self, seller_id):
+    self.product = models.Product(seller_id=seller_id)
+    self.product.save()
+
+
+  def belongsToPhone(self, phone_number):
+    if self.seller.account.phone:
+      seller_phone = self.seller.account.phone
+      return True if (phone_number[-8:] == seller_phone[-8:]) else False
+    else: return False
+
+
+  def resetSlug(self):
+
+    pass
+
 
   def addPhoto(self, url, rank):
     from apps.seller.models import Photo
@@ -56,9 +74,10 @@ class Product(object):
       asset = models.Asset.objects.get(id=asset_id)
       self.product.assets.add(asset)
       return "added asset " + (asset.name if asset.name else "")
-    except Asset.DoesNotExist:
+
+    except models.Asset.DoesNotExist:
       return "asset does not exist"
-    except: return ""
+    except Exception as e: return str(e)
 
   def removeAsset(self, asset_id):
     try:
@@ -73,9 +92,10 @@ class Product(object):
       shipping_option = models.ShippingOption.objects.get(id=shipping_option_id)
       self.product.shipping_options.add(shipping_option)
       return "added shipping option " + (shipping_option.name if shipping_option.name else "")
-    except ShippingOption.DoesNotExist:
+
+    except models.ShippingOption.DoesNotExist:
       return "shipping option does not exist"
-    except: return ""
+    except Exception as e: return str(e)
 
   def removeShippingOption(self, shipping_option_id):
     try:
@@ -90,7 +110,7 @@ class Product(object):
       color = admin_models.Color.objects.get(id=color_id)
       self.product.colors.add(color)
       return "added color " + color.name
-    except ShippingOption.DoesNotExist:
+    except admin_models.Color.DoesNotExist:
       return "color does not exist"
     except: return ""
 
@@ -118,10 +138,10 @@ class Product(object):
       elif attribute == 'weight':
         self.product.weight = value
       else:
-        raise TypeError('attribute does not exist')
+        raise Exception('attribute does not exist')
 
     except Exception as e:
-      return "attribute does not exist"
+      return str(e)
     else:
       self.product.save()
       return "saved " + attribute + ": " + (str(value) if value else "None")
@@ -139,10 +159,10 @@ class Product(object):
       elif attribute == 'weight':
         value = self.product.weight
       else:
-        raise TypeError('attribute does not exist')
+        raise Exception('attribute does not exist')
 
     except Exception as e:
-      return "attribute does not exist"
+      return str(e)
     else:
       return str(value) if value else ""
 
@@ -151,10 +171,8 @@ class Product(object):
       self.product.assets.clear()
       self.product.shipping_options.clear()
       self.product.colors.clear()
-    except:
-      return False
-    else:
-      return True
+    except Exception as e:
+      ExceptionHandler(e, "in product_class.Product.clear")
 
   def activate(self):
     try:
@@ -162,70 +180,74 @@ class Product(object):
       self.product.active_at = timezone.now()
       self.product.in_holding = False
       self.product.save()
-    except:
-      return False
+    except Exception as e:
+      ExceptionHandler(e, "in product_class.Product.activate")
     else:
-      seller_events.activatedProduct(self.product)
-      return True
+      Email('product/activated', product).sendTo(people.Dan.email)
 
   def deactivate(self):
+    from apps.communication.controller.order_events import cancelOrder
+    try:
+      for order in self.product.order_set.all():
+        cancelOrder(order)
+    except Exception as e:
+      ExceptionHandler(e, "in product_class.Product.deactivateA")
+
     try:
       self.product.deactive_at = timezone.now()
       self.product.in_holding = False
       self.product.save()
-    except:
-      return False
+    except Exception as e:
+      ExceptionHandler(e, "in product_class.Product.deactivateB")
     else:
-      return True
+      message = "product %d has been removed by seller" % product.product.id
+      Email(message=message).sendTo(people.Dan.email)
 
   def approve(self):
     try:
       self.product.approved_at = timezone.now()
       self.product.in_holding = False
       self.product.save()
-    except:
-      return False
-    else:
-      return True
+      self.product.resetSlug()
+    except Exception as e:
+      ExceptionHandler(e, "in product_class.Product.approve")
 
-  def unapprove(self):
+  def unapprove(self): #remove original approval
     try:
       self.product.approved_at = None
       self.product.in_holding = False
       self.product.save()
-    except:
-      return False
-    else:
-      return True
+    except Exception as e:
+      ExceptionHandler(e, "in product_class.Product.unapprove")
 
-  def disapprove(self):
+  def disapprove(self): #set to not approved
     try:
       self.product.approved_at = None
       self.product.in_holding = False
       self.product.save()
-    except:
-      return False
-    else:
-      return True
+    except Exception as e:
+      ExceptionHandler(e, "in product_class.Product.disapprove")
 
-  def mark_sold(self):
+  def hold(self):
+    try:
+      self.product.approved_at = None
+      self.product.in_holding = True
+      self.product.save()
+    except Exception as e:
+      ExceptionHandler(e, "in product_class.Product.hold")
+
+  def sold(self):
     try:
       self.product.sold_at = timezone.now()
       self.product.save()
-    except:
-      return False
-    else:
-      return True
+    except Exception as e:
+      ExceptionHandler(e, "in product_class.Product.sold")
 
   def delete(self):
+    try: self.product.assets.clear()
+    except: pass
+
     try:
-      self.product.assets.clear()
-    except:
-      pass
-    finally:
-      try:
-        self.product.delete()
-      except:
-        return False
-      else:
-        return True
+      self.product.delete()
+    except Exception as e:
+      ExceptionHandler(e, "in product_class.Product.delete")

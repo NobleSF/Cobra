@@ -39,14 +39,14 @@
           {% for item in cart %}
             <div id='item_{{ item.id }}' class='thumbnail row-fluid'>
               <div class='photo span4'>
-                <a href="{% url 'product' item.product.id %}">
+                <a href="{{ item.product.get_absolute_url }}">
                   <img src='{{ item.photo.thumb_size }}' alt='{{ item.product.title }}'>
                 </a>
               </div>
               <div class='details span8'>
                 <ul>
                   <li class='name'>
-                    <a href="{% url 'product' item.product.id %}">
+                    <a href="{{ item.product.get_absolute_url }}">
                       {{ item.product.name }} by {{ item.product.seller.name }}
                     </a>
                   </li>

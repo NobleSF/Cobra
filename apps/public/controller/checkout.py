@@ -44,8 +44,7 @@ def cartAdd(request, product_id):
   cart = Cart(request)
 
   try:
-    product = Product.objects.get(id=product_id)
-    cart.add(product)
+    cart.add(Product.objects.get(id=product_id))
     return redirect('cart')
 
   except Exception as e:
@@ -60,8 +59,7 @@ def cartRemove(request, product_id):
   cart = Cart(request)
 
   try:
-    product = Product.objects.get(id=product_id)
-    cart.remove(product)
+    cart.remove(Product.objects.get(id=product_id))
     return redirect('cart')
 
   except Exception as e:

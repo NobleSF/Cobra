@@ -1,5 +1,5 @@
 from django.http import HttpResponse, Http404
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.views.decorators.cache import cache_page
 from django.utils import timezone
@@ -8,23 +8,13 @@ from itertools import chain
 from django.utils import simplejson as json
 
 def home(request, product_id, slug=None):
+  product = get_object_or_404(Product, id=product_id)
+
+  #permanent redirect when slug not included
+  if not slug and product.slug:
+    redirect(product, permanent=True)
+
   try:
-    product = Product.objects.get(id=product_id)
-
-    try: product.artisan = product.assets.filter(ilk='artisan')[0]#.order_by('?')[:1]
-    except: pass
-    product.materials = product.assets.filter(ilk='material')#.order_by('?')[:3]
-    product.tools     = product.assets.filter(ilk='tool')#.order_by('?')[:3]
-    product.utilities = list(chain(product.materials, product.tools))
-
-    try:
-      product.pinterest_url = ("http://www.pinterest.com/pin/create/button/" +
-                               "?url=http://www.theanou.com" + product.get_absolute_url() +
-                               "&media=" + product.photo.original +
-                               "&description=" + product.title_description)
-
-    except: pass #if something here broke, it probably doesn't need to be working anyway
-
     more_products = (product.seller.product_set
                      .exclude(id=product.id)
                      .filter(sold_at=None)
@@ -32,12 +22,9 @@ def home(request, product_id, slug=None):
                      .filter(deactive_at=None)
                      .order_by('approved_at').reverse())
 
-    context = {'product':       product,
+    context = {'product': product,
                'more_products': more_products[:3]
               }
-
-  except Product.DoesNotExist:
-    raise Http404
 
   except Exception as e:
     ExceptionHandler(e, "in product.home")

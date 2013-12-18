@@ -19,26 +19,24 @@ def create(request):
         username = request.POST.get('username')
         password = process_password(request.POST.get('password'))
         account = Account(username=username, password=password)
-        #account.is_admin = ()
         account.save()
 
         if request.POST['account_type'] == 'admin':
+          account.admin_type = "unassigned"
+          account.save()
           messages.success(request, 'Admin account created. Ask Tom to set admin privileges')
           return redirect('admin:account edit', account.id)
 
         else: #seller account
-          if createSeller(account) == True:
-            #messages.success(request, 'Seller account created.')
+          if createSeller(account):
             login(request)
             return redirect('seller:edit')
           else:
             messages.error(request, 'Error creating seller account.')
-            error_message = createSeller(account)
-            messages.error(request, error_message)
             account.delete()
 
       else:
-        messages.warning(request, 'Missing username or password')
+        messages.warning(request, 'Missing username and/or password')
 
     except IntegrityError:
       messages.warning(request, 'An account with this username already exists.')
@@ -124,7 +122,6 @@ def login(request, next=None):
     try:
       account = None
       username = request.POST.get('username', '')
-      password = process_password(request.POST.get('password', ''))
 
       #login with phone number
       if not account:
@@ -144,18 +141,21 @@ def login(request, next=None):
           account = Account.objects.get(email=username)
         except: pass
 
-      #lower-case first letter (for phones that auto-capitalize it)
-      if len(username) > 0:
-        username_as_list = list(username)
-        username_as_list[0] = username_as_list[0].lower()
-        username = "".join(username_as_list)
       if not account:
-        try: account = Account.objects.get(username=username)
-        except: pass
-        try: account = Account.objects.get(email=username)
-        except: pass
+        #lower-case first letter (for phones that auto-capitalize it)
+        if len(username) > 0:
+          username_as_list = list(username)
+          username_as_list[0] = username_as_list[0].lower()
+          username = "".join(username_as_list)
 
-      if account and account.password == password:
+        try:
+          account = Account.objects.get(username=username)
+        except:
+          try:
+            account = Account.objects.get(email=username)
+          except: pass
+
+      if account and account.password == process_password(request.POST.get('password', '')):
 
         if account.is_admin:
           request.session['admin_id'] = account.id

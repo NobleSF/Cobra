@@ -206,6 +206,25 @@ class Product(models.Model):
       return str(self.id)
 
   @property
+  def artisan(self):
+    try:
+      return self.assets.filter(ilk='artisan')[0]
+    except:
+      return None
+
+  @property
+  def materials(self):
+    return self.assets.filter(ilk='material')
+
+  @property
+  def tools(self):
+    return self.assets.filter(ilk='tool')
+
+  @property
+  def utilities(self):
+    return list(chain(self.materials, self.tools))
+
+  @property
   def color_adjective(self): #5-15 chars
     try:
       colors = self.colors.all()
@@ -467,24 +486,33 @@ class Product(models.Model):
     else:
       return False
 
-  def belongsToPhone(self, phone_number):
-    if self.seller.account.phone:
-      seller_phone = self.seller.account.phone
-      return True if (phone_number[-8:] == seller_phone[-8:]) else False
-    else: return False
+  @property
+  def pinterest_url(self):
+    try:
+      return ("http://www.pinterest.com/pin/create/button/" +
+              "?url=http://www.theanou.com" + self.get_absolute_url() +
+              "&media=" + self.photo.original +
+              "&description=" + self.title_description)
+    except:
+      return "" #probably doesn't need to be working anyway
+
+  def resetSlug(self):
+    from django.template.defaultfilters import slugify
+    try:
+      self.slug = slugify(self.title)
+      self.slug = ''.join([char for char in self.slug if not char.isdigit()])
+      self.save()
+    except: pass
 
   def get_absolute_url(self):
     from django.core.urlresolvers import reverse
-    if self.slug:
+    if not self.slug:
+      self.resetSlug()
+
+    try:
       return reverse('product_w_slug', args=[str(self.id), self.slug])
-    else:
-      try:
-        from django.template.defaultfilters import slugify
-        self.slug = slugify(self.title)
-        self.save()
-        return reverse('product_w_slug', args=[str(self.id), self.slug])
-      except:
-        return reverse('product', args=[str(self.id)])
+    except:
+      return reverse('product', args=[str(self.id)])
 
   def __unicode__(self):
     if self.color_adjective:
