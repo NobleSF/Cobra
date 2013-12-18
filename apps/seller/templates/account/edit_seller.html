@@ -15,8 +15,8 @@
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/vendor/jquery.ui.widget.min.js'></script>
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.iframe-transport.min.js'></script>
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.fileupload.min.js'></script>
-  <script src='{{ STATIC_URL }}seller/js/account_edit.min.js'></script>
-  <script src='{{ STATIC_URL }}seller/js/asset.min.js'></script>
+  <script src='{{ STATIC_URL }}seller/js/account_edit.min.js?v=1'></script>
+  <script src='{{ STATIC_URL }}seller/js/asset.min.js?v=1'></script>
 {% endblock javascript%}
 
 {% block admin_nav %}
@@ -143,6 +143,9 @@
       </div>
 
     </form>
+
+    <input type='hidden' id='seller-id' value='{{ seller.id }}'>
+
   </div>
 
   <ul id='asset-tabs' class='nav nav-tabs text-center'>

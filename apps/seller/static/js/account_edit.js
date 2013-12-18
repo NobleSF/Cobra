@@ -73,6 +73,7 @@ function addAssetForms(){
       //grab an empty form from the hidden .asset-forms div
       var new_asset = $('#asset-forms .asset').first().clone(false);
       var ilk = this_container.attr('id').replace('_container','');
+      var seller_id = $('#seller-id').val()
 
       //calculate what the next rank should be
       var highest_rank = 0;
@@ -85,6 +86,7 @@ function addAssetForms(){
       var next_rank = highest_rank + 1;
       new_asset.find('input.rank').attr('value', next_rank);
       new_asset.find('input.ilk').attr('value', ilk);
+      new_asset.find('input.seller-id').attr('value', seller_id);
       new_asset.attr('id', ('asset-'+ilk+next_rank));
 
       //place it in the container
