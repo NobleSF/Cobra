@@ -46,8 +46,8 @@ def create(request):
     if product_to_edit:
       return redirect("%d/edit" % product_to_edit.id)
     else:
-      new_product = Product(request=request)
-      return redirect("%d/edit" % new_product.id)
+      new_product_object = Product(request=request)
+      return redirect("%d/edit" % new_product_object.product.id)
 
   except Exception as e:
     ExceptionHandler(e, "in inventory.create")
