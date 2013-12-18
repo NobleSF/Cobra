@@ -115,7 +115,7 @@ def saveAsset(request): #ajax get requests only, create or update asset
   from apps.admin.models import Category
 
   try:
-    if request.session['seller_id'] == request.GET['seller_id']:
+    if int(request.session['seller_id']) == int(request.GET['seller_id']):
       asset, is_new = Asset.objects.get_or_create(
                           seller_id = request.GET['seller_id'],
                           ilk = request.GET['ilk'],
