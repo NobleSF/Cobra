@@ -200,7 +200,8 @@ class Product(object):
     except Exception as e:
       ExceptionHandler(e, "in product_class.Product.deactivateB")
     else:
-      message = "product %d has been removed by seller" % self.product.id
+      message = "Product %d has been removed. No longer for sale." % self.product.id
+      message += "  %s" % self.product.get_absolute_url()
       Email(message=message).sendTo(people.Dan.email)
 
   def approve(self):

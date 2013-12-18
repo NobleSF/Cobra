@@ -8,8 +8,6 @@ from apps.admin.utils.exception_handling import ExceptionHandler
 from django.views.decorators.csrf import csrf_exempt
 from apps.seller.models import Seller
 from apps.seller.controller.product_class import Product
-from settings.people import Tom, Dan
-from apps.communication.controller.email_class import Email
 
 def checkInventory(seller):
   #preferred method
@@ -103,16 +101,15 @@ def detail(request, product_id):
 def remove(request, product_id): #seller deactivate product
   try:
     product = Product(product_id)
-    if product.deactivate():
-      message = "Product %d deactivated by seller. No longer for sale." % product.product.id
-      Email(message=message).sendTo(Dan.email)
-      if request.session.get('admin_id'): messages.success(request, message)
-    else:
-      message = "Unable to deactivate product."
-      if request.session.get('admin_id'): messages.warning(request, message)
+    product.deactivate()
+
+    if request.session.get('admin_id'):
+      messages.success(request, "Product successfully removed from inventory.")
 
   except Exception as e:
     ExceptionHandler(e, "in inventory.remove")
+    if request.session.get('admin_id'):
+      messages.warning(request, "Unable to remove product.")
 
   return redirect('seller:management products')
 

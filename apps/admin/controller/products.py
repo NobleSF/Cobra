@@ -77,7 +77,7 @@ def approve_product(request): #from AJAX GET request
     ExceptionHandler(e, "error on approve_product")
     response = {'error': str(e)}
   else:
-    response = {'success': "%s %s" % (action, product_id)}
+    response = {'success': "%s %s" % (action, product.product.id)}
 
   return HttpResponse(json.dumps(response), content_type='application/json')
 

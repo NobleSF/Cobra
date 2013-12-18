@@ -51,7 +51,7 @@ urlpatterns += patterns('',
   url(r'^admin/management/image_object$', site_management.image_object, name='image_object'),
 )
 
-#ADMIN ACTION
+#MANUAL CACHE REBUILDs
 urlpatterns += patterns('',
   url(r'^admin/re_homepg$', site_management.rebuildHomePage, name='rebuild homepage'),
   url(r'^admin/re_productpg/(?P<product_id>\d+)$', site_management.rebuildProductPage, name='rebuild productpage'),
