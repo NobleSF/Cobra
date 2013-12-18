@@ -150,7 +150,7 @@ def saveAsset(request): #ajax get requests only, create or update asset
     ExceptionHandler(e, "in account.saveAsset")
     response = {'exception': str(e)}
 
-  return HttpResponse(json.dumps(response), mimetype='application/json')
+  return HttpResponse(json.dumps(response), content_type='application/json')
 
 @access_required('seller')
 @csrf_exempt
@@ -169,4 +169,4 @@ def deleteAsset(request): #ajax requests only
     ExceptionHandler(e, "in account.deleteAsset")
     response = {'exception': str(e)}
 
-  return HttpResponse(json.dumps(response), mimetype='application/json')
+  return HttpResponse(json.dumps(response), content_type='application/json')

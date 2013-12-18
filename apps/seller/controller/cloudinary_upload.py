@@ -77,7 +77,7 @@ def checkImageUpload(request):#for our JS to check upload status and get thumb_u
 
           response = {'thumb_url': image.thumb_size}
           return HttpResponse(json.dumps(response),
-                              mimetype='application/json',
+                              content_type='application/json',
                               status='200')
 
         else:
@@ -89,7 +89,7 @@ def checkImageUpload(request):#for our JS to check upload status and get thumb_u
         ExceptionHandler(e, "in cloudinary_upload.checkImageUpload", sentry_only=True)
         response = {'exception':str(e)}
         return HttpResponse(json.dumps(response),
-                            mimetype='application/json',
+                            content_type='application/json',
                             status='500')
 
 @access_required('seller')
@@ -125,7 +125,7 @@ def imageFormData(request):
       'notification_url': request.build_absolute_uri(reverse('seller:complete upload')),
     }
     form_data['signature'] = createSignature(form_data)
-  return HttpResponse(json.dumps(form_data), mimetype='application/json')
+  return HttpResponse(json.dumps(form_data), content_type='application/json')
   #todo: handle exceptions?
 
 @access_required('seller')
@@ -150,7 +150,7 @@ def checkPhotoUpload(request):#for our JS to check upload status and get thumb_u
           response = {'thumb_url': photo.thumb_size}
 
           return HttpResponse(json.dumps(response),
-                              mimetype='application/json',
+                              content_type='application/json',
                               status='200')
         else:
           return HttpResponse("did not find upload", status='204')
@@ -159,7 +159,7 @@ def checkPhotoUpload(request):#for our JS to check upload status and get thumb_u
         ExceptionHandler(e, "in cloudinary_upload.checkPhotoUpload", sentry_only=True)
         response = {'exception':str(e)}
         return HttpResponse(json.dumps(response),
-                            mimetype='application/json',
+                            content_type='application/json',
                             status='500')
 
 @access_required('admin or seller')
@@ -194,7 +194,7 @@ def photoFormData(request):
       #http://respondto.it/complete-upload
     }
     form_data['signature'] = createSignature(form_data)
-  return HttpResponse(json.dumps(form_data), mimetype='application/json')
+  return HttpResponse(json.dumps(form_data), content_type='application/json')
   #todo: handle exceptions?
 
 def createSignature(data):

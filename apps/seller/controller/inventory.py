@@ -187,5 +187,5 @@ def saveProduct(request): #ajax requests only, not asset-aware
   else:
     response['problem'] = "not GET"
 
-  return HttpResponse(json.dumps(response), mimetype='application/json')
+  return HttpResponse(json.dumps(response), content_type='application/json')
   #return HttpResponse(response['exception'])

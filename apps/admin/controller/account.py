@@ -112,7 +112,7 @@ def approve_seller(request): #from AJAX GET request
   else:
     response = {'success': "%s %s" % (action, seller_id)}
 
-  return HttpResponse(json.dumps(response), mimetype='application/json')
+  return HttpResponse(json.dumps(response), content_type='application/json')
 
 def login(request, next=None):
   from apps.admin.controller.forms import AccountLoginForm

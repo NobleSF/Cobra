@@ -148,7 +148,7 @@ def incoming(request):
             sms.save()
             #send reply back with response
             response = {'messages':[{'content':reply_msg}]}
-            return HttpResponse(json.dumps(response), mimetype='application/json')
+            return HttpResponse(json.dumps(response), content_type='application/json')
 
           else:
             return HttpResponse(status=200)#OK
@@ -164,7 +164,7 @@ def incoming(request):
 
       if DEMO or STAGE or DEBUG:
         response = {'messages':[{'content':str(e)}]}
-        return HttpResponse(json.dumps(response), mimetype='application/json')
+        return HttpResponse(json.dumps(response), content_type='application/json')
       else:
         return HttpResponse(status=500)#server error, our fault, Telerivet will try again
 

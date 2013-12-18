@@ -32,7 +32,7 @@ def subscribe(request): #ajax requests only
   except Exception as e:
     response = {'exception': str(e)}
 
-  return HttpResponse(json.dumps(response), mimetype='application/json')
+  return HttpResponse(json.dumps(response), content_type='application/json')
 
 def communicateSubscribed():
   return True

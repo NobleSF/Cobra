@@ -79,7 +79,7 @@ def approve_product(request): #from AJAX GET request
   else:
     response = {'success': "%s %s" % (action, product_id)}
 
-  return HttpResponse(json.dumps(response), mimetype='application/json')
+  return HttpResponse(json.dumps(response), content_type='application/json')
 
 @access_required('admin')
 def rate_product(request): #from AJAX GET request
@@ -116,7 +116,7 @@ def rate_product(request): #from AJAX GET request
   else:
     response = {'success': "%s rated" % product_id}
 
-  return HttpResponse(json.dumps(response), mimetype='application/json')
+  return HttpResponse(json.dumps(response), content_type='application/json')
 
 
 def priceCalc(request):

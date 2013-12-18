@@ -81,7 +81,7 @@ def imageFormData(request):
       }
       form_data['signature'] = createSignature(form_data)
 
-      return HttpResponse(json.dumps(form_data), mimetype='application/json')
+      return HttpResponse(json.dumps(form_data), content_type='application/json')
 
     except Exception as e:
       ExceptionHandler(e, "in orders.imageFormData")

@@ -82,7 +82,7 @@ def cartSave(request): #ajax requests only
   else:
     response = {'problem':"not GET"}
 
-  return HttpResponse(json.dumps(response), mimetype='application/json')
+  return HttpResponse(json.dumps(response), content_type='application/json')
 
 def confirmation(request):
   from apps.public.controller.order_class import getOrders
@@ -157,11 +157,11 @@ def adminCheckout(request): #ajax requests only
 
   except Exception as e:
     responseObject = HttpResponse(content=json.dumps({'error':str(e)}),
-                                  mimetype='application/json',
+                                  content_type='application/json',
                                   status='500')
   else:
     responseObject = HttpResponse(json.dumps({'email':'sent'}),
-                                  mimetype='application/json',
+                                  content_type='application/json',
                                   status='200')
   finally:
     return responseObject

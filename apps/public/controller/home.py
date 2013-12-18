@@ -20,9 +20,9 @@ def loadProducts(request):
       html = render_to_string('home/product.html', {'product':product})
       product_html[str(product.id)] = html
 
-    return HttpResponse(json.dumps(product_html), mimetype='application/json')
+    return HttpResponse(json.dumps(product_html), content_type='application/json')
   else:
-    return HttpResponse(json.dumps({}), mimetype='application/json')
+    return HttpResponse(json.dumps({}), content_type='application/json')
 
 def about(request):
   return render(request, 'home/about.html')

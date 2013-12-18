@@ -124,6 +124,6 @@ def product_data(request=None):
   response = {'products': product_amalgam_bomb}
 
   if request:
-    return HttpResponse(json.dumps(response), mimetype='application/json')
+    return HttpResponse(json.dumps(response), content_type='application/json')
   else:
     return response
