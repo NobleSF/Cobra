@@ -245,7 +245,7 @@ def understandMessage(message): #example message '123 CP123456789MA'
       data['tracking_number'] = matches.group(1)
     except: pass
 
-    return (product.id, data) #like ('1234', {'tracking_number':"CP123456789MA"})
+    return (product.product.id, data) #like ('1234', {'tracking_number':"CP123456789MA"})
 
   else:
     return False

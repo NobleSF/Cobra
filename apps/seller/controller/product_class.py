@@ -39,18 +39,13 @@ class Product(object):
     self.product = models.Product(seller_id=seller_id)
     self.product.save()
 
-
   def belongsToPhone(self, phone_number):
-    if self.seller.account.phone:
-      seller_phone = self.seller.account.phone
+    try:
+      seller_phone = self.product.seller.account.phone
       return True if (phone_number[-8:] == seller_phone[-8:]) else False
-    else: return False
-
-
-  def resetSlug(self):
-
-    pass
-
+    except Exception as e:
+      ExceptionHandler(e, "in product_class.Product.belongsToPhone")
+      return False
 
   def addPhoto(self, url, rank):
     from apps.seller.models import Photo

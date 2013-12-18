@@ -65,13 +65,14 @@
             <ul class='unstyled'>
               {% for item in cart %}
                 <li>
-                  <img class='product-photo'
-                       src='{{ item.photo.pinky_size }}' alt='{{ item.product.title }}'>
-                  <h5 class='product-title'>
-                    {{ item.product.name }}
-                    <span class=''>${{ item.product.display_price }}</span>
-                  </h5>
-
+                  <a href="{{ item.product.get_absolute_url }}">
+                    <img class='product-photo'
+                         src='{{ item.photo.pinky_size }}' alt='{{ item.product.title }}'>
+                    <h5 class='product-title'>
+                      {{ item.product.name }}
+                      <span class=''>${{ item.product.display_price }}</span>
+                    </h5>
+                  </a>
                 </li>
               {% endfor %}
             </ul>
