@@ -49,7 +49,8 @@ def updateOrder(request):
 @access_required('admin')
 @csrf_exempt #find a way to add csrf
 def imageFormData(request):
-  from django.utils import timezone, dateformat, simplejson
+  from django.utils import timezone, dateformat
+  import json
   from apps.seller.controller.cloudinary_upload import createSignature
   from apps.seller.models import Upload
 
@@ -80,7 +81,7 @@ def imageFormData(request):
       }
       form_data['signature'] = createSignature(form_data)
 
-      return HttpResponse(simplejson.dumps(form_data), mimetype='application/json')
+      return HttpResponse(json.dumps(form_data), mimetype='application/json')
 
     except Exception as e:
       ExceptionHandler(e, "in orders.imageFormData")

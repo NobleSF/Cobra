@@ -4,7 +4,8 @@ from apps.admin.utils.decorator import access_required
 from django.contrib import messages
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.forms.models import modelformset_factory
-from django.utils import simplejson, timezone
+from django.utils import timezone
+import json
 from apps.seller.models import Product
 
 @access_required('admin')
@@ -78,7 +79,7 @@ def approve_product(request): #from AJAX GET request
   else:
     response = {'success': "%s %s" % (action, product_id)}
 
-  return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+  return HttpResponse(json.dumps(response), mimetype='application/json')
 
 @access_required('admin')
 def rate_product(request): #from AJAX GET request
@@ -115,7 +116,7 @@ def rate_product(request): #from AJAX GET request
   else:
     response = {'success': "%s rated" % product_id}
 
-  return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+  return HttpResponse(json.dumps(response), mimetype='application/json')
 
 
 def priceCalc(request):

@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.contrib import messages
-from django.utils import simplejson, timezone
+import json
+from django.utils import timezone
 from datetime import timedelta
 from apps.admin.models import Account
 
@@ -111,7 +112,7 @@ def approve_seller(request): #from AJAX GET request
   else:
     response = {'success': "%s %s" % (action, seller_id)}
 
-  return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+  return HttpResponse(json.dumps(response), mimetype='application/json')
 
 def login(request, next=None):
   from apps.admin.controller.forms import AccountLoginForm

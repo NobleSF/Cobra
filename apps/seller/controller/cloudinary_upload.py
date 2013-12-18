@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
-from django.utils import simplejson, timezone, dateformat
+import json
+from django.utils import timezone, dateformat
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.views.decorators.csrf import csrf_exempt
@@ -12,7 +13,7 @@ from settings.settings import CLOUDINARY
 @csrf_exempt
 def completeUpload(request):#for cloudinary to post info on completed uploads
   try:
-    request_data = simplejson.loads(request.body)
+    request_data = json.loads(request.body)
     upload = Upload.objects.get(public_id = request_data.get('public_id'))
     if request_data.get('url').endswith(upload.public_id+'.jpg'):
       upload.complete_at = timezone.now()
@@ -75,7 +76,7 @@ def checkImageUpload(request):#for our JS to check upload status and get thumb_u
             order.save()
 
           response = {'thumb_url': image.thumb_size}
-          return HttpResponse(simplejson.dumps(response),
+          return HttpResponse(json.dumps(response),
                               mimetype='application/json',
                               status='200')
 
@@ -87,7 +88,7 @@ def checkImageUpload(request):#for our JS to check upload status and get thumb_u
       except Exception as e:
         ExceptionHandler(e, "in cloudinary_upload.checkImageUpload", sentry_only=True)
         response = {'exception':str(e)}
-        return HttpResponse(simplejson.dumps(response),
+        return HttpResponse(json.dumps(response),
                             mimetype='application/json',
                             status='500')
 
@@ -124,7 +125,7 @@ def imageFormData(request):
       'notification_url': request.build_absolute_uri(reverse('seller:complete upload')),
     }
     form_data['signature'] = createSignature(form_data)
-  return HttpResponse(simplejson.dumps(form_data), mimetype='application/json')
+  return HttpResponse(json.dumps(form_data), mimetype='application/json')
   #todo: handle exceptions?
 
 @access_required('seller')
@@ -148,7 +149,7 @@ def checkPhotoUpload(request):#for our JS to check upload status and get thumb_u
           photo = product.addPhoto(upload.url, request.GET['rank'])
           response = {'thumb_url': photo.thumb_size}
 
-          return HttpResponse(simplejson.dumps(response),
+          return HttpResponse(json.dumps(response),
                               mimetype='application/json',
                               status='200')
         else:
@@ -157,7 +158,7 @@ def checkPhotoUpload(request):#for our JS to check upload status and get thumb_u
       except Exception as e:
         ExceptionHandler(e, "in cloudinary_upload.checkPhotoUpload", sentry_only=True)
         response = {'exception':str(e)}
-        return HttpResponse(simplejson.dumps(response),
+        return HttpResponse(json.dumps(response),
                             mimetype='application/json',
                             status='500')
 
@@ -193,7 +194,7 @@ def photoFormData(request):
       #http://respondto.it/complete-upload
     }
     form_data['signature'] = createSignature(form_data)
-  return HttpResponse(simplejson.dumps(form_data), mimetype='application/json')
+  return HttpResponse(json.dumps(form_data), mimetype='application/json')
   #todo: handle exceptions?
 
 def createSignature(data):

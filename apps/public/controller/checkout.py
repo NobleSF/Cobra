@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
-from django.utils import simplejson as json
+import json
 from django.contrib import messages
 
 from apps.public.controller.cart_class import Cart

@@ -4,15 +4,14 @@ from apps.admin.utils.exception_handling import ExceptionHandler
 from django.views.decorators.cache import cache_page
 from django.utils import timezone
 from apps.seller.models import Product, Photo
-from itertools import chain
-from django.utils import simplejson as json
+import json
 
 def home(request, product_id, slug=None):
   product = get_object_or_404(Product, id=product_id)
 
   #permanent redirect when slug not included
-  if not slug and product.slug:
-    redirect(product, permanent=True)
+  if product.slug and slug != product.slug:
+    return redirect(product, permanent=True)
 
   try:
     more_products = (product.seller.product_set
@@ -110,8 +109,7 @@ def product_data(request=None):
     product_data['artisans'] = artisans
 
     utilities = []
-    for utility in list(chain(product.assets.filter(ilk='material'),
-                              product.assets.filter(ilk='tool'))):
+    for utility in product.utilities:
       utilities.append({
         'ilk':            utility.ilk,
         'name':           utility.name,

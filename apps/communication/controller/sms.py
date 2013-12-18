@@ -1,7 +1,7 @@
 import requests
 from requests.auth import HTTPBasicAuth
 from settings.settings import TELERIVET, STAGE, DEBUG, DEMO
-import simplejson as json
+import json
 import re #regular expressions
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt

@@ -1,5 +1,6 @@
 from django.http import HttpResponse
-from django.utils import simplejson, timezone
+import json
+from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from apps.admin.utils.decorator import access_required

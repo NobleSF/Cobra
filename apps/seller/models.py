@@ -222,6 +222,7 @@ class Product(models.Model):
 
   @property
   def utilities(self):
+    from itertools import chain
     return list(chain(self.materials, self.tools))
 
   @property

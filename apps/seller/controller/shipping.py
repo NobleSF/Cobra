@@ -1,6 +1,3 @@
-from django.http import HttpResponse, Http404
-from django.shortcuts import render, redirect, get_object_or_404
-from django.utils import simplejson
 from math import ceil as roundUp
 
 def calculateShippingCost(weight, shipping_option):

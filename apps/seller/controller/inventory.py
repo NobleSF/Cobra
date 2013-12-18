@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-from django.utils import simplejson
+import json
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.views.decorators.csrf import csrf_exempt
@@ -187,5 +187,5 @@ def saveProduct(request): #ajax requests only, not asset-aware
   else:
     response['problem'] = "not GET"
 
-  return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+  return HttpResponse(json.dumps(response), mimetype='application/json')
   #return HttpResponse(response['exception'])

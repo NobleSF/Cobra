@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.core.urlresolvers import reverse
-from django.utils import simplejson as json
+import json
 from settings.settings import PRODUCTION, STAGE
 
 def orders(request):
