@@ -183,7 +183,7 @@ class Product(object):
     except Exception as e:
       ExceptionHandler(e, "in product_class.Product.activate")
     else:
-      Email('product/activated', product).sendTo(people.Dan.email)
+      Email('product/activated', self.product).sendTo(people.Dan.email)
 
   def deactivate(self):
     from apps.communication.controller.order_events import cancelOrder
@@ -200,7 +200,7 @@ class Product(object):
     except Exception as e:
       ExceptionHandler(e, "in product_class.Product.deactivateB")
     else:
-      message = "product %d has been removed by seller" % product.product.id
+      message = "product %d has been removed by seller" % self.product.id
       Email(message=message).sendTo(people.Dan.email)
 
   def approve(self):
