@@ -26,7 +26,7 @@
 {% endblock javascript %}
 
 {% block css %}
-  <link href="{{ STATIC_URL }}public/css/about.css" rel="stylesheet">
+  <link href="{{ STATIC_URL }}public/css/about.css?v=1" rel="stylesheet">
 {% endblock css %}
 
 
@@ -39,15 +39,6 @@
 {% endblock header_link_2 %}
 
 {% block content %}
-
-<!--<div id='introduction' class=''>
-  <div class='message'>
-    <h2>
-      What is Anou?
-    </h2>
-  </div>
-  <img src='{{ STATIC_URL }}images/about_page/about_photo.jpg' title='photo of Zaouia Oued Ifrane'>
-</div>-->
 
 <!--<div id='facebook' class='text-center hidden-phone'>
   <div class="fb-like"
@@ -71,70 +62,74 @@
     <h2 class='copy-font'>
       Finally, artisans are gaining the freedom to set their own prices and engage directly with you.
     </h2>
-  </div>
 
-  <div class='span6 video'>
-    <div id='video' class='text-centex'>
-      <iframe src="//player.vimeo.com/video/80725132?title=0&amp;byline=0&amp;color=ffffff" width="585" height="330" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-    </div>
-  </div>
-</div>
-
-<div id='community' class='row-fluid section'>
-  <div class='span6'>
-    <p>
+    <h2 class='copy-font'>
       <span class='quote'>&ldquo;</span>Anou represents a fundamental shift in the fair-trade industry. Instead of asking how organizations can help, we ask how can we build a resilient community of artisans where outside help and fair-trade organizations are no longer needed.<span class='quote'>&rdquo;</span>
       <br><br>
       <span class='credit'>- Dan Driscoll</span>
       <br>
       <span class='credit'>&nbsp;&nbsp;Anou Founder, RPCV</span>
       </span>
-    </p>
+    </h2>
+
   </div>
-  <div class='offset1 span4 image'>
-    <img src="{{ STATIC_URL }}images/about_page/community.jpg">
-    <p class='caption'>
-      Fatima teaches Hadija how to work the camera as they prepare to post their rug for sale.
-    </p>
+
+  <div class='span6'>
+    <div id='video'>
+      <iframe src="//player.vimeo.com/video/80725132?title=0&amp;byline=0&amp;color=ffffff" width="585" height="330" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+    </div>
+
+    <div id='subscribe' class='section well'>
+      <form id='subscribe-form' data-url='{% url 'communication:subscribe' %}'>
+        <ul class='inline'>
+          <li>
+            <h3 class='copy-font'>Sign up for our monthly newsletter</h3>
+          </li>
+          <li>
+            <div class="control-group">
+              <div class="controls">
+
+                <input id='subscribe-email' class='input-large required'
+                  type='text' name='email'
+                  placeholder='email'>
+
+                <p id='email-suggestion' class='caption'>
+                  Did you mean <a id='suggested-email'></a>?
+                </p>
+                <p class="help-inline caption">Please provide your email.</p>
+              </div>
+            </div>
+          </li>
+          <li>
+            <input id='subscribe-name' class='input-medium'
+                   type='text' name='name'
+                   placeholder='name (optional)'>
+          </li>
+          <li id='subscribe-buttons'>
+            <button type='button' id='subscribe-submit' class='btn'>Subscribe</button>
+            <button type='button' class='btn btn-info disabled'>Saving...</button>
+            <button type='button' class='btn btn-success disabled'>Thanks!</button>
+            <button type='button' class='btn btn-danger disabled'>Invalid, please try again</button>
+          </li>
+        </ul>
+      </form>
+    </div>
+
+  <div id='community'>
+
+  </div>
+
+
   </div>
 </div>
 
-<div id='subscribe' class='row-fluid section well'>
-  <div class='span3'>
-    <h3 class='copy-font'>Sign up for our monthly newsletter</h3>
-  </div>
-  <div class='span9'>
-    <form id='subscribe-form' data-url='{% url 'communication:subscribe' %}'>
-      <ul class='inline'>
-        <li>
-          <div class="control-group">
-            <div class="controls">
 
-              <input id='subscribe-email' class='input-large required'
-                type='text' name='email'
-                placeholder='email'>
 
-              <p id='email-suggestion'>
-                Did you mean <a id='suggested-email'></a>?
-              </p>
-              <p class="help-inline">Please provide your email.</p>
-            </div>
-          </div>
-        </li>
-        <li>
-          <input id='subscribe-name' class='input-medium'
-                 type='text' name='name'
-                 placeholder='name (optional)'>
-        </li>
-        <li id='subscribe-buttons'>
-          <button type='button' id='subscribe-submit' class='btn'>Subscribe</button>
-          <button type='button' class='btn btn-info disabled'>Saving...</button>
-          <button type='button' class='btn btn-success disabled'>Thanks!</button>
-          <button type='button' class='btn btn-danger disabled'>Invalid, please try again</button>
-        </li>
-      </ul>
-    </form>
+<div id='community' class='row-fluid section'>
+  <div class='span6'>
+
   </div>
+
 </div>
 
 <div class='row-fluid title section-title'>
@@ -296,7 +291,7 @@
     <div class='span3'>
       <ul class='unstyled'>
         <li class='name'>
-          Brahim El Mansouri
+          <h3>Brahim El Mansouri</h3>
         </li>
         <li class='description'>
           Wood Carver
@@ -318,7 +313,7 @@
       <ul class='unstyled'>
         </li>
         <li class='name'>
-          Rabha Akkaoui
+          <h3>Rabha Akkaoui</h3>
         </li>
         <li class='description'>
           Weaver
@@ -341,7 +336,7 @@
     <div class='span3'>
       <ul class='unstyled'>
         <li class='name'>
-          Mustapha Chaouai
+          <h3>Mustapha Chaouai</h3>
         </li>
         <li class='description'>
           Metalsmith
@@ -362,7 +357,7 @@
     <div class='span3'>
       <ul class='unstyled'>
         <li class='name'>
-          Kenza Oulaghda
+          <h3>Kenza Oulaghda</h3>
         </li>
         <li class='description'>
           Weaver
@@ -385,7 +380,7 @@
     <div class='span3'>
       <ul class='unstyled'>
         <li class='name'>
-          Hicham Kartouchi
+          <h3>Hicham Kartouchi</h3>
         </li>
         <li class='description'>
           Reed Weaver
@@ -406,7 +401,7 @@
     <div class='span3'>
       <ul class='unstyled'>
         <li class='name'>
-          Dan Driscoll
+          <h3>Dan Driscoll</h3>
         </li>
         <li class='description'>
           Anou Founder
@@ -428,7 +423,7 @@
       <ul class='unstyled'>
         </li>
         <li class='name'>
-          Tom Counsell
+          <h3>Tom Counsell</h3>
         </li>
         <li class='description'>
           Technical Director

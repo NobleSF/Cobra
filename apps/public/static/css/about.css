@@ -8,6 +8,10 @@
 	padding: 0;
 	border-bottom: solid 2px;
 	margin: 50px 0 30px;
+}@media (max-width: 500px){
+	.section-title {
+		margin: 20px 0 10px;
+	}
 }
 
 p, dt, dd, .copy-font{
@@ -17,23 +21,23 @@ p, dt, dd, .copy-font{
 	padding: 0;
 }@media (max-width: 1200px){
   p, dt, dd, .copy-font{
-		font-size:16pt;
-		line-height: 16pt;
+		font-size:14pt;
+		line-height: 14pt;
   }
 }@media (max-width: 980px){
   p, dt, dd, .copy-font{
-		font-size:16pt;
-		line-height: 16pt;
+		font-size:12pt;
+		line-height: 12pt;
   }
 }@media (max-width: 768px){
   p, dt, dd, .copy-font{
-    font-size: 16pt;
-    line-height: 20pt;
+    font-size: 14pt;
+    line-height: 16pt;
   }
 }@media (max-width: 500px){
   p, dt, dd, .copy-font{
     font-size: 12pt;
-    line-height: 16pt;
+    line-height: 14pt;
   }
 }
 
@@ -50,60 +54,18 @@ img {border: none;}
 	line-height: 100%;
 }
 
-/*#introduction{
-	margin: 0 0 60px;
+#headline h1, #headline h2, #community h2 {
+	padding: 0 20% 5% 0;
 }
-#introduction img{
-  position: relative;
-  top: 0;
-  z-index: -1;
-}
-#introduction .message {
-  height: 0px;
-  z-index: 5;
-}
-#introduction h2{
-	color: #FFF;
-}
-
-#introduction .message h2 {
-  font-size: 50pt;
-  line-height: 50pt;
-	text-align: center;
-	padding: 140px 100px;
-  margin: auto;
-}@media (max-width: 1200px){
-  #introduction .message h2 {
-    font-size: 40pt;
-    line-height: 40pt;
-  }
-}@media (max-width: 980px){
-  #introduction .message h2 {
-    font-size: 40pt;
-    line-height: 40pt;
-  }
-}@media (max-width: 768px){
-  #introduction .message h2 {
-    font-size: 26pt;
-    line-height: 26pt;
-    margin: 0;
-  }
-}@media (max-width: 500px){
-  #introduction .message h2 {
-    font-size: 20pt;
-    line-height: 20pt;
-  }
-}*/
-
-
 
 /* FACEBOOK LIKE BUTTON */
 /*#facebook{margin: 1em auto 0;}*/
 
 /* SUBSCRIBE FORM */
-#subscribe-form{padding: 20px 0 0;}
-#subscribe-form ul li *{margin: 0;}
-
+#subscribe{margin: 30px 0 0;}
+#subscribe form{margin-top: 0; margin-bottom: 0;}
+#subscribe form input{margin-top: 0; margin-bottom: 0;}
+#subscribe-form li{vertical-align: top;}
 #subscribe-name{display: none;}
 
 #subscribe-buttons button:nth-child(2),
@@ -114,9 +76,27 @@ img {border: none;}
 #email-suggestion{display: none;}
 #suggested-email{cursor: pointer;}
 
+@media (max-width: 768px){
+	#process1 .image, #process2 .image{
+		text-align: center;
+	}
+}
 
 #process1 img, #process2 img{
 	padding: 0 0 20px;
+}@media (max-width: 768px){
+	#process1 img, #process2 img{
+		max-width: 300px;
+	}
+}@media (max-width: 500px){
+	#process1 img, #process2 img{
+		max-width: 150px;
+	}
+}
+
+@media (max-width: 768px){
+	#process1 img, #process2 img{
+	}
 }
 
 @media (min-width: 769px){
@@ -127,13 +107,13 @@ img {border: none;}
 	#team ul{
 		padding: 0 0 30px;
 	}
-}
-
-
-
-@media (max-width: 768px){
 	#team .headshot, #team ul{
 		text-align: center;
+	}
+}
+@media (max-width: 500px){
+	#team .headshot img {
+		max-width: 150px;
 	}
 }
 
@@ -142,11 +122,12 @@ img {border: none;}
 	line-height: 18pt;
 	color: #414e62;
 }
+#team .name h3 {margin: 0;}
 #team .description {
 	font-size: 12pt;
 	line-height: 12pt;
 	color: #616c7d;
-	padding: 10px 0;
+	padding: 0 0 10px;
 }
 .contact {
 	color: #407bd9;
