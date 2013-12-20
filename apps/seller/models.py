@@ -59,6 +59,13 @@ class Seller(models.Model):
     return self.account.bank_account if self.account.bank_account else ""
 
   @property
+  def artisans(self):
+    try:
+      return self.asset_set.filter(ilk='artisan')
+    except:
+      return None
+
+  @property
   def categories(self):
     from django.utils import timezone
     products = self.product_set.filter(approved_at__lte=timezone.now())
@@ -86,6 +93,30 @@ class Seller(models.Model):
       return slugify(self.title.replace('from ',''))
     except:
       return None
+
+  def get_store_products(self, limit=None):
+    from django.utils import timezone
+    try:
+      products = (self.product_set
+                      .filter(sold_at=None,
+                              approved_at__lte=timezone.now(),
+                              deactive_at=None)
+                      .order_by('approved_at').reverse())[:limit]
+      return products
+    except:
+      return []
+
+  def get_sold_products(self, limit=None):
+    from django.utils import timezone
+    try:
+      products = (self.product_set
+                      .filter(sold_at__lte=timezone.now(),
+                              approved_at__lte=timezone.now(),
+                              deactive_at=None)
+                      .order_by('sold_at').reverse())[:limit]
+      return products
+    except:
+      return []
 
   def get_absolute_url(self):
     from django.core.urlresolvers import reverse
@@ -496,6 +527,19 @@ class Product(models.Model):
               "&description=" + self.title_description)
     except:
       return "" #probably doesn't need to be working anyway
+
+  def get_related_products(self, limit=3):
+    from django.utils import timezone
+    try:
+      products = (self.seller.product_set
+                      .filter(sold_at=None,
+                              approved_at__lte=timezone.now(),
+                              deactive_at=None)
+                      .exclude(id=self.id)
+                      .order_by('approved_at').reverse())[:limit]
+      return products
+    except:
+      return []
 
   def resetSlug(self):
     from django.template.defaultfilters import slugify

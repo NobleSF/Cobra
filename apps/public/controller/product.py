@@ -11,25 +11,9 @@ def home(request, product_id, slug=None):
 
   #permanent redirect when slug not included
   if product.slug and slug != product.slug:
-    return redirect(product, permanent=True)
+    return redirect(product, permanent=True) #uses get_absolute_url
 
-  try:
-    more_products = (product.seller.product_set
-                     .exclude(id=product.id)
-                     .filter(sold_at=None)
-                     .filter(approved_at__lte=timezone.now())
-                     .filter(deactive_at=None)
-                     .order_by('approved_at').reverse())
-
-    context = {'product': product,
-               'more_products': more_products[:3]
-              }
-
-  except Exception as e:
-    ExceptionHandler(e, "in product.home")
-    context = {'exception', str(e)}
-
-  return render(request, 'product.html', context)
+  return render(request, 'product.html', {'product': product})
 
 @cache_page(172800) #cache for 48 hours
 def product_data(request=None):

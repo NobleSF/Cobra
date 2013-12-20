@@ -11,8 +11,8 @@ urlpatterns = patterns('',
   url(r'^product/(?P<product_id>\d+)$', product.home, name='product'),
 
   # store page at /store/123 represents a seller profile
-  url(r'^store/(?P<seller_id>\d+)', store.home, name='store'),
-  url(r'^store/(?P<seller_id>\d+)-(?P<slug>\w+)', store.home, name='store_w_slug'),
+  url(r'^store/(?P<seller_id>\d+)-(?P<slug>\S+)', store.home, name='store_w_slug'),
+  url(r'^store/(?P<seller_id>\d+)$', store.home, name='store'),
 
   #checkout pages
   url(r'^checkout/cart$', checkout.cart, name='cart'),

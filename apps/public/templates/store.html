@@ -135,10 +135,10 @@
       <input id='load-products-url' type='hidden' value='{% url 'load products' %}'>
 
       <div class='product-row row-fluid lazy-load'>
-        {% for product in products %}
+        {% for product in store.get_store_products %}
 
           <div  class='span6 product-area {% cycle "pos1" "pos2" %}
-                  {% if forloop.counter0 < 4 %}
+                  {% if forloop.counter0 < 6 %}
                     loaded
                   {% else %}
                     unloaded
@@ -146,7 +146,7 @@
                 data-order='{{ forloop.counter0 }}'
                 data-product-id='{{ product.id }}'>
 
-            {% if forloop.counter0 < 4 %}
+            {% if forloop.counter0 < 6 %}
               {% product_tag product %}
             {% endif %}
           </div>
@@ -169,7 +169,7 @@
       </div>
 
       <div class='product-row row-fluid lazy-load'>
-        {% for product in sold_products %}
+        {% for product in store.get_sold_products %}
           <div  class='span6 product-area {% cycle "pos1" "pos2" %} unloaded'
                 data-order='{{ forloop.counter0 }}'
                 data-product-id='{{ product.id }}'>

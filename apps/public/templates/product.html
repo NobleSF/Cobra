@@ -320,7 +320,7 @@
 
 {% endcache public_product_content %}
 
-{% cache 432000 public_product_extras product.id %}{# 5 days #}
+{% cache 86400 public_product_extras product.id %}
 
   {% load home_inclusion_tags %}
   <div id='store'>
@@ -335,7 +335,7 @@
     </h1>
 
     <div class='product-row row-fluid'>
-      {% for product in more_products %}
+      {% for product in product.get_related_products %}
 
         <div class='span4 product-area {% cycle "pos1" "pos2" "pos3" %}'>
           {% product_tag product %}
