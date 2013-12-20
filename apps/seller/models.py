@@ -19,6 +19,8 @@ class Seller(models.Model):
   approved_at   = models.DateTimeField(null=True, blank=True) #admin approval
   deactive_at   = models.DateTimeField(null=True, blank=True) #seller deactivate
 
+  slug          = models.CharField(max_length=150, null=True, blank=True)
+
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
@@ -86,14 +88,6 @@ class Seller(models.Model):
     except:
       return ""
 
-  @property
-  def slug(self):
-    try:
-      from django.template.defaultfilters import slugify
-      return slugify(self.title.replace('from ',''))
-    except:
-      return None
-
   def get_store_products(self, limit=None):
     from django.utils import timezone
     try:
@@ -118,11 +112,22 @@ class Seller(models.Model):
     except:
       return []
 
+  def resetSlug(self):
+    from django.template.defaultfilters import slugify
+    try:
+      self.slug = slugify(self.title.replace('from ',''))
+      self.slug = ''.join([char for char in self.slug if not char.isdigit()])
+      self.save()
+    except: pass
+
   def get_absolute_url(self):
     from django.core.urlresolvers import reverse
-    if self.slug:
+    if not self.slug:
+      self.resetSlug()
+
+    try:
       return reverse('store_w_slug', args=[str(self.id), self.slug])
-    else:
+    except:
       return reverse('store', args=[str(self.id)])
 
   def __unicode__(self):
@@ -185,11 +190,11 @@ class Product(models.Model):
   #is_orderable  = models.BooleanField(default=False) #for custom orders
   #is_hidden     = being sold on another platform (etys, ebay)
 
+  slug          = models.CharField(max_length=150, null=True, blank=True)
+
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
-
-  slug          = models.CharField(max_length=150, null=True, blank=True)
 
   @property
   def was_never_active(self): return True if not self.active_at else False
