@@ -7,7 +7,7 @@ from settings.settings import STAGE, DEBUG, DEMO
 from apps.admin.utils.decorator import postpone
 
 class Email(object):
-  def __init__(self, template_dir=None, data={}, message=None):
+  def __init__(self, template_dir=None, data={}, message=None, subject=None):
     #creates an email using the template and data provided
     if template_dir:
 
@@ -18,18 +18,25 @@ class Email(object):
       context = {'data':data}
 
       self.subject = render_to_string(subject_template, context)
+      if subject:
+        self.subject = "%s | %s" % (subject, self.subject)
+
       self.text_body = render_to_string(text_body_template, context)
       self.html_body = render_to_string(html_body_template, context)
+      if message:
+        self.text_body += "\n%s" % str(message)
+        self.html_body += "<br><p>%s</p>" % str(message)
 
       #default from address
       self.from_email = "Anou <hello@theanou.com>"
 
     else:
-      message = str(message) if message else 'test email body'
-      self.subject = 'notification'
-      self.text_body = message
-      self.html_body = '<p>%s</p>' % message
+      message = message if message else "test email body"
+      self.subject = subject or "notification"
+      self.text_body = str(message)
+      self.html_body = "<p>%s</p>" % str(message)
       self.from_email = 'system@theanou.com'
+      #self.attachment_url = None
 
   def sendFrom(self, from_email):
     self.from_email = from_email
@@ -69,11 +76,16 @@ class Email(object):
                   )
       #sendgrid settings automatically bcc dump@theanou.com on every email
       self.mail.attach_alternative(self.html_body, "text/html")
+      #if self.attachment_url:
+      #  self.mail.attach_file(self.attachment_url)
       self.mail.send()
       self.save()
 
     except Exception as e:
       ExceptionHandler(e, "in email_class.sendTo", sentry_only=True)
+
+  #def attach(self, url):
+  #  self.attachment_url = url
 
   def save(self):
     try:    self.order

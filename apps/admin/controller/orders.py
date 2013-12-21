@@ -5,6 +5,7 @@ from apps.admin.utils.decorator import access_required
 from django.views.decorators.csrf import csrf_exempt
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.contrib import messages
+from apps.communication.controller.email_class import Email
 from apps.public.models import Order
 from settings.settings import CLOUDINARY
 
@@ -33,18 +34,21 @@ def updateOrder(request):
   if request.method == 'GET':
     order_id = request.GET.get('order_id')
     action = request.GET.get('action')
-
     order = Order.objects.get(id=order_id)
 
     if action == "seller paid":
       order.seller_paid_at = timezone.now()
+      if order.seller.account.email:
+        message = "%d: %s" % (order.products.all()[0].id, order.seller_paid_receipt.original)
+        email = Email(message=message, subject="$$")
+        email.assignToOrder(order)
+        email.sendTo(order.seller.account.email)
 
     order.save()
     return HttpResponse(status=200)#OK
 
   else:
     return HttpResponse(status=402)#bad request
-
 
 @access_required('admin')
 @csrf_exempt #find a way to add csrf
