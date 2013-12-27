@@ -14,11 +14,11 @@ def invalidate_cache(fragment_name, *vary_on):
 
 def template_cache_key(fragment_name, *vary_on):
   # Builds a cache key for a template fragment
-  from django.utils.hashcompat import md5_constructor
+  from hashlib import md5
   from django.utils.http import urlquote
 
   base_cache_key = "template.cache.%s" % fragment_name
-  args = md5_constructor(u":".join([urlquote(var) for var in vary_on]))
+  args = md5(u":".join([urlquote(var) for var in vary_on]))
   return "%s.%s" % (base_cache_key, args.hexdigest())
 
 @postpone
