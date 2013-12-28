@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
+from django.utils import timezone, dateformat
 from apps.admin.utils.decorator import access_required
 from django.views.decorators.csrf import csrf_exempt
 from apps.admin.utils.exception_handling import ExceptionHandler
@@ -44,6 +45,13 @@ def updateOrder(request):
         email.assignToOrder(order)
         email.sendTo(order.seller.account.email)
 
+    elif action == "add note": #requires order_id, note
+      if request.GET.get('note'):
+        timestamp = timezone.now()
+        note = timestamp.strftime("%H:%M %d/%m/%y - ") + str(request.GET['note'])
+        order.notes = order.notes if order.notes else ""
+        order.notes += "\n" + note
+
     order.save()
     return HttpResponse(status=200)#OK
 
@@ -53,7 +61,6 @@ def updateOrder(request):
 @access_required('admin')
 @csrf_exempt #find a way to add csrf
 def imageFormData(request):
-  from django.utils import timezone, dateformat
   import json
   from apps.seller.controller.cloudinary_upload import createSignature
   from apps.seller.models import Upload

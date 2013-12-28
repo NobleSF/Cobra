@@ -4,6 +4,7 @@ $().ready( function(){
   uploader.apply($('#seller-paid').find('.image-input'));
 });
 
+// CLICKABLE ICONS RED -> GREEN
 $('.changeable').click(function(){
   var confirm_message
   var url = $('#update-order-url').val();
@@ -30,6 +31,30 @@ $('.changeable').click(function(){
     });
   }
 });
+
+//ADD NOTES
+$('#add-note').click(function(){
+  var notes_before = $("#notes").html();
+  var notes_after = ""
+  var url = $('#update-order-url').val();
+  var data = {'action':'add note',
+              'note':$('#new-note').val(),
+              'order_id': $('#order-id').val()}
+
+  $.ajax({url: url, data: data})
+  .done(function(data){
+    //append note to notes area
+    notes_after = notes_before + "<br>" + $('#new-note').val();
+    $("#notes").html(notes_after);
+    //clear add-note form
+    $('#new-note').html("");
+  })
+  .fail(function(){
+    //sad face
+    $('#add-note').html("<i class='symbol-sad'></i>");
+    $('#add-note').removeClass('btn-info').addClass('btn-danger');
+  });
+})
 
 function fileUploadAction(){
   this.apply = function(file_input){

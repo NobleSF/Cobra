@@ -138,6 +138,8 @@ class Order(models.Model):
   seller_paid_at      = models.DateTimeField(null=True, blank=True)
   returned_at         = models.DateTimeField(null=True, blank=True)
 
+  notes               = models.TextField(blank=True, null=True)
+
   #update history
   created_at          = models.DateTimeField(auto_now_add = True)
   updated_at          = models.DateTimeField(auto_now = True)

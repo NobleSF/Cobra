@@ -5,7 +5,7 @@
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/vendor/jquery.ui.widget.min.js'></script>
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.iframe-transport.min.js'></script>
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.fileupload.min.js'></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}admin/js/order.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}admin/js/order.min.js?v=2"></script>
 {% endblock javascript %}
 
 {% block css %}
@@ -154,13 +154,19 @@
   </div>
 </p>
 
-{% if order.cart.notes %}
-  <p>Notes:<br>
-    <div style='border: solid 1px black'>
-      {{ order.cart.notes }}
-    </div>
-  </p>
-{% endif %}
+<p>Notes:<br>
+  <div id='notes'
+       style='border: solid 1px black'>
+    {% if order.cart.notes %}
+      {{ order.cart.notes|linebreaks }}<br>
+    {% endif %}
+    {{ order.notes|default_if_none:""|linebreaks }}
+  </div>
+</p>
+
+<input id='order-id' type='hidden' value='{{ order.id }}'>
+<textarea id='new-note' name='new-note'></textarea>
+<button id='add-note' class='btn btn-info'>Add Note</button>
 
 {% if order.cart.receipt %}
   <p>Receipt:<br>
