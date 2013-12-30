@@ -5,10 +5,10 @@ from django.utils import timezone
 
 def getOrders(checkout_id):
   try:
-    try:
-      cart = models.Cart.objects.get(wepay_checkout_id = checkout_id)
-    except:
+    if "MAN" in str(checkout_id):
       cart = models.Cart.objects.get(anou_checkout_id = checkout_id)
+    else:
+      cart = models.Cart.objects.get(wepay_checkout_id = checkout_id)
 
     orders = cart.orders.all()
     if not orders:
@@ -17,6 +17,9 @@ def getOrders(checkout_id):
       from apps.public.controller.cart_class import cleanupCarts
       cleanupCarts()
     return orders
+
+  except models.Cart.DoesNotExist:
+    return []
 
   except Exception as e:
     ExceptionHandler(e, "in order_class.getOrders")
