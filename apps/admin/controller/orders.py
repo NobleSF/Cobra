@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.contrib import messages
 from apps.communication.controller.email_class import Email
+from apps.communication.controller.sms import sendSMS
 from apps.public.models import Order
 from settings.settings import CLOUDINARY
 
@@ -39,11 +40,22 @@ def updateOrder(request):
 
     if action == "seller paid":
       order.seller_paid_at = timezone.now()
+
+      #SEND EMAIL WITH RECEIPT TO SELLER
       if order.seller.account.email:
         message = "%d: %s" % (order.products.all()[0].id, order.seller_paid_receipt.original)
-        email = Email(message=message, subject="$$")
+        email = Email(message=message, subject="$$>>$$")
         email.assignToOrder(order)
         email.sendTo(order.seller.account.email)
+
+      #SEND SMS TO SELLER
+      if order.seller.account.phone:
+        message = ("%d\r\n$$>>$$\r\n%dDh" %
+                    (order.products.all()[0].id, int(order.seller_paid_amount)))
+        message += "\r\n"
+        message += ("Anou transfere %d Dh a votre compte pour les produit: %d" %
+                    (order.seller_paid_amount, order.products.all()[0].id))
+        sendSMS(message, order.seller.account.phone)
 
     elif action == "add note": #requires order_id, note
       if request.GET.get('note'):
