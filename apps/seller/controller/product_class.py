@@ -28,6 +28,7 @@ class Product(object):
         raise Exception("No product_id or valid request object")
 
     except Exception as e:
+      self.product = None
       #possibly bad product id or no seller_id in request.session
       ExceptionHandler(e, "problem in product_class.Product.__init__")
 
