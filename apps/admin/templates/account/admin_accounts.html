@@ -37,7 +37,7 @@
         {% elif account.admin_type in 'master' %}
           <i class='symbol-master-admin black'></i>
         {% endif %}
-        {{ account.name|default_if_none:"----------" }}
+        {{ account.name|default_if_none:"-----" }}
       </td>
 
       <td class='phone'>

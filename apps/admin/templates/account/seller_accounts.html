@@ -31,7 +31,7 @@
   {% for city in cities %}
     <thead>
       <th colspan='4' class='city title-font'>
-        {{ city.grouper }}, Morocco
+        {{ city.grouper|default_if_none:'-----' }}, Morocco
       </th>
     </thead>
 
@@ -43,7 +43,7 @@
                class='symbol-go anou-blue'
                title='login as seller'></a>
           {% endif %}
-          {% if account.name %}{{ account.name }}{% else %}----------{% endif %}
+          {% if account.name %}{{ account.name }}{% else %}-----{% endif %}
         </td>
 
         <td class='phone'>
