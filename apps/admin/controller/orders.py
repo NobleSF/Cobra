@@ -44,13 +44,13 @@ def updateOrder(request):
       #SEND EMAIL WITH RECEIPT TO SELLER
       if order.seller.account.email:
         message = "%d: %s" % (order.products.all()[0].id, order.seller_paid_receipt.original)
-        email = Email(message=message, subject="$$>>$$")
+        email = Email(message=message, subject="$")
         email.assignToOrder(order)
         email.sendTo(order.seller.account.email)
 
       #SEND SMS TO SELLER
       if order.seller.account.phone:
-        message = ("%d\r\n$$>>$$\r\n%dDh" %
+        message = ("%d\r\n$\r\n%dDh" %
                     (order.products.all()[0].id, int(order.seller_paid_amount)))
         message += "\r\n"
         message += ("Anou transfere %d Dh a votre compte pour les produit: %d" %
