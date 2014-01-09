@@ -3,9 +3,21 @@
 <tr id='title-row-{{ product.id }}' class='title-row'>
   <td class='name'>
     <h4 class='copy-font'>{{ product.seller.name }}</h4>
+    <div class='links' style='white-space: nowrap'>
+      <a href="{{ product.get_absolute_url }}" target='_blank'>
+        <i class='symbol-profile green'></i>
+      </a>
+      <i class='black'>{{ product.id }}</i>
+      {% if product.in_holding or not product.is_approved %}
+        <a href="{% url 'seller:inventory edit' product.id %}" target='_blank'>
+          <i class='symbol-go blue'></i>
+        </a>
+      {% endif %}
+    </div>
+  </td>
   </td>
 
-  <td colspan='5'>
+  <td colspan='3'>
     {% for photo in product.photos.all %}
       <img src='{{ photo.pinky_size }}'>
     {% endfor %}
@@ -14,32 +26,38 @@
 
 <tr id='actions-row-{{ product.id }}' class='actions-row highlight'>
 
-  <td class='actions'>
-    {% if not product.is_approved %}
-      <button class='approve-product btn btn-success'
-              data-product-id="{{ product.id }}">
-        Approve
-      </button>
-    {% else %}
-      <button class='close-product btn btn-success'
-              data-product-id="{{ product.id }}">
-        Done
-      </button>
-    {% endif %}
-    {% if not product.in_holding %}
-    <br>
-    <button class='hold-product btn btn-warning'
-            data-product-id="{{ product.id }}">
-      On Hold
-    </button>
-    {% endif %}
-    {% if product.is_active and not product.approved_at or product.in_holding %}
+  {% if admin_type in "country, master" %}
+    <td class='actions'>
+      {% if not product.is_approved %}
+        <i class='approve-product symbol-check green'
+           data-product-id="{{ product.id }}">
+        </i>
+      {% else %}
+        <i class='close-product symbol-check green'
+           data-product-id="{{ product.id }}">
+        </i>
+      {% endif %}
+      {% if not product.in_holding %}
       <br>
-      <button class='delete-product btn btn-mini btn-danger'
-              data-product-id="{{ product.id }}">
-        Delete
-      </button>
-    {% endif %}
+      <i class='hold-product symbol-hold red'
+         data-product-id="{{ product.id }}">
+      </i>
+      {% endif %}
+      {% if product.is_active and not product.approved_at or product.in_holding %}
+        <br>
+        <i class='delete-product symbol-remove red'
+           data-product-id="{{ product.id }}">
+        </i>
+      {% endif %}
+    </td>
+  {% endif %}
+
+  <td class='measures'>
+    <i class='symbol-money nowrap'> {{ product.price }}</i>
+    <br>
+    <i class='symbol-weight'> {{ product.weight }}</i>
+    <br>
+    <i class='symbol-shipping'> {{ product.shipping_cost }}</i>
   </td>
 
   <td class='ratings' colspan='2'>
@@ -67,30 +85,5 @@
         {% endfor %}
       </div>
     {% endfor %}
-  </td>
-
-  <td class='measures' colspan='2'>
-    <i class='symbol-weight'> {{ product.weight }}</i>
-    <i>g</i>
-    <br>
-    <i class='symbol-shipping'> {{ product.shipping_cost }}</i>
-    <i>Dh</i>
-    <br>
-    <i class='symbol-money'> {{ product.price }}</i>
-    <i>Dh</i>
-  </td>
-
-  <td class='links'>
-    <i class='black'>{{ product.id }}</i>
-    {% if product.in_holding or not product.is_approved %}
-      <br>
-      <a href="{% url 'seller:inventory edit' product.id %}" target='_blank'>
-        <i class='symbol-go blue'></i>
-      </a>
-    {% endif %}
-    <br>
-    <a href="{{ product.get_absolute_url }}" target='_blank'>
-      <i class='symbol-profile green'></i>
-    </a>
   </td>
 </tr>

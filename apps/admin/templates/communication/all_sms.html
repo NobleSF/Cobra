@@ -23,7 +23,7 @@
 {% block content %}
 
   <form id='sms-form' action="{% url 'admin:send sms'%}" method="post">{% csrf_token %}
-    <ul class='inline'>
+    <ul class='inline' style="white-space: nowrap">
       <li class='input-prepend'>
         <i class='add-on symbol-phone black' title='phone number'></i>
         {{ form.to_number }}
