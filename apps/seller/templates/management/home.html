@@ -2,37 +2,40 @@
 {% load url from future %}
 
 {% block title %}
-  {{ block.super }} Products
+  {{ block.super }} Dashboard
 {% endblock title %}
 
 {% block css %}
   <style>
     #body{margin: 0 auto; max-width: 800px}
     #primary-nav, #secondary-nav, #footer{text-align: center;}
-    a:hover{text-decoration: none;}
 
     #primary-nav{}
     #orders{float: left;}
     #products{}
     #new-product{float: right;}
-    #orders i, #products i, #new-product i{
+
+    #orders, #products, #new-product{
       font-size: 1200%;
       line-height: normal;
+    }@media (max-width: 600px){
+      #orders, #products, #new-product{font-size: 600%}
+      #secondary-nav{margin-top: 20%;}
+    }@media (max-width: 300px){
+      #orders, #products, #new-product{font-size: 400%}
+      #secondary-nav{margin-top: 20%;}
     }
 
     #secondary-nav{margin-top: 40%;}
     #home{float: left;}
     #edit-account{}
     #logout{float: right;}
-    #edit-account i{font-size: 90%}
+    #admin-dashboard{float: right; padding: 0 15px;}
+    #edit-account{font-size: 90%}
 
-    @media (max-width: 600px){
-      #orders i, #products i, #new-product i{font-size: 600%}
-      #secondary-nav{margin-top: 20%;}
-    }
-    @media (max-width: 300px){
-      #orders i, #products i, #new-product i{font-size: 400%}
-      #secondary-nav{margin-top: 20%;}
+    #edit-account, #logout, #admin-dashboard{
+      font-size: 160%;
+      line-height: normal;
     }
 
   </style>
@@ -51,14 +54,22 @@
 
 {% block content %}
   <div id='primary-nav'>
-    <a id='orders' href="{% url 'seller:management orders' %}">
-      <i class='symbol-orders gold' title='Sold Products'></i>
+    <a id='orders'
+       href="{% url 'seller:management orders' %}"
+       class='symbol-orders gold'
+       title='Sold Products'>
     </a>
-    <a id='products' href="{% url 'seller:management products' %}">
-      <i class='symbol-products blue' title='Current Products'></i>
+
+    <a id='products'
+       href="{% url 'seller:management products' %}"
+       class='symbol-products blue'
+       title='Current Products'>
     </a>
-    <a id='new-product' href="{% url 'seller:inventory create' %}">
-      <i class='symbol-product-add green' title='Add Product'></i>
+
+    <a id='new-product'
+       href="{% url 'seller:inventory create' %}"
+       class='symbol-product-add green'
+       title='Add Product'>
     </a>
   </div>
 
@@ -66,17 +77,30 @@
     <a id='home' href="{% url 'home' %}">
       <img src="{{ STATIC_URL }}images/Anou_logo_80x50.png" alt="Anou Homepage">
     </a>
-    <a id='edit-account' href="{% url 'seller:edit' %}">
-      <i class='symbol-assets green' title='edit account'></i>
+
+    <a id='edit-account'
+       href="{% url 'seller:edit' %}"
+       class='symbol-assets green'
+       title='edit account'>
     </a>
-    <a id='logout' href="{% url 'admin:logout' %}">
-      <i class='symbol-logout red' title='logout'></i>
+
+    <a id='logout'
+       href="{% url 'logout' %}"
+       class='symbol-logout red'
+       title='logout'>
     </a>
+
+    {% if 'admin_id' in request.session %}
+      <a id='admin-dashboard'
+         href="{% url 'admin:dashboard' %}"
+         class='symbol-admin-dashboard blue'
+         title='Admin Dashboard'>
+      </a>
+    {% endif %}
+
   </div>
 {% endblock content %}
 
 {% block footer %}
-  {% if request.session.admin_id %}
-    <a href="{% url 'admin:dashboard' %}">Admin Dashboard</a>
-  {% endif %}
+<!-- NO FOOTER -->
 {% endblock footer %}

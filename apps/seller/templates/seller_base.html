@@ -2,7 +2,7 @@
 {% load url from future %}
 
 {% block title %}
-  Anou Seller
+  Seller
 {% endblock title %}
 
 {% block header %}
@@ -19,6 +19,16 @@
   <div id='base-navigation'>
     <ul class='pull-right'>
 
+      {% if 'admin_id' in request.session %}
+        <li>
+          <a id='admin-dashboard'
+             href="{% url 'admin:dashboard' %}"
+             class='symbol-admin-dashboard blue'
+             title='Admin Dashboard'>
+          </a>
+        </li>
+      {% endif %}
+
       <li>
         <a href="{% url 'seller:management home' %}"
            class='symbol-go anou-blue' title='artisan account'>
@@ -28,7 +38,3 @@
     </ul>
   </div>
 {% endblock header %}
-
-{% block content %}
-
-{% endblock content %}

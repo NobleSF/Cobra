@@ -5,40 +5,43 @@
   <style>
     .page-title{float: left;}
 
-    #sms-form{float: right; padding: 21m;}
+    #sms-form{float: left; padding: 21m;}
     #sms-form #id_to_number{width: 7em;}
-    #sms-form #id_message{width: 20em; height: 2em;}
+    #sms-form #id_message{width: 22em; height: 2em;}
     #sms-form #id_order{width: 3.5em;}
+    #sms-form i{font-size: 16pt}
 
     .incoming{background-color: rgb(218, 253, 218);}
     .outgoing{background-color: rgb(225, 225, 252);}
   </style>
 {% endblock css %}
 
-{% block content %}
+{% block logo %}
+  <i class='symbol-SMS black'></i>
+{% endblock logo %}
 
-  <h3 class='page-title'>SMS</h3>
+{% block content %}
 
   <form id='sms-form' action="{% url 'admin:send sms'%}" method="post">{% csrf_token %}
     <ul class='inline'>
-      <li>Send SMS:</li>
-      <li>{{ form.to_number }}</li>
+      <li class='input-prepend'>
+        <i class='add-on symbol-phone black' title='phone number'></i>
+        {{ form.to_number }}
+      </li>
+      <li class='input-prepend'>
+        <i class='add-on symbol-orders black' title='order number'></i>
+        {{ form.order }}
+      </li>
+      <li>
+        <button type='submit' class='btn btn-large symbol-go green' title='send'></button>
+      </li>
+    </ul>
+    <ul class='inline'>
       <li>{{ form.message }}</li>
-      <li>{{ form.order }}</li>
-      <li><button type='submit' class='btn' style="margin-bottom: 10px;">Send</button></li>
     </ul>
   </form>
 
 <table class='table table-hover table-condensed'>
-  <thead>
-    <td>DATE&nbsp;&nbsp;TIME</td>
-    <td>INCOMING/OUTGOING</td>
-    <td></td>
-    <td>PHONE</td>
-    <td>MESSAGE</td>
-    <td>ORDER#</td>
-    <td>AUTO-REPLY</td>
-  </thead>
 
   {% for sms in sms_messages %}
     <tr class='{% if sms.incoming %}incoming{% else %}outgoing{% endif %}'>
@@ -46,9 +49,9 @@
       <td>{{ sms.created_at|date:"m/d H:i" }}</td>
 
       {% if sms.to_number in anou_phones %}
-        <td style='text-align: center;'>INCOMING</td>
+        <td style='text-align: center;'>IN</td>
       {% else %}
-        <td style='text-align: center;'>OUTGOING</td>
+        <td style='text-align: center;'>OUT</td>
       {% endif %}
 
       <td>
@@ -59,9 +62,6 @@
       <td>{{ sms.phone_number }}</td>
 
       <td>{{ sms.message|linebreaksbr }}</td>
-      <td>
-        {% if sms.order %}{{ sms.order.id }}{% endif %}
-      </td>
 
       <td class='{% if sms.auto_reply %}outgoing{% endif %}'>
         {% if sms.auto_reply %}{{ sms.auto_reply }}{% endif %}
@@ -71,9 +71,4 @@
   {% endfor %}
 
 </table>
-
-<p class='text-center' style='text-decoration: underline; font-size: 20pt;'>
-  see Tom for more
-</p>
-
 {% endblock content %}

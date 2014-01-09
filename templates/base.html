@@ -77,24 +77,18 @@
       <div id="base-navigation">
 
         <ul class='pull-right'>
-          <li>
-            <a href="{% url 'cart' %}">
-              <span class='symbol-cart' title='cart'></span>
-              <span class='hidden-phone title'>Cart</span>
-            </a>
-          </li>
-
-          {% if 'admin_id' in request.session or 'seller_id' in request.session %}
+          {% block header_icons %}
             <li>
-              <a href="{% url 'admin:logout' %}"
-                 class='symbol-logout red' title='logout'></a>
+              <a href="{% url 'cart' %}">
+                <span class='symbol-cart' title='cart'></span>
+                <span class='hidden-phone title'>Cart</span>
+              </a>
             </li>
-          {% endif %}
-
-          <li>
-            <a href="{% url 'seller:management home' %}"
-               class='symbol-go anou-blue' title='artisan account'></a>
-          </li>
+            <li>
+              <a href="{% url 'seller:management home' %}"
+                 class='symbol-go anou-blue' title='artisan account'></a>
+            </li>
+          {% endblock header_icons %}
         </ul>
 
         <ul id='text-links' class=''>

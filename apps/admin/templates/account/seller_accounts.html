@@ -1,0 +1,79 @@
+{% extends "admin_base.html" %}
+{% load url from future %}
+
+{% block title %}
+  Sellers
+{% endblock title %}
+
+{% block javascript %}
+  <script type="text/javascript" src="{{ STATIC_URL }}admin/js/all_accounts.js"></script>
+{% endblock javascript %}
+
+{% block css %}
+  <style>
+    th.city{padding-top: 30px; font-size: 22pt;}
+    td{min-width: 50px;}
+    .name, .phone i{text-align: right; font-size: 14pt;}
+    .name a{font-size: 16pt;}
+  </style>
+{% endblock css %}
+
+{% block logo %}
+  <i class='symbol-sellers black'></i>
+{% endblock logo %}
+
+{% block content %}
+<input id='approve-url' type='hidden' value="{% url 'admin:approve seller' %}">
+
+<table class='table table-hover'>
+  {% regroup accounts by seller.city as cities %}
+
+  {% for city in cities %}
+    <thead>
+      <th colspan='4' class='city title-font'>
+        {{ city.grouper }}, Morocco
+      </th>
+    </thead>
+
+    {% for account in city.list %}
+      <tr>
+        <td class='name title-font'>
+          {% if request.session.admin_type in "translator, trainer, country, master" %}
+            <a href="{{ account.cheat_login_url }}"
+               class='symbol-go anou-blue'
+               title='login as seller'></a>
+          {% endif %}
+          {% if account.name %}{{ account.name }}{% else %}----------{% endif %}
+        </td>
+
+        <td class='phone'>
+          <i class='symbol-phone black'></i>
+          {{ account.phone }}
+        </td>
+
+        <td class='approve'>
+          {% if request.session.admin_type in "trainer, country, master" %}
+            <span id='approve-button-{{ account.sellers.all.0.id }}'
+                    class='pull-right btn btn-mini
+                      {% if account.sellers.all.0.approved_at %}
+                        unapprove-seller btn-danger
+                      {% else %}
+                        approve-seller btn-success
+                      {% endif %}
+                    '
+                    data-seller-id='{{ account.sellers.all.0.id }}'>
+              {% if account.sellers.all.0.approved_at %}
+                Un-Approve
+              {% else %}
+                Approve
+              {% endif %}
+            </span>
+          {% endif %}
+        </td>
+
+      </tr>
+    {% endfor %}
+  {% endfor %}
+</table>
+
+{% endblock content %}

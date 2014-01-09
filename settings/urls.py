@@ -1,23 +1,30 @@
 from django.conf.urls import patterns, include, url
-from apps.public.controller import home
 from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.views.generic import TemplateView, RedirectView
-from .sitemaps import sitemaps
 
+from apps.public.controller import home
 urlpatterns = patterns('',
   url(r'^$', home.home, name='home'), #fyi, this is home
-  url(r'^blog',
-      RedirectView.as_view(url='http://helloanou.wordpress.com/', permanent=False), name='blog')
 )
 
+#APPS
 urlpatterns += patterns('',
   url(r'^', include('apps.public.urls')),
-  url(r'^', include('apps.admin.urls', namespace='admin')),
+  url(r'^admin/', include('apps.admin.urls', namespace='admin')),
   url(r'^seller/', include('apps.seller.urls', namespace='seller')),
   url(r'^communication/', include('apps.communication.urls', namespace='communication')),
 )
 
-#BACKWARDS COMPATABILITY WITH OLD ANOU SITE
+#TOP LEVEL URLS
+from apps.admin.controller import account
+urlpatterns += patterns('',
+  url(r'^blog',
+      RedirectView.as_view(url='http://helloanou.wordpress.com/', permanent=False), name='blog'),
+  url(r'^login$', account.login, name='login'),
+  url(r'^logout$', account.logout, name='logout'),
+)
+
+#OLD SITE REDIRECTS
 from apps.communication.controller import sms
 urlpatterns += patterns('',
   (r'^index.php', lambda x: HttpResponsePermanentRedirect('/')),
@@ -35,6 +42,7 @@ urlpatterns += patterns('',
   url(r'^robots\.txt', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
   url(r'^humans\.txt', TemplateView.as_view(template_name='humans.txt', content_type='text/plain')),
 )
+from .sitemaps import sitemaps
 urlpatterns += patterns('django.contrib.sitemaps.views',
     (r'^sitemap\.xml$', 'index', {'sitemaps': sitemaps}),
     (r'^sitemap-(?P<section>.+)\.xml$', 'sitemap', {'sitemaps': sitemaps}),

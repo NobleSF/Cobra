@@ -1,0 +1,61 @@
+{% extends "admin_base.html" %}
+{% load url from future %}
+
+{% block title %}
+  Admins
+{% endblock title %}
+
+{% block javascript %}
+  <script type="text/javascript" src="{{ STATIC_URL }}admin/js/all_accounts.js"></script>
+{% endblock javascript %}
+
+{% block css %}
+  <style>
+    th.city{padding-top: 30px; font-size: 22pt;}
+    td{min-width: 50px;}
+    .name, .phone i{text-align: right; font-size: 14pt;}
+    .name a{font-size: 16pt;}
+  </style>
+{% endblock css %}
+
+{% block logo %}
+  <i class='symbol-admins black'></i>
+{% endblock logo %}
+
+{% block content %}
+<table class='table table-hover'>
+
+  {% for account in accounts %}
+    <tr>
+      <td class='name title-font'>
+        {% if account.admin_type in 'translator' %}
+          <i class='symbol-translator black'></i>
+        {% elif account.admin_type in 'trainer' %}
+          <i class='symbol-admin black'></i>
+        {% elif account.admin_type in 'country' %}
+          <i class='symbol-country-admin black'></i>
+        {% elif account.admin_type in 'master' %}
+          <i class='symbol-master-admin black'></i>
+        {% endif %}
+        {{ account.name|default_if_none:"----------" }}
+      </td>
+
+      <td class='phone'>
+        <i class='symbol-phone black'></i>
+        {{ account.phone }}
+      </td>
+
+      <td class='actions'>
+        <a href="{% url 'admin:edit account' account.id %}"
+           class='symbol-profile red'
+           title='edit account'></a>
+
+        <a href="{% url 'admin:reset password' account.id %}"
+           class='symbol-reset-password red'
+           title='reset password'></a>
+      </td>
+    </tr>
+  {% endfor %}
+</table>
+
+{% endblock content %}

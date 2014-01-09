@@ -9,52 +9,115 @@ from datetime import timedelta
 from apps.admin.models import Account
 
 @access_required('admin')
-def create(request):
+def adminAccounts(request):
+  from django.db.models import Count
+  #types_order = ['unassigned', 'translator', 'trainer', 'country', 'master']
+  admin_accounts = (Account.objects
+                    .annotate(num_sellers=Count('sellers'))
+                    .filter(
+                      admin_type__isnull=False,
+                      num_sellers=0)
+                    #.exclude(admin_type='master')
+                    .order_by('admin_type', 'name'))
+
+  return render(request, 'account/admin_accounts.html', {'accounts':admin_accounts})
+
+@access_required('admin')
+def createAdmin(request):
+  from apps.admin.controller.forms import AccountCreateForm
+  from django.db import IntegrityError
+
+  if request.method == 'POST':
+
+    name        = request.POST.get('name')
+    phone       = request.POST.get('phone')
+    password    = request.POST.get('password')
+    password    = processPassword(password) if password else None
+    admin_type  = request.POST.get('admin_type')
+
+    if not phone:
+      context = {'incorrect': "bad phone"}
+    elif not password:
+      context = {'incorrect': "bad password"}
+    elif not admin_type:
+      context = {'incorrect': "bad admin_type"}
+
+    else:
+      try:
+        account = Account(phone=phone, password=password, admin_type=admin_type)
+        account.name = name if name else None
+        account.save()
+        return redirect('admin:edit account', account.id)
+
+      except IntegrityError:
+        messages.warning(request, 'An account with this phone already exists.')
+        context = {'incorrect': "bad phone"}
+
+      except Exception as e:
+        ExceptionHandler(e, "in account.createAdmin")
+        messages.error(request, e)
+
+  else:
+    context = {}
+
+  context['form'] = AccountCreateForm()
+  return render(request, 'account/create_admin.html', context)
+
+@access_required('admin')
+def sellerAccounts(request):
+  from django.db.models import Count
+  seller_accounts = (Account.objects
+                     .annotate(num_sellers=Count('sellers'))
+                     .filter(
+                      admin_type__isnull=True,
+                      num_sellers=1)
+                     .order_by('name'))
+  return render(request, 'account/seller_accounts.html', {'accounts':seller_accounts})
+
+@access_required('admin')
+def createSeller(request):
   from apps.admin.controller.forms import AccountCreateForm
   from django.db import IntegrityError
   from apps.seller.controller.account import create as createSeller
+  context = {}
 
   if request.method == 'POST':
-    try:
-      if request.POST.get('username') and request.POST.get('password'):
-        username = request.POST.get('username')
-        password = process_password(request.POST.get('password'))
-        account = Account(username=username, password=password)
+
+    name        = request.POST.get('name')
+    phone       = request.POST.get('phone')
+    password    = request.POST.get('password')
+    password    = processPassword(password) if password else None
+
+    if not phone and phone.isdigit():
+      context = {'incorrect': "bad phone"}
+    elif not password:
+      context = {'incorrect': "bad password"}
+
+    else:
+      try:
+        account = Account(phone=phone, password=password)
+        account.name = name if name else None
         account.save()
 
-        if request.POST['account_type'] == 'admin':
-          account.admin_type = "unassigned"
-          account.save()
-          messages.success(request, 'Admin account created. Ask Tom to set admin privileges')
-          return redirect('admin:account edit', account.id)
+        if createSeller(account):
+          login(request)
+          return redirect('seller:edit')
+        else:
+          e = Exception("createSeller() returned False")
+          ExceptionHandler(e, 'in account.createSeller')
+          messages.error(request, 'Error creating seller account.')
+          account.delete()
 
-        else: #seller account
-          if createSeller(account):
-            login(request)
-            return redirect('seller:edit')
-          else:
-            messages.error(request, 'Error creating seller account.')
-            account.delete()
+      except IntegrityError:
+        messages.warning(request, 'An account with this phone already exists.')
+        context = {'incorrect': "bad phone"}
 
-      else:
-        messages.warning(request, 'Missing username and/or password')
+      except Exception as e:
+        ExceptionHandler(e, "in account.createSeller")
+        messages.error(request, e)
 
-    except IntegrityError:
-      messages.warning(request, 'An account with this username already exists.')
-    except Exception as e:
-      ExceptionHandler(e, "error creating account")
-      messages.error(request, e)
-
-  context = {'form': AccountCreateForm()}
-  return render(request, 'account/create.html', context)
-
-@access_required('admin')
-def all_accounts(request):
-  context = {
-      'seller_accounts':Account.objects.filter(admin_type__isnull=True).order_by('name')
-      #todo: query filter should check for attached seller accounts
-    }
-  return render(request, 'account/all_accounts.html', context)
+  context['form'] = AccountCreateForm()
+  return render(request, 'account/create_seller.html', context)
 
 @access_required('admin')
 def edit(request, account_id=None):
@@ -80,7 +143,7 @@ def edit(request, account_id=None):
   return render(request, 'account/edit.html', context)
 
 @access_required('admin')
-def approve_seller(request): #from AJAX GET request
+def approveSeller(request): #from AJAX GET request
   from apps.seller.models import Seller
   try:
     seller_id = request.GET['seller_id']
@@ -123,6 +186,8 @@ def login(request, next=None):
     try:
       account = None
       username = request.POST.get('username', '')
+      if not username:
+        username = request.POST.get('phone', '')
 
       #login with phone number
       if not account:
@@ -156,10 +221,11 @@ def login(request, next=None):
             account = Account.objects.get(email=username)
           except: pass
 
-      if account and account.password == process_password(request.POST.get('password', '')):
+      if account and account.password == processPassword(request.POST.get('password', '')):
 
         if account.is_admin:
           request.session['admin_id'] = account.id
+          request.session['admin_type'] = account.admin_type
           request.session['username'] = account.username
           if 'cart_id' in request.session:
             del request.session['cart_id']
@@ -202,7 +268,7 @@ def login(request, next=None):
   return render(request, 'account/login.html', context)
 
 @access_required('admin')
-def login_cheat(request):
+def loginCheat(request):
   from apps.seller.models import Seller
 
   seller_id = request.GET.get('seller_id')
@@ -214,31 +280,29 @@ def login_cheat(request):
 
 def logout(request):
   try:
-    if 'username'   in request.session: del request.session['username']
-    if 'admin_id'   in request.session: del request.session['admin_id']
-    if 'seller_id'  in request.session: del request.session['seller_id']
-    if 'next'       in request.session: del request.session['next']
-    if 'cart_id'    in request.session: del request.session['cart_id']
-
-    return redirect('home')
+    for var in ['username', 'admin_id', 'admin_type', 'seller_id', 'cart_id', 'next']:
+      if var in request.session:
+        del request.session[var]
 
   except Exception as e:
     ExceptionHandler(e, "error in logout function")
-    return render(request, 'public/home.html', {'exception':e})
+
+  finally:
+    return redirect('home')
 
 @access_required('admin')
-def reset_password(request, account_id=None):
+def resetPassword(request, account_id=None):
   from apps.admin.controller.forms import AccountPasswordForm
   try:
     account = Account.objects.get(id=account_id)
 
     if request.method == 'POST':
-      #old_password = process_password(request.POST.get('old_password'))
-      new_password = process_password(request.POST.get('new_password'))
+      #old_password = processPassword(request.POST.get('old_password'))
+      new_password = processPassword(request.POST.get('new_password'))
       account.password = new_password
       account.save()
       messages.success(request, "password changed for %s" % account.name)
-      return redirect('admin:account edit', account.id)
+      return redirect('admin:edit account', account.id)
 
   except Exception as e:
     ExceptionHandler(e, "error on password reset")
@@ -248,7 +312,7 @@ def reset_password(request, account_id=None):
   #success or not, take them back where they came from.
   return render(request, 'account/reset_password.html', context)
 
-def process_password(encrypted): #private function
+def processPassword(encrypted): #private function
   from Crypto.Hash import SHA256
   #http://www.laurentluce.com/posts/python-and-cryptography-with-pycrypto/
   #https://www.dlitz.net/software/pycrypto/doc/

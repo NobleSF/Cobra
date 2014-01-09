@@ -38,36 +38,94 @@
 
 {% block css %}
   <style>
-
+    #fields li{display: block;}
+    #fields i[class*="symbol-"] {font-size: 18pt;}
+    #fields td.label-for{
+      font-size: 14pt;
+      text-align: right;
+      padding: 0 15px 0 0;
+      white-space: nowrap;
+    }
   </style>
 {% endblock css %}
 
+{% block logo %}
+  <i class='symbol-money-calc black'></i>
+{% endblock logo %}
+
 {% block content %}
+  <table id='fields' class='unstyled'>
 
-  <form>
-    <label for='artisan_price'>Artisan Price:</label>
-    <input id='artisan_price' type='text' class='editable'>Dh
+    <tr>
+      <td class='label-for'>Artisan Price</td>
+      <td class='input-prepend input-append'>
+        <i class='add-on symbol-money black' title='username'></i>
+        <input id='artisan_price' type='text' class='editable'>
+        <i class='add-on' title='username'>Dh</i>
+      </td>
+    </tr>
 
-    <label for='shipping_cost'>Shipping Cost:</label>
-    <input id='shipping_cost' type='text' class='editable'>Dh
+    <tr>
+      <td class='label-for'>Shipping Cost</td>
+      <td class='input-prepend input-append'>
+        <i class='add-on symbol-shipping black' title='username'></i>
+        <input id='shipping_cost' type='text' class='editable'>
+        <i class='add-on' title='username'>Dh</i>
+      </td>
+    </tr>
 
-    <label for='anou_fee'>Anou Fee:</label>
-    <input id='anou_fee' type='text' disabled='disabled'>Dh
+    <tr>
+      <td class='label-for'>Anou Fee</td>
+      <td class='input-prepend input-append'>
+        <i class='add-on black' title='username'>%</i>
+        <input id='anou_fee' type='text' disabled='disabled'>
+        <i class='add-on' title='username'>Dh</i>
+      </td>
+    </tr>
 
-    <label for='local_price'>Local Price:</label>
-    <input id='local_price' type='text' disabled='disabled'>Dh
+    <tr>
+      <td class='label-for'>Local Price</td>
+      <td class='input-prepend input-append'>
+        <i class='add-on symbol-money black' title='username'></i>
+        <input id='local_price' type='text' disabled='disabled'>Dh
+        <i class='add-on' title='username'>Dh</i>
+      </td>
+    </tr>
 
-    <label for='exchange_rate'>USD Exchange Rate:</label>
-    <input id='exchange_rate' type='text' value='{{exchange_rate}}' class='editable'>Dh/USD
+    <tr>
+      <td class='label-for'>Exchange Rate</td>
+      <td class='input-prepend input-append'>
+        <i class='add-on symbol-currency-exchange black' title='username'></i>
+        <input id='exchange_rate' type='text' value='{{exchange_rate}}' class='editable'>
+        <i class='add-on' title='username'>Dh/USD</i>
+      </td>
+    </tr>
 
-    <label for='usd_price'>USD Price:</label>
-    <input id='usd_price' type='text' disabled='disabled'>USD
+    <tr>
+      <td class='label-for'>USD Price</td>
+      <td class='input-prepend input-append'>
+        <i class='add-on symbol-money black' title='username'></i>
+        <input id='usd_price' type='text' disabled='disabled'>
+        <i class='add-on' title='username'>USD</i>
+      </td>
+    </tr>
 
-    <label for='wepay_fee'>Wepay Fee:</label>
-    <input id='wepay_fee' type='text' disabled='disabled'>USD
+    <tr>
+      <td class='label-for'>Wepay Fee</td>
+      <td class='input-prepend input-append'>
+        <i class='add-on symbol-money black' title='username'></i>
+        <input id='wepay_fee' type='text' disabled='disabled'>
+        <i class='add-on' title='username'>USD</i>
+      </td>
+    </tr>
 
-    <label for='anou_store_price'>Anou Store Price:</label>
-    <input id='anou_store_price' type='text' disabled='disabled'>USD
-  </form>
-
+    <tr>
+      <td class='label-for'>Anou Store Price</td>
+      <td class='input-prepend input-append'>
+        <i class='add-on symbol-money black' title='username'></i>
+        <input id='anou_store_price' type='text' disabled='disabled'>
+        <i class='add-on' title='username'>USD</i>
+      </td>
+    </tr>
+  </table>
 {% endblock content %}

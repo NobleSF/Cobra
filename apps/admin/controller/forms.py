@@ -1,22 +1,19 @@
 from django.db import models
 from django import forms
 from apps.admin.models import Account
-from apps.admin.controller.account import process_password
+from apps.admin.controller.account import processPassword
 
 from django.forms.widgets import TextInput
 class NumberInput(TextInput):
   input_type = 'tel'
 
 class AccountCreateForm(forms.Form):
-  username      = forms.CharField(max_length=100)
+  name          = forms.CharField(max_length=50, required=False)
+  phone         = forms.CharField(max_length=15)
   password      = forms.CharField(max_length=100)
-  account_type  = forms.MultipleChoiceField(
-                    widget=forms.Select,
-                    choices=(('seller','seller'),('admin','admin'))
-                  )
 
   def clean_password(self):
-    return process_password(self.cleaned_data['password'])
+    return processPassword(self.cleaned_data['password'])
 
 class AccountEditForm(forms.ModelForm):
   class Meta:
@@ -63,15 +60,15 @@ class AccountLoginForm(forms.Form):
   password  = forms.CharField(widget=NumberInput(attrs={'autocomplete':'off'}))
 
   def clean_password(self):
-    return process_password(self.cleaned_data['password'])
+    return processPassword(self.cleaned_data['password'])
 
 class AccountPasswordForm(forms.Form):
   new_password  = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'off'}))
 
 class SMSForm(forms.Form):
   to_number     = forms.CharField(widget=NumberInput(
-                          attrs={'placeholder':'phone #'}))
+                          attrs={'placeholder':''}))
   message       = forms.CharField(widget=forms.Textarea(
-                          attrs={'placeholder':'message'}))
+                          attrs={'placeholder':'...'}))
   order         = forms.CharField(widget=forms.TextInput(
-                          attrs={'placeholder':'order #'}))
+                          attrs={'placeholder':''}))

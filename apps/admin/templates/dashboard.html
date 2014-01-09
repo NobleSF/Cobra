@@ -1,65 +1,142 @@
 {% extends "admin_base.html" %}
 
+{% block css %}
+  <style>
+    #dashboard li{
+      height: 75px;
+    }
+    li a[class*="symbol-"] {
+      font-size: 40pt;
+      height: 50px;
+    }
+  </style>
+{% endblock css %}
+
 {% block content %}
   {% load url from future %}
-  <div class='row-fluid'>
-    <div class='span6'>
-      <h3>Accounts</h3>
-      <ul>
-        <li><a href="{% url 'admin:account create' %}">Create New Account</a></li>
-        <li><a href="{% url 'admin:account edit' %}">Edit My Account</a></li>
-        <li><a href="{% url 'admin:all accounts' %}">All Accounts</a></li>
+  <div id='dashboard' class='row-fluid'>
+    <div class='span12 text-center'>
+      <ul class='unstyled pull-left'>
+        {% if request.session.admin_type in "translator, trainer, country, master" %}
+          <li>
+            <a href="{% url 'admin:seller accounts' %}"
+               class='symbol-sellers blue'
+               title='seller accounts'></a>
+          </li>
+        {% endif %}
+
+        {% if request.session.admin_type in "trainer, country, master" %}
+          <li>
+            <a href="{% url 'admin:create seller' %}"
+               class='symbol-seller-add green'
+               title='create seller'></a>
+          </li>
+        {% endif %}
+
+        {% if request.session.admin_type in "country, master" %}
+          <li>
+            <a href="{% url 'admin:admin accounts' %}"
+               class='symbol-admins blue'
+               title='admin accounts'></a>
+          </li>
+        {% endif %}
+
+        {% if request.session.admin_type in "country, master" %}
+<!--          <li>
+            <a href="{% url 'admin:create admin' %}"
+               class='symbol-admin-add green'
+               title='create admin'></a>
+          </li>-->
+        {% endif %}
+
+        {% if request.session.admin_type in "translator, trainer, country, master" %}
+          <li>
+            <a href="{% url 'admin:edit account' %}"
+               class='symbol-profile red'
+               title='my account'></a>
+          </li>
+        {% endif %}
       </ul>
 
-      <h3>Products</h3>
-      <ul>
-        <li><a href="{% url 'admin:review products' %}">Review New Products</a></li>
-        <li><a href="{% url 'admin:unrated products' %}">Unrated Products</a></li>
-        <li><a href="{% url 'admin:product lookup' %}">Product Lookup</a></li>
-        <li><a href="{% url 'admin:price calc' %}">Price Calculator</a></li>
+      <ul class='unstyled pull-right'>
+        {% if request.session.admin_type in "trainer, country, master" %}
+          <li>
+            <a href="{% url 'admin:stats' %}"
+               class='symbol-chart purple'
+               title='statistics'></a>
+          </li>
+
+<!--          <li>
+            <a href="{% url 'admin:research' %}"
+               class='symbol-world purple'
+               title='research'></a>
+          </li>-->
+        {% endif %}
+
+        {% if request.session.admin_type in "country, master" %}
+          <li>
+            <a href="{% url 'admin:all sms' %}"
+               class='symbol-SMS blue'
+               title='SMS'></a>
+          </li>
+
+          <li>
+            <a href="{% url 'admin:all email' %}"
+               class='symbol-email blue'
+               title='email'></a>
+          </li>
+        {% endif %}
       </ul>
 
-      <h3>Orders</h3>
-      <ul>
-        <li><a href="{% url 'admin:all orders' %}">Order History</a></li>
-      </ul>
-
-      <h3>Communication</h3>
-      <ul>
-        <li><a href="{% url 'admin:all sms' %}">SMS Messages</a></li>
-        <li><a href="{% url 'admin:all email' %}">Email Log</a></li>
-      </ul>
-
-      {% if request.session.username == 'tom' %}
-        <h3>Global Settings</h3>
-        <ul>
-          <li><a href="{% url 'admin:currency' %}">Currency</a></li>
-          <li><a href="{% url 'admin:country' %}">Country</a></li>
-          <li><a href="{% url 'admin:color' %}">Color</a></li>
-          <li><a href="{% url 'admin:category' %}">Category</a></li>
-          <li><a href="{% url 'admin:rating_subject' %}">Rating Subject</a></li>
-          <li><a href="{% url 'admin:shipping_option' %}">Morocco Shipping Option</a></li>
-          <li><a href="{% url 'admin:image_object' %}">Add Image Object</a></li>
-        </ul>
-      {% endif %}
-
-    </div>
-    <div>
-      <h3>Stats</h3>
       <ul class='unstyled'>
-        <li>
-          <span class='badge'>{{ mtd_product_count }}</span>
-          products added this month
-        </li>
-        <li>
-          <span class='badge'>{{ avg_rating|floatformat:2 }}%</span>
-          rating of live products
-        </li>
-        <li>
-          <span class='badge'>{{ avg_rating_change|floatformat:2 }}%</span>
-          change from last month
-        </li>
+        {% if request.session.admin_type in "trainer, country, master" %}
+          <li><a href="{% url 'admin:review products' %}"
+                 class='symbol-product-check blue'
+                 title='review products'></a>
+          </li>
+
+          <li>
+            <a href="{% url 'admin:price calc' %}"
+               class='symbol-money-calc purple'
+               title='price calc'></a>
+          </li>
+
+          <li>
+            <a href="{% url 'admin:all orders' %}"
+               class='symbol-orders gold'
+               title='orders'></a>
+          </li>
+        {% endif %}
+
+        {% if request.session.admin_type in "master" %}
+          <li>
+            <a href="{% url 'admin:product lookup' %}"
+               class='symbol-products pink'
+               title='lookup product'></a>
+          </li>
+
+          <li>
+            <a href="{% url 'admin:unrated products' %}"
+               class='symbol-happy pink'
+               title='rate products'></a>
+          </li>
+        {% endif %}
       </ul>
+    </div>
+  </div>
+
+  <div class='row-fluid'>
+    <div class='span4'>
+      {% if request.session.admin_type in "master" and request.session.username == 'tom' %}
+        <h3>Global Settings</h3>
+        <a href="{% url 'admin:currency' %}">Currency</a><br>
+        <a href="{% url 'admin:country' %}">Country</a><br>
+        <a href="{% url 'admin:color' %}">Color</a><br>
+        <a href="{% url 'admin:category' %}">Category</a><br>
+        <a href="{% url 'admin:rating subject' %}">Rating Subject</a><br>
+        <a href="{% url 'admin:shipping option' %}">Morocco Shipping Option</a><br>
+        <a href="{% url 'admin:image object' %}">Add Image Object</a><br>
+      {% endif %}
     </div>
   </div>
 {% endblock content %}

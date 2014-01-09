@@ -160,12 +160,13 @@ class Order(models.Model):
   def is_reviewed(self): return True if self.reviewed_at else False
   @property
   def is_seller_paid(self): return True if self.seller_paid_at else False
+  @property
+  def is_complete(self): return True if self.seller_paid_at else False
 
   @property
   def tracking_url(self):
-    if self.tracking_number:
-      return "https://tools.usps.com/go/TrackConfirmAction_input?qtc_tLabels1=" + self.tracking_number
-    else: return False
+    tracking_url = "https://tools.usps.com/go/TrackConfirmAction_input?qtc_tLabels1="
+    return  tracking_url + self.tracking_number if self.tracking_number else False
 
 class Rating(models.Model):
   from apps.seller.models import Product

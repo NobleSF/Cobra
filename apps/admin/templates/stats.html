@@ -1,0 +1,124 @@
+{% extends "admin_base.html" %}
+{% load url from future %}
+{% load dashboard_tags %}
+
+{% block css %}
+<style>
+  .graph{
+    white-space: nowrap;
+    display: inline-block;
+  }
+  .group{
+    width: 30px;
+    margin: 0 10px;
+    display: inline-block;
+  }
+  .bar{
+    background-color: #aeaeae;
+    margin: -10px;
+  }
+  .value{
+    line-height: 0px;
+    position: relative;
+    top: -10px;
+    left: -5px;
+  }
+  .title {
+    margin: 0px -5px 0px;
+  }
+
+  .anou-fees{background-color: #86ABD7}
+  .shipping-costs{background-color: #A27D74}
+  .product-value{background-color: #BCAEAD}
+  .costs{background-color: #F00}
+
+  i{font-size: 16pt; padding: 5px 10px;}
+</style>
+{% endblock css %}
+
+{% block content %}
+
+<br>
+<br>
+<br>
+<br>
+
+<div class="graph">
+  {% for month, data in revenue_data %}
+    <div class='group'>
+      <div class="bar anou-fees"
+           style="height: {% sizescaler data.anou_fees 15000 200 20 %}px;"
+      ></div>
+      <span class='value'
+            style='top: -{% sizescaler data.anou_fees 15000 200 20 -10 %}px;'
+      >{{ data.anou_fees }}</span>
+
+      <div class='title'>{{ month }}</div>
+
+      <span class='value'
+            style='top: {% sizescaler data.costs 15000 200 20 -10 %}px;'
+      >{{ data.costs }}</span>
+      <div class="bar costs"
+           style="height: {% sizescaler data.costs 15000 200 20 %}px;"
+      ></div>
+
+    </div>
+  {% endfor %}
+</div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<div class="graph">
+  {% for month, data in revenue_data %}
+    <div class='group'>
+      <div class='title' style="margin-bottom: 20px;">
+        {{ data.revenue }}
+      </div>
+
+      <div class="bar shipping-costs"
+           style="height: {% sizescaler data.shipping_costs 50000 500 20 %}px;"
+      ></div>
+      <span class='value'
+            style='top: -{% sizescaler data.shipping_costs 50000 500 20 -10 %}px;'
+      >{{ data.shipping_costs }}</span>
+
+      <div class="bar product-value"
+           style="height: {% sizescaler data.product_value 50000 500 20 %}px;"
+      ></div>
+      <span class='value'
+            style='top: -{% sizescaler data.product_value 50000 500 20 -10 %}px;'
+      >{{ data.product_value }}</span>
+
+      <div class="bar anou-fees"
+           style="height: {% sizescaler data.anou_fees 50000 500 20 %}px;"
+      ></div>
+      <span class='value'
+            style='top: -{% sizescaler data.anou_fees 50000 500 20 -10 %}px;'
+      >{{ data.anou_fees }}</span>
+
+      <div class='title'>{{ month }}</div>
+
+    </div>
+  {% endfor %}
+</div>
+
+<br>
+<br>
+
+<div id='key'>
+  <div class='product-value' style='width: 150px'>
+    <i class='symbol-products black'></i>
+  </div>
+  <div class='shipping-costs' style='width: 150px'>
+    <i class='symbol-shipping black'></i>
+  </div>
+  <div class='anou-fees' style='width: 150px'>
+    <i class='black'>ANOU</i>
+  </div>
+</div>
+
+{% endblock content %}

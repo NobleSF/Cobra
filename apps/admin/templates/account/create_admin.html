@@ -1,0 +1,42 @@
+{% extends "admin_base.html" %}
+
+{% block css %}
+  <style>
+    #account-form ul li{display: block;}
+    #account-form i{font-size: 18pt;}
+    #submit-button{font-size: 24pt;}
+  </style>
+{% endblock css %}
+
+{% block logo %}
+  <i class='symbol-admin-add black'></i>
+{% endblock logo %}
+
+{% block content %}
+
+  <form id='account-form' action="" method="post">{% csrf_token %}
+    <ul>
+      <li class='input-prepend'>
+        <i class='add-on symbol-name black' title='name'></i>
+        {{form.name}}
+      </li>
+
+      <li class='input-prepend'>
+        <i class='add-on symbol-phone black' title='phone'></i>
+        {{form.phone}}
+      </li>
+
+      <li class='input-prepend'>
+        <i class='add-on symbol-password black' title='password'></i>
+        {{form.password}}
+      </li>
+
+      <li>
+        <button id='submit-button'
+                class='btn btn-large symbol-go green'
+                type='submit' />
+      </li>
+    </ul>
+  </form>
+
+{% endblock content %}

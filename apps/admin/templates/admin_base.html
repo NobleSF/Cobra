@@ -2,37 +2,38 @@
 {% load url from future %}
 
 {% block title %}
-  Anou Admin
+  Admin
 {% endblock title %}
 
 {% block header %}
   <div id='base-logo' class='pull-left'>
-    <a href="{% url 'home' %}">
-      <img src="{{ STATIC_URL }}images/Anou_logo_80x50.png" alt="Anou Homepage">
-    </a>
-    <a href="{% url 'admin:dashboard' %}">Admin Dashboard</a>
+    {% block logo %}
+      <a href="{% url 'home' %}">
+        <img src="{{ STATIC_URL }}images/Anou_logo_80x50.png" alt="Anou Homepage">
+      </a>
+    {% endblock logo %}
   </div>
+
+  {% block admin_nav %}{% endblock admin_nav %}
+
   <div id='base-navigation'>
     <ul class='pull-right'>
 
       <li>
+        <a href="{% url 'admin:dashboard' %}"
+           class='symbol-admin-dashboard anou-blue' title='admin dashboard'></a>
+      </li>
 
-      </li>
       <li>
-        <a href="{% url 'admin:logout' %}"
-           class='symbol-logout red' title='logout'>
-        </a>
+        <a href="{% url 'logout' %}"
+           class='symbol-logout red' title='logout'></a>
       </li>
+
       <li>
         <a href="{% url 'seller:management home' %}"
-           class='symbol-go anou-blue' title='artisan account'>
-        </a>
+           class='symbol-go anou-blue' title='artisan account'></a>
       </li>
 
     </ul>
   </div>
 {% endblock header %}
-
-{% block content %}
-
-{% endblock content %}

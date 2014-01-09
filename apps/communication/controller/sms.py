@@ -82,7 +82,7 @@ def saveSMS(sms_data): #takes Telerivet response content detail at
     sms.save()
 
   except Exception as e:
-    return "save error: " + str(e)
+    ExceptionHandler(e, "in sms.saveSMS")
   else:
     return sms
 
@@ -133,7 +133,10 @@ def incoming(request):
         (product_id, data) = msg_data
         product = Product(product_id)
 
-        if product.belongsToPhone(request.POST.get('from_number')):
+        if not product.product:
+          return HttpResponse(status=200)#OK
+
+        elif product.belongsToPhone(request.POST.get('from_number')):
           #if the sender owns the product, update the order
 
           if data.get('remove'):
@@ -152,6 +155,7 @@ def incoming(request):
 
           else:
             return HttpResponse(status=200)#OK
+
         else:
           message = "This SMS not from product owner: " + request.POST.get('content')
           Email(message=message).sendTo(Dan.email)

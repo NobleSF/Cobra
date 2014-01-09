@@ -21,18 +21,20 @@
 </style>
 {% endblock css %}
 
+{% block logo %}
+  <i class='symbol-orders black'></i>
+{% endblock logo %}
+
 {% block content %}
 
-<h3>ORDERS</h3>
-
 <table class='table table-hover table-condensed'>
-  <thead>
+  <!--<thead>
     <td>ORDER</td>
     <td>DATE&nbsp;TIME</td>
     <td>ITEM</td>
     <td>STATUS</td>
     <td colspan='2'>PAYMENT</td>
-  </thead>
+  </thead>-->
 
   {% for order in orders %}
     <tr class='information-row'>

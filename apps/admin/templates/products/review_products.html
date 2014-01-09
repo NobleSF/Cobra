@@ -25,9 +25,11 @@
   </style>
 {% endblock css %}
 
-{% block content %}
-  <h3>Review Products</h3>
+{% block logo %}
+  <i class='symbol-product-check black'></i>
+{% endblock logo %}
 
+{% block content %}
   <input id='approve-url' type='hidden'
          value="{% url 'admin:approve product' %}">
 
@@ -46,9 +48,7 @@
     {% endfor %}
   </table>
 
-  <br><br><br>
-
-  <h3>IN HOLDING</h3>
+  <i class='symbol-hold black'></i>
 
   <table id='purgatory' class='table table-hover table-condensed'>
     {% for product in products_in_holding %}

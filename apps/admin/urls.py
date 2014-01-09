@@ -1,60 +1,67 @@
 from django.conf.urls import patterns, include, url
-from controller import dashboard, account, products, orders, communication, site_management
+from apps.admin.controller import dashboard, account, products, orders, communication, site_management
 
 #ACCOUNT PAGES
 urlpatterns = patterns('',
   #Todo: I'd like to add the word "secure" into all account and checkout pages
     # just to give the user more peace of mind.
 
-  url(r'^account/create$', account.create, name='account create'),
-  url(r'^account/all_accounts$', account.all_accounts, name='all accounts'),
-  url(r'^account/(?P<account_id>\d+)?/edit$', account.edit, name='account edit'),
-  url(r'^account/(?P<account_id>\d+)?/password_reset$', account.reset_password, name='account reset password'),
-  url(r'^account/login$', account.login, name='login'),
-  url(r'^account/login_cheat$', account.login_cheat, name='login_cheat'),
-  url(r'^account/logout$', account.logout, name='logout'),
+  url(r'^create_admin$', account.createAdmin, name='create admin'),
+  url(r'^create_seller$', account.createSeller, name='create seller'),
+
+  url(r'^admin_accounts$', account.adminAccounts, name='admin accounts'),
+  url(r'^seller_accounts$', account.sellerAccounts, name='seller accounts'),
+
+  url(r'^edit_account/(?P<account_id>\d+)?$', account.edit, name='edit account'),
+  url(r'^reset_password/(?P<account_id>\d+)?$', account.resetPassword, name='reset password'),
+
+  url(r'^login_cheat$', account.loginCheat, name='login cheat'),
 )
 
 #DASHBOARD PAGES
 urlpatterns += patterns('',
-  url(r'^admin/dashboard$', dashboard.dashboard, name='dashboard'),
+  url(r'^dashboard$', dashboard.dashboard, name='dashboard'),
 
   #SELLER ACCOUNTS
-  url(r'^admin/ajax/approve_seller$', account.approve_seller, name='approve seller'),
+  url(r'^ajax/approve_seller$', account.approveSeller, name='approve seller'),
 
   #PRODUCTS
-  url(r'^admin/review_products$', products.review_products, name='review products'),
-  url(r'^admin/unrated_products$', products.unrated_products, name='unrated products'),
-  url(r'^admin/ajax/approve_product$', products.approve_product, name='approve product'),
-  url(r'^admin/ajax/rate_product$', products.rate_product, name='rate product'),
-  url(r'^admin/product_lookup$', products.product_lookup, name='product lookup'),
-  url(r'^admin/price_calc$', products.priceCalc, name='price calc'),
+  url(r'^review_products$', products.reviewProducts, name='review products'),
+  url(r'^unrated_products$', products.unratedProducts, name='unrated products'),
+  url(r'^ajax/approve_product$', products.approveProduct, name='approve product'),
+  url(r'^ajax/rate_product$', products.rateProduct, name='rate product'),
+  url(r'^product_lookup$', products.productLookup, name='product lookup'),
+  url(r'^price_calc$', products.priceCalc, name='price calc'),
 
   #ORDERS
-  url(r'^admin/all_orders$', orders.allOrders, name='all orders'),
-  url(r'^admin/order/(?P<order_id>\d+)$', orders.order, name='order'),
-  url(r'^admin/ajax/update_order$', orders.updateOrder, name='update order'),
-  url(r'^admin/ajax/order_image_data$', orders.imageFormData, name='image form data'),
+  url(r'^all_orders$', orders.allOrders, name='all orders'),
+  url(r'^order/(?P<order_id>\d+)$', orders.order, name='order'),
+  url(r'^ajax/update_order$', orders.updateOrder, name='update order'),
+  url(r'^ajax/order_image_data$', orders.imageFormData, name='image form data'),
 
   #COMMUNICATION
-  url(r'^admin/send_sms$', communication.sendSMS, name='send sms'),
-  url(r'^admin/sms$', communication.allSMS, name='all sms'),
-  url(r'^admin/email$', communication.allEmail, name='all email'),
+  url(r'^send_sms$', communication.sendSMS, name='send sms'),
+  url(r'^sms$', communication.allSMS, name='all sms'),
+  url(r'^email$', communication.allEmail, name='all email'),
+
+  #EXTRAS
+  url(r'^stats$', dashboard.stats, name='stats'),
+  url(r'^research$', dashboard.research, name='research'),
 
   #SETTINGS
-  url(r'^admin/management/country$', site_management.country, name='country'),
-  url(r'^admin/management/currency$', site_management.currency, name='currency'),
-  url(r'^admin/management/color$', site_management.color, name='color'),
-  url(r'^admin/management/category$', site_management.category, name='category'),
-  url(r'^admin/management/rating_subject$', site_management.rating_subject, name='rating_subject'),
-  url(r'^admin/management/shipping_option$', site_management.shipping_option, name='shipping_option'),
-  url(r'^admin/management/image_object$', site_management.image_object, name='image_object'),
+  url(r'^management/country$', site_management.country, name='country'),
+  url(r'^management/currency$', site_management.currency, name='currency'),
+  url(r'^management/color$', site_management.color, name='color'),
+  url(r'^management/category$', site_management.category, name='category'),
+  url(r'^management/rating_subject$', site_management.ratingSubject, name='rating subject'),
+  url(r'^management/shipping_option$', site_management.shippingOption, name='shipping option'),
+  url(r'^management/image_object$', site_management.imageObject, name='image object'),
 )
 
 #MANUAL CACHE REBUILDs
 urlpatterns += patterns('',
-  url(r'^admin/re_homepg$', site_management.rebuildHomePage, name='rebuild homepage'),
-  url(r'^admin/re_productpg/(?P<product_id>\d+)$', site_management.rebuildProductPage, name='rebuild productpage'),
-  url(r'^admin/re_storepg/(?P<seller_id>\d+)$', site_management.rebuildStorePage, name='rebuild storepage'),
-  url(r'^admin/re_prod_ranks$', site_management.rebuildProductRankings, name='rebuild product rankings'),
+  url(r'^re_homepg$', site_management.rebuildHomePage, name='rebuild homepage'),
+  url(r'^re_productpg/(?P<product_id>\d+)$', site_management.rebuildProductPage, name='rebuild productpage'),
+  url(r'^re_storepg/(?P<seller_id>\d+)$', site_management.rebuildStorePage, name='rebuild storepage'),
+  url(r'^re_prod_ranks$', site_management.rebuildProductRankings, name='rebuild product rankings'),
 )

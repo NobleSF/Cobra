@@ -9,7 +9,7 @@ import json
 from apps.seller.models import Product
 
 @access_required('admin')
-def product_lookup(request):
+def productLookup(request):
   context = {}
   if request.method == "POST":
     try:
@@ -26,7 +26,7 @@ def product_lookup(request):
   return render(request, 'products/product_lookup.html', context)
 
 @access_required('admin')
-def review_products(request):
+def reviewProducts(request):
   products_to_review = (Product.objects.filter(approved_at=None,
                                                active_at__lte=timezone.now(),
                                                deactive_at=None,
@@ -46,7 +46,7 @@ def review_products(request):
   return render(request, 'products/review_products.html', context)
 
 @access_required('admin')
-def unrated_products(request):
+def unratedProducts(request):
   from django.db.models import Count
   unrated_products = (Product.objects.filter(in_holding=False,
                                              active_at__lte=timezone.now(),
@@ -59,7 +59,7 @@ def unrated_products(request):
   return render(request, 'products/unrated_products.html', {'products':unrated_products})
 
 @access_required('admin')
-def approve_product(request): #from AJAX GET request
+def approveProduct(request): #from AJAX GET request
   from apps.seller.controller.product_class import Product
   try:
     product = Product(request.GET.get('product_id'))
@@ -82,7 +82,7 @@ def approve_product(request): #from AJAX GET request
   return HttpResponse(json.dumps(response), content_type='application/json')
 
 @access_required('admin')
-def rate_product(request): #from AJAX GET request
+def rateProduct(request): #from AJAX GET request
   from apps.seller.models import Product
   from apps.public.models import Rating
   from apps.admin.models import RatingSubject

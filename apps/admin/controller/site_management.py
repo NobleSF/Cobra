@@ -103,7 +103,7 @@ def category(request):
   return render(request, 'site_management/formset.html', context)
 
 @access_required('admin')
-def rating_subject(request):
+def ratingSubject(request):
   from apps.admin.models import RatingSubject
   RatingSubjectFormSet = modelformset_factory(RatingSubject)
   context = {}
@@ -119,7 +119,7 @@ def rating_subject(request):
   return render(request, 'site_management/formset.html', context)
 
 @access_required('admin')
-def shipping_option(request):
+def shippingOption(request):
   from apps.seller.models import ShippingOption
   ShippingOptionFormSet = modelformset_factory(ShippingOption)
   context = {}
@@ -135,7 +135,7 @@ def shipping_option(request):
   return render(request, 'site_management/formset.html', context)
 
 @access_required('admin')
-def image_object(request):
+def imageObject(request):
   from apps.seller.models import Image
   ImageFormSet = modelformset_factory(Image)
   context = {}

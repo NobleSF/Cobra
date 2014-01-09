@@ -1,7 +1,7 @@
 {% load url from future %}
 <div id='remove-product{{ product.id }}' class='remove-product'>
   <a href="{% url 'seller:inventory remove' product.id %}">
-    <i class='symbol-close red' title='remove product from inventory'></i>
+    <i class='symbol-remove red' title='remove product from inventory'></i>
   </a>
 </div>
 

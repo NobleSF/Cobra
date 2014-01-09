@@ -41,7 +41,7 @@
     <div class='span12'>
       <h1 id='seller-title' >
         <a href="{{ seller.get_absolute_url }}"
-           class='symbol-profile green' title='seller public page'></a>
+           class='symbol-seller purple' title='seller public page'></a>
         {% if seller.account.name %}
           {{ seller.account.name }}
         {% endif %}
@@ -91,7 +91,7 @@
               {{ seller_form.bio }}
             </li>
             <li class='input-prepend'>
-              <i class='add-on symbol-country black' title='country'></i>
+              <i class='add-on symbol-world black' title='country'></i>
               {{ seller_form.country }}
             </li>
             <li class='input-prepend'>
@@ -111,7 +111,7 @@
         <ul>
 
           <li class='input-prepend'>
-            <i class='add-on symbol-profile black' title='name'></i>
+            <i class='add-on symbol-name black' title='name'></i>
             {{ seller_form.name }}
           </li>
 
@@ -119,9 +119,14 @@
             <i class='add-on symbol-email black' title='email'></i>
             {{ seller_form.email }}
           </li>
-          <li class='input-prepend'>
+          <li class='input-prepend input-append'>
             <i class='add-on symbol-phone black' title='phone number'></i>
             {{ seller_form.phone }}
+            {% if request.session.admin_type in 'trainer, country, master' %}
+              <a href="{% url 'admin:reset password' seller.account.id %}"
+                 class='add-on symbol-reset-password red'
+                 title='reset password'></a>
+            {% endif %}
           </li>
 
           {% if 'admin_id' in request.session %}

@@ -1,0 +1,79 @@
+{% extends "admin_base.html" %}
+
+{% block css %}
+  <style>
+    #account-form ul li{display: block;}
+    #account-form i{font-size: 18pt;}
+    #submit-button{font-size: 24pt;}
+
+    input.error{
+      background-color: rgba(245, 0, 0, 0.3);
+    }
+/*    .exit-button{
+      border-left: 1em solid transparent;
+      font-size: 1em;
+      height: 100%;
+      width: 3em;
+      opacity: 0.01;
+      padding: 0.5em 0em;
+    }*/
+  </style>
+{% endblock css %}
+
+{% block javascript %}
+  <script>
+    //show errors
+    $(function(){
+      if ("{{incorrect}}" == "bad phone"){
+        $('#id_phone').addClass('error');
+      }
+      if ("{{incorrect}}" == "bad password"){
+        $('#id_password').addClass('error');
+      }
+    });
+    //remove errors on input select
+    $('#id_phone, #id_password').on('click', function(){
+      $(this).removeClass('error');
+    });
+
+    $('i').click(function(){
+      $(this).closest('li').find('input').focus();
+    });
+  </script>
+{% endblock javascript %}
+
+{% block logo %}
+  <i class='symbol-seller-add black'></i>
+{% endblock logo %}
+
+{% block content %}
+
+  <form id='account-form' action="" method="post">{% csrf_token %}
+    <ul>
+      <li class='input-prepend'>
+        <i class='add-on symbol-name black' title='name'></i>
+        {{form.name}}
+
+      </li>
+
+      <li class='input-prepend'>
+        <i class='add-on symbol-phone black' title='phone'></i>
+        {{form.phone}}
+
+      </li>
+
+      <li class='input-prepend'>
+        <i class='add-on symbol-password black' title='password'></i>
+        {{form.password}}
+
+      </li>
+
+      <li>
+        <button id='submit-button'
+                class='btn btn-large symbol-go green'
+                type='submit' />
+      </li>
+    </ul>
+  </form>
+
+{% endblock content %}
