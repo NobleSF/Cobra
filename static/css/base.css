@@ -98,21 +98,21 @@ a, a:hover, a:active, a:focus{outline: 0;}
 }
 [class*="symbol-"].black:hover {opacity: 1 !important;}
 .anou-blue  {color: rgb(65, 123, 217)   !important;}
-.blue       {color: #417bd9             !important;}
-.black      {color: #333                !important;}
-.gray       {color: #888                !important;}
-.white      {color: #fffefa             !important;}
-.red        {color: rgb(179, 50, 0)     !important;}
-.gold       {color: rgb(209, 176, 0)    !important;}
-.green      {color: rgb(37, 153, 0)     !important;}
-.orange     {color: rgb(231, 166, 0)    !important;}
-.gold       {color: rgb(245, 180, 0)    !important;}
+.white      {color: #fffefa             !important;}/*background*/
+.black      {color: #333                !important;}/*not clickable*/
+.gray       {color: #888                !important;}/*disabled*/
+.blue       {color: #417bd9             !important;}/*read-only information*/
+.red        {color: rgb(179, 50, 0)     !important;}/*delete or danger*/
+.green      {color: rgb(37, 153, 0)     !important;}/*add or create*/
+.pink       {color: rgb(255, 0, 255)    !important;}/*special tool*/
+.purple     {color: #663399             !important;}/*learn insights*/
+.gold       {color: rgb(245, 180, 0)    !important;}/*money related*/
 
-.color-rating1  {color: rgb(164, 0,   0)    !important;}
-.color-rating2  {color: rgb(254, 0,   0)    !important;}
-.color-rating3  {color: rgb(255, 83,  83)   !important;}
-.color-rating4  {color: rgb(126, 198, 132)  !important;}
-.color-rating5  {color: rgb(1,   142, 11)   !important;}
+.color-rating1  {color: rgb(164, 0,   0)    !important;}/*dark red*/
+.color-rating2  {color: rgb(254, 0,   0)    !important;}/*medium red*/
+.color-rating3  {color: rgb(255, 83,  83)   !important;}/*light red*/
+.color-rating4  {color: rgb(126, 198, 132)  !important;}/*light green*/
+.color-rating5  {color: rgb(1,   142, 11)   !important;}/*dark green*/
 
 .right-to-left{
   float: right !important;
