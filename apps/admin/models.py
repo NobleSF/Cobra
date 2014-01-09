@@ -1,7 +1,7 @@
 from django.db import models
 
 class Account(models.Model):
-  username      = models.CharField(max_length=50, unique=True)
+  username      = models.CharField(max_length=50, blank=True, null=True, unique=True)
   password      = models.CharField(max_length=64)
   name          = models.CharField(max_length=50, blank=True, null=True)
   email         = models.EmailField(blank=True, null=True, unique=True)
@@ -23,10 +23,10 @@ class Account(models.Model):
   def cheat_login_url(self):
     from django.core.urlresolvers import reverse
     try:
-      url = reverse('admin:login_cheat')
+      url = reverse('admin:login cheat')
       url_parameters = "?seller_id=%d&destination=%s" % (self.sellers.all()[0].id, reverse('seller:management home'))
     except:
-      return reverse('admin:login')
+      return reverse('login')
     else:
       return url + url_parameters
 
