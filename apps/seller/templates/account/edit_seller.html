@@ -123,9 +123,11 @@
             <i class='add-on symbol-phone black' title='phone number'></i>
             {{ seller_form.phone }}
             {% if request.session.admin_type in 'trainer, country, master' %}
-              <a href="{% url 'admin:reset password' seller.account.id %}"
+              <i id='reset-password'
                  class='add-on symbol-reset-password red'
-                 title='reset password'></a>
+                 title='reset password'
+                 onclick='window.location.href="{% url 'admin:reset password' seller.account.id %}";'>
+              </i>
             {% endif %}
           </li>
 

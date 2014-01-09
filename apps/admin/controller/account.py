@@ -131,7 +131,10 @@ def edit(request, account_id=None):
     account_model_form = AccountEditForm(request.POST, instance=account)
     if account_model_form.is_valid():
       account_model_form.save()
-      messages.success(request, 'Account information saved.')
+      if account.is_admin:
+        return redirect('admin:admin accounts')
+      else:#seller
+        return redirect('admin:seller accounts')
     else:
       messages.warning(request, 'Not saved. Some data is invalid.')
 
@@ -293,23 +296,24 @@ def logout(request):
 @access_required('admin')
 def resetPassword(request, account_id=None):
   from apps.admin.controller.forms import AccountPasswordForm
-  try:
-    account = Account.objects.get(id=account_id)
+  account_id = account_id if account_id else request.session.get('admin_id')
+  account = Account.objects.get(id=account_id)
 
-    if request.method == 'POST':
-      #old_password = processPassword(request.POST.get('old_password'))
+  if request.method == 'POST':
+    try:
       new_password = processPassword(request.POST.get('new_password'))
       account.password = new_password
       account.save()
-      messages.success(request, "password changed for %s" % account.name)
-      return redirect('admin:edit account', account.id)
+      if account.is_admin:
+        return redirect('admin:edit account', account.id)
+      else:#seller
+        return redirect('seller:edit')
 
-  except Exception as e:
-    ExceptionHandler(e, "error on password reset")
-    messages.warning(request, "invalid passwords provided")
+    except Exception as e:
+      ExceptionHandler(e, "error on password reset")
+      messages.warning(request, str(e))
 
-  context = {'form':AccountPasswordForm()}
-  #success or not, take them back where they came from.
+  context = {'form':AccountPasswordForm(), 'account_name':account.name}
   return render(request, 'account/reset_password.html', context)
 
 def processPassword(encrypted): #private function

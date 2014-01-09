@@ -33,7 +33,7 @@
           </li>
         {% endif %}
 
-        {% if request.session.admin_type in "country, master" %}
+        {% if request.session.admin_type in "translator, trainer, country, master" %}
           <li>
             <a href="{% url 'admin:admin accounts' %}"
                class='symbol-admins blue'
@@ -66,11 +66,11 @@
                title='statistics'></a>
           </li>
 
-<!--          <li>
+          <li>
             <a href="{% url 'admin:research' %}"
                class='symbol-world purple'
                title='research'></a>
-          </li>-->
+          </li>
         {% endif %}
 
         {% if request.session.admin_type in "country, master" %}

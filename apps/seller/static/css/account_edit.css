@@ -47,6 +47,8 @@
 #seller-form-submit{
 }
 
+#reset-password{cursor: pointer}
+
 #seller-account i.add-on, #seller-account a.add-on{
   font-size: 18pt;
 }

@@ -48,13 +48,13 @@
 
         <td class='phone'>
           <i class='symbol-phone black'></i>
-          {{ account.phone }}
+          {{ account.phone|default_if_none:"-----" }}
         </td>
 
-        <td class='approve'>
-          {% if request.session.admin_type in "trainer, country, master" %}
+        {% if request.session.admin_type in "country, master" %}
+          <td class='approve'>
             <span id='approve-button-{{ account.sellers.all.0.id }}'
-                    class='pull-right btn btn-mini
+                  class='pull-right btn btn-mini
                       {% if account.sellers.all.0.approved_at %}
                         unapprove-seller btn-danger
                       {% else %}
@@ -68,8 +68,8 @@
                 Approve
               {% endif %}
             </span>
-          {% endif %}
-        </td>
+          </td>
+        {% endif %}
 
       </tr>
     {% endfor %}

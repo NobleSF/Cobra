@@ -5,6 +5,7 @@
   <style>
     #edit-account-form ul li{display: block;}
     #edit-account-form i{font-size: 18pt;}
+    #reset-password{cursor: pointer;}
     #submit-button{font-size: 24pt;}
   </style>
 {% endblock css %}
@@ -14,7 +15,7 @@
 {% endblock logo %}
 
 {% block content %}
-  <form id='edit-account-form' action="/" method="post">{% csrf_token %}
+  <form id='edit-account-form' action="" method="post">{% csrf_token %}
 
     <ul class='unstyled'>
       <li class='input-prepend'>
@@ -25,9 +26,11 @@
       <li class='input-prepend input-append'>
         <i class='add-on symbol-phone black' title='phone'></i>
         {{ form.phone }}
-        <a href="{% url 'admin:reset password' seller.account.id %}"
-           class='add-on symbol-password red'
-           title='reset password' onclick='return false'></a>
+        <i id='reset-password'
+           class='add-on symbol-reset-password red'
+           title='reset password'
+           onclick='window.location.href="{% url 'admin:reset password' account.id %}";'>
+        </i>
       </li>
 
       <li class='input-prepend'>
@@ -49,11 +52,12 @@
         <i class='add-on black' title='bank account'>#</i>
         {{ form.bank_account }}
       </li>
+
+      <li>
+        <button id='submit-button'
+                class='btn btn-large symbol-go green'
+                type='submit' />
+      </li>
     </ul>
-
-    <button id='submit-button'
-            class='btn btn-large symbol-go green'
-            type='submit' />
-
   </form>
 {% endblock content %}

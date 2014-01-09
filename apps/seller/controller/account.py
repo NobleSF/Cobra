@@ -54,7 +54,7 @@ def edit(request):
           seller_data = seller_form.cleaned_data
 
           seller.account.name         = seller_data['name']
-          seller.account.email        = seller_data['email']
+          seller.account.email        = seller_data['email'] or None
           seller.account.phone        = seller_data['phone']
           seller.account.bank_name    = seller_data['bank_name']
           seller.account.bank_account = seller_data['bank_account']
