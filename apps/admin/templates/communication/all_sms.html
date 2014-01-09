@@ -22,25 +22,25 @@
 
 {% block content %}
 
-  <form id='sms-form' action="{% url 'admin:send sms'%}" method="post">{% csrf_token %}
-    <ul class='inline' style="white-space: nowrap">
-      <li class='input-prepend'>
-        <i class='add-on symbol-phone black' title='phone number'></i>
-        {{ form.to_number }}
-      </li>
-      <li class='input-prepend'>
-        <i class='add-on symbol-orders black' title='order number'></i>
-        {{ form.order }}
-      </li>
-      <li>
-        <button type='submit' class='btn btn-large symbol-go green' title='send'></button>
-      </li>
-    </ul>
-    <ul class='inline'>
-      <li>{{ form.message }}</li>
-    </ul>
-  </form>
-
+<form id='sms-form' action="{% url 'admin:send sms'%}" method="post">{% csrf_token %}
+  <ul class='inline' style="white-space: nowrap">
+    <li class='input-prepend'>
+      <i class='add-on symbol-phone black' title='phone number'></i>
+      {{ form.to_number }}
+    </li>
+    <li class='input-prepend'>
+      <i class='add-on symbol-orders black' title='order number'></i>
+      {{ form.order }}
+    </li>
+    <li>
+      <button type='submit' class='btn btn-large symbol-go green' title='send'></button>
+    </li>
+  </ul>
+  <ul class='inline'>
+    <li>{{ form.message }}</li>
+  </ul>
+</form>
+<br>
 <table class='table table-hover table-condensed'>
 
   {% for sms in sms_messages %}
