@@ -70,8 +70,9 @@ def sellerAccounts(request):
                      .annotate(num_sellers=Count('sellers'))
                      .filter(
                       admin_type__isnull=True,
-                      num_sellers=1)
-                     .order_by('name'))
+                      num_sellers=1))
+  seller_accounts = sorted(seller_accounts, key=lambda a: a.sellers.all()[0].city)
+  seller_accounts.reverse()
   return render(request, 'account/seller_accounts.html', {'accounts':seller_accounts})
 
 @access_required('admin')
