@@ -14,7 +14,7 @@ $('.hold-product').click(function(){
 });
 
 $('.delete-product').click(function(){
-  if (confirm("Permanently Delete Product Forever?")){
+  if (confirm("wach bghtih imsah?")){
     var product_id = $(this).attr('data-product-id');
     approveProduct(product_id, 'delete');
   }
