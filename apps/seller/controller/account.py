@@ -88,7 +88,7 @@ def edit(request):
       seller_form.fields['bio_ol'].initial        = seller.bio_ol
 
       seller_form.fields['city'].initial          = seller.city
-      seller_form.fields['country'].initial       = seller.country
+      seller_form.fields['country'].initial       = seller.country if seller.country else '1'
       seller_form.fields['coordinates'].initial   = seller.coordinates
 
       seller_form.fields['bank_name'].initial     = seller.bank_name
