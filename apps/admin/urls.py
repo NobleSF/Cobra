@@ -34,7 +34,8 @@ urlpatterns += patterns('',
   url(r'^price_calc$', products.priceCalc, name='price calc'),
 
   #ORDERS
-  url(r'^all_orders$', orders.allOrders, name='all orders'),
+  url(r'^orders/(?P<year>\d+)?/(?P<week>\d+)?$', orders.orders, name='orders range'),
+  url(r'^orders$', orders.orders, name='orders'),
   url(r'^order/(?P<order_id>\d+)$', orders.order, name='order'),
   url(r'^ajax/update_order$', orders.updateOrder, name='update order'),
   url(r'^ajax/order_image_data$', orders.imageFormData, name='image form data'),

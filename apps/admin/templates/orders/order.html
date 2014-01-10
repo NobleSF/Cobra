@@ -26,7 +26,7 @@
 
 <input type='hidden' id='update-order-url' value='{% url 'admin:update order' %}'>
 
-<p><a href="{% url 'admin:all orders' %}">back to All Orders</a></p>
+<p><a href="{% url 'admin:orders' %}">back to Orders</a></p>
 
 <h3 class='copy-font'>
   ORDER {{ order.id }} at {{ order.created_at|date:"m/d  H:i" }}

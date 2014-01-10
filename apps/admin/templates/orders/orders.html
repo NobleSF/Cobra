@@ -27,6 +27,12 @@
 
 {% block content %}
 
+<a href="{% url 'admin:orders range' last_week.year last_week.week %}">Prev Week</a>
+<br>
+<span>{{ this_week.date|date:"Y-m-d" }}</span>
+<br>
+<a href="{% url 'admin:orders range' next_week.year next_week.week %}">Next Week</a>
+
 <table class='table table-hover table-condensed'>
   <!--<thead>
     <td>ORDER</td>
@@ -44,7 +50,7 @@
         </a>
       </td>
 
-      <td>{{ order.created_at|date:"m/d  H:i" }}</td>
+      <td>{{ order.created_at|date:"m-d  H:i" }}</td>
 
       <td>
         <a href="{{ order.products.all.0.get_absolute_url }}"
@@ -102,9 +108,5 @@
   {% endfor %}
 
 </table>
-
-<p class='text-center' style='text-decoration: underline; font-size: 20pt;'>
-  see Tom for more
-</p>
 
 {% endblock content %}

@@ -12,11 +12,33 @@ from apps.public.models import Order
 from settings.settings import CLOUDINARY
 
 @access_required('admin')
-def allOrders(request):
-  orders = Order.objects.all().order_by('created_at').reverse()[:50]
+def orders(request, year=None, week=None):
+  from datetime import datetime, timedelta
+  try:
+    year, week = int(year), int(week)
+  except Exception as e:
+    now = timezone.now()
+    year, week = now.year, int(now.strftime('%W'))
 
-  context = {'orders': orders}
-  return render(request, 'orders/all_orders.html', context)
+  this_week = datetime.strptime("%d%d1" % (year, week), "%Y%W%w") #monday
+  last_week = this_week - timedelta(days=7)
+  next_week = this_week + timedelta(days=7)
+
+  orders = Order.objects.filter(
+                          created_at__gte=this_week,
+                          created_at__lt=next_week
+                        ).order_by('created_at').reverse()
+
+  this_week = {'date':this_week, 'year': this_week.year, 'week':this_week.strftime('%W')}
+  last_week = {'date':last_week, 'year': last_week.year, 'week':last_week.strftime('%W')}
+  next_week = {'date':next_week, 'year': next_week.year, 'week':next_week.strftime('%W')}
+
+  context = {'orders':    orders,
+             'this_week': this_week,
+             'last_week': last_week,
+             'next_week': next_week}
+
+  return render(request, 'orders/orders.html', context)
 
 @access_required('admin')
 def order(request, order_id):
@@ -26,8 +48,7 @@ def order(request, order_id):
 
     return render(request, 'orders/order.html', {'order': order, 'CLOUDINARY':CLOUDINARY})
   except Exception as e:
-    print str(e)
-    return redirect('admin:all orders')
+    return redirect('admin:orders')
 
 @access_required('admin')
 def updateOrder(request):
