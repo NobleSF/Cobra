@@ -9,8 +9,8 @@ class NumberInput(TextInput):
 
 class AccountCreateForm(forms.Form):
   name          = forms.CharField(max_length=50, required=False)
-  phone         = forms.CharField(max_length=15)
-  password      = forms.CharField(max_length=100)
+  phone         = forms.CharField(widget=NumberInput(), max_length=15)
+  password      = forms.CharField(widget=NumberInput(), max_length=100)
 
   def clean_password(self):
     return processPassword(self.cleaned_data['password'])
@@ -63,7 +63,7 @@ class AccountLoginForm(forms.Form):
     return processPassword(self.cleaned_data['password'])
 
 class AccountPasswordForm(forms.Form):
-  new_password  = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'off'}))
+  new_password  = forms.CharField(widget=NumberInput(attrs={'autocomplete':'off'}))
 
 class SMSForm(forms.Form):
   to_number     = forms.CharField(widget=NumberInput(

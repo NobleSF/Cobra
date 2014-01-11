@@ -48,7 +48,11 @@
 
         <td class='phone'>
           <i class='symbol-phone black'></i>
-          {{ account.phone|default_if_none:"-----" }}
+          {% if account.phone %}
+            <a href="tel:{{ account.phone }}">{{ account.phone }}</a>
+          {% else %}
+            -----
+          {% endif %}
         </td>
 
         {% if request.session.admin_type in "country, master" %}

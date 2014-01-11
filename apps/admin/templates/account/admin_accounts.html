@@ -42,7 +42,7 @@
 
       <td class='phone'>
         <i class='symbol-phone black'></i>
-        {{ account.phone }}
+        <a href="tel:{{ account.phone }}">{{ account.phone }}</a>
       </td>
 
       {% if request.session.admin_type in "country, master"%}

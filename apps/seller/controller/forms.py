@@ -12,7 +12,7 @@ class SellerEditForm(forms.Form):
 
   name          = forms.CharField(required=False)
   email         = forms.EmailField(required=False)
-  phone         = forms.CharField(required=False)
+  phone         = forms.CharField(widget=NumberInput(), required=False)
 
   bank_name     = forms.CharField(required=False)
   bank_account  = forms.CharField(required=False)
