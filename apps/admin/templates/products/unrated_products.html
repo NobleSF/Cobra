@@ -36,7 +36,7 @@
 
   <table class='table table-hover table-condensed'>
     {% for product in products %}
-      {% product_review_row product %}
+      {% product_review_row product request.session.admin_type %}
     {% empty %}
       <tr>
         <td colspan='6'>
