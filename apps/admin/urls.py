@@ -1,26 +1,10 @@
 from django.conf.urls import patterns, include, url
-from apps.admin.controller import dashboard, account, products, orders, communication, site_management
-
-#ACCOUNT PAGES
-urlpatterns = patterns('',
-  #Todo: I'd like to add the word "secure" into all account and checkout pages
-    # just to give the user more peace of mind.
-
-  url(r'^create_admin$', account.createAdmin, name='create admin'),
-  url(r'^create_seller$', account.createSeller, name='create seller'),
-
-  url(r'^admin_accounts$', account.adminAccounts, name='admin accounts'),
-  url(r'^seller_accounts$', account.sellerAccounts, name='seller accounts'),
-
-  url(r'^edit_account/(?P<account_id>\d+)?$', account.edit, name='edit account'),
-  url(r'^reset_password/(?P<account_id>\d+)?$', account.resetPassword, name='reset password'),
-
-  url(r'^login_cheat$', account.loginCheat, name='login cheat'),
-)
+from apps.admin.controller import admin, account, products, orders, communication, site_management
 
 #DASHBOARD PAGES
-urlpatterns += patterns('',
-  url(r'^dashboard$', dashboard.dashboard, name='dashboard'),
+urlpatterns = patterns('',
+  url(r'^$', admin.home, name='home'),
+  url(r'^dashboard$', admin.home),
 
   #SELLER ACCOUNTS
   url(r'^ajax/approve_seller$', account.approveSeller, name='approve seller'),
@@ -46,8 +30,8 @@ urlpatterns += patterns('',
   url(r'^email$', communication.allEmail, name='all email'),
 
   #EXTRAS
-  url(r'^stats$', dashboard.stats, name='stats'),
-  url(r'^research$', dashboard.research, name='research'),
+  url(r'^stats$', admin.stats, name='stats'),
+  url(r'^research$', admin.research, name='research'),
 
   #SETTINGS
   url(r'^management/country$', site_management.country, name='country'),
@@ -57,6 +41,23 @@ urlpatterns += patterns('',
   url(r'^management/rating_subject$', site_management.ratingSubject, name='rating subject'),
   url(r'^management/shipping_option$', site_management.shippingOption, name='shipping option'),
   url(r'^management/image_object$', site_management.imageObject, name='image object'),
+)
+
+#ACCOUNT PAGES
+urlpatterns += patterns('',
+  #Todo: I'd like to add the word "secure" into all account and checkout pages
+    # just to give the user more peace of mind.
+
+  url(r'^create_admin$', account.createAdmin, name='create admin'),
+  url(r'^create_seller$', account.createSeller, name='create seller'),
+
+  url(r'^admin_accounts$', account.adminAccounts, name='admin accounts'),
+  url(r'^seller_accounts$', account.sellerAccounts, name='seller accounts'),
+
+  url(r'^edit_account/(?P<account_id>\d+)?$', account.edit, name='edit account'),
+  url(r'^reset_password/(?P<account_id>\d+)?$', account.resetPassword, name='reset password'),
+
+  url(r'^login_cheat$', account.loginCheat, name='login cheat'),
 )
 
 #MANUAL CACHE REBUILDs

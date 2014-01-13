@@ -55,13 +55,13 @@
 {% block content %}
   <div id='primary-nav'>
     <a id='orders'
-       href="{% url 'seller:management orders' %}"
+       href="{% url 'seller:orders' %}"
        class='symbol-orders gold'
        title='Sold Products'>
     </a>
 
     <a id='products'
-       href="{% url 'seller:management products' %}"
+       href="{% url 'seller:products' %}"
        class='symbol-products blue'
        title='Current Products'>
     </a>
@@ -92,7 +92,7 @@
 
     {% if 'admin_id' in request.session %}
       <a id='admin-dashboard'
-         href="{% url 'admin:dashboard' %}"
+         href="{% url 'admin:home' %}"
          class='symbol-admin-dashboard blue'
          title='Admin Dashboard'>
       </a>

@@ -49,7 +49,7 @@ def create(request):
 
   except Exception as e:
     ExceptionHandler(e, "in inventory.create")
-    return redirect('seller:management home')
+    return redirect('seller:home')
 
 @access_required('admin or seller')
 def edit(request, product_id):
@@ -91,7 +91,7 @@ def edit(request, product_id):
   except Exception as e:
     error_message = "in inventory.edit with product %s" % str(product_id)
     ExceptionHandler(e, error_message)
-    return redirect('seller:management home')
+    return redirect('seller:home')
 
 @access_required('seller') #it's the 'r' in crud, but is it even needed?
 def detail(request, product_id):
@@ -111,7 +111,7 @@ def remove(request, product_id): #seller deactivate product
     if request.session.get('admin_id'):
       messages.warning(request, "Unable to remove product.")
 
-  return redirect('seller:management products')
+  return redirect('seller:products')
 
 @access_required('admin or seller')
 @csrf_exempt

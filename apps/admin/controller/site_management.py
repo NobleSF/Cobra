@@ -17,7 +17,7 @@ def rebuildHomePage(request):
     return redirect('home')
   else:
     messages.error(request,"Error refreshing cache on homepage")
-    return redirect('admin:dashboard')
+    return redirect('admin:home')
 
 @access_required('admin')
 def rebuildProductPage(request=None, product_id=None):

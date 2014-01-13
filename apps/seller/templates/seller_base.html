@@ -22,7 +22,7 @@
       {% if 'admin_id' in request.session %}
         <li>
           <a id='admin-dashboard'
-             href="{% url 'admin:dashboard' %}"
+             href="{% url 'admin:home' %}"
              class='symbol-admin-dashboard blue'
              title='Admin Dashboard'>
           </a>
@@ -30,7 +30,7 @@
       {% endif %}
 
       <li>
-        <a href="{% url 'seller:management home' %}"
+        <a href="{% url 'seller:home' %}"
            class='symbol-go anou-blue' title='artisan account'>
         </a>
       </li>

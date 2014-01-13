@@ -1,11 +1,11 @@
 from django.conf.urls import patterns, include, url
-from controller import account, inventory, management, cloudinary_upload, custom_order
+from controller import seller, account, inventory, cloudinary_upload, custom_order
 
 urlpatterns = patterns('',
 
-  url(r'^$', management.home, name='management home'), #seller dashboard, live products
-  url(r'^products$', management.products, name='management products'), #products
-  url(r'^orders$', management.orders, name='management orders'), #orders
+  url(r'^$', seller.home, name='home'), #seller dashboard, live products
+  url(r'^products$', seller.products, name='products'), #products
+  url(r'^orders$', seller.orders, name='orders'), #orders
 
   #SELLER ACCOUNT
   url(r'^edit$', account.edit, name='edit'), #edit seller info

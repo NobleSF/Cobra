@@ -5,9 +5,9 @@ from datetime import datetime, timedelta
 from apps.admin.models import Account
 
 @access_required('admin')
-def dashboard(request):
+def home(request):
   #request.session['admin_type'] = 'master'
-  return render(request, 'dashboard.html', {})
+  return render(request, 'admin_home.html', {})
 
 def stats(request):
   from apps.seller.models import Product

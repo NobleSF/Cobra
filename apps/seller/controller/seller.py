@@ -16,10 +16,10 @@ def home(request):
     seller = Seller.objects.get(id=request.session['seller_id'])
     context = {'seller': seller}
   except Exception as e:
-    ExceptionHandler(e, "in management.home")
+    ExceptionHandler(e, "in seller.home")
     context = {'exception': e}
 
-  return render(request, 'management/home.html', context)
+  return render(request, 'seller_home.html', context)
 
 @access_required('seller')
 def products(request):
@@ -38,10 +38,10 @@ def products(request):
 
     context = {'seller': seller, 'products': products}
   except Exception as e:
-    ExceptionHandler(e, "in management.products")
+    ExceptionHandler(e, "in seller.products")
     context = {'exception': e}
 
-  return render(request, 'management/products.html', context)
+  return render(request, 'products.html', context)
 
 @access_required('seller')
 def orders(request):
@@ -55,7 +55,7 @@ def orders(request):
     context = {'seller': seller, 'products': sold_products}
 
   except Exception as e:
-    ExceptionHandler(e, "in management.products")
+    ExceptionHandler(e, "in seller.products")
     context = {'exception': e}
 
-  return render(request, 'management/orders.html', context)
+  return render(request, 'orders.html', context)
