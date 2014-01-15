@@ -177,7 +177,7 @@
 {% endif %}
 
 <table>
-  <thead><td style='width:100px;'></td><td align='right' style='width:100px;'></td></thead>
+  <thead><td style='width:100px;'></td><td align='right' style='width:200px;'></td></thead>
   <tr>
     <td>artisan price</td>
     <td>{{ order.products.all.0.price }} MAD</td>
@@ -185,7 +185,10 @@
 
   <tr>
     <td>shipping</td>
-    <td>{{ order.products.all.0.shipping_cost }} MAD</td>
+    <td style='white-space: nowrap'>
+      {{ order.products.all.0.shipping_cost }} MAD
+      ({{ order.products.all.0.weight }}g)
+    </td>
   </tr>
 
   <tr>
