@@ -9,29 +9,30 @@
   $('.has-info').click(function(){
     alert($(this).attr('data-info'));
   });
-
 </script>
 {% endblock javascript %}
 
 {% block css %}
 <style>
-
+  a:hover{text-decoration: none}
   .has-info{cursor: pointer;}
-
 </style>
 {% endblock css %}
 
 {% block logo %}
   <i class='symbol-orders black'></i>
+
+  <a href="{% url 'admin:orders range' last_week.year last_week.week %}">
+    <i class='symbol-down blue'></i>
+  </a>
+  <a href="{% url 'admin:orders range' next_week.year next_week.week %}">
+    <i class='symbol-up {% if next_week %}blue{%else%}gray{%endif%}'></i>
+  </a>
 {% endblock logo %}
 
 {% block content %}
 
-<a href="{% url 'admin:orders range' last_week.year last_week.week %}">Prev Week</a>
-<br>
-<span>{{ this_week.date|date:"Y-m-d" }}</span>
-<br>
-<a href="{% url 'admin:orders range' next_week.year next_week.week %}">Next Week</a>
+<span>{{ this_week.date|date:"d-m-Y" }} : {{ next_week.date|date:"d-m-Y" }}</span>
 
 <table class='table table-hover table-condensed'>
   <!--<thead>
@@ -63,14 +64,14 @@
         <i title='{{ order.seller_confirmed_at|date:"m/d  H:i" }}'
            class='symbol-SMS
                   {% if order.is_seller_confirmed  %}green has-info
-                  {% else %}red{% endif %}'
+                  {% else %}gray{% endif %}'
            data-info='{{ order.seller_confirmed_at|date:"m/d  H:i" }}'
            ></i>
 
         <i title='{{ order.shipped_at|date:"m/d  H:i" }}'
            class='symbol-SMS-shipping
                   {% if order.is_shipped %}green has-info
-                  {% else %}red{% endif %}'
+                  {% else %}gray{% endif %}'
            data-info='{{ order.shipped_at|date:"m/d  H:i" }}'
            ></i>
 
@@ -79,14 +80,14 @@
         <i title='{{ order.tracking_number }}'
            class='symbol-shipping
                   {% if order.tracking_number %}green has-info
-                  {% else %}red{% endif %}'
+                  {% else %}gray{% endif %}'
            data-info='{{ order.tracking_number }}'
            ></i>
 
         <i title='{{ order.seller_paid_at|date:"m/d  H:i" }}'
            class='symbol-money
               {% if order.is_seller_paid %}green has-info
-              {% else %}red{% endif %}'
+              {% else %}gray{% endif %}'
            data-info='{{ order.seller_paid_at|date:"m/d  H:i" }}'
            ></i>
       </td>

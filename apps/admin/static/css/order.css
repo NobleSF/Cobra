@@ -1,6 +1,12 @@
+a:hover{text-decoration: none;}
 .changeable{cursor: pointer;}
-
 .image-upload-div{height: 80px;}
+
+.product-id-number {
+  position: relative;
+  top: -6px;
+  left: -80px;
+}
 
 .hidden-fields{display: none;}
 .description{height: 5em;}

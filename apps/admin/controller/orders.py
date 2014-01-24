@@ -8,16 +8,16 @@ from apps.admin.utils.exception_handling import ExceptionHandler
 from django.contrib import messages
 from apps.communication.controller.email_class import Email
 from apps.communication.controller.sms import sendSMS
+from datetime import datetime, timedelta
 from apps.public.models import Order
 from settings.settings import CLOUDINARY
 
 @access_required('admin')
 def orders(request, year=None, week=None):
-  from datetime import datetime, timedelta
+  now = datetime.now()
   try:
     year, week = int(year), int(week)
   except Exception as e:
-    now = timezone.now()
     year, week = now.year, int(now.strftime('%W'))
 
   this_week = datetime.strptime("%d%d1" % (year, week), "%Y%W%w") #monday
@@ -31,7 +31,9 @@ def orders(request, year=None, week=None):
 
   this_week = {'date':this_week, 'year': this_week.year, 'week':this_week.strftime('%W')}
   last_week = {'date':last_week, 'year': last_week.year, 'week':last_week.strftime('%W')}
-  next_week = {'date':next_week, 'year': next_week.year, 'week':next_week.strftime('%W')}
+  if next_week < now:
+    next_week = {'date':next_week, 'year': next_week.year, 'week':next_week.strftime('%W')}
+  else: next_week = None
 
   context = {'orders':    orders,
              'this_week': this_week,
@@ -45,8 +47,14 @@ def order(request, order_id):
   try:
     order = Order.objects.get(id=order_id)
     order.shipping_address = order.cart.shipping_address.replace('\n','<br>')
+    this_week = {'date': order.created_at,
+                 'year': order.created_at.year,
+                 'week': order.created_at.strftime('%W')}
 
-    return render(request, 'orders/order.html', {'order': order, 'CLOUDINARY':CLOUDINARY})
+    context = {'order': order,
+               'this_week': this_week,
+               'CLOUDINARY':CLOUDINARY}
+    return render(request, 'orders/order.html', context)
   except Exception as e:
     return redirect('admin:orders')
 

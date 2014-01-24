@@ -1,6 +1,10 @@
 {% extends "admin_base.html" %}
 {% load url from future %}
 
+{% block title %}
+  Order {{ order.id }}
+{% endblock title %}
+
 {% block javascript %}
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/vendor/jquery.ui.widget.min.js'></script>
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.iframe-transport.min.js'></script>
@@ -12,43 +16,54 @@
   <link href="{{ STATIC_URL }}admin/css/order.css" rel="stylesheet">
 {% endblock css %}
 
+{% block logo %}
+  <a href="{% url 'admin:orders range' this_week.year this_week.week %}">
+    <i class='symbol-orders gold'></i>
+  </a>
+  <i>{{ order.id }}</i>
+{% endblock logo %}
+
 {% block content %}
-
-
 <!-- the location to upload photos to -->
 <input type='hidden' id='upload-url' value='{{ CLOUDINARY.upload_url }}'>
-
 <!-- to give cloudinary so they can tell our server when upload is complete -->
 <input type='hidden' id='upload-complete-url' value="{% url 'seller:complete upload' %}">
-
 <!-- for JS to check upload completion and get thumb_url -->
 <input type='hidden' id='upload-check-url' value="{% url 'seller:check image upload' %}">
-
 <input type='hidden' id='update-order-url' value='{% url 'admin:update order' %}'>
 
-<p><a href="{% url 'admin:orders' %}">back to Orders</a></p>
-
 <h3 class='copy-font'>
-  ORDER {{ order.id }} at {{ order.created_at|date:"m/d  H:i" }}
+  <a href="{% url 'confirmation' %}?checkout_id={{order.cart.checkout_id}}"
+     target='_blank'>
+    {{order.cart.checkout_id}}
+  </a>
 </h3>
 
 <h3 class='copy-font'>
+  {{ order.created_at|date:"d-m-Y  H:i" }}
+</h3>
+
+<h3 class='copy-font'>
+
+  <i class='symbol-opentag black' title='product id'></i>
+  <span class='product-id-number'>{{ order.products.all.0.id }}</span>
+
   <a href="{{ order.products.all.0.get_absolute_url }}" target='_blank'>
     {{ order.products.all.0.title }}
-  </a><br>
-  by
-  {{ order.seller.name }}<br>
-  from
-  {{ order.seller.city }}, Morocco
+  </a>
 </h3>
 
-<p>phone: {{ order.seller.account.phone }}</p>
+<h3 class='copy-font'>
+  {{ order.seller.name }},
+  <a href="tel:{{ order.seller.account.phone }}"><i class="symbol-phone blue"></i></a>
+  {{ order.seller.account.phone }}
+</h3>
 
 <table>
   <thead><td style='width:100px;'></td><td></td></thead>
   <tr>
     <td>
-      <i class='symbol-SMS {% if order.is_seller_confirmed  %}green{% else %}red{% endif %}'></i>
+      <i class='symbol-SMS {% if order.is_seller_confirmed  %}green{% else %}gray{% endif %}'></i>
     </td>
     <td>
       {% if order.is_seller_confirmed  %}{{ order.seller_confirmed_at|date:"m/d  H:i" }}{% endif %}
@@ -57,7 +72,7 @@
 
   <tr>
     <td>
-      <i class='symbol-SMS-shipping {% if order.is_shipped %}green{% else %}red{% endif %}'></i>
+      <i class='symbol-SMS-shipping {% if order.is_shipped %}green{% else %}gray{% endif %}'></i>
     </td>
     <td>
       {% if order.is_shipped %}{{ order.shipped_at|date:"m/d  H:i" }}{% endif %}
@@ -66,7 +81,7 @@
 
   <tr>
     <td>
-      <i class='symbol-shipping {% if order.tracking_number %}green{% else %}red{% endif %}'></i>
+      <i class='symbol-shipping {% if order.tracking_number %}green{% else %}gray{% endif %}'></i>
     </td>
     <td>
       <a href="{{ order.tracking_url }}" target='_blank'>
@@ -79,7 +94,7 @@
     <td>
       <i class='symbol-money
         {% if order.is_seller_paid %}green
-        {% else %}red changeable seller_paid
+        {% else %}gray changeable seller_paid
         {% endif %}'
       data-order-id='{{order.id}}'
       ></i>
@@ -131,7 +146,7 @@
       </div>
 
       {% if order.is_seller_paid %}
-        marked paid on {{ order.seller_paid_at|date:"m/d  H:i" }}
+        {{ order.seller_paid_at|date:"d-m-Y  H:i" }}
       {% endif %}
 
     </td>
@@ -140,21 +155,12 @@
 <br>
 
 <p>
-  Customer Confirmation:
-  <a href="{% url 'confirmation' %}?checkout_id={{order.cart.checkout_id}}"
-     target='_blank'>
-    {{order.cart.checkout_id}}
-  </a>
-</p>
-
-<p>
-  Shipping Address:<br>
   <div style='border: solid 1px black'>
     {% if order.shipping_address %}{{ order.shipping_address|safe }}{% endif %}
   </div>
 </p>
 
-<p>Notes:<br>
+<p>
   <div id='notes'
        style='border: solid 1px black'>
     {% if order.cart.notes %}
