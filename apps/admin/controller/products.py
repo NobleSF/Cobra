@@ -13,13 +13,12 @@ def productLookup(request):
   context = {}
   if request.method == "POST":
     try:
-      product = Product.objects.get(id=request.POST.get('product_id'))
-
+      context['product'] = Product.objects.get(id=request.POST.get('product_id'))
     except Product.DoesNotExist:
       context['problem'] = "No Product with that ID"
     except Exception as e:
       context['problem'] = str(e)
-  return render(request, 'products/product_lookup.html', {'product':product})
+  return render(request, 'products/product_lookup.html', context)
 
 @access_required('admin')
 def reviewProducts(request):
