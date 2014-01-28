@@ -193,7 +193,7 @@
     <td>shipping</td>
     <td style='white-space: nowrap'>
       {{ order.products.all.0.shipping_cost }} MAD
-      ({{ order.products.all.0.weight }}g)
+      ({{ order.products.all.0.weight }}g, {{ order.products.all.0.metric_dimensions }})
     </td>
   </tr>
 
