@@ -6,7 +6,7 @@ from apps.admin.utils.exception_handling import ExceptionHandler
 from django.forms.models import modelformset_factory
 from django.utils import timezone
 import json
-from apps.seller.models import Product
+from apps.seller.models import Product, ShippingOption
 
 @access_required('admin')
 def productLookup(request):
@@ -118,3 +118,40 @@ def priceCalc(request):
   from apps.admin.models import Currency
   exchange_rate = Currency.objects.get(code='MAD').exchange_rate_to_USD
   return render(request, 'products/price_calc.html', {'exchange_rate':exchange_rate})
+
+def getShippingCost(request):
+  from apps.seller.controller.shipping import calculateShippingCost
+
+  if request.method == "GET":
+    if request.GET.get('product_id'):
+      try:
+        shipping_cost = Product.objects.get(id=request.GET['product_id']).shipping_cost
+      except: pass
+
+    elif request.GET.get('weight') and request.GET.get('shipping_option'):
+      try:
+        shipping_option = ShippingOption.objects.get(name=request.GET['shipping_option'])
+        shipping_cost = calculateShippingCost(request.GET['weight'], shipping_option)
+      except: pass
+
+  try:
+    response = {'shipping_cost': shipping_cost}
+    return HttpResponse(json.dumps(response), content_type='application/json')
+  except:
+    return HttpResponse(status=400)#bad request
+
+def getProductData(request):
+  if request.method == "GET" and request.GET.get('product_id'):
+    try:
+      product = Product.objects.get(id=request.GET['product_id'])
+      response = {'price':            product.price,
+                  'weight':           product.weight,
+                  'shipping_option':  product.shipping_options.all()[0].name,
+                  'shipping_cost':    product.shipping_cost
+                  }
+      return HttpResponse(json.dumps(response), content_type='application/json')
+
+    except:
+      return HttpResponse(status=500)#server error
+  else:
+    return HttpResponse(status=400)#bad request

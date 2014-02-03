@@ -4,48 +4,111 @@
 {% block javascript %}
   <script>
 
-    $('.editable').keyup(function(){
-      $('#anou_fee').val('')
-      $('#local_price').val('')
-      $('#usd_price').val('')
-      $('#wepay_fee').val('')
-      $('#anou_store_price').val('')
+    $('#product-submit').click(function(){
+      product_id = $('#product-id').val();
+      clearData(except=$('#product-id'));
+      $('#product-submit').removeClass('green').removeClass('red').addClass('gray');
+      $('.shipping-option').removeClass('gray').addClass('green');
+      getProductData(product_id);
     });
 
-    $('.editable').blur(function(){
-      var artisan_price = parseInt($('#artisan_price').val());
-      var shipping_cost = parseInt($('#shipping_cost').val());
-      var exchange_rate = parseFloat($('#exchange_rate').val());
+    $('.shipping-option').click(function(){
+      shipping_option = $(this).attr('id');
+      weight = $('#weight').val();
+      clearData(except=$('#weight').add('#artisan-price'));
+      $('.shipping-option').removeClass('gray').addClass('green');
+      $(this).removeClass('green').addClass('gray');
+      getShippingCost(weight, shipping_option);
+    });
+
+    $('input').keyup(function(){ //input:not([disabled])
+      $('input[disabled=true]').val('');
+    });
+
+    $('input').blur(function(){
+      completeData();
+    });
+
+    function clearData(except){
+      items = $('input').not('#exchange-rate')
+      if (except){items = items.not(except)}
+      items.val('');
+    }
+
+    function completeData(){
+      var artisan_price = parseInt($('#artisan-price').val());
+      var shipping_cost = parseInt($('#shipping-cost').val());
+      var exchange_rate = parseFloat($('#exchange-rate').val());
 
       if (artisan_price > 0 && shipping_cost > 0 && exchange_rate > 0){
 
         var anou_fee = artisan_price * (10 / 90)
         var local_price = artisan_price + shipping_cost + anou_fee
         var usd_price = local_price / exchange_rate
+
+        $('#anou-fee').val(anou_fee.toFixed(2))
+        $('#local-price').val(local_price.toFixed(2))
+        $('#local-price-copy').val(local_price.toFixed(2))
+        $('#usd-price').val(usd_price.toFixed(2))
+
         var wepay_fee = 0.3 + ((0.029/(1-0.029))*(usd_price + 0.3))
         var anou_store_price = usd_price + wepay_fee
+        $('#wepay-fee').val(wepay_fee.toFixed(2))
+        $('#anou-price').val(anou_store_price.toFixed(2))
 
-        $('#anou_fee').val(anou_fee.toFixed(2))
-        $('#local_price').val(local_price.toFixed(2))
-        $('#usd_price').val(usd_price.toFixed(2))
-        $('#wepay_fee').val(wepay_fee.toFixed(2))
-        $('#anou_store_price').val(anou_store_price.toFixed(2))
+        var ebay_fee = 0.3 + ((0.129/(1-0.129))*(usd_price + 0.3))
+        var ebay_price = usd_price + ebay_fee
+        $('#ebay-fee').val(ebay_fee.toFixed(2))
+        $('#ebay-price').val(ebay_price.toFixed(2))
+
+        var etsy_fee = 0.4 + ((0.065/(1-0.065))*(usd_price + 0.4))
+        var etsy_price = usd_price + etsy_fee
+        $('#etsy-fee').val(etsy_fee.toFixed(2))
+        $('#etsy-price').val(etsy_price.toFixed(2))
+
       }
-    })
+    }
+
+    function getProductData(product_id){
+      url = "{% url 'admin:product data' %}";
+      data = {'product_id': product_id};
+      $.ajax({url: url, data: data})
+      .done(function(data){
+        $('#artisan-price').val(data.price);
+        $('#weight').val(data.weight);
+        $('.shipping-option').removeClass('gray').addClass('green');
+        $('#'+data.shipping_option).removeClass('green').addClass('gray');
+        $('#shipping-cost').val(data.shipping_cost);
+        completeData();
+      })
+      .fail(function(){
+        $('#product-submit').removeClass('green').addClass('red');
+      });
+    }
+
+    function getShippingCost(weight, shipping_option){
+      url = "{% url 'admin:shipping cost' %}";
+      data = {'weight': weight, 'shipping_option': shipping_option};
+      $.ajax({url: url, data: data})
+      .done(function(data){
+        $('#shipping-cost').val(data.shipping_cost);
+        completeData();
+      })
+      .fail(function(){
+        $('#weight').val('');
+        $('.shipping-option').removeClass('gray').addClass('green');
+      });
+    }
 
   </script>
 {% endblock javascript %}
 
 {% block css %}
   <style>
-    #fields li{display: block;}
-    #fields i[class*="symbol-"] {font-size: 18pt;}
-    #fields td.label-for{
-      font-size: 14pt;
-      text-align: right;
-      padding: 0 15px 0 0;
-      white-space: nowrap;
-    }
+    #body li i{font-size: 18pt;}
+    i.green {cursor: pointer;}
+    #store-price-section ul li{display: block;}
+
   </style>
 {% endblock css %}
 
@@ -54,78 +117,109 @@
 {% endblock logo %}
 
 {% block content %}
-  <table id='fields' class='unstyled'>
 
-    <tr>
-      <td class='label-for'>Artisan Price</td>
-      <td class='input-prepend input-append'>
-        <i class='add-on symbol-money black' title='username'></i>
-        <input id='artisan_price' type='text' class='editable'>
-        <i class='add-on' title='username'>Dh</i>
-      </td>
-    </tr>
+<ul id='inputs-section' class='inline'>
+  <li class='input-prepend input-append'>
+    <i class='add-on symbol-solidtag black'></i>
+    <input id='product-id' type='text' class='input-mini'>
+    <i id='product-submit' class='add-on symbol-go green'></i>
+  </li>
 
-    <tr>
-      <td class='label-for'>Shipping Cost</td>
-      <td class='input-prepend input-append'>
-        <i class='add-on symbol-shipping black' title='username'></i>
-        <input id='shipping_cost' type='text' class='editable'>
-        <i class='add-on' title='username'>Dh</i>
-      </td>
-    </tr>
+  <li class='input-prepend input-append'>
+    <i class='add-on symbol-weight black'></i>
+    <input id='weight' type='text' class='input-mini'>
+    <i id='Package' class='add-on green shipping-option'>P</i>
+    <i id='Envelope' class='add-on green shipping-option'>E</i>
+  </li>
 
-    <tr>
-      <td class='label-for'>Anou Fee</td>
-      <td class='input-prepend input-append'>
-        <i class='add-on black' title='username'>%</i>
-        <input id='anou_fee' type='text' disabled='disabled'>
-        <i class='add-on' title='username'>Dh</i>
-      </td>
-    </tr>
+</ul>
 
-    <tr>
-      <td class='label-for'>Local Price</td>
-      <td class='input-prepend input-append'>
-        <i class='add-on symbol-money black' title='username'></i>
-        <input id='local_price' type='text' disabled='disabled'>Dh
-        <i class='add-on' title='username'>Dh</i>
-      </td>
-    </tr>
+<ul id='local-price-section' class='inline'>
+  <li class='input-prepend'>
+    <i class='add-on symbol-money black'></i>
+    <input id='artisan-price' type='text' class='input-mini'>
+  </li>
 
-    <tr>
-      <td class='label-for'>Exchange Rate</td>
-      <td class='input-prepend input-append'>
-        <i class='add-on symbol-currency-exchange black' title='username'></i>
-        <input id='exchange_rate' type='text' value='{{exchange_rate}}' class='editable'>
-        <i class='add-on' title='username'>Dh/USD</i>
-      </td>
-    </tr>
+  <li class='input-prepend'>
+    <i class='add-on symbol-shipping black'></i>
+    <input id='shipping-cost' type='text' class='input-mini'>
+  </li>
 
-    <tr>
-      <td class='label-for'>USD Price</td>
-      <td class='input-prepend input-append'>
-        <i class='add-on symbol-money black' title='username'></i>
-        <input id='usd_price' type='text' disabled='disabled'>
-        <i class='add-on' title='username'>USD</i>
-      </td>
-    </tr>
+  <li class='input-prepend'>
+    <i class='add-on black'>%</i>
+    <input id='anou-fee' type='text' class='input-mini' disabled='true'>
+  </li>
 
-    <tr>
-      <td class='label-for'>Wepay Fee</td>
-      <td class='input-prepend input-append'>
-        <i class='add-on symbol-money black' title='username'></i>
-        <input id='wepay_fee' type='text' disabled='disabled'>
-        <i class='add-on' title='username'>USD</i>
-      </td>
-    </tr>
+  <li><i class='add-on black'>=</i></li>
 
-    <tr>
-      <td class='label-for'>Anou Store Price</td>
-      <td class='input-prepend input-append'>
-        <i class='add-on symbol-money black' title='username'></i>
-        <input id='anou_store_price' type='text' disabled='disabled'>
-        <i class='add-on' title='username'>USD</i>
-      </td>
-    </tr>
-  </table>
+  <li class='input-append'>
+    <input id='local-price' type='text' class='input-mini' disabled='true'>
+    <i class='add-on black'>Dh</i>
+  </li>
+</ul>
+
+<ul id='currency-exchange-section' class='inline'>
+  <li>
+    <input id='local-price-copy' type='text' class='input-mini' disabled='true'>
+  </li>
+
+  <li><i class='add-on black'>&divide;</i></li>
+
+  <li class='input-prepend'>
+    <i class='add-on symbol-currency-exchange black'></i>
+    <input id='exchange-rate' type='text' class='input-mini' value='{{exchange_rate}}'>
+  </li>
+
+  <li><i class='add-on black'>=</i></li>
+
+  <li class='input-prepend'>
+    <i class='add-on black'>$</i>
+    <input id='usd-price' type='text' class='input-mini' disabled='true'>
+  </li>
+</ul>
+
+<ul id='store-price-section' class='inline'>
+  <li>
+    <ul class='unstyled'>
+      <li>eBay</li>
+      <li class='input-prepend'>
+        <i class='add-on black'>%</i>
+        <input id='ebay-fee' type='text' class='input-mini' disabled='true'>
+      </li>
+
+      <li class='input-prepend'>
+        <i class='add-on black'>$</i>
+        <input id='ebay-price' type='text' class='input-mini' disabled='true'>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <ul class=''>
+      <li>Etsy</li>
+      <li class='input-prepend'>
+        <i class='add-on black'>%</i>
+        <input id='etsy-fee' type='text' class='input-mini' disabled='true'>
+      </li>
+
+      <li class='input-prepend'>
+        <i class='add-on black'>$</i>
+        <input id='etsy-price' type='text' class='input-mini' disabled='true'>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <ul class=''>
+      <li>Anou Store</li>
+      <li class='input-prepend'>
+        <i class='add-on black'>%</i>
+        <input id='wepay-fee' type='text' class='input-mini' disabled='true'>
+      </li>
+
+      <li class='input-prepend'>
+        <i class='add-on black'>$</i>
+        <input id='anou-price' type='text' class='input-mini' disabled='true'>
+      </li>
+    </ul>
+  </li>
+</ul>
 {% endblock content %}

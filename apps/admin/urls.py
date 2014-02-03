@@ -16,6 +16,8 @@ urlpatterns = patterns('',
   url(r'^ajax/rate_product$', products.rateProduct, name='rate product'),
   url(r'^product_lookup$', products.productLookup, name='product lookup'),
   url(r'^price_calc$', products.priceCalc, name='price calc'),
+  url(r'^get_ship_cost$', products.getShippingCost, name='shipping cost'),
+  url(r'^get_prod_data$', products.getProductData, name='product data'),
 
   #ORDERS
   url(r'^orders/(?P<year>\d+)?/(?P<week>\d+)?$', orders.orders, name='orders range'),
