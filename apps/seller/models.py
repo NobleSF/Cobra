@@ -485,7 +485,7 @@ class Product(models.Model):
   def etsy_fee(self): #Etsy + EtsyCheckout fee is $0.45 plus 6.5% of total
     if self.usd_price:
       fee = 0.40
-      fee+= (0.065/(1-0.065)) * (self.usd_price + fee)
+      fee += (0.065/(1-0.065)) * (self.usd_price + fee)
       return fee
     else:
       return 0

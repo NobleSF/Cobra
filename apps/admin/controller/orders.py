@@ -97,7 +97,7 @@ def updateOrder(request):
     return HttpResponse(status=200)#OK
 
   else:
-    return HttpResponse(status=402)#bad request
+    return HttpResponse(status=402)#bad request, payment required
 
 @access_required('admin')
 @csrf_exempt #find a way to add csrf
@@ -140,4 +140,4 @@ def imageFormData(request):
       return HttpResponse(status=500)#server error
 
   else:
-    return HttpResponse(status=402)#bad request
+    return HttpResponse(status=402)#bad request, payment required
