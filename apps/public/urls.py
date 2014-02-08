@@ -1,25 +1,34 @@
 from django.conf.urls import patterns, include, url
-from controller import home, checkout, product, store
+from controller import home, checkout, product, store, command
 
 urlpatterns = patterns('',
-  #home (site homepage) url defined in anou/urls.py
+
+  #homepage url defined in anou/urls.py
   url(r'^load_products$', home.loadProducts, name='load products'),
   url(r'^about$', home.about, name='about'),
 
-  # product page at /product/123-slug
-  url(r'^product/(?P<product_id>\d+)-(?P<slug>\S+)$', product.home, name='product_w_slug'),
+  # PRODUCT PAGE at /product/123-slug
+  url(r'^product/(?P<product_id>\d+)-(?P<slug>\S+)$', product.home,
+      name='product_w_slug'),
   url(r'^product/(?P<product_id>\d+)$', product.home, name='product'),
 
-  # store page at /store/123 represents a seller profile
-  url(r'^store/(?P<seller_id>\d+)-(?P<slug>\S+)', store.home, name='store_w_slug'),
+  # COMMANDS / CUSTOM ORDERS
+  url(r'^product/command_request$', command.request, name='command request'),
+
+  # STORE PAGE at /store/123 represents a seller profile
+  url(r'^store/(?P<seller_id>\d+)-(?P<slug>\S+)', store.home,
+      name='store_w_slug'),
   url(r'^store/(?P<seller_id>\d+)$', store.home, name='store'),
 
-  #checkout pages
+  # CHECKOUT PAGES
   url(r'^checkout/cart$', checkout.cart, name='cart'),
-  url(r'^checkout/cart-add/(?P<product_id>\d+)$', checkout.cartAdd, name='cart-add'),
-  url(r'^checkout/cart-remove/(?P<product_id>\d+)$', checkout.cartRemove, name='cart-remove'),
+  url(r'^checkout/cart-add/(?P<product_id>\d+)$', checkout.cartAdd,
+      name='cart-add'),
+  url(r'^checkout/cart-remove/(?P<product_id>\d+)$', checkout.cartRemove,
+      name='cart-remove'),
   url(r'^checkout/ajax/cart_save$', checkout.cartSave, name='cart-save'),
-  url(r'^checkout/ajax/admin_checkout$', checkout.adminCheckout, name='admin checkout'),
+  url(r'^checkout/ajax/admin_checkout$', checkout.adminCheckout,
+      name='admin checkout'),
   url(r'^checkout/confirmation$', checkout.confirmation, name='confirmation'),
 
   #testing

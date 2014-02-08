@@ -56,6 +56,10 @@
   line-height: 1em;
 }
 
+#custom-order{
+  display: none;
+}
+#custom-order i{font-size: 18pt;}
 #custom-order-button, #custom-order-submit-button, #custom-order-success, #custom-order-fail {
   width: 90%;
   padding: 0.3em 0.3em;
@@ -66,9 +70,11 @@
 #custom-order-submit-button {
   margin: 0;
 }
-#cancel-custom-order-button{
-  margin: 10px 0;
+#custom-order input.error, #custom-order textarea.error{
+  background-color: rgb(255, 200, 200);
 }
+
+#custom-order-success, #custom-order-fail{display: none;}
 #custom-order-button h2, #custom-order-submit-button h2, #custom-order-success h2, #custom-order-fail h2 {
   font-size: 12pt;
   line-height: 14pt;

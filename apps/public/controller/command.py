@@ -11,16 +11,21 @@ from settings.people import Tom, Dan
 from apps.communication.controller.email_class import Email
 
 @csrf_exempt
-def requestCustomOrder(request): #post with product_id, customer_email, message
-  if request.method == 'POST' and request.POST.get('customer_email'):
+def request(request):
+  if request.method == 'POST' and request.POST.get('email'):
     try:
       data = {
         'product':        Product.objects.get(id=request.POST['product_id']),
-        'customer_email': request.POST['customer_email'],
+        'email':          request.POST['email'],
         'message':        request.POST['message'],
+        'length':         request.POST.get('length', "--"),
+        'width':          request.POST.get('length', "--"),
       }
 
-      Email('custom_order/request', data).sendTo([Dan.email, data['customer_email']])
+      data['message'] += (" width %s cm, length %s cm" %
+                          (data['width'], data['length']))
+
+      Email('custom_order/request', data).sendTo([Dan.email, data['email']])
       return HttpResponse(status=200)
 
     except Exception as e:

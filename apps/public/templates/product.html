@@ -29,7 +29,7 @@
 {% endblock additional_meta_tags %}
 
 {% block javascript %}
-  <script type="text/javascript" src="{{ STATIC_URL }}public/js/product.min.js?v=2"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}public/js/product.js?v=2"></script>
 {% endblock javascript %}
 
 {% block css %}
@@ -200,45 +200,7 @@
       {% endif %}
 
       <a id='custom-order-button' class='btn btn-info'>
-        <h2>
-          Request Custom Changes
-        </h2>
-      </a>
-    </div>
-
-    <div id='custom-order' class='span4' style='display: none;'>
-      <a id='cancel-custom-order-button' class='btn btn-small btn-danger'>
-        <h2>
-          Cancel Request
-        </h2>
-      </a>
-
-      <input id='custom-order-product-id'
-             name='custom-order-product-id'
-             type='hidden' value='{{ product.id }}'>
-      <br>
-      <label for='customer-email'>Your Email Address</label>
-      <input id='custom-order-customer-email'
-             name='custom-order-customer-email' type='text'>
-      <br>
-      <label for='message'>Briefly describe the changes you would like</label>
-      <textarea id='custom-order-message'
-                name='custom-order-message' rows='4'></textarea>
-
-      <a id='custom-order-submit-button' class='btn btn-success'>
-        <h2>
-          Send Request
-        </h2>
-      </a>
-      <a id='custom-order-success' class='btn btn-info disabled' style='display: none;'>
-        <h2>
-          Success. Check your email for confirmation.
-        </h2>
-      </a>
-      <a id='custom-order-fail' class='btn btn-warning disabled' style='display: none;'>
-        <h2>
-          Oops! Something went wrong. Please email hello@theanou.com with your request.
-        </h2>
+        <h2>Request Custom Order</h2>
       </a>
     </div>
 
@@ -274,10 +236,91 @@
 
   </div>
 
+  <div id='custom-order'>
+    <input id='custom-order-url' type='hidden'
+           value="{% url 'command request'%}">
+
+    <div class='row-fluid'><div class='span12'><hr></div></div>
+    <div class='row-fluid'><div class='span12'>
+      <h4>Custom Order Request</h4>
+    </div></div>
+
+    <div id='custom-order-form' class='row-fluid'>
+      <div class='span6'>
+        <!-- hidden elements -->
+        <input id='custom-order-product-id'
+               name='custom-order-product-id'
+               type='hidden' value='{{ product.id }}'>
+
+        <textarea id='custom-order-message'
+                  name='custom-order-message' rows='5'
+                  placeholder='Briefly describe the changes you would like.'
+                  style='width: 100%;'
+        ></textarea>
+      </div>
+
+      <div class='span6'>
+        <div class='input-prepend input-append'>
+          <i class='symbol-length add-on'></i>
+          <input id='custom-order-length' class='input-mini'
+                 name='custom-order-length' type='tel'
+                 placeholder='length'>
+          <i class='add-on'>cm</i>
+        </div>
+        &nbsp;
+        <div class='input-prepend input-append'>
+          <i class='symbol-width add-on'></i>
+          <input id='custom-order-width' class='input-mini'
+                 name='custom-order-width' type='tel'
+                 placeholder='width'>
+          <i class='add-on'>cm</i>
+        </div>
+
+        <br>
+        <div class='input-prepend'>
+          <i class='symbol-email add-on'></i>
+          <input id='custom-order-email' class='input-xlarge'
+                 name='custom-order-email' type='text'
+                 placeholder='your email'>
+        </div>
+
+        <a id='custom-order-submit-button' class='btn btn-success'>
+          <h2>
+            Send Request
+          </h2>
+        </a>
+
+      </div>
+    </div>
+
+    <div class='row-fluid'>
+      <div id='custom-order-confirmation' class='span12'>
+
+        <a id='custom-order-success' class='btn btn-info disabled'>
+          <h2>
+            Sent! Check your email for confirmation.
+          </h2>
+        </a>
+        <a id='custom-order-fail' class='btn btn-warning disabled'>
+          <h2>
+            Oops! Something went wrong.
+            Sorry, please email <u>hello@theanou.com</u> with your request.
+          </h2>
+        </a>
+      </div>
+    </div>
+    <div class='row-fluid'><div class='span12'><hr></div></div>
+  </div>
+
+<!-- UTILITIES -->
+
   {% if product.utilities %}
-    <h4 class='utilities-disclaimer copy-font'>
-      This Original Item was Handmade using the Local Materials and Tools Below
-    </h4>
+    <div class='row-fluid'><div class='span12'>
+      <h4 class='utilities-disclaimer copy-font'>
+        This Original Item was Handmade using
+        the Local Materials and Tools Below
+      </h4>
+    </div></div>
   {% endif %}
 
   <div id='utilities'><div class='row-fluid'>
