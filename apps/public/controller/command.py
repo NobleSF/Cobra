@@ -17,7 +17,7 @@ def request(request):
       data = {
         'product':        Product.objects.get(id=request.POST['product_id']),
         'email':          request.POST['email'],
-        'message':        request.POST['message'],
+        'message':        request.POST.get('message', ""),
         'length':         request.POST.get('length', "--"),
         'width':          request.POST.get('length', "--"),
       }

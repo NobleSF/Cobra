@@ -42,34 +42,48 @@ $('.product').hover(
 $('#custom-order-button').click(function(){
   $('#custom-order').show();
   $.scrollTo($('#custom-order').first(), 600);
-  $.scrollTo("-=50px", 100, {axis:'y'});
-  //scrollTo #custom-order
+  //$.scrollTo("-=50px", 100, {axis:'y'});
+});
+
+$('.change-size').click(function(){
+  $('.change-size').hide();
+  $('#size-form').show();
+});
+$('.change-quantity').click(function(){
+  $('.change-quantity').hide();
+  $('#quantity-form').show();
+});
+$('.change-description').click(function(){
+  $('.change-description').hide();
+  $('#description-form').show();
 });
 
 $('#custom-order-submit-button').click(function(){
-  if ($('#custom-order-message').val() == "") {
-    $('#custom-order-message').addClass('error');
-  }else if ($('#custom-order-email').val() == "") {
+  if ($('#custom-order-email').val() == "") {
     $('#custom-order-email').addClass('error');
   }else{
     $('#custom-order-submit-button h2').html("Sending...");
     $('#custom-order-submit-button').attr('disabled', 'True')
 
+    var size = $('#custom-order-width-A').val()
+
     $.ajax({url: $('#custom-order-url').val(),
             data: { 'product_id': $('#custom-order-product-id').val(),
                     'email': $('#custom-order-email').val(),
-                    'length': $('#custom-order-width').val(),
-                    'width': $('#custom-order-length').val(),
-                    'message': $('#custom-order-message').val()
+                    'size': size,
+                    'description': $('#custom-order-message').val()
                   },
             type: "POST"})
     .done(function(){
-      $('#custom-order-form').hide();// hide form
-      $('#custom-order-success').css('display', 'block');// show success
+      $('#custom-order-submit-button').hide();// hide form
+      $('#custom-order-success').show();// show success
     })
     .fail(function(){
-      $('#custom-order-fail').css('display', 'block');// show fail
-      $('#custom-order-submit-button').hide(); //h ide submit button
+      $('#custom-order-fail').show();// show fail
+      $('#custom-order-submit-button').hide(); //hide submit button
+    })
+    .always(function(){
+      $('#custom-order *').attr('disabled', 'True');
     })
   }
 });

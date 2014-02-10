@@ -33,7 +33,7 @@
 {% endblock javascript %}
 
 {% block css %}
-  <link href="{{ STATIC_URL }}public/css/product.css?v=2" rel="stylesheet">
+  <link href="{{ STATIC_URL }}public/css/product.css?v=3" rel="stylesheet">
 {% endblock css %}
 {% endcache public_product_header %}
 
@@ -61,6 +61,120 @@
 {% block content %}
 {% cache 86400 public_product_content product.id product.is_approved product.is_sold product.is_recently_sold %}
 
+  <!-- CUSTOM ORDER REQUEST FORM -->
+  <div id='custom-order' class='well'>
+    <div class='row-fluid'>
+      <div class='span12 form-horizontal'>
+
+        <!-- hidden elements -->
+        <input id='custom-order-url' type='hidden'
+               value="{% url 'command request'%}">
+        <input id='custom-order-product-id'
+               name='custom-order-product-id'
+               type='hidden' value='{{ product.id }}'>
+
+        <div class='control-group'>
+          <div class='controls'>
+            <h4>Custom Order Request</h4>
+          </div>
+        </div>
+
+        <div id='size-form'>
+          <div class='control-group'>
+            <label class='control-label'>Length</label>
+            <div class='controls form-inline'>
+              <div class='input-append'>
+                <input id='custom-order-length-A' class='input-mini'
+                       name='custom-order-length-A' type='tel'
+                       placeholder=''>
+                <i class='add-on'>ft</i>
+              </div>
+              <div class='input-append'>
+                <input id='custom-order-length-B' class='input-mini'
+                       name='custom-order-length-B' type='tel'
+                       placeholder=''>
+                <i class='add-on'>in</i>
+              </div>
+              <!--<span class='change-size-units'>use meters</span>
+              <span class='change-size-units'>use feet</span>-->
+            </div>
+          </div>
+
+          <div class='control-group'>
+            <label class='control-label'>Width</label>
+            <div class='controls form-inline'>
+              <div class='input-append'>
+                <input id='custom-order-width-A' class='input-mini'
+                       name='custom-order-width-A' type='tel'
+                       placeholder=''>
+                <i class='add-on'>ft</i>
+              </div>
+              <div class='input-append'>
+                <input id='custom-order-width-B' class='input-mini'
+                       name='custom-order-width-B' type='tel'
+                       placeholder=''>
+                <i class='add-on'>in</i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id='quantity-form' class='control-group'>
+          <label class='control-label'>Quantity</label>
+          <div class='controls'>
+            <input id='custom-order-quantity' class='input-mini'
+                   name='custom-order-quantity' type='number'>
+          </div>
+        </div>
+
+        <div id='description-form' class='control-group'>
+          <label class='control-label'>Changes</label>
+          <div class='controls'>
+            <textarea id='custom-order-description'
+                      name='custom-order-description' rows='5'
+                      placeholder='Briefly describe changes you would like.'
+            ></textarea>
+          </div>
+        </div>
+
+        <div class='control-group size'>
+          <div class='controls form-inline'>
+            <button class='btn change-size'>Change Size</button>
+            <button class='btn change-quantity'>Order 2 or More</button>
+            <button class='btn change-description'>Change Something Else</button>
+          </div>
+        </div>
+
+        <div class='control-group'>
+          <label class='control-label'>Contact</label>
+          <div class='controls'>
+          <input id='custom-order-email' class='input-large'
+                 name='custom-order-email' type='text'
+                 placeholder='email address'>
+          </div>
+        </div>
+
+        <div class='control-group'>
+          <div class='controls'>
+            <button id='custom-order-submit-button' class='btn btn-success'>
+              Send Request
+            </button>
+
+            <button id='custom-order-success' class='btn btn-info disabled'>
+              Sent! Check your email for confirmation.
+            </button>
+
+            <button id='custom-order-fail' class='btn btn-warning disabled'>
+              Oops! Something went wrong.
+              Sorry, please email <u>hello@theanou.com</u> with your request.
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT PRIMARY CONTENT -->
   <div id='product' class='row-fluid' itemscope itemtype="http://schema.org/Product">
     <div class='span8'>
 
@@ -233,83 +347,6 @@
         {% endif %}
       </p>
     </div>
-
-  </div>
-
-  <div id='custom-order'>
-    <input id='custom-order-url' type='hidden'
-           value="{% url 'command request'%}">
-
-    <div class='row-fluid'><div class='span12'><hr></div></div>
-    <div class='row-fluid'><div class='span12'>
-      <h4>Custom Order Request</h4>
-    </div></div>
-
-    <div id='custom-order-form' class='row-fluid'>
-      <div class='span6'>
-        <!-- hidden elements -->
-        <input id='custom-order-product-id'
-               name='custom-order-product-id'
-               type='hidden' value='{{ product.id }}'>
-
-        <textarea id='custom-order-message'
-                  name='custom-order-message' rows='5'
-                  placeholder='Briefly describe the changes you would like.'
-                  style='width: 100%;'
-        ></textarea>
-      </div>
-
-      <div class='span6'>
-        <div class='input-prepend input-append'>
-          <i class='symbol-length add-on'></i>
-          <input id='custom-order-length' class='input-mini'
-                 name='custom-order-length' type='tel'
-                 placeholder='length'>
-          <i class='add-on'>cm</i>
-        </div>
-        &nbsp;
-        <div class='input-prepend input-append'>
-          <i class='symbol-width add-on'></i>
-          <input id='custom-order-width' class='input-mini'
-                 name='custom-order-width' type='tel'
-                 placeholder='width'>
-          <i class='add-on'>cm</i>
-        </div>
-
-        <br>
-        <div class='input-prepend'>
-          <i class='symbol-email add-on'></i>
-          <input id='custom-order-email' class='input-xlarge'
-                 name='custom-order-email' type='text'
-                 placeholder='your email'>
-        </div>
-
-        <a id='custom-order-submit-button' class='btn btn-success'>
-          <h2>
-            Send Request
-          </h2>
-        </a>
-
-      </div>
-    </div>
-
-    <div class='row-fluid'>
-      <div id='custom-order-confirmation' class='span12'>
-
-        <a id='custom-order-success' class='btn btn-info disabled'>
-          <h2>
-            Sent! Check your email for confirmation.
-          </h2>
-        </a>
-        <a id='custom-order-fail' class='btn btn-warning disabled'>
-          <h2>
-            Oops! Something went wrong.
-            Sorry, please email <u>hello@theanou.com</u> with your request.
-          </h2>
-        </a>
-      </div>
-    </div>
-    <div class='row-fluid'><div class='span12'><hr></div></div>
   </div>
 
 <!-- UTILITIES -->
