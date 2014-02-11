@@ -17,19 +17,17 @@ def request(request):
       data = {
         'product':        Product.objects.get(id=request.POST['product_id']),
         'email':          request.POST['email'],
-        'message':        request.POST.get('message', ""),
-        'length':         request.POST.get('length', "--"),
-        'width':          request.POST.get('length', "--"),
+        'size':           request.POST.get('size', ""),
+        'quantity':       request.POST.get('quantity', ""),
+        'description':    request.POST.get('description', ""),
       }
-
-      data['message'] += (" width %s cm, length %s cm" %
-                          (data['width'], data['length']))
 
       Email('custom_order/request', data).sendTo([Dan.email, data['email']])
       return HttpResponse(status=200)
 
     except Exception as e:
       ExceptionHandler(e, "error in custom_order.createCustomOrder")
+      print str(e)
       return HttpResponse(status=500)
 
   else:

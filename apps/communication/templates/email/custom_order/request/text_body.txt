@@ -2,8 +2,13 @@ Custom Changes Request for product #{{ data.product.id }}
 {{ data.product.name }} by {{ data.product.seller.name }}
 http://www.theanou.com/{{ data.product.get_absolute_url}}
 
-Changes:
-{{ data.message }}
+Size:<br>
+{{ data.size }}
 
+Quantity:<br>
+{{ data.quantity }}
 
-from {{ data.customer_email }}
+Description:<br>
+{{ data.description }}
+
+from {{ data.email }}
