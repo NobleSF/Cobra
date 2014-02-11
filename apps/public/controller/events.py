@@ -21,7 +21,6 @@ def template_cache_key(fragment_name, *vary_on):
   args = md5(u":".join([urlquote(var) for var in vary_on]))
   return "%s.%s" % (base_cache_key, args.hexdigest())
 
-@postpone
 def invalidate_product_cache(product_id):
   product = Product.objects.get(id=product_id)
 
@@ -35,7 +34,6 @@ def invalidate_product_cache(product_id):
   invalidate_cache('public_product_extras',
                    product.id)
 
-@postpone
 def invalidate_seller_cache(seller_id):
   seller = Seller.objects.get(id=seller_id)
 
