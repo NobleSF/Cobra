@@ -156,6 +156,7 @@ def adminCheckout(request): #ajax requests only
     Email(message=message).sendTo(Dan.email)
 
   except Exception as e:
+    ExceptionHandler(e, "in checkout.adminCheckout")
     responseObject = HttpResponse(content=json.dumps({'error':str(e)}),
                                   content_type='application/json',
                                   status='500')
