@@ -1,0 +1,71 @@
+{% extends "admin_base.html" %}
+
+{% block javascript %}
+  <script>
+    $('#reset-products').click(function(){
+      if ($('#reset-products').attr('disabled') != 'True'){
+        $('#reset-products').attr('disabled', 'True')
+        $('#reset-products').removeClass('btn-primary').addClass('btn-info')
+
+        $.ajax({url: "{% url 'admin:cache reset' %}",
+                data: {'target': 'all product pages'}
+              })
+        .done(function(data){
+          $('#reset-products').removeClass('btn-info').addClass('btn-success')
+          $('#reset-products').html('Done. Product Pages Reset.')
+        })
+        .fail(function(){
+          $('#reset-products').removeClass('btn-info').addClass('btn-danger')
+          $('#reset-products').html('Oops. Something Went Wrong.')
+        });
+      }
+    });
+
+    $('#reset-sellers').click(function(){
+      if ($('#reset-sellers').attr('disabled') != 'True'){
+        $('#reset-sellers').attr('disabled', 'True')
+        $('#reset-sellers').removeClass('btn-primary').addClass('btn-info')
+
+        $.ajax({url: "{% url 'admin:cache reset' %}",
+                data: {'target': 'all seller pages'}
+              })
+        .done(function(data){
+          $('#reset-sellers').removeClass('btn-info').addClass('btn-success')
+          $('#reset-sellers').html('Done. Seller Pages Reset.')
+        })
+        .fail(function(){
+          $('#reset-sellers').removeClass('btn-info').addClass('btn-danger')
+          $('#reset-sellers').html('Oops. Something Went Wrong.')
+        });
+      }
+    });
+
+  </script>
+{% endblock javascript %}
+
+{% block css %}
+  <style>
+
+  </style>
+{% endblock css %}
+
+{% block content %}
+{% load url from future %}
+
+<h3>Cache Management</h3>
+
+<p>
+  <button id='reset-products'
+          class='btn btn-primary'>
+    Reset All Product Pages
+  </button>
+</p>
+
+<p>
+  <button id='reset-sellers'
+          class='btn btn-primary'>
+    Reset All Seller Pages
+  </button>
+</p>
+
+{% endblock content %}

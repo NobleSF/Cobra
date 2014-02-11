@@ -90,9 +90,10 @@
 
       <ul class='unstyled'>
         {% if request.session.admin_type in "trainer, country, master" %}
-          <li><a href="{% url 'admin:review products' %}"
-                 class='symbol-product-check blue'
-                 title='review products'></a>
+          <li>
+            <a href="{% url 'admin:review products' %}"
+               class='symbol-product-check blue'
+               title='review products'></a>
           </li>
 
           <li>
@@ -108,17 +109,11 @@
           </li>
         {% endif %}
 
-        {% if request.session.admin_type in "master" %}
+        {% if request.session.admin_type in "country, master" %}
           <li>
-            <a href="{% url 'admin:product lookup' %}"
-               class='symbol-products pink'
-               title='lookup product'></a>
-          </li>
-
-          <li>
-            <a href="{% url 'admin:unrated products' %}"
-               class='symbol-happy pink'
-               title='rate products'></a>
+            <a href=""
+               class='symbol-command gold'
+               title='custom orders'></a>
           </li>
         {% endif %}
       </ul>
@@ -126,16 +121,47 @@
   </div>
 
   <div class='row-fluid'>
-    <div class='span4'>
+    <div class='span12'>
+      {% if request.session.admin_type in "master" %}
+        <h3>Master Tools</h3>
+        <ul class='unstyled'>
+          <li>
+            <a href="{% url 'admin:cache' %}">Cache Management</a>
+          </li>
+          <li>
+            <a href="{% url 'admin:product lookup' %}">Etsy/eBay Product Info</a>
+          </li>
+          <li>
+            <a href="{% url 'admin:unrated products' %}">Rate Products</a>
+          </li>
+        </ul>
+      {% endif %}
+
       {% if request.session.admin_type in "master" and request.session.username == 'tom' %}
-        <h3>Global Settings</h3>
-        <a href="{% url 'admin:currency' %}">Currency</a><br>
-        <a href="{% url 'admin:country' %}">Country</a><br>
-        <a href="{% url 'admin:color' %}">Color</a><br>
-        <a href="{% url 'admin:category' %}">Category</a><br>
-        <a href="{% url 'admin:rating subject' %}">Rating Subject</a><br>
-        <a href="{% url 'admin:shipping option' %}">Morocco Shipping Option</a><br>
-        <a href="{% url 'admin:image object' %}">Add Image Object</a><br>
+        <h3>Backend Setup</h3>
+        <ul class='unstyled'>
+          <li>
+            <a href="{% url 'admin:currency' %}">Currency</a>
+          </li>
+          <li>
+            <a href="{% url 'admin:country' %}">Country</a>
+          </li>
+          <li>
+            <a href="{% url 'admin:color' %}">Color</a>
+          </li>
+          <li>
+            <a href="{% url 'admin:category' %}">Category</a>
+          </li>
+          <li>
+            <a href="{% url 'admin:rating subject' %}">Rating Subject</a>
+          </li>
+          <li>
+            <a href="{% url 'admin:shipping option' %}">Morocco Shipping Option</a>
+          </li>
+          <li>
+            <a href="{% url 'admin:image object' %}">Add Image Object</a>
+          </li>
+        </ul>
       {% endif %}
     </div>
   </div>

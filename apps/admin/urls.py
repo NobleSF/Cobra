@@ -35,7 +35,11 @@ urlpatterns = patterns('',
   url(r'^stats$', admin.stats, name='stats'),
   url(r'^research$', admin.research, name='research'),
 
-  #SETTINGS
+  #MASTER TOOLS
+  url(r'^cache$', site_management.cache, name='cache'),
+  url(r'^cache_reset$', site_management.cacheReset, name='cache reset'),
+
+  #DB SETUP
   url(r'^management/country$', site_management.country, name='country'),
   url(r'^management/currency$', site_management.currency, name='currency'),
   url(r'^management/color$', site_management.color, name='color'),

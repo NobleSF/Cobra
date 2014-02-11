@@ -39,6 +39,28 @@ def rebuildStorePage(request, seller_id):
   return redirect('store', seller_id)
 
 @access_required('admin')
+def cache(request):
+  return render(request, 'site_management/cache.html', {})
+
+@access_required('admin')
+def cacheReset(request):
+  from apps.public.controller.events import invalidateAllProductCaches, invalidateAllSellerCaches
+  try:
+    if request.method == "GET" and request.GET.get('target', None):
+      if request.GET['target'] == 'all product pages':
+        invalidateAllProductCaches()
+      elif request.GET['target'] == 'all seller pages':
+        invalidateAllSellerCaches()
+      else:
+        raise Exception("invalid target")
+    else:
+      raise Exception("invalid request")
+  except:
+    return HttpResponse(status=400)#bad request
+  else:
+    return HttpResponse(status=200)#OK
+
+@access_required('admin')
 def country(request):
   from apps.admin.models import Country
   CountryFormSet = modelformset_factory(Country)

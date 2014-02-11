@@ -1,9 +1,9 @@
 from django.core.cache import cache
-from apps.seller.models import Product
+from apps.seller.models import Product, Seller
 from apps.admin.utils.decorator import postpone
 
-#async?
 def invalidate_cache(fragment_name, *vary_on):
+  #do not async because Heroku runs out of threads to create around 200+
   try:
     cache_key = template_cache_key(fragment_name, *vary_on)
     cache.delete(cache_key)
@@ -39,6 +39,22 @@ def invalidate_seller_cache(seller_id):
 
   invalidate_cache('public_store_header', seller.id, seller.updated_at)
   invalidate_cache('public_store_content', seller.id, seller.updated_at)
+
+@postpone
+def invalidateAllProductCaches():
+  for product in Product.objects.all():
+    try:
+      invalidate_product_cache(product.id)
+    except:
+      pass
+
+@postpone
+def invalidateAllSellerCaches():
+  for seller in Seller.objects.all():
+    try:
+      invalidate_seller_cache(seller.id)
+    except:
+      pass
 
 @postpone
 def rebuildRankings():
