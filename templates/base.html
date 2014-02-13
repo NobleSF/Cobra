@@ -182,7 +182,13 @@
           category = $(this).attr('event-category') || "uncategorized";
           label = $(this).attr('event-label') || "click";
           value = $(this).attr('event-value') || "";
-          _gaq.push(['_trackEvent', category, action, label, value]);
+          ga('send', {
+            'hitType': 'event',
+            'eventCategory': category,
+            'eventAction': action,
+            'eventLabel': label,
+            'eventValue': value
+          });
         });
       </script>
     {% endblock google_analytics %}
