@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from controller import home, checkout, product, store, command
+from controller import home, checkout, product, store, custom_order
 
 urlpatterns = patterns('',
 
@@ -13,7 +13,8 @@ urlpatterns = patterns('',
   url(r'^product/(?P<product_id>\d+)$', product.home, name='product'),
 
   # COMMANDS / CUSTOM ORDERS
-  url(r'^product/command_request$', command.request, name='command request'),
+  url(r'^product/custom_order_request$', custom_order.request,
+      name='custom order request'),
 
   # STORE PAGE at /store/123 represents a seller profile
   url(r'^store/(?P<seller_id>\d+)-(?P<slug>\S+)', store.home,
