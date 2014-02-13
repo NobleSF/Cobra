@@ -68,7 +68,7 @@
 
         <!-- hidden elements -->
         <input id='custom-order-url' type='hidden'
-               value="{% url 'command request'%}">
+               value="{% url 'custom order request'%}">
         <input id='custom-order-product-id'
                name='custom-order-product-id'
                type='hidden' value='{{ product.id }}'>
@@ -139,9 +139,21 @@
 
         <div class='control-group size'>
           <div class='controls form-inline'>
-            <button class='btn change-size'>Change Size</button>
-            <button class='btn change-quantity'>Order 2 or More</button>
-            <button class='btn change-description'>Change Something Else</button>
+            <button class='btn change-size'
+                    event-action='edit request' event-category='custom-order'
+                    event-label='size'>
+              Change Size
+            </button>
+            <button class='btn change-quantity'
+                    event-action='edit request' event-category='custom-order'
+                    event-label='quantity'>
+              Order 2 or More
+            </button>
+            <button class='btn change-description'
+                    event-action='edit request' event-category='custom-order'
+                    event-label='description'>
+              Change Something Else
+            </button>
           </div>
         </div>
 
@@ -156,7 +168,8 @@
 
         <div class='control-group'>
           <div class='controls'>
-            <button id='custom-order-submit-button' class='btn btn-success'>
+            <button id='custom-order-submit-button' class='btn btn-success'
+                    event-action='submit request' event-category='custom-order'>
               Send Request
             </button>
 
@@ -268,20 +281,6 @@
       {% endcomment %}
 
       <table id='buying-table'>
-
-        <tr id='faceboook' class='text-center' style='margin: 1em 1em 0;'>
-          <div class="fb-like visible-desktop"
-               data-href="http://www.theanou.com{{ product.get_absolute_url }}"
-               data-width="250" data-layout="standard"
-               data-show-faces="false" data-send="true">
-          </div>
-          <div class="fb-like visible-tablet"
-               data-href="http://www.theanou.com{{ product.get_absolute_url }}"
-               data-width="100" data-layout="button_count"
-               data-show-faces="false" data-send="true">
-          </div>
-        </tr>
-
         <tr itemprop="offers" itemscope itemtype="http://schema.org/Offer">
           <td rowspan=2 class='price title-font' itemprop="price">
             ${{ product.display_price }}
@@ -313,7 +312,8 @@
         </a>
       {% endif %}
 
-      <a id='custom-order-button' class='btn btn-info'>
+      <a id='custom-order-button' class='btn btn-info'
+         event-action='begin request' event-category='custom-order'>
         <h2>Request Custom Order</h2>
       </a>
     </div>

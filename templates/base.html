@@ -144,10 +144,8 @@
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
   {% endif %}
 
-  <!--<script type="text/javascript" src="{{ STATIC_URL }}js/base.js"></script>-->
   {% block javascript %}
   {% endblock javascript %}
-
 
   {% if 'username' not in request.session %}
     {% block facebook %}
@@ -165,42 +163,30 @@
     {% endblock pinterest %}
   {% endif %}
 
-  {% if 'username' not in request.session and not debug  %}
-    {% block zopim %}
-      <!--ZOPIM
-      <script type="text/javascript">window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set._.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute('charset','utf-8');$.src='//cdn.zopim.com/?xlmuDH2WUDECb1kjWcaJOoCY6HHe0F2f';z.t=+new Date;$.type='text/javascript';e.parentNode.insertBefore($,e)})(document,'script');</script>
-      END ZOPIM-->
-    {% endblock zopim %}
+  {% if not debug %}
     {% block google_analytics %}
-      <script>
+      <script>//GOOGLE ANALYTICS TRACKING CODE
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-        ga('create', 'UA-43146187-1', 'theanou.com');
+        ga('create',
+           '{% block google_analytics_tracking_id %}UA-43146187-1{% endblock %}',
+           'theanou.com');
+        ga('require', 'linkid', 'linkid.js');
         ga('send', 'pageview');
       </script>
-    {% endblock google_analytics %}
-    {% block lexity %}
-      <script type="text/javascript">
-      (function(d, w) {
-        var x = d.getElementsByTagName('SCRIPT')[0];
-        var g = d.createElement('SCRIPT');
-        g.type = 'text/javascript';
-        g.async = true;
-        g.src = ('https:' == d.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        x.parentNode.insertBefore(g, x);
-        var f = function () {
-          var s = d.createElement('SCRIPT');
-          s.type = 'text/javascript';
-          s.async = true;
-          s.src = "//np.lexity.com/0db9907e";
-          x.parentNode.insertBefore(s, x);
-        };
-        w.attachEvent ? w.attachEvent('onload', f) : w.addEventListener('load', f, false);
-      }(document, window));
+      <script>//CUSTOM EVENT TRACKING FOR CLIENT-SIDE EVENTS
+        $("[event-action]").bind('click', function(){
+          action = $(this).attr('event-action');
+          category = $(this).attr('event-category') || "uncategorized";
+          label = $(this).attr('event-label') || "click";
+          value = $(this).attr('event-value') || "";
+          _gaq.push(['_trackEvent', category, action, label, value]);
+        });
       </script>
-    {% endblock lexity %}
+    {% endblock google_analytics %}
+
     {% block olark %}
       <script data-cfasync="false" type='text/javascript'>/*<![CDATA[*/window.olark||(function(c){var f=window,d=document,l=f.location.protocol=="https:"?"https:":"http:",z=c.name,r="load";var nt=function(){
       f[z]=function(){
