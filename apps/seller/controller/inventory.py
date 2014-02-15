@@ -98,7 +98,7 @@ def detail(request, product_id):
   return render(request, 'inventory/detail.html')
 
 @access_required('seller')
-def remove(request, product_id): #seller deactivate product
+def remove(request, product_id): #seller deactivate product #todo: merge logic with saveProduct
   try:
     product = Product(product_id)
     product.deactivate()
@@ -115,7 +115,7 @@ def remove(request, product_id): #seller deactivate product
 
 @access_required('admin or seller')
 @csrf_exempt
-def saveProduct(request): #ajax requests only, not asset-aware
+def saveProduct(request): #ajax requests only, not asset-aware #todo change name to updateProduct
   response = {}
 
   if request.method == 'GET': # it must be an ajax GET to work

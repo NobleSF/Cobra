@@ -51,15 +51,12 @@ Mustapha = People(info = (
 Kenza = People(info = (
           'Kenza Oulaghda',
           'Trainer',
-          'kenza.tithrite1@gmail.com',
+          'kenzatithrite1@gmail.com',
           '0637637565',
         )
       )
 
-hicham = People(info = (
-          'Hicham Kartouchi',
-          'Trainer',
-          '',
-          ''
-        )
-      )
+everyones_emails = [Dan.email, Tom.email, Brahim.email, Rabha.email, Mustapha.email, Kenza.email]
+
+#todo: remove this whole file and use admin account information
+#todo: or use this file to define groups (trainers, translators, etc)
