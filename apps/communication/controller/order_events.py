@@ -54,7 +54,6 @@ def updateOrder((product_id, data), gimme_reply_sms=False):
       Step 2. Else if already confirmed and not shipped, promote to shipped
       Step 3. Else if not confirmed, promote to confirmed
       Step 4. Else we can't go any further
-
   """
   from apps.public.models import Order
   from apps.seller.models import Product
