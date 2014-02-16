@@ -16,11 +16,6 @@ $(function(){//on page load
   //HOVER ANIMATION
   addHoverAnimation($('.product'));
 
-  $('.flexslider').flexslider({
-    animation: "slide"
-    //,slideshow: false
-  });
-
 });
 
 $('.button.shop').click(function(){

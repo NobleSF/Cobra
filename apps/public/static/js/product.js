@@ -4,6 +4,11 @@ $(function(){//on page load
     interval: false
   })
 
+  //CUSTOM ORDER FORM AUTO-SHOW
+  if (window.location.hash.split("#")[1] == "custom-order"){
+    $('#custom-order').slideDown();
+  }
+
 });
 
 $('#unapprove').click(function(){

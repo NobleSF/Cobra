@@ -14,13 +14,11 @@
 {%block open_graph_image%}{{ block.super }}{%endblock%}
 
 {% block javascript %}
-  <script type="text/javascript" src="{{ STATIC_URL }}vendor/flexslider/js/jquery.flexslider-min.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}public/js/home.min.js?v=3"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}public/js/home.min.js?v=4"></script>
 {% endblock javascript %}
 
 {% block css %}
-  <link href="{{ STATIC_URL }}public/css/home.css?v=2" rel="stylesheet">
-  <link href="{{ STATIC_URL }}vendor/flexslider/css/flexslider.css" rel="stylesheet">
+  <link href="{{ STATIC_URL }}public/css/home.css?v=3" rel="stylesheet">
 {% endblock css %}
 {% endcache home_header %}
 
@@ -42,62 +40,21 @@
 {% block content %}
 {% cache 864000 home_content %} {# cache for 10 days #}
   <div class='row-fluid'>
-    <div class='span12'>
-
-      <div class="flexslider">
-        <ul class="slides">
-
-          <li>
-            <div class='slide-text'>
-              <p class='title'>GOOD-BYE MIDDLEMEN</p>
-              <p class='verse title-font'>
-                <span>
-                  Anou's artisan-managed store
-                  enables you to buy directly from artisans
-                </span>
-                <br>
-                <a class='button' href="http://helloanou.wordpress.com/2013/07/15/the-economics-of-a-single-moroccan-reed-basket/">Learn more</a>
-                <a class='button shop'>Shop</a>
-              </p>
-            </div>
-            <img src="{{ STATIC_URL }}images/slide3.jpg" />
-          </li>
-
-          <li>
-            <div class='slide-text'>
-              <p class='title'>A COMMUNITY OF ARTISANS</p>
-              <p class='verse title-font'>
-                <span>
-                  Anou's store is owned and operated by Moroccan artisans
-                  and each purchase supports the growth of our vibrant community
-                </span>
-                <br>
-                <a href="{% url 'about' %}" class='button'>Join our community</a>
-                <a class='button shop'>Shop</a>
-              </p>
-
-            </div>
-            <img src="{{ STATIC_URL }}images/slide2.jpg" />
-          </li>
-
-          <li>
-            <div class='slide-text'>
-              <p class='title'>FROM VILLAGES TO YOUR HOME</p>
-              <p class='verse title-font'>
-                <span>
-                  Our platform bridges the two using culturally-responsive design
-                </span>
-                <br>
-                <a href="{% url 'about' %}" class='button'>Learn how</a>
-                <a class='button shop'>Shop</a>
-              </p>
-            </div>
-            <img src="{{ STATIC_URL }}images/slide1.jpg" />
-          </li>
-
-        </ul>
+    <div id='banner' class='span12'>
+      <div class='text'>
+        <p class='title'>MADE JUST FOR YOU</p>
+        <p class='verse title-font'>
+          <span>
+            What can Fatima make for you?
+          </span>
+          <br>
+          <a class='button' href="/product/336-colored-flat-weave-pile-knot-mix#custom-order">
+            Request Custom Order
+          </a>
+          <a class='button shop'>Shop</a>
+        </p>
       </div>
-
+      <img src="{{ STATIC_URL }}images/slide4.jpg" />
     </div>
   </div>
 
