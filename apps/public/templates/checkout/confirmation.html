@@ -123,14 +123,14 @@
                 {% elif checkout_data.name %}
                   {{ checkout_data.name }}<br>
                 {% endif %}
-                {{ checkout_data.shipping_address.address1 }}<br>
+                {{ checkout_data.shipping_address.address1|default_if_none:"" }}<br>
                 {% if checkout_data.shipping_address.address2 %}
                   {{ checkout_data.shipping_address.address2 }}<br>
                 {% endif %}
-                {{ checkout_data.shipping_address.city }},
-                {{ checkout_data.shipping_address.state }}
-                {{ checkout_data.shipping_address.postal_code }}<br>
-                {{ checkout_data.shipping_address.country }}
+                {{ checkout_data.shipping_address.city|default_if_none:"" }},
+                {{ checkout_data.shipping_address.state|default_if_none:"" }}
+                {{ checkout_data.shipping_address.postal_code|default_if_none:"" }}<br>
+                {{ checkout_data.shipping_address.country|default_if_none:"" }}
               {% else %}
                 No shipping address on file!
               {% endif %}
