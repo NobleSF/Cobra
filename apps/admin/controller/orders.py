@@ -104,7 +104,7 @@ def updateOrder(request):
 def imageFormData(request):
   import json
   from apps.seller.controller.cloudinary_upload import createSignature
-  from apps.seller.models import Upload
+  from apps.seller.models.upload import Upload
 
   if request.method == "POST" and 'order_id' in request.POST:
     try:

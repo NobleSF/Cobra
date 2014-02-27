@@ -1,6 +1,10 @@
 from django.db import models
 from django import forms
-from apps.seller.models import Asset, Product, Seller, Image, Photo
+from apps.seller.models.asset import Asset
+from apps.seller.models.product import Product
+from apps.seller.models.seller import Seller
+from apps.seller.models.image import Image
+from apps.seller.models.photo import Photo
 from apps.admin.models import Category
 
 from django.forms.widgets import TextInput

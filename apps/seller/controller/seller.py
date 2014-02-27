@@ -10,7 +10,7 @@ from django.db.models import Q
 
 @access_required('seller')
 def home(request):
-  from apps.seller.models import Seller
+  from apps.seller.models.seller import Seller
 
   try:
     seller = Seller.objects.get(id=request.session['seller_id'])
@@ -23,7 +23,7 @@ def home(request):
 
 @access_required('seller')
 def products(request):
-  from apps.seller.models import Seller
+  from apps.seller.models.seller import Seller
 
   try:
     seller = Seller.objects.get(id=request.session['seller_id'])
@@ -45,7 +45,7 @@ def products(request):
 
 @access_required('seller')
 def orders(request):
-  from apps.seller.models import Seller
+  from apps.seller.models.seller import Seller
 
   try:
     seller = Seller.objects.get(id=request.session['seller_id'])

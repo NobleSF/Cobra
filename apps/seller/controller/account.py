@@ -9,7 +9,7 @@ from django.db import IntegrityError, transaction
 
 def create(account):
   try:
-    from apps.seller.models import Seller
+    from apps.seller.models.seller import Seller
     seller_account = Seller(account_id=account.id)
     seller_account.save()
     return True
@@ -19,7 +19,7 @@ def create(account):
 
 @access_required('seller')
 def edit(request):
-  from apps.seller.models import Seller
+  from apps.seller.models.seller import Seller
   from apps.seller.controller.forms import AssetForm, SellerEditForm
   from settings.settings import CLOUDINARY
 
@@ -111,7 +111,7 @@ def edit(request):
 @access_required('seller')
 @csrf_exempt
 def saveAsset(request): #ajax get requests only, create or update asset
-  from apps.seller.models import Asset
+  from apps.seller.models.asset import Asset
   from apps.admin.models import Category
 
   try:
@@ -155,7 +155,7 @@ def saveAsset(request): #ajax get requests only, create or update asset
 @access_required('seller')
 @csrf_exempt
 def deleteAsset(request): #ajax requests only
-  from apps.seller.models import Asset
+  from apps.seller.models.asset import Asset
   try:
     asset = Asset.objects.get(
               seller_id = request.session['seller_id'],

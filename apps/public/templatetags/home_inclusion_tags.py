@@ -5,7 +5,7 @@ register = template.Library()
 def homepage_products_tag():
   from django.utils import timezone
   from datetime import timedelta
-  from apps.seller.models import Product
+  from apps.seller.models.product import Product
   from apps.public.controller.product_ranking import updateRankings
 
   products = (Product.objects.filter(sold_at=None,

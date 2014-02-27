@@ -7,7 +7,8 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.communication.models import SMS
-from apps.seller.models import Seller, Asset
+from apps.seller.models.seller import Seller
+from apps.seller.models.asset import Asset
 from apps.seller.controller.product_class import Product
 from apps.admin.utils.decorator import postpone
 from apps.communication.controller.email_class import Email

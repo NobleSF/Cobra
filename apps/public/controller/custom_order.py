@@ -6,7 +6,8 @@ import json
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.views.decorators.csrf import csrf_exempt
-from apps.seller.models import Seller, Product
+from apps.seller.models.seller import Seller
+from apps.seller.models.product import Product
 from settings.people import Tom, Dan
 from apps.communication.controller.email_class import Email
 

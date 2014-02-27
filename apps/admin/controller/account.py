@@ -148,7 +148,7 @@ def edit(request, account_id=None):
 
 @access_required('admin')
 def approveSeller(request): #from AJAX GET request
-  from apps.seller.models import Seller
+  from apps.seller.models.seller import Seller
   try:
     seller_id = request.GET['seller_id']
     action = request.GET['action']
@@ -183,7 +183,7 @@ def approveSeller(request): #from AJAX GET request
 
 def login(request, next=None):
   from apps.admin.controller.forms import AccountLoginForm
-  from apps.seller.models import Seller
+  from apps.seller.models.seller import Seller
 
   if request.method == 'POST':
     form = AccountLoginForm(request.POST)
@@ -273,7 +273,7 @@ def login(request, next=None):
 
 @access_required('admin')
 def loginCheat(request):
-  from apps.seller.models import Seller
+  from apps.seller.models.seller import Seller
 
   seller_id = request.GET.get('seller_id')
   destination = request.GET.get('destination')

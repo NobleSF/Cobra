@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.views.decorators.cache import cache_page
 from django.utils import timezone
-from apps.seller.models import Product, Photo
+from apps.seller.models.product import Product
+from apps.seller.models.photo import Photo
 import json
 
 def home(request, product_id, slug=None):

@@ -40,7 +40,7 @@ def cart(request):
   return render(request, 'checkout/cart.html', context)
 
 def cartAdd(request, product_id):
-  from apps.seller.models import Product
+  from apps.seller.models.product import Product
   cart = Cart(request)
 
   try:
@@ -55,7 +55,7 @@ def cartAdd(request, product_id):
       return redirect('cart')
 
 def cartRemove(request, product_id):
-  from apps.seller.models import Product
+  from apps.seller.models.product import Product
   cart = Cart(request)
 
   try:

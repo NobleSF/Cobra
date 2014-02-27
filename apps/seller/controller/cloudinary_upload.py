@@ -5,7 +5,9 @@ from django.utils import timezone, dateformat
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.views.decorators.csrf import csrf_exempt
-from apps.seller.models import Upload, Image, Photo
+from apps.seller.models.upload import Upload
+from apps.seller.models.image import Image
+from apps.seller.models.photo import Photo
 from django.db import IntegrityError
 from settings.settings import CLOUDINARY
 #from django.core.cache import cache
@@ -38,7 +40,8 @@ def checkImageUpload(request):#for our JS to check upload status and get thumb_u
   #if cached_response:
   #  return cached_response
   #else:
-  from apps.seller.models import Asset, Seller
+  from apps.seller.models.asset import Asset
+  from apps.seller.models.seller import Seller
 
   if request.method != 'GET' or 'public_id' not in request.GET:
     return HttpResponse("public_id required", status=406)#Not acceptable

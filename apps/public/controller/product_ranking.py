@@ -3,7 +3,7 @@ from django.db.models import Avg
 from django.utils import timezone
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from apps.seller.models import Product
+from apps.seller.models.product import Product
 from apps.public.models import Rating, Ranking
 
 WEIGHTS = {'photography': 14,

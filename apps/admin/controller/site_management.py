@@ -21,7 +21,7 @@ def rebuildHomePage(request):
 
 @access_required('admin')
 def rebuildProductPage(request=None, product_id=None):
-  from apps.seller.models import Product
+  from apps.seller.models.product import Product
   from apps.public.controller.events import invalidate_product_cache
   try:
     invalidate_product_cache(product_id)
@@ -142,7 +142,7 @@ def ratingSubject(request):
 
 @access_required('admin')
 def shippingOption(request):
-  from apps.seller.models import ShippingOption
+  from apps.seller.models.shipping_option import ShippingOption
   ShippingOptionFormSet = modelformset_factory(ShippingOption)
   context = {}
   if request.method == 'POST':
@@ -158,7 +158,7 @@ def shippingOption(request):
 
 @access_required('admin')
 def imageObject(request):
-  from apps.seller.models import Image
+  from apps.seller.models.image import Image
   ImageFormSet = modelformset_factory(Image)
   context = {}
   if request.method == 'POST':

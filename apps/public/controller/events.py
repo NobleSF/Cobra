@@ -1,5 +1,6 @@
 from django.core.cache import cache
-from apps.seller.models import Product, Seller
+from apps.seller.models.product import Product
+from apps.seller.models.seller import Seller
 from apps.admin.utils.decorator import postpone
 
 def invalidate_cache(fragment_name, *vary_on):

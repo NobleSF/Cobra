@@ -49,7 +49,7 @@ class Product(object):
       return False
 
   def addPhoto(self, url, rank):
-    from apps.seller.models import Photo
+    from apps.seller.models.photo import Photo
     try:
       photo, is_new = Photo.objects.get_or_create(
                         product = self.product,

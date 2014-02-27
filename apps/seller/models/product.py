@@ -1,185 +1,21 @@
 from django.db import models
-from settings.settings import CLOUDINARY
-
-class Seller(models.Model):
-  from apps.admin.models import Account, Country, Currency
-  account       = models.ForeignKey(Account, related_name='sellers')#should really be one-to-one relationship
-  bio           = models.TextField(null=True, blank=True)
-  city          = models.CharField(max_length=50, null=True, blank=True)
-  country       = models.ForeignKey(Country, null=True, blank=True)
-  coordinates   = models.CharField(max_length=30, null=True, blank=True)
-  image         = models.ForeignKey('Image', null=True, blank=True, on_delete=models.SET_NULL)
-
-  #Original Language
-  #name_ol       = models.CharField(max_length=50, null=True, blank=True)
-  bio_ol = models.TextField(null=True, blank=True)
-
-  #account lifecycle
-  translated_by = models.ForeignKey(Account, null=True, blank=True, related_name='translator')
-  approved_at   = models.DateTimeField(null=True, blank=True) #admin approval
-  deactive_at   = models.DateTimeField(null=True, blank=True) #seller deactivate
-
-  slug          = models.CharField(max_length=150, null=True, blank=True)
-
-  #update history
-  created_at    = models.DateTimeField(auto_now_add = True)
-  updated_at    = models.DateTimeField(auto_now = True)
-
-  @property
-  def title(self):
-    return "%s from %s, %s" % (self.name, self.city, self.country.name)
-
-  @property
-  def title_description(self):
-    try:
-      if self.categories_name_string:
-        title = "Find %s" % self.categories_name_string
-      else:
-        title = "Products"
-      title += " each uniquly handmade by the artisans of %s" % self.name
-      title += " sent to you direct from %s, %s." % (self.city, self.country.name)
-      return title
-    except:
-      return ("Artisans crafts handmade in Morocco." +
-              "Our store ships direct from original artisans. " +
-              "Made possible by Anou - Beyond Fair Trade.")
-
-  @property
-  def name(self): return self.account.name if self.account.name else ""
-  @property
-  def username(self): return self.account.username
-  @property
-  def email(self): return self.account.email if self.account.email else ""
-  @property
-  def phone(self): return self.account.phone if self.account.phone else ""
-
-  @property
-  def bank_name(self):
-    return self.account.bank_name if self.account.bank_name else ""
-  @property
-  def bank_account(self):
-    return self.account.bank_account if self.account.bank_account else ""
-
-  @property
-  def artisans(self):
-    try:
-      return self.asset_set.filter(ilk='artisan')
-    except:
-      return None
-
-  @property
-  def categories(self):
-    from django.utils import timezone
-    products = self.product_set.filter(approved_at__lte=timezone.now())
-    categories = []
-    for product in products:
-      if product.parent_category not in categories:
-        categories.append(product.parent_category)
-    return categories
-
-  @property
-  def categories_name_string(self):
-    try:
-      names_list = [c.name for c in self.categories]
-      if len(names_list) > 2:
-        return ", and ".join(", ".join(names_list).rsplit(", ",1))
-      else:
-        return " and ".join(list)
-    except:
-      return ""
-
-  def get_store_products(self, limit=None):
-    from django.utils import timezone
-    try:
-      products = (self.product_set
-                      .filter(sold_at=None,
-                              approved_at__lte=timezone.now(),
-                              deactive_at=None)
-                      .order_by('approved_at').reverse())[:limit]
-      return products
-    except:
-      return []
-
-  def get_sold_products(self, limit=None):
-    from django.utils import timezone
-    try:
-      products = (self.product_set
-                      .filter(sold_at__lte=timezone.now(),
-                              approved_at__lte=timezone.now(),
-                              deactive_at=None)
-                      .order_by('sold_at').reverse())[:limit]
-      return products
-    except:
-      return []
-
-  def resetSlug(self):
-    from django.template.defaultfilters import slugify
-    try:
-      self.slug = slugify(self.title.replace('from ',''))
-      self.slug = ''.join([char for char in self.slug if not char.isdigit()])
-      self.save()
-    except: pass
-
-  def get_absolute_url(self):
-    from django.core.urlresolvers import reverse
-    if not self.slug:
-      self.resetSlug()
-
-    try:
-      return reverse('store_w_slug', args=[str(self.id), self.slug])
-    except:
-      return reverse('store', args=[str(self.id)])
-
-  def __unicode__(self):
-    return self.name
-
-class Asset(models.Model):
-  from apps.admin.models import Category
-  seller        = models.ForeignKey('Seller')
-  ilk           = models.CharField(max_length=10)#product,artisan,tool,material
-  rank          = models.SmallIntegerField()
-  name          = models.CharField(max_length=50, null=True, blank=True)
-  description   = models.TextField(null=True, blank=True)
-  image         = models.ForeignKey('Image', null=True, blank=True, on_delete=models.SET_NULL)
-  categories    = models.ManyToManyField(Category, null=True, blank=True)
-  phone         = models.CharField(max_length=15, null=True, blank=True)
-  #important     = models.BooleanField(default=False)
-
-  #Original Language
-  name_ol       = models.CharField(max_length=50, null=True, blank=True)
-  description_ol = models.TextField(null=True, blank=True)
-
-  #update history
-  created_at    = models.DateTimeField(auto_now_add = True)
-  updated_at    = models.DateTimeField(auto_now = True)
-
-  def __unicode__(self):
-    return unicode(self.name)
-
-  @property
-  def title(self):
-    return "%s from %s, %s" % (self.name, self.seller.city, self.seller.country.name)
-
-  def get_ilk(self):
-    return self._get_ilk_display()
-
-  class Meta:
-    unique_together = ('seller', 'ilk', 'rank')
-    ordering = ['rank', 'created_at']
+from apps.admin.models import Color
+from apps.seller.models.asset import Asset
+from apps.seller.models.seller import Seller
+from apps.seller.models.shipping_option import ShippingOption
 
 class Product(models.Model):
-  from apps.admin.models import Color
-  seller        = models.ForeignKey('Seller')
+  seller        = models.ForeignKey(Seller)
 
   #product description elements
-  assets        = models.ManyToManyField('Asset')
+  assets        = models.ManyToManyField(Asset)
   colors        = models.ManyToManyField(Color)
   width         = models.SmallIntegerField(null=True, blank=True)
   height        = models.SmallIntegerField(null=True, blank=True)
   length        = models.SmallIntegerField(null=True, blank=True)
   weight        = models.SmallIntegerField(null=True, blank=True)
   price         = models.SmallIntegerField(null=True, blank=True)
-  shipping_options = models.ManyToManyField('ShippingOption')
+  shipping_options = models.ManyToManyField(ShippingOption)
 
   #lifecycle milestones
   active_at     = models.DateTimeField(null=True, blank=True) #seller add
@@ -196,6 +32,11 @@ class Product(models.Model):
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
 
+  class Meta:
+    ordering = ['-sold_at', '-id']
+    app_label = 'seller'
+
+  # MODEL PROPERTIES
   @property
   def was_never_active(self): return True if not self.active_at else False
   #todo: use property.setter functions too!
@@ -227,7 +68,7 @@ class Product(models.Model):
   @property
   def photo(self):
     try:
-      return self.photos.all()[0]
+      return self.photos.exclude(is_progress=True)[0]
     except:
       return None
 
@@ -511,7 +352,6 @@ class Product(models.Model):
   def display_price(self): #round to the nearest $1
     return int(round(self.usd_price + self.wepay_fee - self.display_shipping_price))
 
-
   @property
   def is_complete(self):
     if (self.assets.filter(ilk='product').count() and #has product type
@@ -533,6 +373,7 @@ class Product(models.Model):
     except:
       return "" #probably doesn't need to be working anyway
 
+  # MODEL FUNCTIONS
   def get_related_products(self, limit=3):
     from django.utils import timezone
     try:
@@ -569,84 +410,6 @@ class Product(models.Model):
       return "%s%s" % (self.color_adjective, self.name)
     else:
       return self.name
-
-  class Meta:
-    ordering = ['-sold_at', '-id']
-
-class ShippingOption(models.Model):
-  from apps.admin.models import Country
-  name          = models.CharField(max_length=50)
-  country       = models.ForeignKey(Country)
-  image         = models.ForeignKey('Image', null=True, blank=True, on_delete=models.SET_NULL)
-
-  def __unicode__(self):
-    return self.name
-
-class Photo(models.Model): #exclusively product photos.
-  from settings.settings import MEDIA_URL
-  product       = models.ForeignKey(Product, related_name="photos")
-  rank          = models.SmallIntegerField()
-  original      = models.URLField(max_length=200)
-  #update history
-  created_at    = models.DateTimeField(auto_now_add = True)
-  updated_at    = models.DateTimeField(auto_now = True)
-
-  def __unicode__(self):
-    return unicode(self.original).replace(CLOUDINARY['download_url'],'')
-
-  @property
-  def thumb_size(self):
-    return u'%s' % self.original.replace("upload", "upload/c_fill,g_center,h_281,q_85,w_375")
-
-  @property
-  def pinky_size(self):
-    return u'%s' % self.original.replace("upload", "upload/c_fill,g_center,h_75,q_70,w_100")
-
-  @property
-  def product_size(self):
-    return u'%s' % self.original.replace("upload", "upload/c_pad,h_600,q_70,w_800")
-
-  class Meta:
-    unique_together = ('product', 'rank')
-    ordering = ['product','rank',]
-
-class Image(models.Model): #for assets and anything other than product photos
-  original      = models.URLField(max_length=200)
-  #update history
-  created_at    = models.DateTimeField(auto_now_add = True)
-  updated_at    = models.DateTimeField(auto_now = True)
-
-  def __unicode__(self):
-    return unicode(self.original).replace(CLOUDINARY['download_url'],'')
-
-  @property
-  def thumb_size(self):
-    transformation = "c_fill,g_center,h_225,q_85,w_300"
-    return u'%s' % self.original.replace("upload", ("upload/"+transformation))
-
-  @property
-  def pinky_size(self):
-    transformation = "c_fill,g_center,h_75,q_85,w_100"
-    return u'%s' % self.original.replace("upload", ("upload/"+transformation))
-
-  @property
-  def peephole(self):
-    transformation = "c_fill,g_center,h_75,q_85,w_75,r_max"
-    return u'%s' % self.original.replace("upload", ("upload/"+transformation))
-
-  @property
-  def headshot(self):
-    transformation = "c_fill,w_200,h_200,c_thumb,g_face,r_max"
-    return u'%s' % self.original.replace("upload", ("upload/"+transformation))
-
-class Upload(models.Model): #images and photos before they exist
-  public_id     = models.CharField(max_length=100, unique=True)
-  created_at    = models.DateTimeField(auto_now_add = True)
-  complete_at   = models.DateTimeField(null=True, blank=True)
-  url           = models.URLField(max_length=200, null=True, blank=True)
-
-  @property
-  def is_complete(self): return True if self.complete_at else False
 
 def rreplace(s, old, new, occurrence):
   li = s.rsplit(old, occurrence)

@@ -5,7 +5,7 @@ from datetime import timedelta
 from apps.public.controller.promotion_rules import discount_for_cart_promotion
 
 def cleanupCarts():
-  from apps.seller.models import Product
+  from apps.seller.models.product import Product
 
   try:
     time_1_hour_ago = timezone.now() - timedelta(hours=1)

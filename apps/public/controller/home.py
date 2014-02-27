@@ -9,7 +9,7 @@ def home(request):
 
 @cache_page(176400) #49hrs an hour over homepage in-template cache
 def loadProducts(request):
-  from apps.seller.models import Product
+  from apps.seller.models.product import Product
   from django.template.loader import render_to_string
 
   if request.method == "GET" and request.GET.get('product_ids'):

@@ -56,7 +56,7 @@ def updateOrder((product_id, data), gimme_reply_sms=False):
       Step 4. Else we can't go any further
   """
   from apps.public.models import Order
-  from apps.seller.models import Product
+  from apps.seller.models.product import Product
 
   try:
     product = Product.objects.get(id=product_id)

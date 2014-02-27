@@ -6,7 +6,8 @@ from apps.admin.utils.exception_handling import ExceptionHandler
 from django.forms.models import modelformset_factory
 from django.utils import timezone
 import json
-from apps.seller.models import Product, ShippingOption
+from apps.seller.models.product import Product
+from apps.seller.models.shipping_option import ShippingOption
 
 @access_required('admin')
 def productLookup(request):
@@ -78,7 +79,7 @@ def approveProduct(request): #from AJAX GET request
 
 @access_required('admin')
 def rateProduct(request): #from AJAX GET request
-  from apps.seller.models import Product
+  from apps.seller.models.product import Product
   from apps.public.models import Rating
   from apps.admin.models import RatingSubject
   try:

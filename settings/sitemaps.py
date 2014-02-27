@@ -1,5 +1,6 @@
 from django.contrib.sitemaps import Sitemap
-from apps.seller.models import Seller, Product
+from apps.seller.models.seller import Seller
+from apps.seller.models.product import Product
 from django.utils import timezone
 from django.core.urlresolvers import reverse
 

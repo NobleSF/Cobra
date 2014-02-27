@@ -10,7 +10,7 @@ def home(request):
   return render(request, 'admin_home.html', {})
 
 def stats(request):
-  from apps.seller.models import Product
+  from apps.seller.models.product import Product
   from apps.public.models import Order
   today = datetime.now()
   beginning_of_time = datetime(2013, 8, 1)#August 1st, 2013 - launch of this app

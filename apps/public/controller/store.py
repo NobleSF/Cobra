@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.utils import timezone
-from apps.seller.models import Seller
+from apps.seller.models.seller import Seller
 
 def home(request, seller_id, slug=None):
   store = get_object_or_404(Seller, id=seller_id)

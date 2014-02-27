@@ -1,4 +1,7 @@
 from django.db import models
+from apps.seller.models.product import Product
+from apps.seller.models.shipping_option import ShippingOption
+from apps.seller.models.image import Image
 
 class Cart(models.Model):
   #from apps.admin.models import Currency
@@ -64,7 +67,6 @@ class Cart(models.Model):
     return address
 
 class Item(models.Model):
-  from apps.seller.models import Product
   cart                = models.ForeignKey('Cart')
   product             = models.ForeignKey(Product)
   #quantity           = models.PositiveIntegerField(default=1)
@@ -79,7 +81,7 @@ class Item(models.Model):
 
   @property
   def photos(self):
-    from apps.seller.models import Photo
+    from apps.seller.models.photo import Photo
     return Photo.objects.filter(product_id=self.product.id)
 
   @property
@@ -105,8 +107,6 @@ class Promotion(models.Model):
     return unicode(self.name)
 
 class Order(models.Model):
-  from apps.seller.models import Product, ShippingOption, Image
-
   cart                = models.ForeignKey('Cart', related_name='orders')
 
   #charges breakdown in local currency (eg. dirhams in Morocco)
@@ -169,7 +169,6 @@ class Order(models.Model):
     return  tracking_url + self.tracking_number if self.tracking_number else False
 
 class Rating(models.Model):
-  from apps.seller.models import Product
   from apps.admin.models import RatingSubject
 
   session_key         = models.CharField(max_length=32)
@@ -182,7 +181,7 @@ class Rating(models.Model):
     return unicode(self.value)
 
 class Ranking(models.Model):
-  from apps.seller.models import Product
+  from apps.seller.models.product import Product
 
   product       = models.OneToOneField(Product)
 

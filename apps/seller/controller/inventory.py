@@ -6,7 +6,7 @@ import json
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.views.decorators.csrf import csrf_exempt
-from apps.seller.models import Seller
+from apps.seller.models.seller import Seller
 from apps.seller.controller.product_class import Product
 
 def checkInventory(seller):
@@ -176,6 +176,7 @@ def saveProduct(request): #ajax requests only, not asset-aware #todo change name
         'summary_shipping_cost': str(product.product.shipping_cost)
       }
       response.update(cost_summary)
+      #response['is_complete'] = product.product.is_complete
 
     except Exception as e:
       ExceptionHandler(e, "in inventory.saveProduct")
