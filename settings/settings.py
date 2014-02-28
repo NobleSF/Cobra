@@ -21,7 +21,6 @@ DEBUG = not (PRODUCTION or DEMO)
 TEMPLATE_DEBUG = not (STAGE or PRODUCTION or DEMO)
 
 ANOU_FEE_RATE = 0.10
-DAYS_UNTIL_PRODUCT_EXPIRES = 120
 
 UNDER_CONSTRUCTION = False
 INTERNAL_IPS = ('127.0.0.1',)
@@ -165,25 +164,6 @@ else:
     }
   }
 
-DEBUG_TOOLBAR_PANELS = (
-  'debug_toolbar.panels.version.VersionDebugPanel',
-  'debug_toolbar.panels.timer.TimerDebugPanel',
-  'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
-  'debug_toolbar.panels.headers.HeaderDebugPanel',
-  'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
-  'debug_toolbar.panels.template.TemplateDebugPanel',
-  'debug_toolbar.panels.sql.SQLDebugPanel',
-  'debug_toolbar.panels.signals.SignalDebugPanel',
-  'debug_toolbar.panels.logger.LoggingPanel',
-)
-
-DEBUG_TOOLBAR_CONFIG = {
-  'INTERCEPT_REDIRECTS': False,
-  #'HIDE_DJANGO_SQL': False,
-  #'TAG': 'div',
-  #'ENABLE_STACKTRACES' : True,
-}
-
 RAVEN_CONFIG = {
   'dsn': 'https://f590888e182a4110b137b51e58352072:b4289579833c4f47950a36fd340746b3@app.getsentry.com/12262',
 }
@@ -294,8 +274,6 @@ MIDDLEWARE_CLASSES = (
   # Uncomment the next line for simple clickjacking protection:
   # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
-#if not (PRODUCTION or STAGE or DEMO):
-#  MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
 
 ROOT_URLCONF = 'settings.urls'
 
@@ -309,8 +287,6 @@ TEMPLATE_DIRS = (
   # Always use forward slashes, even on Windows.
   # Don't forget to use absolute paths, not relative paths.
 )
-#if not (PRODUCTION or STAGE or DEMO):
-#  TEMPLATE_DIRS += ('C:\django\django-debug-toolbar\debug_toolbar\templates',)
 
 INSTALLED_APPS = (
   'apps.public',
@@ -336,9 +312,6 @@ INSTALLED_APPS = (
 )
 if PRODUCTION:
   INSTALLED_APPS += ('raven.contrib.django.raven_compat',) #Sentry
-
-#if not (PRODUCTION or STAGE or DEMO):
-#  INSTALLED_APPS += ('debug_toolbar',)
 
 TEMPLATE_CONTEXT_PROCESSORS = (
   'django.core.context_processors.debug',
