@@ -193,6 +193,7 @@ RAVEN_CONFIG = {
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = [
   'www.theanou.com',
+  'theanou.com',
   'anou-cobra.herokuapp.com',
   'anou-cobra-stage.herokuapp.com',
   'anou-cobra-demo.herokuapp.com',
@@ -293,8 +294,8 @@ MIDDLEWARE_CLASSES = (
   # Uncomment the next line for simple clickjacking protection:
   # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
-if not (PRODUCTION or STAGE or DEMO):
-  MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+#if not (PRODUCTION or STAGE or DEMO):
+#  MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
 
 ROOT_URLCONF = 'settings.urls'
 
@@ -308,8 +309,8 @@ TEMPLATE_DIRS = (
   # Always use forward slashes, even on Windows.
   # Don't forget to use absolute paths, not relative paths.
 )
-if not (PRODUCTION or STAGE or DEMO):
-  TEMPLATE_DIRS += ('C:\django\django-debug-toolbar\debug_toolbar\templates',)
+#if not (PRODUCTION or STAGE or DEMO):
+#  TEMPLATE_DIRS += ('C:\django\django-debug-toolbar\debug_toolbar\templates',)
 
 INSTALLED_APPS = (
   'apps.public',
@@ -336,8 +337,8 @@ INSTALLED_APPS = (
 if PRODUCTION:
   INSTALLED_APPS += ('raven.contrib.django.raven_compat',) #Sentry
 
-if not (PRODUCTION or STAGE or DEMO):
-  INSTALLED_APPS += ('debug_toolbar',)
+#if not (PRODUCTION or STAGE or DEMO):
+#  INSTALLED_APPS += ('debug_toolbar',)
 
 TEMPLATE_CONTEXT_PROCESSORS = (
   'django.core.context_processors.debug',
