@@ -1,4 +1,3 @@
-from apps.communication import models
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.template import Context
 from django.template.loader import render_to_string
@@ -88,11 +87,12 @@ class Email(object):
   #  self.attachment_url = url
 
   def save(self):
+    from apps.communication.models import Email as EmailDBModel
     try:    self.order
     except: self.order = None
 
     try:
-      email = models.Email(
+      email = EmailDBModel(
                 from_address  = self.mail.from_email,
                 to_address    = ','.join(self.mail.to),
                 subject       = self.mail.subject,

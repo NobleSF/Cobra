@@ -154,8 +154,13 @@ def communicateOrderSellerPaid(order):
     return "error: " + str(e)
 
 def cancelOrder(order):
-  message = 'Cancel order %d, Confirmation# %d' % (order.id, order.cart.checkout_id)
-  email = Email(message=message)
-  email.assignToOrder(order)
-  email.sendTo((people.Dan.email,people.Tom.email))
-  #todo: email customer
+  try:
+    message = 'Cancel order %d, Confirmation# %d' % (order.id, order.cart.checkout_id)
+    email = Email(message=message)
+    email.assignToOrder(order)
+    email.sendTo((people.Dan.email,people.Tom.email))
+    #todo: email customer
+
+  except Exception as e:
+    ExceptionHandler(e, "in order_events.cancelOrder")
+    #a product was likely deactivated and it's order not cancelled!
