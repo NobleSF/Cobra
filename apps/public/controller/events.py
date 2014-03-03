@@ -60,16 +60,8 @@ def invalidateAllSellerCaches():
 @postpone
 def rebuildRankings():
   from apps.public.controller.product_ranking import updateRankings
-  from django.utils import timezone
 
-  products = Product.objects.filter(sold_at=None,
-                                    approved_at__lte=timezone.now(),
-                                    active_at__lte=timezone.now(),
-                                    seller__approved_at__lte=timezone.now(),
-                                    seller__deactive_at=None,
-                                    deactive_at=None)
-
-  for product in products:
+  for product in Product.objects.for_sale():
     try:
       updateRankings(product, except_ratings=True)
     except:

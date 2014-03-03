@@ -6,8 +6,16 @@ from apps.seller.models.shipping_option import ShippingOption
 
 from django.utils import timezone
 from apps.admin.utils.exception_handling import ExceptionHandler
-from apps.communication.controller.email_class import Email
-from settings.people import Dan, Brahim
+
+class ProductManager(models.Manager):
+  def for_sale(self):
+    return super(ProductManager, self).get_queryset().filter(
+                                        sold_at=None,
+                                        approved_at__lte=timezone.now(),
+                                        active_at__lte=timezone.now(),
+                                        deactive_at=None,
+                                        seller__approved_at__lte=timezone.now(),
+                                        seller__deactive_at=None)
 
 class Product(models.Model):
   seller        = models.ForeignKey(Seller)
@@ -38,6 +46,9 @@ class Product(models.Model):
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
 
+  #MANAGERS
+  objects = ProductManager()
+
   class Meta:
     ordering = ['-sold_at', '-id']
     app_label = 'seller'
@@ -50,6 +61,9 @@ class Product(models.Model):
 
   @is_active.setter
   def is_active(self, value):
+    from apps.communication.controller.email_class import Email
+    from settings.people import Dan, Brahim, everyones_emails
+
     if value and self.active_at and not self.deactive_at: #already active
       pass
 
@@ -66,7 +80,6 @@ class Product(models.Model):
         cancelOrder(order)
 
       try:
-        from settings.people import everyones_emails
         message = "R %d" % self.id
         message += "<br>%s" % self.seller.name
         Email(message=message).sendTo(everyones_emails)
@@ -453,13 +466,10 @@ class Product(models.Model):
   def get_related_products(self, limit=3):
     from django.utils import timezone
     try:
-      products = (self.seller.product_set
-                      .filter(sold_at=None,
-                              approved_at__lte=timezone.now(),
-                              deactive_at=None)
-                      .exclude(id=self.id)
-                      .order_by('approved_at').reverse())[:limit]
-      return products
+      return (Product.objects.for_sale()
+              .filter(seller=self.seller)
+              .exclude(id=self.id))[:limit]
+      #todo: create recommendation engine
     except:
       return []
 

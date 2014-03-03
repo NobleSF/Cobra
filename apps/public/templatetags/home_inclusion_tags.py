@@ -3,21 +3,13 @@ register = template.Library()
 
 @register.inclusion_tag('home/homepage_products.html')
 def homepage_products_tag():
-  from django.utils import timezone
-  from datetime import timedelta
   from apps.seller.models.product import Product
   from apps.public.controller.product_ranking import updateRankings
 
-  products = (Product.objects.filter(sold_at=None,
-                                    approved_at__lte=timezone.now(),
-                                    active_at__lte=timezone.now(),
-                                    seller__approved_at__lte=timezone.now(),
-                                    seller__deactive_at=None,
-                                    deactive_at=None)
-                              .exclude(ranking=None))
-
+  products = Product.objects.for_sale().exclude(ranking=None)
+  #sort by average ranking points, descending
   products = sorted(products, key=lambda p: p.ranking.weighted_average)
-  products.reverse() #sort by points descending
+  products.reverse()
   return {'products':products}
 
 @register.inclusion_tag('home/product.html')
