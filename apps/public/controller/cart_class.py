@@ -19,7 +19,7 @@ def cleanupCarts():
             item.delete()
 
   except Exception as e:
-    ExceptionHandler(e, "error on cart cleanup")
+    ExceptionHandler(e, "error on cart_class.cleanupCarts")
 
 # based on https://github.com/bmentges/django-cart
 class Cart(object):
@@ -58,29 +58,29 @@ class Cart(object):
 
   def add(self, product): #, quantity=1
     try:
-      item = models.Item.objects.get(
+      item = models.Item.objects.get_or_create(
         cart=self.cart,
-        product=product,
-      )
-    except Exception as e:
-      item = models.Item()
-      item.cart = self.cart
-      item.product = product
-      #item.quantity = quantity
-    else: #ItemAlreadyExists
-      pass #item.quantity = item.quantity + int(quantity)
-    finally:
+        product=product)
+      #item.quantity = item.quantity + quantity if item.quantity else quantity
       item.save()
+    except Exception as e:
+      ExceptionHandler(e, "error on cart_class.add")
 
-  def remove(self, product):
+  def remove(self, product): #, quantity=None
     try:
       item = models.Item.objects.get(
         cart=self.cart,
         product=product,
       )
-    except Exception: pass #i don't care
-    else:
+      #if quantity and quantity < item.quantity:
+      #  item.quantity -= quantity
+      #  item.save()
+      #else:
       item.delete()
+    except models.Item.DoesNotExist:
+      pass #i don't care
+    except Exception as e:
+      ExceptionHandler(e, "error on cart_class.remove")
 
   def update(self, product): #, quantity
     try:
@@ -88,7 +88,10 @@ class Cart(object):
         cart=self.cart,
         product=product,
       )
-    except Exception: pass
+      #item.quantity = quantity
+      #item.save()
+    except Exception as e:
+      ExceptionHandler(e, "error on cart_class.update")
 
   def saveData(self, attribute, value):
     try:

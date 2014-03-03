@@ -133,9 +133,8 @@ def imageFormData(request):
 
 @access_required('seller')
 @csrf_exempt
-def checkPhotoUpload(request):#for our JS to check upload status and get thumb_url todo:cache response
-  from apps.seller.controller.product_class import Product
-
+def checkPhotoUpload(request): #js checks upload status and gets thumb_url
+  #todo:cache response
   if request.method != 'GET' or 'public_id' not in request.GET:
     return HttpResponse("public_id required", status=406)#Not acceptable
 
@@ -147,9 +146,15 @@ def checkPhotoUpload(request):#for our JS to check upload status and get thumb_u
     else:
       try:
         if upload.is_complete:
-          product = Product(request.GET['product_id'])
+          from apps.seller.models.photo import Photo
 
-          photo = product.addPhoto(upload.url, request.GET['rank'])
+          photo, is_new = Photo.objects.get_or_create(
+                            product_id = request.GET['product_id'],
+                            rank = request.GET['rank'])
+
+          photo.original = upload.url
+          photo.save()
+
           response = {'thumb_url': photo.thumb_size}
 
           return HttpResponse(json.dumps(response),

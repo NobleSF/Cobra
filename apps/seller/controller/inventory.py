@@ -6,8 +6,11 @@ import json
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.views.decorators.csrf import csrf_exempt
+from apps.seller.models.shipping_option import ShippingOption
 from apps.seller.models.seller import Seller
-from apps.seller.controller.product_class import Product
+from apps.seller.models.product import Product
+from apps.seller.models.asset import Asset
+from apps.admin.models import Color
 
 def checkInventory(seller):
   #preferred method
@@ -44,8 +47,9 @@ def create(request):
     if product_to_edit:
       return redirect("%d/edit" % product_to_edit.id)
     else:
-      new_product_object = Product(request=request)
-      return redirect("%d/edit" % new_product_object.product.id)
+      new_product = Product(seller=seller)
+      new_product.save()
+      return redirect("%d/edit" % new_product.id)
 
   except Exception as e:
     ExceptionHandler(e, "in inventory.create")
@@ -57,30 +61,34 @@ def edit(request, product_id):
   from settings.settings import CLOUDINARY
 
   try:
-    product = Product(product_id, request)
+    if request.session.get('admin_type') in ['master','country','trainer']:
+      product = Product.objects.get(id=product_id)
+    else:
+      product = Product.objects.get(id=product_id,
+                                    seller_id=request.session['seller_id'])
 
     product_form = ProductEditForm()
-    product_form.fields['price'].initial  = product.get('price')
-    product_form.fields['length'].initial = product.get('length')
-    product_form.fields['width'].initial  = product.get('width')
-    product_form.fields['height'].initial = product.get('height')
-    product_form.fields['weight'].initial = product.get('weight')
+    product_form.fields['price'].initial  = product.price
+    product_form.fields['length'].initial = product.length
+    product_form.fields['width'].initial  = product.width
+    product_form.fields['height'].initial = product.height
+    product_form.fields['weight'].initial = product.weight
 
-    for asset in product.product.assets.all():
+    for asset in product.assets.all():
       product_form.fields['assets'].initial += str(asset.id)+" "
 
-    for color in product.product.colors.all():
+    for color in product.colors.all():
       product_form.fields['colors'].initial += str(color.id)+" "
 
-    for shipping_option in product.product.shipping_options.all():
+    for shipping_option in product.shipping_options.all():
       product_form.fields['shipping_options'].initial += str(shipping_option.id)+" "
 
-    product_form.fields['product_id'].initial = product.product.id
+    product_form.fields['product_id'].initial = product.id
 
-    product.product.photos = product.product.photos.order_by('rank')
+    product.photos = product.photos.order_by('rank')#todo: remove, unnecessary
 
     context = {
-      'product':          product.product,
+      'product':          product,
       'product_form':     product_form,
       'CLOUDINARY':       {'upload_url':   CLOUDINARY['upload_url'],
                            'download_url': CLOUDINARY['download_url']
@@ -100,8 +108,10 @@ def detail(request, product_id):
 @access_required('seller')
 def remove(request, product_id): #seller deactivate product #todo: merge logic with saveProduct
   try:
-    product = Product(product_id)
-    product.deactivate()
+    product = Product.objects.get(id=product_id,
+                                  seller_id=request.session['seller_id'])
+    product.is_active = False
+    product.save()
 
     if request.session.get('admin_id'):
       messages.success(request, "Product successfully removed from inventory.")
@@ -120,63 +130,90 @@ def saveProduct(request): #ajax requests only, not asset-aware #todo change name
 
   if request.method == 'GET': # it must be an ajax GET to work
     try:
-      product = Product(request.GET.get('product_id'))
+      if request.session.get('admin_type') in ['master','country','trainer']:
+        product = Product.objects.get(id=request.GET.get('product_id'))
+      else:
+        product = Product.objects.get(id=request.GET.get('product_id'),
+                                      seller_id = request.session['seller_id'])
 
       if request.GET.get('activate') == "yes":
-        product.activate();
+        product.is_active = True
+        product.save()
 
-      attribute = request.GET.get('attribute')
-      status    = request.GET.get('status')
-      if attribute and attribute != "active":
-        product.unapprove()
+      attribute = request.GET.get('attribute', None)
+      status    = request.GET.get('status', None)
+      value     = request.GET.get('value', None)
+      value     = int(round(float(value))) if value else None
 
       if attribute == "asset":
-        if status == "active":
-          response['asset'] = product.addAsset(request.GET.get('asset_id'))
-        else:
-          response['asset'] = product.removeAsset(request.GET.get('asset_id'))
+        try:
+          asset = Asset.objects.get(id=request.GET.get('asset_id'))
+          if status == "active":
+            product.assets.add(asset)
+            response['asset'] = "added asset %d" % asset.id
+          else:
+            product.assets.remove(asset)
+            response['asset'] = "removed asset %d" % asset.id
+        except Asset.DoesNotExist:
+          response['asset'] = "asset does not exist"
+        except Exception as e:
+          response['asset'] = str(e)
 
       elif attribute == "shipping option":
-        if status == "active":
-          response['shipping_option'] = product.addShippingOption(request.GET.get('shipping_option_id'))
-        else:
-          response['shipping_option'] = product.removeShippingOption(request.GET.get('shipping_option_id'))
+        try:
+          shipping_option = ShippingOption.objects.get(
+                              id=request.GET.get('shipping_option_id'))
+          if status == "active":
+            product.shipping_options.add(shipping_option)
+            response['shipping_option'] = "added shipping option %d" % shipping_option.id
+          else:
+            product.shipping_options.remove(shipping_option)
+            response['shipping_option'] = "removed shipping option %d" % shipping_option.id
+        except ShippingOption.DoesNotExist:
+          response['shipping_option'] = "shipping option does not exist"
+        except Exception as e:
+          response['shipping_option'] = str(e)
 
       elif attribute == "color":
-        if status == "active":
-          response['color'] = product.addColor(request.GET.get('color_id'))
-        else:
-          response['color'] = product.removeColor(request.GET.get('color_id'))
-
-      elif attribute == "photo":
         try:
-          rank = request.GET['rank']
-          url = request.GET['value']
-        except: response['photo'] = "error saving photo"
-        else:
-          photo = product.addPhoto(url, rank)
-          if photo:
-            response['photo_id'] = photo.id
-            response['photo'] = "saved photo at rank %s with url %s" % (photo.rank, photo.original)
+          color = Color.objects.get(id=request.GET.get('color_id'))
+          if status == "active":
+            product.colors.add(color)
+            response['color'] = "added color %s" % color.name
           else:
-            response['photo'] = "error saving photo"
+            product.colors.remove(color)
+            response['color'] = "removed color %s" % color.name
+        except Color.DoesNotExist:
+          response['color'] = "color does not exist"
+        except Exception as e:
+          response['color'] = str(e)
 
       elif attribute == "active":
         if status == "yes":
-          response['active'] = product.activate()
+          product.is_active = True
         else:
-          response['active'] = not product.deactivate()
+          product.is_active = False
 
-      else:
-        success_message = product.update(attribute, request.GET.get('value'))
-        response['success'] = success_message
+
+      elif attribute == 'price':    product.price = value
+      elif attribute == 'length':   product.length = value
+      elif attribute == 'width':    product.width = value
+      elif attribute == 'height':   product.height = value
+      elif attribute == 'weight':   product.weight = value
+
+      else: #final else after all other possible options
+        raise Exception('attribute does not exist')
 
       cost_summary = {
-        'summary_price': str(product.product.price) if product.product.price else "",
-        'summary_shipping_cost': str(product.product.shipping_cost)
+        'summary_price': str(product.price) if product.price else "",
+        'summary_shipping_cost': str(product.shipping_cost)
       }
       response.update(cost_summary)
-      #response['is_complete'] = product.product.is_complete
+      #response['is_complete'] = product.is_complete
+
+      #save product only at the very end
+      product.is_approved = False
+      product.save()
 
     except Exception as e:
       ExceptionHandler(e, "in inventory.saveProduct")

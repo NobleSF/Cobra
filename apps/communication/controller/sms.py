@@ -6,10 +6,7 @@ import re #regular expressions
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from apps.admin.utils.exception_handling import ExceptionHandler
-from apps.communication.models import SMS
-from apps.seller.models.seller import Seller
-from apps.seller.models.asset import Asset
-from apps.seller.controller.product_class import Product
+from apps.seller.models.product import Product
 from apps.admin.utils.decorator import postpone
 from apps.communication.controller.email_class import Email
 from settings.people import Dan, Brahim
@@ -59,6 +56,7 @@ def sendSMSForOrder(message, to_number, order, priority='1'):
 
 def saveSMS(sms_data): #takes Telerivet response content detail at
   #https://telerivet.com/p/PJ8973e6e346c349cbcdd094fcffa9fcb5/api/rest/sending
+  from apps.communication.models import SMS
   try:
     sms_messages = SMS.objects.filter(telerivet_id = sms_data['id'])
     if sms_messages:
@@ -99,7 +97,7 @@ def incoming(request):
         Step 1. Save the SMS in the db or our record
         Step 2. Understand the content of the message
         Step 3. Find a product match for the product ID number
-        Step 4. Pass product_class handles removals
+        Step 4. Handles removals
         Step 5. Pass order updates off to order_events function
 
         Return EITHER reply message OR 200-ok OR 500-error
@@ -132,35 +130,35 @@ def incoming(request):
 
       else: #it was understandable
         (product_id, data) = msg_data
-        product = Product(product_id)
-
-        if not product.product:
+        try:
+          product = Product.objects.get(id=product_id)
+        except:
           return HttpResponse(status=200)#OK
 
-        elif product.belongsToPhone(request.POST.get('from_number')):
+        if not product.belongsToPhone(request.POST.get('from_number')):
+          message = "This SMS not from product owner: " + request.POST.get('content')
+          Email(message=message).sendTo(Dan.email)
+          return HttpResponse(status=200)#OK
+
+        else:
           #if the sender owns the product, update the order
 
           if data.get('remove'):
-            product.deactivate()
+            product.is_active = False
+            product.save()
             reply_msg = 'shukran'
           else:
             reply_msg = order_events.updateOrder(msg_data, gimme_reply_sms=True)
             #gives us reply string or True(no reply)
 
-          if isinstance(reply_msg, basestring):
+          if not isinstance(reply_msg, basestring):
+            return HttpResponse(status=200)#OK
+          else:
             sms.auto_reply = reply_msg
             sms.save()
             #send reply back with response
             response = {'messages':[{'content':reply_msg}]}
             return HttpResponse(json.dumps(response), content_type='application/json')
-
-          else:
-            return HttpResponse(status=200)#OK
-
-        else:
-          message = "This SMS not from product owner: " + request.POST.get('content')
-          Email(message=message).sendTo(Dan.email)
-          return HttpResponse(status=200)#OK
 
           #todo: email Brahim about this incoming text product with wrong owner
 
@@ -194,6 +192,9 @@ def status_confirmation(request):
     return HttpResponse(status=403)#forbidden, didn't come from Telerivet
 
 def getPhoneOwner(phone_number):
+  from apps.seller.models.seller import Seller
+  from apps.seller.models.asset import Asset
+
   phone_number = phone_number[-8:]
   sender = {}
   try: sender['Seller'] = Seller.objects.get(account__phone__endswith=phone_number)
@@ -217,14 +218,14 @@ def understandMessage(message): #example message '123 CP123456789MA'
     pattern = re.compile('^\D{0,2}(\d{1,4})(?![\d])')
     matches = pattern.match(message)
     product_id = matches.group(1) #captured product_id
-    product = Product(product_id)
+    product = Product.objects.get(id=product_id)
   except:
     product = None
 
   stripped_message = re.sub(r'\W', '', message) #strip out all whitespace
 
-  if product and stripped_message == str(product.product.id): #only product id
-    return (product.product.id, {})
+  if product and stripped_message == str(product.id): #only product id
+    return (product.id, {})
 
   elif product:
     """ systematically check each possible command/action on the product id
@@ -250,7 +251,7 @@ def understandMessage(message): #example message '123 CP123456789MA'
       data['tracking_number'] = matches.group(1)
     except: pass
 
-    return (product.product.id, data) #like ('1234', {'tracking_number':"CP123456789MA"})
+    return (product.id, data) #like ('1234', {'tracking_number':"CP123456789MA"})
 
   else:
     return False

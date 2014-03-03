@@ -56,24 +56,27 @@ def unratedProducts(request):
 
 @access_required('admin')
 def approveProduct(request): #from AJAX GET request
-  from apps.seller.controller.product_class import Product
+  from apps.seller.models.product import Product
   try:
-    product = Product(request.GET.get('product_id'))
+    product = Product.objects.get(id=request.GET.get('product_id'))
     action = request.GET.get('action')
 
     if action == 'approve':
-      product.approve()
+      product.is_approved = True
+      product.save()
     elif action == 'hold':
-      product.hold()
+      product.is_on_hold = True
+      product.save()
     elif action == 'delete':
       product.delete();
     else:
       raise Exception('invalid action: %s' % action)
+
   except Exception as e:
     ExceptionHandler(e, "error on approve_product")
     response = {'error': str(e)}
   else:
-    response = {'success': "%s %s" % (action, product.product.id)}
+    response = {'success': "%s %s" % (action, product.id)}
 
   return HttpResponse(json.dumps(response), content_type='application/json')
 

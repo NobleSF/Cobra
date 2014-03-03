@@ -4,6 +4,11 @@ from apps.seller.models.asset import Asset
 from apps.seller.models.seller import Seller
 from apps.seller.models.shipping_option import ShippingOption
 
+from django.utils import timezone
+from apps.admin.utils.exception_handling import ExceptionHandler
+from apps.communication.controller.email_class import Email
+from settings.people import Dan, Brahim
+
 class Product(models.Model):
   seller        = models.ForeignKey(Seller)
 
@@ -20,7 +25,8 @@ class Product(models.Model):
   #lifecycle milestones
   active_at     = models.DateTimeField(null=True, blank=True) #seller add
   deactive_at   = models.DateTimeField(null=True, blank=True) #seller remove
-  in_holding    = models.BooleanField(default=False) #unable to be approved
+  in_holding    = models.BooleanField(default=False) #held by admin
+  #todo: change this to on_hold_at = datetime
   approved_at   = models.DateTimeField(null=True, blank=True) #admin approval
   sold_at       = models.DateTimeField(null=True, blank=True)
   #is_orderable  = models.BooleanField(default=False) #for custom orders
@@ -38,15 +44,87 @@ class Product(models.Model):
 
   # MODEL PROPERTIES
   @property
-  def was_never_active(self): return True if not self.active_at else False
-  #todo: use property.setter functions too!
-  #(http://docs.python.org/2/library/functions.html#property)
+  def is_active(self):
+    if self.active_at and not self.deactive_at: return True
+    else: return False
+
+  @is_active.setter
+  def is_active(self, value):
+    if value and self.active_at and not self.deactive_at: #already active
+      pass
+
+    elif value: #activate
+      self.active_at = timezone.now()
+      self.deactive_at = None
+      Email('product/activated', self).sendTo([Dan.email, Brahim.email])
+
+    elif not value: #deactivate
+      self.deactive_at = timezone.now()
+      #cancel orders of this product
+      from apps.communication.controller.order_events import cancelOrder
+      for order in self.order_set.all():
+        cancelOrder(order)
+
+      try:
+        from settings.people import everyones_emails
+        message = "R %d" % self.id
+        message += "<br>%s" % self.seller.name
+        Email(message=message).sendTo(everyones_emails)
+      except Exception as e:
+        ExceptionHandler(e, "in Product.is_active")
+
+    #always
+    self.in_holding = False
 
   @property
-  def is_active(self): return True if (self.active_at and not self.deactive_at) else False
+  def was_never_active(self):
+    #was never active in it's current state
+    #will return true if was active and then deactivated
+    return True if not self.active_at else False
 
   @property
-  def is_sold(self): return True if self.sold_at else False
+  def is_on_hold(self):
+    if self.in_holding: return True
+    else: return False
+
+  @is_on_hold.setter
+  def is_on_hold(self, value):
+    if value: #hold
+      self.approved_at = None
+      self.in_holding = True
+    elif not value: #unhold
+      self.in_holding = False
+
+  @property
+  def is_approved(self):
+    if self.approved_at and self.is_active: return True
+    else: return False
+
+  @is_approved.setter
+  def is_approved(self, value):
+    if value and self.approved_at: #already approved
+      pass
+    elif value: #approve
+      self.approved_at = timezone.now()
+      self.resetSlug()
+    elif not value: #unapprove or disapprove #todo: separate these actions
+      self.approved_at = None
+    #always:
+    self.in_holding = False
+
+  @property
+  def is_sold(self):
+    if self.sold_at: return True
+    else: return False
+
+  @is_sold.setter
+  def is_sold(self, value):
+    if value and self.sold_at: #already sold
+      pass
+    elif value:
+      self.sold_at = timezone.now()
+    elif not value:
+      self.sold_at = None
 
   @property
   def is_recently_sold(self):
@@ -61,9 +139,6 @@ class Product(models.Model):
         return False
     else:
       return False
-
-  @property
-  def is_approved(self): return True if (self.approved_at and self.is_active) else False
 
   @property
   def photo(self):
@@ -374,6 +449,7 @@ class Product(models.Model):
       return "" #probably doesn't need to be working anyway
 
   # MODEL FUNCTIONS
+
   def get_related_products(self, limit=3):
     from django.utils import timezone
     try:
@@ -395,6 +471,16 @@ class Product(models.Model):
       self.save()
     except: pass
 
+
+  def belongsToPhone(self, phone_number):
+    try:
+      seller_phone = self.seller.account.phone
+      return True if (phone_number[-8:] == seller_phone[-8:]) else False
+    except Exception as e:
+      ExceptionHandler(e, "in Product.belongsToPhone")
+      return False
+
+
   def get_absolute_url(self):
     from django.core.urlresolvers import reverse
     if not self.slug:
@@ -407,10 +493,19 @@ class Product(models.Model):
 
   def __unicode__(self):
     if self.color_adjective:
-      return "%s%s" % (self.color_adjective, self.name)
+      return unicode("%s%s" % (self.color_adjective, self.name))
     else:
-      return self.name
+      return unicode(self.name)
 
 def rreplace(s, old, new, occurrence):
   li = s.rsplit(old, occurrence)
   return new.join(li)
+
+
+
+#POST SAVE SIGNALS
+"""
+when asset added, make sure it belongs to the same seller as the product
+
+
+"""
