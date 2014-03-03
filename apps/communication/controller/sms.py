@@ -38,7 +38,8 @@ def sendSMS(message, to_number, priority='1'): #using Telerivet
     if int(response.status_code) is 200:
       return saveSMS(response_content) #responds with SMS object or exception str
     else:
-      details = "status:%d" % response.status_code if response.status_code else ""
+      details = "status: %d" % response.status_code if response.status_code else ""
+      details += ", error: %s" % response_content.get('error', 'not provided')
       e = Exception('bad request or possible Telerivet error, %s' % details)
       ExceptionHandler(e, "in sms.sendSMS-B")
       return None
@@ -49,7 +50,8 @@ def sendSMSForOrder(message, to_number, order, priority='1'):
     sms = sendSMS(message, to_number, priority)
     if sms and order:
       sms.order = order
-    sms.save()
+    elif sms:
+      sms.save()
 
   except Exception as e:
     ExceptionHandler(e, "in sms.sendSMSForOrder")

@@ -58,7 +58,7 @@ class Cart(object):
 
   def add(self, product): #, quantity=1
     try:
-      item = models.Item.objects.get_or_create(
+      item, is_new = models.Item.objects.get_or_create(
         cart=self.cart,
         product=product)
       #item.quantity = item.quantity + quantity if item.quantity else quantity
