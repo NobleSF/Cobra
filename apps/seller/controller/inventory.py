@@ -147,7 +147,8 @@ def saveProduct(request): #ajax requests only, not asset-aware #todo change name
 
       if attribute == "asset":
         try:
-          asset = Asset.objects.get(id=request.GET.get('asset_id'))
+          asset = (Asset.objects.filter(seller=product.seller) #asset belongs to seller
+                   .get(id=request.GET.get('asset_id')))
           if status == "active":
             product.assets.add(asset)
             response['asset'] = "added asset %d" % asset.id
