@@ -37,5 +37,17 @@ class Asset(models.Model):
     ordering = ['rank', 'created_at']
     app_label = 'seller'
 
-# MODEL PROPERTIES
-# MODEL FUNCTIONS
+  # MODEL PROPERTIES
+  # MODEL FUNCTIONS
+
+#SIGNALS AND SIGNAL REGISTRATION
+from django.dispatch import receiver
+from django.db.models.signals import pre_save, post_save, pre_delete, m2m_changed
+
+@receiver(post_save, sender=Asset)
+def createRanking(sender, instance, created, **kwargs):
+  if not created:
+    products = instance.product_set.all()
+    for p in products:
+      p.resetSlug()
+      p.save() #not necessary, but shows that the save signals will fire

@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from apps.seller.models.product import Product
 from apps.public.models import Rating, Ranking
+from apps.admin.utils.exception_handling import ExceptionHandler
 
 WEIGHTS = {'photography': 14,
            'price':       5,
@@ -15,50 +16,18 @@ WEIGHTS = {'photography': 14,
 DAYS_TO_PROMOTE_NEW_PRODUCT = 2
 DAYS_TO_PROMOTE_NEW_STORE   = 14
 
-@receiver(post_save, sender=Product)
-def createRanking(sender, instance, created, **kwargs):
-  if created:
-    ranking = Ranking(product = instance,
-                      new_product = newProductResult(instance))
-
 def updateRankings(product, except_ratings=False):
   try:
-    #get ranking objects
-    ranking = product.ranking
+    ranking, is_new = Ranking.objects.get_or_create(product=product)
     ranking.new_product = newProductResult(product)
-  except Ranking.DoesNotExist:
-    #create one
-    ranking = Ranking(product = product,
-                      new_product = newProductResult(product))
-
-  ranking.new_store = newStoreResult(product)
-  if not except_ratings:
-    ranking.photography = photographyResult(product)
-    ranking.price = priceResult(product)
-    ranking.appeal = appealResult(product)
-  ranking.save()
-
-@receiver(post_save, sender=Rating)
-def updateRatingRankings(sender, instance, created, **kwargs):
-  rating = instance
-  try:
-    ranking = rating.product.ranking
-  except Ranking.DoesNotExist:
-    #create one
-    ranking = Ranking(product = rating.product,
-                      new_product = newProductResult(rating.product))
-  except: pass
-
-  try:
-    if rating.subject.name == 'Photography':
-      ranking.photography = photographyResult(rating.product)
-    elif rating.subject.name == 'Price':
-      ranking.price = priceResult(rating.product)
-    elif rating.subject.name == 'Appeal':
-      ranking.appeal = appealResult(rating.product)
+    ranking.new_store = newStoreResult(product)
+    if not except_ratings:
+      ranking.photography = photographyResult(product)
+      ranking.price = priceResult(product)
+      ranking.appeal = appealResult(product)
     ranking.save()
-  except:
-    pass
+  except Exception as e:
+    ExceptionHandler(e, "error on product_rankings.updateRankings", sentry_only=True)
 
 def photographyResult(product):
   try:

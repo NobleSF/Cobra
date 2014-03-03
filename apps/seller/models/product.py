@@ -40,6 +40,7 @@ class Product(models.Model):
   #is_orderable  = models.BooleanField(default=False) #for custom orders
   #is_hidden     = being sold on another platform (etys, ebay)
 
+  #dynamically created and updated
   slug          = models.CharField(max_length=150, null=True, blank=True)
 
   #update history
@@ -462,7 +463,6 @@ class Product(models.Model):
       return "" #probably doesn't need to be working anyway
 
   # MODEL FUNCTIONS
-
   def get_related_products(self, limit=3):
     from django.utils import timezone
     try:
@@ -481,7 +481,6 @@ class Product(models.Model):
       self.save()
     except: pass
 
-
   def belongsToPhone(self, phone_number):
     try:
       seller_phone = self.seller.account.phone
@@ -489,7 +488,6 @@ class Product(models.Model):
     except Exception as e:
       ExceptionHandler(e, "in Product.belongsToPhone")
       return False
-
 
   def get_absolute_url(self):
     from django.core.urlresolvers import reverse
@@ -507,15 +505,37 @@ class Product(models.Model):
     else:
       return unicode(self.name)
 
+#SUPPORTING FUNCTIONS
 def rreplace(s, old, new, occurrence):
   li = s.rsplit(old, occurrence)
   return new.join(li)
 
+#SIGNALS AND SIGNAL REGISTRATION
+from django.dispatch import receiver
+from django.db.models.signals import pre_save, post_save, pre_delete
 
+@receiver(pre_delete, sender=Product)
+def onDelete(sender, instance, **kwargs):
+  try:
+    #todo: copy instance to reporting app
+    instance.assets.clear()
+    instance.colors.clear()
+    instance.shipping_options.clear()
+  except Exception as e:
+    ExceptionHandler(e, "error on product.onDelete pre_delete signal")
 
-#POST SAVE SIGNALS
-"""
-when asset added, make sure it belongs to the same seller as the product
+@receiver(post_save, sender=Product)
+def createRanking(sender, instance, created, update_fields, **kwargs):
+  try:
+    from apps.public.models import Ranking
+    from apps.public.controller.product_ranking import updateRankings
+    if created:
+      ranking, is_new = Ranking.objects.get_or_create(product = instance)
+      ranking.new_product = newProductResult(instance)
+  except Exception as e:
+    ExceptionHandler(e, "error on product.createRanking post_save signal")
 
-
-"""
+@receiver(post_save, sender=Product)
+def resetProductPageCache(sender, instance, created, update_fields, **kwargs):
+  from apps.public.controller.events import invalidate_product_cache
+  invalidate_product_cache(instance.id)

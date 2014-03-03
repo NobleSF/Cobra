@@ -170,8 +170,8 @@ class Order(models.Model):
 
 class Rating(models.Model):
   from apps.admin.models import RatingSubject
-
   session_key         = models.CharField(max_length=32)
+  #todo: tie to account
   product             = models.ForeignKey(Product)
   subject             = models.ForeignKey(RatingSubject)
   value               = models.SmallIntegerField()
@@ -182,14 +182,11 @@ class Rating(models.Model):
 
 class Ranking(models.Model):
   from apps.seller.models.product import Product
-
   product       = models.OneToOneField(Product)
-
   photography   = models.DecimalField(max_digits=3, decimal_places=2, default='0.50')
   price         = models.DecimalField(max_digits=3, decimal_places=2, default='0.50')
   appeal        = models.DecimalField(max_digits=3, decimal_places=2, default='0.50')
-
-  new_product   = models.DecimalField(max_digits=3, decimal_places=2)
+  new_product   = models.DecimalField(max_digits=3, decimal_places=2, default='1.00')
   new_store     = models.DecimalField(max_digits=3, decimal_places=2, default='1.00')
 
   #update history
@@ -223,5 +220,25 @@ class Ranking(models.Model):
       sum += WEIGHTS[key]
     return sum
 
-#signal receivers are in here
-from apps.public.controller import product_ranking
+#SIGNALS AND SIGNAL REGISTRATION
+from django.dispatch import receiver
+from django.db.models.signals import pre_save, post_save, pre_delete
+
+@receiver(post_save, sender=Rating)
+def updateRatingRankings(sender, instance, created, **kwargs):
+  from apps.public.controller.product_ranking import newProductResult, newStoreResult, photographyResult, priceResult, appealResult
+  try:
+    ranking, is_new = Ranking.objects.get_or_create(product = instance.product)
+    if is_new:
+      ranking.new_product = newProductResult(instance.product)
+      ranking.new_store   = newStoreResult(instance.product)
+
+    if instance.subject.name == 'Photography':
+      ranking.photography = photographyResult(instance.product)
+    elif instance.subject.name == 'Price':
+      ranking.price = priceResult(instance.product)
+    elif instance.subject.name == 'Appeal':
+      ranking.appeal = appealResult(instance.product)
+    ranking.save()
+  except Exception as e:
+    ExceptionHandler(e, "error on product_rankings.updateRatingRankings", sentry_only=True)
