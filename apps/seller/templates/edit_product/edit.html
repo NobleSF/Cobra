@@ -1,6 +1,6 @@
 {% extends "seller_base.html" %}
 {% load url from future %}
-{% load inventory_inclusion_tags %}
+{% load edit_product_inclusion_tags %}
 
 {% block title %}edit {{ product.id }}{% endblock title %}
 
@@ -22,10 +22,7 @@
   <script src='{{ STATIC_URL }}seller/js/product_photo_upload.min.js'></script>
 {% endblock javascript%}
 
-{% block new_product_active %}active{% endblock %}
-
 {% block content %}
-
   <input type='hidden' id='product-ajax-url' value="{% url 'seller:save product' %}">
   <input type='hidden' id='product-id' value='{{ product.id }}'>
 
@@ -38,9 +35,7 @@
   <input type='hidden' id='upload-check-url'
          value="{% url 'seller:check photo upload' %}">
 
-
   <div id='product-edit-form' class='text-center'>
-
     <div class='hidden-fields'>
       {{ product_form.product_id }}
       {{ product_form.assets }}

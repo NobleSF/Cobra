@@ -1,11 +1,8 @@
 from django.conf.urls import patterns, include, url
-from controller import seller, account, inventory, cloudinary_upload, custom_order
+from controller import seller, account, inventory, cloudinary_upload, custom_order, edit_product
 
 urlpatterns = patterns('',
-
   url(r'^$', seller.home, name='home'), #seller dashboard, live products
-  url(r'^products$', seller.products, name='products'), #products
-  url(r'^orders$', seller.orders, name='orders'), #orders
 
   #SELLER ACCOUNT
   url(r'^edit$', account.edit, name='edit'), #edit seller info
@@ -13,12 +10,14 @@ urlpatterns = patterns('',
   url(r'^ajax/asset_delete$', account.deleteAsset, name='delete asset'),
 
   #INVENTORY
-  url(r'^ajax/product_save$', inventory.saveProduct, name='save product'),
+  url(r'^products$', inventory.products, name='products'), #products
+  url(r'^orders$', inventory.orders, name='orders'), #orders
 
   url(r'^inventory/create$', inventory.create, name='inventory create'),
-  url(r'^inventory/(?P<product_id>\d+)$', inventory.detail, name='inventory detail'),
-  url(r'^inventory/(?P<product_id>\d+)/edit$', inventory.edit, name='inventory edit'),
   url(r'^inventory/(?P<product_id>\d+)/remove$', inventory.remove, name='inventory remove'),
+
+  url(r'^inventory/(?P<product_id>\d+)/edit$', edit_product.edit, name='edit product'),
+  url(r'^ajax/product_save$', edit_product.saveProduct, name='save product'),
 
   #PHOTOS AND IMAGES
   url(r'^ajax/pho_data$', cloudinary_upload.photoFormData, name='photo form data'),
@@ -30,5 +29,4 @@ urlpatterns = patterns('',
   url(r'^ajax/complete_up$', cloudinary_upload.completeUpload, name='complete upload'),
 
   # CUSTOM ORDERS
-
 )
