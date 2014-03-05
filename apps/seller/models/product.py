@@ -38,7 +38,6 @@ class Product(models.Model):
   approved_at   = models.DateTimeField(null=True, blank=True) #admin approval
   sold_at       = models.DateTimeField(null=True, blank=True)
   #is_orderable  = models.BooleanField(default=False) #for custom orders
-  #is_hidden     = being sold on another platform (etys, ebay)
 
   #dynamically created and updated
   slug          = models.CharField(max_length=150, null=True, blank=True)
@@ -443,10 +442,12 @@ class Product(models.Model):
 
   @property
   def is_complete(self):
-    if (self.assets.filter(ilk='product').count() and #has product type
-        self.assets.filter(ilk='artisan').count() and #has artisan
-        self.photos.count() and #has photo
-        self.display_price #has price
+    if (self.assets.filter(ilk='product').count() #has product type
+        and self.assets.filter(ilk='artisan').count() #has artisan
+        and self.photos.count() #has photo
+        and self.shipping_options.count() #has shipping option
+        and self.display_price #has price
+        and self.weight #has weight
     ):
       return True
     else:
