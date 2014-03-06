@@ -3,15 +3,40 @@
 
 {% block css %}
   <style>
-
+    ul{list-style:none;}
+    #google{cursor:pointer;}
+    span[class*=symbol]{font-size: 18pt;}
   </style>
 {% endblock css %}
+
+{% block javascript %}
+  <script>
+    $('#google').one('click', function(){
+      product_id = $('#product-id').val()
+      url = "{% url 'admin:google product' %}" + "?product_id=" + product_id
+      window.location.replace(url);
+    });
+  </script>
+{% endblock javascript %}
 
 {% block logo %}
   <i class='symbol-world black'></i>
 {% endblock logo %}
 
 {% block content %}
+
+  <ul class='inline'>
+    <li>
+      <span class='symbol-solidtag'></span>
+    </li>
+    <li>
+      <input type='text' id='product-id' class='input-mini'>
+    </li>
+    <li>
+      <span id='google' class='symbol-go green'></span>
+    </li>
+  </ul>
+
   <ul>
 
     <li>
@@ -91,7 +116,6 @@
         <span style='color:#B163A3; border:2px solid #B163A3;'>2014 color of the year</span>
       </a>
     </li>
-
 
     <li>
       <a href="http://www.ebay.com/sch/Rugs-Carpets-/20571/i.html?_from=R40&LH_BIN=1&LH_Sold=1&_nkw=berber+rug" target="_blank">

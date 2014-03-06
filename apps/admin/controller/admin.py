@@ -9,6 +9,7 @@ def home(request):
   #request.session['admin_type'] = 'master'
   return render(request, 'admin_home.html', {})
 
+@access_required('admin')
 def stats(request):
   from apps.seller.models.product import Product
   from apps.public.models import Order
@@ -74,9 +75,6 @@ def stats(request):
 
   context = {'revenue_data':revenue_data, 'product_activity':product_activity}
   return render(request, 'stats.html', context)
-
-def research(request):
-  return render(request, 'research.html', {})
 
 def getNextMonth(date):#not smart to handle end-of-month limits (eg Feb 30th)
     year = date.year if date.month < 12 else date.year + 1

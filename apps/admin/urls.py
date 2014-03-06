@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from apps.admin.controller import admin, account, products, orders, communication, site_management
+from apps.admin.controller import admin, account, products, orders, communication, site_management, research
 
 #DASHBOARD PAGES
 urlpatterns = patterns('',
@@ -33,7 +33,9 @@ urlpatterns = patterns('',
 
   #EXTRAS
   url(r'^stats$', admin.stats, name='stats'),
-  url(r'^research$', admin.research, name='research'),
+  url(r'^research$', research.home, name='research'),
+  url(r'^research_google$', research.googleImageSearch, name='google product'),
+  url(r'^research_etsy$', research.etsySearch, name='etsy product'),
 
   #MASTER TOOLS
   url(r'^cache$', site_management.cache, name='cache'),

@@ -502,7 +502,7 @@ class Product(models.Model):
 
   def __unicode__(self):
     if self.color_adjective:
-      return unicode("%s%s" % (self.color_adjective, self.name))
+      return unicode("%s %s" % (self.color_adjective, self.name))
     else:
       return unicode(self.name)
 
