@@ -529,7 +529,7 @@ def onDelete(sender, instance, **kwargs):
 def createRanking(sender, instance, created, update_fields, **kwargs):
   try:
     from apps.public.models import Ranking
-    from apps.public.controller.product_ranking import updateRankings
+    from apps.public.controller.product_ranking import updateRankings, newProductResult
     if created:
       ranking, is_new = Ranking.objects.get_or_create(product = instance)
       ranking.new_product = newProductResult(instance)
