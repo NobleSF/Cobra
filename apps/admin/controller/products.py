@@ -150,9 +150,9 @@ def getProductData(request):
       product = Product.objects.get(id=request.GET['product_id'])
       response = {'price':            product.price,
                   'weight':           product.weight,
-                  'length':           product.length,
-                  'width':            product.width,
-                  'height':           product.height,
+                  'length':           product.length or 1,
+                  'width':            product.width or 1,
+                  'height':           product.height or 1,
                   'shipping_option':  product.shipping_options.all()[0].name,
                   'shipping_cost':    product.shipping_cost
                   }
