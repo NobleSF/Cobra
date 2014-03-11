@@ -13,8 +13,8 @@
     });
 
     $('.shipping-option').click(function(){
-      shipping_option = $(this).attr('id');
-      weight = $('#weight').val();
+      var shipping_option = $(this).attr('id');
+      var weight = $('#weight').val();
       clearData(except=$('#weight').add('#artisan-price'));
       $('.shipping-option').removeClass('gray').addClass('green');
       $(this).removeClass('green').addClass('gray');
@@ -27,10 +27,11 @@
 
     $('input').blur(function(){
       completeData();
+      customOrderCalculator();
     });
 
     function clearData(except){
-      items = $('input').not('#exchange-rate')
+      items = $('input').not('#exchange-rate');
       if (except){items = items.not(except)}
       items.val('');
     }
@@ -42,29 +43,30 @@
 
       if (artisan_price > 0 && shipping_cost > 0 && exchange_rate > 0){
 
-        var anou_fee = artisan_price * (10 / 90)
-        var local_price = artisan_price + shipping_cost + anou_fee
-        var usd_price = local_price / exchange_rate
+        var anou_fee = artisan_price * (10 / 90);
+        var local_price = artisan_price + shipping_cost + anou_fee;
+        var usd_price = local_price / exchange_rate;
 
-        $('#anou-fee').val(anou_fee.toFixed(2))
-        $('#local-price').val(local_price.toFixed(2))
-        $('#local-price-copy').val(local_price.toFixed(2))
-        $('#usd-price').val(usd_price.toFixed(2))
+        $('#anou-fee').val(anou_fee.toFixed(2));
+        $('#local-price').val(local_price.toFixed(2));
+        $('#local-price-copy').val(local_price.toFixed(2));
+        $('#usd-price').val(usd_price.toFixed(2));
 
-        var wepay_fee = 0.3 + ((0.029/(1-0.029))*(usd_price + 0.3))
-        var anou_store_price = usd_price + wepay_fee
-        $('#wepay-fee').val(wepay_fee.toFixed(2))
-        $('#anou-price').val(anou_store_price.toFixed(2))
+        var wepay_fee = 0.3 + ((0.029/(1-0.029))*(usd_price + 0.3));
+        var anou_store_price = usd_price + wepay_fee;
+        $('#wepay-fee').val(wepay_fee.toFixed(2));
+        $('#anou-price').val(anou_store_price.toFixed(2));
+        $('#old-price').val(anou_store_price.toFixed(2));
 
-        var ebay_fee = 0.3 + ((0.129/(1-0.129))*(usd_price + 0.3))
-        var ebay_price = usd_price + ebay_fee
-        $('#ebay-fee').val(ebay_fee.toFixed(2))
-        $('#ebay-price').val(ebay_price.toFixed(2))
+        var ebay_fee = 0.3 + ((0.129/(1-0.129))*(usd_price + 0.3));
+        var ebay_price = usd_price + ebay_fee;
+        $('#ebay-fee').val(ebay_fee.toFixed(2));
+        $('#ebay-price').val(ebay_price.toFixed(2));
 
-        var etsy_fee = 0.4 + ((0.065/(1-0.065))*(usd_price + 0.4))
-        var etsy_price = usd_price + etsy_fee
-        $('#etsy-fee').val(etsy_fee.toFixed(2))
-        $('#etsy-price').val(etsy_price.toFixed(2))
+        var etsy_fee = 0.4 + ((0.065/(1-0.065))*(usd_price + 0.4));
+        var etsy_price = usd_price + etsy_fee;
+        $('#etsy-fee').val(etsy_fee.toFixed(2));
+        $('#etsy-price').val(etsy_price.toFixed(2));
 
       }
     }
@@ -72,23 +74,30 @@
     function getProductData(product_id){
       url = "{% url 'admin:product data' %}";
       data = {'product_id': product_id};
-      $.ajax({url: url, data: data})
-      .done(function(data){
+      $.ajax({url: url, data: data
+
+      }).done(function(data){
         $('#artisan-price').val(data.price);
         $('#weight').val(data.weight);
+
+        $('#length').val(data.length);
+        $('#width').val(data.width);
+        $('#height').val(data.height);
+        $('#old-weight').val(data.weight);
+
         $('.shipping-option').removeClass('gray').addClass('green');
         $('#'+data.shipping_option).removeClass('green').addClass('gray');
         $('#shipping-cost').val(data.shipping_cost);
         completeData();
-      })
-      .fail(function(){
+
+      }).fail(function(){
         $('#product-submit').removeClass('green').addClass('red');
       });
     }
 
     function getShippingCost(weight, shipping_option){
-      url = "{% url 'admin:shipping cost' %}";
-      data = {'weight': weight, 'shipping_option': shipping_option};
+      var url = "{% url 'admin:shipping cost' %}";
+      var data = {'weight': weight, 'shipping_option': shipping_option};
       $.ajax({url: url, data: data})
       .done(function(data){
         $('#shipping-cost').val(data.shipping_cost);
@@ -100,6 +109,50 @@
       });
     }
 
+    function customOrderCalculator(){
+
+      if( $('#new-length').val() && $('#new-width').val() && $('#new-height').val() ){
+        var old_volume = (parseInt($('#length').val())
+                          * parseInt($('#width').val())
+                          * parseInt($('#height').val()));
+        var new_volume = (parseInt($('#new-length').val())
+                          * parseInt($('#new-width').val())
+                          * parseInt($('#new-height').val()));
+
+        var ratio = parseFloat(new_volume) / parseFloat(old_volume);
+        var new_weight = parseInt( parseInt($('#old-weight').val()) * ratio);
+        $('#new-weight').val(new_weight);
+        var shipping_option = $('.shipping-option').attr('id');
+
+        data = {'weight': new_weight, 'shipping_option': shipping_option};
+        url = "{% url 'admin:shipping cost' %}";
+        $.ajax({url: url, data: data})
+        .done(function(data){
+          //inflate artisan price
+          var artisan_price = parseInt($('#artisan-price').val());
+          var new_artisan_price = artisan_price * ratio;
+
+          //calculate new local price
+          var anou_fee = new_artisan_price * (10 / 90);
+          var local_price = new_artisan_price + data.shipping_cost + anou_fee;
+
+          //add fees, etc to get anou store price
+          var exchange_rate = parseFloat($('#exchange-rate').val());
+          var usd_price = local_price / exchange_rate;
+          var wepay_fee = 0.3 + ((0.029/(1-0.029))*(usd_price + 0.3));
+          var anou_store_price = usd_price + wepay_fee;
+
+          $('#new-price').val(anou_store_price.toFixed(2));
+          $('#price-minus-20').val((anou_store_price * 0.8).toFixed(2));
+          $('#price-plus-20').val((anou_store_price * 1.2).toFixed(2));
+        })
+        .fail(function(){
+          $('#weight').val('');
+          $('.shipping-option').removeClass('gray').addClass('green');
+        });
+      }
+    }// end customOrderCalculator
+
   </script>
 {% endblock javascript %}
 
@@ -108,7 +161,6 @@
     #body li i{font-size: 18pt;}
     i.green {cursor: pointer;}
     #store-price-section ul li{display: block;}
-
   </style>
 {% endblock css %}
 
@@ -131,7 +183,6 @@
     <i id='Package' class='add-on green shipping-option'>P</i>
     <i id='Envelope' class='add-on green shipping-option'>E</i>
   </li>
-
 </ul>
 
 <ul id='local-price-section' class='inline'>
@@ -222,4 +273,62 @@
     </ul>
   </li>
 </ul>
+
+<br><br><br><br>
+
+<!-- ESTIMATE THE COST OF DIFFERENT SIZE RUGS -->
+  <ul class='inline'>
+    <li class='input-prepend input-append'>
+      <i class='add-on symbol-length black'></i>
+      <input id='length' type='text' class='input-mini'>
+      <i class='add-on'>&rarr;</i>
+      <input id='new-length' type='text' class='input-mini'>
+    </li>
+  </ul>
+
+  <ul class='inline'>
+    <li class='input-prepend input-append'>
+      <i class='add-on symbol-width black'></i>
+      <input id='width' type='text' class='input-mini'>
+      <i class='add-on'>&rarr;</i>
+      <input id='new-width' type='text' class='input-mini'>
+    </li>
+  </ul>
+
+  <ul class='inline'>
+    <li class='input-prepend input-append'>
+      <i class='add-on symbol-height black'></i>
+      <input id='height' type='text' class='input-mini'>
+      <i class='add-on'>&rarr;</i>
+      <input id='new-height' type='text' class='input-mini'>
+    </li>
+  </ul>
+
+  <ul class='inline'>
+    <li class='input-prepend input-append'>
+      <i class='add-on symbol-weight black'></i>
+      <input id='old-weight' type='text' class='input-mini'>
+      <i class='add-on'>&rarr;</i>
+      <input id='new-weight' type='text' class='input-mini' disabled='true'>
+    </li>
+  </ul>
+
+  <ul class='inline'>
+    <li class='input-prepend input-append'>
+      <i class='add-on black'>$</i>
+      <input id='old-price' type='text' class='input-mini' disabled='true'>
+      <i class='add-on'>&rarr;</i>
+      <input id='new-price' type='text' class='input-mini' disabled='true'>
+    </li>
+  </ul>
+
+  <ul class='inline'>
+    <li class='input-prepend input-append'>
+      <i class='add-on'>-20%</i>
+      <input id='price-minus-20' type='text' class='input-mini' disabled='true'>
+      <i class='add-on'>+20%</i>
+      <input id='price-plus-20' type='text' class='input-mini' disabled='true'>
+    </li>
+  </ul>
+
 {% endblock content %}

@@ -127,7 +127,7 @@ def getShippingCost(request):
   from apps.seller.controller.shipping import calculateShippingCost
 
   if request.method == "GET":
-    if request.GET.get('product_id'):
+    if request.GET.get('product_id', None):
       try:
         shipping_cost = Product.objects.get(id=request.GET['product_id']).shipping_cost
       except: pass
@@ -150,6 +150,9 @@ def getProductData(request):
       product = Product.objects.get(id=request.GET['product_id'])
       response = {'price':            product.price,
                   'weight':           product.weight,
+                  'length':           product.length,
+                  'width':            product.width,
+                  'height':           product.height,
                   'shipping_option':  product.shipping_options.all()[0].name,
                   'shipping_cost':    product.shipping_cost
                   }
