@@ -17,7 +17,6 @@ urlpatterns = patterns('',
   url(r'^inventory/(?P<product_id>\d+)/remove$', inventory.remove, name='inventory remove'),
 
   url(r'^inventory/(?P<product_id>\d+)/edit$', edit_product.edit, name='edit product'),
-  url(r'^ajax/product_save$', edit_product.saveProduct, name='save product'),
 
   #PHOTOS AND IMAGES
   url(r'^ajax/pho_data$', cloudinary_upload.photoFormData, name='photo form data'),

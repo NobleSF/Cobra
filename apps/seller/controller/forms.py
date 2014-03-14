@@ -102,34 +102,3 @@ class AssetForm(forms.Form):
                   widget=NumberInput(
                     attrs={'class':"phone autosave"}),
                     max_length=15, required=False)
-
-class ProductEditForm(forms.Form):
-  product_id        = forms.CharField(
-                        widget=forms.TextInput(),
-                        initial="none")
-
-  assets            = forms.CharField(
-                        widget=forms.TextInput(),
-                        initial=" ")
-  shipping_options  = forms.CharField(
-                        widget=forms.TextInput(),
-                        initial=" ")
-  colors            = forms.CharField(
-                        widget=forms.TextInput(),
-                        initial=" ")
-
-  price             = forms.CharField(
-                        widget=NumberInput(attrs={'class':"autosave giveMeData",
-                                            'min':'1', 'max':'30000','step':'1'}))
-  length            = forms.CharField(
-                        widget=NumberInput(attrs={'class':"autosave giveMeData",
-                                            'min':'1', 'max':'30000','step':'1'}))
-  width             = forms.CharField(
-                        widget=NumberInput(attrs={'class':"autosave giveMeData",
-                                            'min':'1', 'max':'30000','step':'1'}))
-  height            = forms.CharField(
-                        widget=NumberInput(attrs={'class':"autosave giveMeData",
-                                            'min':'1', 'max':'30000','step':'1'}))
-  weight            = forms.CharField(
-                        widget=NumberInput(attrs={'class':"autosave giveMeData",
-                                            'min':'1', 'max':'30000','step':'1'}))

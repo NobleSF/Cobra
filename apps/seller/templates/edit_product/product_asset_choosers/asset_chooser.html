@@ -1,27 +1,18 @@
-<ul class='asset-chooser' id='{{ ilk }}_chooser'>
+<ul class='asset-chooser' id='{{ ilk }}-chooser'>
   {% for asset in assets %}
-    {% if asset.image %}
-      <li class='asset'
-          store-object_id='{{ asset.id }}'
-          store-input_id='assets'
+
+    <li id='asset{{ asset.id }}' name='asset'
+        class='asset autosave {% if asset.selected %}selected{% endif %}'
+        data-asset_id='{{ asset.id }}'
+        data-selected='{% if asset.selected %}yes{% endif %}'
+    >
+      <div class='asset-image'
+           title='{{ asset.name }} {{ asset.name_ol|default_if_none:"" }}'
       >
-        <!-- data-object-id and data-input-id are used by ajax
-              to store saved assets in the product form --->
+        <img src='{{ asset.image.pinky_size }}'
+             alt='{{ asset.name }} {{ asset.name_ol|default_if_none:"" }}'>
+      </div>
 
-        <div class='asset-image' title='{{ asset.name }}'>
-          <img src='{{ asset.image.pinky_size }}' alt='{{ asset.name }} image'>
-        </div>
-
-        <div class='hidden-fields'>
-          <input type='text' id='asset{{ asset.id }}' class='asset-input autosave'
-                 data-product_id='{{ product_id }}'
-                 data-attribute='asset'
-                 data-asset_id='{{ asset.id }}'
-                 data-status=""
-          >
-        </div>
-
-      </li>
-    {% endif %}
+    </li>
   {% endfor %}
 </ul>

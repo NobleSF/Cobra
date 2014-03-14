@@ -14,28 +14,39 @@ def photo_upload_tag(product, rank):
          }
 
 @register.inclusion_tag('edit_product/product_asset_choosers/asset_chooser.html')
-def asset_chooser_tag(request, product, ilk):
+def asset_chooser_tag(product, ilk):
   try:
-    assets = product.seller.asset_set.filter(ilk=ilk)
-  except Exception as e:
+    # get assets that belong to the seller, are of this ilk, and have an image
+    assets = product.seller.asset_set.filter(ilk=ilk).filter(image__gte=1)
+    for asset in assets:
+      asset.selected = True if product.assets.filter(id=asset.id).exists() else False
+
+  except:
     assets = None
 
-  return {'assets':assets, 'ilk':ilk, 'product_id':product.id}
+  return {'assets':assets, 'ilk':ilk}
 
 @register.inclusion_tag('edit_product/product_asset_choosers/shipping_option_chooser.html')
-def shipping_option_chooser_tag(request, product):
+def shipping_option_chooser_tag(product):
   try:
     shipping_options = product.seller.country.shippingoption_set.all()
-  except Exception as e:
+    for s_o in shipping_options:
+      s_o.selected = True if product.shipping_options.filter(id=s_o.id).exists() else False
+
+  except:
     shipping_options = None
 
-  return {'shipping_options':shipping_options, 'product_id':product.id}
+  return {'shipping_options':shipping_options}
 
 @register.inclusion_tag('edit_product/product_asset_choosers/color_chooser.html')
 def color_chooser_tag(product):
   from apps.admin.models import Color
   try:
     colors = Color.objects.all()
-  except Exception as e:
+    for color in colors:
+      color.selected = True if product.colors.filter(id=color.id).exists() else False
+
+  except:
     colors = None
-  return {'colors':colors, 'product_id':product.id}
+
+  return {'colors':colors}

@@ -1,23 +1,14 @@
 <ul class='asset-chooser' id='color-chooser'>
   {% for color in colors %}
-    <li class='asset'
-        store-object_id='{{ color.id }}'
-        store-input_id='colors'
+
+    <li id='color{{ color.id }}' name='color'
+        class='asset autosave {% if color.selected %}selected{% endif %}'
+        data-color_id='{{ color.id }}'
+        data-selected='{% if color.selected %}yes{% endif %}'
     >
-      <!-- data-object-id and data-input-id are used by ajax
-      to store saved colors in the product form --->
 
       <div class='asset-image' title='{{ color.name }}'
            style='background-color: #{{ color.hex_value }};'>
-      </div>
-
-      <div class='hidden-fields'>
-        <input type='text' id='color{{ color.id }}' class='color-input autosave'
-               data-product_id='{{ product_id }}'
-               data-attribute='color'
-               data-color_id='{{ color.id }}'
-               data-status=""
-        >
       </div>
 
     </li>

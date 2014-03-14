@@ -23,7 +23,7 @@
 {% endblock javascript%}
 
 {% block content %}
-  <input type='hidden' id='product-ajax-url' value="{% url 'seller:save product' %}">
+  <input type='hidden' id='edit-product-url' value="{% url 'seller:edit product' product.id %}">
   <input type='hidden' id='product-id' value='{{ product.id }}'>
 
   <!-- the location to upload photos to -->
@@ -36,18 +36,15 @@
          value="{% url 'seller:check photo upload' %}">
 
   <div id='product-edit-form' class='text-center'>
-    <div class='hidden-fields'>
-      {{ product_form.product_id }}
-      {{ product_form.assets }}
-      {{ product_form.colors }}
-      {{ product_form.shipping_options }}
-    </div>
+    <input type='hidden' id='product-id' name='product-id' value='{{ product.id }}'>
 
+    <!-- PRODUCT TYPE CHOOSER -->
     <div id='product-chooser-section' class='section'>
       <div class='section-number first'>1</div>
-      {% asset_chooser_tag request product "product" %}
+      {% asset_chooser_tag product "product" %}
     </div>
 
+    <!-- PHOTO UPLOADING -->
     <div id='photos-section' class='section'>
       <div class='section-number'>2</div>
 
@@ -56,85 +53,113 @@
           {% photo_upload_tag product rank %}
         {% endfor %}
       </div>
-    </div><!--end photos section-->
+    </div>
 
+    <!-- PRICE -->
     <div id='price-section' class='section'>
       <div class='section-number'>3</div>
       <table><tr>
         <td><i class='symbol-money'></i></td>
-        <td>{{ product_form.price }}</td>
+        <td>
+          <input type='tel' id='price' name='price' class='autosave has-exit-button'
+                  min='1' max='30000' step='1'
+                  value='{{ product.price|default_if_none:"" }}'>
+        </td>
         <td><span class='units'>Dh</span></td>
         <td class='exit-button'>
-          <button class='symbol-go white hidden-desktop'></button>
+          <button class='symbol-go white'></button>
         </td>
       </tr></table>
-    </div><!--end price section-->
+    </div>
 
+    <!-- COLOR CHOOSER -->
     <div id='color-chooser-section' class='section'>
       <div class='section-number'>4</div>
       {% color_chooser_tag product %}
-    </div><!--end color section-->
+    </div>
 
+    <!-- TOOL CHOOSER -->
     <div id='tool-chooser-section' class='section'>
       <div class='section-number'>5</div>
-      {% asset_chooser_tag request product "tool" %}
-    </div><!--end tool section-->
+      {% asset_chooser_tag product "tool" %}
+    </div>
 
+    <!-- MATERIAL CHOOSER -->
     <div id='material-chooser-section' class='section'>
       <div class='section-number'>6</div>
-      {% asset_chooser_tag request product "material" %}
-    </div><!--end material section-->
+      {% asset_chooser_tag product "material" %}
+    </div>
 
+    <!-- ARTISAN CHOOSER -->
     <div id='artisan-chooser-section' class='section'>
       <div class='section-number'>7</div>
-      {% asset_chooser_tag request product "artisan" %}
-    </div><!--end artisan section-->
+      {% asset_chooser_tag product "artisan" %}
+    </div>
 
+    <!-- MEASUREMENTS -->
     <div id='measurements-section' class='section'>
       <div class='section-number'>8</div>
 
       <table id='weight-table'><tr>
         <td><i class='symbol-weight black'></i></td>
-        <td>{{ product_form.weight}}</td>
+        <td>
+          <input type='tel' id='weight' name='weight' class='autosave has-exit-button'
+                  min='1' max='30000' step='1'
+                  value='{{ product.weight|default_if_none:"" }}'>
+        </td>
         <td><span class='units'>g&nbsp;&nbsp;</span></td>
         <td class='exit-button'>
-          <button class='symbol-go white hidden-desktop'></button>
+          <button class='symbol-go white'></button>
         </td>
       </tr></table>
 
       <table><tr>
         <td><i class='symbol-width black'></i></td>
-        <td>{{ product_form.width }}</td>
+        <td>
+          <input type='tel' id='width' name='width' class='autosave has-exit-button'
+                  min='1' max='30000' step='1'
+                  value='{{ product.width|default_if_none:"" }}'>
+        </td>
         <td><span class='units'>cm</span></td>
         <td class='exit-button'>
-          <button class='symbol-go white hidden-desktop'></button>
+          <button class='symbol-go white'></button>
         </td>
       </tr></table>
 
       <table><tr>
         <td><i class='symbol-height black'></i></td>
-        <td>{{ product_form.height }}</td>
+        <td>
+          <input type='tel' id='height' name='height' class='autosave has-exit-button'
+                  min='1' max='30000' step='1'
+                  value='{{ product.height|default_if_none:"" }}'>
+        </td>
         <td><span class='units'>cm</span></td>
         <td class='exit-button'>
-          <button class='symbol-go white hidden-desktop'></button>
+          <button class='symbol-go white'></button>
         </td>
       </tr></table>
 
       <table><tr>
         <td><i class='symbol-length black'></i></td>
-        <td>{{ product_form.length }}</td>
+        <td>
+          <input type='tel' id='length' name='length' class='autosave has-exit-button'
+                  min='1' max='30000' step='1'
+                  value='{{ product.length|default_if_none:"" }}'>
+        </td>
         <td><span class='units'>cm</span></td>
         <td class='exit-button'>
-          <button class='symbol-go white hidden-desktop'></button>
+          <button class='symbol-go white'></button>
         </td>
       </tr></table>
-    </div><!--end measurements section-->
+    </div><!-- END MEASUREMENTS -->
 
+    <!-- SHIPPING CHOOSER -->
     <div id='shipping-option-chooser-section' class='section'>
       <div class='section-number'>9</div>
-      {% shipping_option_chooser_tag request product %}
-    </div><!--end shipping option section-->
+      {% shipping_option_chooser_tag product %}
+    </div>
 
+    <!-- SUMMARY -->
     <div id='summary-section' class='section row-fluid'>
       <div class='section-number'>10</div>
 
@@ -165,32 +190,34 @@
         <img src="{{ product.photo.thumb_size }}"/>
       </div>
 
-      <button id='submit' class='symbol-go white'></button>
-    </div><!--end summary section-->
+      <button id='activate' name='activate' class='symbol-go white autosave'>
+      </button>
 
-  </div>
+    </div><!-- END SUMMARY -->
 
+  </div><!-- end #product-edit-form -->
+
+  <!-- FLOATING PHOTO -->
   <div id='floating-photo' class='visible-desktop pull-right'>
     <div class='image'>
       <img src="{{ product.photo.thumb_size }}"/>
     </div>
   </div>
 
+  <!-- CONFIRMATION -->
   <div id='confirmation'>
     <div class='product-id'>
-
       <div class='product-id-tag'>
         <i class='symbol-opentag black' title='product id'></i>
       </div>
       <div class='product-id-number'>
         {{ product.id }}
       </div>
-
-    </div><!-- end #product-edit-form -->
+    </div>
 
     <div class='image'>
-      <img src="{{ product.photos.0.thumb_size }}"/>
+      <img src="{{ product.photo.thumb_size }}"/>
     </div>
-  </div><!--end confirmation div-->
+  </div><!--END CONFIRMATION -->
 
 {% endblock content %}

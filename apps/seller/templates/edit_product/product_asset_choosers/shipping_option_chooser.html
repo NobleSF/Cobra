@@ -1,26 +1,14 @@
 <ul class='asset-chooser' id='shipping-option-chooser'>
   {% for shipping_option in shipping_options %}
-    <li class='asset'
-        store-object_id='{{ shipping_option.id }}'
-        store-input_id='shipping_options'
-        data-cost-formula='{{ shipping_option.cost_formula }}'
+
+    <li id='shipping-option{{ shipping_option.id }}' name='shipping_option'
+        class='asset autosave {% if shipping_option.selected %}selected{% endif %}'
+        data-shipping_option_id='{{ shipping_option.id }}'
+        data-selected='{% if shipping_option.selected %}yes{% endif %}'
     >
-      <!-- data-object-id and data-input-id are used by ajax
-      to store saved shippign options in the product form --->
 
       <div class='asset-image' title='{{ shipping_option.name }}'>
-        <img src='{{ shipping_option.image.pinky_size }}' alt='{{ shipping_option.name }} image'>
-      </div>
-
-      <div class='hidden-fields'>
-        <input type='text'
-               id='shipping_option{{ shipping_option.id }}'
-               class='shipping-option-input autosave'
-               data-product_id='{{ product_id }}'
-               data-attribute='shipping option'
-               data-shipping_option_id='{{ shipping_option.id }}'
-               data-status=""
-        >
+        <img src='{{ shipping_option.image.pinky_size }}' alt='{{ shipping_option.name }}'>
       </div>
 
     </li>

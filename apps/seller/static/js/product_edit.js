@@ -1,30 +1,42 @@
-$().ready( function(){
-  //run on page load
+$().ready( function(){ //run on page load
   //$(window).resize(function() {});
+
+  var fail_count = 0;
+  function countFail(autosave_status){
+    autosave_status = autosave_status || {}
+    if( autosave_status.code == "404" ){
+      fail_count++;
+    }
+    if( fail_count > 1 ){
+      // todo: do something
+    }
+  }
 
   //focus on inputs when icon clicked
   $('i').click(function(){
     $(this).closest('table').find('input').focus()
   });
 
-  //show exit-button when focused on input (mobile)
-  $('#id_price, #id_weight, #id_width, #id_height, #id_length')
-  .on('focus', function(){
-    $(this).closest('td').next('td').next('td').find('button')
-    .css('opacity', '1');
-  });
-  $('#id_price, #id_weight, #id_width, #id_height, #id_length')
-  .on('blur', function(){
-    $(this).closest('td').next('td').next('td').find('button')
-    .css('opacity', '0.01');
-  });
+  //show/hide exit-button for elements that have one: .has-exit-button
+  $(document).on({
+    'focus': function(){
+      $(this).closest('td').next('td').next('td').find('button')
+      .css('opacity', '1');
+    },
+    'blur': function(){
+      $(this).closest('td').next('td').next('td').find('button')
+      .css('opacity', '0.01');
+    }
+  }, '.has-exit-button');
 
-  $('#id_weight').on('blur', function(){
+  //special logic for heavy items, they require a box.
+  //todo: take this logic server side
+  $('#weight').on('blur', function(){
     envelope = $('#shipping-option-chooser-section .asset[store-object_id=2]');
     if ($(this).val() > 450){
-      //should use a box, so hide the envelope shipping option
+      //heavy items require a box, so hide the envelope shipping option
       if ($(envelope).hasClass('selected')){
-        $(envelope).click();
+        $(envelope).trigger('click'); //a click should de-select and save
       }
       envelope.hide();
     }else{
@@ -32,127 +44,87 @@ $().ready( function(){
     }
   });
 
-  markAssignedAssetsAsSelected();
-
   //activate the "show more" link in the summary
-  $('.total-cost').bind('click', function(){
+  $('.total-cost').on('click', function(){
     $('.extra').toggle();
   });
 
-  //selection actions for choosing assets, etc
-  $('.asset').each( function(){
-    $(this).bind('click', function(){
-      $(this).toggleClass('active');
-      $(this).toggleClass('selected');
-      toggleStoreAssetId($(this));
-      toggleActiveState($(this));
-    });
+  //autosave for inputs
+  $('input.autosave').autosave({
+    url:      $('#edit-product-url').val(),
+    event:    'blur',
+    type:     'json',
+    data:     {'product_id':$('#product-id').val()},
+
+    before:   function(){
+      $(this).removeClass('saved').removeClass('error').addClass('updating');
+    },
+    done:     function(){
+      $(this).removeClass('updating').addClass('saved');
+      response_data = $(this).data('autosave-response');
+      //if element not in focus, update value
+      if( !$(this).is(":focus") && $(this).attr('name') == response_data.name ){
+        $(this).val(response_data.value);
+      }
+      updateSummary($(this).data('autosave-response'));
+    },
+    fail:     function(){
+      $(this).removeClass('updating').addClass('error');
+      //todo: if 404 error, trigger this event again
+      $(this).val("");
+    }
   });
 
-  applyAutosaveDataToTextAttributes();
-  applyAutosaveEvents();
+  //autosave for asset buttons
+  $('.asset.autosave').autosave({
+    url:      $('#edit-product-url').val(),
+    event:    'click',
+    type:     'json',
+    data:     {'product_id':$('#product-id').val()},
+    before:   function(){
+      $(this).toggleClass('selected');
+      if ($(this).hasClass('selected')){
+        $(this).attr('data-selected', 'yes');
+      }else{
+        $(this).attr('data-selected', '');
+      }
+    },
+    done:      function(){
+      updateSummary($(this).data('autosave-response'));
+    },
+    fail:      function(){
+      countFail($(this).data('autosave')['status']);
+      $(this).toggleClass('selected'); //should toggle back to what it was
+    }
+  });
 
-  //validate form and show confirmation
-  $('#submit').bind('click', function(){
-    if (validateForm()){
-      //todo: bring back button if upload fails
-
-      $.ajax({
-        url: $('#product-ajax-url').attr('value'),
-        data: { 'attribute':"active",
-                'status': "yes",
-                'product_id': $('#product-id').val()
-              },
-      }).success(function(){
+  $('#activate').autosave({
+    url:      $('#edit-product-url').val(),
+    event:    'click',
+    type:     'json',
+    data:     {'product_id':$('#product-id').val()},
+    before:   function(){
+      if( !validateForm() ){ //validate form
+        $.scrollTo($('.attention').first(), 1100);
+      }
+      //todo: disable button, show spinner
+    },
+    done:     function(){
+      if( $(this).data('autosave-response')['activated'] ){
+        // show confirmation
         $('#product-edit-form').hide();
         $('#floating-photo').remove();
         $('#confirmation').show();
         $.scrollTo('#header');
-      });
-
-    }else{
-      $.scrollTo($('.attention').first(), 1100);
+      }else{
+        // if the form looks valid here, but it's not server-side
+        // refresh the page and re-run validation
+        // or get error location from server
+      }
     }
-  });
+  })
 
 });//end .ready
-
-function markAssignedAssetsAsSelected(){
-  //actual assets
-  asset_ids = $('#id_assets').val().split(" ");
-  $.each(asset_ids, function(index, value){
-    if (value !== ""){
-      var btn = $('[store-input_id="assets"][store-object_id="'+value+'"]');
-      $(btn).addClass("active").addClass("selected");
-    }
-  });
-  //colors
-  color_ids = $('#id_colors').val().split(" ");
-  $.each(color_ids, function(index, value){
-    if (value !== ""){
-      var btn = $('[store-input_id="colors"][store-object_id="'+value+'"]');
-      $(btn).addClass("active").addClass("selected");
-    }
-  });
-  //shipping options
-  shipping_option_ids = $('#id_shipping_options').val().split(" ");
-  $.each(shipping_option_ids, function(index, value){
-    if (value !== ""){
-      var btn = $('[store-input_id="shipping_options"][store-object_id="'+value+'"]');
-      $(btn).addClass("active").addClass("selected");
-    }
-  });
-}
-
-function toggleStoreAssetId(asset_element){
-  asset_id = asset_element.attr('store-object_id');
-  input_element = $('#id_'+asset_element.attr('store-input_id'));
-  input_element_value = input_element.attr('value');
-  if (input_element_value === undefined){input_element_value=""}
-
-  if (asset_element.hasClass('selected')){ //if selected
-    if (!input_element_value.match(asset_id)){ //if does not already contain id
-      input_element_value = input_element_value + ' ' + asset_id;
-      input_element.attr('value', input_element_value);
-    }
-  }else{ //remove id
-    input_element_value = input_element_value.replace(asset_id, '');
-    input_element.attr('value', input_element_value);
-  }
-  input_element.trigger('change');//for any autosave function watching
-}
-
-function toggleActiveState(asset_element){
-  asset_input = asset_element.find('input');
-  if (asset_element.hasClass('selected')){ //if selected
-    asset_input.attr('data-status', "active");
-  }else{
-    asset_input.attr('data-status', "");
-  }
-  asset_input.trigger('change');//for any autosave function watching
-}
-
-function applyAutosaveDataToTextAttributes(){
-  $('.giveMeData').each(function(){
-    $(this).attr('data-product_id', $('#id_product_id').val());
-    attribute = $(this).attr('id').replace("id_","");
-    $(this).attr('data-attribute', attribute);
-  });
-}
-
-function applyAutosaveEvents(){
-  $('.autosave').each(function(){
-    $(this).autosave({
-      url:$('#product-ajax-url').attr('value'),
-      before:function(){$(this).addClass('updating');},
-      success:function(data){
-        $(this).removeClass('updating').addClass('saved');
-        updateSummary(data);
-      },
-      error:function(){$(this).removeClass('updating').addClass('error');}
-    });
-  });
-}
 
 function updateSummary(data){
   data = typeof data !== 'undefined' ? data : null; //parameter default values
@@ -185,68 +157,46 @@ function validateForm(){
   //remove previously applied attention classes
   $('.attention').removeClass('attention');
   no_errors = true
-
   //product type selected
-  if($('#product-chooser-section').find('.selected').length === 0){
+  if($('#product-chooser-section .selected').length === 0){
     $('#product-chooser-section').addClass('attention');
     no_errors = false
   }
   //artisan selected
-  if($('#artisan-chooser-section').find('.selected').length === 0){
+  if($('#artisan-chooser-section .selected').length === 0){
     $('#artisan-chooser-section').addClass('attention');
     no_errors = false
   }
   //photo
-  if($('#photos').find('.photo').first().find('img').length === 0){
+  if($('#photos .photo').first().find('img').length === 0){
     $('#photos-section').addClass('attention');
     no_errors = false
   }
   //price
-  if(!($('#id_price').val() > 0)){
+  if(!($('#price').val() > 0)){
     $('#price-section').addClass('attention');
     no_errors = false
   }
   //weight provided
-  if(!($('#id_weight').val() > 0)){
+  if(!($('#weight').val() > 0)){
     $('#measurements-section').addClass('attention');
     no_errors = false
   }
   //shipping option selected
-  if($('#id_shipping_options').val().trim().length === 0){
+  if($('#shipping-option-chooser-section .selected').length === 0){
     $('#shipping-option-chooser-section').addClass('attention');
     no_errors = false
   }
-
-  //run scripts to remove attention classes at interaction
-  if (!no_errors){
-    $('#photos').find('.photo-form').click(function(){
-      $(this).closest('photos-section').removeClass('attention');
-    });
-    $('#product-chooser-section').click(function(){
-      $(this).removeClass('attention');
-    });
-    $('#artisan-chooser-section').click(function(){
-      $(this).removeClass('attention');
-    });
-    $('#id_price').click(function(){
-      $(this).closest('#price-section').removeClass('attention');
-    });
-    $('#id_weight').click(function(){
-      $(this).closest('#measurements-section').removeClass('attention');
-    });
-    $('#shipping-option-chooser-section').click(function(){
-      $(this).removeClass('attention');
-    });
-  }
-
   return no_errors
 }
+// remove .attention when editing section
+$('.section').on('click', function(){
+  $(this).removeClass('attention');
+});
 
-//AUTOSAVE from https://github.com/cfurrow/jquery.autosave.js
-//example:
-//  $("input").autosave({url:"/save",success:function(){},error:function(){}});
-//
-jQuery.fn.autosave=function(e){function n(e){var n=/^data\-(\w+)$/,r={};r.value=e.value;r.name=e.name;t.each(e.attributes,function(e,t){n.test(t.nodeName)&&(r[n.exec(t.nodeName)[1]]=t.value)});return r}var t=jQuery;t.each(this,function(){var r=t(this),i={data:{},event:"change",success:function(){},error:function(){},before:function(){}};e=t.extend(i,e);var s=n(this),o=s.event||e.event;r.on(o,function(){var r=t(this);s.value=r.val();s=t.extend(s,n(this));var i=s.url?s.url:e.url;e.before&&e.before.call(this,r);t.ajax({url:i,data:s,success:function(t){e.success(t,r)},error:function(t){e.error(t,r)}})})})};
+//AUTOSAVE from https://github.com/tomcounsell/jquery-autosave
+//example: $("input").autosave({options});
+;(function(a,b,c,d){function g(b,c){this.element=b,this.options=a.extend({},f,c),this._defaults=f,this._name=e,this.init()}var e="autosave",f={url:"",method:"POST",event:"change",data:{},type:"html",debug:!1,before:function(){},done:function(){},fail:function(){},always:function(){}};g.prototype.init=function(){function e(b){var c=/^data\-(\w+)$/,d={};return d.value=b.val()||"",d.name=b.attr("name")||"",a(b[0].attributes).each(function(){c.test(this.nodeName)&&(attribute_name=c.exec(this.nodeName)[1],d[attribute_name]=this.nodeValue)}),d}var b=a(this.element),c=e(b),d=this.options,c=e(b);d.event=c.event||d.event,b.on(d.event,function(c){d.before&&d.before.call(b);var f=e(b);options=a.extend({},d,f);var g=a.extend({},options.data,f);options.debug=="false"&&(options.debug=!1),delete g.url,delete g.method,delete g.type,delete g.debug,g.event=options.event,options.debug?console.log(g):a.ajax({url:options.url,type:options.method,cache:!1,data:g,dataType:options.type}).done(function(a,c,d){b.data("autosave-response",a),b.data("autosave-status",{text:d.statusText,code:d.status}),b.trigger("autosave-done")}).fail(function(a,c,d){b.data("autosave-status",{text:a.statusText,code:a.status}),b.data("autosave-error",d),b.trigger("autosave-fail")}).always(function(){b.trigger("autosave-always")})}),d.done&&b.on("autosave-done",function(){var a=b.data("autosave-response"),c=b.data("autosave-status");options.done.call(b,a,c)}),d.fail&&b.on("autosave-fail",function(){error=b.data("autosave-error"),status=b.data("autosave-status"),options.fail.call(b,error,status)}),d.always&&b.on("autosave-always",function(){status=b.data("autosave-status"),options.always.call(b,status)})},a.fn.autosave=function(a){return this.each(function(){new g(this,a)})}})(jQuery,window,document)
 
 //SCROLLTO from http://archive.plugins.jquery.com/project/ScrollTo
 // Copyright (c) 2007-2012 Ariel Flesler - aflesler(at)gmail(dot)com | http://flesler.blogspot.com
