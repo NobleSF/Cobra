@@ -127,7 +127,7 @@
         $('#new-weight').val(new_weight);
         var shipping_option = $('.shipping-option').attr('id');
 
-        data = {'weight': ((new_weight*1.05)+100), 'shipping_option': shipping_option};
+        data = {'weight': (parseInt(new_weight*1.05)+100), 'shipping_option': shipping_option};
         url = "{% url 'admin:shipping cost' %}";
         $.ajax({url: url, data: data})
         .done(function(data){
