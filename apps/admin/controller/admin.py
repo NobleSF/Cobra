@@ -14,7 +14,7 @@ def stats(request):
   from apps.seller.models.product import Product
   from apps.public.models import Order
   today = datetime.now()
-  beginning_of_time = datetime(2013, 8, 1)#August 1st, 2013 - launch of this app
+  beginning_of_time = datetime(2013, 10, 1)#August 1st, 2013 - launch of this app
   firsts_of_months = [beginning_of_time,]
 
   #create list of datetimes, firsts of all months from beginning_of_time until now
