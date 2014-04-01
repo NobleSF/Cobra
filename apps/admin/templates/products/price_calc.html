@@ -45,6 +45,8 @@
 
         var anou_fee = artisan_price * (10 / 90);
         var local_price = artisan_price + shipping_cost + anou_fee;
+        $('#old-artisan-price').val(artisan_price.toFixed(0));
+
         var usd_price = local_price / exchange_rate;
 
         $('#anou-fee').val(anou_fee.toFixed(2));
@@ -78,6 +80,7 @@
 
       }).done(function(data){
         $('#artisan-price').val(data.price);
+        $('#old-artisan-price').val(data.price);
         $('#weight').val(data.weight);
 
         $('#length').val(data.length);
@@ -124,13 +127,14 @@
         $('#new-weight').val(new_weight);
         var shipping_option = $('.shipping-option').attr('id');
 
-        data = {'weight': new_weight, 'shipping_option': shipping_option};
+        data = {'weight': ((new_weight*1.05)+100), 'shipping_option': shipping_option};
         url = "{% url 'admin:shipping cost' %}";
         $.ajax({url: url, data: data})
         .done(function(data){
           //inflate artisan price
           var artisan_price = parseInt($('#artisan-price').val());
           var new_artisan_price = artisan_price * ratio;
+          $('#new-artisan-price').val(new_artisan_price.toFixed(0));
 
           //calculate new local price
           var anou_fee = new_artisan_price * (10 / 90);
@@ -143,8 +147,8 @@
           var anou_store_price = usd_price + wepay_fee;
 
           $('#new-price').val(anou_store_price.toFixed(2));
-          $('#price-minus-20').val((anou_store_price * 0.8).toFixed(2));
-          $('#price-plus-20').val((anou_store_price * 1.2).toFixed(2));
+          $('#price-minus-10').val((anou_store_price * 0.9).toFixed(2));
+          $('#price-plus-10').val((anou_store_price * 1.1).toFixed(2));
         })
         .fail(function(){
           $('#weight').val('');
@@ -315,6 +319,15 @@
 
   <ul class='inline'>
     <li class='input-prepend input-append'>
+      <i class='add-on symbol-money black'></i>
+      <input id='old-artisan-price' type='text' class='input-mini' disabled='true'>
+      <i class='add-on'>&rarr;</i>
+      <input id='new-artisan-price' type='text' class='input-mini' disabled='true'>
+    </li>
+  </ul>
+
+  <ul class='inline'>
+    <li class='input-prepend input-append'>
       <i class='add-on black'>$</i>
       <input id='old-price' type='text' class='input-mini' disabled='true'>
       <i class='add-on'>&rarr;</i>
@@ -324,10 +337,10 @@
 
   <ul class='inline'>
     <li class='input-prepend input-append'>
-      <i class='add-on'>-20%</i>
-      <input id='price-minus-20' type='text' class='input-mini' disabled='true'>
-      <i class='add-on'>+20%</i>
-      <input id='price-plus-20' type='text' class='input-mini' disabled='true'>
+      <i class='add-on'>-10%</i>
+      <input id='price-minus-10' type='text' class='input-mini' disabled='true'>
+      <i class='add-on'>+10%</i>
+      <input id='price-plus-10' type='text' class='input-mini' disabled='true'>
     </li>
   </ul>
 
