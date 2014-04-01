@@ -59,19 +59,20 @@ $().ready( function(){ //run on page load
     before:   function(){
       $(this).removeClass('saved').removeClass('error').addClass('updating');
     },
-    done:     function(){
+    done:     function(response){
       $(this).removeClass('updating').addClass('saved');
-      response_data = $(this).data('autosave-response');
       //if element not in focus, update value
-      if( !$(this).is(":focus") && $(this).attr('name') == response_data.name ){
-        $(this).val(response_data.value);
+      if( !$(this).is(":focus") && $(this).attr('name') == response.name ){
+        $(this).val(response.value);
       }
-      updateSummary($(this).data('autosave-response'));
+      updateSummary(response);
     },
-    fail:     function(){
+    fail:     function(jqXHR){
       $(this).removeClass('updating').addClass('error');
       //todo: if 404 error, trigger this event again
-      $(this).val("");
+      //if( jqXHR.status.code == 404 ){
+      //  $(this).val("");
+      //}
     }
   });
 
@@ -89,11 +90,11 @@ $().ready( function(){ //run on page load
         $(this).attr('data-selected', '');
       }
     },
-    done:      function(){
-      updateSummary($(this).data('autosave-response'));
+    done:      function(response){
+      updateSummary(response);
     },
-    fail:      function(){
-      countFail($(this).data('autosave')['status']);
+    fail:      function(jqXHR){
+      //countFail(jqXHR.status);
       $(this).toggleClass('selected'); //should toggle back to what it was
     }
   });
@@ -109,8 +110,8 @@ $().ready( function(){ //run on page load
       }
       //todo: disable button, show spinner
     },
-    done:     function(){
-      if( $(this).data('autosave-response')['activated'] ){
+    done:     function(response){
+      if( response.activated ){
         // show confirmation
         $('#product-edit-form').hide();
         $('#floating-photo').remove();
@@ -196,7 +197,7 @@ $('.section').on('click', function(){
 
 //AUTOSAVE from https://github.com/tomcounsell/jquery-autosave
 //example: $("input").autosave({options});
-;(function(a,b,c,d){function g(b,c){this.element=b,this.options=a.extend({},f,c),this._defaults=f,this._name=e,this.init()}var e="autosave",f={url:"",method:"POST",event:"change",data:{},type:"html",debug:!1,before:function(){},done:function(){},fail:function(){},always:function(){}};g.prototype.init=function(){function e(b){var c=/^data\-(\w+)$/,d={};return d.value=b.val()||"",d.name=b.attr("name")||"",a(b[0].attributes).each(function(){c.test(this.nodeName)&&(attribute_name=c.exec(this.nodeName)[1],d[attribute_name]=this.nodeValue)}),d}var b=a(this.element),c=e(b),d=this.options,c=e(b);d.event=c.event||d.event,b.on(d.event,function(c){d.before&&d.before.call(b);var f=e(b);options=a.extend({},d,f);var g=a.extend({},options.data,f);options.debug=="false"&&(options.debug=!1),delete g.url,delete g.method,delete g.type,delete g.debug,g.event=options.event,options.debug?console.log(g):a.ajax({url:options.url,type:options.method,cache:!1,data:g,dataType:options.type}).done(function(a,c,d){b.data("autosave-response",a),b.data("autosave-status",{text:d.statusText,code:d.status}),b.trigger("autosave-done")}).fail(function(a,c,d){b.data("autosave-status",{text:a.statusText,code:a.status}),b.data("autosave-error",d),b.trigger("autosave-fail")}).always(function(){b.trigger("autosave-always")})}),d.done&&b.on("autosave-done",function(){var a=b.data("autosave-response"),c=b.data("autosave-status");options.done.call(b,a,c)}),d.fail&&b.on("autosave-fail",function(){error=b.data("autosave-error"),status=b.data("autosave-status"),options.fail.call(b,error,status)}),d.always&&b.on("autosave-always",function(){status=b.data("autosave-status"),options.always.call(b,status)})},a.fn.autosave=function(a){return this.each(function(){new g(this,a)})}})(jQuery,window,document)
+;(function(a,b,c,d){function g(b,c){this.element=b,this.options=a.extend({},f,c),this._defaults=f,this._name=e,this.init()}var e="autosave",f={url:"",method:"POST",event:"change",data:{},type:"html",debug:!1,before:function(){},done:function(){},fail:function(){},always:function(){}};g.prototype.init=function(){function e(b){var c=/^data\-(\w+)$/,d={};return d.value=b.val()||"",d.name=b.attr("name")||"",a(b[0].attributes).each(function(){c.test(this.nodeName)&&(attribute_name=c.exec(this.nodeName)[1],d[attribute_name]=this.nodeValue)}),d}var b=a(this.element),c=e(b),d=this.options,c=e(b);d.event=c.event||d.event,b.on(d.event,function(c){d.before&&d.before.call(b);var f=e(b);options=a.extend({},d,f);var g=a.extend({},options.data,f);options.debug=="false"&&(options.debug=!1),delete g.url,delete g.method,delete g.type,delete g.debug,g.event=options.event,options.debug?console.log(g):a.ajax({url:options.url,type:options.method,cache:!1,data:g,dataType:options.type}).done(function(a,c,d){b.data("autosave-data",a),b.data("autosave-textStatus",c),b.data("autosave-jqXHR",d),b.trigger("autosave-done")}).fail(function(a,c,d){b.data("autosave-jqXHR",a),b.data("autosave-textStatus",c),b.data("autosave-errorThrown",d),b.trigger("autosave-fail")}).always(function(){b.trigger("autosave-always")})}),d.done&&b.on("autosave-done",function(){var a=b.data("autosave-data"),c=b.data("autosave-textStatus"),d=b.data("autosave-jqXHR");options.done.call(b,a,c,d)}),d.fail&&b.on("autosave-fail",function(){var a=b.data("autosave-jqXHR"),c=b.data("autosave-textStatus"),d=b.data("autosave-errorThrown");options.fail.call(b,a,c,d)}),d.always&&b.on("autosave-always",function(){options.always.call(b)})},a.fn.autosave=function(a){return this.each(function(){new g(this,a)})}})(jQuery,window,document)
 
 //SCROLLTO from http://archive.plugins.jquery.com/project/ScrollTo
 // Copyright (c) 2007-2012 Ariel Flesler - aflesler(at)gmail(dot)com | http://flesler.blogspot.com
