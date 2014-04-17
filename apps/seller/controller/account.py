@@ -20,7 +20,7 @@ def create(account):
 @access_required('seller')
 def edit(request):
   from apps.seller.models.seller import Seller
-  from apps.seller.controller.forms import AssetForm, SellerEditForm
+  from apps.seller.controller.forms import SellerEditForm
   from settings.settings import CLOUDINARY
 
   seller = Seller.objects.get(id=request.session['seller_id'])
@@ -28,7 +28,6 @@ def edit(request):
     context = {
                 'seller':     seller,
                 'assets':     seller.asset_set.order_by('id'),
-                'asset_form': AssetForm(),
                 'asset_ilks': ['artisan','product','tool','material'],
                 'CLOUDINARY': {'upload_url':   CLOUDINARY['upload_url'],
                                'download_url': CLOUDINARY['download_url']
@@ -110,20 +109,20 @@ def edit(request):
 
 @access_required('seller')
 @csrf_exempt
-def saveAsset(request): #ajax get requests only, create or update asset
+def Asset(request): #ajax get requests only, create or update asset
   from apps.seller.models.asset import Asset
   from apps.admin.models import Category
 
   try:
-    if int(request.session['seller_id']) == int(request.GET['seller_id']):
+    if request.method == 'POST':
       asset, is_new = Asset.objects.get_or_create(
-                          seller_id = request.GET['seller_id'],
-                          ilk = request.GET['ilk'],
-                          rank = request.GET['rank']
-                        )
+                            seller_id = request.session['seller_id'],
+                            ilk = request.POST['ilk'],
+                            rank = request.POST['rank']
+                          )
 
-      element = request.GET.get('name')
-      value   = request.GET.get('value', None)
+      element = request.POST.get('name')
+      value   = request.POST.get('value', None)
 
       if element == 'name':
         asset.name = value
@@ -139,34 +138,20 @@ def saveAsset(request): #ajax get requests only, create or update asset
         asset.categories.clear()
         if value:
           asset.categories.add(Category.objects.get(id=value))
-
       asset.save()
-      response = {'asset_id':asset.id, 'get':request.GET}
 
+      if element == 'delete' and value == 'delete':
+        #todo: archive asset in reporting app
+        asset.delete()
+
+      response = {'asset_id':asset.id, 'element':element, 'value':value}
     else:
-      response = {'problem': "logged in as wrong user"}
+      response = {'problem': "not a POST request"}
 
   except Exception as e:
-    ExceptionHandler(e, "in account.saveAsset")
+    #ExceptionHandler(e, "in account.saveAsset")
     response = {'exception': str(e)}
+    return HttpResponse(json.dumps(response), status=400, content_type='application/json')
 
-  return HttpResponse(json.dumps(response), content_type='application/json')
-
-@access_required('seller')
-@csrf_exempt
-def deleteAsset(request): #ajax requests only
-  from apps.seller.models.asset import Asset
-  try:
-    asset = Asset.objects.get(
-              seller_id = request.session['seller_id'],
-              ilk = request.GET['ilk'],
-              rank = request.GET['rank']
-            )
-    asset.delete()
-    response = {'deleted': "asset has been permanently deleted"}
-
-  except Exception as e:
-    ExceptionHandler(e, "in account.deleteAsset")
-    response = {'exception': str(e)}
-
-  return HttpResponse(json.dumps(response), content_type='application/json')
+  else:
+    return HttpResponse(json.dumps(response), content_type='application/json')

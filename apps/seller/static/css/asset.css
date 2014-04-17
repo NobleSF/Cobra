@@ -21,9 +21,8 @@
 .image{
   width: 300px;
   height: 225px;
-  padding: 3px;
   margin: 0 auto 10px;
-  border: 2px solid #F0F0F0;
+  border: none;
 }
 
 .delete-asset, .go{cursor: pointer;}

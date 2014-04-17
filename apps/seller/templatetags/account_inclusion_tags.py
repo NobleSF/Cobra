@@ -4,25 +4,20 @@ register = template.Library()
 @register.inclusion_tag('account/asset.html')
 def asset_tag(asset_form, asset=None):
   from apps.seller.models.asset import Asset
+  from apps.seller.controller.forms import AssetCategoryForm
+  asset_category_form = AssetCategoryForm()
   try:
-    asset_form.fields["seller_id"].initial      = asset.seller.id
-    asset_form.fields["ilk"].initial            = asset.ilk
-    asset_form.fields["rank"].initial           = asset.rank
-    asset_form.fields["name"].initial           = asset.name
-    asset_form.fields["name_ol"].initial        = asset.name_ol
-    asset_form.fields["description"].initial    = asset.description
-    asset_form.fields["description_ol"].initial = asset.description_ol
-    asset_form.fields["phone"].initial          = asset.phone
     if asset.categories.count():
-      asset_form.fields["category"].initial     = asset.categories.all()[0].id
+      asset_category_form.fields["category"].initial = asset.categories.all()[0].id
+      asset_category_form.fields["category"].widget.attrs.update({
+        'data-ilk':asset.ilk,
+        'data-rank':asset.rank})
 
   except Exception as e:
     asset = None
     image_id = None
 
-  return {'asset':      asset,
-          'asset_form': asset_form
-         }
+  return {'asset': asset, 'asset_category_form': asset_category_form}
 
 @register.inclusion_tag('account/image_upload.html')
 def image_upload_tag(asset=None, seller=None):

@@ -6,8 +6,7 @@ urlpatterns = patterns('',
 
   #SELLER ACCOUNT
   url(r'^edit$', account.edit, name='edit'), #edit seller info
-  url(r'^ajax/asset_save$', account.saveAsset, name='save asset'),
-  url(r'^ajax/asset_delete$', account.deleteAsset, name='delete asset'),
+  url(r'^asset$', account.Asset, name='asset'),
 
   #INVENTORY
   url(r'^products$', inventory.products, name='products'), #products

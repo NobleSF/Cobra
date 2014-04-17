@@ -43,41 +43,7 @@ class SellerEditForm(forms.Form):
     else:
       raise forms.ValidationError("number of digits incorrect")
 
-class AssetForm(forms.Form):
-  #this form is never meant to be submitted or validated
-  #all editable elements are autosaved with ajax
-
-  #no asset-id required in form
-  #with seller_id, ilk, and rank together, the asset is unique
-  seller_id   = forms.CharField(
-                  widget=forms.TextInput(attrs={'class':"seller-id"}))
-  ilk         = forms.CharField(
-                  widget=forms.TextInput(attrs={'class':"ilk"}))
-  rank        = forms.CharField(
-                  widget=forms.TextInput(attrs={'class':"rank"}))
-
-  DELETE      = forms.BooleanField(
-                  widget=forms.CheckboxInput(
-                    attrs={'class':"delete autosave"}))
-
-  name        = forms.CharField(
-                  widget=forms.TextInput(
-                    attrs={'class':"name autosave"}),
-                    max_length=50, required=False)
-  description = forms.CharField(
-                  widget=forms.Textarea(
-                    attrs={'class':"description autosave"}),
-                    required=False)
-
-  name_ol     = forms.CharField(
-                  widget=forms.TextInput(
-                    attrs={'class':"name autosave"}),
-                    max_length=50, required=False)
-  description_ol= forms.CharField(
-                    widget=forms.Textarea(
-                      attrs={'class':"description autosave"}),
-                      required=False)
-
+class AssetCategoryForm(forms.Form):
   # choices must be formatted like [('group_title',(('1','opt1'),('2','opt2'))),]
   CATEGORY_ITEMS = []
   parent_categories = [c for c in Category.objects.all() if c.is_parent_category]
@@ -94,11 +60,9 @@ class AssetForm(forms.Form):
   CATEGORY_ITEMS = [('','Category: None')] + CATEGORY_ITEMS
 
   category    = forms.ChoiceField(
-                  widget=forms.Select(attrs={'class':"category autosave"}),
+                  widget=forms.Select(attrs={
+                    'id':"-category",
+                    'class':"asset-category autosave",
+                  }),
                   choices = CATEGORY_ITEMS,
                   required = False)
-
-  phone       = forms.CharField(
-                  widget=NumberInput(
-                    attrs={'class':"phone autosave"}),
-                    max_length=15, required=False)

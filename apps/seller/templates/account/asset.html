@@ -2,49 +2,89 @@
 {% load static %}
 {% load account_inclusion_tags %}
 
-<div id='asset-{{ asset.ilk }}{{ asset.rank }}' class='asset
-  {% if not asset %}empty{% endif %}
-'>
+<div id='asset-{{ asset.ilk }}{{ asset.rank }}'
+     class='asset {% if not asset %}empty{% endif %}'
+     ilk='{{ asset.ilk|default_if_none:"" }}'
+     rank='{{ asset.rank|default_if_none:"" }}'
+     asset_id='{{ asset.id }}'>
   <ul>
     <li class='asset-media'>
-      {% image_upload_tag asset=asset %}
+      {% image_upload_tag asset %}
     </li>
     <li class='asset-form'>
-      <form onsubmit='return false;'>
-        <div class='hidden-fields'>
-          {{ asset_form.seller_id }}
-          {{ asset_form.ilk }}
-          {{ asset_form.rank }}
-          {{ asset_form.DELETE }}
-        </div>
-        <div class='asset-fields'>
-          <ul>
-            <li class='lang lang-us input-append'>
-              {{ asset_form.name }}
-              <i class='delete-asset symbol-remove red'></i>
-              <i class='go symbol-go green'></i>
-            </li>
-            <li class='lang lang-ol input-append'>
-              {{ asset_form.name_ol }}
-              <i class='delete-asset symbol-remove red'></i>
-              <i class='go symbol-go green'></i>
-            </li>
-            <li class='lang lang-us'>
-              {{ asset_form.description }}
-            </li>
-            <li class='lang lang-ol'>
-              {{ asset_form.description_ol }}
-            </li>
+      <div class='asset-fields'>
+        <ul>
+          <li class='lang lang-us input-append'>
+            <input type='text'
+                   id='{{asset.ilk}}{{asset.rank}}-name' name='name'
+                   class='asset-name autosave'
+                   maxlength='50'
+                   data-ilk='{{asset.ilk}}' data-rank='{{asset.rank}}'
+                   value='{{ asset.name|default_if_none:"" }}'
+                   >
+            <i id='{{asset.ilk}}{{asset.rank}}-delete'
+               class='delete-asset symbol-remove red autosave'
+               data-name='delete' data-value='delete'
+               data-event='click'
+               data-ilk='{{asset.ilk}}' data-rank='{{asset.rank}}'></i>
+            <i class='go symbol-go green'></i>
+          </li>
+
+          <li class='lang lang-ol input-append'>
+            <input type='text'
+                   id='{{asset.ilk}}{{asset.rank}}-name-ol' name='name_ol'
+                   class='asset-name ol autosave'
+                   max-length='50'
+                   data-ilk='{{asset.ilk}}' data-rank='{{asset.rank}}'
+                   value='{{ asset.name_ol|default_if_none:""}}'
+                   >
+            <!-- duplicate todo: remove this redundant html -->
+            <i id='{{asset.ilk}}{{asset.rank}}-delete'
+               class='delete-asset symbol-remove red autosave'
+               data-name='delete' data-value='delete'
+               data-event='click'
+               data-ilk='{{asset.ilk}}' data-rank='{{asset.rank}}'></i>
+            <i class='go symbol-go green'></i>
+            <!-- dup -->
+          </li>
+
+          <li class='lang lang-us'>
+            <textarea id='{{asset.ilk}}{{asset.rank}}-description'
+                      name='description'
+                      class='asset-description autosave'
+                      data-ilk='{{asset.ilk}}' data-rank='{{asset.rank}}'
+                      >{{ asset.description|default_if_none:"" }}</textarea>
+          </li>
+
+          <li class='lang lang-ol'>
+            <textarea id='{{asset.ilk}}{{asset.rank}}-description-ol'
+                      name='description_ol'
+                      class='asset-description ol autosave'
+                      data-ilk='{{asset.ilk}}' data-rank='{{asset.rank}}'
+                      >{{ asset.description_ol|default_if_none:"" }}</textarea>
+          </li>
+
+          {% if asset.ilk == 'product' or not asset %}
             <li class='asset-category'>
-              {{ asset_form.category }}
+              {{ asset_category_form.category }}
             </li>
+          {% endif %}
+
+          {% if asset.ilk == 'artisan' or not asset %}
             <li class='asset-phone input-append'>
-              {{ asset_form.phone }}
+              <input type='text'
+                     id='{{asset.ilk}}{{asset.rank}}-phone' name='phone'
+                     class='asset-phone autosave'
+                     maxlength='15'
+                     data-ilk='{{asset.ilk}}' data-rank='{{asset.rank}}'
+                     value='{{ asset.phone|default_if_none:"" }}'
+                     >
               <i class='symbol-phone black add-on'></i>
             </li>
-          </ul>
-        </div>
-      </form>
+          {% endif %}
+
+        </ul>
+      </div>
     </li>
   </ul>
 </div>

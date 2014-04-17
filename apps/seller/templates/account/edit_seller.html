@@ -12,11 +12,11 @@
 {% endblock css%}
 
 {% block javascript %}
+  <script src='{{ STATIC_URL }}seller/js/account_edit.min.js?v=2'></script>
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/vendor/jquery.ui.widget.min.js'></script>
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.iframe-transport.min.js'></script>
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.fileupload.min.js'></script>
-  <script src='{{ STATIC_URL }}seller/js/account_edit.min.js?v=1'></script>
-  <script src='{{ STATIC_URL }}seller/js/asset.min.js?v=1'></script>
+  <script src='{{ STATIC_URL }}seller/js/asset.min.js?v=2'></script>
 {% endblock javascript%}
 
 {% block admin_nav %}
@@ -59,10 +59,9 @@
     <input type='hidden' id='upload-check-url'
            value="{% url 'seller:check image upload' %}">
 
-    <input type='hidden' id='save-asset-url' value='{% url 'seller:save asset' %}'>
-    <input type='hidden' id='delete-asset-url' value='{% url 'seller:delete asset' %}'>
+    <input type='hidden' id='asset-url' value='{% url 'seller:asset' %}'>
 
-    <div class='pull-left asset'>
+    <div class='pull-left'>
       <ul>
         <li class='asset-media'>
           {% image_upload_tag seller=seller %}
@@ -119,6 +118,7 @@
             <i class='add-on symbol-email black' title='email'></i>
             {{ seller_form.email }}
           </li>
+
           <li class='input-prepend input-append'>
             <i class='add-on symbol-phone black' title='phone number'></i>
             {{ seller_form.phone }}
@@ -152,23 +152,23 @@
     </form>
 
     <input type='hidden' id='seller-id' value='{{ seller.id }}'>
-
   </div>
 
   <ul id='asset-tabs' class='nav nav-tabs text-center'>
-    {% for asset_ilk in asset_ilks %}
-      <li id='{{ asset_ilk }}_tab' class='asset-tab'>
+    {% for ilk in asset_ilks %}
+      <li id='{{ ilk }}-tab' class='asset-tab' ilk='{{ ilk }}'>
         <a>
-          <i class='symbol-{{ asset_ilk }}{{ 2|pluralize }} blue'
-             title='{{ asset_ilk|title }}{{ 2|pluralize }}'>
+          <i class='symbol-{{ ilk }}{{ 2|pluralize }} blue'
+             title='{{ ilk|title }}{{ 2|pluralize }}'>
           </i>
         </a>
       </li>
     {% endfor %}
   </ul>
 
-  {% for asset_ilk in asset_ilks %}
-    <div id='{{ asset_ilk }}_container' class='asset-container'>
+  {% for ilk in asset_ilks %}
+    <div id='{{ ilk }}-container' class='asset-container'
+         ilk='{{ilk }}'>
     </div>
   {% endfor %}
 
