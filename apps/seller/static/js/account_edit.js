@@ -68,8 +68,22 @@ function addAssetForms(){
       //activate image uploading
       uploader = new fileUploadAction();
       uploader.apply(new_asset.find('.image-input'));
+
+      bindButtons()
     }//end if
   });//end for each asset-container
+}
+
+//show exit-button when focused on input
+function bindButtons(){
+  $('input,textarea').on('focus', function(){
+    $(this).closest('.asset-fields').find('.go').show();
+    $(this).closest('.asset-fields').find('.delete-asset').hide();
+  });
+  $('.go').on('click', function(){
+    $(this).closest('.asset-fields').find('.go').hide();
+    $(this).closest('.asset-fields').find('.delete-asset').show();
+  });
 }
 
 function applyAssetIlkRank(asset, ilk, rank){

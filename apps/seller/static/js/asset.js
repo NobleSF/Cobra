@@ -1,19 +1,12 @@
 $().ready( function(){
-  //run on page load
-
-  //show exit-button when focused on input (mobile)
-  $('input,textarea').on('focus', function(){
-    $(this).closest('.asset-fields').find('.go').show();
-    $(this).closest('.asset-fields').find('.delete-asset').hide();
-  });
-  $('.go').on('click', function(){
-    $(this).closest('.asset-fields').find('.go').hide();
-  });
 
   //run on page load for assets
   arrangeAssetForms();//move assets to their respective tab
   autosaveAssets('.autosave');//apply autosave functionality
   addAssetForms();//create blank assets as needed
+
+  //show exit-button when focused on input (mobile)
+  bindButtons();
 
 });
 
