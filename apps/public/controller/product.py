@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.views.decorators.cache import cache_page
 from django.utils import timezone
+from datetime import datetime
 from apps.seller.models.product import Product
 from apps.seller.models.photo import Photo
 import json
@@ -16,10 +17,19 @@ def home(request, product_id, slug=None):
 
   return render(request, 'product.html', {'product': product})
 
-@cache_page(172800) #cache for 48 hours
 def product_data(request=None):
   from django.utils import timezone
   product_amalgam_bomb = []
+
+  products = Product.objects.filter(active_at__lte=timezone.now())
+
+  if request.GET.get('product_id', None):
+    products = products.filter(id=request.GET.get('product_id'))
+
+  if request.GET.get('updated_since', None):
+    timestamp = datetime.utcfromtimestamp(int(request.GET.get('updated_since')))
+    products = products.filter(updated_at__gte=timestamp)
+    #print "timestamp: " + str(timestamp)
 
   try:
     page = int(request.GET['page'])
@@ -27,7 +37,9 @@ def product_data(request=None):
   except Exception as e:
     (start, end) = (0, 10)
 
-  for product in Product.objects.filter(approved_at__lte=timezone.now())[start:end]:
+  #print "product count: " + str(products.count())
+
+  for product in products[start:end]:
 
     product_data = {
       'id':                     product.id,
