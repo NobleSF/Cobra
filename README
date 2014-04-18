@@ -10,15 +10,15 @@ Spring Valley, CA
 
 Anou's Open Product Database:
 
-www.theanou.com/product_data
-returns a json response with the public data for 50 products
-products are paginated with 50 products on each 'page'
+http://www.theanou.com/product_data
+returns a json response with the public data for all approved products on Anou
+products are paginated with 10 products on each 'page'
 retreive more product data with the GET parameter 'page'
-example: www.theanou.com/product_data?page=2
-
-the data responses are cached for 48 hours, but you can add any custom 'version' parameter to generate a new copy at any time
-example: http://www.theanou.com/product_data?page=1&version=TomsCopyFrom2AM
-this custom version will also cache for 48 hours
+example: http://www.theanou.com/product_data?page=2
+'updated_since' parameter limits results to products updated on or after a given unix timestamp
+example: http://www.theanou.com/product_data?updated_since=1396310400&page=2
+'product_id' parameter limits results to a single product
+example: http://www.theanou.com/product_data?product_id=38
 
 the json format is defined here:
 
@@ -34,8 +34,10 @@ the json format is defined here:
 		'parent_category': string,
 		'parent_keywords': string,
 
-		'price': int,
-		'shipping_price': int,
+    'status': string ('available' or 'unavailable')
+    'quantity': int,
+		'price': int (in cents eg. 1312 = $13.12),
+		'shipping_price': int (in cents eg. 1312 = $13.12),
 
 		'ratings':
 			{
@@ -45,10 +47,10 @@ the json format is defined here:
 			},
 		'avg_rating': int,
 
-		'width': int,
-		'height': int,
-		'length': int,
-		'weight': int,
+		'width': int (in centimeters),
+		'height': int (in centimeters),
+		'length': int (in centimeters),
+		'weight': int (in grams),
 
 		'humanized_metric_dimensions': string,
 		'humanized_english_dimensions': string,
