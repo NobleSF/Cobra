@@ -40,8 +40,10 @@ def product_data(request=None):
       'parent_category':        product.parent_category.name if product.parent_category else "",
       'parent_keywords':        product.parent_category.keywords if product.parent_category else "",
 
-      'price':                  product.display_price,
-      'shipping_price':         product.display_shipping_price,
+      'status':                 "unavailable" if (product.is_sold or not product.is_approved) else "available",
+      'quantity':               1,
+      'price':                  product.display_price*100,
+      'shipping_price':         product.display_shipping_price*100,
 
       'ratings':                product.ratings,
       'avg_rating':             product.rating,
