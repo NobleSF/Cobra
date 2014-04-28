@@ -5,9 +5,6 @@ $().ready( function(){
   autosaveAssets('.autosave');//apply autosave functionality
   addAssetForms();//create blank assets as needed
 
-  //show exit-button when focused on input (mobile)
-  bindButtons();
-
 });
 
 function autosaveAssets(selector){
