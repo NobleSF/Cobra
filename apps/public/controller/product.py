@@ -17,7 +17,7 @@ def home(request, product_id, slug=None):
 
   return render(request, 'product.html', {'product': product})
 
-def product_data(request=None):
+def product_data(request):
   from django.utils import timezone
   product_amalgam_bomb = []
 
