@@ -13,6 +13,8 @@ urlpatterns = patterns('',
   url(r'^product/(?P<product_id>\d+)$', product.home, name='product'),
 
   # COMMANDS / CUSTOM ORDERS
+  url(r'^product/custom_order_estimate$', custom_order.estimate,
+      name='custom order estimate'),
   url(r'^product/custom_order_request$', custom_order.request,
       name='custom order request'),
 

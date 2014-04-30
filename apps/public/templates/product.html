@@ -29,7 +29,7 @@
 {% endblock additional_meta_tags %}
 
 {% block javascript %}
-  <script type="text/javascript" src="{{ STATIC_URL }}public/js/product.min.js?v=4"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}public/js/product.min.js?v=5"></script>
 {% endblock javascript %}
 
 {% block css %}
@@ -67,8 +67,10 @@
       <div class='span12 form-horizontal'>
 
         <!-- hidden elements -->
-        <input id='custom-order-url' type='hidden'
+        <input id='custom-order-request-url' type='hidden'
                value="{% url 'custom order request'%}">
+        <input id='custom-order-estimate-url' type='hidden'
+               value="{% url 'custom order estimate'%}">
         <input id='custom-order-product-id'
                name='custom-order-product-id'
                type='hidden' value='{{ product.id }}'>
@@ -158,6 +160,25 @@
         </div>
 
         <div class='control-group'>
+          <label class='control-label'>Estimate</label>
+          <div class='controls'>
+            <p>
+              <img id='custom-order-estimate-loader'
+                   src="{{ STATIC_URL }}images/loader.gif"
+                   height='20' width='20' style='display: none;'
+              >
+              <input id='custom-order-estimate' class='input-mini'
+                     type='text' disabled='disabled'
+                     value='${{product.display_price}}'
+              ><br>
+              This is not an official quote.<br>
+              Prices usually vary within 10% of this estimate when<br>
+              size and quantity are the only changes requested.
+            </p>
+          </div>
+        </div>
+
+        <div class='control-group'>
           <label class='control-label'>Contact</label>
           <div class='controls'>
           <input id='custom-order-email' class='input-large'
@@ -170,7 +191,7 @@
           <div class='controls'>
             <button id='custom-order-submit-button' class='btn btn-success'
                     event-action='submit request' event-category='custom-order'>
-              Send Request
+              Send Request to {{ product.seller.name|title }}
             </button>
 
             <button id='custom-order-success' class='btn btn-info disabled'>

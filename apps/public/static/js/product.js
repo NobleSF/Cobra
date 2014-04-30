@@ -61,6 +61,10 @@ $('.change-description').click(function(){
   $('#description-form').show();
 });
 
+$('#custom-order input').on('keyup change', function(){
+  updateCustomOrderEstimate();
+});
+
 $('#custom-order-submit-button').click(function(){
   if ($('#custom-order-email').val() == "") {
     $('#custom-order-email').addClass('error');
@@ -73,12 +77,13 @@ $('#custom-order-submit-button').click(function(){
     size += $('#custom-order-width-A').val() + "ft. "
     size += $('#custom-order-width-B').val() + "in."
 
-    $.ajax({url: $('#custom-order-url').val(),
-            data: { 'product_id': $('#custom-order-product-id').val(),
-                    'email': $('#custom-order-email').val(),
-                    'size': size,
-                    'quantity': $('#custom-order-quantity').val(),
-                    'description': $('#custom-order-description').val()
+    $.ajax({url: $('#custom-order-request-url').val(),
+            data: { 'product_id':   $('#custom-order-product-id').val(),
+                    'email':        $('#custom-order-email').val(),
+                    'size':         size,
+                    'quantity':     $('#custom-order-quantity').val(),
+                    'description':  $('#custom-order-description').val(),
+                    'estimate':     $('#custom-order-estimate').val()
                   },
             type: "POST"})
     .done(function(){
@@ -94,3 +99,33 @@ $('#custom-order-submit-button').click(function(){
     })
   }
 });
+
+function updateCustomOrderEstimate(){
+
+  $('#custom-order-estimate').hide()
+  $('#custom-order-estimate-loader').show()
+
+  //pull dimensions
+  var length = $('#custom-order-length-A').val()*12*2.54 //feet -> cm
+  length += $('#custom-order-length-B').val()*2.54 //inches -> cm
+  var width = $('#custom-order-width-A').val()*12*2.54 //feet -> cm
+  width += $('#custom-order-width-B').val()*2.54 //inches -> cm
+
+  $.ajax({url: $('#custom-order-estimate-url').val(),
+          data: { 'product_id': $('#custom-order-product-id').val(),
+                  'length':     parseInt(length),
+                  'width':      parseInt(width),
+                  'quantity':   $('#custom-order-quantity').val()
+                },
+          type: 'GET'})
+  .done(function(data){
+    $('#custom-order-estimate').val("$"+data.display_price_estimate)
+    $('#custom-order-estimate').show()
+    $('#custom-order-estimate-loader').hide()
+  })
+  .fail(function(){
+$('#custom-order-estimate').val("error")
+    $('#custom-order-estimate').show()
+    $('#custom-order-estimate-loader').hide()
+  });
+}
