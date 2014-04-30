@@ -11,4 +11,7 @@ Quantity:<br>
 Description:<br>
 {{ data.description }}
 
+Estimate:<br>
+{{ data.estimate }}
+
 from {{ data.email }}
