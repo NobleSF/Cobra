@@ -28,9 +28,9 @@ def estimate(request):
       dimensions.sort() #sort numbers smallest to biggest
       dimensions.reverse() #reverse order, so now biggest first
 
-      if request.GET.get('length').isdigit():
+      if request.GET.get('length') and int(request.GET['length']) > 0:
         dimensions[0] = int(request.GET['length'])
-      if request.GET.get('width').isdigit():
+      if request.GET.get('width') and int(request.GET['width']) > 0:
         dimensions[1]  = int(request.GET['width'])
 
       #get ratio from volume difference
@@ -77,7 +77,6 @@ def request(request):
 
     except Exception as e:
       ExceptionHandler(e, "error in custom_order.createCustomOrder")
-      print str(e)
       return HttpResponse(status=500)
 
   else:
