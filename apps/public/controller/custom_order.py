@@ -16,42 +16,48 @@ def estimate(request):
   try:
     product = Product.objects.get(id=request.GET['product_id'])
 
-    product.length = product.length if product.length else 1
-    product.height = product.height if product.height else 1
-    product.width  = product.width  if product.width  else 1
-    old_volume = product.length * product.width * product.height
+    if product and product.weight and product.price:
 
-    #sort dimensions and update two biggest ones
-    dimensions = [product.length, product.width, product.height]
-    dimensions.sort() #sort numbers smallest to biggest
-    dimensions.reverse() #reverse order, so now biggest first
+      product.length = product.length if product.length else 1
+      product.height = product.height if product.height else 1
+      product.width  = product.width  if product.width  else 1
+      old_volume = product.length * product.width * product.height
 
-    if request.GET.get('length') and int(request.GET['length']) > 0:
-      dimensions[0] = int(request.GET['length'])
-    if request.GET.get('width') and int(request.GET['width'])>0:
-      dimensions[1]  = int(request.GET['width'])
+      #sort dimensions and update two biggest ones
+      dimensions = [product.length, product.width, product.height]
+      dimensions.sort() #sort numbers smallest to biggest
+      dimensions.reverse() #reverse order, so now biggest first
 
-    #get ratio from volume difference
-    new_volume = dimensions[0] * dimensions[1] * dimensions[2]
-    ratio = float(new_volume)/old_volume
+      if request.GET.get('length').isdigit():
+        dimensions[0] = int(request.GET['length'])
+      if request.GET.get('width').isdigit():
+        dimensions[1]  = int(request.GET['width'])
 
-    #scale ratio with quantity
-    if request.GET.get('quantity') and request.GET['quantity'] > 1:
-      ratio = ratio * int(request.GET['quantity'])
+      #get ratio from volume difference
+      new_volume = dimensions[0] * dimensions[1] * dimensions[2]
+      ratio = float(new_volume)/old_volume
 
-    #use ratio to scale price, weight
-    product.price = int(round(product.price * ratio))
-    product.weight = int(round(product.weight * ratio))
-    #increase weight a bit to bump estimate to next shipping price tier if close
-    product.weight = int(round((product.weight * 1.05) + 100)) #add 5% + 100grams
+      #scale ratio with quantity
+      if request.GET.get('quantity') and request.GET['quantity'] > 1:
+        ratio = ratio * int(request.GET['quantity'])
 
-    response = {'display_price_estimate': product.display_price}
-    product.pk = None #DO NOT SAVE!!!
-    return HttpResponse(json.dumps(response), content_type='application/json')
+      #use ratio to scale price, weight
+      product.price = int(round(product.price * ratio))
+      product.weight = int(round(product.weight * ratio))
+      #increase weight a bit to bump estimate to next shipping price tier if close
+      product.weight = int(round((product.weight * 1.05) + 100)) #add 5% + 100grams
+
+      response = {'display_price_estimate': product.display_price}
+      product.pk = None #DO NOT SAVE!!!
+      return HttpResponse(json.dumps(response), content_type='application/json')
+
+    else:
+      return HttpResponse(status=500)
 
   except Exception as e:
     ExceptionHandler(e, "error in product.custom_order_estimate")
-    return HttpResponse(status=500)
+    return HttpResponse(str(e), status=500)
+
 
 @csrf_exempt
 def request(request):
