@@ -97,6 +97,9 @@
                        placeholder=''>
                 <i class='add-on'>in</i>
               </div>
+              <div>
+                <span class='change-size-units'>Original: {{product.longest_side_english}}</span>
+              </div>
               <!--<span class='change-size-units'>use meters</span>
               <span class='change-size-units'>use feet</span>-->
             </div>
@@ -116,6 +119,9 @@
                        name='custom-order-width-B' type='tel'
                        placeholder=''>
                 <i class='add-on'>in</i>
+              </div>
+              <div>
+                <span class='change-size-units'>Original: {{product.second_longest_side_english}}</span>
               </div>
             </div>
           </div>
@@ -170,7 +176,8 @@
               <input id='custom-order-estimate' class='input-mini'
                      type='text' disabled='disabled'
                      value='${{product.display_price}}'
-              ><br>
+              >
+              Includes shipping to North America, Europe.<br>
               This is not an official quote.<br>
               Prices usually vary within 10% of this estimate when<br>
               size and quantity are the only changes requested.

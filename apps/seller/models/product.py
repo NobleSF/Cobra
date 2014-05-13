@@ -311,6 +311,34 @@ class Product(models.Model):
     except: return {}
 
   @property
+  def longest_side_english(self):#todo: clean this up
+    longest = sorted([self.width, self.height, self.length], reverse=True)[0]
+    inches = int(round(longest/2.54))
+    if inches > 18:
+      feet = int(inches / 12)
+      inches = inches % 12
+    else:
+      feet = 0
+      inches = inches if inches > 0 else 1
+    dimension_string = ("%dft " % feet) if feet else ""
+    dimension_string += ("%din" % inches) if inches else ""
+    return dimension_string
+
+  @property
+  def second_longest_side_english(self):#todo clean this up
+    longest = sorted([self.width, self.height, self.length], reverse=True)[1]
+    inches = int(round(longest/2.54))
+    if inches > 18:
+      feet = int(inches / 12)
+      inches = inches % 12
+    else:
+      feet = 0
+      inches = inches if inches > 0 else 1
+    dimension_string = ("%dft " % feet) if feet else ""
+    dimension_string += ("%din" % inches) if inches else ""
+    return dimension_string
+
+  @property
   def metric_dimensions(self):
     from math import floor
     metric_string = ""
