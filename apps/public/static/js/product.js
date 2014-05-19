@@ -61,7 +61,7 @@ $('.change-description').click(function(){
   $('#description-form').show();
 });
 
-$('#custom-order input').on('keyup change', function(){
+$('#custom-order input').not('#custom-order-email').on('keyup change', function(){
   updateCustomOrderEstimate();
 });
 
