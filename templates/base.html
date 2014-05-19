@@ -176,10 +176,11 @@
       </script>
       <script>//CUSTOM EVENT TRACKING FOR CLIENT-SIDE EVENTS
         $("[event-action]").bind('click', function(){
+          console.log('event tracked on ' + $(this).attr('id'));
           action = $(this).attr('event-action');
           category = $(this).attr('event-category') || "uncategorized";
           label = $(this).attr('event-label') || "click";
-          value = $(this).attr('event-value') || "";
+          value = parseInt($(this).attr('event-value')) || 1;
           ga('send', {
             'hitType': 'event',
             'eventCategory': category,
