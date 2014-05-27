@@ -20,6 +20,10 @@ $('#unapprove').click(function(){
   });
 })
 
+$('.morocco-price').click(function(){
+  $('.morocco-price-details').show();
+})
+
 $('.read-more').on('click', function(){
   $(this).prev('.short-description').hide();
   $(this).hide();

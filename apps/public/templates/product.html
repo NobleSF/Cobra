@@ -29,7 +29,7 @@
 {% endblock additional_meta_tags %}
 
 {% block javascript %}
-  <script type="text/javascript" src="{{ STATIC_URL }}public/js/product.min.js?v=5"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}public/js/product.min.js?v=6"></script>
 {% endblock javascript %}
 
 {% block css %}
@@ -310,13 +310,24 @@
 
       <table id='buying-table'>
         <tr itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-          <td rowspan=2 class='price title-font' itemprop="price">
+          <td rowspan=1 class='price title-font' itemprop="price">
             ${{ product.display_price }}
           </td>
-          <td class='price-qualifier nowrap title-font'>Free Shipping</td>
+          <td class='price-qualifier nowrap title-font'>
+            Includes Shipping<br>
+            to USA, Europe<br>
         </tr>
         <tr>
-          <td class='price-qualifier nowrap title-font'>Free Returns</td>
+          <td colspan=2 class='morocco-price price-qualifier nowrap title-font' align='center'>
+            <span style='text-decoration: underline; cursor: pointer;'>
+              Morocco Price: {{ product.local_price }} Dirham
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td colspan=2 class='morocco-price-details' align='center' style='display: none; color: red;'>
+            Living in Morocco? Morocco price includes shipping directly to you. Email us at <a href='mailto:hello@theanou.com'>hello@theanou.com</a> and we will help you with payment options.
+          </td>
         </tr>
       </table>
 
