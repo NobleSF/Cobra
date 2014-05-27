@@ -44,6 +44,10 @@ class Country(models.Model): #could expand on pypi.python.org/pypi/django-countr
   calling_code  = models.IntegerField()
   # assuming countries stick to one currency nationwide
   currency      = models.ForeignKey('Currency')
+  """
+  exchange_rate
+  name_adjective
+  """
 
   def __unicode__(self):
     return self.code

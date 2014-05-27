@@ -396,7 +396,15 @@ class Product(models.Model):
   def shipping_cost(self):
     from apps.seller.controller.shipping import calculateShippingCost
     if self.weight and len(self.shipping_options.all()) > 0:
-      return calculateShippingCost(self.weight, self.shipping_options.all()[0])
+      return calculateShippingCost(self.weight, self.shipping_options.all()[0], 'US')
+    else:
+      return 0
+
+  @property
+  def local_shipping_cost(self):
+    from apps.seller.controller.shipping import calculateShippingCost
+    if self.weight and len(self.shipping_options.all()) > 0:
+      return calculateShippingCost(self.weight, self.shipping_options.all()[0], 'MA')
     else:
       return 0
 
@@ -410,15 +418,22 @@ class Product(models.Model):
   @property
   def local_price(self):
     if self.price:
+      return self.price + self.anou_fee + self.local_shipping_cost
+    else:
+      return 0
+
+  @property
+  def intl_price(self):
+    if self.price:
       return self.price + self.anou_fee + self.shipping_cost
     else:
       return 0
 
   @property
   def usd_price(self): #convert to USD
-    if self.local_price:
+    if self.intl_price:
       local_currency = self.seller.country.currency
-      return self.local_price/float(local_currency.exchange_rate_to_USD)
+      return self.intl_price/float(local_currency.exchange_rate_to_USD)
     else:
       return 0
 

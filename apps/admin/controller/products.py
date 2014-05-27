@@ -135,7 +135,7 @@ def getShippingCost(request):
     elif request.GET.get('weight') and request.GET.get('shipping_option'):
       try:
         shipping_option = ShippingOption.objects.get(name=request.GET['shipping_option'])
-        shipping_cost = calculateShippingCost(request.GET['weight'], shipping_option)
+        shipping_cost = calculateShippingCost(request.GET['weight'], shipping_option, 'US')
       except: pass
 
   try:

@@ -3,7 +3,7 @@ from apps.admin.models import Country
 
 class ShippingOption(models.Model):
   name            = models.CharField(max_length=50)
-  country         = models.ForeignKey(Country)
+  country         = models.ForeignKey(Country)#todo: remove
   image           = models.ForeignKey('Image', null=True, blank=True, on_delete=models.SET_NULL)
 
   class Meta:

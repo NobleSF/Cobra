@@ -61,7 +61,7 @@ def createFromCartItem(item, checkout_data):
     products_charge     = item.product.price,
     anou_charge         = item.product.anou_fee,
     shipping_charge     = item.product.shipping_cost,
-    total_charge        = item.product.local_price,
+    total_charge        = item.product.intl_price,
     seller_paid_amount  = item.product.price + item.product.shipping_cost
   )
   order.save()
