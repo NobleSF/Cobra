@@ -24,7 +24,7 @@ def adminAccounts(request):
 
 @access_required('admin')
 def createAdmin(request):
-  from apps.admin.controller.forms import AccountCreateForm
+  from apps.admin.controllers.forms import AccountCreateForm
   from django.db import IntegrityError
 
   if request.method == 'POST':
@@ -77,9 +77,9 @@ def sellerAccounts(request):
 
 @access_required('admin')
 def createSeller(request):
-  from apps.admin.controller.forms import AccountCreateForm
+  from apps.admin.controllers.forms import AccountCreateForm
   from django.db import IntegrityError
-  from apps.seller.controller.account import create as createSeller
+  from apps.seller.controllers.account import create as createSeller
   context = {}
 
   if request.method == 'POST':
@@ -122,7 +122,7 @@ def createSeller(request):
 
 @access_required('admin')
 def edit(request, account_id=None):
-  from apps.admin.controller.forms import AccountEditForm
+  from apps.admin.controllers.forms import AccountEditForm
 
   if not account_id:
     account_id = request.session.get('admin_id')
@@ -182,7 +182,7 @@ def approveSeller(request): #from AJAX GET request
   return HttpResponse(json.dumps(response), content_type='application/json')
 
 def login(request, next=None):
-  from apps.admin.controller.forms import AccountLoginForm
+  from apps.admin.controllers.forms import AccountLoginForm
   from apps.seller.models.seller import Seller
 
   if request.method == 'POST':
@@ -296,7 +296,7 @@ def logout(request):
 
 @access_required('admin')
 def resetPassword(request, account_id=None):
-  from apps.admin.controller.forms import AccountPasswordForm
+  from apps.admin.controllers.forms import AccountPasswordForm
   account_id = account_id if account_id else request.session.get('admin_id')
   account = Account.objects.get(id=account_id)
 

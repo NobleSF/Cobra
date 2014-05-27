@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.seller.models.product import Product
 from apps.admin.utils.decorator import postpone
-from apps.communication.controller.email_class import Email
+from apps.communication.controllers.email_class import Email
 from settings.people import Dan, Brahim
 
 #todo: this should be a class, not bunch of functions

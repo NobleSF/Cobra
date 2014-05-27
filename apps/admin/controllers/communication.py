@@ -15,7 +15,7 @@ def sendSMS(request):
     message   = request.POST.get('message')
     order_id  = request.POST.get('order')
 
-    sms = sms_controller.sendSMS(message, to_number)
+    sms = sms_controllers.sendSMS(message, to_number)
     if isinstance(sms, SMS):
       try:
         if order_id:
@@ -26,7 +26,7 @@ def sendSMS(request):
       else:
         messages.success(request, "SMS sent!")
     else:
-      e = Exception('unknown response from sms_controller.sendSMS')
+      e = Exception('unknown response from sms_controllers.sendSMS')
       ExceptionHandler(e, "in communication.sendSMS")
       messages.error(request, "SMS failed!")
 
@@ -35,7 +35,7 @@ def sendSMS(request):
 @access_required('admin')
 def allSMS(request):
   from settings.settings import TELERIVET
-  from apps.admin.controller.forms import SMSForm
+  from apps.admin.controllers.forms import SMSForm
 
   sms_messages = SMS.objects.all().order_by('created_at').reverse()[:100]
 

@@ -10,7 +10,7 @@ from apps.seller.models.seller import Seller
 from apps.seller.models.product import Product
 from apps.seller.models.custom_order import CustomOrder
 from settings.people import Tom, Dan
-from apps.communication.controller.email_class import Email
+from apps.communication.controllers.email_class import Email
 
 def estimate(request):
   try:

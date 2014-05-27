@@ -1,7 +1,7 @@
 from django.db import models
 from django import forms
 from apps.admin.models import Account
-from apps.admin.controller.account import processPassword
+from apps.admin.controllers.account import processPassword
 
 from django.forms.widgets import TextInput
 class NumberInput(TextInput):

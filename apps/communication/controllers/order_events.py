@@ -1,6 +1,6 @@
 from apps.admin.utils.exception_handling import ExceptionHandler
-from apps.communication.controller.email_class import Email
-from apps.communication.controller.sms import sendSMS, sendSMSForOrder
+from apps.communication.controllers.email_class import Email
+from apps.communication.controllers.sms import sendSMS, sendSMSForOrder
 from apps.communication.models import SMS
 from settings.settings import DEBUG
 from settings import people

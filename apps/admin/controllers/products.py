@@ -124,7 +124,7 @@ def priceCalc(request):
   return render(request, 'products/price_calc.html', {'exchange_rate':exchange_rate})
 
 def getShippingCost(request):
-  from apps.seller.controller.shipping import calculateShippingCost
+  from apps.seller.controllers.shipping import calculateShippingCost
 
   if request.method == "GET":
     if request.GET.get('product_id', None):

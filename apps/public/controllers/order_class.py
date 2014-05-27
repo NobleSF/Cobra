@@ -14,7 +14,7 @@ def getOrders(checkout_id):
     if not orders:
       orders = createFromCart(cart)
       #after creating an order, run cleanup
-      from apps.public.controller.cart_class import cleanupCarts
+      from apps.public.controllers.cart_class import cleanupCarts
       cleanupCarts()
     return orders
 
@@ -26,9 +26,9 @@ def getOrders(checkout_id):
     return []
 
 def createFromCart(cart):
-  from apps.communication.controller.email_class import Email
+  from apps.communication.controllers.email_class import Email
   from settings.people import Tom, Dan
-  from apps.public.controller.cart_class import Cart
+  from apps.public.controllers.cart_class import Cart
 
   orders = []
 

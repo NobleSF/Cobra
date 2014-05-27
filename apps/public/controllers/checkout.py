@@ -5,8 +5,8 @@ from apps.admin.utils.exception_handling import ExceptionHandler
 import json
 from django.contrib import messages
 
-from apps.public.controller.cart_class import Cart
-from apps.public.controller.forms import CartForm
+from apps.public.controllers.cart_class import Cart
+from apps.public.controllers.forms import CartForm
 
 def cart(request):
   cart = Cart(request)
@@ -85,7 +85,7 @@ def cartSave(request): #ajax requests only
   return HttpResponse(json.dumps(response), content_type='application/json')
 
 def confirmation(request):
-  from apps.public.controller.order_class import getOrders
+  from apps.public.controllers.order_class import getOrders
   checkout_id = None
 
   try:
@@ -140,7 +140,7 @@ def confirmation(request):
 @access_required('admin')
 def adminCheckout(request): #ajax requests only
   from django.core.urlresolvers import reverse
-  from apps.communication.controller.email_class import Email
+  from apps.communication.controllers.email_class import Email
   from settings.people import Dan
 
   try:
