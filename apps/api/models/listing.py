@@ -1,5 +1,5 @@
 from django.db import models
-from apps.seller.models import Product
+from apps.seller.models.product import Product
 
 class Listing(models.Model):
   product       = models.OneToOneField(Product, related_name='etsy_listing')

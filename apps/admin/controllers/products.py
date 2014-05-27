@@ -83,8 +83,8 @@ def approveProduct(request): #from AJAX GET request
 @access_required('admin')
 def rateProduct(request): #from AJAX GET request
   from apps.seller.models.product import Product
-  from apps.public.models import Rating
-  from apps.admin.models import RatingSubject
+  from apps.public.models.rating import Rating
+  from apps.admin.models.rating_subject import RatingSubject
   try:
     product_id      = request.GET.get('product_id')
     rating_subject  = request.GET.get('subject')
@@ -119,7 +119,7 @@ def rateProduct(request): #from AJAX GET request
 
 
 def priceCalc(request):
-  from apps.admin.models import Currency
+  from apps.admin.models.currency import Currency
   exchange_rate = Currency.objects.get(code='MAD').exchange_rate_to_USD
   return render(request, 'products/price_calc.html', {'exchange_rate':exchange_rate})
 

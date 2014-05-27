@@ -1,7 +1,7 @@
 from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.communication.controllers.email_class import Email
 from apps.communication.controllers.sms import sendSMS, sendSMSForOrder
-from apps.communication.models import SMS
+from apps.communication.models.sms import SMS
 from settings.settings import DEBUG
 from settings import people
 from django.utils import timezone
@@ -55,7 +55,7 @@ def updateOrder((product_id, data), gimme_reply_sms=False):
       Step 3. Else if not confirmed, promote to confirmed
       Step 4. Else we can't go any further
   """
-  from apps.public.models import Order
+  from apps.public.models.order import Order
   from apps.seller.models.product import Product
 
   try:

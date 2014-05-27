@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.contrib import messages
-from apps.communication.models import SMS, Email
+from apps.communication.models.sms import SMS
+from apps.communication.models.email import Email
 from apps.seller.models.seller import Seller
 
 @access_required('admin')

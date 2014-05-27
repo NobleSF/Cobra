@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def subscribe(request): #ajax requests only
   from django.db import IntegrityError, transaction
-  from apps.communication.models import Subscription
+  from apps.communication.models.subscription import Subscription
   try:
     subscription = Subscription(email=request.GET.get('email'))
     if request.GET.get('name'):

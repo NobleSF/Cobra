@@ -73,7 +73,7 @@ def checkImageUpload(request):#for our JS to check upload status and get thumb_u
             asset.save()
 
           elif 'order_id' in request.GET:#order receipt
-            from apps.public.models import Order
+            from apps.public.models.order import Order
             order = Order.objects.get(id=request.GET['order_id'])
             order.seller_paid_receipt = image
             order.save()

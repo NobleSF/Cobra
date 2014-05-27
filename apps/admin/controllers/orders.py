@@ -9,7 +9,7 @@ from django.contrib import messages
 from apps.communication.controllers.email_class import Email
 from apps.communication.controllers.sms import sendSMS
 from datetime import datetime, timedelta
-from apps.public.models import Order
+from apps.public.models.order import Order
 from settings.settings import CLOUDINARY
 
 @access_required('admin')

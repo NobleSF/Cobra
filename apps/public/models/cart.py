@@ -2,7 +2,7 @@ from django.db import models
 from apps.public.models.promotion import Promotion
 
 class Cart(models.Model):
-  #from apps.admin.models import Currency
+  #from apps.admin.models.currency import Currency
 
   email               = models.EmailField(blank=True, null=True)
   name                = models.CharField(max_length=100, null=True, blank=True)

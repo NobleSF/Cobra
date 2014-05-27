@@ -6,7 +6,7 @@ from django.contrib import messages
 import json
 from django.utils import timezone
 from datetime import timedelta
-from apps.admin.models import Account
+from apps.admin.models.account import Account
 
 @access_required('admin')
 def adminAccounts(request):

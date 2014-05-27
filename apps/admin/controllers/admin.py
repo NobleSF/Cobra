@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from apps.admin.utils.decorator import access_required
 from django.contrib import messages
 from datetime import datetime, timedelta
-from apps.admin.models import Account
+from apps.admin.models.account import Account
 
 @access_required('admin')
 def home(request):
@@ -12,7 +12,7 @@ def home(request):
 @access_required('admin')
 def stats(request):
   from apps.seller.models.product import Product
-  from apps.public.models import Order
+  from apps.public.models.order import Order
   today = datetime.now()
   beginning_of_time = datetime(2013, 10, 1)#August 1st, 2013 - launch of this app
   firsts_of_months = [beginning_of_time,]
@@ -52,7 +52,7 @@ def stats(request):
                                           approved_at__gte=first_of_month
                                         ).count()
 
-  from apps.public.models import Rating
+  from apps.public.models.rating import Rating
   from django.db.models import Avg
   ratings = (Rating.objects.filter(
               product__active_at__lte=today,

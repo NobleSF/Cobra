@@ -1,6 +1,6 @@
 from django.db import models
 from apps.seller.models.product import Product
-from apps.admin.models import RatingSubject
+from apps.admin.models.rating_subject import RatingSubject
 
 class Rating(models.Model):
   session_key         = models.CharField(max_length=32)
