@@ -61,7 +61,7 @@ class Product(models.Model):
 
   @is_active.setter
   def is_active(self, value):
-    from apps.communication.controller.email_class import Email
+    from apps.communication.controllers.email_class import Email
     from settings.people import Dan, Brahim, everyones_emails
 
     if value and self.active_at and not self.deactive_at: #already active
@@ -75,7 +75,7 @@ class Product(models.Model):
     elif not value: #deactivate
       self.deactive_at = timezone.now()
       #cancel orders of this product
-      from apps.communication.controller.order_events import cancelOrder
+      from apps.communication.controllers.order_events import cancelOrder
       for order in self.order_set.all():
         cancelOrder(order)
 
@@ -394,7 +394,7 @@ class Product(models.Model):
 
   @property
   def shipping_cost(self):
-    from apps.seller.controller.shipping import calculateShippingCost
+    from apps.seller.controllers.shipping import calculateShippingCost
     if self.weight and len(self.shipping_options.all()) > 0:
       return calculateShippingCost(self.weight, self.shipping_options.all()[0], 'US')
     else:
@@ -402,7 +402,7 @@ class Product(models.Model):
 
   @property
   def local_shipping_cost(self):
-    from apps.seller.controller.shipping import calculateShippingCost
+    from apps.seller.controllers.shipping import calculateShippingCost
     if self.weight and len(self.shipping_options.all()) > 0:
       return calculateShippingCost(self.weight, self.shipping_options.all()[0], 'MA')
     else:
@@ -572,7 +572,7 @@ def onDelete(sender, instance, **kwargs):
 def createRanking(sender, instance, created, update_fields, **kwargs):
   try:
     from apps.public.models import Ranking
-    from apps.public.controller.product_ranking import updateRankings, newProductResult
+    from apps.public.controllers.product_ranking import updateRankings, newProductResult
     if created:
       ranking, is_new = Ranking.objects.get_or_create(product = instance)
       ranking.new_product = newProductResult(instance)
@@ -581,5 +581,5 @@ def createRanking(sender, instance, created, update_fields, **kwargs):
 
 @receiver(post_save, sender=Product)
 def resetProductPageCache(sender, instance, created, update_fields, **kwargs):
-  from apps.public.controller.events import invalidate_product_cache
+  from apps.public.controllers.events import invalidate_product_cache
   invalidate_product_cache(instance.id)

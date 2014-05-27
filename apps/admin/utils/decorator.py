@@ -26,7 +26,7 @@ def access_required(permission):
         return func(request, *args, **kwargs)
 
       else:
-        from apps.admin.controller.account import login
+        from apps.admin.controllers.account import login
         return login(request, next=request.get_full_path())
 
     return wraps(func)(inner_decorator)

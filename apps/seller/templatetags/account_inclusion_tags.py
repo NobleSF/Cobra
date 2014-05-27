@@ -4,7 +4,7 @@ register = template.Library()
 @register.inclusion_tag('account/asset.html')
 def asset_tag(asset_form, asset=None):
   from apps.seller.models.asset import Asset
-  from apps.seller.controller.forms import AssetCategoryForm
+  from apps.seller.controllers.forms import AssetCategoryForm
   asset_category_form = AssetCategoryForm()
   try:
     if asset.categories.count():

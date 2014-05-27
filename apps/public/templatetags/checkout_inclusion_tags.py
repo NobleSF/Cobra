@@ -3,7 +3,7 @@ register = template.Library()
 
 @register.inclusion_tag('checkout/manual_checkout.html')
 def manual_checkout_tag(cart):
-  from apps.public.controller.forms import ManualCheckoutForm
+  from apps.public.controllers.forms import ManualCheckoutForm
 
   form = ManualCheckoutForm()
 
