@@ -1,9 +1,9 @@
 #no dependancies
 from apps.seller.models.image import Image
 from apps.seller.models.upload import Upload
-from apps.seller.models.shipping_option import ShippingOption
 
 #requires image
+from apps.seller.models.shipping_option import ShippingOption
 from apps.seller.models.seller import Seller
 
 #requires image, seller

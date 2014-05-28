@@ -1,8 +1,11 @@
 from django.db import models
-
+from apps.seller.models.shipping_option import ShippingOption
+from apps.seller.models.product import Product
+from apps.seller.models.image import Image
+from apps.public.models.cart import Cart
 
 class Order(models.Model):
-  cart                = models.ForeignKey('Cart', related_name='orders')
+  cart                = models.ForeignKey(Cart, related_name='orders')
 
   #charges breakdown in local currency (eg. dirhams in Morocco)
   products_charge     = models.DecimalField(max_digits=8, decimal_places=2)
