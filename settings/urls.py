@@ -10,6 +10,7 @@ urlpatterns = patterns('',
 #APPS
 urlpatterns += patterns('',
   url(r'^', include('apps.public.urls')),
+  url(r'^api/', include('apps.api.urls', namespace='api')),
   url(r'^admin/', include('apps.admin.urls', namespace='admin')),
   url(r'^seller/', include('apps.seller.urls', namespace='seller')),
   url(r'^communication/', include('apps.communication.urls', namespace='communication')),

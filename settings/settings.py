@@ -236,7 +236,6 @@ STATICFILES_DIRS = (
   ('public', os.path.join(SITE_ROOT, 'apps/public/static')),
   ('seller', os.path.join(SITE_ROOT, 'apps/seller/static')),
   ('admin', os.path.join(SITE_ROOT, 'apps/admin/static')),
-  ('communication', os.path.join(SITE_ROOT, 'apps/communication/static')),
 
   # Put strings here, like "/home/html/static" or "C:/www/django/static".
   # Always use forward slashes, even on Windows.
@@ -293,7 +292,7 @@ INSTALLED_APPS = (
   'apps.seller',
   'apps.admin',
   'apps.communication',
-  #'api',
+  'apps.api',
   #'djrill',
   'storages',
   #'compressor',
