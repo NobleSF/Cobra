@@ -293,10 +293,12 @@ INSTALLED_APPS = (
   'apps.admin',
   'apps.communication',
   'apps.api',
-  #'djrill',
+  #LIBRARIES/PACKAGES
+  'djangular',
+  #'pipeline',#for compiling css/js
   'storages',
-  #'compressor',
   'south',
+  #DJANGO DEFAULTS
   #'django.contrib.auth',
   'django.contrib.contenttypes',
   'django.contrib.sessions',
