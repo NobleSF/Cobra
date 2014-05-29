@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from controller import home, checkout, product, store, custom_order
+from controllers import home, checkout, product, store, custom_order
 
 urlpatterns = patterns('',
 
@@ -37,4 +37,5 @@ urlpatterns = patterns('',
   #testing
   url(r'^product_data', product.product_data, name='product_data'),
   url(r'^test_meta$', home.test_meta, name='test meta'),
+  url(r'^angular$', home.angular, name='angular'),
 )
