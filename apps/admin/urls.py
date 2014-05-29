@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from apps.admin.controller import admin, account, products, orders, communication, site_management, research
+from apps.admin.controllers import admin, account, products, orders, communication, site_management, research
 
 #DASHBOARD PAGES
 urlpatterns = patterns('',

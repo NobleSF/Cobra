@@ -92,7 +92,7 @@ def incoming(request):
   """ receives SMS messages via Telerivet, detail at
       https://telerivet.com/p/PJ8973e6e346c349cbcdd094fcffa9fcb5/api/webhook/receiving
   """
-  from apps.communication.controller import order_events
+  from apps.communication.controllers import order_events
 
   if TELERIVET['webhook_secret'] == request.POST.get('secret'):
     """

@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.views.generic import TemplateView, RedirectView
 
-from apps.public.controller import home
+from apps.public.controllers import home
 urlpatterns = patterns('',
   url(r'^$', home.home, name='home'), #fyi, this is home
 )
@@ -17,7 +17,7 @@ urlpatterns += patterns('',
 )
 
 #TOP LEVEL URLS
-from apps.admin.controller import account
+from apps.admin.controllers import account
 urlpatterns += patterns('',
   url(r'^blog',
       RedirectView.as_view(url='http://helloanou.wordpress.com/', permanent=False), name='blog'),
@@ -26,7 +26,7 @@ urlpatterns += patterns('',
 )
 
 #OLD SITE REDIRECTS
-from apps.communication.controller import sms
+from apps.communication.controllers import sms
 urlpatterns += patterns('',
   (r'^index.php', lambda x: HttpResponsePermanentRedirect('/')),
   (r'^landing.php', lambda x: HttpResponsePermanentRedirect('/')),

@@ -9,7 +9,7 @@ from apps.seller.models.seller import Seller
 
 @access_required('admin')
 def sendSMS(request):
-  from apps.communication.controller import sms as sms_controller
+  from apps.communication.controllers import sms as sms_controller
 
   if request.method == 'POST':
     to_number = request.POST.get('to_number')

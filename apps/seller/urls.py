@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from controller import seller, account, inventory, cloudinary_upload, custom_order, edit_product
+from controllers import seller, account, inventory, cloudinary_upload, custom_order, edit_product
 
 urlpatterns = patterns('',
   url(r'^$', seller.home, name='home'), #seller dashboard, live products

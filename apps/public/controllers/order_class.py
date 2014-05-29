@@ -1,6 +1,6 @@
 from apps.public import models
 from apps.admin.utils.exception_handling import ExceptionHandler
-from apps.communication.controller import order_events
+from apps.communication.controllers import order_events
 from django.utils import timezone
 
 def getOrders(checkout_id):

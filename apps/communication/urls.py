@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from controller import sms, public_events, order_events, testing
+from controllers import sms, public_events, order_events, testing
 
 urlpatterns = patterns('',
   #email
