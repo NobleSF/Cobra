@@ -12,5 +12,11 @@ class Country(models.Model): #could expand on pypi.python.org/pypi/django-countr
   name_adjective
   """
 
+  class Meta:
+    app_label = 'admin'
+
+  # MODEL PROPERTIES
+
+  # MODEL FUNCTIONS
   def __unicode__(self):
     return self.code

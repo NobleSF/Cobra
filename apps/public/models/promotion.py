@@ -9,5 +9,11 @@ class Promotion(models.Model):
   #valid_on            = models.DateTimeField(null=True, blank=True)
   #expires_on          = models.DateTimeField(null=True, blank=True)
 
+  class Meta:
+    app_label = 'public'
+
+  # MODEL PROPERTIES
+
+  # MODEL FUNCTIONS
   def __unicode__(self):
     return unicode(self.name)

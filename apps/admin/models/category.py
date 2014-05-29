@@ -9,10 +9,16 @@ class Category(models.Model):
 
   ordering_name = models.CharField(max_length=100)
 
+  class Meta:
+    ordering = ['ordering_name']
+    app_label = 'admin'
+
+  # MODEL PROPERTIES
   @property
   def is_parent_category(self):
     return (not self.parent_category)
 
+  # MODEL FUNCTIONS
   def save(self, *args, **kwargs):
     self.ordering_name = self.get_ordering_name()
     super(Category, self).save(*args, **kwargs)
@@ -25,6 +31,3 @@ class Category(models.Model):
 
   def __unicode__(self):
     return self.name
-
-  class Meta:
-    ordering = ['ordering_name']

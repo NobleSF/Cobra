@@ -10,6 +10,12 @@ class Rating(models.Model):
   value               = models.SmallIntegerField()
   created_at          = models.DateTimeField(auto_now_add = True)
 
+  class Meta:
+    app_label = 'public'
+
+  # MODEL PROPERTIES
+
+  # MODEL FUNCTIONS
   def __unicode__(self):
     return unicode(self.value)
 

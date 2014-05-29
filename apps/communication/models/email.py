@@ -13,3 +13,9 @@ class Email(models.Model):
   order           = models.ForeignKey(Order, null=True, blank=True)
 
   created_at      = models.DateTimeField(auto_now_add = True)
+
+  class Meta:
+    app_label = 'communication'
+
+  # MODEL PROPERTIES
+  # MODEL FUNCTIONS

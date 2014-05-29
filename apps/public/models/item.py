@@ -9,6 +9,10 @@ class Item(models.Model):
   product             = models.ForeignKey(Product)
   #quantity           = models.PositiveIntegerField(default=1)
 
+  class Meta:
+    app_label = 'public'
+
+  # MODEL PROPERTIES
   @property
   def order(self):
     return self.product.order_set.get(cart=self.cart)
@@ -27,6 +31,9 @@ class Item(models.Model):
     try: return photos[0]
     except: return None
 
+  # MODEL FUNCTIONS
   def __unicode__(self):
     #return u'%d units of %s' % (self.quantity, self.product.name)
     return unicode(self.product.name)
+
+

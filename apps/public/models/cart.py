@@ -37,6 +37,10 @@ class Cart(models.Model):
   created_at          = models.DateTimeField(auto_now_add = True)
   updated_at          = models.DateTimeField(auto_now = True)
 
+  class Meta:
+    app_label = 'public'
+
+  # MODEL PROPERTIES
   @property
   def checkout_id(self):
     if self.wepay_checkout_id:
@@ -63,3 +67,5 @@ class Cart(models.Model):
     address += self.postal_code if self.postal_code else ""
     address += ("\n%s" % self.country) if self.country else ""
     return address
+
+  # MODEL FUNCTIONS

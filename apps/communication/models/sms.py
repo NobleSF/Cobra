@@ -14,3 +14,9 @@ class SMS(models.Model):
   #update history
   created_at      = models.DateTimeField(auto_now_add = True)
   updated_at      = models.DateTimeField(auto_now = True)
+
+  class Meta:
+    app_label = 'communication'
+
+  # MODEL PROPERTIES
+  # MODEL FUNCTIONS

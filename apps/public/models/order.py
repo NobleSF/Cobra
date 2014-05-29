@@ -42,7 +42,10 @@ class Order(models.Model):
   created_at          = models.DateTimeField(auto_now_add = True)
   updated_at          = models.DateTimeField(auto_now = True)
 
-  #derivative attributes
+  class Meta:
+    app_label = 'public'
+
+  # MODEL PROPERTIES
   @property
   def seller(self): return self.products.all()[0].seller
 
@@ -65,3 +68,5 @@ class Order(models.Model):
   def tracking_url(self):
     tracking_url = "https://tools.usps.com/go/TrackConfirmAction_input?qtc_tLabels1="
     return  tracking_url + self.tracking_number if self.tracking_number else False
+
+  # MODEL FUNCTIONS

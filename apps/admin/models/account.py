@@ -16,6 +16,10 @@ class Account(models.Model):
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
 
+  class Meta:
+    app_label = 'admin'
+
+  # MODEL PROPERTIES
   @property
   def is_admin(self): return True if self.admin_type else False
 
@@ -35,5 +39,6 @@ class Account(models.Model):
     try: return self.sellers.all()[0]
     except: return None
 
+  # MODEL FUNCTIONS
   def __unicode__(self):
     return self.username

@@ -11,3 +11,9 @@ class Listing(models.Model):
   #description         = models.CharField(max_length=1000, null=True, blank=True)
   #price               = models.IntegerField(null=True, blank=True)
   #shipping_price      = models.IntegerField(null=True, blank=True)
+
+  class Meta:
+    app_label = 'api'
+
+  # MODEL PROPERTIES
+  # MODEL FUNCTIONS
