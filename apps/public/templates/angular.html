@@ -1,34 +1,18 @@
-{% extends "base.html" %}
-{% load url from future %}
-{% load cache %}
-
-{% cache 86400 about %}
+{% extends "public-base.html" %}
 
 {% block title %}
-  About Us,
+  Angular Hello World
   {{ block.super }}
 {% endblock title %}
 
 {% block description %}
-  Anou is an artisan community selling their work independently.
-  With language-free design for illiterate artisans to engage directly with customers, representing a fundamental shift in fair-trade practices.
 {% endblock description %}
 
-{%block open_graph_type%}{%endblock%}
-{%block open_graph_url%}http://www.theanou.com/about{%endblock%}
-{%block open_graph_title%}About Us and FAQ{%endblock%}
-{%block open_graph_description%}{{ block.super }}{%endblock%}
-{%block open_graph_image%}{{ block.super }}{%endblock%}
-
 {% block javascript %}
-  <script type="text/javascript" src="{{ STATIC_URL }}public/js/about.min.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}vendor/fitvids/js/jquery.fitvids.js"></script>
 {% endblock javascript %}
 
 {% block css %}
-  <link href="{{ STATIC_URL }}public/css/about.css?v=1" rel="stylesheet">
 {% endblock css %}
-
 
 {% block header_link_1 %}
   <li><a class='title' href="{% url 'home' %}">Store</a></li>
@@ -39,6 +23,6 @@
 {% endblock header_link_2 %}
 
 {% block content %}
-hello
+{{ block.super }}
+
 {% endblock content %}
-{% endcache about %}
