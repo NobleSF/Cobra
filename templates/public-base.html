@@ -12,7 +12,7 @@
 
   {% spaceless %}
     <title>
-      {% block title %}Anou - Made In Morocco{% endblock title %}
+      {% block title %}Anou - Moroccan Handmade{% endblock title %}
     </title>
   {% endspaceless %}
 
@@ -39,7 +39,7 @@
 
   {% block additional_meta_tags %}{% endblock additional_meta_tags %}
 
-  <!--favicon-->
+  <!--FAVICON-->
   <link rel="shortcut icon" href="{% static 'images/favicon_old.ico'%}" />
   <!--iOS and Android icons-->
   <link rel="apple-touch-icon-precomposed" href="{% static 'images/apple-touch-icon-152x152.png'%}">
@@ -50,7 +50,9 @@
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
 
-  <link href="{% static 'css/icon-font.css' %}" rel="stylesheet">
+  <!--FONTS-->
+  <link href='http://fonts.googleapis.com/css?family=Bitter:400,700,400italic' rel='stylesheet' type='text/css'>
+  <link href="{{STATIC_URL}}css/public-base.css" rel="stylesheet">
   {% block css %}
   {% endblock css %}
 
@@ -65,15 +67,44 @@
 </head>
 
 <body>
-  <div id="header" class="">
-    {% block header %}
-      <!-- HEADER for unchanging logo and header bar -->
-    {% endblock header %}
 
-    {% block messages %}
-      <!-- MESSAGES for showing the user some feedback on actions-->
-    {% endblock messages %}
-  </div>
+  <nav id="header" class="navbar navbar-static-top" role="navigation">
+    <div class="container">
+      <ul class="nav navbar-nav">
+        <li class='dropdown'>
+          <a href='#' class='icon-menu black dropdown-toggle'
+             data-toggle='dropdown'></a>
+          <ul class='dropdown-menu'>
+            <li><a href="{% url 'about' %}">
+              <span class='icon-info mini'></span>About
+            </a></li>
+            <li><a href="{% url 'blog' %}">
+              <span class='icon-journal'></span>Blog
+            </a></li>
+            <li><a href="#">
+              <span class='icon-star'></span>Custom Order
+            </a></li>
+            <li><a href="#">
+              <span class='icon-shop'></span>Retailers and Partners
+            </a></li>
+          </ul>
+        </li>
+        <li>
+          <a id='Anou-logo' href="{% url 'home' %}">
+            <img src='{{STATIC_URL}}images/logo/Anou-logo.png' height='50px'>
+          </a>
+        </li>
+      </ul>
+      <ul class='nav navbar-nav navbar-right'>
+        <li>
+          <a class="icon-cart black" href="{% url 'cart' %}"></a>
+        </li>
+        <li>
+          <a class="icon-go blue" href="{% url 'seller:home' %}"></a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
   <div id="body" class="container">
     {% block content %}
