@@ -21,8 +21,11 @@ class Seller(models.Model):
   #account lifecycle
   translated_by = models.ForeignKey(Account, null=True, blank=True,
                                     related_name='translator')
+
+  #MIGRATE DATA TO API STORE#
   approved_at   = models.DateTimeField(null=True, blank=True) #admin approval #todo: move to store
   deactive_at   = models.DateTimeField(null=True, blank=True) #seller deactivate #todo: move to store
+  #MIGRATE DATA TO API STORE#
 
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
@@ -65,17 +68,6 @@ class Seller(models.Model):
       if product.parent_category not in categories:
         categories.append(product.parent_category)
     return categories
-
-  @property
-  def categories_name_string(self):
-    try:
-      names_list = [c.name for c in self.categories]
-      if len(names_list) > 2:
-        return ", and ".join(", ".join(names_list).rsplit(", ",1))
-      else:
-        return " and ".join(list)
-    except:
-      return ""
 
 
   # MODEL FUNCTIONS

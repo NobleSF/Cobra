@@ -4,11 +4,11 @@ from apps.seller.models.product import Product
 class Store(models.Model):
   seller              = models.OneToOneField(Seller, related_name='store')
 
-  title               = models.CharField(max_length=100, null=True, blank=True)
-  slug                = models.CharField(max_length=100, null=True, blank=True)
+  title         = models.CharField(max_length=100)
+  slug          = models.CharField(max_length=100, null=True, blank=True)
 
-  #price               = models.IntegerField(null=True, blank=True)
-  #shipping_price      = models.IntegerField(null=True, blank=True)
+  approved_at   = models.DateTimeField(null=True, blank=True) #admin approval
+  deactive_at   = models.DateTimeField(null=True, blank=True) #seller deactivate
 
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
@@ -71,6 +71,21 @@ class Store(models.Model):
   def artisans(self):
     return self.seller.artisans
 
+  @property
+  def categories(self):
+    return self.seller.categories
+
+  @property
+  def categories_name_string(self):
+    try:
+      names_list = [c.name for c in self.categories]
+      if len(names_list) > 2:
+        return ", and ".join(", ".join(names_list).rsplit(", ",1))
+      else:
+        return " and ".join(list)
+    except:
+      return ""
+
 
   # MODEL FUNCTIONS
   def get_absolute_url(self):
@@ -84,7 +99,7 @@ class Store(models.Model):
       return reverse('store', args=[str(self.id)])
 
   def __unicode__(self):
-    return self.name
+    return self.title
 
 
 
