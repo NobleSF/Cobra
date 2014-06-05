@@ -18,7 +18,7 @@ class ProductManager(models.Manager):
                                         seller__deactive_at=None)
 
 class Product(models.Model):
-  seller        = models.ForeignKey(Seller)
+  seller        = models.ForeignKey(Seller, related_name='products')
 
   #product description elements
   assets        = models.ManyToManyField(Asset)
@@ -31,11 +31,11 @@ class Product(models.Model):
   shipping_options = models.ManyToManyField(ShippingOption)
 
   #lifecycle milestones
-  active_at     = models.DateTimeField(null=True, blank=True) #seller add
-  deactive_at   = models.DateTimeField(null=True, blank=True) #seller remove
-  in_holding    = models.BooleanField(default=False) #held by admin
+  active_at     = models.DateTimeField(null=True, blank=True) #seller add #todo:move to listing
+  deactive_at   = models.DateTimeField(null=True, blank=True) #seller remove #todo:move to listing
+  in_holding    = models.BooleanField(default=False) #held by admin #todo:move to listing
   #todo: change this to on_hold_at = datetime
-  approved_at   = models.DateTimeField(null=True, blank=True) #admin approval
+  approved_at   = models.DateTimeField(null=True, blank=True) #admin approval #todo:move to listing
   sold_at       = models.DateTimeField(null=True, blank=True)
   #is_orderable  = models.BooleanField(default=False) #for custom orders
 
@@ -265,7 +265,7 @@ class Product(models.Model):
       return title
     except:
       return ("Artisan craft handmade made in Morocco. Qty: 1 " +
-              "For sale on Anou - Beyond Fair Trade.")
+              "For sale on Anou - Moroccan Handmade.")
 
   @property
   def description(self):
@@ -549,10 +549,6 @@ class Product(models.Model):
     else:
       return unicode(self.name)
 
-#SUPPORTING FUNCTIONS
-def rreplace(s, old, new, occurrence):
-  li = s.rsplit(old, occurrence)
-  return new.join(li)
 
 #SIGNALS AND SIGNAL REGISTRATION
 from django.dispatch import receiver
@@ -583,3 +579,9 @@ def createRanking(sender, instance, created, update_fields, **kwargs):
 def resetProductPageCache(sender, instance, created, update_fields, **kwargs):
   from apps.public.controllers.events import invalidate_product_cache
   invalidate_product_cache(instance.id)
+
+
+#SUPPORTING FUNCTIONS
+def rreplace(s, old, new, occurrence):
+  li = s.rsplit(old, occurrence)
+  return new.join(li)

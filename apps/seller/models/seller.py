@@ -21,10 +21,8 @@ class Seller(models.Model):
   #account lifecycle
   translated_by = models.ForeignKey(Account, null=True, blank=True,
                                     related_name='translator')
-  approved_at   = models.DateTimeField(null=True, blank=True) #admin approval
-  deactive_at   = models.DateTimeField(null=True, blank=True) #seller deactivate
-
-  slug          = models.CharField(max_length=150, null=True, blank=True)
+  approved_at   = models.DateTimeField(null=True, blank=True) #admin approval #todo: move to store
+  deactive_at   = models.DateTimeField(null=True, blank=True) #seller deactivate #todo: move to store
 
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
@@ -33,35 +31,17 @@ class Seller(models.Model):
   class Meta:
     app_label = 'seller'
 
+
   # MODEL PROPERTIES
   @property
-  def title(self):
-    return "%s from %s, %s" % (self.name, self.city, self.country.name)
-
+  def name(self):
+    return self.account.name if self.account.name else ""
   @property
-  def title_description(self):
-    try:
-      if self.categories_name_string:
-        title = "Find %s" % self.categories_name_string
-      else:
-        title = "Products"
-      title += " each uniquly handmade by the artisans of %s " % self.name
-      title += "sent to you direct from %s, %s." % (self.city, self.country.name)
-      return title
-    except:
-      return ("Artisans crafts handmade in Morocco." +
-              "Our store ships direct from original artisans. " +
-              "Made possible by Anou - Beyond Fair Trade.")
-
+  def email(self):
+    return self.account.email if self.account.email else ""
   @property
-  def name(self): return self.account.name if self.account.name else ""
-  @property
-  def username(self): return self.account.username
-  @property
-  def email(self): return self.account.email if self.account.email else ""
-  @property
-  def phone(self): return self.account.phone if self.account.phone else ""
-
+  def phone(self):
+    return self.account.phone if self.account.phone else ""
   @property
   def bank_name(self):
     return self.account.bank_name if self.account.bank_name else ""
@@ -97,39 +77,8 @@ class Seller(models.Model):
     except:
       return ""
 
+
   # MODEL FUNCTIONS
-  def get_store_products(self, limit=None):
-    from django.utils import timezone
-    try:
-      products = (self.product_set
-                      .filter(sold_at=None,
-                              approved_at__lte=timezone.now(),
-                              deactive_at=None)
-                      .order_by('approved_at').reverse())[:limit]
-      return products
-    except:
-      return []
-
-  def get_sold_products(self, limit=None):
-    from django.utils import timezone
-    try:
-      products = (self.product_set
-                      .filter(sold_at__lte=timezone.now(),
-                              approved_at__lte=timezone.now(),
-                              deactive_at=None)
-                      .order_by('sold_at').reverse())[:limit]
-      return products
-    except:
-      return []
-
-  def resetSlug(self):
-    from django.template.defaultfilters import slugify
-    try:
-      self.slug = slugify(self.title.replace('from ',''))
-      self.slug = ''.join([char for char in self.slug if not char.isdigit()])
-      self.save()
-    except: pass
-
   def get_absolute_url(self):
     from django.core.urlresolvers import reverse
     if not self.slug:
@@ -142,3 +91,16 @@ class Seller(models.Model):
 
   def __unicode__(self):
     return self.name
+
+
+#SIGNALS AND SIGNAL REGISTRATION
+from django.dispatch import receiver
+from django.db.models.signals import pre_save, post_save, pre_delete
+
+@receiver(post_save, sender=Seller)
+def updateStore(sender, instance, **kwargs):
+  try:
+    store = instance.store
+    store.save()
+  except Exception as e:
+    ExceptionHandler(e, "error on seller.updateStore")
