@@ -5,7 +5,7 @@ import json
 from django.views.decorators.cache import cache_page
 
 def home(request):
-  return render(request, 'home/home.html')
+  return render(request, 'base.html')
 
 @cache_page(176400) #49hrs an hour over homepage in-template cache
 def loadProducts(request):
@@ -25,7 +25,7 @@ def loadProducts(request):
     return HttpResponse(json.dumps({}), content_type='application/json')
 
 def about(request):
-  return render(request, 'home/about.html')
+  return render(request, 'about/base.html')
 
 def test_meta(request):
   values = request.META.items()
@@ -38,6 +38,3 @@ def test_meta(request):
   for k, v in values:
     html.append('<tr><td>%s</td><td>%s</td></tr>' % (k, v))
   return HttpResponse('<table>%s</table>' % '\n'.join(html))
-
-def angular(request):
-  return render(request, 'angular.html')
