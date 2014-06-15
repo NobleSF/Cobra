@@ -1,20 +1,20 @@
 from django import template
 register = template.Library()
 
-@register.inclusion_tag('home/homepage_products.html')
-def homepage_products_tag():
-  from apps.seller.models.product import Product
-  from apps.public.controllers.product_ranking import updateRankings
+@register.inclusion_tag('home/homepage_listings.html')
+def homepage_listings_tag():
+  from apps.api.models.listing import Listing
+  from apps.public.controllers.listing_ranking import updateRankings
 
-  products = Product.objects.for_sale().exclude(ranking=None)
+  listings = Listing.objects.for_sale().exclude(ranking=None)
   #sort by average ranking points, descending
-  products = sorted(products, key=lambda p: p.ranking.weighted_average)
-  products.reverse()
-  return {'products':products}
+  listings = sorted(listings, key=lambda p: p.ranking.weighted_average)
+  listings.reverse()
+  return {'listings':listings}
 
-@register.inclusion_tag('home/product.html')
-def product_tag(product):
-  return {'product':product}
+@register.inclusion_tag('home/listing.html')
+def listing_tag(listing):
+  return {'listing':listing}
 
 @register.inclusion_tag('home/search_bar.html')
 def search_bar_tag(search_keywords=None):
