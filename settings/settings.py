@@ -295,6 +295,7 @@ INSTALLED_APPS = (
   'apps.api',
   #LIBRARIES/PACKAGES
   'djangular',
+  'rest_framework',
   #'pipeline',#for compiling css/js
   'storages',
   'south',
