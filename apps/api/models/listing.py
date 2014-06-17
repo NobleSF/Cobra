@@ -88,13 +88,13 @@ class Listing(models.Model):
 
       try:
         message = "R %d" % self.id
-        message += "<br>%s" % self.seller.name
+        message += "<br>%s" % self.product.seller.name
         Email(message=message).sendTo(everyones_emails)
       except Exception as e:
         ExceptionHandler(e, "in Product.is_active")
 
     #always
-    self.in_holding = False
+    self.on_hold_at = None
 
   @property
   def was_never_active(self):
@@ -104,16 +104,16 @@ class Listing(models.Model):
 
   @property
   def is_on_hold(self):
-    if self.in_holding: return True
+    if self.on_hold_at: return True
     else: return False
 
   @is_on_hold.setter
   def is_on_hold(self, value):
     if value: #hold
       self.approved_at = None
-      self.in_holding = True
+      self.on_hold_at = timezone.now()
     elif not value: #unhold
-      self.in_holding = False
+      self.on_hold_at = None
 
   @property
   def is_approved(self):
@@ -130,7 +130,7 @@ class Listing(models.Model):
     elif not value: #unapprove or disapprove #todo: separate these actions
       self.approved_at = None
     #always:
-    self.in_holding = False
+    self.on_hold_at = None
 
   @property
   def is_sold(self):
@@ -219,30 +219,30 @@ class Listing(models.Model):
 
   @property
   def title(self): # <=51 chars counting but not using country name
-    if (len(self.name) +
+    if (len(self.product.name) +
         len(self.materials_name_string) +
         len(self.color_adjective) +
-        len(self.seller.country.name)) <= 49: #51-2 space chars
-      return "%s %s %s" % (self.color_adjective, self.materials_name_string, self.name)
+        len(self.product.seller.country.name)) <= 49: #51-2 space chars
+      return "%s %s %s" % (self.color_adjective, self.materials_name_string, self.product.name)
     else:
-      return "%s %s" % (self.color_adjective, self.name)
+      return "%s %s" % (self.color_adjective, self.product.name)
 
   @property
   def standard_title(self):
     title  = "%s " % self.color_adjective if self.color_adjective else ""
-    title += "%s" % self.name
-    title += " by %s" % self.seller.name
-    title += ", %s" % self.seller.country.name
+    title += "%s" % self.product.name
+    title += " by %s" % self.product.seller.name
+    title += ", %s" % self.product.seller.country.name
     return title
 
   @property
   def title_description(self): # <=160 chars
     try:
-      title  = "%s: %s Uniquely handmade by artisans" % (self.product.category, self.name)
+      title  = "%s: %s Uniquely handmade by artisans" % (self.product.category, self.product.name)
       if self.materials_name_string:
         title += " using %s." % self.materials_name_string
-      title += " Crafted by %s" % self.seller.name
-      title += " from %s, %s." % (self.seller.city, self.seller.country.name)
+      title += " Crafted by %s" % self.product.seller.name
+      title += " from %s, %s." % (self.product.seller.city, self.product.seller.country.name)
       title += " Ships to USA and Europe" if len(title) <= 135 else ""
       title += " Qty: 1" if len(title) <= 150 else ""
       return title
@@ -377,7 +377,7 @@ class Listing(models.Model):
   @property
   def usd_price(self): #convert to USD
     if self.intl_price:
-      local_currency = self.seller.country.currency
+      local_currency = self.product.seller.country.currency
       return self.intl_price/float(local_currency.exchange_rate_to_USD)
     else:
       return 0
@@ -444,7 +444,7 @@ class Listing(models.Model):
     from django.utils import timezone
     try:
       return (Product.objects.for_sale()
-              .filter(seller=self.seller)
+              .filter(seller=self.product.seller)
               .exclude(id=self.id))[:limit]
       #todo: create recommendation engine
     except:
@@ -469,9 +469,9 @@ class Listing(models.Model):
 
   def __unicode__(self):
     if self.color_adjective:
-      return unicode("%s %s" % (self.color_adjective, self.name))
+      return unicode("%s %s" % (self.color_adjective, self.product.name))
     else:
-      return unicode(self.name)
+      return unicode(self.product.name)
 
 
 #SIGNALS AND SIGNAL REGISTRATION
