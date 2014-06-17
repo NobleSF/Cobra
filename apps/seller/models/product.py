@@ -124,10 +124,7 @@ class Product(models.Model):
       return False
 
   def __unicode__(self):
-    if self.color_adjective:
-      return unicode("%s %s" % (self.color_adjective, self.name))
-    else:
-      return unicode(self.name)
+    return unicode(self.name)
 
 
 #SIGNALS AND SIGNAL REGISTRATION
