@@ -26,16 +26,14 @@ class Listing(models.Model):
   product             = models.OneToOneField(Product, related_name='listing')
 
   slug                = models.CharField(max_length=100, null=True, blank=True)
-  #title               = models.CharField(max_length=100, null=True, blank=True)
-  #standard_title      = models.CharField(max_length=100, null=True, blank=True)
-  #title_description   = models.CharField(max_length=300, null=True, blank=True)
-  #description         = models.CharField(max_length=1000, null=True, blank=True)
-  #price               = models.IntegerField(null=True, blank=True)
-  #shipping_price      = models.IntegerField(null=True, blank=True)
+  title               = models.CharField(max_length=100, null=True, blank=True)
+  description         = models.CharField(max_length=1000, null=True, blank=True)
 
-
-
-
+  #prices #todo: make more dynamic, accouting for shipping to other countries/currencies
+  usd_price           = models.PositiveIntegerField(default=0)
+  local_price         = models.PositiveIntegerField(default=0)
+  us_shipping_price   = models.PositiveIntegerField(default=0)
+  local_shipping_price = models.PositiveIntegerField(default=0)
 
   #lifecycle milestones
   active_at           = models.DateTimeField(null=True, blank=True) #seller add
@@ -87,7 +85,7 @@ class Listing(models.Model):
         cancelOrder(order)
 
       try:
-        message = "R %d" % self.id
+        message = "R %d" % self.product.id
         message += "<br>%s" % self.product.seller.name
         Email(message=message).sendTo(everyones_emails)
       except Exception as e:
@@ -126,7 +124,6 @@ class Listing(models.Model):
       pass
     elif value: #approve
       self.approved_at = timezone.now()
-      self.resetSlug()
     elif not value: #unapprove or disapprove #todo: separate these actions
       self.approved_at = None
     #always:
@@ -167,11 +164,6 @@ class Listing(models.Model):
   @property
   def tools(self):
     return self.product.assets.filter(ilk='tool')
-
-  @property
-  def utilities(self):
-    from itertools import chain
-    return list(chain(self.product.materials, self.product.tools))
 
   @property
   def color_adjective(self): #5-15 chars
@@ -218,46 +210,8 @@ class Listing(models.Model):
       return ""
 
   @property
-  def title(self): # <=51 chars counting but not using country name
-    if (len(self.product.name) +
-        len(self.materials_name_string) +
-        len(self.color_adjective) +
-        len(self.product.seller.country.name)) <= 49: #51-2 space chars
-      return "%s %s %s" % (self.color_adjective, self.materials_name_string, self.product.name)
-    else:
-      return "%s %s" % (self.color_adjective, self.product.name)
-
-  @property
-  def standard_title(self):
-    title  = "%s " % self.color_adjective if self.color_adjective else ""
-    title += "%s" % self.product.name
-    title += " by %s" % self.product.seller.name
-    title += ", %s" % self.product.seller.country.name
-    return title
-
-  @property
-  def title_description(self): # <=160 chars
-    try:
-      title  = "%s: %s Uniquely handmade by artisans" % (self.product.category, self.product.name)
-      if self.materials_name_string:
-        title += " using %s." % self.materials_name_string
-      title += " Crafted by %s" % self.product.seller.name
-      title += " from %s, %s." % (self.product.seller.city, self.product.seller.country.name)
-      title += " Ships to USA and Europe" if len(title) <= 135 else ""
-      title += " Qty: 1" if len(title) <= 150 else ""
-      return title
-    except:
-      return ("Artisan craft handmade made in Morocco. Qty: 1 " +
-              "For sale on Anou - Moroccan Handmade.")
-
-  @property
-  def description(self):
-    try: return self.product.assets.filter(ilk='product')[0].description
-    except: return ''
-
-  @property
   def longest_side_english(self):#todo: clean this up
-    longest = sorted([self.width, self.height, self.length], reverse=True)[0]
+    longest = sorted([self.product.width, self.product.height, self.product.length], reverse=True)[0]
     inches = int(round(longest/2.54))
     if inches > 18:
       feet = int(inches / 12)
@@ -271,7 +225,7 @@ class Listing(models.Model):
 
   @property
   def second_longest_side_english(self):#todo clean this up
-    longest = sorted([self.width, self.height, self.length], reverse=True)[1]
+    longest = sorted([self.product.width, self.product.height, self.product.length], reverse=True)[1]
     inches = int(round(longest/2.54))
     if inches > 18:
       feet = int(inches / 12)
@@ -287,7 +241,7 @@ class Listing(models.Model):
   def metric_dimensions(self):
     from math import floor
     metric_string = ""
-    measurements = sorted([self.width, self.height, self.length], reverse=True)
+    measurements = sorted([self.product.width, self.product.height, self.product.length], reverse=True)
 
     for length in measurements:
       if length:
@@ -309,7 +263,7 @@ class Listing(models.Model):
   @property
   def english_dimensions(self):
     engish_string = ""
-    measurements = sorted([self.width, self.height, self.length], reverse=True)
+    measurements = sorted([self.product.width, self.product.height, self.product.length], reverse=True)
 
     for length in measurements:
       if length:
@@ -329,48 +283,9 @@ class Listing(models.Model):
     return engish_string
 
   @property
-  def anou_fee(self):
-    from settings.settings import ANOU_FEE_RATE
-    if self.price:
-      fee = self.price * ANOU_FEE_RATE / (1-ANOU_FEE_RATE)
-      return int(round(fee)) #round off for local currencies
-    else:
-      return 0
-
-  @property
-  def shipping_cost(self):
-    from apps.seller.controllers.shipping import calculateShippingCost
-    if self.weight and len(self.shipping_options.all()) > 0:
-      return calculateShippingCost(self.weight, self.shipping_options.all()[0], 'US')
-    else:
-      return 0
-
-  @property
-  def local_shipping_cost(self):
-    from apps.seller.controllers.shipping import calculateShippingCost
-    if self.weight and len(self.shipping_options.all()) > 0:
-      return calculateShippingCost(self.weight, self.shipping_options.all()[0], 'MA')
-    else:
-      return 0
-
-  @property
-  def seller_paid_amount(self):
-    if self.price:
-      return self.price + self.shipping_cost
-    else:
-      return 0
-
-  @property
-  def local_price(self):
-    if self.price:
-      return self.price + self.anou_fee + self.local_shipping_cost
-    else:
-      return 0
-
-  @property
   def intl_price(self):
-    if self.price:
-      return self.price + self.anou_fee + self.shipping_cost
+    if self.product.price:
+      return self.product.price + self.product.anou_fee + self.product.shipping_cost
     else:
       return 0
 
@@ -381,35 +296,6 @@ class Listing(models.Model):
       return self.intl_price/float(local_currency.exchange_rate_to_USD)
     else:
       return 0
-
-  @property
-  def ebay_fee(self): #eBay + PayPal fee is $0.30 plus 12.9% of total
-    if self.usd_price:
-      fee = 0.30
-      fee += (0.129/(1-0.129)) * (self.usd_price + fee)
-      return fee
-    else:
-      return 0
-
-  @property
-  def ebay_price(self): #add fees and round to the nearest $1
-    if self.usd_price:
-      return int(round(self.usd_price + self.ebay_fee))
-    else:
-      return 0
-
-  @property
-  def etsy_fee(self): #Etsy + EtsyCheckout fee is $0.45 plus 6.5% of total
-    if self.usd_price:
-      fee = 0.40
-      fee += (0.065/(1-0.065)) * (self.usd_price + fee)
-      return fee
-    else:
-      return 0
-
-  @property
-  def etsy_price(self): #add fees and round to the nearest $1
-    return int(round(self.usd_price + self.etsy_fee))
 
   @property
   def wepay_fee(self):#wepay fee is $0.30 plus 2.9% of total
@@ -428,6 +314,12 @@ class Listing(models.Model):
   def display_price(self): #round to the nearest $1
     return int(round(self.usd_price + self.wepay_fee - self.display_shipping_price))
 
+  @property
+  def local_display_price(self):
+    if self.product.price:
+      return self.product.price + self.product.anou_fee
+    else:
+      return 0
 
   @property
   def pinterest_url(self):
@@ -440,32 +332,59 @@ class Listing(models.Model):
       return "" #probably doesn't need to be working anyway
 
   # MODEL FUNCTIONS
-  def get_related_products(self, limit=3):
-    from django.utils import timezone
-    try:
-      return (Product.objects.for_sale()
-              .filter(seller=self.product.seller)
-              .exclude(id=self.id))[:limit]
-      #todo: create recommendation engine
-    except:
-      return []
+  def buildTitle(self): # <=51 chars counting but not using country name
+    if (len(self.product.name) +
+        len(self.materials_name_string) +
+        len(self.color_adjective) +
+        len(self.product.seller.country.name)) <= 49: #51-2 space chars
+      return "%s %s %s" % (self.color_adjective, self.materials_name_string, self.product.name)
+    else:
+      return "%s %s" % (self.color_adjective, self.product.name)
 
-  def resetSlug(self):
+  def buildStandardTitle(self):
+    title  = "%s " % self.color_adjective if self.color_adjective else ""
+    title += "%s" % self.product.name
+    title += " by %s" % self.product.seller.name
+    title += ", %s" % self.product.seller.country.name
+    return title
+
+  def buildTitleDescription(self): # <=160 chars
+    try:
+      title  = "%s: %s Uniquely handmade by artisans" % (self.product.category, self.product.name)
+      if self.materials_name_string:
+        title += " using %s." % self.materials_name_string
+      title += " Crafted by %s" % self.product.seller.name
+      title += " from %s, %s." % (self.product.seller.city, self.product.seller.country.name)
+      title += " Ships to USA and Europe" if len(title) <= 135 else ""
+      title += " Qty: 1" if len(title) <= 150 else ""
+      return title
+    except:
+      return ("Artisan craft handmade made in Morocco. Qty: 1 " +
+              "For sale on Anou - Moroccan Handmade.")
+
+  def buildDescription(self):
+    try: return self.product.assets.filter(ilk='product')[0].description
+    except: return ''
+
+  def buildSlug(self):
     from django.template.defaultfilters import slugify
     try:
-      self.slug = slugify(self.title)
-      self.slug = ''.join([char for char in self.slug if not char.isdigit()])
-      self.save()
+      slug = slugify(self.title)
+      slug = ''.join([char for char in self.slug if not char.isdigit()])#remove numbers
+      return slug
     except: pass
+
+  def expireListingCache(self):
+    #from apps.public.controllers.events import invalidate_product_cache
+    #invalidate_product_cache(instance.id)
+    pass
 
   def get_absolute_url(self):
     from django.core.urlresolvers import reverse
-    if not self.slug:
-      self.resetSlug()
     try:
-      return reverse('product_w_slug', args=[str(self.id), self.slug])
+      return reverse('product_w_slug', args=[str(self.product.id), self.slug])
     except:
-      return reverse('product', args=[str(self.id)])
+      return reverse('product', args=[str(self.product.id)])
 
   def __unicode__(self):
     if self.color_adjective:
@@ -479,10 +398,19 @@ from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save, pre_delete
 
 @receiver(post_save, sender=Product)
-def resetProductPageCache(sender, instance, created, update_fields, **kwargs):
-  from apps.public.controllers.events import invalidate_product_cache
-  invalidate_product_cache(instance.id)
-
+def resetListing(sender, instance, created, update_fields, **kwargs):
+  #dynamic info
+  self.slug = self.buildSlug()
+  self.title = self.buildTitle()
+  self.description = self.buildDescription()
+  #update prices
+  self.price = self.display_price
+  self.local_price = self.local_display_price
+  self.us_shipping_price = self.product.shipping_cost
+  self.local_shipping_price = self.product.local_shipping_cost
+  #cache
+  self.expireListingCache()
+  self.save()
 
 #SUPPORTING FUNCTIONS
 def rreplace(s, old, new, occurrence):
