@@ -49,5 +49,4 @@ def createRanking(sender, instance, created, **kwargs):
   if not created:
     products = instance.product_set.all()
     for p in products:
-      p.resetSlug()
       p.save() #not necessary, but shows that the save signals will fire
