@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
-from controllers import *
+from rest_framework.urlpatterns import format_suffix_patterns
+from apps.api.controllers import listing
 
 urlpatterns = patterns('',
 
@@ -14,3 +15,11 @@ urlpatterns = patterns('',
   #url(r'^store/(?P<store_id>\d+)$', store.store, name='store'),
 
 )
+
+
+urlpatterns += patterns('',
+  url(r'^listings/$', listing.ListingList.as_view(), name='listings'),
+  url(r'^listings/(?P<product_id>[0-9]+)/$', listing.ListingDetail.as_view(), name='listing'),
+)
+
+urlpatterns = format_suffix_patterns(urlpatterns)
