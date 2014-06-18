@@ -129,6 +129,21 @@ class Product(models.Model):
       return 0
 
   @property
+  def local_shipping_cost(self):
+    from apps.seller.controllers.shipping import calculateShippingCost
+    if self.weight and len(self.shipping_options.all()) > 0:
+      return calculateShippingCost(self.weight, self.shipping_options.all()[0], 'MA')
+    else:
+      return 0
+
+  @property
+  def seller_paid_amount(self):
+    if self.price:
+      return self.price + self.shipping_cost
+    else:
+      return 0
+
+  @property
   def intl_price(self):
     if self.price:
       return self.price + self.anou_fee + self.shipping_cost
@@ -207,13 +222,3 @@ def createRanking(sender, instance, created, update_fields, **kwargs):
       ranking.new_product = newProductResult(instance)
   except Exception as e:
     ExceptionHandler(e, "error on product.createRanking post_save signal")
-
-@receiver(post_save, sender=Product)
-def updateListing(sender, instance, created, update_fields, **kwargs):
-  from apps.api.models.listing import Listing
-  try:
-    instance.listing.update()
-  except Listing.DoesNotExist:
-    pass
-  except Exception as e:
-    ExceptionHandler(e, "error on product.updateListing post_save signal")
