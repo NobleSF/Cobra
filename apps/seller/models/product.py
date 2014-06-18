@@ -96,9 +96,7 @@ class Product(models.Model):
       for rating in query:
         ratings[rating['subject__name']] = int(round(rating['average']))
       return ratings
-
     except: return {}
-
 
   @property
   def is_complete(self):
@@ -112,6 +110,67 @@ class Product(models.Model):
       return True
     else:
       return False
+
+  @property
+  def anou_fee(self):
+    from settings.settings import ANOU_FEE_RATE
+    if self.price:
+      fee = self.price * ANOU_FEE_RATE / (1-ANOU_FEE_RATE)
+      return int(round(fee)) #round off for local currencies
+    else:
+      return 0
+
+  @property
+  def shipping_cost(self):
+    from apps.seller.controllers.shipping import calculateShippingCost
+    if self.weight and len(self.shipping_options.all()) > 0:
+      return calculateShippingCost(self.weight, self.shipping_options.all()[0], 'US')
+    else:
+      return 0
+
+  @property
+  def intl_price(self):
+    if self.price:
+      return self.price + self.anou_fee + self.shipping_cost
+    else:
+      return 0
+
+  @property
+  def usd_price(self): #convert to USD
+    if self.intl_price:
+      local_currency = self.seller.country.currency
+      return self.intl_price/float(local_currency.exchange_rate_to_USD)
+    else:
+      return 0
+
+  @property
+  def ebay_fee(self): #eBay + PayPal fee is $0.30 plus 12.9% of total
+    if self.usd_price:
+      fee = 0.30
+      fee += (0.129/(1-0.129)) * (self.usd_price + fee)
+      return fee
+    else:
+      return 0
+
+  @property
+  def ebay_price(self): #add fees and round to the nearest $1
+    if self.usd_price:
+      return int(round(self.usd_price + self.ebay_fee))
+    else:
+      return 0
+
+  @property
+  def etsy_fee(self): #Etsy + EtsyCheckout fee is $0.45 plus 6.5% of total
+    if self.usd_price:
+      fee = 0.40
+      fee += (0.065/(1-0.065)) * (self.usd_price + fee)
+      return fee
+    else:
+      return 0
+
+  @property
+  def etsy_price(self): #add fees and round to the nearest $1
+    return int(round(self.usd_price + self.etsy_fee))
 
 
   # MODEL FUNCTIONS
@@ -148,3 +207,13 @@ def createRanking(sender, instance, created, update_fields, **kwargs):
       ranking.new_product = newProductResult(instance)
   except Exception as e:
     ExceptionHandler(e, "error on product.createRanking post_save signal")
+
+@receiver(post_save, sender=Product)
+def updateListing(sender, instance, created, update_fields, **kwargs):
+  from apps.api.models.listing import Listing
+  try:
+    instance.listing.update()
+  except Listing.DoesNotExist:
+    pass
+  except Exception as e:
+    ExceptionHandler(e, "error on product.updateListing post_save signal")
