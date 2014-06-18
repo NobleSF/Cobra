@@ -41,7 +41,7 @@ class Listing(models.Model):
   on_hold_at          = models.DateTimeField(null=True, blank=True) #held by admin
   approved_at         = models.DateTimeField(null=True, blank=True) #admin approval
   sold_at             = models.DateTimeField(null=True, blank=True)
-  is_orderable        = models.BooleanField(default=False) #for custom orders
+  is_orderable        = models.BooleanField(default=True) #for custom orders
 
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
@@ -65,7 +65,7 @@ class Listing(models.Model):
     else: return False
 
   @is_active.setter
-  def is_active(self, value):
+  def is_active(self, value):#todo: remove, listing should be deleted if not active
     from apps.communication.controllers.email_class import Email
     from settings.people import Dan, Brahim, everyones_emails
 
@@ -95,7 +95,7 @@ class Listing(models.Model):
     self.on_hold_at = None
 
   @property
-  def was_never_active(self):
+  def was_never_active(self):#todo: remove, no listing if never active
     #was never active in it's current state
     #will return true if was active and then deactivated
     return True if not self.active_at else False
@@ -290,7 +290,7 @@ class Listing(models.Model):
       return 0
 
   @property
-  def usd_price(self): #convert to USD
+  def intl_price_in_usd(self): #convert to USD
     if self.intl_price:
       local_currency = self.product.seller.country.currency
       return self.intl_price/float(local_currency.exchange_rate_to_USD)
@@ -299,9 +299,9 @@ class Listing(models.Model):
 
   @property
   def wepay_fee(self):#wepay fee is $0.30 plus 2.9% of total
-    if self.usd_price:
+    if self.intl_price_in_usd:
       fee = 0.30
-      fee += (0.029/(1-0.029)) * (self.usd_price + fee)
+      fee += (0.029/(1-0.029)) * (self.intl_price_in_usd + fee)
       return fee
     else:
       return 0
@@ -312,7 +312,7 @@ class Listing(models.Model):
 
   @property
   def display_price(self): #round to the nearest $1
-    return int(round(self.usd_price + self.wepay_fee - self.display_shipping_price))
+    return int(round(self.intl_price_in_usd + self.wepay_fee - self.display_shipping_price))
 
   @property
   def local_display_price(self):
@@ -399,18 +399,19 @@ from django.db.models.signals import pre_save, post_save, pre_delete
 
 @receiver(post_save, sender=Product)
 def resetListing(sender, instance, created, update_fields, **kwargs):
+  listing = instance.listing
   #dynamic info
-  self.slug = self.buildSlug()
-  self.title = self.buildTitle()
-  self.description = self.buildDescription()
+  listing.slug = listing.buildSlug()
+  listing.title = listing.buildTitle()
+  listing.description = listing.buildDescription()
   #update prices
-  self.price = self.display_price
-  self.local_price = self.local_display_price
-  self.us_shipping_price = self.product.shipping_cost
-  self.local_shipping_price = self.product.local_shipping_cost
+  listing.usd_price = listing.display_price
+  listing.local_price = listing.local_display_price
+  listing.us_shipping_price = listing.product.shipping_cost
+  listing.local_shipping_price = listing.product.local_shipping_cost
   #cache
-  self.expireListingCache()
-  self.save()
+  listing.expireListingCache()
+  listing.save()
 
 #SUPPORTING FUNCTIONS
 def rreplace(s, old, new, occurrence):

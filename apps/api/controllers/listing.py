@@ -11,18 +11,21 @@ from django.views.decorators.cache import cache_page
 
 class ListingSerializer(serializers.ModelSerializer):
   from apps.api.controllers.product import ProductSerializer
+  id                  = serializers.Field(source='product.id')
+  #product             = ProductSerializer(many=False, read_only=True)
 
-  id = serializers.Field(source='product.id')
-  #product = ProductSerializer(many=False, read_only=True)
-
-  #MODEL PROPERTIES
-  title = serializers.Field()
-  price = serializers.Field(source='display_price')
-  shipping_price = serializers.Field(source='display_shipping_price')
+  #MODEL METHODS AND PROPERTIES
+  url                 = serializers.SerializerMethodField('get_url')
+  is_sold             = serializers.Field(source='is_sold')
+  is_recently_sold    = serializers.Field(source='is_recently_sold')
+  metric_dimensions   = serializers.Field(source='metric_dimensions')
+  english_dimensions  = serializers.Field(source='english_dimensions')
+  pinterest_url       = serializers.Field(source='pinterest_url')
 
   #SERIALIZERS
   materials = serializers.SerializerMethodField('get_materials')
   artisans = serializers.SerializerMethodField('get_artisans')
+  colors = serializers.SerializerMethodField('get_colors')
 
   def get_materials(self, obj):
     from apps.api.controllers.asset import AssetSerializer
@@ -34,9 +37,25 @@ class ListingSerializer(serializers.ModelSerializer):
     serializer = AssetSerializer(obj.product.assets.filter(ilk='artisans'))
     return serializer.data
 
+  def get_colors(self, obj):
+    color_list = []
+    try:
+      for color in obj.product.colors.all():
+        color_list.append(color.name)
+    except: pass
+    return color_list
+
+  def get_url(self, obj): return obj.get_absolute_url()
+
   class Meta:
     model = Listing
-    fields = ('title', 'price', 'shipping_price', 'materials', 'artisans',)
+    fields = ('id', 'title', 'description',
+              'usd_price', 'local_price', 'us_shipping_price', 'local_shipping_price',
+              'is_orderable', 'created_at', 'updated_at',
+              'is_sold', 'is_recently_sold',
+              'metric_dimensions', 'english_dimensions',
+              'pinterest_url', 'url',
+              'materials', 'artisans', 'colors',)
 
 
 class ListingList(APIView):
