@@ -2,7 +2,7 @@
 
 {% load staticfiles %}
 
-<html lang="en" ng-app="">
+<html lang="en" ng-app="marketplace">
 <head>
   <meta charset="utf-8">
 
@@ -49,20 +49,20 @@
   <script src="{% static 'vendor/angular/angular.min.js' %}"></script>-->
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.js"></script>
+
+  <!-- ANGULAR FILES -->
+  <script src="{{STATIC_URL}}js/angular/directives.js"></script>
+  <script src="{{STATIC_URL}}js/angular/app.js"></script>
+  <!--<script src="{{STATIC_URL}}js/angular/controllers.js"></script>-->
+  <!--<script src="{{STATIC_URL}}js/angular/filters.js"></script>-->
+  <!--<script src="{{STATIC_URL}}js/angular/services.js"></script>-->
 
   <!--FONTS-->
   <link href='http://fonts.googleapis.com/css?family=Bitter:400,700,400italic' rel='stylesheet' type='text/css'>
   <link href="{{STATIC_URL}}css/public-base.css" rel="stylesheet">
   {% block css %}
   {% endblock css %}
-
-  {% block angular_controllers %}
-    <script type="application/javascript">
-      var HelloController = function($scope) {
-        $scope.name = 'Django Angular Project Template';
-      };
-    </script>
-  {% endblock angular_controllers %}
 
 </head>
 
@@ -108,11 +108,14 @@
 
   <div id="body" class="container">
     {% block content %}
-      <div ng-controller="HelloController">
-        Say Hello to: <input type="text" ng-model="name"/>
+      <div ng-controller="MarketController as market">
+
         {% verbatim %}
-        <h1>Hello, {{ name }}!</h1>
+          <div ng-repeat='listing in market.listings'>
+            <h3>{{listing.id}}: {{listing.title}}</h3>
+          </div>
         {% endverbatim %}
+
       </div>
     {% endblock content %}
   </div>
