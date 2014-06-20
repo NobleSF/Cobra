@@ -110,11 +110,8 @@
     {% block content %}
       <div ng-controller="MarketController as market">
 
-        {% verbatim %}
-          <div ng-repeat='listing in market.listings'>
-            <h3>{{listing.id}}: {{listing.title}}</h3>
-          </div>
-        {% endverbatim %}
+        <!-- Listing Grid  -->
+        <listing-grid></listing-grid>
 
       </div>
     {% endblock content %}

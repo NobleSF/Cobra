@@ -6,7 +6,8 @@
 
     var market = this;
     market.listings = [];
-    $http.get('/api/listings/')
+    $http.get('/api/listings/') //todo: load urls in with a constant
+    //http://django-angular.readthedocs.org/en/latest/manage-urls.html
     .success(function(data){
       market.listings = data;
     });

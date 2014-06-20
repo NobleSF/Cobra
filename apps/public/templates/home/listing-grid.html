@@ -1,0 +1,17 @@
+{% verbatim %}
+  <div class='listing' ng-repeat='listing in market.listings'>
+
+    <h3>{{listing.id}}: {{listing.title}}</h3>
+
+    <img ng-src="{{listing.photos[first]}}">
+
+    <ul class='materials'>
+      <li class='material' ng-repeat="material in listing.materials">
+        <p>{{material.name}}: {{material.description}}</p>
+        <img ng-src="{{material.peephole_image}}">
+      </li>
+
+    </div>
+
+  </div>
+{% endverbatim %}

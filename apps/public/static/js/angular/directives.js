@@ -1,13 +1,13 @@
 (function(){
     var app = angular.module('market-directives', []);
 
-    //app.directive("productDescription", function() {
-    //  return {
-    //    restrict: 'E',
-    //    templateUrl: "product-description.html"
-    //  };
-    //});
-    //
+    app.directive("listingGrid", function() {
+      return {
+        restrict: 'E',
+        templateUrl: "/listing-grid"
+      };
+    });
+
     //app.directive("productReviews", function() {
     //  return {
     //    restrict: 'E',

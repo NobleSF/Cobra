@@ -7,6 +7,9 @@ from django.views.decorators.cache import cache_page
 def home(request):
   return render(request, 'base.html')
 
+def listingGrid(request):
+  return render(request, 'home/listing-grid.html')
+
 @cache_page(176400) #49hrs an hour over homepage in-template cache
 def loadProducts(request):
   from apps.seller.models.product import Product

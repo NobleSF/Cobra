@@ -38,4 +38,10 @@ urlpatterns = patterns('',
   url(r'^product_data', product.product_data, name='product_data'),
   url(r'^test_meta$', home.test_meta, name='test meta'),
 
+
+
+  # NEW ANGULAR PARTIALS
+  url(r'^listing-grid$', home.listingGrid, name='listing-grid'),
+
+
 )
