@@ -1,0 +1,25 @@
+{% spaceless %}
+
+<div class='listing' data-url="{{ listing.get_absolute_url }}">
+  <a href='{{ listing.get_absolute_url }}'>
+
+    <div class='title title-photo'>
+      <h3 class='name hover-show'>{{ listing.name }}</h3>
+      {% if listing.seller.city %}
+        <h4 class='city hover-show'>
+          from {{ listing.seller.city }}, Morocco
+          {# listing.seller.country.name todo: make this generic again #}
+        </h4>
+      {% endif %}
+    </div>
+
+    <div class='photo'>
+      <img alt='{{ listing.title }}'
+           src='{{ listing.photo.thumb_size }}'
+           width='375' height='281'>
+    </div>
+
+  </a>
+</div>
+
+{% endspaceless %}
