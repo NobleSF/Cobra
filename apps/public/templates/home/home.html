@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+  <script type="text/javascript" src="{{ STATIC_URL }}public/js/public.js?v=0"></script>
+{% endblock javascript %}
+
+{% block css %}
+  <link href="{{ STATIC_URL }}public/css/public.css?v=0" rel="stylesheet">
+{% endblock css %}
+
+{% block banner %}
+  <hr>
+{% endblock banner %}
+
+{% block content %}
+  <div id='home-content'
+       ng-controller="MarketController as market">
+
+    <!-- Listing Grid  -->
+    <listing-grid></listing-grid>
+
+  </div>
+{% endblock content %}
+
+{% block footer %}
+  <ul class='inline'>
+    <li>&copy;2014 <a href='http://www.theanou.com'>Anou</a></li>
+    <li><a href="//www.facebook.com/TheAn0u" rel="publisher">Facebook</a></li>
+    <li><a href="//plus.google.com/+Theanou" rel="publisher">Google+</a></li>
+    <li><a href="//www.pinterest.com/helloanou/" rel="publisher">Pinterest</a></li>
+  </ul>
+{% endblock footer %}
