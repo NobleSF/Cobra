@@ -1,6 +1,10 @@
 (function(){
 
-  var app = angular.module('marketplace', ['ngRoute', 'market-directives']);
+  var app = angular.module('marketplace', [
+                                           'ngRoute',
+                                           'cloudinary',
+                                           'market-directives'
+                                          ]);
 
   app.controller('MarketController', ['$http', function($http){
 

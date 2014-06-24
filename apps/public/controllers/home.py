@@ -5,10 +5,10 @@ import json
 from django.views.decorators.cache import cache_page
 
 def home(request):
-  return render(request, 'base.html')
+  return render(request, 'home/home.html')
 
-def listingGrid(request):
-  return render(request, 'home/listing-grid.html')
+def listingGrid(request): #partial
+  return render(request, 'home/partials/listing-grid.html')
 
 @cache_page(176400) #49hrs an hour over homepage in-template cache
 def loadProducts(request):

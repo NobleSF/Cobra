@@ -7,7 +7,7 @@
   <meta charset="utf-8">
 
   {% block viewport %}
-    <meta id='page-viewport' name="viewport" content="width=device-width" />
+    <meta id='viewport' name="viewport" content="width=device-width, initial-scale=1">
   {% endblock viewport %}
 
   {% spaceless %}
@@ -44,14 +44,18 @@
   <!--iOS and Android icons-->
   <link rel="apple-touch-icon-precomposed" href="{% static 'images/apple-touch-icon-152x152.png'%}">
 
-  <!--if debug
-  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-  <script src="{% static 'vendor/angular/angular.min.js' %}"></script>-->
-  <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.js"></script>
+  {% if debug %}
+    <link href="{{STATIC_URL}}vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="{{STATIC_URL}}vendor/angular/angular.min.js"></script>
+    <script src="{{STATIC_URL}}vendor/angular/angular-route.js"></script>
+  {% else %}
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.js"></script>
+  {% endif %}
 
   <!-- ANGULAR FILES -->
+  <script src="{{STATIC_URL}}vendor/cloudinary/js/angular.cloudinary.js"></script>
   <script src="{{STATIC_URL}}js/angular/directives.js"></script>
   <script src="{{STATIC_URL}}js/angular/app.js"></script>
   <!--<script src="{{STATIC_URL}}js/angular/controllers.js"></script>-->
@@ -106,31 +110,37 @@
     </div>
   </nav>
 
+  <div id="banner" class="container-fluid">
+    {% block banner %}
+      <hr>
+    {% endblock banner %}
+  </div>
+
   <div id="body" class="container">
     {% block content %}
-      <div ng-controller="MarketController as market">
-
-        <!-- Listing Grid  -->
-        <listing-grid></listing-grid>
-
-      </div>
+      hello world
     {% endblock content %}
   </div>
 
-  <footer id="footer">
+  <footer id="footer" class="container">
     {% block footer %}
 
     {% endblock footer %}
   </footer>
 
-  <!--Javascript Placed at the end of the document so the pages load faster -->
+  {% if debug %}
+    <script src="{{STATIC_URL}}vendor/jquery/jquery-2.1.1.min.js"></script>
+    <script src="{{STATIC_URL}}vendor/bootstrap/js/bootstrap.min.js"></script>
+  {% else %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+  {% endif %}
 
-  <!--if debug
-  <script src="{% static 'vendor/jquery/jquery-2.1.1.min.js'%}"></script>
-  <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js'%}"></script>
-  -->
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+  <script src="{{STATIC_URL}}vendor/cloudinary/js/jquery.cloudinary.js"></script>
+  <script>
+    $.cloudinary.config().cloud_name = 'hork5h8x1';
+    //$("img").cloudinary();
+  </script>
 
   {% block javascript %}
   {% endblock javascript %}
