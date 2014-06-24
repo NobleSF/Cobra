@@ -9,6 +9,34 @@ from django.views.decorators.csrf import csrf_exempt
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.views.decorators.cache import cache_page
 
+
+
+
+
+
+
+
+
+
+# PAGINATE
+# http://www.django-rest-framework.org/api-guide/pagination
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class ListingSerializer(serializers.ModelSerializer):
   from apps.api.controllers.product import ProductSerializer
   id                  = serializers.Field(source='product.id')
@@ -23,9 +51,18 @@ class ListingSerializer(serializers.ModelSerializer):
   pinterest_url       = serializers.Field(source='pinterest_url')
 
   #SERIALIZERS
+  photos = serializers.SerializerMethodField('get_photos')
   materials = serializers.SerializerMethodField('get_materials')
   artisans = serializers.SerializerMethodField('get_artisans')
   colors = serializers.SerializerMethodField('get_colors')
+
+  def get_photos(self, obj):
+    photos = []
+    for photo in obj.product.photos.exclude(is_progress=True):
+      #url = photo.original
+      #cloudinary_id = url[url.rfind('/')+1:url.rfind('.')]
+      photos.append(photo.product_size)
+    return photos
 
   def get_materials(self, obj):
     from apps.api.controllers.asset import AssetSerializer
@@ -55,7 +92,7 @@ class ListingSerializer(serializers.ModelSerializer):
               'is_sold', 'is_recently_sold',
               'metric_dimensions', 'english_dimensions',
               'pinterest_url', 'url',
-              'materials', 'artisans', 'colors',)
+              'photos', 'materials', 'artisans', 'colors',)
 
 
 class ListingList(APIView):
