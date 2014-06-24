@@ -1,26 +1,45 @@
 {% extends "base.html" %}
 
 {% block javascript %}
-  <script type="text/javascript" src="{{ STATIC_URL }}public/js/public.js?v=0"></script>
+  <script type='text/javascript' src="{{ STATIC_URL }}public/js/public.js?v=0"></script>
 {% endblock javascript %}
 
 {% block css %}
-  <link href="{{ STATIC_URL }}public/css/public.css?v=0" rel="stylesheet">
+  <link href="{{ STATIC_URL }}public/css/public.css?v=0" rel='stylesheet'>
 {% endblock css %}
 
+{% block header %}{{ block.super }}
+{% endblock header %}
+
 {% block banner %}
-  <hr>
+  <div id='banner' class='container-fluid'>
+    <img ng-src="{{ STATIC_URL }}images/banner-photos/berber-tapis-web.jpg" class='img-responsive'>
+    <div class='gradient'></div>
+  </div>
+
+  <div id='breadcrumbs' class='container'>
+    <div class='row'>
+      <div class='col-xs-6'>
+        <ol class='breadcrumb'>
+          <li><a href="#">Home</a></li>
+          <li class='active'>Rugs and Carpets</li>
+        </ol>
+      </div>
+    </div>
+  </div>
 {% endblock banner %}
 
-{% block content %}
-  <div id='home-content'
-       ng-controller="MarketController as market">
+{% block body %}
+  <div id='body' class='container'>
+    <div id='home-content'
+         ng-controller="MarketController as market">
 
-    <!-- Listing Grid  -->
-    <listing-grid></listing-grid>
+      <!-- Listing Grid  -->
+      <listing-grid></listing-grid>
 
+    </div>
   </div>
-{% endblock content %}
+{% endblock body %}
 
 {% block footer %}
   <ul class='inline'>
