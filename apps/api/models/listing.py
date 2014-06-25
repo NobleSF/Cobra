@@ -417,6 +417,13 @@ def resetListing(sender, instance, created, update_fields, **kwargs):
   listing.expireListingCache()
   listing.save()
 
+@receiver(pre_delete, sender=Product)
+def deleteListing(sender, instance, **kwargs):
+  try:
+    instance.listing.delete()
+  except Exception as e:
+    ExceptionHandler(e, "error on listing.deleteListing, Product pre_delete signal")
+
 #SUPPORTING FUNCTIONS
 def rreplace(s, old, new, occurrence):
   li = s.rsplit(old, occurrence)
