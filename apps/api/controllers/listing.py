@@ -1,20 +1,16 @@
-from django.http import HttpResponse, Http404
 from apps.api.models.listing import Listing
 from rest_framework import serializers
-from rest_framework.decorators import api_view
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from django.views.decorators.csrf import csrf_exempt
 from apps.admin.utils.exception_handling import ExceptionHandler
-from django.views.decorators.cache import cache_page
+from rest_framework import filters
+from rest_framework import generics
+import django_filters
 
 class ListingSerializer(serializers.ModelSerializer):
   from apps.api.controllers.product import ProductSerializer
 
-  pk = serializers.Field(source='pk')
-  product_id          = serializers.Field(source='product.id')
-  category = serializers.Field(source='category.name')
+  pk                  = serializers.Field(source='pk')
+  product             = serializers.Field(source='product.id')
+  category            = serializers.Field(source='category.name')
 
   #MODEL METHODS AND PROPERTIES
   url                 = serializers.SerializerMethodField('get_url')
@@ -25,10 +21,10 @@ class ListingSerializer(serializers.ModelSerializer):
   pinterest_url       = serializers.Field(source='pinterest_url')
 
   #SERIALIZERS
-  photos = serializers.SerializerMethodField('get_photos')
-  materials = serializers.SerializerMethodField('get_materials')
-  artisans = serializers.SerializerMethodField('get_artisans')
-  colors = serializers.SerializerMethodField('get_colors')
+  photos              = serializers.SerializerMethodField('get_photos')
+  materials           = serializers.SerializerMethodField('get_materials')
+  artisans            = serializers.SerializerMethodField('get_artisans')
+  colors              = serializers.SerializerMethodField('get_colors')
 
   def get_photos(self, obj):
     photos = []
@@ -60,7 +56,7 @@ class ListingSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Listing
-    fields = ('pk', 'product_id', 'title', 'category', 'description',
+    fields = ('pk', 'product', 'title', 'category', 'description',
               'usd_price', 'local_price', 'us_shipping_price', 'local_shipping_price',
               'is_orderable', 'created_at', 'updated_at',
               'is_sold', 'is_recently_sold',
@@ -68,67 +64,28 @@ class ListingSerializer(serializers.ModelSerializer):
               'pinterest_url', 'url',
               'photos', 'materials', 'artisans', 'colors',)
 
+class ListingFilter(django_filters.FilterSet):
+  product = django_filters.NumberFilter(name='product__id')
+  store = django_filters.NumberFilter(name='product__seller__id')
+  category = django_filters.CharFilter(name='category__name')
 
-#http://www.django-rest-framework.org/tutorial/3-class-based-views#using-generic-class-based-views
-from rest_framework import filters
-from rest_framework import generics
-from apps.api.controllers.listing_filter import ListingFilter
+  min_price = django_filters.NumberFilter(name="usd_price", lookup_type='gte')
+  max_price = django_filters.NumberFilter(name="usd_price", lookup_type='lte')
+
+  class Meta:
+    model = Listing
+    fields = ['product', 'store', 'category', 'min_price', 'max_price']
+    #order_by = ['product']
 
 class ListingList(generics.ListCreateAPIView):
-    queryset = Listing.objects.all()
-    serializer_class = ListingSerializer
-    filter_class = ListingFilter
-    filter_backends = (filters.DjangoFilterBackend,)
-    paginate_by = 24
-    paginate_by_param = 'page_size'
-    max_paginate_by = 120
+  queryset = Listing.objects.all()
+  serializer_class = ListingSerializer
+  filter_class = ListingFilter
+  filter_backends = (filters.DjangoFilterBackend,)
+  paginate_by = 24
+  paginate_by_param = 'page_size'
+  max_paginate_by = 120
 
 class ListingDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Listing.objects.all()
-    serializer_class = ListingSerializer
-
-
-#CLASS BASED VIEW WITH FUNCTION FOR EACH HTTP METHOD
-#class ListingList(APIView):
-#  """
-#  List all listings, or create a new listing.
-#  """
-#  def get(self, request, format=None):
-#    listings = Listing.objects.all()
-#    serializer = ListingSerializer(listings, many=True)
-#    return Response(serializer.data)
-#
-#  def post(self, request, format=None):
-#    serializer = ListingSerializer(data=request.DATA)
-#    if serializer.is_valid():
-#      serializer.save()
-#      return Response(serializer.data, status=status.HTTP_201_CREATED)
-#    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-#class ListingDetail(APIView):
-#  """
-#  Retrieve, update or delete a listing.
-#  """
-#  def get_object(self, product_id):
-#    try:
-#      return Listing.objects.get(product_id=product_id)
-#    except Listing.DoesNotExist:
-#      raise Http404
-#
-#  def get(self, request, product_id, format=None):
-#    listing = self.get_object(product_id)
-#    serializer = ListingSerializer(listing)
-#    return Response(serializer.data)
-#
-#  def put(self, request, product_id, format=None):
-#    listing = self.get_object(product_id)
-#    serializer = ListingSerializer(listing, data=request.DATA)
-#    if serializer.is_valid():
-#      serializer.save()
-#      return Response(serializer.data)
-#    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-#  def delete(self, request, product_id, format=None):
-#    listing = self.get_object(product_id)
-#    listing.delete()
-#    return Response(status=status.HTTP_204_NO_CONTENT)
+  queryset = Listing.objects.all()
+  serializer_class = ListingSerializer
