@@ -1,5 +1,6 @@
 from django.db import models
 from apps.seller.models.product import Product
+from apps.admin.models.category import Category
 from django.utils import timezone
 from apps.admin.utils.exception_handling import ExceptionHandler
 
@@ -27,6 +28,7 @@ class Listing(models.Model):
 
   slug                = models.CharField(max_length=100, null=True, blank=True)
   title               = models.CharField(max_length=100, null=True, blank=True)
+  category            = models.ForeignKey(Category)
   description         = models.CharField(max_length=1000, null=True, blank=True)
 
   #prices #todo: make more dynamic, accouting for shipping to other countries/currencies
@@ -403,7 +405,9 @@ def resetListing(sender, instance, created, update_fields, **kwargs):
   #dynamic info
   listing.slug = listing.buildSlug()
   listing.title = listing.buildTitle()
+  listing.category = listing.product.assets.filter(ilk='product')[0].categories.all()[0]
   listing.description = listing.buildDescription()
+
   #update prices
   listing.usd_price = listing.display_price
   listing.local_price = listing.local_display_price
