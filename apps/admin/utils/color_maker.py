@@ -35,4 +35,4 @@ def hsv_to_rgb(hue, saturation, value):
 
   r,g,b = (r*256), (g*256), (b*256)
 
-  return [int(round(r)), int(round(g)), int(round(b))]
+  return "rgb(%d,%d,%d)" % (int(round(r)), int(round(g)), int(round(b)))
