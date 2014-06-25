@@ -16,7 +16,3 @@ class ListingFilter(django_filters.FilterSet):
     model = Listing
     fields = ['product', 'store', 'category', 'min_price', 'max_price']
     #order_by = ['product']
-
-
-# PAGINATE
-# http://www.django-rest-framework.org/api-guide/pagination

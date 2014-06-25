@@ -79,6 +79,9 @@ class ListingList(generics.ListCreateAPIView):
     serializer_class = ListingSerializer
     filter_class = ListingFilter
     filter_backends = (filters.DjangoFilterBackend,)
+    paginate_by = 24
+    paginate_by_param = 'page_size'
+    max_paginate_by = 120
 
 class ListingDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Listing.objects.all()
@@ -86,7 +89,6 @@ class ListingDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 #CLASS BASED VIEW WITH FUNCTION FOR EACH HTTP METHOD
-
 #class ListingList(APIView):
 #  """
 #  List all listings, or create a new listing.
@@ -130,6 +132,3 @@ class ListingDetail(generics.RetrieveUpdateDestroyAPIView):
 #    listing = self.get_object(product_id)
 #    listing.delete()
 #    return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-
