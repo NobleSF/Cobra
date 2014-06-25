@@ -9,38 +9,12 @@ from django.views.decorators.csrf import csrf_exempt
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.views.decorators.cache import cache_page
 
-
-
-
-
-
-
-
-
-
-# PAGINATE
-# http://www.django-rest-framework.org/api-guide/pagination
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class ListingSerializer(serializers.ModelSerializer):
   from apps.api.controllers.product import ProductSerializer
-  id                  = serializers.Field(source='product.id')
-  #product             = ProductSerializer(many=False, read_only=True)
+
+  pk = serializers.Field(source='pk')
+  product_id          = serializers.Field(source='product.id')
+  category = serializers.Field(source='category.name')
 
   #MODEL METHODS AND PROPERTIES
   url                 = serializers.SerializerMethodField('get_url')
@@ -86,7 +60,7 @@ class ListingSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Listing
-    fields = ('id', 'title', 'description',
+    fields = ('pk', 'product_id', 'title', 'category', 'description',
               'usd_price', 'local_price', 'us_shipping_price', 'local_shipping_price',
               'is_orderable', 'created_at', 'updated_at',
               'is_sold', 'is_recently_sold',
@@ -95,58 +69,67 @@ class ListingSerializer(serializers.ModelSerializer):
               'photos', 'materials', 'artisans', 'colors',)
 
 
-class ListingList(APIView):
-  """
-  List all listings, or create a new listing.
-  """
-  def get(self, request, format=None):
-    listings = Listing.objects.all()
-    serializer = ListingSerializer(listings, many=True)
-    return Response(serializer.data)
-
-  def post(self, request, format=None):
-    serializer = ListingSerializer(data=request.DATA)
-    if serializer.is_valid():
-      serializer.save()
-      return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class ListingDetail(APIView):
-  """
-  Retrieve, update or delete a listing.
-  """
-  def get_object(self, product_id):
-    try:
-      return Listing.objects.get(product_id=product_id)
-    except Listing.DoesNotExist:
-      raise Http404
-
-  def get(self, request, product_id, format=None):
-    listing = self.get_object(product_id)
-    serializer = ListingSerializer(listing)
-    return Response(serializer.data)
-
-  def put(self, request, product_id, format=None):
-    listing = self.get_object(product_id)
-    serializer = ListingSerializer(listing, data=request.DATA)
-    if serializer.is_valid():
-      serializer.save()
-      return Response(serializer.data)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-  def delete(self, request, product_id, format=None):
-    listing = self.get_object(product_id)
-    listing.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
-
-
 #http://www.django-rest-framework.org/tutorial/3-class-based-views#using-generic-class-based-views
-#from rest_framework import generics
+from rest_framework import filters
+from rest_framework import generics
+from apps.api.controllers.listing_filter import ListingFilter
+
+class ListingList(generics.ListCreateAPIView):
+    queryset = Listing.objects.all()
+    serializer_class = ListingSerializer
+    filter_class = ListingFilter
+    filter_backends = (filters.DjangoFilterBackend,)
+
+class ListingDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Listing.objects.all()
+    serializer_class = ListingSerializer
+
+
+#CLASS BASED VIEW WITH FUNCTION FOR EACH HTTP METHOD
+
+#class ListingList(APIView):
+#  """
+#  List all listings, or create a new listing.
+#  """
+#  def get(self, request, format=None):
+#    listings = Listing.objects.all()
+#    serializer = ListingSerializer(listings, many=True)
+#    return Response(serializer.data)
 #
-#class ListingList(generics.ListCreateAPIView):
-#    queryset = Listing.objects.all()
-#    serializer_class = ListingSerializer
+#  def post(self, request, format=None):
+#    serializer = ListingSerializer(data=request.DATA)
+#    if serializer.is_valid():
+#      serializer.save()
+#      return Response(serializer.data, status=status.HTTP_201_CREATED)
+#    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 #
-#class ListingDetail(generics.RetrieveUpdateDestroyAPIView):
-#    queryset = Listing.objects.all()
-#    serializer_class = ListingSerializer
+#class ListingDetail(APIView):
+#  """
+#  Retrieve, update or delete a listing.
+#  """
+#  def get_object(self, product_id):
+#    try:
+#      return Listing.objects.get(product_id=product_id)
+#    except Listing.DoesNotExist:
+#      raise Http404
+#
+#  def get(self, request, product_id, format=None):
+#    listing = self.get_object(product_id)
+#    serializer = ListingSerializer(listing)
+#    return Response(serializer.data)
+#
+#  def put(self, request, product_id, format=None):
+#    listing = self.get_object(product_id)
+#    serializer = ListingSerializer(listing, data=request.DATA)
+#    if serializer.is_valid():
+#      serializer.save()
+#      return Response(serializer.data)
+#    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#  def delete(self, request, product_id, format=None):
+#    listing = self.get_object(product_id)
+#    listing.delete()
+#    return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
