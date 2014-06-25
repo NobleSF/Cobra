@@ -9,7 +9,7 @@ class CategorySerializer(serializers.ModelSerializer):
   from apps.api.controllers.product import ProductSerializer
 
   pk                  = serializers.Field(source='pk')
-  parent_category     = serializers.Field(source='parent_category__name')
+  parent_category     = serializers.Field(source='parent_category.name')
 
   #MODEL METHODS AND PROPERTIES
   url                 = serializers.SerializerMethodField('get_url')
@@ -26,7 +26,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class CategoryFilter(django_filters.FilterSet):
-  category = django_filters.CharFilter(name='category__name')
+  category = django_filters.CharFilter(name='name')
   #parents only
 
   class Meta:

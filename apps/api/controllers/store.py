@@ -27,11 +27,15 @@ class StoreSerializer(serializers.ModelSerializer):
               'url',)
 
 class StoreFilter(django_filters.FilterSet):
-  category = django_filters.CharFilter(name='category__name')
-  #parents only
+  def filter_category(queryset, value):
+    if not value: return queryset
+    queryset = queryset #...custom filtering on queryset using 'value'...
+    return queryset
+
+  category = django_filters.CharFilter(action=filter_category)
 
   class Meta:
-    model = Category
+    model = Store
     fields = ['category',]
 
 class StoreList(generics.ListCreateAPIView):
