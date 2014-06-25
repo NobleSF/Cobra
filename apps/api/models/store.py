@@ -1,11 +1,13 @@
 from django.db import models
-from apps.seller.models.product import Product
+from apps.seller.models.seller import Seller
+from apps.admin.utils.exception_handling import ExceptionHandler
 
 class Store(models.Model):
-  seller              = models.OneToOneField(Seller, related_name='store')
+  seller        = models.OneToOneField(Seller, related_name='store')
 
   title         = models.CharField(max_length=100)
   slug          = models.CharField(max_length=100, null=True, blank=True)
+  color         = models.CharField(max_length=16, null=True, blank=True)
 
   approved_at   = models.DateTimeField(null=True, blank=True) #admin approval
   deactive_at   = models.DateTimeField(null=True, blank=True) #seller deactivate
@@ -59,15 +61,6 @@ class Store(models.Model):
               "Made possible by Anou - Moroccan Handmade.")
 
   @property
-  def color(self): #todo: make this an editable value only randomly created once
-    from apps.admin.utils.color_maker import get_pastel
-    if self.id:
-      rgb = get_pastel(self.id)
-    else:
-      rgb = [255,255,255]#white
-    return "rgb(%s,%s,%s)" % (rgb[0],rgb[1],rgb[2])
-
-  @property
   def artisans(self):
     return self.seller.artisans
 
@@ -102,10 +95,6 @@ class Store(models.Model):
     return self.title
 
 
-
-
-
-
 #SIGNALS AND SIGNAL REGISTRATION
 from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save, pre_delete
@@ -129,3 +118,19 @@ def resetSlug(sender, instance, **kwargs):
     store.slug = ''.join([char for char in self.slug if not char.isdigit()])
   except Exception as e:
     ExceptionHandler(e, "error on store.resetSlug")
+
+@receiver(post_save, sender=Store)
+def setColor(sender, instance, created, update_fields, **kwargs):
+  from apps.admin.utils.color_maker import get_pastel
+  if not instance.color:
+    try:
+      instance.color = get_pastel(instance.pk)
+      instance.save()
+    except Exception as e: print str(e)
+
+@receiver(pre_delete, sender=Seller)
+def deleteStore(sender, instance, **kwargs):
+  try:
+    instance.store.delete()
+  except Exception as e:
+    ExceptionHandler(e, "error on store.deleteStore, Seller pre_delete signal")
