@@ -29,5 +29,9 @@ class Category(models.Model):
     else:
       return self.name
 
+  def get_absolute_url(self):
+    from django.core.urlresolvers import reverse
+    return reverse('category', args=[str(self.name)])
+
   def __unicode__(self):
     return self.name

@@ -23,6 +23,9 @@ urlpatterns = patterns('',
       name='store_w_slug'),
   url(r'^store/(?P<seller_id>\d+)$', store.home, name='store'),
 
+  #CATEGORY PAGE
+  url(r'^category/(?P<name>\d+)$', home.category, name='category'),
+
   # CHECKOUT PAGES
   url(r'^checkout/cart$', checkout.cart, name='cart'),
   url(r'^checkout/cart-add/(?P<product_id>\d+)$', checkout.cartAdd,
