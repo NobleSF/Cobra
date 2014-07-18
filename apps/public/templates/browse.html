@@ -30,15 +30,43 @@
 {% endblock banner %}
 
 {% block body %}
+{% verbatim %}
+
   <div id='body' class='container'>
-    <div id='home-content'
+
+    <div id='market-base' class='row'
          ng-controller="MarketController as market">
 
-      <!-- Listing Grid  -->
-      <listing-grid></listing-grid>
+      <component ng-repeat='component in market.components' type="{{component.type}}">
+        <listing ng-if="component.type == 'listing'"></listing>
+        <category ng-if="component.type == 'category'"></category>
+        <store ng-if="component.type == 'store'"></store>
+      </component>
 
+      </div>
     </div>
-  </div>
+
+
+    <div id='market-base'
+         ng-controller="OldMarketController as market">
+
+      <category-grid></category-grid>
+    </div>
+
+    <div id='category-base'
+         ng-controller="CategoryController as category">
+
+      <listing-grid></listing-grid>
+    </div>
+
+    <!--<div id='store-base'
+         ng-controller="StoreController as store">
+
+      <store-grid></store-grid>
+    </div>-->
+
+  </div><!--end body-->
+{% endverbatim %}
 {% endblock body %}
 
 {% block footer %}

@@ -5,16 +5,28 @@ import json
 from django.views.decorators.cache import cache_page
 
 def home(request):
-  return render(request, 'home/home.html')
+  return render(request, 'browse.html')
 
 def category(rewuest):
-  return render(request, 'home/home.html')
+  return render(request, 'browse.html')
 
 def listingGrid(request): #partial
-  return render(request, 'home/partials/listing-grid.html')
+  return render(request, 'partials/listing-grid.html')
+
+def categoryGrid(request): #partial
+  return render(request, 'partials/category-grid.html')
+
+def listing(request): #partial
+  return render(request, 'partials/listing.html')
+
+def store(request): #partial
+  return render(request, 'partials/store.html')
+
+def category(request): #partial
+  return render(request, 'partials/category.html')
 
 
-@cache_page(176400) #49hrs an hour over homepage in-template cache
+@cache_page(176400) #49hrs
 def loadProducts(request):
   from apps.seller.models.product import Product
   from django.template.loader import render_to_string

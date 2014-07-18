@@ -1,0 +1,27 @@
+{% spaceless %}
+{% verbatim %}
+
+  <div class='listing'>
+
+    <a href="#/product/{{component.pk}}"><!--{{listing.url}}-->
+      <img class='img-responsive img-rounded'
+           ng-src="{{component.photos[0]}}"
+           alt="{{component.title}}"
+           >
+
+      <div class='actions'>
+        <div class='gradient img-rounded'>
+          <button class='love icon-heart-empty white btn btn-default pull-left'
+          ></button>
+
+          <span class='price white pull-right'>
+            ${{component.usd_price}}
+          </span>
+        </div>
+      </div>
+
+    </a>
+  </div>
+
+{% endverbatim %}
+{% endspaceless %}

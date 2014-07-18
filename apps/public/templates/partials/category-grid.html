@@ -1,0 +1,31 @@
+{% spaceless %}
+{% verbatim %}
+  <div class='row'>
+
+    <div ng-repeat='category in market.categories'
+         class='listing'
+         ng-class="{'col-xs-6': category.size == 'small',
+                    'col-md-4': category.size == 'small',
+                    'col-xs-12': category.size == 'big',
+                    'col-md-8': category.size == 'big'}"
+         >
+
+      <a href="#/category/{{category.pk}}"><!--{{category.url}}-->
+        <img class='img-responsive img-rounded'
+             ng-src="{{category.image}}"
+             alt="{{category.name}}"
+             >
+
+        <div class='title'>
+          <h3>{{category.name}}</h3>
+        </div>
+
+      </a>
+    </div>
+
+    <!--<cl-image public-id="{{listing.photos[0]}}" height="150" width="150" crop="fill"/>
+    </cl-image>-->
+
+  </div>
+{% endverbatim %}
+{% endspaceless %}

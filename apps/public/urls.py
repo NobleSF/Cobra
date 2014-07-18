@@ -45,6 +45,10 @@ urlpatterns = patterns('',
 
   # NEW ANGULAR PARTIALS
   url(r'^listing-grid$', home.listingGrid, name='listing-grid'),
+  url(r'^category-grid$', home.categoryGrid, name='category-grid'),
 
+  url(r'^listing$', home.listing, name='listing'),
+  url(r'^store$', home.store, name='store'),
+  url(r'^category$', home.category, name='category'),
 
 )

@@ -3,9 +3,9 @@
   <div class='row'>
 
     <div class='col-xs-6 col-md-4 listing'
-         ng-repeat='listing in market.listings'>
+         ng-repeat='listing in category.listings'>
 
-      <a href="{{listing.url}}">
+      <a href="#/product/{{listing.pk}}"><!--{{listing.url}}-->
         <img class='img-responsive img-rounded'
              ng-src="{{listing.photos[0]}}"
              alt="{{listing.title}}"

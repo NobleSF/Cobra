@@ -1,0 +1,16 @@
+{% spaceless %}
+{% verbatim %}
+
+  <div class='category'>
+
+    <a href="#/product/{{component.pk}}"><!--{{listing.url}}-->
+      <img class='img-responsive img-rounded'
+           ng-src="{{component.photos[0]}}"
+           alt="{{component.title}}"
+           >
+
+    </a>
+  </div>
+
+{% endverbatim %}
+{% endspaceless %}
