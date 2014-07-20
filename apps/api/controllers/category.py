@@ -33,18 +33,24 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class CategoryFilter(django_filters.FilterSet):
 
+  def limit(queryset, value):
+    return queryset[:value]
+
   def filter_parents(queryset, value):
     if value:
       return queryset.filter(parent_category__isnull=True)
     else:
       return queryset.exclude(parent_category__isnull=True)
 
-  category = django_filters.CharFilter(name='name')
+  limit     = django_filters.NumberFilter(action=limit)
+  category  = django_filters.CharFilter(name='name')
   is_parent = django_filters.BooleanFilter(action=filter_parents)
 
   class Meta:
     model = Category
-    fields = ['category', 'is_parent', 'parent_category', 'parent_category__name']
+    fields = ['limit',
+              'category', 'is_parent',
+              'parent_category', 'parent_category__name']
 
 class CategoryList(generics.ListCreateAPIView):
   queryset = Category.objects.all()

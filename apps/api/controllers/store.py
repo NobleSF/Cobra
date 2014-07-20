@@ -20,28 +20,42 @@ class StoreSerializer(serializers.ModelSerializer):
 
   def get_url(self, obj): return obj.get_absolute_url()
 
+  def get_photos(self, obj):
+    try: return obj.products[0].photos[0].product_size
+    except: return ""
+
+  def get_artisans(self, obj):
+    try: return obj.assets.filter(ilk='artisan')
+    except: return ""
+
   class Meta:
     model = Store
     fields = ('pk', 'seller',
               'title', 'color',
-              'url',)
+              'url',
+              'photos', 'artisans',)
 
 class StoreFilter(django_filters.FilterSet):
+
+  def limit(queryset, value):
+    return queryset[:value]
+
   def filter_category(queryset, value):
     if not value: return queryset
     queryset = queryset #...custom filtering on queryset using 'value'...
     return queryset
 
-  category = django_filters.CharFilter(action=filter_category)
+  limit     = django_filters.NumberFilter(action=limit)
+  category  = django_filters.CharFilter(action=filter_category)
 
   class Meta:
     model = Store
-    fields = ['category',]
+    fields = ['limit', 'category',]
 
 class StoreList(generics.ListCreateAPIView):
   queryset = Store.objects.all()
   serializer_class = StoreSerializer
-  #filter_class = StoreFilter
+  filter_class = StoreFilter
   filter_backends = (filters.DjangoFilterBackend,)
   paginate_by = 6
   paginate_by_param = 'page_size'

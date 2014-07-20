@@ -69,17 +69,20 @@ class ListingFilter(django_filters.FilterSet):
   def limit(queryset, value):
     return queryset[:value]
 
-  product = django_filters.NumberFilter(name='product__id')
-  store = django_filters.NumberFilter(name='product__seller__id')
-  category = django_filters.CharFilter(name='category__name')
-  limit = django_filters.NumberFilter(action=limit)
+  limit     = django_filters.NumberFilter(action=limit)
+
+  product   = django_filters.NumberFilter(name='product__id')
+  store     = django_filters.NumberFilter(name='product__seller__id')
+  category  = django_filters.CharFilter(name='category__name')
 
   min_price = django_filters.NumberFilter(name="usd_price", lookup_type='gte')
   max_price = django_filters.NumberFilter(name="usd_price", lookup_type='lte')
 
   class Meta:
     model = Listing
-    fields = ['product', 'store', 'category', 'min_price', 'max_price']
+    fields = ['limit',
+              'product', 'store', 'category',
+              'min_price', 'max_price']
     #order_by = ['product']
 
 class ListingList(generics.ListCreateAPIView):
