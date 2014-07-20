@@ -43,6 +43,18 @@
       };
     });
 
+    //get 2 stores and append them to the blocks array
+    $http.get('/api/stores/?limit=2')
+    .success(function(data){
+      for( store=0; store < data.results.length; store++){
+        market.blocks.push({
+          type: 'store',
+          size: 'single',
+          data: data.results[store]
+        });
+      };
+    });
+
     //size them
 
     //order them

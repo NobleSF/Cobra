@@ -1,22 +1,16 @@
 {% spaceless %}
 {% verbatim %}
 
-  <div  ng-repeat='category in market.categories'
-        class='category'
-        ng-class="{'col-xs-6': category.size == 'single',
-                   'col-md-4': category.size == 'single',
-                   'col-xs-12': category.size == 'double',
-                   'col-md-8': category.size == 'double'}"
-  >
+  <div class='category'>
 
-    <a href="#/category/{{category.pk}}"><!--{{category.url}}-->
+    <a href="#/category/{{block.data.pk}}"><!--{{block.data.url}}-->
       <img class='img-responsive img-rounded'
-           ng-src="{{category.image}}"
-           alt="{{category.name}}"
+           ng-src="{{block.data.image}}"
+           alt="{{block.data.name}}"
            >
 
       <div class='title'>
-        <h3>{{category.name}}</h3>
+        <h3>{{block.data.name}}</h3>
       </div>
 
     </a>

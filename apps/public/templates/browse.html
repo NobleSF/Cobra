@@ -42,11 +42,11 @@
   <div id='body' class='container'>
 
     <div id='market-base'
-         class='component row'
+         class='row component'
          ng-controller="MarketController as market">
 
       <block ng-repeat='block in market.blocks'
-             class='component'
+             class='block'
              type='{{block.type}}'
              ng-class="{'col-xs-6': block.size == 'single',
                         'col-md-4': block.size == 'single',

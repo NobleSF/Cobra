@@ -1,14 +1,14 @@
 {% spaceless %}
 {% verbatim %}
 
-  <div class='store'>
+  <div class='store' style='background-color: {{block.data.color}};'>
 
-    <a href="#/product/{{store.pk}}"><!--{{listing.url}}-->
+    <a href="#/product/{{block.data.pk}}"><!--{{listing.url}}-->
       <img class='img-responsive img-rounded'
-           ng-src="{{store.photos[0]}}"
-           alt="{{store.title}}"
+           ng-src="{{block.data.photos}}"
+           alt="{{block.data.title}}"
            >
-      <h5>{{store.title}}</h5>
+      <h5>{{block.data.title}}</h5>
     </a>
   </div>
 
