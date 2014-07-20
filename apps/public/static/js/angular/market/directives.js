@@ -5,7 +5,17 @@
   app.directive("component", function() {
 
     function link(scope, element, attrs) {
+    }
 
+    return {
+      //link: link,
+      restrict: 'E'
+    }
+  });
+
+  app.directive("block", function() {
+
+    function link(scope, element, attrs) {
     }
 
     return {
@@ -15,7 +25,12 @@
   });
 
   app.directive("listing", function() {
+
+    function link(scope, element, attrs) {
+    }
+
     return {
+      link: link,
       restrict: 'E',
       templateUrl: "/listing"
     };
@@ -32,20 +47,6 @@
     return {
       restrict: 'E',
       templateUrl: "/category"
-    };
-  });
-
-  app.directive("listingGrid", function() {
-    return {
-      restrict: 'E',
-      templateUrl: "/listing-grid"
-    };
-  });
-
-  app.directive("categoryGrid", function() {
-    return {
-      restrict: 'E',
-      templateUrl: "/category-grid"
     };
   });
 

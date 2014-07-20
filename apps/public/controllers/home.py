@@ -10,20 +10,14 @@ def home(request):
 def category(rewuest):
   return render(request, 'browse.html')
 
-def listingGrid(request): #partial
-  return render(request, 'partials/listing-grid.html')
+#partials
+def listing(request):   return render(request, 'partials/blocks/listing.html')
+def store(request):     return render(request, 'partials/blocks/store.html')
+def category(request):  return render(request, 'partials/blocks/category.html')
 
-def categoryGrid(request): #partial
-  return render(request, 'partials/category-grid.html')
+def about(request):
+  return render(request, 'about/base.html')
 
-def listing(request): #partial
-  return render(request, 'partials/listing.html')
-
-def store(request): #partial
-  return render(request, 'partials/store.html')
-
-def category(request): #partial
-  return render(request, 'partials/category.html')
 
 
 @cache_page(176400) #49hrs
@@ -42,9 +36,6 @@ def loadProducts(request):
     return HttpResponse(json.dumps(product_html), content_type='application/json')
   else:
     return HttpResponse(json.dumps({}), content_type='application/json')
-
-def about(request):
-  return render(request, 'about/base.html')
 
 def test_meta(request):
   values = request.META.items()

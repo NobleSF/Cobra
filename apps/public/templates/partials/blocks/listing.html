@@ -3,10 +3,10 @@
 
   <div class='listing'>
 
-    <a href="#/product/{{component.pk}}"><!--{{listing.url}}-->
+    <a href="#/product/{{listing.pk}}"><!--{{listing.url}}-->
       <img class='img-responsive img-rounded'
-           ng-src="{{component.photos[0]}}"
-           alt="{{component.title}}"
+           ng-src="{{block.data.photos[0]}}"
+           alt="{{block.data.title}}"
            >
 
       <div class='actions'>
@@ -15,13 +15,16 @@
           ></button>
 
           <span class='price white pull-right'>
-            ${{component.usd_price}}
+            ${{block.data.usd_price}}
           </span>
         </div>
       </div>
 
     </a>
   </div>
+
+  <!--<cl-image public-id="{{block.data.photos[0]}}" height="150" width="150" crop="fill"/>
+  </cl-image>-->
 
 {% endverbatim %}
 {% endspaceless %}

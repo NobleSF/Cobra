@@ -22,7 +22,7 @@ class CategorySerializer(serializers.ModelSerializer):
   def get_url(self, obj): return obj.get_absolute_url()
 
   def get_size(self, obj):
-    return 'big' if obj.pk % 2 else 'small'
+    return 'double' if obj.pk % 2 else 'single'
 
   class Meta:
     model = Category

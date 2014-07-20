@@ -65,9 +65,14 @@ class ListingSerializer(serializers.ModelSerializer):
               'photos', 'materials', 'artisans', 'colors',)
 
 class ListingFilter(django_filters.FilterSet):
+
+  def limit(queryset, value):
+    return queryset[:value]
+
   product = django_filters.NumberFilter(name='product__id')
   store = django_filters.NumberFilter(name='product__seller__id')
   category = django_filters.CharFilter(name='category__name')
+  limit = django_filters.NumberFilter(action=limit)
 
   min_price = django_filters.NumberFilter(name="usd_price", lookup_type='gte')
   max_price = django_filters.NumberFilter(name="usd_price", lookup_type='lte')

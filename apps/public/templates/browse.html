@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 
+{% block angular %}
+  <script src="{{STATIC_URL}}vendor/cloudinary/js/angular.cloudinary.js"></script>
+  <script src="{{STATIC_URL}}js/angular/market/directives.js"></script>
+  <script src="{{STATIC_URL}}js/angular/market/controllers.js"></script>
+  <script src="{{STATIC_URL}}js/angular/market/app.js"></script>
+{% endblock angular %}
+
 {% block javascript %}
   <script type='text/javascript' src="{{ STATIC_URL }}public/js/public.js?v=0"></script>
 {% endblock javascript %}
@@ -34,36 +41,26 @@
 
   <div id='body' class='container'>
 
-    <div id='market-base' class='row'
+    <div id='market-base'
+         class='component row'
          ng-controller="MarketController as market">
 
-      <component ng-repeat='component in market.components' type="{{component.type}}">
-        <listing ng-if="component.type == 'listing'"></listing>
-        <category ng-if="component.type == 'category'"></category>
-        <store ng-if="component.type == 'store'"></store>
-      </component>
+      <block ng-repeat='block in market.blocks'
+             class='component'
+             type='{{block.type}}'
+             ng-class="{'col-xs-6': block.size == 'single',
+                        'col-md-4': block.size == 'single',
+                        'col-md-8': block.size == 'double',
+                        'col-md-12': block.size == 'triple'}">
+
+        <listing ng-if="block.type == 'listing'"></listing>
+        <category ng-if="block.type == 'category'"></category>
+        <store ng-if="block.type == 'store'"></store>
+
+      </block>
 
       </div>
     </div>
-
-
-    <div id='market-base'
-         ng-controller="OldMarketController as market">
-
-      <category-grid></category-grid>
-    </div>
-
-    <div id='category-base'
-         ng-controller="CategoryController as category">
-
-      <listing-grid></listing-grid>
-    </div>
-
-    <!--<div id='store-base'
-         ng-controller="StoreController as store">
-
-      <store-grid></store-grid>
-    </div>-->
 
   </div><!--end body-->
 {% endverbatim %}

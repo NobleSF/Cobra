@@ -3,12 +3,12 @@
 
   <div class='store'>
 
-    <a href="#/product/{{component.pk}}"><!--{{listing.url}}-->
+    <a href="#/product/{{store.pk}}"><!--{{listing.url}}-->
       <img class='img-responsive img-rounded'
-           ng-src="{{component.photos[0]}}"
-           alt="{{component.title}}"
+           ng-src="{{store.photos[0]}}"
+           alt="{{store.title}}"
            >
-
+      <h5>{{store.title}}</h5>
     </a>
   </div>
 
