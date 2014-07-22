@@ -37,8 +37,8 @@
     }
 
     function completeData(){
-      var artisan_price = parseInt($('#artisan-price').val());
-      var shipping_cost = parseInt($('#shipping-cost').val());
+      var artisan_price = Math.round($('#artisan-price').val());
+      var shipping_cost = Math.round($('#shipping-cost').val());
       var exchange_rate = parseFloat($('#exchange-rate').val());
 
       if (artisan_price > 0 && shipping_cost > 0 && exchange_rate > 0){
@@ -115,29 +115,29 @@
     function customOrderCalculator(){
 
       if( $('#new-length').val() && $('#new-width').val() && $('#new-height').val() ){
-        var old_volume = (parseInt($('#length').val())
-                          * parseInt($('#width').val())
-                          * parseInt($('#height').val()));
-        var new_volume = (parseInt($('#new-length').val())
-                          * parseInt($('#new-width').val())
-                          * parseInt($('#new-height').val()));
+        var old_volume = (Math.round($('#length').val())
+                          * Math.round($('#width').val())
+                          * Math.round($('#height').val()));
+        var new_volume = (Math.round($('#new-length').val())
+                          * Math.round($('#new-width').val())
+                          * Math.round($('#new-height').val()));
 
         var ratio = parseFloat(new_volume) / parseFloat(old_volume);
-        var new_weight = parseInt( parseInt($('#old-weight').val()) * ratio);
+        var new_weight = Math.round( Math.round($('#old-weight').val()) * ratio);
         $('#new-weight').val(new_weight);
         var shipping_option = $('.shipping-option').attr('id');
 
-        data = {'weight': (parseInt(new_weight*1.05)+100), 'shipping_option': shipping_option};
+        data = {'weight': (Math.round(new_weight*1.05)+100), 'shipping_option': shipping_option};
         url = "{% url 'admin:shipping cost' %}";
         $.ajax({url: url, data: data})
         .done(function(data){
           //inflate artisan price
-          var artisan_price = parseInt($('#artisan-price').val());
+          var artisan_price = Math.round($('#artisan-price').val());
           var new_artisan_price = artisan_price * ratio;
           $('#new-artisan-price').val(new_artisan_price.toFixed(0));
 
           //calculate new local price
-          var anou_fee = new_artisan_price * (10 / 90);
+          var anou_fee = Math.round(new_artisan_price * (10 / 90));
           var intl_price = new_artisan_price + data.shipping_cost + anou_fee;
 
           //add fees, etc to get anou store price
