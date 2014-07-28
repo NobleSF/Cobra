@@ -186,25 +186,25 @@
   <thead><td style='width:100px;'></td><td align='right' style='width:200px;'></td></thead>
   <tr>
     <td>artisan price</td>
-    <td>{{ order.products_charge }} MAD</td>
+    <td>{{ order.products_charge|floatformat:0 }} MAD</td>
   </tr>
 
   <tr>
     <td>shipping</td>
     <td style='white-space: nowrap'>
-      {{ order.shipping_charge }} MAD
+      {{ order.shipping_charge|floatformat:0 }} MAD
       ({{ order.products.all.0.weight }}g, {{ order.products.all.0.metric_dimensions }})
     </td>
   </tr>
 
   <tr>
     <td>Anou fee</td>
-    <td>{{ order.anou_charge }} MAD</td>
+    <td>{{ order.anou_charge|floatformat:0 }} MAD</td>
   </tr>
 
   <tr>
     <td>total</td>
-    <td>{{ order.total_charge }} MAD</td>
+    <td>{{ order.total_charge|floatformat:0 }} MAD</td>
   </tr>
 </table>
 
