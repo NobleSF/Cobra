@@ -1,33 +1,34 @@
+Next Steps
+				admin and seller keep using base template
 
-Mobile Integration / API app
-	http://tastypieapi.org/
-	http://django-rest-framework.org/
+				design seller and category blocks
 
-Redesign
-	Homepage:
-		http://bxslider.com/
-		http://www.fitgrd.com/
-		http://www.colorhexa.com/407bd9
-	Buttons:
-		http://ace-subido.github.com/css3-microsoft-metro-buttons/index.html
-		http://www.red-team-design.com/css3-patterned-buttons
-		http://www.dropzonejs.com/
+				angular controllers sort blocks and report activity
+				reporting app collects data, store in Redis?
 
-	Images:
-		Cloudinary for all uploaded images and photos
-		load SVG icons into http://icomoon.io/ and export as icon font
-		Where to find SVG icons: http://game-icons.net/ http://icomoon.io/
+				About page outside of angular app, just cleanup typography, etc.
+				cleanup email content to reflect redesign
 
-	Responsive qualities: http://bradfrost.github.com/this-is-responsive/patterns.html
+Cleanup
+				remove old public controllers, templates, and js files
+				remove private keys, etc from code
+				open source the project on GitHub
 
-	Keep use of JS libraries to a minimum for speed
-		http://www.gonzoblog.nl/2013/02/27/10-fresh-css3-only-tutorials-look-ma-no-javascript/
-		http://jquery-jkit.com/
-	For an extra dose of awesomeness:
-		http://www.unheap.com/
-		http://djdesignerlab.com/2013/05/28/15-tools-for-formatting-css-code-for-well-organized-web-design/
-		send link for package tracking:
-		https://tools.usps.com/go/TrackConfirmAction_input?qtc_tLabels1={{ tracking_number }}
 
-Check code for efficiency:
-	http://flake8.readthedocs.org
+Launch Redisign
+
+Improve Later
+				create pages and navigation for resellers, tour guides, press sheets, etc.
+
+				make angular checkout app for checkout process
+				Use Stripe for payment processing
+				Use https in checkout app
+
+				seller ratings
+
+				analyze user beahvior data
+				measure location handicaps for both mobile and desktop
+
+Ebay, Etsy
+				create separate django project for 3rd party integrations
+				connect API's from Anou, Etsy, Ebay, etc
