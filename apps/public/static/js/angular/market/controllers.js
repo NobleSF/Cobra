@@ -57,7 +57,12 @@
 
     //size them
 
+    //products are always small (1/3 or 1/2 mobile width)
+    //categories and stores are big (2/3 or full mobile width)
+
     //order them
+
+    //whether desktop or mobile, all rows should fill
 
   }]);
 
@@ -90,14 +95,14 @@
 
 })();
 
-  controllers.controller('OldMarketController', ['$http', function($http){
-
-    var market = this;
-    market.categories = [];
-    $http.get('/api/categories/?is_parent=True') //todo: load urls in with a constant
-    //http://django-angular.readthedocs.org/en/latest/manage-urls.html
-    .success(function(data){
-      market.categories = data.results;
-    });
-
-  }]);
+//controllers.controller('OldMarketController', ['$http', function($http){
+//
+//  var market = this;
+//  market.categories = [];
+//  $http.get('/api/categories/?is_parent=True') //todo: load urls in with a constant
+//  //http://django-angular.readthedocs.org/en/latest/manage-urls.html
+//  .success(function(data){
+//    market.categories = data.results;
+//  });
+//
+//}]);

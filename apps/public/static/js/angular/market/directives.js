@@ -50,6 +50,7 @@
     };
   });
 
+  //FROM EXAMPLE ANGULAR PROJECT ON CODESCHOOLS
   //app.directive("productSpecs", function() {
   //  return {
   //    restrict:"A",

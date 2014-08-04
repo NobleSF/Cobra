@@ -7,6 +7,8 @@
                                            'market-controllers'
                                           ]);
 
+
+  //route provider looks at url and activates the right controller
   app.config(['$routeProvider',
     function($routeProvider) {
       $routeProvider.
