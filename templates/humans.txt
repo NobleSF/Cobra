@@ -5,22 +5,18 @@ Contact: dan@theanou.com
 Residence: Morocco
 Origin: San Diego, California, USA
 
+Community Support and Morocco Contact: Tifawt Belaid
+Contact: tifawt@theanou.com
+Residence: Rabat, Morocco
+Origin: Rabat, Morocco
+
 Technical Director: Tom Counsell
 Contact: tom@theanou.com
 Residence: Figuig, Morocco
 Origin: Indianapolis, Indiana, USA
 
-/* SPECIAL THANKS */
-
-United States Peace Corps: http://www.peacecorps.gov/
-Dan's Aunt and Uncle
-Telerivet: http://www.telerivet.com
-PageKite: https://pagekite.net/
-
 /* SITE */
 
-Languages: Python/Django
-Standards: HTML5, CSS3, jQuery
-Components: Telerivet, Sendgrid, Bootstrap by Twitter
-Software: Komodo, GitHub, Photoshop
+Languages and Technologies: SQL, Python, Django, HTML, CSS, jQuery, Angular.js
+Components: REST API, Telerivet, Sendgrid, Bootstrap by Twitter
 Hosting: Heroku, Amazon S3, Cloudinary

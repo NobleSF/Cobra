@@ -24,6 +24,14 @@ Tom = People(info = (
         )
       )
 
+Tifawt = People(info = (
+          'Tifawt Belaid',
+          'Community Supporter',
+          'tifawt@theanou.com',
+          '212613342325',
+        )
+      )
+
 Brahim = People(info = (
           'Brahim El Mansouri',
           'Director',
@@ -56,7 +64,7 @@ Kenza = People(info = (
         )
       )
 
-everyones_emails = [Dan.email, Tom.email, Brahim.email, Rabha.email, Mustapha.email, Kenza.email]
+everyones_emails = [Dan.email, Tifawt.email, Tom.email, Brahim.email, Rabha.email, Mustapha.email, Kenza.email]
 
 #todo: remove this whole file and use admin account information
 #todo: or use this file to define groups (trainers, translators, etc)

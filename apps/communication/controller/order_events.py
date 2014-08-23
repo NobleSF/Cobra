@@ -29,7 +29,7 @@ def communicateOrdersCreated(orders):
       #notify the team
       try:
         order.seller_msg = seller_msg.replace('\n', '<br>')
-        emails = [people.Dan.email, people.Brahim.email,
+        emails = [people.Dan.email, people.Tifawt.email, people.Brahim.email,
                   people.Rabha.email, people.Kenza.email, people.Mustapha.email]
         for address in emails:
           Email('order/created_copy_director', order).sendTo(address)
@@ -158,7 +158,7 @@ def cancelOrder(order):
     message = 'Cancel order %d, Confirmation# %d' % (order.id, order.cart.checkout_id)
     email = Email(message=message)
     email.assignToOrder(order)
-    email.sendTo((people.Dan.email,people.Tom.email))
+    email.sendTo((people.Dan.email,people.Tifawt.email))
     #todo: email customer
 
   except Exception as e:
