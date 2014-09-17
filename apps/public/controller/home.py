@@ -27,6 +27,10 @@ def loadProducts(request):
 def about(request):
   return render(request, 'home/about.html')
 
+def commonthread(request):
+  return render(request, 'home/commonthread.html')
+
+
 def test_meta(request):
   values = request.META.items()
   values.append(['path', request.path])

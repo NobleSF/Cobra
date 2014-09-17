@@ -34,6 +34,8 @@ urlpatterns = patterns('',
       name='admin checkout'),
   url(r'^checkout/confirmation$', checkout.confirmation, name='confirmation'),
 
+  url(r'^commonthread$', home.commonthread, name='commonthread'),
+
   #testing
   url(r'^product_data', product.product_data, name='product_data'),
   url(r'^test_meta$', home.test_meta, name='test meta'),

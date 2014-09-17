@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block title %}
+  Common Thread Rug Collection,
+  {{ block.super }}
+{% endblock title %}
+
+{% block description %}
+  A limited edition collection of six rugs, a contemporary take on traditional Amazigh culture. Help Amazigh people keep their traditions and crafts alive.
+{% endblock description %}
+
+{%block open_graph_type%}{%endblock%}
+{%block open_graph_url%}http://www.theanou.com/commonthread{%endblock%}
+{%block open_graph_title%}CommonThread{%endblock%}
+{%block open_graph_description%}{{ block.super }}{%endblock%}
+{%block open_graph_image%}{{ block.super }}{%endblock%}
+
+{% block javascript %}
+  <!--<script type="text/javascript" src="{{ STATIC_URL }}public/js/about.min.js"></script>-->
+  <script type="text/javascript" src="{{ STATIC_URL }}vendor/fitvids/js/jquery.fitvids.js"></script>
+{% endblock javascript %}
+
+{% block css %}
+  <!--<link href="{{ STATIC_URL }}public/css/about.css?v=1" rel="stylesheet">-->
+  <style>
+    #commonthread{
+      background-color: #f6f6f3;
+      text-align: center;
+    }
+    p,h1,a{color: #f15b43;}
+    a{text-decoration: underline;}
+    .buy{
+      background-color: #f15b43;
+      margin: 0 20%;
+      padding: 8px;
+    }
+    .buy a{color: #f6f6f3; text-decoration: none;}
+    #video{margin: 10px 0 40px;}
+  </style>
+{% endblock css %}
+
+
+{% block header_link_1 %}
+  <li><a class='title' href="{% url 'home' %}">Store</a></li>
+{% endblock header_link_1 %}
+
+{% block header_link_2 %}
+  <li><a class='title' href="http://helloanou.wordpress.com">Blog</a></li>
+{% endblock header_link_2 %}
+
+{% block content %}<div id='commonthread'>
+
+<h1><img src="http://res.cloudinary.com/hork5h8x1/image/upload/c_scale,w_1000/v1410938931/commonthreadlogo_ywk2u0.png" alt="Common Thread"></h1>
+
+<p style='color: #f15b43; margin: 3% 7%;'>
+  This limited edition collection of six rugs offers a contemporary take on traditional Amazigh culture. All artisans are part of Anou, an online platform that cuts out the middleman and allows the Amazigh people to keep their traditions and crafts alive.
+</p>
+
+<div id='links' class='row-fluid'>
+  <div class='span6'>
+    <a href='http://helloanou.wordpress.com/2014/09/15/come-see-the-common-thread-exhibition-in-london/' style='color: #f15b43; text-decoration: underline;'>Find out more on the Anou Blog</a>
+  </div>
+  <div class='span6'>
+    <a href='http://helloanou.wordpress.com/' style='color: #f15b43; text-decoration: underline;'>Download the Common Thread PDF</a>
+  </div>
+</div>
+
+<div id='video' class='row-fluid'>
+  <div id='video'>
+    <iframe src="//player.vimeo.com/video/80725132?title=0&amp;byline=0&amp;color=ffffff" width="585" height="330" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+  </div>
+</div>
+
+<h1>The Common Thread Collection</h1>
+
+<div id='products1' class='row-fluid'>
+  <div class='span4 product'>
+    <img src="http://res.cloudinary.com/hork5h8x1/image/upload/c_scale,bo_10px_solid_rgb:f6f6f3,w_370/RABHA_digital_rug_white_foalry.jpg">
+    <p>
+      Assoulef (Opportunity)<br>by Rabha Akkaoui
+    </p>
+    <p class='buy'>
+      <a href="">
+        BUY THIS RUG
+      </a>
+    </p>
+    <p class-'note'>
+      <a href="mailto:hello@theanou.com?subject=Assoulef (Opportunity) by Rabha Akkaoui" target="blank">
+        Contact Anou for lead times
+      </a>
+    </p>
+  </div>
+
+  <div class='span4 product'>
+    <img src="http://res.cloudinary.com/hork5h8x1/image/upload/c_scale,bo_10px_solid_rgb:f6f6f3,w_370/MUSTAPHA_digital_rug_white_mg0ap0.jpg">
+    <p>
+      Ammyili (Coexistence)<br>by Mustapha Chaouai
+    </p>
+    <p class='buy'>
+      <a href="">
+        BUY THIS RUG
+      </a>
+    </p>
+    <p class-'note'>
+      <a href="mailto:hello@theanou.com?subject=Ammyili (Coexistence) by Mustapha Chaouai" target="blank">
+        Contact Anou for lead times
+      </a>
+    </p>
+  </div>
+
+  <div class='span4 product'>
+    <img src="http://res.cloudinary.com/hork5h8x1/image/upload/c_scale,bo_10px_solid_rgb:f6f6f3,w_370/KENZA_digital_rug_white_qp0q4f.jpg">
+    <p>
+      Mma (Mother)<br>by Kenza Oulaghda
+    </p>
+    <p class='buy'>
+      <a href="">
+        BUY THIS RUG
+      </a>
+    </p>
+    <p class-'note'>
+      <a href="mailto:hello@theanou.com?subject=Mma (Mother) by Kenza Oulaghda" target="blank">
+        Contact Anou for lead times
+      </a>
+    </p>
+  </div>
+</div>
+
+<div id='products2' class='row-fluid'>
+  <div class='span4 product'>
+    <img src="http://res.cloudinary.com/hork5h8x1/image/upload/c_scale,bo_10px_solid_rgb:f6f6f3,w_370/FATIMA2_digital_rug_white_fzskzy.jpg">
+    <p>
+      Tmazight (Motherland)<br>by Fatima Ouakhoum
+    </p>
+    <p class='buy'>
+      <a href="">
+        BUY THIS RUG
+      </a>
+    </p>
+    <p class-'note'>
+      <a href="mailto:hello@theanou.com?subject=Tmazight (Motherland) by Fatima Ouakhoum" target="blank">
+        Contact Anou for lead times
+      </a>
+    </p>
+  </div>
+
+  <div class='span4 product'>
+    <img src="http://res.cloudinary.com/hork5h8x1/image/upload/c_scale,bo_10px_solid_rgb:f6f6f3,w_370/FATIMA1_digital_rug_white_tfwdml.jpg">
+    <p>
+      Afouzar (Sacred)<br>by Fatima Yadiri
+    </p>
+    <p class='buy'>
+      <a href="">
+        BUY THIS RUG
+      </a>
+    </p>
+    <p class-'note'>
+      <a href="mailto:hello@theanou.com?subject=Afouzar (Sacred) by Fatima Yadiri" target="blank">
+        Contact Anou for lead times
+      </a>
+    </p>
+  </div>
+
+  <div class='span4 product'>
+    <img src="http://res.cloudinary.com/hork5h8x1/image/upload/c_scale,bo_10px_solid_rgb:f6f6f3,w_370/BRAHIM_digital_rug_white_hj1yu6.jpg">
+    <p>
+      Amagit (Identity)<br>by Brahim El Mansouri
+    </p>
+    <p class='buy'>
+      <a href="">
+        BUY THIS RUG
+      </a>
+    </p>
+    <p class-'note'>
+      <a href="mailto:hello@theanou.com?subject=Amagit (Identity) by Brahim El Mansouri" target="blank">
+        Contact Anou for lead times
+      </a>
+    </p>
+  </div>
+</div>
+
+</div>{% endblock content %}
+{% endcache about %}
