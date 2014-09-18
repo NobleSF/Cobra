@@ -37,6 +37,7 @@
     }
     .buy a{color: #f6f6f3; text-decoration: none;}
     #video{margin: 10px 0 40px;}
+    .note{margin: 20px 0 15px;}
   </style>
 {% endblock css %}
 
@@ -62,13 +63,13 @@
     <a href='http://helloanou.wordpress.com/2014/09/15/come-see-the-common-thread-exhibition-in-london/' style='color: #f15b43; text-decoration: underline;'>Find out more on the Anou Blog</a>
   </div>
   <div class='span6'>
-    <a href='http://helloanou.wordpress.com/' style='color: #f15b43; text-decoration: underline;'>Download the Common Thread PDF</a>
+    <a href='https://www.dropbox.com/s/ndux95108vo7ess/Common%20Thread.pdf?dl=1' style='color: #f15b43; text-decoration: underline;'>Download the Common Thread PDF</a>
   </div>
 </div>
 
 <div id='video' class='row-fluid'>
   <div id='video'>
-    <iframe src="//player.vimeo.com/video/80725132?title=0&amp;byline=0&amp;color=ffffff" width="585" height="330" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+    <iframe src="//player.vimeo.com/video/106020444?title=0&amp;byline=0&amp;color=ffffff" width="585" height="330" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
   </div>
 </div>
 
@@ -81,13 +82,8 @@
       Assoulef (Opportunity)<br>by Rabha Akkaoui
     </p>
     <p class='buy'>
-      <a href="">
-        BUY THIS RUG
-      </a>
-    </p>
-    <p class-'note'>
-      <a href="mailto:hello@theanou.com?subject=Assoulef (Opportunity) by Rabha Akkaoui" target="blank">
-        Contact Anou for lead times
+      <a href="{% url 'buy commonthread rug' 'opportunity' %}">
+        &pound;600<br>BUY THIS RUG
       </a>
     </p>
   </div>
@@ -98,13 +94,8 @@
       Ammyili (Coexistence)<br>by Mustapha Chaouai
     </p>
     <p class='buy'>
-      <a href="">
-        BUY THIS RUG
-      </a>
-    </p>
-    <p class-'note'>
-      <a href="mailto:hello@theanou.com?subject=Ammyili (Coexistence) by Mustapha Chaouai" target="blank">
-        Contact Anou for lead times
+      <a href="{% url 'buy commonthread rug' 'coexistence' %}">
+        &pound;1000<br>BUY THIS RUG
       </a>
     </p>
   </div>
@@ -115,17 +106,17 @@
       Mma (Mother)<br>by Kenza Oulaghda
     </p>
     <p class='buy'>
-      <a href="">
-        BUY THIS RUG
-      </a>
-    </p>
-    <p class-'note'>
-      <a href="mailto:hello@theanou.com?subject=Mma (Mother) by Kenza Oulaghda" target="blank">
-        Contact Anou for lead times
+      <a href="{% url 'buy commonthread rug' 'mother' %}">
+        &pound;500<br>BUY THIS RUG
       </a>
     </p>
   </div>
 </div>
+
+<p class='note'>
+  -- Price include shipping and delivery.
+  <a href="mailto:hello@theanou.com" target="blank">Contact Anou for lead times.</a> --
+</p>
 
 <div id='products2' class='row-fluid'>
   <div class='span4 product'>
@@ -134,13 +125,8 @@
       Tmazight (Motherland)<br>by Fatima Ouakhoum
     </p>
     <p class='buy'>
-      <a href="">
-        BUY THIS RUG
-      </a>
-    </p>
-    <p class-'note'>
-      <a href="mailto:hello@theanou.com?subject=Tmazight (Motherland) by Fatima Ouakhoum" target="blank">
-        Contact Anou for lead times
+      <a href="{% url 'buy commonthread rug' 'motherland' %}">
+        &pound;1200<br>BUY THIS RUG
       </a>
     </p>
   </div>
@@ -151,13 +137,8 @@
       Afouzar (Sacred)<br>by Fatima Yadiri
     </p>
     <p class='buy'>
-      <a href="">
-        BUY THIS RUG
-      </a>
-    </p>
-    <p class-'note'>
-      <a href="mailto:hello@theanou.com?subject=Afouzar (Sacred) by Fatima Yadiri" target="blank">
-        Contact Anou for lead times
+      <a href="{% url 'buy commonthread rug' 'sacred' %}">
+        &pound;1000<br>BUY THIS RUG
       </a>
     </p>
   </div>
@@ -168,16 +149,16 @@
       Amagit (Identity)<br>by Brahim El Mansouri
     </p>
     <p class='buy'>
-      <a href="">
-        BUY THIS RUG
-      </a>
-    </p>
-    <p class-'note'>
-      <a href="mailto:hello@theanou.com?subject=Amagit (Identity) by Brahim El Mansouri" target="blank">
-        Contact Anou for lead times
+      <a href="{% url 'buy commonthread rug' 'identity' %}">
+        &pound;1200<br>BUY THIS RUG
       </a>
     </p>
   </div>
 </div>
+
+<p class='note'>
+  -- Price include shipping and delivery.
+  <a href="mailto:hello@theanou.com" target="blank">Contact Anou for lead times.</a> --
+</p>
 
 </div>{% endblock content %}

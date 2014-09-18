@@ -30,6 +30,35 @@ def about(request):
 def commonthread(request):
   return render(request, 'home/commonthread.html')
 
+def commonthreadAddToCart(request, rug_name):
+  from apps.seller.models.product import Product
+  from apps.communication.controller.email_class import Email
+  from settings.people import Tifawt, Dan, Tom
+
+  rugs = {
+    'opportunity':  [1860,],
+    'coexistence':  [1861,],
+    'mother':       [1862,],
+    'motherland':   [1863,],
+    'sacred':       [1864,],
+    'identity':     [1865,],
+  }
+
+  buy_this_one = None
+  for product_id in rugs[rug_name]:
+    product = Product.objects.get(id=product_id)
+    if not product.is_sold() and not buy_this_one:
+      buy_this_one = product
+
+  if buy_this_one:
+    return HttpResponseRedirect(reverse('cart-add', args=[buy_this_one.id]))
+  else:
+    try:
+      email = Email(message=("%s rug is sold out!!!" % rug_name),
+                    subject=("%s sold out" % rug_name))
+      email.sendTo([Tom.email, Dan.email, Tifawt.email,])
+    except: pass
+    return HttpResponseRedirect(reverse('commonthread'))
 
 def test_meta(request):
   values = request.META.items()
