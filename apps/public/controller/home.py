@@ -47,9 +47,10 @@ def commonthreadAddToCart(request, rug_name):
   try:
     buy_this_one = None
     for product_id in rugs[rug_name]:
-      product = Product.objects.get(id=product_id)
-      if not product.is_sold and not buy_this_one:
-        buy_this_one = product
+      if not buy_this_one:
+        product = Product.objects.get(id=product_id)
+        if not product.is_sold:
+          buy_this_one = product
 
     if buy_this_one:
       return HttpResponseRedirect(reverse('cart-add', args=[buy_this_one.id]))
