@@ -19,6 +19,11 @@
 {% block javascript %}
   <!--<script type="text/javascript" src="{{ STATIC_URL }}public/js/about.min.js"></script>-->
   <script type="text/javascript" src="{{ STATIC_URL }}vendor/fitvids/js/jquery.fitvids.js"></script>
+  <script>
+    $(function(){//on page load
+      $("#video").fitVids();
+    });
+  </script>
 {% endblock javascript %}
 
 {% block css %}
