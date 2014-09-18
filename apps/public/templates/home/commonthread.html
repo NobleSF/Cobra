@@ -30,12 +30,16 @@
     }
     p,h1,a{color: #f15b43;}
     a{text-decoration: underline;}
-    .buy{
+
+    .buy{margin: 0 20%;}
+    .buy a{text-decoration: none;}
+    .buybutton{
       background-color: #f15b43;
-      margin: 0 20%;
-      padding: 8px;
+      height: 50px;
+      padding: 8px 0 0;
     }
-    .buy a{color: #f6f6f3; text-decoration: none;}
+    .buybutton p{color: #f6f6f3;}
+
     #video{margin: 10px 0 40px;}
     .note{margin: 20px 0 15px;}
   </style>
@@ -69,7 +73,7 @@
 
 <div id='video' class='row-fluid'>
   <div id='video'>
-    <iframe src="//player.vimeo.com/video/106020444?title=0&amp;byline=0&amp;color=ffffff" width="585" height="330" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+    <iframe src="//player.vimeo.com/video/106479121?title=0&amp;byline=0&amp;color=ffffff" width="585" height="330" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
   </div>
 </div>
 
@@ -81,11 +85,13 @@
     <p>
       Assoulef (Opportunity)<br>by Rabha Akkaoui
     </p>
-    <p class='buy'>
+    <div class='buy'>
       <a href="{% url 'buy commonthread rug' 'opportunity' %}">
-        &pound;600<br>BUY THIS RUG
+        <div class='buybutton'>
+          <p>&pound;600<br>BUY THIS RUG</p>
+        </div>
       </a>
-    </p>
+    </div>
   </div>
 
   <div class='span4 product'>
@@ -93,11 +99,13 @@
     <p>
       Ammyili (Coexistence)<br>by Mustapha Chaouai
     </p>
-    <p class='buy'>
+    <div class='buy'>
       <a href="{% url 'buy commonthread rug' 'coexistence' %}">
-        &pound;1000<br>BUY THIS RUG
+        <div class='buybutton'>
+          <p>&pound;1000<br>BUY THIS RUG</p>
+        </div>
       </a>
-    </p>
+    </div>
   </div>
 
   <div class='span4 product'>
@@ -105,12 +113,15 @@
     <p>
       Mma (Mother)<br>by Kenza Oulaghda
     </p>
-    <p class='buy'>
+    <div class='buy'>
       <a href="{% url 'buy commonthread rug' 'mother' %}">
-        &pound;500<br>BUY THIS RUG
+        <div class='buybutton'>
+          <p>&pound;500<br>BUY THIS RUG</p>
+        </div>
       </a>
-    </p>
+    </div>
   </div>
+
 </div>
 
 <p class='note'>
@@ -124,11 +135,13 @@
     <p>
       Tmazight (Motherland)<br>by Fatima Ouakhoum
     </p>
-    <p class='buy'>
+    <div class='buy'>
       <a href="{% url 'buy commonthread rug' 'motherland' %}">
-        &pound;1200<br>BUY THIS RUG
+        <div class='buybutton'>
+          <p>&pound;1200<br>BUY THIS RUG</p>
+        </div>
       </a>
-    </p>
+    </div>
   </div>
 
   <div class='span4 product'>
@@ -136,11 +149,13 @@
     <p>
       Afouzar (Sacred)<br>by Fatima Yadiri
     </p>
-    <p class='buy'>
+    <div class='buy'>
       <a href="{% url 'buy commonthread rug' 'sacred' %}">
-        &pound;1000<br>BUY THIS RUG
+        <div class='buybutton'>
+          <p>&pound;1000<br>BUY THIS RUG</p>
+        </div>
       </a>
-    </p>
+    </div>
   </div>
 
   <div class='span4 product'>
@@ -148,12 +163,15 @@
     <p>
       Amagit (Identity)<br>by Brahim El Mansouri
     </p>
-    <p class='buy'>
+    <div class='buy'>
       <a href="{% url 'buy commonthread rug' 'identity' %}">
-        &pound;1200<br>BUY THIS RUG
+        <div class='buybutton'>
+          <p>&pound;1200<br>BUY THIS RUG</p>
+        </div>
       </a>
-    </p>
+    </div>
   </div>
+
 </div>
 
 <p class='note'>
@@ -161,4 +179,6 @@
   <a href="mailto:hello@theanou.com" target="blank">Contact Anou for lead times.</a> --
 </p>
 
-</div>{% endblock content %}
+</div>
+
+{% endblock content %}
