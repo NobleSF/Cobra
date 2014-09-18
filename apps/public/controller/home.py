@@ -47,7 +47,7 @@ def commonthreadAddToCart(request, rug_name):
   buy_this_one = None
   for product_id in rugs[rug_name]:
     product = Product.objects.get(id=product_id)
-    if not product.is_sold() and not buy_this_one:
+    if not product.is_sold and not buy_this_one:
       buy_this_one = product
 
   if buy_this_one:
