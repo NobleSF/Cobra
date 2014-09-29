@@ -64,7 +64,7 @@ class Cart(models.Model):
     address += ("%s " % self.state) if self.state else ""
     address += self.postal_code if self.postal_code else ""
     address += ("\n%s" % self.country) if self.country else ""
-    return address
+    return address.upper()
 
 class Item(models.Model):
   cart                = models.ForeignKey('Cart')
