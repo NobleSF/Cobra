@@ -224,6 +224,14 @@ class Ranking(models.Model):
 from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save, pre_delete
 
+@receiver(pre_save, sender=Cart)
+def setFullCountryName(sender, instance, **kwargs):
+  from settings.country_codes import country
+  try:
+    if len(instance.country) == 2:
+      instance.country = country[instance.country]
+  except: pass
+
 @receiver(post_save, sender=Rating)
 def updateRatingRankings(sender, instance, created, **kwargs):
   from apps.public.controller.product_ranking import newProductResult, newStoreResult, photographyResult, priceResult, appealResult
