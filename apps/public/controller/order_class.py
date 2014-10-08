@@ -27,7 +27,7 @@ def getOrders(checkout_id):
 
 def createFromCart(cart):
   from apps.communication.controller.email_class import Email
-  from settings.people import Tom, Dan, Tifawt
+  from settings.people import support_team
   from apps.public.controller.cart_class import Cart
 
   orders = []
@@ -43,7 +43,7 @@ def createFromCart(cart):
         item.product.save()
       else:
         email = Email(message="customer was just charged for a product someone else already bought")
-        email.sendTo([Tom.email, Dan.email, Tifawt.email])
+        email.sendTo([person.email for person in support_team])
 
     if order_events.communicateOrdersCreated(orders):
       for order in orders:

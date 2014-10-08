@@ -62,7 +62,7 @@ class Product(models.Model):
   @is_active.setter
   def is_active(self, value):
     from apps.communication.controller.email_class import Email
-    from settings.people import Dan, Tifawt, Brahim, everyones_emails
+    from settings.people import operations_team
 
     if value and self.active_at and not self.deactive_at: #already active
       pass
@@ -70,7 +70,7 @@ class Product(models.Model):
     elif value: #activate
       self.active_at = timezone.now()
       self.deactive_at = None
-      Email('product/activated', self).sendTo([Dan.email, Tifawt.email, Brahim.email])
+      Email('product/activated', self).sendTo([person.email for person in operations_team])
 
     elif not value: #deactivate
       self.deactive_at = timezone.now()
@@ -82,7 +82,7 @@ class Product(models.Model):
       try:
         message = "R %d" % self.id
         message += "<br>%s" % self.seller.name
-        Email(message=message).sendTo(everyones_emails)
+        Email(message=message).sendTo([person.email for person in operations_team])
       except Exception as e:
         ExceptionHandler(e, "in Product.is_active")
 

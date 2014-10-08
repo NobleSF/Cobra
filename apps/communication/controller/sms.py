@@ -9,7 +9,7 @@ from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.seller.models.product import Product
 from apps.admin.utils.decorator import postpone
 from apps.communication.controller.email_class import Email
-from settings.people import Dan, Tifawt, Brahim
+from settings.people import support_team, operations_team
 
 #todo: this should be a class, not bunch of functions
 
@@ -127,7 +127,7 @@ def incoming(request):
           for someone in sender:
             message += "<br>Sent by Anou %s %s." % (someone, sender[someone].name)
         except: pass
-        Email(message=message).sendTo([Dan.email,Tifawt.email])
+        Email(message=message).sendTo([person.email for person in support_team])
         return HttpResponse(status=200)#OK
 
       else: #it was understandable
@@ -139,7 +139,7 @@ def incoming(request):
 
         if not product.belongsToPhone(request.POST.get('from_number')):
           message = "This SMS not from product owner: " + request.POST.get('content')
-          Email(message=message).sendTo([Dan.email,Tifawt.email])
+          Email(message=message).sendTo([person.email for person in support_team])
           return HttpResponse(status=200)#OK
 
         else:

@@ -41,7 +41,7 @@ class ExceptionHandler(object):
     try:
       message = self.message if self.message else "Something broke."
       message += "<br>%s" % str(self.exception)
-      Email(message=message).sendTo(people.Tom.email)
+      Email(message=message).sendTo([person.email for person in people.developer_team])
     except Exception as e:
       ExceptionHandler(e, sentry_only=True)
       self.smsTom(sos=True)
