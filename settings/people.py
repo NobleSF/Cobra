@@ -8,19 +8,19 @@ class People(object):
   def __unicode__(self):
     return self.name
 
-Dan = People(info = (
-          'Dan Driscoll',
-          'Founder',
-          'dan@theanou.com',
-          '212653827628',
-        )
-      )
-
 Tom = People(info = (
           'Tom Counsell',
           'Technical Director',
           'tom@theanou.com',
           '212662750819',
+        )
+      )
+
+Dan = People(info = (
+          'Dan Driscoll',
+          'Founder',
+          'dan@theanou.com',
+          '212653827628',
         )
       )
 
@@ -32,6 +32,16 @@ Tifawt = People(info = (
         )
       )
 
+Latifa = People(info= (
+          'Latifa Mahna',
+          'Intern',
+          'latifamahna@gmail.com ',
+          '',
+        )
+      )
+
+
+#Directors
 Brahim = People(info = (
           'Brahim El Mansouri',
           'Director',
@@ -42,29 +52,32 @@ Brahim = People(info = (
 
 Rabha = People(info = (
           'Rabha Akkaouai',
-          'Trainer',
-          'tounfite.products@gmail.com',
+          'Director',
+          'rabha@theanou.com',
           '212623045998',
         )
       )
 
 Mustapha = People(info = (
           'Mustapha Chaouai',
-          'Trainer',
-          'oued.ifrane.nahda@gmail.com',
+          'Director',
+          'mustapha@theanou.com',
           '212637637569',
         )
       )
 
 Kenza = People(info = (
           'Kenza Oulaghda',
-          'Trainer',
-          'kenzatithrite1@gmail.com',
+          'Director',
+          'kenza@theanou.com',
           '0637637565',
         )
       )
 
-everyones_emails = [Dan.email, Tifawt.email, Tom.email, Brahim.email, Rabha.email, Mustapha.email, Kenza.email]
+developer_team = [Tom,]
+operations_team = [Dan, Tifawt, Latifa, Brahim, Rabha, Mustapha, Kenza,]
+directors = [person for person in operations if person.title == "Director"]
+support_team = [person for person in operations if person.title != "Director"]
 
 #todo: remove this whole file and use admin account information
 #todo: or use this file to define groups (trainers, translators, etc)
