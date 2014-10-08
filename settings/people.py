@@ -8,6 +8,7 @@ class People(object):
   def __unicode__(self):
     return self.name
 
+#Development Team
 Tom = People(info = (
           'Tom Counsell',
           'Technical Director',
@@ -16,6 +17,7 @@ Tom = People(info = (
         )
       )
 
+#Suport Team
 Dan = People(info = (
           'Dan Driscoll',
           'Founder',
@@ -35,11 +37,10 @@ Tifawt = People(info = (
 Latifa = People(info= (
           'Latifa Mahna',
           'Intern',
-          'latifamahna@gmail.com ',
+          'latifamahna@gmail.com',
           '',
         )
       )
-
 
 #Directors
 Brahim = People(info = (
@@ -76,8 +77,8 @@ Kenza = People(info = (
 
 developer_team = [Tom,]
 operations_team = [Dan, Tifawt, Latifa, Brahim, Rabha, Mustapha, Kenza,]
-directors = [person for person in operations if person.title == "Director"]
-support_team = [person for person in operations if person.title != "Director"]
+directors = [person for person in operations_team if person.title == "Director"]
+support_team = [person for person in operations_team if person.title != "Director"]
 
 #todo: remove this whole file and use admin account information
 #todo: or use this file to define groups (trainers, translators, etc)
