@@ -9,6 +9,14 @@
       font-size: 40pt;
       height: 50px;
     }
+
+    .googledoc, .googledrive, .googlepres, .googlesheet
+    { display: inline-block; background: url("{{ STATIC_URL }}images/buttons/google-sprite.png") no-repeat; overflow: hidden; text-indent: -9999px; text-align: left; }
+
+    .googledoc { background-position: -10px -0px; width: 55px; height: 55px; }
+    .googledrive { background-position: -75px -0px; width: 55px; height: 55px; }
+    .googlepres { background-position: -10px -65px; width: 55px; height: 55px; }
+    .googlesheet { background-position: -75px -65px; width: 55px; height: 55px; }
   </style>
 {% endblock css %}
 
@@ -84,6 +92,24 @@
             <a href="{% url 'admin:all email' %}"
                class='symbol-email blue'
                title='email'></a>
+          </li>
+
+          <li>
+            <a href="https://drive.google.com/a/theanou.com/#folders/0B6IClx1EtpNycTI1bXVrVGN1X2s"
+               class='googledrive'
+               title='sheet'></a>
+          </li>
+
+          <li>
+            <a href="https://docs.google.com/a/theanou.com/document/d/1lr0k6mm93KCZIZcYx6eeuEBm_m8w95ELCwnsod2Z7Pw/edit"
+               class='googledoc'
+               title='sheet'></a>
+          </li>
+
+          <li>
+            <a href="https://docs.google.com/a/theanou.com/spreadsheets/d/1pv9fm-O6H_xghrxgpJLQ85B3Sg7RsXiV_BwlqNTBRF4/edit#gid=0"
+               class='googlesheet'
+               title='sheet'></a>
           </li>
         {% endif %}
       </ul>
