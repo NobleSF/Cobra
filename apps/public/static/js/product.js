@@ -117,8 +117,8 @@ function updateCustomOrderEstimate(){
 
   $.ajax({url: $('#custom-order-estimate-url').val(),
           data: { 'product_id': $('#custom-order-product-id').val(),
-                  'length':     parseInt(length),
-                  'width':      parseInt(width),
+                  'length':     Math.round(length),
+                  'width':      Math.round(width),
                   'quantity':   $('#custom-order-quantity').val()
                 },
           type: 'GET'})

@@ -18,7 +18,7 @@
 {% endblock javascript %}
 
 {% block css %}
-  <link href="{{ STATIC_URL }}public/css/home.css?v=3" rel="stylesheet">
+  <link href="{{ STATIC_URL }}public/css/home.css?v=5" rel="stylesheet">
 {% endblock css %}
 {% endcache home_header %}
 
@@ -42,25 +42,37 @@
   <div class='row-fluid'>
     <div id='banner' class='span12'>
       <div class='text'>
-        <p class='title'>NO MORE MIDDLEMEN</p>
+        <!--<p class='title'>NO MORE MIDDLEMEN</p>-->
         <p class='verse title-font'>
           <span>
-            Finally. Buy directly from the artisan who made it.
+            <span class='hidden-phone'>Throughout August + September 2014,</span>
+            Anou artisan leaders collaborated with British designer
+            <span class='hidden-phone'>Sabrina Kraus </span>Lopez
+            to create the Common Thread <span class='hidden-desktop'>Rug</span>
+            Collection.
+            <span class='visible-desktop'>
+              <br><br>
+              Each rug in the limited edition collection is now
+              available to order online and will be on display
+              at the London Design Festival from September 18-21st
+            </span>
           </span>
           <br>
-          <a class='button' href="http://helloanou.wordpress.com/"
+          <a class='button' style='background-color: #f15b43;'
+            href="/commonthread"
             event-action='learn more on homepage'
             event-category='homepage'
             event-label='blog'>
-            Learn More
+            See Collection and Learn More
           </a>
+          <br>
           <a class='button shop'
             event-action='shop on homepage'
             event-category='homepage'
-            event-label='shop'>Shop</a>
+            event-label='shop'>Shop Anou</a>
         </p>
       </div>
-      <img src="{{ STATIC_URL }}images/slide3.jpg" />
+      <img src="{{ STATIC_URL }}images/commonthreadbanner.jpg" alt='Common Thread Collection banner image' title="Common Thread photography by Simon Mills" />
     </div>
   </div>
 

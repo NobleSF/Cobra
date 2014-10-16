@@ -9,8 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 from apps.seller.models.seller import Seller
 from apps.seller.models.product import Product
 from apps.seller.models.custom_order import CustomOrder
-from settings.people import Tom, Dan
 from apps.communication.controllers.email_class import Email
+from settings.people import developer_team, support_team
 
 def estimate(request):
   try:
@@ -72,7 +72,8 @@ def request(request):
         'estimate':       request.POST.get('estimate', ""),
       }
 
-      Email('custom_order/request', data).sendTo([Dan.email, data['email']])
+      recipient_email_list = [data['email'],] + [person.email for person in support_team]
+      Email('custom_order/request', data).sendTo(recipient_email_list)
       return HttpResponse(status=200)
 
     except Exception as e:

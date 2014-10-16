@@ -29,7 +29,7 @@
 {% endblock additional_meta_tags %}
 
 {% block javascript %}
-  <script type="text/javascript" src="{{ STATIC_URL }}public/js/product.min.js?v=6"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}public/js/product.min.js?v=7"></script>
 {% endblock javascript %}
 
 {% block css %}
@@ -320,13 +320,16 @@
         <tr>
           <td colspan=2 class='morocco-price price-qualifier nowrap title-font' align='center'>
             <span style='text-decoration: underline; cursor: pointer;'>
-              Morocco Price: {{ product.local_price }} Dirham
+              Price in Morocco: {{ product.local_price }} Dh
             </span>
           </td>
         </tr>
         <tr>
           <td colspan=2 class='morocco-price-details' align='center' style='display: none; color: red;'>
-            Living in Morocco? Morocco price includes shipping directly to you. Email us at <a href='mailto:hello@theanou.com'>hello@theanou.com</a> and we will help you with payment options.
+            {{ product.local_price }}Dh: This price includes shipping within Morocco. To order, e-mail us at <a href='mailto:hello@theanou.com'>hello@theanou.com</a> and we will help you with payment options.
+            <br><br>
+            {{ product.local_price }}Dh: Le prix inclut la livraison au Maroc. Pour passer commande envoyez nous un message &agrave; l'adresse <a href='mailto:hello@theanou.com'>hello@theanou.com</a> et nous vous pr&eacute;senterons les diff&eacute;rentes options de paiement.
+
           </td>
         </tr>
       </table>

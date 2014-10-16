@@ -56,33 +56,40 @@
 }
 
 #banner .text .verse {
-  font-size: 28pt;
-  line-height: 30pt;
-  margin: 0 500px 0 50px;
+  font-size: 22pt;
+  line-height: 24pt;
+  margin: 0 20px 0 50%;
   padding: 10px 0;
 }@media (max-width: 1200px){
-  #banner .text .verse {margin: 0 300px 0 50px;}
+  #banner .text .verse {}
 }@media (max-width: 980px){
   #banner .text .verse {
-    font-size: 22pt;
+    font-size: 20pt;
     line-height: 22pt;
-    margin: 0 230px 0 50px;
+
   }
 }@media (max-width: 768px){
   #banner .text .verse {
-    font-size: 16pt;
+    font-size: 18pt;
     line-height: 16pt;
-    margin: 0 30% 0 50px;
+
   }
 }@media (max-width: 500px){
   #banner .text .verse {
     padding: 0;
-    margin: -10px 40px;
+    margin: -10px 20px;
+  }
+}@media (max-width: 425px){
+  #banner .text .verse {
+    padding: 0;
+		font-size: 14pt;
+		line-height: 12pt;
+    margin: -10px 10px;
   }
 }
 
 @media (max-width: 500px){
-  #banner .text .verse span {display: none;}
+  #banner .text .verse {line-height: 22pt;}
   #banner .text .verse .shop {display: none;}
 }
 
@@ -91,20 +98,27 @@
   background-color: rgb(40,102,202);
   color: #FFF;
   padding: 10px 20px;
-  line-height: 75pt;
+  line-height: 60pt;
   cursor: pointer;
   margin-right: 30px;
 }@media (max-width: 980px){
   #banner .text .button {
     line-height: 60pt;
+		margin-left: -20%;
   }
 }@media (max-width: 768px){
   #banner .text .button {
     padding: 10px;
     line-height: 50pt;
+		margin-left: -50%;
   }
 }@media (max-width: 500px){
-  #banner .text .verse span {line-height: 10pt;}
+  #banner .text .verse span {
+		line-height: 10pt;
+	}
+	#banner .text .button {
+		margin: 10px;
+	}
 }
 
 #banner .text .button:hover {

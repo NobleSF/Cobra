@@ -19,7 +19,6 @@ def about(request):
   return render(request, 'about/base.html')
 
 
-
 @cache_page(176400) #49hrs
 def loadProducts(request):
   from apps.seller.models.product import Product
@@ -36,6 +35,45 @@ def loadProducts(request):
     return HttpResponse(json.dumps(product_html), content_type='application/json')
   else:
     return HttpResponse(json.dumps({}), content_type='application/json')
+
+def about(request):
+  return render(request, 'home/about.html')
+
+def commonthread(request):
+  return render(request, 'home/commonthread.html')
+
+def commonthreadAddToCart(request, rug_name):
+  from apps.seller.models.product import Product
+  from apps.communication.controller.email_class import Email
+  from settings.people import Tifawt, Dan, Tom
+
+  rugs = {
+    'opportunity':  [1860,1888,1889,1890,1891,1892,],
+    'coexistence':  [1861,1882,1883,1884,1885,1886,],
+    'mother':       [1862,1893,1894,1895,1896,1897,],
+    'motherland':   [1863,1867,1868,1869,1870,1871,],
+    'sacred':       [1864,1877,1878,1879,1880,1881,],
+    'identity':     [1865,1872,1873,1874,1875,1876,],
+  }
+
+  try:
+    buy_this_one = None
+    for product_id in rugs[rug_name]:
+      if not buy_this_one:
+        product = Product.objects.get(id=product_id)
+        if not product.is_sold:
+          buy_this_one = product
+
+    if buy_this_one:
+      return HttpResponseRedirect(reverse('cart-add', args=[buy_this_one.id]))
+    else:
+      email = Email(message=("%s rug is sold out!!!" % rug_name),
+                    subject=("%s sold out" % rug_name))
+      email.sendTo([Tom.email, Dan.email, Tifawt.email,])
+      return HttpResponseRedirect(reverse('commonthread'))
+
+  except:
+    return HttpResponseRedirect(reverse('commonthread'))
 
 def test_meta(request):
   values = request.META.items()

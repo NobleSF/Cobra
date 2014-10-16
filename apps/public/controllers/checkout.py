@@ -141,7 +141,7 @@ def confirmation(request):
 def adminCheckout(request): #ajax requests only
   from django.core.urlresolvers import reverse
   from apps.communication.controllers.email_class import Email
-  from settings.people import Dan
+  from settings.people import support_team, Dan, Tifawt
 
   try:
     cart = Cart(request)
@@ -153,7 +153,7 @@ def adminCheckout(request): #ajax requests only
     confirmation_url = request.build_absolute_uri(confirmation)
     confirmation_html_link = "<a href='%s'>%s</a>" % (confirmation_url, confirmation_url)
     message = "<p>To complete manual checkout go to: "+confirmation_html_link+"</p>"
-    Email(message=message).sendTo(Dan.email)
+    Email(message=message).sendTo([Dan.email,Tifawt.email]) #only send to trusted staff
 
   except Exception as e:
     ExceptionHandler(e, "in checkout.adminCheckout")
