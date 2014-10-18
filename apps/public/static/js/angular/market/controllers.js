@@ -20,7 +20,7 @@
                     ];
 
     //get 3 listing and append them to the blocks array
-    $http.get('/api/listings/?limit=3')
+    $http.get('/api/listings/?limit=6')
     .success(function(data){
       for( listing=0; listing < data.results.length; listing++){
         market.blocks.push({
@@ -29,31 +29,33 @@
           data: data.results[listing]
         });
       };
+      market.next = data.next;
+      market.prev = data.previous;
     });
 
     //get parent categories and append them to the blocks array
-    $http.get('/api/categories/?is_parent=True')
-    .success(function(data){
-      for( category=0; category < data.results.length; category++){
-        market.blocks.push({
-          type: 'category',
-          size: 'single',
-          data: data.results[category]
-        });
-      };
-    });
+    //$http.get('/api/categories/?is_parent=True')
+    //.success(function(data){
+    //  for( category=0; category < data.results.length; category++){
+    //    market.blocks.push({
+    //      type: 'category',
+    //      size: 'single',
+    //      data: data.results[category]
+    //    });
+    //  };
+    //});
 
     //get 2 stores and append them to the blocks array
-    $http.get('/api/stores/?limit=2')
-    .success(function(data){
-      for( store=0; store < data.results.length; store++){
-        market.blocks.push({
-          type: 'store',
-          size: 'single',
-          data: data.results[store]
-        });
-      };
-    });
+    //$http.get('/api/stores/?limit=2')
+    //.success(function(data){
+    //  for( store=0; store < data.results.length; store++){
+    //    market.blocks.push({
+    //      type: 'store',
+    //      size: 'single',
+    //      data: data.results[store]
+    //    });
+    //  };
+    //});
 
     //size them
 

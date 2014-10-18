@@ -59,5 +59,6 @@
 .listing .price{
 	font-size: 12pt;
 	position: relative;
-	top: 10px;
+	top: -15px;
+	height: 0px;
 }
