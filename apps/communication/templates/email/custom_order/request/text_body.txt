@@ -14,4 +14,7 @@ Description:<br>
 Estimate:<br>
 {{ data.estimate }}
 
+Country:<br>
+{{ data.country }}
+
 from {{ data.email }}

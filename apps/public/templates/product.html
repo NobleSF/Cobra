@@ -29,7 +29,7 @@
 {% endblock additional_meta_tags %}
 
 {% block javascript %}
-  <script type="text/javascript" src="{{ STATIC_URL }}public/js/product.min.js?v=7"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}public/js/product.min.js?v=8"></script>
 {% endblock javascript %}
 
 {% block css %}
@@ -177,20 +177,30 @@
                      type='text' disabled='disabled'
                      value='${{product.display_price}}'
               >
-              Includes shipping to North America, Europe.<br>
-              This is not an official quote.<br>
-              Prices usually vary within 10% of this estimate when<br>
-              size and quantity are the only changes requested.
             </p>
           </div>
-        </div>
 
-        <div class='control-group'>
-          <label class='control-label'>Contact</label>
+          <div class="controls">
+            <p>
+              Prices usually vary within 10% of this estimate when<br>
+              size and quantity are the only changes requested.<br>
+              This estimate includes shipping to North America or Europe.<br>
+              We ship everywhere. Provide your country for accurate quote:<br>
+            </p>
+          </div>
+
+          <label class='control-label'>Country</label>
+          <div class="controls">
+            <input id="custom-order-country" class="input-mini"
+                   name="custom-order-country" type="text"
+                   placeholder="USA">
+          </div>
+
+          <label class='control-label'>Email</label>
           <div class='controls'>
-          <input id='custom-order-email' class='input-large'
-                 name='custom-order-email' type='text'
-                 placeholder='email address'>
+            <input id='custom-order-email' class='input-large'
+                   name='custom-order-email' type='text'
+                   placeholder='name@example.com'>
           </div>
         </div>
 
