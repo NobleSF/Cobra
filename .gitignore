@@ -1,13 +1,16 @@
 #################
-## Tom's Additions
+## Additions
 #################
 
+settings/local_environment_settings.py
 *.save
 venv
 *.pyc
 *.komodoproject
 .komodotools/
 pagekite.py
+.idea/*
+npm-debug.log
 
 #################
 ## Eclipse
@@ -172,3 +175,4 @@ pip-log.txt
 
 # Mac crap
 .DS_Store
+
