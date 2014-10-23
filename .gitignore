@@ -11,6 +11,7 @@ venv
 pagekite.py
 .idea/*
 npm-debug.log
+lib/
 
 #################
 ## Eclipse
@@ -176,3 +177,7 @@ pip-log.txt
 # Mac crap
 .DS_Store
 
+
+Cobra/include/python2.7
+
+Cobra/.Python
