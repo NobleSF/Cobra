@@ -12,33 +12,62 @@ from datetime import datetime, timedelta
 from apps.public.models import Order
 from settings.settings import CLOUDINARY
 
+
 @access_required('admin')
-def orders(request, year=None, week=None):
-  now = datetime.now()
-  try:
-    year, week = int(year), int(week)
-  except Exception as e:
-    year, week = now.year, int(now.strftime('%W'))
+def fihd_order(request, some_id):
+  found_orders = []
+  try: found_orders = Order.obects.get(id=some_id)
+  except: pass
+  if not found_orders:
+    try: found_orders = Order.obects.find(cart__checkout_id=some_id)
+    except: pass
+  if not found_orders:
+    try: found_orders = Order.obects.find(seller_id=some_id)
+    except: pass
+  if not found_orders:
+    try: found_orders = Order.obects.find(product__seller_id=some_id)
+    except: pass
 
-  this_week = datetime.strptime("%d%d1" % (year, week), "%Y%W%w") #monday
-  last_week = this_week - timedelta(days=7)
-  next_week = this_week + timedelta(days=7)
+  if len(found_orders) == 1:
+    order(requet, found_orders[0].id)
+  elif len(found_orders) > 1:
+    orders(request, found_orders)
+  else:
+    #send message
+    orders(request)
 
-  orders = Order.objects.filter(
-                          created_at__gte=this_week,
-                          created_at__lt=next_week
-                        ).order_by('created_at').reverse()
 
-  this_week = {'date':this_week, 'year': this_week.year, 'week':this_week.strftime('%W')}
-  last_week = {'date':last_week, 'year': last_week.year, 'week':last_week.strftime('%W')}
-  if next_week < now:
-    next_week = {'date':next_week, 'year': next_week.year, 'week':next_week.strftime('%W')}
-  else: next_week = None
+@access_required('admin')
+def orders(request, year=None, week=None, orders=[]):
+  if orders:
+    context = {'orders': orders}
 
-  context = {'orders':    orders,
-             'this_week': this_week,
-             'last_week': last_week,
-             'next_week': next_week}
+  else:
+    now = datetime.now()
+    try:
+      year, week = int(year), int(week)
+    except Exception as e:
+      year, week = now.year, int(now.strftime('%W'))
+
+    this_week = datetime.strptime("%d%d1" % (year, week), "%Y%W%w") #monday
+    last_week = this_week - timedelta(days=7)
+    next_week = this_week + timedelta(days=7)
+
+    orders = Order.objects.filter(
+                            created_at__gte=this_week,
+                            created_at__lt=next_week
+                          ).order_by('created_at').reverse()
+
+    this_week = {'date':this_week, 'year': this_week.year, 'week':this_week.strftime('%W')}
+    last_week = {'date':last_week, 'year': last_week.year, 'week':last_week.strftime('%W')}
+    if next_week < now:
+      next_week = {'date':next_week, 'year': next_week.year, 'week':next_week.strftime('%W')}
+    else: next_week = None
+
+    context = {'orders':    orders,
+               'this_week': this_week,
+               'last_week': last_week,
+               'next_week': next_week}
 
   return render(request, 'orders/orders.html', context)
 

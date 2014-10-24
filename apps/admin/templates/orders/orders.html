@@ -22,17 +22,24 @@
 {% block logo %}
   <i class='symbol-orders black'></i>
 
-  <a href="{% url 'admin:orders range' last_week.year last_week.week %}">
-    <i class='symbol-down blue'></i>
-  </a>
-  <a href="{% url 'admin:orders range' next_week.year next_week.week %}">
-    <i class='symbol-up {% if next_week %}blue{%else%}gray{%endif%}'></i>
-  </a>
+  {% if this_week and next_week %}
+    <a href="{% url 'admin:orders range' last_week.year last_week.week %}">
+      <i class='symbol-down blue'></i>
+    </a>
+    <a href="{% url 'admin:orders range' next_week.year next_week.week %}">
+      <i class='symbol-up {% if next_week %}blue{%else%}gray{%endif%}'></i>
+    </a>
+  {% endif %}
+
+  <input id='search_field' type="text">
+  <button id='search-button' class='symbol-go'></button>
 {% endblock logo %}
 
 {% block content %}
 
-<span>{{ this_week.date|date:"d-m-Y" }} : {{ next_week.date|date:"d-m-Y" }}</span>
+{% if this_week and next_week %}
+  <span>{{ this_week.date|date:"d-m-Y" }} : {{ next_week.date|date:"d-m-Y" }}</span>
+{% endif %}
 
 <table class='table table-hover table-condensed'>
   <!--<thead>
