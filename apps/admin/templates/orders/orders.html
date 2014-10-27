@@ -20,24 +20,34 @@
 {% endblock css %}
 
 {% block logo %}
-  <i class='symbol-orders black'></i>
+  <ul class="inline">
+    <li>
+      <i class='symbol-orders black'></i>
+    </li>
 
-  {% if this_week and next_week %}
-    <a href="{% url 'admin:orders range' last_week.year last_week.week %}">
-      <i class='symbol-down blue'></i>
-    </a>
-    <a href="{% url 'admin:orders range' next_week.year next_week.week %}">
-      <i class='symbol-up {% if next_week %}blue{%else%}gray{%endif%}'></i>
-    </a>
-  {% endif %}
-
-  <input id='search_field' type="text">
-  <button id='search-button' class='symbol-go'></button>
+    {% if this_week %}
+      <li>
+        <a href="{% url 'admin:orders range' last_week.year last_week.week %}">
+          <i class='symbol-down blue'></i>
+        </a>
+        <a href="{% url 'admin:orders range' next_week.year next_week.week %}">
+          <i class='symbol-up {% if next_week %}blue{%else%}gray{%endif%}'></i>
+        </a>
+      </li>
+    {% endif %}
+    <li>
+      <form method="get" action="{% url 'admin:find order' %}" style="margin: 0;;">
+        <input id='search_field' name="some_id" type="text">
+        <button type="submit" id='search-button' class='symbol-go'
+            style="line-height: 18pt;"></button>
+      </form>
+    </li>
+  </ul>
 {% endblock logo %}
 
 {% block content %}
 
-{% if this_week and next_week %}
+{% if this_week %}
   <span>{{ this_week.date|date:"d-m-Y" }} : {{ next_week.date|date:"d-m-Y" }}</span>
 {% endif %}
 
