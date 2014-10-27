@@ -46,34 +46,34 @@ def stats(request):
         'costs':          int(getCostsForMonth(date))}
        ])
 
-  product_activity = {}
-  first_of_month = datetime(today.year, today.month, 1)
-  product_activity['products_added'] = Product.objects.filter(
-                                          approved_at__gte=first_of_month
-                                        ).count()
+  # product_activity = {}
+  # first_of_month = datetime(today.year, today.month, 1)
+  # product_activity['products_added'] = Product.objects.filter(
+  #                                         approved_at__gte=first_of_month
+  #                                       ).count()
+  #
+  # from apps.public.models import Rating
+  # from django.db.models import Avg
+  # ratings = (Rating.objects.filter(
+  #             product__active_at__lte=today,
+  #             product__deactive_at=None,
+  #             product__in_holding=False,
+  #             product__approved_at__lte=today))
+  #
+  # avg_rating = ratings.aggregate(average=Avg('value'))['average']
+  # avg_rating_before = (ratings
+  #                       .exclude(product__updated_at__gte=first_of_month)
+  #                       .aggregate(average=Avg('value'))
+  #                     )['average']
+  #
+  # avg_rating_normalized = (avg_rating-1)/4 * 100
+  # avg_rating_before_normalized = (avg_rating_before-1)/4 * 100
+  #
+  #
+  # product_activity['avg_rating'] = int(avg_rating_normalized)
+  # product_activity['avg_rating_change'] = int(((avg_rating_normalized-avg_rating_before_normalized)/avg_rating_before_normalized) * 100)
 
-  from apps.public.models import Rating
-  from django.db.models import Avg
-  ratings = (Rating.objects.filter(
-              product__active_at__lte=today,
-              product__deactive_at=None,
-              product__in_holding=False,
-              product__approved_at__lte=today))
-
-  avg_rating = ratings.aggregate(average=Avg('value'))['average']
-  avg_rating_before = (ratings
-                        .exclude(product__updated_at__gte=first_of_month)
-                        .aggregate(average=Avg('value'))
-                      )['average']
-
-  avg_rating_normalized = (avg_rating-1)/4 * 100
-  avg_rating_before_normalized = (avg_rating_before-1)/4 * 100
-
-
-  product_activity['avg_rating'] = int(avg_rating_normalized)
-  product_activity['avg_rating_change'] = int(((avg_rating_normalized-avg_rating_before_normalized)/avg_rating_before_normalized) * 100)
-
-  context = {'revenue_data':revenue_data, 'product_activity':product_activity}
+  context = {'revenue_data':revenue_data}#, 'product_activity':product_activity
   return render(request, 'stats.html', context)
 
 def getNextMonth(date):#not smart to handle end-of-month limits (eg Feb 30th)
