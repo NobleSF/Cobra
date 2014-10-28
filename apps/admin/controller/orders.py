@@ -18,7 +18,7 @@ from settings.settings import CLOUDINARY
 def find_order(request):
 
   try:
-    some_id = request.GET.get('some_id')
+    some_id = request.GET.get('some_id').strip()
     # print "some id: " + some_id
     found_orders = []
 
@@ -37,6 +37,9 @@ def find_order(request):
 
     else: #not a digit
       found_orders = Order.objects.filter(cart__anou_checkout_id=some_id)
+
+      if not found_orders:
+        found_orders = Order.objects.filter(tracking_number=some_id)
 
       if not found_orders:
         found_orders = [] #reset because it may be an empty query set which can't be appended
