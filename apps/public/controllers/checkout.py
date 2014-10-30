@@ -111,7 +111,7 @@ def confirmation(request):
     try:
       #if necessary, remove from session and checkout the cart
       if( checkout_data.get('gross') and
-          checkout_data.get('state') in ['authorized', 'reserved', 'captured']
+          checkout_data.get('state') in ['authorized', 'reserved', 'captured', 'refunded']
       ) or (
           checkout_data.get('manual_order')
       ):
@@ -121,6 +121,9 @@ def confirmation(request):
 
         if request.session.get('cart_id') and cart.cart.id == request.session.get('cart_id'):
           del request.session['cart_id']
+
+        if checkout_data.get('state') in ['refunded']:
+          checkout_data['refund'] = True
       else:
         checkout_data = {'problem': "Payment on order is not complete."}
 

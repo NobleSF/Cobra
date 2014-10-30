@@ -65,6 +65,7 @@ def request(request):
     try:
       data = {
         'product':        Product.objects.get(id=request.POST['product_id']),
+        'country':        request.POST['country'],
         'email':          request.POST['email'],
         'size':           request.POST.get('size', ""),
         'quantity':       request.POST.get('quantity', ""),

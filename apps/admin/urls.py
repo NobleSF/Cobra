@@ -20,6 +20,7 @@ urlpatterns = patterns('',
   url(r'^get_prod_data$', products.getProductData, name='product data'),
 
   #ORDERS
+  url(r'^find_order/$', orders.find_order, name='find order'),
   url(r'^orders/(?P<year>\d+)?/(?P<week>\d+)?$', orders.orders, name='orders range'),
   url(r'^orders$', orders.orders, name='orders'),
   url(r'^order/(?P<order_id>\d+)$', orders.order, name='order'),

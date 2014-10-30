@@ -9,36 +9,90 @@ from django.contrib import messages
 from apps.communication.controllers.email_class import Email
 from apps.communication.controllers.sms import sendSMS
 from datetime import datetime, timedelta
-from apps.public.models.order import Order
+from apps.public.models import Order
+from apps.seller.models.product import Product
+from django.db.models import Q
 from settings.settings import CLOUDINARY
 
 @access_required('admin')
-def orders(request, year=None, week=None):
-  now = datetime.now()
+def find_order(request):
+
   try:
-    year, week = int(year), int(week)
+    some_id = request.GET.get('some_id').strip()
+    # print "some id: " + some_id
+    found_orders = []
+
+    if some_id.isdigit():
+      found_product_orders = []
+      try:
+        product = Product.objects.get(id=some_id)
+        found_product_orders = product.order_set.all()
+      except: pass
+      try:
+        found_orders = Order.objects.filter(
+                            Q(id=some_id) |
+                            Q(cart__wepay_checkout_id=some_id))
+      except: pass
+      found_orders = list(found_orders) + list(found_product_orders)
+
+    else: #not a digit
+      found_orders = Order.objects.filter(cart__anou_checkout_id=some_id)
+
+      if not found_orders:
+        found_orders = Order.objects.filter(tracking_number=some_id)
+
+      if not found_orders:
+        found_orders = [] #reset because it may be an empty query set which can't be appended
+        try:
+          from apps.seller.models import Seller
+          seller = Seller.objects.filter(account__name__icontains=some_id)[0]
+          for product in seller.product_set.all():
+            if product.order_set.all():
+              found_orders.append(product.order_set.all()[0])
+        except Exception as e: print str(e)
+
+    if len(found_orders) == 1:
+      return order(request, found_orders[0].id)
+    elif len(found_orders) > 1:
+      return orders(request, show_orders=found_orders)
+    else:
+      raise Exception("no valid search parameter")
+
   except Exception as e:
-    year, week = now.year, int(now.strftime('%W'))
+    print str(e)
+    return orders(request)
 
-  this_week = datetime.strptime("%d%d1" % (year, week), "%Y%W%w") #monday
-  last_week = this_week - timedelta(days=7)
-  next_week = this_week + timedelta(days=7)
+@access_required('admin')
+def orders(request, year=None, week=None, show_orders=[]):
+  if show_orders:
+    context = {'orders': show_orders}
 
-  orders = Order.objects.filter(
-                          created_at__gte=this_week,
-                          created_at__lt=next_week
-                        ).order_by('created_at').reverse()
+  else:
+    now = datetime.now()
+    try:
+      year, week = int(year), int(week)
+    except Exception as e:
+      year, week = now.year, int(now.strftime('%W'))
 
-  this_week = {'date':this_week, 'year': this_week.year, 'week':this_week.strftime('%W')}
-  last_week = {'date':last_week, 'year': last_week.year, 'week':last_week.strftime('%W')}
-  if next_week < now:
-    next_week = {'date':next_week, 'year': next_week.year, 'week':next_week.strftime('%W')}
-  else: next_week = None
+    this_week = datetime.strptime("%d%d1" % (year, week), "%Y%W%w") #monday
+    last_week = this_week - timedelta(days=7)
+    next_week = this_week + timedelta(days=7)
 
-  context = {'orders':    orders,
-             'this_week': this_week,
-             'last_week': last_week,
-             'next_week': next_week}
+    show_orders = Order.objects.filter(
+                                  created_at__gte=this_week,
+                                  created_at__lt=next_week
+                                ).order_by('created_at').reverse()
+
+    this_week = {'date':this_week, 'year': this_week.year, 'week':this_week.strftime('%W')}
+    last_week = {'date':last_week, 'year': last_week.year, 'week':last_week.strftime('%W')}
+    if next_week < now:
+      next_week = {'date':next_week, 'year': next_week.year, 'week':next_week.strftime('%W')}
+    else: next_week = None
+
+    context = {'orders':    show_orders,
+               'this_week': this_week,
+               'last_week': last_week,
+               'next_week': next_week}
 
   return render(request, 'orders/orders.html', context)
 

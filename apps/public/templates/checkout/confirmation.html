@@ -42,6 +42,10 @@
             {% endif %}
           </h3>
 
+          {% if checkout_data.refund %}
+            <p class="red">Note: You have received a full or partial refund!</p>
+          {% endif %}
+
           {% for item in cart %}
             {% if item.order.tracking_number %}
               <h3 class=''>
