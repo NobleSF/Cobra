@@ -69,7 +69,7 @@ class Listing(models.Model):
   @is_active.setter
   def is_active(self, value):#todo: remove, listing should be deleted if not active
     from apps.communication.controllers.email_class import Email
-    from settings.people import Dan, Brahim, everyones_emails
+    from settings.people import Dan, Brahim, operations_team
 
     if value and self.active_at and not self.deactive_at: #already active
       pass
@@ -89,7 +89,7 @@ class Listing(models.Model):
       try:
         message = "R %d" % self.product.id
         message += "<br>%s" % self.product.seller.name
-        Email(message=message).sendTo(everyones_emails)
+        Email(message=message).sendTo([person.email for person in operations_team])
       except Exception as e:
         ExceptionHandler(e, "in Product.is_active")
 

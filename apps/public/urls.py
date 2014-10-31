@@ -48,9 +48,9 @@ urlpatterns = patterns('',
 
 
 
-  # NEW ANGULAR PARTIALS
-  url(r'^listing$', home.listing, name='listing'),
-  url(r'^store$', home.store, name='store'),
-  url(r'^category$', home.category, name='category'),
+  # # NEW ANGULAR PARTIALS
+  # url(r'^listing$', home.listing, name='listing'),
+  # url(r'^store$', home.store, name='store'),
+  # url(r'^category$', home.category, name='category'),
 
 )
