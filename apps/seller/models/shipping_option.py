@@ -1,5 +1,5 @@
 from django.db import models
-from apps.admin.models import Country
+from apps.admin.models.country import Country
 
 class ShippingOption(models.Model):
   name            = models.CharField(max_length=50)

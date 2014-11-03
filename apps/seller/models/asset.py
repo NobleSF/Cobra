@@ -1,5 +1,5 @@
 from django.db import models
-from apps.admin.models import Category
+from apps.admin.models.category import Category
 from apps.seller.models.image import Image
 from apps.seller.models.seller import Seller
 

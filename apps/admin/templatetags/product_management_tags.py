@@ -3,7 +3,7 @@ register = template.Library()
 
 @register.inclusion_tag('products/product_review_row.html')
 def product_review_row(product, admin_type):
-  from apps.admin.models import RatingSubject
+  from apps.admin.models.rating_subject import RatingSubject
   rating_subjects = RatingSubject.objects.all()
 
   return {'product': product,

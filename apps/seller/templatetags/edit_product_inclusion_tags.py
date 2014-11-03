@@ -40,7 +40,7 @@ def shipping_option_chooser_tag(product):
 
 @register.inclusion_tag('edit_product/product_asset_choosers/color_chooser.html')
 def color_chooser_tag(product):
-  from apps.admin.models import Color
+  from apps.admin.models.color import Color
   try:
     colors = Color.objects.all()
     for color in colors:

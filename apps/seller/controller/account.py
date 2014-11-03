@@ -111,7 +111,7 @@ def edit(request):
 @csrf_exempt
 def Asset(request): #ajax get requests only, create or update asset
   from apps.seller.models.asset import Asset
-  from apps.admin.models import Category
+  from apps.admin.models.category import Category
 
   try:
     if request.method == 'POST':

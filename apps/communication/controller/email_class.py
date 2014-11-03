@@ -86,12 +86,12 @@ class Email(object):
   #  self.attachment_url = url
 
   def save(self):
-    from apps.communication.models import Email as EmailDBModel
+    from apps.communication.models.email import Email as EmailModel
     try:    self.order
     except: self.order = None
 
     try:
-      email = EmailDBModel(
+      email = EmailModel(
                 from_address  = self.mail.from_email,
                 to_address    = ','.join(self.mail.to),
                 subject       = self.mail.subject,

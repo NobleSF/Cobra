@@ -11,7 +11,7 @@ from apps.seller.models.shipping_option import ShippingOption
 from apps.seller.models.seller import Seller
 from apps.seller.models.product import Product
 from apps.seller.models.asset import Asset
-from apps.admin.models import Color
+from apps.admin.models.color import Color
 from settings.settings import CLOUDINARY
 
 @access_required('admin or seller')

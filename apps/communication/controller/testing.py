@@ -1,12 +1,9 @@
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render
+from django.http import HttpResponse
 from django.template.loader import render_to_string
-from django.core.urlresolvers import reverse
-import json
 from settings.settings import PRODUCTION, STAGE
 
 def orders(request):
-  from apps.public.models import Order
+  from apps.public.models.order import Order
   if PRODUCTION:
     test_checkout_id = '62513453'
   elif STAGE:

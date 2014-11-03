@@ -5,14 +5,14 @@ from apps.seller.models.product import Product
 from apps.seller.models.seller import Seller
 from apps.seller.models.image import Image
 from apps.seller.models.photo import Photo
-from apps.admin.models import Category
+from apps.admin.models.category import Category
 
 from django.forms.widgets import TextInput
 class NumberInput(TextInput):
   input_type = 'tel'
 
 class SellerEditForm(forms.Form):
-  from apps.admin.models import Country
+  from apps.admin.models.country import Country
 
   name          = forms.CharField(required=False)
   email         = forms.EmailField(required=False)

@@ -58,7 +58,7 @@ def sendSMSForOrder(message, to_number, order, priority='1'):
 
 def saveSMS(sms_data): #takes Telerivet response content detail at
   #https://telerivet.com/p/PJ8973e6e346c349cbcdd094fcffa9fcb5/api/rest/sending
-  from apps.communication.models import SMS
+  from apps.communication.models.sms import SMS
   try:
     sms_messages = SMS.objects.filter(telerivet_id = sms_data['id'])
     if sms_messages:

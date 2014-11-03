@@ -1,5 +1,5 @@
 from django.db import models
-from apps.admin.models import Color
+from apps.admin.models.color import Color
 from apps.seller.models.asset import Asset
 from apps.seller.models.seller import Seller
 from apps.seller.models.shipping_option import ShippingOption
@@ -571,7 +571,7 @@ def onDelete(sender, instance, **kwargs):
 @receiver(post_save, sender=Product)
 def createRanking(sender, instance, created, update_fields, **kwargs):
   try:
-    from apps.public.models import Ranking
+    from apps.public.models.ranking import Ranking
     from apps.public.controller.product_ranking import updateRankings, newProductResult
     if created:
       ranking, is_new = Ranking.objects.get_or_create(product = instance)
