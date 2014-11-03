@@ -1,1 +1,1 @@
-web: waitress-serve --port=$PORT Cobra.settings.wsgi:application
+web: waitress-serve --port=$PORT settings.wsgi:application
