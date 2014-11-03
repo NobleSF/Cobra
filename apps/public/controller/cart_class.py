@@ -1,8 +1,10 @@
-from apps.public import models
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.utils import timezone
 from datetime import timedelta
 from apps.public.controller.promotion_rules import discount_for_cart_promotion
+
+from apps.public.models.item import Item
+from apps.public.models.cart import Cart as CartModel
 
 def cleanupCarts():
   from apps.seller.models.product import Product
@@ -31,15 +33,15 @@ class Cart(object):
     #override session cart if valid checkout_id is provided
     if checkout_id:
       if isinstance(checkout_id, basestring) and checkout_id.startswith('MAN'):
-        try: cart_id = models.Cart.objects.get(anou_checkout_id=checkout_id).id
+        try: cart_id = CartModel.objects.get(anou_checkout_id=checkout_id).id
         except: pass
       else:
-        try: cart_id = models.Cart.objects.get(wepay_checkout_id=checkout_id).id
+        try: cart_id = CartModel.objects.get(wepay_checkout_id=checkout_id).id
         except: pass
 
     if cart_id:
       try:
-        cart = models.Cart.objects.get(id=cart_id)
+        cart = CartModel.objects.get(id=cart_id)
       except:
         cart = self.new(request)
     else:
@@ -51,14 +53,14 @@ class Cart(object):
       yield item
 
   def new(self, request):
-    cart = models.Cart()
+    cart = CartModel()
     cart.save()
     request.session['cart_id'] = cart.id
     return cart
 
   def add(self, product): #, quantity=1
     try:
-      item, is_new = models.Item.objects.get_or_create(
+      item, is_new = Item.objects.get_or_create(
         cart=self.cart,
         product=product)
       #item.quantity = item.quantity + quantity if item.quantity else quantity
@@ -68,7 +70,7 @@ class Cart(object):
 
   def remove(self, product): #, quantity=None
     try:
-      item = models.Item.objects.get(
+      item = Item.objects.get(
         cart=self.cart,
         product=product,
       )
@@ -77,14 +79,14 @@ class Cart(object):
       #  item.save()
       #else:
       item.delete()
-    except models.Item.DoesNotExist:
+    except Item.DoesNotExist:
       pass #i don't care
     except Exception as e:
       ExceptionHandler(e, "error on cart_class.remove")
 
   def update(self, product): #, quantity
     try:
-      item = models.Item.objects.get(
+      item = Item.objects.get(
         cart=self.cart,
         product=product,
       )

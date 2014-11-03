@@ -1,14 +1,14 @@
-from apps.public import models
 from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.communication.controller import order_events
 from django.utils import timezone
 
 def getOrders(checkout_id):
+  from apps.public.models.cart import Cart
   try:
     if "MAN" in str(checkout_id):
-      cart = models.Cart.objects.get(anou_checkout_id = checkout_id)
+      cart = Cart.objects.get(anou_checkout_id = checkout_id)
     else:
-      cart = models.Cart.objects.get(wepay_checkout_id = checkout_id)
+      cart = Cart.objects.get(wepay_checkout_id = checkout_id)
 
     orders = cart.orders.all()
     if not orders:
@@ -18,7 +18,7 @@ def getOrders(checkout_id):
       cleanupCarts()
     return orders
 
-  except models.Cart.DoesNotExist:
+  except Cart.DoesNotExist:
     return []
 
   except Exception as e:
@@ -56,7 +56,9 @@ def createFromCart(cart):
   return orders
 
 def createFromCartItem(item, checkout_data):
-  order = models.Order(
+  from apps.public.models.order import Order
+
+  order = Order(
     cart                = item.cart,
     products_charge     = item.product.price,
     anou_charge         = item.product.anou_fee,
