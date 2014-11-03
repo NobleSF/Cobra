@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.contrib import messages
-from apps.communication.models import SMS, Email
+import apps.communication.models
 from apps.seller.models.seller import Seller
 
 @access_required('admin')
@@ -16,7 +16,7 @@ def sendSMS(request):
     order_id  = request.POST.get('order')
 
     sms = sms_controller.sendSMS(message, to_number)
-    if isinstance(sms, SMS):
+    if isinstance(sms, apps.communication.models.SMS):
       try:
         if order_id:
           sms.order_id = order_id
@@ -37,7 +37,7 @@ def allSMS(request):
   from settings.settings import TELERIVET
   from apps.admin.controller.forms import SMSForm
 
-  sms_messages = SMS.objects.all().order_by('created_at').reverse()[:100]
+  sms_messages = apps.communication.models.SMS.objects.all().order_by('created_at').reverse()[:100]
 
   for sms in sms_messages:
     if sms.from_number in TELERIVET['past_numbers']:
@@ -62,7 +62,7 @@ def allSMS(request):
 def allEmail(request):
   from settings.people import Tom, Dan, Brahim
 
-  emails = (Email.objects.all()
+  emails = (apps.communication.models.Email.objects.all()
             .exclude(to_address__contains = Dan.email)
             .exclude(to_address__contains = Tom.email)
             .exclude(to_address__contains = Brahim.email)

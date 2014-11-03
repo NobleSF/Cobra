@@ -1,5 +1,7 @@
 from django.db import models
-from apps.admin.models import Account, Country, Currency
+from apps.admin.models.account import Account
+from apps.admin.models.country import Country
+
 from apps.seller.models.image import Image
 
 class Seller(models.Model):

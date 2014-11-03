@@ -144,7 +144,7 @@ def confirmation(request):
 def adminCheckout(request): #ajax requests only
   from django.core.urlresolvers import reverse
   from apps.communication.controller.email_class import Email
-  from settings.people import support_team, Dan, Tifawt
+  from settings.people import Dan, Tifawt
 
   try:
     cart = Cart(request)

@@ -9,7 +9,7 @@ from django.contrib import messages
 from apps.communication.controller.email_class import Email
 from apps.communication.controller.sms import sendSMS
 from datetime import datetime, timedelta
-from apps.public.models import Order
+from apps.public.models.order import Order
 from apps.seller.models.product import Product
 from django.db.models import Q
 from settings.settings import CLOUDINARY
@@ -44,7 +44,7 @@ def find_order(request):
       if not found_orders:
         found_orders = [] #reset because it may be an empty query set which can't be appended
         try:
-          from apps.seller.models import Seller
+          from apps.seller.models.seller import Seller
           seller = Seller.objects.filter(account__name__icontains=some_id)[0]
           for product in seller.product_set.all():
             if product.order_set.all():

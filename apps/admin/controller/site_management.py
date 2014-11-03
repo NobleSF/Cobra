@@ -62,7 +62,7 @@ def cacheReset(request):
 
 @access_required('admin')
 def country(request):
-  from apps.admin.models import Country
+  from apps.admin.models.country import Country
   CountryFormSet = modelformset_factory(Country)
   context = {}
   if request.method == 'POST':
@@ -78,7 +78,7 @@ def country(request):
 
 @access_required('admin')
 def currency(request):
-  from apps.admin.models import Currency
+  from apps.admin.models.currency import Currency
   CurrencyFormSet = modelformset_factory(Currency)
   context = {}
   if request.method == 'POST':
@@ -94,7 +94,7 @@ def currency(request):
 
 @access_required('admin')
 def color(request):
-  from apps.admin.models import Color
+  from apps.admin.models.color import Color
   ColorFormSet = modelformset_factory(Color)
   context = {}
   if request.method == 'POST':
@@ -110,7 +110,7 @@ def color(request):
 
 @access_required('admin')
 def category(request):
-  from apps.admin.models import Category
+  from apps.admin.models.category import Category
   CategoryFormSet = modelformset_factory(Category)
   context = {}
   if request.method == 'POST':
@@ -126,7 +126,7 @@ def category(request):
 
 @access_required('admin')
 def ratingSubject(request):
-  from apps.admin.models import RatingSubject
+  from apps.admin.models.rating_subject import RatingSubject
   RatingSubjectFormSet = modelformset_factory(RatingSubject)
   context = {}
   if request.method == 'POST':
