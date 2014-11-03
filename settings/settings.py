@@ -1,6 +1,5 @@
 # Django settings for Anou project.
 import os, socket
-from memcacheify import memcacheify
 from people import *
 
 LOCAL_MACHINES = ['TOMCOUNSELL']
@@ -148,14 +147,8 @@ if STAGE:
 if DEMO:
   WEPAY['redirect_uri'] = 'http://anou-cobra-demo.herokuapp.com/checkout/confirmation'
 
-if PRODUCTION or (os.environ.get('CACHEING') == 'ON'):
-  CACHES = memcacheify()
-else:
-  CACHES = {
-    'default': {
-      'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-    }
-  }
+from memcacheify import memcacheify
+CACHES = memcacheify()
 
 RAVEN_CONFIG = {
   'dsn': 'https://f590888e182a4110b137b51e58352072:b4289579833c4f47950a36fd340746b3@app.getsentry.com/12262',
@@ -285,7 +278,6 @@ INSTALLED_APPS = (
   #'djrill',
   'storages',
   #'compressor',
-  'south',
   #'django.contrib.auth',
   'django.contrib.contenttypes',
   'django.contrib.sessions',

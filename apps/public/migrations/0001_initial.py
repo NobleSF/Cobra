@@ -1,341 +1,128 @@
 # -*- coding: utf-8 -*-
-import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'Cart'
-        db.create_table('public_cart', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('email', self.gf('django.db.models.fields.EmailField')(max_length=75, null=True, blank=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
-            ('address1', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
-            ('address2', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
-            ('city', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
-            ('state', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
-            ('postal_code', self.gf('django.db.models.fields.CharField')(max_length=15, null=True, blank=True)),
-            ('country', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
-            ('wepay_checkout_id', self.gf('django.db.models.fields.BigIntegerField')(null=True, blank=True)),
-            ('checked_out', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-        ))
-        db.send_create_signal('public', ['Cart'])
+    dependencies = [
+        ('seller', '0001_initial'),
+        ('admin', '0001_initial'),
+    ]
 
-        # Adding model 'Item'
-        db.create_table('public_item', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('cart', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['public.Cart'])),
-            ('product', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['seller.Product'])),
-        ))
-        db.send_create_signal('public', ['Item'])
-
-        # Adding model 'Order'
-        db.create_table('public_order', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('cart', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['public.Cart'])),
-            ('products_charge', self.gf('django.db.models.fields.DecimalField')(max_digits=6, decimal_places=2)),
-            ('anou_charge', self.gf('django.db.models.fields.DecimalField')(max_digits=6, decimal_places=2)),
-            ('shipping_charge', self.gf('django.db.models.fields.DecimalField')(max_digits=6, decimal_places=2)),
-            ('discount_charge', self.gf('django.db.models.fields.DecimalField')(default=0, max_digits=6, decimal_places=2)),
-            ('discount_reason', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
-            ('total_charge', self.gf('django.db.models.fields.DecimalField')(max_digits=6, decimal_places=2)),
-            ('receipt', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('shipping_option', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['seller.ShippingOption'], null=True, blank=True)),
-            ('shipping_weight', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
-            ('shipping_cost', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=6, decimal_places=2, blank=True)),
-            ('tracking_number', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
-            ('seller_paid_amount', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=6, decimal_places=2, blank=True)),
-            ('seller_notified_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('seller_confirmed_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('shipped_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('received_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('reviewed_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('seller_paid_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('returned_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('notes', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-        ))
-        db.send_create_signal('public', ['Order'])
-
-        # Adding M2M table for field products on 'Order'
-        db.create_table('public_order_products', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('order', models.ForeignKey(orm['public.order'], null=False)),
-            ('product', models.ForeignKey(orm['seller.product'], null=False))
-        ))
-        db.create_unique('public_order_products', ['order_id', 'product_id'])
-
-        # Adding model 'Rating'
-        db.create_table('public_rating', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('product', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['seller.Product'])),
-            ('subject', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['admin.RatingSubject'])),
-            ('value', self.gf('django.db.models.fields.SmallIntegerField')()),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-        ))
-        db.send_create_signal('public', ['Rating'])
-
-        # Adding model 'Subscription'
-        db.create_table('public_subscription', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('email', self.gf('django.db.models.fields.CharField')(unique=True, max_length=100)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-        ))
-        db.send_create_signal('public', ['Subscription'])
-
-        # Adding model 'CustomerActivity'
-        db.create_table('public_customeractivity', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('product_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['seller.Product'])),
-            ('action', self.gf('django.db.models.fields.CharField')(max_length=10)),
-            ('value', self.gf('django.db.models.fields.IntegerField')()),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-        ))
-        db.send_create_signal('public', ['CustomerActivity'])
-
-        # Adding model 'Visitor'
-        db.create_table('public_visitor', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('carts', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['public.Cart'], null=True, blank=True)),
-        ))
-        db.send_create_signal('public', ['Visitor'])
-
-        # Adding M2M table for field sessions on 'Visitor'
-        db.create_table('public_visitor_sessions', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('visitor', models.ForeignKey(orm['public.visitor'], null=False)),
-            ('session', models.ForeignKey(orm['sessions.session'], null=False))
-        ))
-        db.create_unique('public_visitor_sessions', ['visitor_id', 'session_id'])
-
-
-    def backwards(self, orm):
-        # Deleting model 'Cart'
-        db.delete_table('public_cart')
-
-        # Deleting model 'Item'
-        db.delete_table('public_item')
-
-        # Deleting model 'Order'
-        db.delete_table('public_order')
-
-        # Removing M2M table for field products on 'Order'
-        db.delete_table('public_order_products')
-
-        # Deleting model 'Rating'
-        db.delete_table('public_rating')
-
-        # Deleting model 'Subscription'
-        db.delete_table('public_subscription')
-
-        # Deleting model 'CustomerActivity'
-        db.delete_table('public_customeractivity')
-
-        # Deleting model 'Visitor'
-        db.delete_table('public_visitor')
-
-        # Removing M2M table for field sessions on 'Visitor'
-        db.delete_table('public_visitor_sessions')
-
-
-    models = {
-        'admin.account': {
-            'Meta': {'object_name': 'Account'},
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'unique': 'True', 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_admin': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'password': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
-            'phone': ('django.db.models.fields.CharField', [], {'max_length': '15', 'unique': 'True', 'null': 'True', 'blank': 'True'}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
-        },
-        'admin.category': {
-            'Meta': {'object_name': 'Category'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
-        },
-        'admin.color': {
-            'Meta': {'object_name': 'Color'},
-            'hex_value': ('django.db.models.fields.CharField', [], {'max_length': '6'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '15'})
-        },
-        'admin.country': {
-            'Meta': {'object_name': 'Country'},
-            'calling_code': ('django.db.models.fields.IntegerField', [], {}),
-            'code': ('django.db.models.fields.CharField', [], {'max_length': '3'}),
-            'currency': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['admin.Currency']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        },
-        'admin.currency': {
-            'Meta': {'object_name': 'Currency'},
-            'code': ('django.db.models.fields.CharField', [], {'max_length': '3'}),
-            'exchange_rate_to_USD': ('django.db.models.fields.FloatField', [], {}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
-        },
-        'admin.ratingsubject': {
-            'Meta': {'object_name': 'RatingSubject'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '20'})
-        },
-        'public.cart': {
-            'Meta': {'object_name': 'Cart'},
-            'address1': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'address2': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'checked_out': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'city': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'country': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'postal_code': ('django.db.models.fields.CharField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'}),
-            'state': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'wepay_checkout_id': ('django.db.models.fields.BigIntegerField', [], {'null': 'True', 'blank': 'True'})
-        },
-        'public.customeractivity': {
-            'Meta': {'object_name': 'CustomerActivity'},
-            'action': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'product_id': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['seller.Product']"}),
-            'value': ('django.db.models.fields.IntegerField', [], {})
-        },
-        'public.item': {
-            'Meta': {'object_name': 'Item'},
-            'cart': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['public.Cart']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'product': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['seller.Product']"})
-        },
-        'public.order': {
-            'Meta': {'object_name': 'Order'},
-            'anou_charge': ('django.db.models.fields.DecimalField', [], {'max_digits': '6', 'decimal_places': '2'}),
-            'cart': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['public.Cart']"}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'discount_charge': ('django.db.models.fields.DecimalField', [], {'default': '0', 'max_digits': '6', 'decimal_places': '2'}),
-            'discount_reason': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'notes': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'products': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['seller.Product']", 'symmetrical': 'False'}),
-            'products_charge': ('django.db.models.fields.DecimalField', [], {'max_digits': '6', 'decimal_places': '2'}),
-            'receipt': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'received_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'returned_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'reviewed_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'seller_confirmed_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'seller_notified_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'seller_paid_amount': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '6', 'decimal_places': '2', 'blank': 'True'}),
-            'seller_paid_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'shipped_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'shipping_charge': ('django.db.models.fields.DecimalField', [], {'max_digits': '6', 'decimal_places': '2'}),
-            'shipping_cost': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '6', 'decimal_places': '2', 'blank': 'True'}),
-            'shipping_option': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['seller.ShippingOption']", 'null': 'True', 'blank': 'True'}),
-            'shipping_weight': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'total_charge': ('django.db.models.fields.DecimalField', [], {'max_digits': '6', 'decimal_places': '2'}),
-            'tracking_number': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
-        },
-        'public.rating': {
-            'Meta': {'object_name': 'Rating'},
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'product': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['seller.Product']"}),
-            'subject': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['admin.RatingSubject']"}),
-            'value': ('django.db.models.fields.SmallIntegerField', [], {})
-        },
-        'public.subscription': {
-            'Meta': {'object_name': 'Subscription'},
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'email': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'})
-        },
-        'public.visitor': {
-            'Meta': {'object_name': 'Visitor'},
-            'carts': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['public.Cart']", 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'sessions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['sessions.Session']", 'symmetrical': 'False'})
-        },
-        'seller.asset': {
-            'Meta': {'object_name': 'Asset'},
-            'categories': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['admin.Category']", 'null': 'True', 'blank': 'True'}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'ilk': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
-            'image': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['seller.Image']", 'null': 'True', 'on_delete': 'models.SET_NULL', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'seller': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['seller.Seller']"}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
-        },
-        'seller.image': {
-            'Meta': {'object_name': 'Image'},
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'original': ('django.db.models.fields.URLField', [], {'max_length': '200'}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
-        },
-        'seller.product': {
-            'Meta': {'object_name': 'Product'},
-            'active_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'approved_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'assets': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['seller.Asset']", 'symmetrical': 'False'}),
-            'colors': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['admin.Color']", 'symmetrical': 'False'}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'deactive_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'height': ('django.db.models.fields.SmallIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'length': ('django.db.models.fields.SmallIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'price': ('django.db.models.fields.SmallIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'seller': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['seller.Seller']"}),
-            'shipping_options': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['seller.ShippingOption']", 'symmetrical': 'False'}),
-            'sold_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'weight': ('django.db.models.fields.SmallIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'width': ('django.db.models.fields.SmallIntegerField', [], {'null': 'True', 'blank': 'True'})
-        },
-        'seller.seller': {
-            'Meta': {'object_name': 'Seller'},
-            'account': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['admin.Account']"}),
-            'bio': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'city': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'coordinates': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
-            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['admin.Country']", 'null': 'True', 'blank': 'True'}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'currency': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['admin.Currency']", 'null': 'True', 'blank': 'True'}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['seller.Image']", 'null': 'True', 'on_delete': 'models.SET_NULL', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'phone': ('django.db.models.fields.BigIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
-        },
-        'seller.shippingoption': {
-            'Meta': {'object_name': 'ShippingOption'},
-            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['admin.Country']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['seller.Image']"}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
-        },
-        'sessions.session': {
-            'Meta': {'object_name': 'Session', 'db_table': "'django_session'"},
-            'expire_date': ('django.db.models.fields.DateTimeField', [], {'db_index': 'True'}),
-            'session_data': ('django.db.models.fields.TextField', [], {}),
-            'session_key': ('django.db.models.fields.CharField', [], {'max_length': '40', 'primary_key': 'True'})
-        }
-    }
-
-    complete_apps = ['public']
+    operations = [
+        migrations.CreateModel(
+            name='Cart',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('email', models.EmailField(max_length=75, null=True, blank=True)),
+                ('name', models.CharField(max_length=100, null=True, blank=True)),
+                ('address_name', models.CharField(max_length=100, null=True, blank=True)),
+                ('address1', models.CharField(max_length=100, null=True, blank=True)),
+                ('address2', models.CharField(max_length=100, null=True, blank=True)),
+                ('city', models.CharField(max_length=50, null=True, blank=True)),
+                ('state', models.CharField(max_length=50, null=True, blank=True)),
+                ('postal_code', models.CharField(max_length=15, null=True, blank=True)),
+                ('country', models.CharField(max_length=50, null=True, blank=True)),
+                ('wepay_checkout_id', models.BigIntegerField(null=True, blank=True)),
+                ('anou_checkout_id', models.CharField(max_length=15, null=True, blank=True)),
+                ('checked_out', models.BooleanField(default=False)),
+                ('receipt', models.TextField(null=True, blank=True)),
+                ('notes', models.TextField(null=True, blank=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Item',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('cart', models.ForeignKey(to='public.Cart')),
+                ('product', models.ForeignKey(to='seller.Product')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Order',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('products_charge', models.DecimalField(max_digits=8, decimal_places=2)),
+                ('anou_charge', models.DecimalField(max_digits=8, decimal_places=2)),
+                ('shipping_charge', models.DecimalField(max_digits=8, decimal_places=2)),
+                ('total_charge', models.DecimalField(max_digits=8, decimal_places=2)),
+                ('shipping_weight', models.FloatField(null=True, blank=True)),
+                ('shipping_cost', models.DecimalField(null=True, max_digits=8, decimal_places=2, blank=True)),
+                ('tracking_number', models.CharField(max_length=50, null=True, blank=True)),
+                ('seller_paid_amount', models.DecimalField(null=True, max_digits=8, decimal_places=2, blank=True)),
+                ('seller_notified_at', models.DateTimeField(null=True, blank=True)),
+                ('seller_confirmed_at', models.DateTimeField(null=True, blank=True)),
+                ('shipped_at', models.DateTimeField(null=True, blank=True)),
+                ('received_at', models.DateTimeField(null=True, blank=True)),
+                ('reviewed_at', models.DateTimeField(null=True, blank=True)),
+                ('seller_paid_at', models.DateTimeField(null=True, blank=True)),
+                ('returned_at', models.DateTimeField(null=True, blank=True)),
+                ('notes', models.TextField(null=True, blank=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+                ('cart', models.ForeignKey(related_name='orders', to='public.Cart')),
+                ('products', models.ManyToManyField(to='seller.Product')),
+                ('seller_paid_receipt', models.ForeignKey(blank=True, to='seller.Image', null=True)),
+                ('shipping_option', models.ForeignKey(blank=True, to='seller.ShippingOption', null=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Promotion',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=50, null=True, blank=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Ranking',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('photography', models.DecimalField(default=b'0.50', max_digits=3, decimal_places=2)),
+                ('price', models.DecimalField(default=b'0.50', max_digits=3, decimal_places=2)),
+                ('appeal', models.DecimalField(default=b'0.50', max_digits=3, decimal_places=2)),
+                ('new_product', models.DecimalField(default=b'1.00', max_digits=3, decimal_places=2)),
+                ('new_store', models.DecimalField(default=b'1.00', max_digits=3, decimal_places=2)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+                ('product', models.OneToOneField(to='seller.Product')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Rating',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('session_key', models.CharField(max_length=32)),
+                ('value', models.SmallIntegerField()),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('product', models.ForeignKey(to='seller.Product')),
+                ('subject', models.ForeignKey(to='admin.RatingSubject')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.AddField(
+            model_name='cart',
+            name='promotions',
+            field=models.ManyToManyField(to='public.Promotion'),
+            preserve_default=True,
+        ),
+    ]

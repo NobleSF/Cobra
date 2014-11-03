@@ -1,272 +1,199 @@
 # -*- coding: utf-8 -*-
-import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+import django.db.models.deletion
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'Seller'
-        db.create_table('seller_seller', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('account', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['admin.Account'])),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('email', self.gf('django.db.models.fields.EmailField')(max_length=75, null=True, blank=True)),
-            ('phone', self.gf('django.db.models.fields.BigIntegerField')(null=True, blank=True)),
-            ('bio', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('city', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
-            ('country', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['admin.Country'], null=True, blank=True)),
-            ('coordinates', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
-            ('currency', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['admin.Currency'], null=True, blank=True)),
-            ('image', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['seller.Image'], null=True, on_delete=models.SET_NULL, blank=True)),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-        ))
-        db.send_create_signal('seller', ['Seller'])
+    dependencies = [
+        ('admin', '0001_initial'),
+    ]
 
-        # Adding model 'Asset'
-        db.create_table('seller_asset', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('seller', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['seller.Seller'])),
-            ('ilk', self.gf('django.db.models.fields.CharField')(max_length=10)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
-            ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('image', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['seller.Image'], null=True, on_delete=models.SET_NULL, blank=True)),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-        ))
-        db.send_create_signal('seller', ['Asset'])
-
-        # Adding M2M table for field categories on 'Asset'
-        db.create_table('seller_asset_categories', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('asset', models.ForeignKey(orm['seller.asset'], null=False)),
-            ('category', models.ForeignKey(orm['admin.category'], null=False))
-        ))
-        db.create_unique('seller_asset_categories', ['asset_id', 'category_id'])
-
-        # Adding model 'Product'
-        db.create_table('seller_product', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('seller', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['seller.Seller'])),
-            ('width', self.gf('django.db.models.fields.SmallIntegerField')(null=True, blank=True)),
-            ('height', self.gf('django.db.models.fields.SmallIntegerField')(null=True, blank=True)),
-            ('length', self.gf('django.db.models.fields.SmallIntegerField')(null=True, blank=True)),
-            ('weight', self.gf('django.db.models.fields.SmallIntegerField')(null=True, blank=True)),
-            ('price', self.gf('django.db.models.fields.SmallIntegerField')(null=True, blank=True)),
-            ('active_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('deactive_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('approved_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('sold_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-        ))
-        db.send_create_signal('seller', ['Product'])
-
-        # Adding M2M table for field assets on 'Product'
-        db.create_table('seller_product_assets', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('product', models.ForeignKey(orm['seller.product'], null=False)),
-            ('asset', models.ForeignKey(orm['seller.asset'], null=False))
-        ))
-        db.create_unique('seller_product_assets', ['product_id', 'asset_id'])
-
-        # Adding M2M table for field colors on 'Product'
-        db.create_table('seller_product_colors', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('product', models.ForeignKey(orm['seller.product'], null=False)),
-            ('color', models.ForeignKey(orm['admin.color'], null=False))
-        ))
-        db.create_unique('seller_product_colors', ['product_id', 'color_id'])
-
-        # Adding M2M table for field shipping_options on 'Product'
-        db.create_table('seller_product_shipping_options', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('product', models.ForeignKey(orm['seller.product'], null=False)),
-            ('shippingoption', models.ForeignKey(orm['seller.shippingoption'], null=False))
-        ))
-        db.create_unique('seller_product_shipping_options', ['product_id', 'shippingoption_id'])
-
-        # Adding model 'ShippingOption'
-        db.create_table('seller_shippingoption', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('country', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['admin.Country'])),
-            ('image', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['seller.Image'])),
-        ))
-        db.send_create_signal('seller', ['ShippingOption'])
-
-        # Adding model 'Photo'
-        db.create_table('seller_photo', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('product', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['seller.Product'])),
-            ('rank', self.gf('django.db.models.fields.SmallIntegerField')()),
-            ('original', self.gf('django.db.models.fields.URLField')(max_length=200)),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-        ))
-        db.send_create_signal('seller', ['Photo'])
-
-        # Adding unique constraint on 'Photo', fields ['product', 'rank']
-        db.create_unique('seller_photo', ['product_id', 'rank'])
-
-        # Adding model 'Image'
-        db.create_table('seller_image', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('original', self.gf('django.db.models.fields.URLField')(max_length=200)),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-        ))
-        db.send_create_signal('seller', ['Image'])
-
-
-    def backwards(self, orm):
-        # Removing unique constraint on 'Photo', fields ['product', 'rank']
-        db.delete_unique('seller_photo', ['product_id', 'rank'])
-
-        # Deleting model 'Seller'
-        db.delete_table('seller_seller')
-
-        # Deleting model 'Asset'
-        db.delete_table('seller_asset')
-
-        # Removing M2M table for field categories on 'Asset'
-        db.delete_table('seller_asset_categories')
-
-        # Deleting model 'Product'
-        db.delete_table('seller_product')
-
-        # Removing M2M table for field assets on 'Product'
-        db.delete_table('seller_product_assets')
-
-        # Removing M2M table for field colors on 'Product'
-        db.delete_table('seller_product_colors')
-
-        # Removing M2M table for field shipping_options on 'Product'
-        db.delete_table('seller_product_shipping_options')
-
-        # Deleting model 'ShippingOption'
-        db.delete_table('seller_shippingoption')
-
-        # Deleting model 'Photo'
-        db.delete_table('seller_photo')
-
-        # Deleting model 'Image'
-        db.delete_table('seller_image')
-
-
-    models = {
-        'admin.account': {
-            'Meta': {'object_name': 'Account'},
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'unique': 'True', 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_admin': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'password': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
-            'phone': ('django.db.models.fields.CharField', [], {'max_length': '15', 'unique': 'True', 'null': 'True', 'blank': 'True'}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
-        },
-        'admin.category': {
-            'Meta': {'object_name': 'Category'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
-        },
-        'admin.color': {
-            'Meta': {'object_name': 'Color'},
-            'hex_value': ('django.db.models.fields.CharField', [], {'max_length': '6'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '15'})
-        },
-        'admin.country': {
-            'Meta': {'object_name': 'Country'},
-            'calling_code': ('django.db.models.fields.IntegerField', [], {}),
-            'code': ('django.db.models.fields.CharField', [], {'max_length': '3'}),
-            'currency': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['admin.Currency']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        },
-        'admin.currency': {
-            'Meta': {'object_name': 'Currency'},
-            'code': ('django.db.models.fields.CharField', [], {'max_length': '3'}),
-            'exchange_rate_to_USD': ('django.db.models.fields.FloatField', [], {}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
-        },
-        'seller.asset': {
-            'Meta': {'object_name': 'Asset'},
-            'categories': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['admin.Category']", 'null': 'True', 'blank': 'True'}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'ilk': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
-            'image': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['seller.Image']", 'null': 'True', 'on_delete': 'models.SET_NULL', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'seller': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['seller.Seller']"}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
-        },
-        'seller.image': {
-            'Meta': {'object_name': 'Image'},
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'original': ('django.db.models.fields.URLField', [], {'max_length': '200'}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
-        },
-        'seller.photo': {
-            'Meta': {'ordering': "['product', 'rank']", 'unique_together': "(('product', 'rank'),)", 'object_name': 'Photo'},
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'original': ('django.db.models.fields.URLField', [], {'max_length': '200'}),
-            'product': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['seller.Product']"}),
-            'rank': ('django.db.models.fields.SmallIntegerField', [], {}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
-        },
-        'seller.product': {
-            'Meta': {'object_name': 'Product'},
-            'active_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'approved_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'assets': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['seller.Asset']", 'symmetrical': 'False'}),
-            'colors': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['admin.Color']", 'symmetrical': 'False'}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'deactive_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'height': ('django.db.models.fields.SmallIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'length': ('django.db.models.fields.SmallIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'price': ('django.db.models.fields.SmallIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'seller': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['seller.Seller']"}),
-            'shipping_options': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['seller.ShippingOption']", 'symmetrical': 'False'}),
-            'sold_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'weight': ('django.db.models.fields.SmallIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'width': ('django.db.models.fields.SmallIntegerField', [], {'null': 'True', 'blank': 'True'})
-        },
-        'seller.seller': {
-            'Meta': {'object_name': 'Seller'},
-            'account': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['admin.Account']"}),
-            'bio': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'city': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'coordinates': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
-            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['admin.Country']", 'null': 'True', 'blank': 'True'}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'currency': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['admin.Currency']", 'null': 'True', 'blank': 'True'}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['seller.Image']", 'null': 'True', 'on_delete': 'models.SET_NULL', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'phone': ('django.db.models.fields.BigIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
-        },
-        'seller.shippingoption': {
-            'Meta': {'object_name': 'ShippingOption'},
-            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['admin.Country']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['seller.Image']"}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
-        }
-    }
-
-    complete_apps = ['seller']
+    operations = [
+        migrations.CreateModel(
+            name='Asset',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('ilk', models.CharField(max_length=10)),
+                ('rank', models.SmallIntegerField()),
+                ('name', models.CharField(max_length=50, null=True, blank=True)),
+                ('description', models.TextField(null=True, blank=True)),
+                ('phone', models.CharField(max_length=15, null=True, blank=True)),
+                ('name_ol', models.CharField(max_length=50, null=True, blank=True)),
+                ('description_ol', models.TextField(null=True, blank=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+                ('categories', models.ManyToManyField(to='admin.Category', null=True, blank=True)),
+            ],
+            options={
+                'ordering': ['rank', 'created_at'],
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='CustomOrder',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('customer_name', models.TextField(null=True, blank=True)),
+                ('customer_email', models.TextField(null=True, blank=True)),
+                ('notes', models.TextField(null=True, blank=True)),
+                ('estimated_completion_date', models.DateTimeField(null=True, blank=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Image',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('original', models.URLField()),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Photo',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('rank', models.SmallIntegerField()),
+                ('is_progress', models.BooleanField(default=False)),
+                ('original', models.URLField()),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+            ],
+            options={
+                'ordering': ['product', 'rank'],
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Product',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('width', models.SmallIntegerField(null=True, blank=True)),
+                ('height', models.SmallIntegerField(null=True, blank=True)),
+                ('length', models.SmallIntegerField(null=True, blank=True)),
+                ('weight', models.SmallIntegerField(null=True, blank=True)),
+                ('price', models.SmallIntegerField(null=True, blank=True)),
+                ('active_at', models.DateTimeField(null=True, blank=True)),
+                ('deactive_at', models.DateTimeField(null=True, blank=True)),
+                ('in_holding', models.BooleanField(default=False)),
+                ('approved_at', models.DateTimeField(null=True, blank=True)),
+                ('sold_at', models.DateTimeField(null=True, blank=True)),
+                ('slug', models.CharField(max_length=150, null=True, blank=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+                ('assets', models.ManyToManyField(to='seller.Asset')),
+                ('colors', models.ManyToManyField(to='admin.Color')),
+            ],
+            options={
+                'ordering': ['-sold_at', '-id'],
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Seller',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('bio', models.TextField(null=True, blank=True)),
+                ('city', models.CharField(max_length=50, null=True, blank=True)),
+                ('coordinates', models.CharField(max_length=30, null=True, blank=True)),
+                ('bio_ol', models.TextField(null=True, blank=True)),
+                ('approved_at', models.DateTimeField(null=True, blank=True)),
+                ('deactive_at', models.DateTimeField(null=True, blank=True)),
+                ('slug', models.CharField(max_length=150, null=True, blank=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+                ('account', models.ForeignKey(related_name='sellers', to='admin.Account')),
+                ('country', models.ForeignKey(blank=True, to='admin.Country', null=True)),
+                ('image', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, blank=True, to='seller.Image', null=True)),
+                ('translated_by', models.ForeignKey(related_name='translator', blank=True, to='admin.Account', null=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='ShippingOption',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=50)),
+                ('country', models.ForeignKey(to='admin.Country')),
+                ('image', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, blank=True, to='seller.Image', null=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Upload',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('public_id', models.CharField(unique=True, max_length=100)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('complete_at', models.DateTimeField(null=True, blank=True)),
+                ('url', models.URLField(null=True, blank=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.AddField(
+            model_name='product',
+            name='seller',
+            field=models.ForeignKey(to='seller.Seller'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='product',
+            name='shipping_options',
+            field=models.ManyToManyField(to='seller.ShippingOption'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='photo',
+            name='product',
+            field=models.ForeignKey(related_name='photos', to='seller.Product'),
+            preserve_default=True,
+        ),
+        migrations.AlterUniqueTogether(
+            name='photo',
+            unique_together=set([('product', 'rank')]),
+        ),
+        migrations.AddField(
+            model_name='customorder',
+            name='base_product',
+            field=models.ForeignKey(related_name='custom_orders', to='seller.Product', null=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='customorder',
+            name='custom_product',
+            field=models.OneToOneField(to='seller.Product'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='asset',
+            name='image',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, blank=True, to='seller.Image', null=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='asset',
+            name='seller',
+            field=models.ForeignKey(to='seller.Seller'),
+            preserve_default=True,
+        ),
+        migrations.AlterUniqueTogether(
+            name='asset',
+            unique_together=set([('seller', 'ilk', 'rank')]),
+        ),
+    ]
