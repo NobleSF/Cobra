@@ -1,5 +1,5 @@
 # Django settings for Anou project.
-import dj_database_url, os, socket
+import os, socket
 from memcacheify import memcacheify
 from people import *
 
@@ -29,6 +29,7 @@ SITE_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 ADMINS = (('Developer', 'dev@theanou.com'),)
 MANAGERS = ADMINS
 
+import dj_database_url
 if PRODUCTION or STAGE or DEMO:
   DATABASES = {'default': dj_database_url.config()}
   SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -147,7 +148,7 @@ if STAGE:
 if DEMO:
   WEPAY['redirect_uri'] = 'http://anou-cobra-demo.herokuapp.com/checkout/confirmation'
 
-if PRODUCTION or ('CACHEING' in os.environ and os.environ['CACHEING'] == 'ON'):
+if PRODUCTION or (os.environ.get('CACHEING') == 'ON'):
   CACHES = memcacheify()
 else:
   CACHES = {
@@ -174,11 +175,6 @@ ALLOWED_HOSTS = [
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
-# although not all choices may be available on all operating systems.
-# On Unix systems, a value of None will cause Django to use the same
-# timezone as the operating system.
-# If running in a Windows environment this must be set to the same as your
-# system time zone.
 TIME_ZONE = 'Africa/Casablanca'
 
 # Language code for this installation. All choices can be found here:

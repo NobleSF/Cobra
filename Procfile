@@ -1,1 +1,1 @@
-web: newrelic-admin run-program gunicorn settings.wsgi --timeout 300
+web: waitress-serve --port=$PORT Cobra.wsgi:application
