@@ -53,7 +53,6 @@ def updateOrder((product_id, data), gimme_reply_sms=False):
       Step 3. Else if not confirmed, promote to confirmed
       Step 4. Else we can't go any further
   """
-  from apps.public.models.order import Order
   from apps.seller.models.product import Product
 
   try:
