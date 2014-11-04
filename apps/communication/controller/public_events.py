@@ -1,9 +1,7 @@
-from django.http import HttpResponse
 import json
-from apps.communication.controller.email_class import Email
-from apps.communication.controller.sms import sendSMS
-from settings.settings import DEBUG
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from apps.communication.controller.email_class import Email
 
 @csrf_exempt
 def subscribe(request): #ajax requests only

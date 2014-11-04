@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.utils import timezone
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.seller.models.seller import Seller
 from apps.seller.models.product import Product
-from django.utils import timezone
-from django.db.models import Q
 
 @access_required('seller')
 def products(request):

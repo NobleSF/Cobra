@@ -1,15 +1,16 @@
-import requests
-from requests.auth import HTTPBasicAuth
-from settings.settings import TELERIVET, STAGE, DEBUG, DEMO
 import json
 import re #regular expressions
+import requests
+from requests.auth import HTTPBasicAuth
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from settings.settings import TELERIVET, STAGE, DEBUG, DEMO
 from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.seller.models.product import Product
 from apps.admin.utils.decorator import postpone
 from apps.communication.controller.email_class import Email
-from settings.people import support_team, operations_team
+from settings.people import support_team
+
 
 #todo: this should be a class, not bunch of functions
 
@@ -195,7 +196,6 @@ def status_confirmation(request):
 
 def getPhoneOwner(phone_number):
   from apps.seller.models.seller import Seller
-  from apps.seller.models.asset import Asset
 
   phone_number = phone_number[-8:]
   sender = {}

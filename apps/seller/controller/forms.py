@@ -1,13 +1,7 @@
-from django.db import models
 from django import forms
-from apps.seller.models.asset import Asset
-from apps.seller.models.product import Product
-from apps.seller.models.seller import Seller
-from apps.seller.models.image import Image
-from apps.seller.models.photo import Photo
+from django.forms.widgets import TextInput
 from apps.admin.models.category import Category
 
-from django.forms.widgets import TextInput
 class NumberInput(TextInput):
   input_type = 'tel'
 

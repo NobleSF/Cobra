@@ -1,5 +1,6 @@
 from math import ceil as roundUp
 
+
 def calculateShippingCost(weight, shipping_option, ship_to_country):
   shipping_cost = 9999
   rates = {}
@@ -23,7 +24,7 @@ def calculateShippingCost(weight, shipping_option, ship_to_country):
       '500': 178.5,
     }
 
-  elif (ship_to_country == 'US'): #Package shipping_option
+  elif ship_to_country == 'US':  # Package shipping_option
     rates = {
       '1000': 202,
       '2000': 290,
@@ -97,22 +98,22 @@ def calculateShippingCost(weight, shipping_option, ship_to_country):
       '70000': 8142,
     }
 
-  elif (ship_to_country == 'MA'): #Package shipping_option
+  elif ship_to_country == 'MA':  # Package shipping_option
     rates = {
       '20': 20,
-      '50':	23,
+      '50': 23,
       '100': 27,
       '250': 33,
       '500': 38,
       '1000': 46,
-      '2000':	47,
-      '3000':	48,
-      '4000':	49,
-      '5000':	50,
-      '6000':	57,
-      '7000':	58,
-      '8000':	59,
-      '9000':	60,
+      '2000': 47,
+      '3000': 48,
+      '4000': 49,
+      '5000': 50,
+      '6000': 57,
+      '7000': 58,
+      '8000': 59,
+      '9000': 60,
       '10000': 61,
       '11000': 69,
       '12000': 70,

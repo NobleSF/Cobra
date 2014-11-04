@@ -1,7 +1,7 @@
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render, get_object_or_404
-from django.core.urlresolvers import reverse
 import json
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
+from django.core.urlresolvers import reverse
 from django.views.decorators.cache import cache_page
 
 def home(request):

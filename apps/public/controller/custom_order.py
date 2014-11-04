@@ -1,15 +1,9 @@
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render, redirect
-from django.core.urlresolvers import reverse
-from django.contrib import messages
 import json
-from apps.admin.utils.decorator import access_required
-from apps.admin.utils.exception_handling import ExceptionHandler
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from apps.seller.models.seller import Seller
+from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.seller.models.product import Product
-from apps.seller.models.custom_order import CustomOrder
-from settings.people import developer_team, support_team
+from settings.people import support_team
 from apps.communication.controller.email_class import Email
 
 def estimate(request):

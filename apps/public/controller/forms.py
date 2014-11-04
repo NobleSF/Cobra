@@ -1,6 +1,4 @@
 from django import forms
-from apps.public.models.cart import Cart
-from django import forms
 
 class CartForm(forms.Form):
   email       = forms.CharField(max_length=100, widget=forms.TextInput(

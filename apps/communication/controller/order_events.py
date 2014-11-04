@@ -1,10 +1,9 @@
+from django.utils import timezone
 from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.communication.controller.email_class import Email
-from apps.communication.controller.sms import sendSMS, sendSMSForOrder
-from apps.communication.models.sms import SMS
+from apps.communication.controller.sms import sendSMSForOrder
 from settings.settings import DEBUG
 from settings.people import operations_team, support_team
-from django.utils import timezone
 
 def communicateOrdersCreated(orders):
   try:

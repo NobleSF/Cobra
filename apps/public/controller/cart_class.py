@@ -2,7 +2,6 @@ from apps.admin.utils.exception_handling import ExceptionHandler
 from django.utils import timezone
 from datetime import timedelta
 from apps.public.controller.promotion_rules import discount_for_cart_promotion
-
 from apps.public.models.item import Item
 from apps.public.models.cart import Cart as CartModel
 

@@ -1,9 +1,6 @@
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from django.contrib import messages
+from django.shortcuts import render
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
-
 
 @access_required('seller')
 def home(request):

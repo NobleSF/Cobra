@@ -1,16 +1,14 @@
+import json
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
-import json
 from django.utils import timezone, dateformat
+from django.views.decorators.csrf import csrf_exempt
+from django.db import IntegrityError
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
-from django.views.decorators.csrf import csrf_exempt
 from apps.seller.models.upload import Upload
 from apps.seller.models.image import Image
-from apps.seller.models.photo import Photo
-from django.db import IntegrityError
 from settings.settings import CLOUDINARY
-#from django.core.cache import cache
 
 @csrf_exempt
 def completeUpload(request):#for cloudinary to post info on completed uploads

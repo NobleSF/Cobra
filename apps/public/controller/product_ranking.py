@@ -1,10 +1,6 @@
-from math import log, pow, e, ceil
+from math import log, pow, e
 from django.db.models import Avg
 from django.utils import timezone
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from apps.seller.models.product import Product
-from apps.public.models.rating import Rating
 from apps.public.models.ranking import Ranking
 from apps.admin.utils.exception_handling import ExceptionHandler
 

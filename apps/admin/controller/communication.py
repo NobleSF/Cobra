@@ -1,10 +1,10 @@
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
-from django.contrib import messages
 import apps.communication.models
 from apps.seller.models.seller import Seller
+
 
 @access_required('admin')
 def sendSMS(request):

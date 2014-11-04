@@ -1,9 +1,6 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from apps.admin.utils.decorator import access_required
-from django.contrib import messages
-from datetime import datetime, timedelta
-from apps.admin.models.account import Account
 from apps.seller.models.product import Product
 
 @access_required('admin')

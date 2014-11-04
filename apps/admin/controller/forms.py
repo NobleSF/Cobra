@@ -1,9 +1,9 @@
-from django.db import models
 from django import forms
+from django.forms.widgets import TextInput
 from apps.admin.models.account import Account
 from apps.admin.controller.account import processPassword
 
-from django.forms.widgets import TextInput
+
 class NumberInput(TextInput):
   input_type = 'tel'
 

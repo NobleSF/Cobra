@@ -5,7 +5,6 @@ from django.utils import timezone, dateformat
 from apps.admin.utils.decorator import access_required
 from django.views.decorators.csrf import csrf_exempt
 from apps.admin.utils.exception_handling import ExceptionHandler
-from django.contrib import messages
 from apps.communication.controller.email_class import Email
 from apps.communication.controller.sms import sendSMS
 from datetime import datetime, timedelta

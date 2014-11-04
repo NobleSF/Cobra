@@ -1,12 +1,8 @@
-from django.http import HttpResponse, Http404
-from django.shortcuts import render, redirect, get_object_or_404
-from apps.admin.utils.exception_handling import ExceptionHandler
-from django.views.decorators.cache import cache_page
-from django.utils import timezone
 from datetime import datetime
-from apps.seller.models.product import Product
-from apps.seller.models.photo import Photo
 import json
+from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from apps.seller.models.product import Product
 
 def home(request, product_id, slug=None):
   product = get_object_or_404(Product, id=product_id)
