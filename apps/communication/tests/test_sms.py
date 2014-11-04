@@ -2,7 +2,7 @@ from django.test import TestCase
 from apps.communication.models.sms import SMS as SMSModel
 from apps.communication.controller import sms
 
-class SMSTestCase(TestCase):
+class SMSTest(TestCase):
   def test_create(self):
     """
     Tests that an SMS can be created and saved
