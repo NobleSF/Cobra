@@ -7,15 +7,15 @@ from apps.seller.models.shipping_option import ShippingOption
 from django.utils import timezone
 from apps.admin.utils.exception_handling import ExceptionHandler
 
-class ProductManager(models.Manager):
+class ProductQuerySet(models.QuerySet):
   def for_sale(self):
-    return super(ProductManager, self).get_queryset().filter(
-                                        sold_at=None,
-                                        approved_at__lte=timezone.now(),
-                                        active_at__lte=timezone.now(),
-                                        deactive_at=None,
-                                        seller__approved_at__lte=timezone.now(),
-                                        seller__deactive_at=None)
+    return self.filter(
+                  sold_at=None,
+                  approved_at__lte=timezone.now(),
+                  active_at__lte=timezone.now(),
+                  deactive_at=None,
+                  seller__approved_at__lte=timezone.now(),
+                  seller__deactive_at=None)
 
 class Product(models.Model):
   seller        = models.ForeignKey(Seller)
@@ -46,8 +46,8 @@ class Product(models.Model):
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
 
-  #MANAGERS
-  objects = ProductManager()
+  #CUSTOMIZED MANAGER
+  objects = ProductQuerySet.as_manager()
 
   class Meta:
     ordering = ['-sold_at', '-id']
