@@ -8,10 +8,7 @@ class Rating(models.Model):
   product             = models.ForeignKey(Product)
   subject             = models.ForeignKey(RatingSubject)
   value               = models.SmallIntegerField()
-  created_at          = models.DateTimeField(auto_now_add = True)
-
-  class Meta:
-    app_label = 'public'
+  created_at          = models.DateTimeField(auto_now_add=True)
 
   # MODEL PROPERTIES
   # MODEL FUNCTIONS
@@ -27,7 +24,7 @@ from apps.public.models.ranking import Ranking
 def updateRatingRankings(sender, instance, created, **kwargs):
   from apps.public.controller.product_ranking import newProductResult, newStoreResult, photographyResult, priceResult, appealResult
   try:
-    ranking, is_new = Ranking.objects.get_or_create(product = instance.product)
+    ranking, is_new = Ranking.objects.get_or_create(product=instance.product)
     if is_new:
       ranking.new_product = newProductResult(instance.product)
       ranking.new_store   = newStoreResult(instance.product)

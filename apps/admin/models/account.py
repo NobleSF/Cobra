@@ -16,9 +16,6 @@ class Account(models.Model):
   created_at    = models.DateTimeField(auto_now_add = True)
   updated_at    = models.DateTimeField(auto_now = True)
 
-  class Meta:
-    app_label = 'admin'
-
   # MODEL PROPERTIES
   @property
   def is_admin(self): return True if self.admin_type else False

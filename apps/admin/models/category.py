@@ -11,7 +11,6 @@ class Category(models.Model):
 
   class Meta:
     ordering = ['ordering_name']
-    app_label = 'admin'
 
   # MODEL PROPERTIES
   @property

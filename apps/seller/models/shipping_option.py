@@ -3,11 +3,8 @@ from apps.admin.models.country import Country
 
 class ShippingOption(models.Model):
   name            = models.CharField(max_length=50)
-  country         = models.ForeignKey(Country)#todo: remove
+  country         = models.ForeignKey(Country) #todo: refactor to define destination country
   image           = models.ForeignKey('Image', null=True, blank=True, on_delete=models.SET_NULL)
-
-  class Meta:
-    app_label = 'seller'
 
   # MODEL PROPERTIES
   # MODEL FUNCTIONS

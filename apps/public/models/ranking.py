@@ -12,9 +12,6 @@ class Ranking(models.Model):
   #update history
   updated_at    = models.DateTimeField(auto_now = True)
 
-  class Meta:
-    app_label = 'public'
-
   # MODEL PROPERTIES
   @property
   def subjects(self):

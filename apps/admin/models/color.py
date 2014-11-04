@@ -6,7 +6,6 @@ class Color(models.Model):
 
   class Meta:
     ordering = ['id']
-    app_label = 'admin'
 
   # MODEL PROPERTIES
 

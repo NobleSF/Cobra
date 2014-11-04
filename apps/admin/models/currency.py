@@ -6,9 +6,6 @@ class Currency(models.Model):
   exchange_rate_to_USD  = models.FloatField(verbose_name='Exchange Rate')
   updated_at            = models.DateTimeField(auto_now = True)
 
-  class Meta:
-    app_label = 'admin'
-
   # MODEL PROPERTIES
 
   # MODEL FUNCTIONS

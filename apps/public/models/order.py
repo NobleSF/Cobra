@@ -42,9 +42,6 @@ class Order(models.Model):
   created_at          = models.DateTimeField(auto_now_add = True)
   updated_at          = models.DateTimeField(auto_now = True)
 
-  class Meta:
-    app_label = 'public'
-
   # MODEL PROPERTIES
   @property
   def seller(self): return self.products.all()[0].seller

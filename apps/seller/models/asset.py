@@ -35,7 +35,6 @@ class Asset(models.Model):
   class Meta:
     unique_together = ('seller', 'ilk', 'rank')
     ordering = ['rank', 'created_at']
-    app_label = 'seller'
 
   # MODEL PROPERTIES
   # MODEL FUNCTIONS

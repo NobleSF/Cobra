@@ -30,7 +30,6 @@ class Photo(models.Model): #exclusively product photos.
   class Meta:
     unique_together = ('product', 'rank')
     ordering = ['product','rank',]
-    app_label = 'seller'
 
   # MODEL PROPERTIES
   # MODEL FUNCTIONS

@@ -30,8 +30,5 @@ class Image(models.Model): #for assets and anything other than product photos
     transformation = "c_fill,w_200,h_200,c_thumb,g_face,r_max"
     return u'%s' % self.original.replace("upload", ("upload/"+transformation))
 
-  class Meta:
-    app_label = 'seller'
-
   # MODEL PROPERTIES
   # MODEL FUNCTIONS

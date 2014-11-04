@@ -7,9 +7,6 @@ class Item(models.Model):
   product             = models.ForeignKey(Product)
   #quantity           = models.PositiveIntegerField(default=1)
 
-  class Meta:
-    app_label = 'public'
-
   # MODEL PROPERTIES
   @property
   def order(self):

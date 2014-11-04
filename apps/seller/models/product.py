@@ -51,7 +51,6 @@ class Product(models.Model):
 
   class Meta:
     ordering = ['-sold_at', '-id']
-    app_label = 'seller'
 
   # MODEL PROPERTIES
   @property

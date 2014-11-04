@@ -35,9 +35,6 @@ class Cart(models.Model):
   created_at          = models.DateTimeField(auto_now_add = True)
   updated_at          = models.DateTimeField(auto_now = True)
 
-  class Meta:
-    app_label = 'public'
-
   # MODEL PROPERTIES
   @property
   def checkout_id(self):
