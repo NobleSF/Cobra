@@ -1,11 +1,13 @@
+import json
+from datetime import timedelta
+
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.utils import timezone
+
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
-from django.contrib import messages
-import json
-from django.utils import timezone
-from datetime import timedelta
 from apps.admin.models.account import Account
 
 @access_required('admin')
@@ -83,7 +85,6 @@ def createSeller(request):
   context = {}
 
   if request.method == 'POST':
-
     name        = request.POST.get('name')
     phone       = request.POST.get('phone')
     password    = request.POST.get('password')
@@ -273,8 +274,6 @@ def login(request, next=None):
 
 @access_required('admin')
 def loginCheat(request):
-  from apps.seller.models.seller import Seller
-
   seller_id = request.GET.get('seller_id')
   destination = request.GET.get('destination')
 

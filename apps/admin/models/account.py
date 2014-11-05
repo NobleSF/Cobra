@@ -10,7 +10,7 @@ class Account(models.Model):
   bank_account  = models.CharField(max_length=100, blank=True, null=True)
 
   admin_type    = models.CharField(max_length=20, null=True)#super,country,trainer,translator
-                  #todo: create priveledges table with country assignments
+  #todo: create privileges table with group assignments
 
   #update history
   created_at    = models.DateTimeField(auto_now_add = True)
