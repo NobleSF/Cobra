@@ -9,7 +9,7 @@ class Account(models.Model):
   bank_name     = models.CharField(max_length=50, blank=True, null=True)
   bank_account  = models.CharField(max_length=100, blank=True, null=True)
 
-  admin_type    = models.CharField(max_length=20, null=True)#super,country,trainer,translator
+  admin_type    = models.CharField(max_length=20, null=True)#master,country,trainer,translator
   #todo: create privileges table with group assignments
 
   #update history
