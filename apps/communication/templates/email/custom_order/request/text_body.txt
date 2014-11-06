@@ -1,6 +1,6 @@
 Custom Changes Request for product #{{ data.product.id }}
 {{ data.product.name }} by {{ data.product.seller.name }}
-http://www.theanou.com/{{ data.product.get_absolute_url}}
+http://www.theanou.com{{ data.product.get_absolute_url}}
 
 Size:<br>
 {{ data.size }}

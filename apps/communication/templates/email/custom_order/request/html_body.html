@@ -1,6 +1,6 @@
 <h3>
   Custom changes request for product #{{ data.product.id }}:
-  <a href="http://www.theanou.com/{{ data.product.get_absolute_url}}">
+  <a href="http://www.theanou.com{{ data.product.get_absolute_url}}">
     {{ data.product.name }} by {{ data.product.seller.name }}
   </a>
 </h3>
