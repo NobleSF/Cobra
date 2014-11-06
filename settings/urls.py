@@ -20,8 +20,8 @@ from apps.admin.controller import account
 urlpatterns += patterns('',
   url(r'^blog',
       RedirectView.as_view(url='http://helloanou.wordpress.com/', permanent=False), name='blog'),
-  url(r'^login$', account.login, name='login'),
-  url(r'^logout$', account.logout, name='logout'),
+  url(r'^login', account.login, name='login'),
+  url(r'^logout', account.logout, name='logout'),
 )
 
 #OLD SITE REDIRECTS
