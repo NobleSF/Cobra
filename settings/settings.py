@@ -176,8 +176,22 @@ if STAGE:
 if DEMO:
   WEPAY['redirect_uri'] = 'http://anou-cobra-demo.herokuapp.com/checkout/confirmation'
 
-from memcacheify import memcacheify
-CACHES = memcacheify()
+
+import os
+import urlparse
+import json
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_bmemcached.memcached.BMemcached',
+        'LOCATION': os.environ.get('MEMCACHEDCLOUD_SERVERS').split(','),
+        'OPTIONS': {
+                    'username': os.environ.get('MEMCACHEDCLOUD_USERNAME'),
+                    'password': os.environ.get('MEMCACHEDCLOUD_PASSWORD')
+            }
+    }
+} if PRODUCTION or STAGE or DEMO else None
+
 
 RAVEN_CONFIG = {
   'dsn': 'https://f590888e182a4110b137b51e58352072:b4289579833c4f47950a36fd340746b3@app.getsentry.com/12262',
