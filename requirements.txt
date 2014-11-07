@@ -12,6 +12,7 @@ numpy==1.9.1
 pycrypto==2.6.1
 cloudinary
 newrelic
+python-memcached
 python-binary-memcached
 django-bmemcached
 requests
