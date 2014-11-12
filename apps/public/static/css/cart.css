@@ -13,9 +13,9 @@ body{min-width: 620px;}/* for the wepay iframe */
   padding: 0 0 0 1em;
 }
 
-#customer-info.part2, #payment.part3, #cart-shortcut{
-  display: none;
-}
+/*#customer-info.part2, #payment.part3, #cart-shortcut{*/
+  /*display: none;*/
+/*}*/
 
 #items .details li, #summary li, #mini-summary li{
   font-size: 1.7em;

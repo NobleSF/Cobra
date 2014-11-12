@@ -4,7 +4,7 @@ from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
 import json
 from django.contrib import messages
-
+from django.views.decorators.csrf import csrf_exempt
 from apps.public.controller.cart_class import Cart
 from apps.public.controller.forms import CartForm
 
@@ -20,6 +20,12 @@ def cart(request):
   try:
     cart_form.fields['email'].initial = cart.getData('email')
     cart_form.fields['name'].initial  = cart.getData('name')
+    cart_form.fields['address1'].initial  = cart.getData('address1')
+    cart_form.fields['address2'].initial  = cart.getData('address2')
+    cart_form.fields['city'].initial  = cart.getData('city')
+    cart_form.fields['state'].initial  = cart.getData('state')
+    cart_form.fields['postal_code'].initial  = cart.getData('postal_code')
+    cart_form.fields['country'].initial  = cart.getData('country')
   except: pass
   finally:
     context = {'cart':cart, 'cart_form':cart_form}
@@ -30,6 +36,7 @@ def cart(request):
       messages.warning(request, 'You are unable to checkout.')
 
   elif cart.count():
+
     wepay_checkout_uri = cart.getWePayCheckoutURI()
     if not isinstance(wepay_checkout_uri, basestring):
       context['exception'] = str(wepay_checkout_uri)
@@ -84,23 +91,48 @@ def cartSave(request): #ajax requests only
 
   return HttpResponse(json.dumps(response), content_type='application/json')
 
-def confirmation(request):
-  from apps.public.controller.order_class import getOrders
-  checkout_id = None
+@csrf_exempt
+def stripe_checkout(request):
+  import stripe
+  from settings.settings import STRIPE_API_KEY
+
+  stripe_token = request.POST.get('stripeToken')
+  stripe.api_key = STRIPE_API_KEY
+
+  #stripe_token_type = request.POST.get('stripeTokenType')
+  #stripe_email = request.POST.get('stripeEmail')
+
+  cart = Cart(request)
 
   try:
-    if request.method == 'GET':
-      checkout_id = request.GET.get('checkout_id')
-  except:
-    #if an admin is logged in, they should not have come without a checkout_id
-    if 'admin_id' in request.session:
-      raise Exception("No checkout_id provided. checkout_id is required for admins")
-    else:
-      pass # no worries, use the checkout_id from the session cart
-  finally:
-    cart = Cart(request, checkout_id)
+    charge = stripe.Charge.create(
+        amount=int(float(cart.summary()) * 100), # amount in cents, again
+        currency="usd",
+        card=stripe_token,
+        description="payment to Anou"
+    )
+    cart.cart.stripe_charge_id = charge.get('id')
+    cart.cart.wepay_checkout_id = None
+    cart.cart.checkout_data = charge
+    cart.cart.save()
+
+  except stripe.CardError, e:
+    # The card has been declined
+    print "card has been declined"
+  except Exception as e:
+    print str(e)
+
+  return redirect('confirmation', cart.cart.checkout_id)
+
+def confirmation(request, checkout_id=None):
+  from apps.public.controller.order_class import getOrders
+
+  checkout_id = checkout_id or request.GET.get('checkout_id')
+  print checkout_id
+  cart = Cart(request, checkout_id)
 
   checkout_data = cart.getCheckoutData() #return {} if no data available
+  #print checkout_data
   #also runs checkout processes if necessary
 
   if not checkout_data: #empty data means no checkout_id created for the cart.
@@ -113,7 +145,9 @@ def confirmation(request):
       if( checkout_data.get('gross') and
           checkout_data.get('state') in ['authorized', 'reserved', 'captured', 'refunded']
       ) or (
-          checkout_data.get('manual_order')
+        checkout_data.get('manual_order')
+      ) or (
+        checkout_data.get('paid')
       ):
         if cart.count: #if there are things in the cart
           cart.checkout()
@@ -122,7 +156,7 @@ def confirmation(request):
         if request.session.get('cart_id') and cart.cart.id == request.session.get('cart_id'):
           del request.session['cart_id']
 
-        if checkout_data.get('state') in ['refunded']:
+        if checkout_data.get('state') in ['refunded'] or checkout_data.get('refunded'):
           checkout_data['refund'] = True
       else:
         checkout_data = {'problem': "Payment on order is not complete."}

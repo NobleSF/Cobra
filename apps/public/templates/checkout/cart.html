@@ -141,15 +141,68 @@
                   </div>
                 </div>
 
+                <div class="control-group">
+                  <div class="controls">
+                    {{ cart_form.address1 }}
+                    <p class="help-inline">Address Line 1</p>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <div class="controls">
+                    {{ cart_form.address2 }}
+                    <p class="help-inline">Address Line 2</p>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <div class="controls">
+                    {{ cart_form.city }}
+                    <p class="help-inline">City</p>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <div class="controls">
+                    {{ cart_form.state }}
+                    <p class="help-inline">State/Region</p>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <div class="controls">
+                    {{ cart_form.postal_code }}
+                    <p class="help-inline">Postal Code</p>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <div class="controls">
+                    {{ cart_form.country }}
+                    <p class="help-inline">Country</p>
+                  </div>
+                </div>
+
               </fieldset>
             </div>
             <div class='span6'>
               <fieldset>
                 <legend>Order Total: ${{ cart.summary }}</legend>
                 <div class='control-group'>
-                  <button id='pay-now-button' class='btn btn-large btn-success'>
-                    Pay Now
-                  </button>
+                  <form action="{%  url 'stripe checkout' %}" method="POST">
+{#                    http://respondto.it/anou-stripe#}
+                    <script
+                      src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                      data-key="pk_test_47TiYcItnCxY3eHwS95vSWam"
+                      data-amount="{% widthratio cart.summary 1 100 %}"
+                      data-name="Anou"
+                      data-description="{{ cart|length }} item{{ cart|length|pluralize }} (${{ cart.summary }})"
+                      data-image="/static/images/Anou_logo_square_128.png"
+                      data-allow-remember-me="false"
+                      data-currency="USD"
+                      data-label="Pay with card.">
+                    </script>
+                  </form>
                 </div>
               </fieldset>
               </h3>
@@ -158,28 +211,6 @@
         </div>
       </div>
       <!----- END PART 2 ----->
-
-      <!----- PART 3 ----->
-      <div id='payment' class='part3'>
-        {% if 'admin_id' in request.session %}
-          {% manual_checkout_tag cart %}
-        {% else %}
-          <small class='trim text-info'>
-            <span class='symbol-lock'></span>
-            This container is an SSL (https) encrypted frame secured and hosted by
-            <a href='https://www.wepay.com/security' target='_blank'>WePay</a>
-            <span class='symbol-lock'></span>
-          </small>
-          <div id='wepay-payment'></div>
-          <small class='trim text-info'>
-            <span class='symbol-lock'></span>
-            This container is an SSL (https) encrypted frame secured and hosted by
-            <a href='https://www.wepay.com/security' target='_blank'>WePay</a>
-            <span class='symbol-lock'></span>
-          </small>
-        {% endif %}
-      </div>
-      <!----- END PART 3 ----->
 
     </div><!-- end of left side, span8 -->
 

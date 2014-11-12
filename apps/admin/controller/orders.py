@@ -35,7 +35,10 @@ def find_order(request):
       found_orders = list(found_orders) + list(found_product_orders)
 
     else: #not a digit
-      found_orders = Order.objects.filter(cart__anou_checkout_id=some_id)
+      found_orders = Order.objects.filter(
+        Q(cart__anou_checkout_id=some_id) |
+        Q(cart__stripe_charge_id__endswith=some_id)
+      )
 
       if not found_orders:
         found_orders = Order.objects.filter(tracking_number=some_id)

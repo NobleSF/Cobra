@@ -32,7 +32,8 @@ urlpatterns = patterns('',
   url(r'^checkout/ajax/cart_save$', checkout.cartSave, name='cart-save'),
   url(r'^checkout/ajax/admin_checkout$', checkout.adminCheckout,
       name='admin checkout'),
-  url(r'^checkout/confirmation$', checkout.confirmation, name='confirmation'),
+  url(r'^checkout/stripe_checkout$', checkout.stripe_checkout, name='stripe checkout'),
+  url(r'^checkout/confirmation/(?P<checkout_id>\w+)?$', checkout.confirmation, name='confirmation'),
 
   #temporary
   url(r'^commonthread$', home.commonthread, name='commonthread'),

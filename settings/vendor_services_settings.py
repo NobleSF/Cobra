@@ -61,6 +61,10 @@ if not LOCAL: #not PRODUCTION or STAGE or DEMO
   if DEMO:
     WEPAY['redirect_uri'] = 'http://anou-cobra-demo.herokuapp.com/checkout/confirmation'
 
+
+  # PAYMENT PROCESSING BY STRIPE
+  STRIPE_API_KEY = "sk_test_3riKVqPnmaA9k1zOFbp8bcFV"
+
   #MEMCACHED CLOUD RESPONSE CACHEING
   CACHES = {
     'default': {

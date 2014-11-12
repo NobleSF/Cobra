@@ -18,3 +18,5 @@ django-bmemcached
 requests
 virtualenv==1.8.2
 raven>=3
+jsonfield
+--index-url https://code.stripe.com

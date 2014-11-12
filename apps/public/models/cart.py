@@ -1,5 +1,6 @@
 from django.db import models
 from apps.public.models.promotion import Promotion
+from jsonfield import JSONField
 
 class Cart(models.Model):
   email               = models.EmailField(blank=True, null=True)
@@ -16,8 +17,12 @@ class Cart(models.Model):
 
   wepay_checkout_id   = models.BigIntegerField(null=True, blank=True)
   anou_checkout_id    = models.CharField(max_length=15, null=True, blank=True)
+  stripe_charge_id    = models.CharField(max_length=35, null=True, blank=True)
+  checkout_data       = JSONField(null=True, blank=True)
+
   checked_out         = models.BooleanField(default=False)#does not need to be a date
 
+  #todo: create checkout model for these values and data in orders model
   #total_charge        = models.DecimalField(max_digits=8, decimal_places=2,
   #                                          null=True, blank=True)
   #total_discount      = models.DecimalField(max_digits=8, decimal_places=2,
@@ -42,6 +47,8 @@ class Cart(models.Model):
       return self.wepay_checkout_id
     elif self.anou_checkout_id:
       return self.anou_checkout_id
+    elif self.stripe_charge_id:
+      return self.stripe_charge_id[3:]
     else:
       return False
 

@@ -1,3 +1,4 @@
+from apps.admin.utils.decorator import postpone
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.utils import timezone
 from datetime import timedelta
@@ -5,6 +6,7 @@ from apps.public.controller.promotion_rules import discount_for_cart_promotion
 from apps.public.models.item import Item
 from apps.public.models.cart import Cart as CartModel
 
+@postpone
 def cleanupCarts():
   from apps.seller.models.product import Product
 
@@ -31,25 +33,30 @@ class Cart(object):
 
     #override session cart if valid checkout_id is provided
     if checkout_id:
-      if isinstance(checkout_id, basestring) and checkout_id.startswith('MAN'):
-        try: cart_id = CartModel.objects.get(anou_checkout_id=checkout_id).id
-        except: pass
-      else:
-        try: cart_id = CartModel.objects.get(wepay_checkout_id=checkout_id).id
-        except: pass
-
-    if cart_id:
+      from django.db.models import Q
       try:
-        cart = CartModel.objects.get(id=cart_id)
+        try:
+          self.cart = CartModel.objects.get(wepay_checkout_id=int(checkout_id))
+        except:
+          self.cart = CartModel.objects.filter(
+                      Q(anou_checkout_id=checkout_id) |
+                      Q(stripe_charge_id__endswith=checkout_id))[0]
+      except Exception as e: print str(e)
+
+    elif cart_id:
+      try:
+        self.cart = CartModel.objects.get(id=cart_id)
       except:
-        cart = self.new(request)
+        self.cart = self.new(request)
     else:
-      cart = self.new(request)
-    self.cart = cart
+      self.cart = self.new(request)
 
   def __iter__(self):
     for item in self.cart.item_set.all():
       yield item
+
+  def __len__(self):
+    return len(self.cart.item_set.all())
 
   def new(self, request):
     cart = CartModel()
@@ -170,6 +177,8 @@ class Cart(object):
       return self.cart.wepay_checkout_id
     elif self.cart.anou_checkout_id:
       return self.cart.anou_checkout_id
+    elif self.cart.stripe_charge_id:
+      return self.cart.stripe_charge_id[3:]
     else:
       return False
 
@@ -227,24 +236,16 @@ class Cart(object):
       self.cart.save()
 
   def getAnouCheckoutId(self, type='manual'):
-    from django.utils.dateformat import format
 
-    try:
-      if self.cart.anou_checkout_id:
-        anou_checkout_id = self.cart.anou_checkout_id
-      else:
-        unix_timestamp = format(timezone.now(), u'U')
-        if type == 'manual':
-          anou_checkout_id = "MAN%s" % unix_timestamp
-        #else 'ebay' or 'etsy'
-        self.cart.anou_checkout_id = anou_checkout_id
-        self.cart.wepay_checkout_id = None #shouldn't possibly have both
-        self.cart.save()
+    if type == 'manual':#else 'ebay' or 'etsy'
+      from django.utils.dateformat import format
+      unix_timestamp = format(timezone.now(), u'U')
+      anou_checkout_id = "MAN%s" % unix_timestamp
+      self.cart.anou_checkout_id = anou_checkout_id
+      self.cart.save()
 
-    except Exception as e:
-      return e
-    else:
-      return anou_checkout_id
+    if self.cart.checkout_id:
+      return self.cart.checkout_id
 
   def getWePayCheckoutURI(self):
     from apps.wepay.api import WePay
@@ -291,68 +292,80 @@ class Cart(object):
       except Exception as e:
         return {'error': e}
       else:
+        #shipping address
+        if not wepay_response.get('shipping_address'):
+          wepay_response['shipping_address'] = {} #create the dict
+
+        if not (self.cart.address1 and self.cart.city and
+              self.cart.state and self.cart.postal_code):
+          #we do not have an address stored for this order
+          #pull address from WePay and save it as our own
+
+          #US or international address, all should match up except state, postal_code
+          if wepay_response.get('shipping_address'):
+            self.cart.address_name = wepay_response['shipping_address'].get('name')
+            self.cart.address1  = wepay_response['shipping_address'].get('address1')
+            self.cart.address2  = wepay_response['shipping_address'].get('address2')
+            self.cart.city      = wepay_response['shipping_address'].get('city')
+            if wepay_response['shipping_address'].get('country') == 'US':
+              self.cart.country = 'USA'
+            else:
+              self.cart.country = wepay_response['shipping_address'].get('country')
+
+            #check for non-US address first
+            if (wepay_response['shipping_address'].get('region') or
+                wepay_response['shipping_address'].get('post_code')):
+             # international address, all should match except region -> state, post_code -> postal_code
+             self.cart.state = wepay_response['shipping_address'].get('region')
+             self.cart.postal_code = wepay_response['shipping_address'].get('post_code')
+
+            else: #US address
+              self.cart.state = wepay_response['shipping_address'].get('state')
+              self.cart.postal_code = wepay_response['shipping_address'].get('zip')
+
+          self.cart.save() #save all our address changes
+
         return wepay_response
 
+  def getStripeCheckoutData(self):
+    if not self.cart.stripe_charge_id: #not a stripe payment
+      return {}
+    else:
+      stripe_response = self.cart.checkout_data
+      #todo: use stripe api to reset our data
+      self.cart.checkout_data = stripe_response
+      return stripe_response
+
   def getCheckoutData(self):
-    checkout_data = wepay_checkout_data = {}
+    checkout_data = wepay_checkout_data = self.cart.checkout_data or {}
 
     try:
-      if str(self.cart.anou_checkout_id).startswith('MAN'):
+      if str(self.cart.checkout_id).startswith('MAN'):
         manual_checkout = True
+        checkout_data = {'manual_order':True}
+      elif str(self.cart.stripe_charge_id).startswith('ch_'):
+        stripe_checkout = True
+        checkout_data = self.getStripeCheckoutData()
       else:
-        manual_checkout = False
-        wepay_checkout_data = self.getWePayCheckoutData()
-
-      checkout_data = wepay_checkout_data if wepay_checkout_data else {'manual_order':True}
+        wepay_checkout = True
+        checkout_data = self.getWePayCheckoutData()
 
       #name and email
       if self.cart.name:
         checkout_data['name'] = self.cart.name
       else:
-        checkout_data['name'] = wepay_checkout_data.get('payer_name')
-        self.cart.name = wepay_checkout_data.get('payer_name')
+        checkout_data['name'] = checkout_data.get('payer_name')
+        self.cart.name = checkout_data.get('payer_name')
         self.cart.save()
       if self.cart.email:
         checkout_data['email'] = self.cart.email
       else:
-        checkout_data['email'] = wepay_checkout_data.get('payer_email')
-        self.cart.email = wepay_checkout_data.get('payer_email')
+        checkout_data['email'] = checkout_data.get('payer_email')
+        self.cart.email = checkout_data.get('payer_email')
         self.cart.save()
 
-      #shipping address
       if not checkout_data.get('shipping_address'):
-        checkout_data['shipping_address'] = {} #create the dict
-
-      if (not manual_checkout and
-          not (self.cart.address1 and self.cart.city and
-            self.cart.state and self.cart.postal_code)):
-        #we do not have an address stored for this order
-        #pull address from WePay and save it as our own
-
-        #US or international address, all should match up except state, postal_code
-        if wepay_checkout_data.get('shipping_address'):
-
-          self.cart.address_name = wepay_checkout_data['shipping_address'].get('name')
-          self.cart.address1  = wepay_checkout_data['shipping_address'].get('address1')
-          self.cart.address2  = wepay_checkout_data['shipping_address'].get('address2')
-          self.cart.city      = wepay_checkout_data['shipping_address'].get('city')
-          if wepay_checkout_data['shipping_address'].get('country') == 'US':
-            self.cart.country = 'USA'
-          else:
-            self.cart.country = wepay_checkout_data['shipping_address'].get('country')
-
-          #check for non-US address first
-          if (wepay_checkout_data['shipping_address'].get('region') or
-              wepay_checkout_data['shipping_address'].get('post_code')):
-           # international address, all should match except region -> state, post_code -> postal_code
-           self.cart.state = wepay_checkout_data['shipping_address'].get('region')
-           self.cart.postal_code = wepay_checkout_data['shipping_address'].get('post_code')
-
-          else: #US address
-            self.cart.state = wepay_checkout_data['shipping_address'].get('state')
-            self.cart.postal_code = wepay_checkout_data['shipping_address'].get('zip')
-
-        self.cart.save() #save all our address changes
+        checkout_data['shipping_address'] = {}
 
       if self.cart.address_name:
         checkout_data['shipping_address']['name']       = self.cart.address_name
@@ -363,6 +376,67 @@ class Cart(object):
       checkout_data['shipping_address']['postal_code']  = self.cart.postal_code
       checkout_data['shipping_address']['country']      = self.cart.country
 
-    except: pass
+    except Exception as e: print str(e)
 
     return checkout_data
+
+# # Stripe Checkout Data example
+#<Charge charge id=ch_14xS5HDICecd6FXNs26nHitv at 0x7ffbdd3d8910> JSON: {
+# >>> charge
+#   "amount": 42200,
+#   "amount_refunded": 0,
+#   "balance_transaction": "txn_14xS5HDICecd6FXN2BQ07tLb",
+#   "captured": true,
+#   "card": {
+#     "address_city": null,
+#     "address_country": null,
+#     "address_line1": null,
+#     "address_line1_check": null,
+#     "address_line2": null,
+#     "address_state": null,
+#     "address_zip": null,
+#     "address_zip_check": null,
+#     "brand": "Visa",
+#     "country": "US",
+#     "customer": null,
+#     "cvc_check": "pass",
+#     "dynamic_last4": null,
+#     "exp_month": 2,
+#     "exp_year": 2018,
+#     "fingerprint": "ED4oOCTPx6OnntQC",
+#     "funding": "credit",
+#     "id": "card_14xRJADICecd6FXNag2jFErT",
+#     "last4": "4242",
+#     "name": "erstn@stie.com",
+#     "object": "card"
+#   },
+#   "created": 1415664035,
+#   "currency": "usd",
+#   "customer": null,
+#   "description": "hey, it's a charge",
+#   "dispute": null,
+#   "failure_code": null,
+#   "failure_message": null,
+#   "fraud_details": {
+#     "stripe_report": null,
+#     "user_report": null
+#   },
+#   "id": "ch_14xS5HDICecd6FXNs26nHitv",
+#   "invoice": null,
+#   "livemode": false,
+#   "metadata": {},
+#   "object": "charge",
+#   "paid": true,
+#   "receipt_email": null,
+#   "receipt_number": null,
+#   "refunded": false,
+#   "refunds": {
+#     "data": [],
+#     "has_more": false,
+#     "object": "list",
+#     "total_count": 0,
+#     "url": "/v1/charges/ch_14xS5HDICecd6FXNs26nHitv/refunds"
+#   },
+#   "shipping": null,
+#   "statement_description": null
+# }
