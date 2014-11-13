@@ -1,41 +1,44 @@
 $(function(){//on page load
-
-  //resize things for ipad
+  //resize things for iPad
   if ((768 < $(window).width()) && ($(window).width() < 979) ||
       navigator.userAgent.match(/(iPhone|iPod|iPad)/i)){
     $('#main-content').removeClass('span8').addClass('span12');
     $('#information').removeClass('span4').addClass('span12');
   }
 
-  $('.autosave').each(function(){
-    $(this).autosave({
-      url:$('#cart-ajax-url').attr('value'),
-      before:function(){$(this).addClass('updating')},
-      success:function(){$(this).removeClass('updating').addClass('saved')},
-      error:function(){$(this).removeClass('updating').addClass('error')}
-    });
+  $('input.required').each(function() {
+    if ($(this).val() > ""){
+      $(this).addClass('saved');
+    }
+    validateForm();
   });
 
+  $(".autosave").autosave({
+    url:$('#cart-ajax-url').attr('value'),
+    method:"GET",
+    done:function(){$(this).addClass('saved')},
+    fail:function(){$(this).addClass('error')}
+  });
+
+$('.required').on('keyup', function(){
+  validateForm();
+})
+
 });
 
-$('#checkout-button').on('click', function(){
-  //hide cart, show checkout
-  $('.part1').slideUp(400);
-  $('.part2').delay(400).slideDown(400);
-});
-$('#pay-now-button').on('click', function(){
-  //hide cart, show checkout
-  if (validateForm()){
-    $('#customer-info').slideUp(400);
-    $('#payment').delay(400).slideDown(400);
+function validateForm(){
+  var complete = true;
+  $('.required').each(function(){
+    if ($(this).val() == ""){
+      complete = false;
+    }
+  })
+  if (complete){
+    $('#pay-button').show();
+  }else{
+    $('#pay-button').hide();
   }
-});
-$('#cart-return-button').on('click', function(){
-  //hide cart, show checkout
-  $('.part3').slideUp(400);
-  $('.part2').slideUp(400);
-  $('.part1').delay(400).slideDown(400);
-});
+}
 
 $('#checkout-form').find('#id_email').on('blur', function() {
   $(this).mailcheck({
@@ -49,50 +52,13 @@ $('#checkout-form').find('#id_email').on('blur', function() {
     }
   });
 });
+
 $('#suggested-email').click(function(){
   $('#checkout-form').find('#id_email').val($('#suggested-email').html());
   $('#suggested-email').html('');
   $('#email-suggestion').hide();
   $('#checkout-form').find('#id_email').trigger('change');
 })
-
-$('input.required').on('change', function(){
-  if ($(this).val() == ""){
-    $(this).closest('.control-group').addClass('error');
-  }else{
-    if ($(this).closest('.control-group').hasClass('error')){
-      validateForm();
-    }
-  }
-});
-
-function validateForm(){
-  var complete = true;
-  $('#checkout-form  input.required').each(function(){
-    $(this).removeClass('error');
-    if ($(this).val() == ""){
-      complete = false;
-      $(this).closest('.control-group').addClass('error');
-      $(this).closest('.control-group').find('.help-inline').fadeOut().fadeIn();
-    }else if ($(this).attr('id') == 'id_email'){
-      if (!IsEmail($(this).val())){
-        complete = false;
-        $(this).closest('.control-group').addClass('error');
-        $(this).closest('.control-group').find('.help-inline').fadeOut().fadeIn();
-      }else{
-        $(this).closest('.control-group').removeClass('error');
-        $(this).closest('.control-group').find('.help-inline').fadeOut();
-      }
-    }
-  });
-  return complete
-}
-
-//http://stackoverflow.com/questions/2507030/email-validation-using-jquery
-function IsEmail(email) {
-  var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-  return regex.test(email);
-}
 
 //MANUAL ADMIN ORDERING FUNCTIONS
 $('#admin-checkout-button').click(function(){
@@ -121,17 +87,25 @@ function validateManualCheckout(){
 }
 // END MANUAL ADMIN ORDERING FUNCTIONS
 
-//https://github.com/cfurrow/jquery.autosave.js
-//example:
-//  $("input").autosave({url:"/save",success:function(){},error:function(){}});
-//
-jQuery.fn.autosave=function(e){function n(e){var n=/^data\-(\w+)$/,r={};r.value=e.value;r.name=e.name;t.each(e.attributes,function(e,t){n.test(t.nodeName)&&(r[n.exec(t.nodeName)[1]]=t.value)});return r}var t=jQuery;t.each(this,function(){var r=t(this),i={data:{},event:"change",success:function(){},error:function(){},before:function(){}};e=t.extend(i,e);var s=n(this),o=s.event||e.event;r.on(o,function(){var r=t(this);s.value=r.val();s=t.extend(s,n(this));var i=s.url?s.url:e.url;e.before&&e.before.call(this,r);t.ajax({url:i,data:s,success:function(t){e.success(t,r)},error:function(t){e.error(t,r)}})})})};
+//https://github.com/mailcheck/mailcheck
+// example:
+//$('#email').on('blur', function() {
+//  $(this).mailcheck({
+//    suggested: function(element, suggestion) {},
+//    empty: function(element) {}
+//  });
+//});
 
-//use mailcheck on email field
-//https://github.com/kicksend/mailcheck
+/*1.1.0*/var Mailcheck={domainThreshold:4,topLevelThreshold:3,defaultDomains:"yahoo.com google.com hotmail.com gmail.com me.com aol.com mac.com live.com comcast.net googlemail.com msn.com hotmail.co.uk yahoo.co.uk facebook.com verizon.net sbcglobal.net att.net gmx.com mail.com outlook.com icloud.com".split(" "),defaultTopLevelDomains:"co.jp co.uk com net org info edu gov mil ca".split(" "),run:function(a){a.domains=a.domains||Mailcheck.defaultDomains;a.topLevelDomains=a.topLevelDomains||Mailcheck.defaultTopLevelDomains;
+a.distanceFunction=a.distanceFunction||Mailcheck.sift3Distance;var b=function(a){return a},c=a.suggested||b,b=a.empty||b;return(a=Mailcheck.suggest(Mailcheck.encodeEmail(a.email),a.domains,a.topLevelDomains,a.distanceFunction))?c(a):b()},suggest:function(a,b,c,d){a=a.toLowerCase();a=this.splitEmail(a);if(b=this.findClosestDomain(a.domain,b,d,this.domainThreshold)){if(b!=a.domain)return{address:a.address,domain:b,full:a.address+"@"+b}}else if(c=this.findClosestDomain(a.topLevelDomain,c,d,this.topLevelThreshold),
+a.domain&&c&&c!=a.topLevelDomain)return d=a.domain,b=d.substring(0,d.lastIndexOf(a.topLevelDomain))+c,{address:a.address,domain:b,full:a.address+"@"+b};return!1},findClosestDomain:function(a,b,c,d){d=d||this.topLevelThreshold;var e,g=99,f=null;if(!a||!b)return!1;c||(c=this.sift3Distance);for(var h=0;h<b.length;h++){if(a===b[h])return a;e=c(a,b[h]);e<g&&(g=e,f=b[h])}return g<=d&&null!==f?f:!1},sift3Distance:function(a,b){if(null==a||0===a.length)return null==b||0===b.length?0:b.length;if(null==b||
+0===b.length)return a.length;for(var c=0,d=0,e=0,g=0;c+d<a.length&&c+e<b.length;){if(a.charAt(c+d)==b.charAt(c+e))g++;else for(var f=e=d=0;5>f;f++){if(c+f<a.length&&a.charAt(c+f)==b.charAt(c)){d=f;break}if(c+f<b.length&&a.charAt(c)==b.charAt(c+f)){e=f;break}}c++}return(a.length+b.length)/2-g},splitEmail:function(a){a=a.trim().split("@");if(2>a.length)return!1;for(var b=0;b<a.length;b++)if(""===a[b])return!1;var c=a.pop(),d=c.split("."),e="";if(0==d.length)return!1;if(1==d.length)e=d[0];else{for(b=
+1;b<d.length;b++)e+=d[b]+".";2<=d.length&&(e=e.substring(0,e.length-1))}return{topLevelDomain:e,domain:c,address:a.join("@")}},encodeEmail:function(a){a=encodeURI(a);return a=a.replace("%20"," ").replace("%25","%").replace("%5E","^").replace("%60","`").replace("%7B","{").replace("%7C","|").replace("%7D","}")}};"undefined"!==typeof module&&module.exports&&(module.exports=Mailcheck);
+"undefined"!==typeof window&&window.jQuery&&function(a){a.fn.mailcheck=function(a){var c=this;if(a.suggested){var d=a.suggested;a.suggested=function(a){d(c,a)}}if(a.empty){var e=a.empty;a.empty=function(){e.call(null,c)}}a.email=this.val();Mailcheck.run(a)}}(jQuery);
+Mailcheck.defaultTopLevelDomains.push('com.au', 'de') // extend existing TLDs
+
+// https://github.com/tomcounsell/jquery-autosave
+// example:
+//   $(".autosave").autosave({ url:"/save", done:function(){}, fail:function(){} });
 //
-/*1.1*/var Kicksend={mailcheck:{threshold:3,defaultDomains:"yahoo.com google.com hotmail.com gmail.com me.com aol.com mac.com live.com comcast.net googlemail.com msn.com hotmail.co.uk yahoo.co.uk facebook.com verizon.net sbcglobal.net att.net gmx.com mail.com".split(" "),defaultTopLevelDomains:"co.uk com net org info edu gov mil".split(" "),run:function(a){a.domains=a.domains||Kicksend.mailcheck.defaultDomains;a.topLevelDomains=a.topLevelDomains||Kicksend.mailcheck.defaultTopLevelDomains;a.distanceFunction=
-a.distanceFunction||Kicksend.sift3Distance;var b=Kicksend.mailcheck.suggest(encodeURI(a.email),a.domains,a.topLevelDomains,a.distanceFunction);b?a.suggested&&a.suggested(b):a.empty&&a.empty()},suggest:function(a,b,c,d){a=a.toLowerCase();a=this.splitEmail(a);if(b=this.findClosestDomain(a.domain,b,d)){if(b!=a.domain)return{address:a.address,domain:b,full:a.address+"@"+b}}else if(c=this.findClosestDomain(a.topLevelDomain,c),a.domain&&c&&c!=a.topLevelDomain)return b=a.domain,b=b.substring(0,b.lastIndexOf(a.topLevelDomain))+
-c,{address:a.address,domain:b,full:a.address+"@"+b};return!1},findClosestDomain:function(a,b,c){var d,e=99,g=null;if(!a||!b)return!1;c||(c=this.sift3Distance);for(var f=0;f<b.length;f++){if(a===b[f])return a;d=c(a,b[f]);d<e&&(e=d,g=b[f])}return e<=this.threshold&&null!==g?g:!1},sift3Distance:function(a,b){if(null==a||0===a.length)return null==b||0===b.length?0:b.length;if(null==b||0===b.length)return a.length;for(var c=0,d=0,e=0,g=0;c+d<a.length&&c+e<b.length;){if(a.charAt(c+d)==b.charAt(c+e))g++;
-else for(var f=e=d=0;5>f;f++){if(c+f<a.length&&a.charAt(c+f)==b.charAt(c)){d=f;break}if(c+f<b.length&&a.charAt(c)==b.charAt(c+f)){e=f;break}}c++}return(a.length+b.length)/2-g},splitEmail:function(a){a=a.split("@");if(2>a.length)return!1;for(var b=0;b<a.length;b++)if(""===a[b])return!1;var c=a.pop(),d=c.split("."),e="";if(0==d.length)return!1;if(1==d.length)e=d[0];else{for(b=1;b<d.length;b++)e+=d[b]+".";2<=d.length&&(e=e.substring(0,e.length-1))}return{topLevelDomain:e,domain:c,address:a.join("@")}}}};
-window.jQuery&&function(a){a.fn.mailcheck=function(a){var c=this;if(a.suggested){var d=a.suggested;a.suggested=function(a){d(c,a)}}if(a.empty){var e=a.empty;a.empty=function(){e.call(null,c)}}a.email=this.val();Kicksend.mailcheck.run(a)}}(jQuery);
+;(function(a,b,c,d){function g(b,c){this.element=b,this.options=a.extend({},f,c),this._defaults=f,this._name=e,this.init()}var e="autosave",f={url:"",method:"POST",event:"change",data:{},type:"html",debug:!1,before:function(){},done:function(){},fail:function(){},always:function(){}};g.prototype.init=function(){function e(b){var c=/^data\-(\w+)$/,d={};return d.value=b.val()||"",d.name=b.attr("name")||"",a(b[0].attributes).each(function(){c.test(this.nodeName)&&(attribute_name=c.exec(this.nodeName)[1],d[attribute_name]=this.nodeValue)}),d}var b=a(this.element),c=e(b),d=this.options,c=e(b);d.event=c.event||d.event,b.on(d.event,function(c){d.before&&d.before.call(b);var f=e(b);options=a.extend({},d,f);var g=a.extend({},options.data,f);options.debug=="false"&&(options.debug=!1),delete g.url,delete g.method,delete g.type,delete g.debug,g.event=options.event,options.debug?console.log(g):a.ajax({url:options.url,type:options.method,cache:!1,data:g,dataType:options.type}).done(function(a,c,d){b.data("autosave-data",a),b.data("autosave-textStatus",c),b.data("autosave-jqXHR",d),b.trigger("autosave-done")}).fail(function(a,c,d){b.data("autosave-jqXHR",a),b.data("autosave-textStatus",c),b.data("autosave-errorThrown",d),b.trigger("autosave-fail")}).always(function(){b.trigger("autosave-always")})}),d.done&&b.on("autosave-done",function(){var a=b.data("autosave-data"),c=b.data("autosave-textStatus"),d=b.data("autosave-jqXHR");options.done.call(b,a,c,d)}),d.fail&&b.on("autosave-fail",function(){var a=b.data("autosave-jqXHR"),c=b.data("autosave-textStatus"),d=b.data("autosave-errorThrown");options.fail.call(b,a,c,d)}),d.always&&b.on("autosave-always",function(){options.always.call(b)})},a.fn.autosave=function(a){return this.each(function(){new g(this,a)})}})(jQuery,window,document)

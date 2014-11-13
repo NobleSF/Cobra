@@ -35,15 +35,6 @@ def cart(request):
     if not isinstance(anou_checkout_id, basestring):
       messages.warning(request, 'You are unable to checkout.')
 
-  elif cart.count():
-
-    wepay_checkout_uri = cart.getWePayCheckoutURI()
-    if not isinstance(wepay_checkout_uri, basestring):
-      context['exception'] = str(wepay_checkout_uri)
-      messages.warning(request, 'WePay connection issue. You are unable to checkout.')
-    else:
-      context['wepay_checkout_uri'] = wepay_checkout_uri
-
   return render(request, 'checkout/cart.html', context)
 
 def cartAdd(request, product_id):

@@ -1,4 +1,3 @@
-body{min-width: 620px;}/* for the wepay iframe */
 
 .thumbnail{
   padding: 1em 0em 1em 1em;
@@ -12,10 +11,6 @@ body{min-width: 620px;}/* for the wepay iframe */
   list-style: none;
   padding: 0 0 0 1em;
 }
-
-/*#customer-info.part2, #payment.part3, #cart-shortcut{*/
-  /*display: none;*/
-/*}*/
 
 #items .details li, #summary li, #mini-summary li{
   font-size: 1.7em;
@@ -34,19 +29,15 @@ body{min-width: 620px;}/* for the wepay iframe */
   margin: 1em;
 }
 
-#checkout-form .wepay-widget-input{
-  height: 2em;
-}
-
-#checkout-form{
-  margin-top: 50px;
-  text-align: center;
-}
 fieldset legend{
   margin: 0;
 }
 .help-inline{
   display: none;
+}
+
+.required:not(.saved) {
+  border-color: #0088cc !important;
 }
 
 #email-suggestion{
@@ -56,22 +47,12 @@ fieldset legend{
   cursor: pointer;
 }
 
-#payment{
-  border: dotted 2px grey;
-  width: 620px;
-  text-align: center;
-  margin: 15px 0;
-}
-#wepay-payment{
-  margin: 8px;
-}
-
 #manual-checkout-form #address-div{margin: 5% 0;}
 
-#id_address_name, #id_address1, #id_address2{width: 350px;}
-#id_city, #id_postal_code{width: 250px;}
+#id_address_name, #id_address1, #id_address2{width: 250px;}
+#id_city, #id_postal_code{width: 150px;}
 #id_state, #id_country{width: 100px;}
-#id_notes, #id_receipt{width: 350px;}
+#id_notes, #id_receipt{width: 250px;}
 
 #submit-div{padding: 2em 0;}
 #submit-div .admin-checkout-error, #submit-div .admin-checkout-success{

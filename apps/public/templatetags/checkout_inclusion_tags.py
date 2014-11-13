@@ -3,10 +3,8 @@ register = template.Library()
 
 @register.inclusion_tag('checkout/manual_checkout.html')
 def manual_checkout_tag(cart):
-  from apps.public.controller.forms import ManualCheckoutForm
-
-  form = ManualCheckoutForm()
-
+  from apps.public.controller.forms import CartForm
+  form = CartForm()
   try:
     form.fields['address_name'].initial = cart.getData('address_name')
     form.fields['address1'].initial     = cart.getData('address1')

@@ -7,18 +7,11 @@
 {% endblock title %}
 
 {% block javascript %}
-  <script type="text/javascript" src="{{ STATIC_URL }}public/js/cart.min.js"></script>
-  <!-- WEPAY Script -->
-  <script type="text/javascript" src="https://www.wepay.com/min/js/iframe.wepay.js"></script>
-  {% if cart.count %}
-    <script type="text/javascript">
-      WePay.iframe_checkout("wepay-payment", "{{ wepay_checkout_uri }}");
-    </script>
-  {% endif %}
+  <script type="text/javascript" src="{{ STATIC_URL }}public/js/cart.min.js?v=1"></script>
 {% endblock javascript %}
 
 {% block css %}
-  <link href="{{ STATIC_URL }}public/css/cart.css" rel="stylesheet">
+  <link href="{{ STATIC_URL }}public/css/cart.css?v=1" rel="stylesheet">
 {% endblock css %}
 
 {% block content %}
@@ -26,13 +19,13 @@
   <div class='row-fluid'>
     <div id='main-content' class='span8'>
 
-      <!----- PART 1 ----->
       <div id='cart' class='part1'>
         <h3 id='cart-sentance' class='trim'>
           You have
           {{ cart.count }}
           item{{ cart.count|pluralize }}
-          in your Shopping Cart.
+          in your Shopping Cart...
+          <a href="{% url 'home' %}" class="nowrap">continue shopping</a>
         </h3>
 
         <div id='items'>
@@ -65,7 +58,6 @@
             <ul>
               <li class='title-font'>Shipping</li>
               <li class='title-font'>Total</li>
-              <li class='title-font'><a href="{% url 'home' %}">Continue Shopping</a></li>
             </ul>
           </div>
           <div class='span7'>
@@ -74,143 +66,87 @@
               <li class='amount title-font'>
                 $<span id='order-total'>{{ cart.summary }}</span>
               </li>
-              <li class='title-font'>
-                {% if cart.count %}
-                  <button id='checkout-button'
-                     class='btn btn-large btn-success'>
-                    Secure Checkout
-                  </button>
-                {% else %}
-                  <button id='checkout-button-dummy'
-                     class='btn btn-large btn-success disabled'>
-                    Secure Checkout
-                  </button>
-                {% endif %}
-              </li>
             </ul>
           </div>
         </div>
       </div>
-      <!----- END PART 1 ----->
 
-      <div id='cart-shortcut' class='part2 part3'>
-        <h3 id='cart-return-button' class=''>
-          <a href='#cart-sentance'>
-            <span class='symbol-cart'></span> back to Cart
-          </a>
-        </h3>
+{#      <div id='cart-shortcut'>#}
+{#        <h3 id='cart-paragraph' class='trim '>#}
+{#          You have#}
+{#          {% for item in cart %}#}
+{#            {% if forloop.first %}a#}
+{#            {% elif forloop.last %} and a#}
+{#            {% else %}, a#}
+{#            {% endif %}#}
+{#            {{ item.product.name }}#}
+{#            for#}
+{#            ${{ item.product.display_price }}#}
+{#          {% endfor %}#}
+{#          in your cart for a total of#}
+{#          ${{ cart.summary }}#}
+{#        </h3>#}
+{#      </div>#}
 
-        <h3 id='cart-paragraph' class='trim '>
-          You have
-          {% for item in cart %}
-            {% if forloop.first %}a
-            {% elif forloop.last %} and a
-            {% else %}, a
-            {% endif %}
-            {{ item.product.name }}
-            for
-            ${{ item.product.display_price }}
-          {% endfor %}
-          in your cart for a total of
-          ${{ cart.summary }}
-        </h3>
-      </div>
+      {% if cart.count %}
+        <div id='customer-info'>
+          {% if 'admin_id' in request.session %}
+            {% manual_checkout_tag cart %}
+          {% else %}
 
-      <!----- PART 2 ----->
-      <div id='customer-info' class='part2'>
-        <div id='checkout-form'>
-          <input type='hidden' id='cart-ajax-url' value="{% url 'cart-save' %}">
-          <div class='row-fluid'>
-            <div class='span6'>
-              <fieldset><legend>Contact Info</legend>
 
-                <div class="control-group">
-                  <div class="controls">
+            <div id='checkout-form'>
+              <input type='hidden' id='cart-ajax-url' value="{% url 'cart-save' %}">
+              <div class='row-fluid'>
+                <div class='span6'>
+
+                  <div id='contact-div' class=''>
+                    <h4>Contact Info</h4>
                     {{ cart_form.name }}
-                    <p class="help-inline">Please provide your name.</p>
-                  </div>
-                </div>
-
-                <div class="control-group">
-                  <div class="controls">
                     {{ cart_form.email }}
-                    <p id='email-suggestion'>
+                    <p><span id='email-suggestion'>
                       Did you mean <a id='suggested-email'></a>?
-                    </p>
-                    <p class="help-inline">Please provide your email.</p>
+                    </span>&nbsp;</p>
                   </div>
-                </div>
 
-                <div class="control-group">
-                  <div class="controls">
-                    {{ cart_form.address1 }}
-                    <p class="help-inline">Address Line 1</p>
+                  <div id="payment-div">
+                    <h4>Order Total: ${{ cart.summary }}</h4>
+                    <form id="pay-button" action="{%  url 'stripe checkout' %}" method="POST" style="display: none;">
+  {#                    http://respondto.it/anou-stripe#}
+                      <script
+                        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                        data-key="pk_test_47TiYcItnCxY3eHwS95vSWam"
+                        data-amount="{% widthratio cart.summary 1 100 %}"
+                        data-name="Anou"
+                        data-description="{{ cart|length }} item{{ cart|length|pluralize }} (${{ cart.summary }})"
+                        data-image="https://res.cloudinary.com/hork5h8x1/image/upload/Anou_logo_square_128_azlqgp.png"
+                        data-allow-remember-me="false"
+                        data-currency="USD"
+                        data-label="Pay with card.">
+                      </script>
+                    </form>
                   </div>
-                </div>
 
-                <div class="control-group">
-                  <div class="controls">
-                    {{ cart_form.address2 }}
-                    <p class="help-inline">Address Line 2</p>
-                  </div>
                 </div>
+                <div class='span6'>
 
-                <div class="control-group">
-                  <div class="controls">
+                  <div id='address-div' class=''>
+                    <h4 class='copy-font'>Shipping Address</h4>
+                    {{ cart_form.address_name }}<br>
+                    {{ cart_form.address1 }}<br>
+                    {{ cart_form.address2 }}<br>
                     {{ cart_form.city }}
-                    <p class="help-inline">City</p>
-                  </div>
-                </div>
-
-                <div class="control-group">
-                  <div class="controls">
-                    {{ cart_form.state }}
-                    <p class="help-inline">State/Region</p>
-                  </div>
-                </div>
-
-                <div class="control-group">
-                  <div class="controls">
+                    {{ cart_form.state }}<br>
                     {{ cart_form.postal_code }}
-                    <p class="help-inline">Postal Code</p>
-                  </div>
-                </div>
-
-                <div class="control-group">
-                  <div class="controls">
                     {{ cart_form.country }}
-                    <p class="help-inline">Country</p>
                   </div>
-                </div>
 
-              </fieldset>
-            </div>
-            <div class='span6'>
-              <fieldset>
-                <legend>Order Total: ${{ cart.summary }}</legend>
-                <div class='control-group'>
-                  <form action="{%  url 'stripe checkout' %}" method="POST">
-{#                    http://respondto.it/anou-stripe#}
-                    <script
-                      src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                      data-key="pk_test_47TiYcItnCxY3eHwS95vSWam"
-                      data-amount="{% widthratio cart.summary 1 100 %}"
-                      data-name="Anou"
-                      data-description="{{ cart|length }} item{{ cart|length|pluralize }} (${{ cart.summary }})"
-                      data-image="/static/images/Anou_logo_square_128.png"
-                      data-allow-remember-me="false"
-                      data-currency="USD"
-                      data-label="Pay with card.">
-                    </script>
-                  </form>
                 </div>
-              </fieldset>
-              </h3>
+              </div>
             </div>
-          </div>
+          {% endif %}
         </div>
-      </div>
-      <!----- END PART 2 ----->
+      {% endif %}
 
     </div><!-- end of left side, span8 -->
 
