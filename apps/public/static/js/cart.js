@@ -35,8 +35,10 @@ function validateForm(){
   })
   if (complete){
     $('#pay-button').show();
+    $('#admin-checkout-button').show();
   }else{
     $('#pay-button').hide();
+    $('#admin-checkout-button').hide();
   }
 }
 

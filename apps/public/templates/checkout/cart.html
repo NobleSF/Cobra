@@ -90,24 +90,38 @@
 
       {% if cart.count %}
         <div id='customer-info'>
-          {% if 'admin_id' in request.session %}
-            {% manual_checkout_tag cart %}
-          {% else %}
 
+          <div id='checkout-form'>
+            <input type='hidden' id='cart-ajax-url' value="{% url 'cart-save' %}">
+            <div class='row-fluid'>
+              <div class='span6'>
 
-            <div id='checkout-form'>
-              <input type='hidden' id='cart-ajax-url' value="{% url 'cart-save' %}">
-              <div class='row-fluid'>
-                <div class='span6'>
+                <div id='address-div' class=''>
+                  <h4 class='copy-font'>Shipping Address</h4>
+                  {{ cart_form.address_name }}<br>
+                  {{ cart_form.address1 }}<br>
+                  {{ cart_form.address2 }}<br>
+                  {{ cart_form.city }}
+                  {{ cart_form.state }}<br>
+                  {{ cart_form.postal_code }}
+                  {{ cart_form.country }}
+                </div>
 
-                  <div id='contact-div' class=''>
-                    <h4>Contact Info</h4>
-                    {{ cart_form.name }}
-                    {{ cart_form.email }}
-                    <p><span id='email-suggestion'>
-                      Did you mean <a id='suggested-email'></a>?
-                    </span>&nbsp;</p>
-                  </div>
+              </div>
+              <div class='span6'>
+
+                <div id='contact-div' class=''>
+                  <h4>Contact Info</h4>
+                  {{ cart_form.name }}
+                  {{ cart_form.email }}
+                  <p><span id='email-suggestion'>
+                    Did you mean <a id='suggested-email'></a>?
+                  </span>&nbsp;</p>
+                </div>
+
+                {% if 'admin_id' in request.session %}
+                  {% manual_checkout_tag cart %}
+                {% else %}
 
                   <div id="payment-div">
                     <h4>Order Total: ${{ cart.summary }}</h4>
@@ -127,24 +141,12 @@
                     </form>
                   </div>
 
-                </div>
-                <div class='span6'>
+                {% endif %}
 
-                  <div id='address-div' class=''>
-                    <h4 class='copy-font'>Shipping Address</h4>
-                    {{ cart_form.address_name }}<br>
-                    {{ cart_form.address1 }}<br>
-                    {{ cart_form.address2 }}<br>
-                    {{ cart_form.city }}
-                    {{ cart_form.state }}<br>
-                    {{ cart_form.postal_code }}
-                    {{ cart_form.country }}
-                  </div>
-
-                </div>
               </div>
             </div>
-          {% endif %}
+          </div>
+
         </div>
       {% endif %}
 

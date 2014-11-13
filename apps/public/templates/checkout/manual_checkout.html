@@ -4,19 +4,6 @@
 
   <input type='hidden' id='manual_checkout_url' value="{% url 'admin checkout' %}">
 
-  <h3 class='copy-font'>Manual Checkout - Admins only</h3>
-
-  <div id='address-div' class=''>
-    <h4 class='copy-font'>Shipping Address</h4>
-    {{ form.address_name }}<br>
-    {{ form.address1 }}<br>
-    {{ form.address2 }}<br>
-    {{ form.city }}
-    {{ form.state }}<br>
-    {{ form.postal_code }}
-    {{ form.country }}
-  </div>
-
   <div id='notes-div' class=''>
     <h4 class='copy-font'>Notes</h4>
     {{ form.notes }}
@@ -26,6 +13,7 @@
   </div>
 
   <div id='submit-div'>
+    <h4 style="color: maroon;">Submit to confirm that customer has paid in full.</h4>
     <button id='admin-checkout-button' class='btn btn-info'>Submit</button>
     <button class='admin-checkout-error btn btn-danger' disabled='disabled'>Error</button>
     <button class='admin-checkout-success btn btn-success' disabled='disabled'>Success</button>
