@@ -13,9 +13,10 @@ class ExceptionHandler(object):
     self.exception = exception
     self.message = message
 
-    if no_email: self.reportIt()
-    elif tom_only: self.emailTom()
-
+    if no_email:
+      self.reportIt()
+    elif tom_only:
+      self.emailTom()
     else:
       self.reportIt()
       self.emailTom()

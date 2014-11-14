@@ -121,8 +121,6 @@ INSTALLED_APPS = (
   'django.contrib.staticfiles',
   'django.contrib.sitemaps',
 )
-if PRODUCTION:
-  INSTALLED_APPS += ('raven.contrib.django.raven_compat',) #Sentry
 
 TEMPLATE_CONTEXT_PROCESSORS = (
   #'django.contrib.auth.context_processors.auth',
