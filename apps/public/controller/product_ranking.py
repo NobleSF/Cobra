@@ -24,7 +24,7 @@ def updateRankings(product, except_ratings=False):
       ranking.appeal = appealResult(product)
     ranking.save()
   except Exception as e:
-    ExceptionHandler(e, "error on product_rankings.updateRankings", sentry_only=True)
+    ExceptionHandler(e, "error on product_rankings.updateRankings", no_email=True)
 
 def photographyResult(product):
   try:

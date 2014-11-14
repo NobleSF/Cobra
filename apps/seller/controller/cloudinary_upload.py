@@ -87,7 +87,7 @@ def checkImageUpload(request):#for our JS to check upload status and get thumb_u
           return HttpResponse("did not find upload", status='204')
 
       except Exception as e:
-        ExceptionHandler(e, "in cloudinary_upload.checkImageUpload", sentry_only=True)
+        ExceptionHandler(e, "in cloudinary_upload.checkImageUpload", no_email=True)
         response = {'exception':str(e)}
         return HttpResponse(json.dumps(response),
                             content_type='application/json',
@@ -162,7 +162,7 @@ def checkPhotoUpload(request): #js checks upload status and gets thumb_url
           return HttpResponse("did not find upload", status='204')
 
       except Exception as e:
-        ExceptionHandler(e, "in cloudinary_upload.checkPhotoUpload", sentry_only=True)
+        ExceptionHandler(e, "in cloudinary_upload.checkPhotoUpload", no_email=True)
         response = {'exception':str(e)}
         return HttpResponse(json.dumps(response),
                             content_type='application/json',

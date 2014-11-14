@@ -75,7 +75,7 @@ def edit(request, product_id=None):
 
         except Exception as e:
           response['asset'] = str(e)
-          ExceptionHandler(e, message="in edit_product.edit asset", sentry_only=True)
+          ExceptionHandler(e, message="in edit_product.edit asset", no_email=True)
         else:
           response['asset'] = "change saved"
 
@@ -90,7 +90,7 @@ def edit(request, product_id=None):
 
         except Exception as e:
           response['color'] = str(e)
-          ExceptionHandler(e, message="in edit_product.edit color", sentry_only=True)
+          ExceptionHandler(e, message="in edit_product.edit color", no_email=True)
         else:
           response['color'] = "change saved"
 
@@ -106,7 +106,7 @@ def edit(request, product_id=None):
 
         except Exception as e:
           response['shipping_option'] = str(e)
-          ExceptionHandler(e, message="in edit_product.edit shipping_option", sentry_only=True)
+          ExceptionHandler(e, message="in edit_product.edit shipping_option", no_email=True)
         else:
           response['shipping_option'] = "change saved"
 
@@ -136,7 +136,7 @@ def edit(request, product_id=None):
       product.save()
 
     except Exception as e:
-      ExceptionHandler(e, "in inventory.saveProduct", sentry_only=True)
+      ExceptionHandler(e, "in inventory.saveProduct", no_email=True)
       response = {'exception': str(e)}
 
   else:

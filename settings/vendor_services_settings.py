@@ -78,9 +78,12 @@ if not LOCAL: #not PRODUCTION or STAGE or DEMO
     }
   }
 
-  #SENTRY EXCEPTION REPORTING
-  RAVEN_CONFIG = {
-    'dsn': os.environ.get('SENTRY_DSN')
+  #EXCEPTION HANDLING AND REPORTING
+  ROLLBAR = {
+    'access_token': os.environ.get('ROLLBAR_ACCESS_TOKEN'),
+    'environment': 'production' if PRODUCTION else 'development',
+    'branch': 'master',
+    'root': '/absolute/path/to/code/root',
   }
 
 else: #local dev, use local file: settings/local_environment_settings.py

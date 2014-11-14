@@ -1,5 +1,6 @@
 from apps.admin.utils.decorator import postpone
 from settings import people
+import rollbar
 
 class ExceptionHandler(object):
   """
@@ -7,16 +8,16 @@ class ExceptionHandler(object):
   and other mischievous activities that should be reported
   """
   def __init__(self, exception, message=None,
-               sentry_only=False, tom_only=False, #todo: replace sentry_only with no_email
+               no_email=False, tom_only=False,
                sos_sms=False):
     self.exception = exception
     self.message = message
 
-    if sentry_only: self.tellSentry()
+    if no_email: self.reportIt()
     elif tom_only: self.emailTom()
 
     else:
-      self.tellSentry()
+      self.reportIt()
       self.emailTom()
 
     if sos_sms:
@@ -24,16 +25,16 @@ class ExceptionHandler(object):
       self.smsDan(sos=True)
 
   @postpone
-  def tellSentry(self):
-    from settings.settings import PRODUCTION
-    if PRODUCTION:
-      from raven.contrib.django.models import client as Sentry
-      try:
-        raise self.exception
-      except:
-        Sentry.captureException()
-    else:
-      pass
+  def reportIt(self):
+    try:
+      raise self.exception
+    except:
+      rollbar.report_exc_info()
+      # if we had the request object
+      #rollbar.report_exc_info(request=request)
+      # additional params
+      #rollbar.report_exc_info(request=request, extra_data={'bar': bar})
+
 
   #email is already async, no need for @postpone
   def emailTom(self):
@@ -43,7 +44,7 @@ class ExceptionHandler(object):
       message += "<br>%s" % str(self.exception)
       Email(message=message).sendTo([person.email for person in people.developer_team])
     except Exception as e:
-      ExceptionHandler(e, sentry_only=True)
+      ExceptionHandler(e, no_email=True)
       self.smsTom(sos=True)
 
   @postpone

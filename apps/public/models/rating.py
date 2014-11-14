@@ -37,4 +37,4 @@ def updateRatingRankings(sender, instance, created, **kwargs):
       ranking.appeal = appealResult(instance.product)
     ranking.save()
   except Exception as e:
-    ExceptionHandler(e, "error on product_rankings.updateRatingRankings", sentry_only=True)
+    ExceptionHandler(e, "error on product_rankings.updateRatingRankings", no_email=True)

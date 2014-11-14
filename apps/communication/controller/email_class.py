@@ -80,7 +80,7 @@ class Email(object):
       self.save()
 
     except Exception as e:
-      ExceptionHandler(e, "in email_class.sendTo", sentry_only=True)
+      ExceptionHandler(e, "in email_class.sendTo", no_email=True)
 
   #def attach(self, url):
   #  self.attachment_url = url
