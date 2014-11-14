@@ -204,9 +204,6 @@ class Cart(object):
       return False
 
   def count(self):
-    #result = 0
-    #for item in self.cart.item_set.all():
-    #  result += 1 * item.quantity
     return len(self.cart.item_set.all())
 
   def summary(self):

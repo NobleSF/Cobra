@@ -1,12 +1,13 @@
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render, redirect
-from apps.admin.utils.decorator import access_required
-from apps.admin.utils.exception_handling import ExceptionHandler
 import json
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
+from apps.admin.utils.decorator import access_required
+from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.public.controller.cart_class import Cart
 from apps.public.controller.forms import CartForm
+
 
 def cart(request):
   cart = Cart(request)
