@@ -129,7 +129,7 @@
   {#                    http://respondto.it/anou-stripe#}
                       <script
                         src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                        data-key="pk_test_47TiYcItnCxY3eHwS95vSWam"
+                        data-key="{{ STRIPE_PUBLIC_KEY }}"
                         data-amount="{% widthratio cart.summary 1 100 %}"
                         data-name="Anou"
                         data-description="{{ cart|length }} item{{ cart|length|pluralize }} (${{ cart.summary }})"

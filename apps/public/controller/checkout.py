@@ -36,6 +36,9 @@ def cart(request):
     anou_checkout_id = cart.getAnouCheckoutId()
     if not isinstance(anou_checkout_id, basestring):
       messages.warning(request, 'You are unable to checkout.')
+  else:
+    from settings.settings import STRIPE_PUBLIC_KEY
+    context['STRIPE_PUBLIC_KEY'] = STRIPE_PUBLIC_KEY
 
   return render(request, 'checkout/cart.html', context)
 
@@ -87,10 +90,10 @@ def cartSave(request): #ajax requests only
 @csrf_exempt
 def stripe_checkout(request):
   import stripe
-  from settings.settings import STRIPE_API_KEY
+  from settings.settings import STRIPE_SECRET_KEY
 
   stripe_token = request.POST.get('stripeToken')
-  stripe.api_key = STRIPE_API_KEY
+  stripe.api_key = STRIPE_SECRET_KEY
 
   #stripe_token_type = request.POST.get('stripeTokenType')
   #stripe_email = request.POST.get('stripeEmail')
