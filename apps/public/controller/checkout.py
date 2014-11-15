@@ -7,7 +7,7 @@ from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.public.controller.cart_class import Cart
 from apps.public.controller.forms import CartForm
-
+from apps.seller.models.product import Product
 
 def cart(request):
   cart = Cart(request)
@@ -19,24 +19,16 @@ def cart(request):
 
   cart_form = CartForm()
   try:
-    cart_form.fields['email'].initial       = cart.getData('email')
-    cart_form.fields['name'].initial        = cart.getData('name')
-    cart_form.fields['address1'].initial    = cart.getData('address1')
-    cart_form.fields['address2'].initial    = cart.getData('address2')
-    cart_form.fields['city'].initial        = cart.getData('city')
-    cart_form.fields['state'].initial       = cart.getData('state')
-    cart_form.fields['postal_code'].initial = cart.getData('postal_code')
-    cart_form.fields['country'].initial     = cart.getData('country')
-    cart_form.fields['notes'].initial       = cart.getData('notes')
-    cart_form.fields['receipt'].initial     = cart.getData('receipt')
-  except: pass
-  finally:
-    context = {'cart':cart, 'cart_form':cart_form}
+    for field_name in ['email', 'name', 'address1', 'address2', 'city',
+                       'state', 'postal_code', 'country', 'notes', 'receipt']:
+      cart_form.fields[field_name].initial = cart.getData(field_name)
+  except:
+    pass
+
+  context = {'cart': cart, 'cart_form': cart_form}
 
   if 'admin_id' in request.session:
-    anou_checkout_id = cart.getAnouCheckoutId()
-    if not isinstance(anou_checkout_id, basestring):
-      messages.warning(request, 'You are unable to checkout.')
+    cart.getAnouCheckoutId()
   else:
     from settings.settings import STRIPE_PUBLIC_KEY
     context['STRIPE_PUBLIC_KEY'] = STRIPE_PUBLIC_KEY
@@ -44,7 +36,6 @@ def cart(request):
   return render(request, 'checkout/cart.html', context)
 
 def cartAdd(request, product_id):
-  from apps.seller.models.product import Product
   cart = Cart(request)
 
   try:
@@ -59,32 +50,22 @@ def cartAdd(request, product_id):
       return redirect('cart')
 
 def cartRemove(request, product_id):
-  from apps.seller.models.product import Product
   cart = Cart(request)
 
   try:
     cart.remove(Product.objects.get(id=product_id))
-    return redirect('cart')
-
   except Exception as e:
     ExceptionHandler(e, "in checkout.cartRemove")
-    if 'HTTP_REFERER' in request.META:
-      return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-    else:
-      return redirect('cart')
+
+  return redirect('cart')
 
 def cartSave(request): #ajax requests only
   if request.method == 'GET': # it must be an ajax GET to work
-    try:
-      cart = Cart(request)
-      cart.saveData(request.GET['name'], request.GET['value'])
-      response = {'success':request.GET['name']+" saved"}
-
-    except Exception as e:
-      response = {'exception': e}
-
+    cart = Cart(request)
+    cart.saveData(request.GET.get('name'), request.GET.get('value'))
+    response = {'success': str(request.GET.get('name'))+" saved"}
   else:
-    response = {'problem':"not GET"}
+    response = {'problem': "not GET"}
 
   return HttpResponse(json.dumps(response), content_type='application/json')
 

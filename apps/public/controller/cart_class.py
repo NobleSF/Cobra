@@ -346,6 +346,10 @@ class Cart(object):
       else:
         wepay_checkout = True
         checkout_data = self.getWePayCheckoutData()
+        try:
+          self.cart.checkout_data = checkout_data
+          self.cart.save()
+        except: pass
 
       #name and email
       if self.cart.name:
