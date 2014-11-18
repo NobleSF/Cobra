@@ -2,13 +2,13 @@ from datetime import timedelta
 from django.db import models
 from jsonfield import JSONField
 from django.utils import timezone
-from apps.admin.models import Currency
 from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.public.models import Cart
 
+
 class Checkout(models.Model):
+  public_id           = models.CharField(max_length=8, null=True, blank=True)#set by post_save signal
   cart                = models.OneToOneField(to=Cart, related_name='checkout')
-  public_id           = models.CharField(max_length=15, null=True, blank=True)#todo use pre_save signal, remove null-true
 
   # id number assigned by the payment provider
   checkout_id         = models.CharField(max_length=35, null=True, blank=True)
@@ -96,7 +96,10 @@ class Checkout(models.Model):
 
 
 #SIGNALS AND SIGNAL REGISTRATION
+from django.dispatch import receiver
+from django.db.models.signals import pre_save, post_save, pre_delete
 
+#todo turn on after data migration
 # @receiver(post_save, sender=Checkout)
 # def createOrders(sender, instance, created, **kwargs):
 #   checkout = instance
@@ -127,3 +130,8 @@ class Checkout(models.Model):
 #   email = Email('checkout/created', checkout)
 #   email.assignToOrder(checkout.cart.orders[0])
 #   email.sendTo(checkout.cart.email_with_name)
+
+@receiver(post_save, sender=Checkout)
+def setPublicId(sender, instance, created, **kwargs):
+  if not instance.public_id:
+    instance.public_id = "C%d" % instance.pk

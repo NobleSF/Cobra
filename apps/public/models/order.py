@@ -6,7 +6,8 @@ from apps.seller.models.image import Image
 from apps.public.models.cart import Cart
 
 class Order(models.Model):
-  cart                = models.ForeignKey(Cart, related_name='orders')
+  public_id           = models.CharField(max_length=8, null=True, blank=True)#set by post_save signal
+  cart                = models.ForeignKey(Cart, related_name='orders')#todo delete
   checkout            = models.ForeignKey(Checkout, related_name='orders', null=True, blank=True)#todo remove null-true
 
   #charges breakdown in local currency (eg. dirhams in Morocco)
@@ -83,3 +84,7 @@ def createOrders(sender, instance, created, **kwargs):
     from apps.communication.controller.order_events import communicateOrderCreated
     communicateOrderCreated(order)
 
+@receiver(post_save, sender=Order)
+def setPublicId(sender, instance, created, **kwargs):
+  if not instance.public_id:
+    instance.public_id = "R%d" % instance.pk
