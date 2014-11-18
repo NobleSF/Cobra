@@ -5,6 +5,29 @@ from apps.communication.controller.sms import sendSMSForOrder
 from settings.settings import DEBUG
 from settings.people import operations_team, support_team
 
+def communicateOrderCreated(order):
+  try: #message each artisan that their product has sold and for how much
+    artisan_msg = "%d \r\n %d Dh" % (order.product.id, order.product.price)
+    for artisan in order.product.assets.filter(ilk='artisan'):
+      sendSMSForOrder(artisan_msg, artisan.phone, order)
+  except Exception as e:
+    ExceptionHandler(e, "in order_events.communicateOrdersCreated-A")
+
+  #message the seller with the address
+  address_string = order.cart.shipping_address.replace('\n','\n\r')
+  seller_msg = "%d \r\n %s" % (order.product.id, address_string)
+  seller_phone = order.seller.phone
+  sendSMSForOrder(seller_msg, seller_phone, order)
+
+  #notify the team
+  try:
+    order.seller_msg = seller_msg.replace('\n', '<br>')
+    emails = [person.email for person in operations_team]
+    for address in emails:
+      Email('order/created_copy_director', order).sendTo(address)
+  except Exception as e:
+    ExceptionHandler(e, "in order_events.communicateOrdersCreated-B")
+
 def communicateOrdersCreated(orders):
   try:
     for order in orders: #send SMS to seller for each order

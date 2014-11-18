@@ -1,4 +1,5 @@
 from django.db import models
+from apps.public.models.checkout import Checkout
 from apps.seller.models.product import Product
 from apps.seller.models.shipping_option import ShippingOption
 from apps.seller.models.image import Image
@@ -6,6 +7,7 @@ from apps.public.models.cart import Cart
 
 class Order(models.Model):
   cart                = models.ForeignKey(Cart, related_name='orders')
+  checkout            = models.ForeignKey(Checkout, related_name='orders', null=True, blank=True)#todo remove null-true
 
   #charges breakdown in local currency (eg. dirhams in Morocco)
   products_charge     = models.DecimalField(max_digits=8, decimal_places=2)
@@ -26,6 +28,7 @@ class Order(models.Model):
 
   #order items
   products            = models.ManyToManyField(Product)
+  product             = models.ForeignKey(Product, related_name='orders', null=True, blank=True)#todo remove null-true
 
   #Status
   seller_notified_at  = models.DateTimeField(null=True, blank=True)
@@ -67,3 +70,16 @@ class Order(models.Model):
     return  tracking_url + self.tracking_number if self.tracking_number else False
 
   # MODEL FUNCTIONS
+
+
+#SIGNALS AND SIGNAL REGISTRATION
+from django.dispatch import receiver
+from django.db.models.signals import pre_save, post_save, pre_delete
+
+@receiver(post_save, sender=Order)
+def createOrders(sender, instance, created, **kwargs):
+  order = instance
+  if created:
+    from apps.communication.controller.order_events import communicateOrderCreated
+    communicateOrderCreated(order)
+
