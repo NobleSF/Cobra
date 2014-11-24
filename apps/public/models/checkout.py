@@ -14,9 +14,9 @@ class Checkout(models.Model):
   cart                = models.OneToOneField(to=Cart, related_name='checkout')
 
   # id number assigned by the payment provider
-  checkout_id         = models.CharField(max_length=35, null=True, blank=True)#todo rename to payment_id
+  payment_id          = models.CharField(max_length=35, null=True, blank=True)
   #the data returned by our payment provider
-  checkout_data       = JSONField(null=True, blank=True)#todo rename to payment_data
+  payment_data        = JSONField(null=True, blank=True)
   is_manual_order     = models.BooleanField(default=False)
 
   total_charge        = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
@@ -102,7 +102,7 @@ class Checkout(models.Model):
 
   def pullStripeData(self):
     #todo: use stripe api to reset our data
-    if self.checkout_id.startswith('ch_'):
+    if self.payment_id.startswith('ch_'):
       return self.checkout_data
     else:
       return {}
@@ -137,7 +137,7 @@ class Checkout(models.Model):
       except Exception as e:
         return {'error': e}
       else:
-        self.checkout_id = self.cart.wepay_checkout_id
+        self.payment_id = self.cart.wepay_checkout_id
         self.checkout_data = wepay_response if wepay_response else self.checkout_data
         self.save()
 
