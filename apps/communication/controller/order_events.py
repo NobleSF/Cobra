@@ -80,7 +80,7 @@ def updateOrder((product_id, data), gimme_reply_sms=False):
 
   try:
     product = Product.objects.get(id=product_id)
-    order = product.order_set.all()[0]
+    order = product.orders.all()[0]
 
     reply = str(product_id) + " "
 
