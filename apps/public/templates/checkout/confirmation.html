@@ -46,7 +46,7 @@
             <p class="red">Note: You have received a full or partial refund!</p>
           {% endif %}
 
-          {% for item in cart %}
+          {% for item in cart.items %}
             {% if item.order.tracking_number %}
               <h3 class=''>
                 Track your {{ item.product.name }} at
@@ -67,7 +67,7 @@
           <fieldset>
             <legend>Order Items</legend>
             <ul class='unstyled'>
-              {% for item in cart %}
+              {% for item in cart.items %}
                 <li>
                   <a href="{{ item.product.get_absolute_url }}">
                     <img class='product-photo'

@@ -25,7 +25,7 @@ def find_order(request):
       found_product_orders = []
       try:
         product = Product.objects.get(id=some_id)
-        found_product_orders = product.order_set.all()
+        found_product_orders = product.orders.all()
       except: pass
       try:
         found_orders = Order.objects.filter(
@@ -49,8 +49,8 @@ def find_order(request):
           from apps.seller.models.seller import Seller
           seller = Seller.objects.filter(account__name__icontains=some_id)[0]
           for product in seller.product_set.all():
-            if product.order_set.all():
-              found_orders.append(product.order_set.all()[0])
+            if product.orders.count():
+              found_orders.append(product.orders.all()[0])
         except Exception as e: print str(e)
 
     if len(found_orders) == 1:

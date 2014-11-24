@@ -29,7 +29,7 @@
         </h3>
 
         <div id='items'>
-          {% for item in cart %}
+          {% for item in cart.items %}
             <div id='item_{{ item.id }}' class='thumbnail row-fluid'>
               <div class='photo span4'>
                 <a href="{{ item.product.get_absolute_url }}">
