@@ -1,13 +1,13 @@
 from datetime import timedelta
+
 from django.db import models
 from jsonfield import JSONField
 from django.utils import timezone
+
 from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.communication.controller.email_class import Email
-from apps.public.models import Item
 from apps.public.models.cart import Cart
 from settings.people import support_team
-
 
 class Checkout(models.Model):
   public_id           = models.CharField(max_length=8, null=True, blank=True)#set by post_save signal
@@ -69,37 +69,6 @@ class Checkout(models.Model):
 
 
   # MODEL FUNCTIONS
-  def __iter__(self):
-    for item in self.cart.items.all():
-      yield item
-
-  def __len__(self):
-    return self.cart.items.count()
-
-  def count(self):
-    return self.cart.items.count()
-
-  def summary(self):
-    return '%.2f' % sum([item.product.display_price for item in self.cart.items.all()])
-
-  def clearItems(self):
-    for item in self.cart.items.all():
-      item.delete()
-
-  def addItem(self, product, quantity=1):
-    item, is_new = Item.objects.get_or_create(cart=self, product=product)
-    #item.quantity = quantity if quantity else 1
-    item.save()
-
-  def removeItem(self, product, quantity=0):
-    item = Item.objects.get(cart=self, product=product)
-    # if not quantity or quantity > item.quantity:
-    #   item.delete()
-    # else:
-    #   item.quantity = item.quantity - quantity
-    #   item.save()
-    item.delete()
-
   def pullStripeData(self):
     #todo: use stripe api to reset our data
     if self.payment_id.startswith('ch_'):
@@ -122,7 +91,7 @@ class Checkout(models.Model):
             item.delete()
 
     except Exception as e:
-      ExceptionHandler(e, "error on cart_class.cleanupCarts")
+      ExceptionHandler(e, "error on checkout.cleanupCarts")
 
   def getWePayCheckoutData(self):#todo delete once finished with potential refunds
     from apps.wepay.api import WePay
@@ -229,7 +198,8 @@ class Checkout(models.Model):
 
 #SIGNALS AND SIGNAL REGISTRATION
 from django.dispatch import receiver
-from django.db.models.signals import pre_save, post_save, pre_delete
+from django.db.models.signals import post_save
+
 
 @receiver(post_save, sender=Checkout)
 def createOrders(sender, instance, created, **kwargs):

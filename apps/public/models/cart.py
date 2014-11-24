@@ -1,11 +1,6 @@
-from datetime import timedelta
 from django.db import models
-from django.utils import timezone
-from apps.admin.utils.decorator import postpone
-from apps.admin.utils.exception_handling import ExceptionHandler
-from apps.public.controller.promotion_rules import discount_for_cart_promotion
-from apps.public.models.promotion import Promotion
 from jsonfield import JSONField
+from apps.public.models.promotion import Promotion
 
 class Cart(models.Model):
   email               = models.EmailField(blank=True, null=True)
@@ -75,6 +70,39 @@ class Cart(models.Model):
     return address.upper()
 
   # MODEL FUNCTIONS
+  def __iter__(self):
+    for item in self.items.all():
+      yield item
+
+  def __len__(self):
+    return self.items.count()
+
+  def count(self):
+    return self.items.count()
+
+  def summary(self):
+    return '%.2f' % sum([item.product.display_price for item in self.items.all()])
+
+  def clearItems(self):
+    for item in self.items.all():
+      item.delete()
+
+  def addItem(self, product, quantity=1):
+    from apps.public.models import Item
+    item, is_new = Item.objects.get_or_create(cart=self, product=product)
+    #item.quantity = quantity if quantity else 1
+    item.save()
+
+  def removeItem(self, product, quantity=0):
+    from apps.public.models import Item
+    item = Item.objects.get(cart=self, product=product)
+    # if not quantity or quantity > item.quantity:
+    #   item.delete()
+    # else:
+    #   item.quantity = item.quantity - quantity
+    #   item.save()
+    item.delete()
+
   def addPromotion(self, promotion):
     pass #self.promotions.add(promotion)
 
@@ -85,11 +113,10 @@ class Cart(models.Model):
   #   discounts['summary'] = sum(discounts.values())
   #   return discounts
 
-
-
 #SIGNALS AND SIGNAL REGISTRATION
 from django.dispatch import receiver
-from django.db.models.signals import pre_save, post_save, pre_delete
+from django.db.models.signals import pre_save
+
 
 @receiver(pre_save, sender=Cart)
 def setFullCountryName(sender, instance, **kwargs):
