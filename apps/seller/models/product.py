@@ -75,7 +75,7 @@ class Product(models.Model):
       self.deactive_at = timezone.now()
       #cancel orders of this product
       from apps.communication.controller.order_events import cancelOrder
-      for order in self.order_set.all():
+      for order in self.orders.all():
         cancelOrder(order)
 
       try:

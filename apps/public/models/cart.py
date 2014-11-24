@@ -1,4 +1,9 @@
+from datetime import timedelta
 from django.db import models
+from django.utils import timezone
+from apps.admin.utils.decorator import postpone
+from apps.admin.utils.exception_handling import ExceptionHandler
+from apps.public.controller.promotion_rules import discount_for_cart_promotion
 from apps.public.models.promotion import Promotion
 from jsonfield import JSONField
 
@@ -43,6 +48,14 @@ class Cart(models.Model):
     else:
       return False
 
+  # @property
+  # def checked_out(self):
+  #   try:
+  #     self.checkout.objects.count()
+  #   except RelatedObjectDoesNotExist:
+  #     return False
+  #   else: return True
+
   @property
   def email_with_name(self):
     if self.name and self.email:
@@ -62,6 +75,17 @@ class Cart(models.Model):
     return address.upper()
 
   # MODEL FUNCTIONS
+  def addPromotion(self, promotion):
+    pass #self.promotions.add(promotion)
+
+  # def discounts(self):
+  #   discounts = {}
+  #   for promotion in self.promotions:
+  #     discounts[promotion.name] = discount_for_cart_promotion(self.cart, promotion)
+  #   discounts['summary'] = sum(discounts.values())
+  #   return discounts
+
+
 
 #SIGNALS AND SIGNAL REGISTRATION
 from django.dispatch import receiver
