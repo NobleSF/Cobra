@@ -200,14 +200,14 @@ class Checkout(models.Model):
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 
-
 @receiver(post_save, sender=Checkout)
 def createOrders(sender, instance, created, **kwargs):
-  from apps.public.models.order import Order
   checkout = instance
   if (checkout.is_paid and #cart/checkout has been paid for
       checkout.cart.items.count() > 0 and #there are items in the cart
       checkout.orders.count() == 0): #there are no orders yet created
+
+    from apps.public.models.order import Order
     for item in checkout.cart.items.all():
       if item.product.sold_at is not None:
         email = Email(message="customer was just charged for a product someone else already bought")
@@ -226,17 +226,14 @@ def createOrders(sender, instance, created, **kwargs):
         item.product.sold_at = timezone.now()
         item.product.save()
 
-@receiver(post_save, sender=Checkout)
-def emailCustomer(sender, instance, created, **kwargs):
-  checkout = instance
-  email = Email('checkout/created', checkout)
-  email.assignToOrder(checkout.cart.orders[0])
-  email.sendTo(checkout.cart.email_with_name)
+    email = Email('checkout/created', checkout)
+    email.assignToOrder(checkout.cart.orders[0])
+    email.sendTo(checkout.cart.email_with_name)
 
 @receiver(post_save, sender=Checkout)
 def setPublicId(sender, instance, created, **kwargs):
   if not instance.public_id:
-    instance.public_id = "C%d" % instance.pk
+    instance.public_id = "T%d" % instance.pk
 
 
 # # Stripe Checkout Data example

@@ -24,12 +24,12 @@ class Cart(models.Model):
   checked_out         = models.BooleanField(default=False)#does not need to be a date
   #todo delete
 
-  receipt             = models.TextField(blank=True, null=True)
   notes               = models.TextField(blank=True, null=True)
+  receipt             = models.TextField(blank=True, null=True)
 
   #update history
-  created_at          = models.DateTimeField(auto_now_add = True)
-  updated_at          = models.DateTimeField(auto_now = True)
+  created_at          = models.DateTimeField(auto_now_add=True)
+  updated_at          = models.DateTimeField(auto_now=True)
 
   # MODEL PROPERTIES
   @property

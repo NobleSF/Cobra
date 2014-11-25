@@ -7,8 +7,7 @@ from apps.public.models.cart import Cart
 
 class Order(models.Model):
   public_id           = models.CharField(max_length=8, null=True, blank=True)#set by post_save signal
-  cart                = models.ForeignKey(Cart, related_name='orders')#todo delete
-  checkout            = models.ForeignKey(Checkout, related_name='orders', null=True, blank=True)#todo remove null-true
+  checkout            = models.ForeignKey(Checkout, related_name='orders')
 
   #charges breakdown in local currency (eg. dirhams in Morocco)
   products_charge     = models.DecimalField(max_digits=8, decimal_places=2)
