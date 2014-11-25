@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from controller import home, checkout, product, store, custom_order
+from controller import home, checkout, product, store, custom_order, cart, manual_checkout
 
 urlpatterns = patterns('',
 
@@ -24,16 +24,25 @@ urlpatterns = patterns('',
   url(r'^store/(?P<seller_id>\d+)$', store.home, name='store'),
 
   # CHECKOUT PAGES
-  url(r'^checkout/cart$', checkout.cart, name='cart'),
-  url(r'^checkout/cart-add/(?P<product_id>\d+)$', checkout.cartAdd,
-      name='cart-add'),
-  url(r'^checkout/cart-remove/(?P<product_id>\d+)$', checkout.cartRemove,
-      name='cart-remove'),
-  url(r'^checkout/ajax/cart_save$', checkout.cartSave, name='cart-save'),
-  url(r'^checkout/ajax/admin_checkout$', checkout.adminCheckout,
-      name='admin checkout'),
-  url(r'^checkout/stripe_checkout$', checkout.stripe_checkout, name='stripe checkout'),
-  url(r'^checkout/confirmation/(?P<checkout_id>\w+)?$', checkout.confirmation, name='confirmation'),
+  url(r'^checkout/cart$', cart.cart, name='cart'),
+  url(r'^checkout/cart-add/(?P<product_id>\d+)$',
+      cart.cartAdd, name='cart add'),
+  url(r'^checkout/cart-remove/(?P<product_id>\d+)$',
+      cart.cartRemove, name='cart remove'),
+  url(r'^checkout/ajax/cart_save$', cart.cartSave, name='cart save'),
+
+  url(r'^checkout/stripe_checkout$',
+      checkout.stripe_checkout, name='stripe checkout'),
+  url(r'^checkout/confirmation/(?P<checkout_id>\w+)?$',
+      checkout.confirmation, name='confirmation'),
+
+  # ADMIN MANUAL ORDER CHECKOUT
+  url(r'^checkout/ajax/admin_create_checkout$',
+      manual_checkout.createCheckout, name='manual checkout create'),
+  url(r'^checkout/manual_checkout/(?P<checkout_public_id>\w+)$',
+      manual_checkout.editCheckout, name='manual checkout edit'),
+  url(r'^checkout/ajax/save_checkout',
+      manual_checkout.saveCheckout, name='manual checkout save'),
 
   #temporary
   url(r'^commonthread$', home.commonthread, name='commonthread'),

@@ -53,7 +53,7 @@ def commonthreadAddToCart(request, rug_name):
           buy_this_one = product
 
     if buy_this_one:
-      return HttpResponseRedirect(reverse('cart-add', args=[buy_this_one.id]))
+      return HttpResponseRedirect(reverse('cart add', args=[buy_this_one.id]))
     else:
       email = Email(message=("%s rug is sold out!!!" % rug_name),
                     subject=("%s sold out" % rug_name))
