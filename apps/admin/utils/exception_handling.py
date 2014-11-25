@@ -1,7 +1,7 @@
 from apps.admin.utils.decorator import postpone
 from settings import people
 import rollbar
-from settings.settings import DEBUG
+from settings.settings import DEBUG, LOCAL
 
 
 class ExceptionHandler(object):
@@ -14,8 +14,10 @@ class ExceptionHandler(object):
                sos_sms=False):
     self.exception = exception
     self.message = message
+
     if DEBUG:
       print message, str(exception)
+      no_email = True if LOCAL else no_email
 
     if no_email:
       self.reportIt()
