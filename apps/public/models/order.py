@@ -27,7 +27,7 @@ class Order(models.Model):
   seller_paid_receipt = models.ForeignKey(Image, blank=True, null=True)
 
   #order items
-  products            = models.ManyToManyField(Product)
+  products            = models.ManyToManyField(Product)#todo migrate to product
   product             = models.ForeignKey(Product, related_name='orders', null=True, blank=True)#todo remove null-true
 
   #Status
@@ -47,7 +47,7 @@ class Order(models.Model):
 
   # MODEL PROPERTIES
   @property
-  def seller(self): return self.products.all()[0].seller
+  def seller(self): return self.product.seller
 
   @property
   def is_seller_notified(self): return True if self.seller_notified_at else False
@@ -76,14 +76,15 @@ class Order(models.Model):
 from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save, pre_delete
 
-@receiver(post_save, sender=Order)
-def createOrders(sender, instance, created, **kwargs):
-  order = instance
-  if created:
-    from apps.communication.controller.order_events import communicateOrderCreated
-    communicateOrderCreated(order)
+# @receiver(post_save, sender=Order)
+# def createOrders(sender, instance, created, **kwargs):
+#   order = instance
+#   if created:
+#     from apps.communication.controller.order_events import communicateOrderCreated
+#     communicateOrderCreated(order)
 
 @receiver(post_save, sender=Order)
 def setPublicId(sender, instance, created, **kwargs):
   if not instance.public_id:
     instance.public_id = "R%d" % instance.pk
+    instance.save()

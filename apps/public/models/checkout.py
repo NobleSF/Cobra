@@ -42,7 +42,7 @@ class Checkout(models.Model):
   @property
   def name(self): return self.cart.name
   @property
-  def address_name(self): return self.cart.address_name
+  def address_name(self): return self.cart.address_name if self.cart.address_name else self.cart.name
   @property
   def address1(self): return self.cart.address1
   @property
@@ -58,14 +58,15 @@ class Checkout(models.Model):
 
   @property
   def shipping_address (self):
-    address  = "%s\n" % (self.address_name or self.name or "")
-    address += ("%s\n" % self.address1) if self.address1 else ""
-    address += ("%s\n" % self.address2) if self.address2 else ""
-    address += ("%s, " % self.city) if self.city else ""
-    address += ("%s " % self.state) if self.state else ""
-    address += self.postal_code if self.postal_code else ""
-    address += ("\n%s" % self.country) if self.country else ""
-    return address.upper()
+    if self.address1 or self.address2:
+      address  = "%s\n" % (self.address_name or "")
+      address += ("%s\n" % self.address1) if self.address1 else ""
+      address += ("%s\n" % self.address2) if self.address2 else ""
+      address += ("%s, " % self.city) if self.city else ""
+      address += ("%s " % self.state) if self.state else ""
+      address += self.postal_code if self.postal_code else ""
+      address += ("\n%s" % self.country) if self.country else ""
+      return address.upper()
 
 
   # MODEL FUNCTIONS
@@ -110,13 +111,13 @@ class Checkout(models.Model):
         self.checkout_data = wepay_response if wepay_response else self.checkout_data
         self.save()
 
-        #payment deets
+        #PAYMENT INFO
         self.total_charge     = wepay_response.get('amount')
         self.total_discount   = 0
         self.total_paid       = wepay_response.get('amount') if wepay_response.get('state') in ['captured', 'refunded'] else 0
         self.total_refunded   = wepay_response.get('amount_refunded')
 
-        #shipping address
+        #SHIPPING ADDRESS
         if not wepay_response.get('shipping_address'):
           wepay_response['shipping_address'] = {} #create the dict
 
@@ -155,7 +156,7 @@ class Checkout(models.Model):
     try:
       if self.is_manual_order:
         checkout_data = {'manual_order':True}
-      elif str(self.cart.stripe_charge_id).startswith('ch_'):
+      elif str(self.cart.stripe_charge_id).startswith('ch_'): #stripe
         stripe_checkout = True
         checkout_data = self.getStripeCheckoutData()
       else:
@@ -214,7 +215,7 @@ def createOrders(sender, instance, created, **kwargs):
         email.sendTo([person.email for person in support_team])
       else:
         order = Order(
-          cart                = item.cart,
+          checkout            = checkout,
           products_charge     = item.product.price,
           anou_charge         = item.product.anou_fee,
           shipping_charge     = item.product.shipping_cost,
@@ -226,15 +227,15 @@ def createOrders(sender, instance, created, **kwargs):
         item.product.sold_at = timezone.now()
         item.product.save()
 
-    email = Email('checkout/created', checkout)
-    email.assignToOrder(checkout.cart.orders[0])
-    email.sendTo(checkout.cart.email_with_name)
+    # email = Email('checkout/created', checkout)
+    # email.assignToOrder(checkout.cart.orders[0])
+    # email.sendTo(checkout.cart.email_with_name)
 
 @receiver(post_save, sender=Checkout)
 def setPublicId(sender, instance, created, **kwargs):
   if not instance.public_id:
     instance.public_id = "T%d" % instance.pk
-
+    instance.save()
 
 # # Stripe Checkout Data example
 #<Charge charge id=ch_14xS5HDICecd6FXNs26nHitv at 0x7ffbdd3d8910> JSON: {
