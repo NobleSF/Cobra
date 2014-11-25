@@ -33,9 +33,9 @@
 <input type='hidden' id='update-order-url' value='{% url 'admin:update order' %}'>
 
 <h3 class='copy-font'>
-  <a href="{% url 'confirmation' %}?checkout_id={{order.cart.checkout_id}}"
+  <a href="{% url 'confirmation' %}?checkout_id={{order.checkout.cart.checkout_id}}"
      target='_blank'>
-    {{order.cart.checkout_id}}
+    {{order.checkout.cart.checkout_id}}
   </a>
 </h3>
 
@@ -163,8 +163,8 @@
 <p>
   <div id='notes'
        style='border: solid 1px black'>
-    {% if order.cart.notes %}
-      {{ order.cart.notes|linebreaks }}<br>
+    {% if order.checkout.notes %}
+      {{ order.checkout.notes|linebreaks }}<br>
     {% endif %}
     {{ order.notes|default_if_none:""|linebreaks }}
   </div>
@@ -174,10 +174,10 @@
 <textarea id='new-note' name='new-note'></textarea>
 <button id='add-note' class='btn btn-info'>Add Note</button>
 
-{% if order.cart.receipt %}
+{% if order.checkout.cart.receipt %}
   <p>Receipt:<br>
     <div style='border: solid 1px black'>
-      {{ order.cart.receipt }}
+      {{ order.checkout.cart.receipt }}
     </div>
   </p>
 {% endif %}

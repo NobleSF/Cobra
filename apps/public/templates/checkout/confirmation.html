@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load url from future %}
 
 {% block title %}
   Order Confirmation
@@ -17,32 +16,31 @@
   <div class='row-fluid'>
     <div class='span8'>
 
-      {% if cart.count %}
-        <div id='comfirmation-title'>
+      {% if checkout.cart.count %}
+        <div id='confirmation-title'>
           <h1>
-            {% if checkout_data.error or checkout_data.problem %}
-              {{ checkout_data.error }}
-              {{ checkout_data.problem }}
+            {% if problem %}
+              {{ problem }}
             {% else %}
               Order Complete!
             {% endif %}
           </h1>
           <h3 class=''>
-            {% if checkout_data.gross %}
+            {% if checkout.payment_data.gross %}
               Total Charged:
               <span class='badge'><h3 class=''>
-                ${{ checkout_data.gross|floatformat:2 }}
+                ${{ checkout.payment_data.gross|floatformat:2 }}
               </h3></span>
             {% endif %}
-            {% if checkout_data.checkout_id %}
+            {% if checkout.payment_data.checkout_id %}
               Confirmation Number:
               <span class='badge'><h3 class=''>
-                {{ checkout_data.checkout_id }}
+                {{ checkout.payment_data.checkout_id }}
               </h3></span>
             {% endif %}
           </h3>
 
-          {% if checkout_data.refund %}
+          {% if checkout.payment_data.refund %}
             <p class="red">Note: You have received a full or partial refund!</p>
           {% endif %}
 
@@ -67,7 +65,7 @@
           <fieldset>
             <legend>Order Items</legend>
             <ul class='unstyled'>
-              {% for item in cart.items %}
+              {% for item in checkout.cart %}
                 <li>
                   <a href="{{ item.product.get_absolute_url }}">
                     <img class='product-photo'
@@ -87,19 +85,19 @@
           <fieldset>
             <legend>Contact Information</legend>
             <p>
-              {% if checkout_data.name %}
-                <span id='subscribe-name'>{{ checkout_data.name }}</span>
+              {% if checkout.name %}
+                <span id='subscribe-name'>{{ checkout.name }}</span>
               {% else %}
                 No name on file.
               {% endif %}
               <br>
-              {% if checkout_data.email %}
-                <span id='subscribe-email'>{{ checkout_data.email }}</span>
+              {% if checkout.email %}
+                <span id='subscribe-email'>{{ checkout.email }}</span>
               {% else %}
                 No email on file!
               {% endif %}
             </p>
-            {% if checkout_data.email %}
+            {% if checkout.email %}
               <p id='subscribe' data-url="{% url 'communication:subscribe' %}">
                 <button type='button' id='subscribe-submit' class='btn btn-success'>
                   Subscribe
@@ -111,9 +109,9 @@
                   Thanks!
                 </button>
                 <span class='before'>to</span>
-                <span class='after'>You'll</span>
+                <span class='after'>You'll now</span>
                 receive updates<br>
-                as Anou transforms the world of Fair Trade.
+                as Anou transforms the world of Fair Trade!
               </p>
             {% endif %}
           </fieldset>
@@ -121,20 +119,8 @@
           <fieldset>
             <legend>Shipping Address</legend>
             <p>
-              {% if checkout_data.shipping_address %}
-                {% if checkout_data.shipping_address.name %}
-                  {{ checkout_data.shipping_address.name }}<br>
-                {% elif checkout_data.name %}
-                  {{ checkout_data.name }}<br>
-                {% endif %}
-                {{ checkout_data.shipping_address.address1|default_if_none:"" }}<br>
-                {% if checkout_data.shipping_address.address2 %}
-                  {{ checkout_data.shipping_address.address2 }}<br>
-                {% endif %}
-                {{ checkout_data.shipping_address.city|default_if_none:"" }},
-                {{ checkout_data.shipping_address.state|default_if_none:"" }}
-                {{ checkout_data.shipping_address.postal_code|default_if_none:"" }}<br>
-                {{ checkout_data.shipping_address.country|default_if_none:"" }}
+              {% if checkout.shipping_address %}
+                {{ checkout.shipping_address|linebreaksbr }}
               {% else %}
                 No shipping address on file!
               {% endif %}
@@ -146,15 +132,6 @@
           </p>
 
           <div id='followup'>
-            <h3>
-              Excited...
-              <a href="https://www.facebook.com/sharer/sharer.php?u=www.theanou.com" target="_blank">
-                <img src="{{ STATIC_URL }}images/buttons/FB_share_Anou.png"
-                     title='Share Anou on Facebook'
-                     width='200'
-                     height='52'>
-               </a>
-            </h3>
             <h3>
               Read the
               <a href='http://helloanou.wordpress.com'>latest blog post</a>

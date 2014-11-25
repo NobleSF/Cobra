@@ -14,7 +14,7 @@ def communicateOrderCreated(order):
     ExceptionHandler(e, "in order_events.communicateOrdersCreated-A")
 
   #message the seller with the address
-  address_string = order.cart.shipping_address.replace('\n','\n\r')
+  address_string = order.checkout.cart.shipping_address.replace('\n','\n\r')
   seller_msg = "%d \r\n %s" % (order.product.id, address_string)
   seller_phone = order.seller.phone
   sendSMSForOrder(seller_msg, seller_phone, order)
@@ -43,7 +43,7 @@ def communicateOrdersCreated(orders):
           ExceptionHandler(e, "in order_events.communicateOrdersCreated-A")
 
       #message the seller with the address
-      address_string = order.cart.shipping_address.replace('\n','\n\r')
+      address_string = order.checkout.cart.shipping_address.replace('\n','\n\r')
       seller_msg = products_string + "\r\n" + address_string
       seller_phone = order.seller.phone
       sendSMSForOrder(seller_msg, seller_phone, order)
@@ -127,7 +127,7 @@ def communicateOrderConfirmed(order, gimme_reply_sms=False):
     #send email to buyer
     email = Email('order/confirmed', order)
     email.assignToOrder(order)
-    email.sendTo(order.cart.email_with_name)
+    email.sendTo(order.checkout.cart.email_with_name)
 
     if gimme_reply_sms:
       return sms_reply
@@ -150,7 +150,7 @@ def communicateOrderShipped(order, gimme_reply_sms=False):
     #send email to buyer
     email = Email('order/shipped', order)
     email.assignToOrder(order)
-    email.sendTo(order.cart.email_with_name)
+    email.sendTo(order.checkout.cart.email_with_name)
 
     if gimme_reply_sms:
       return sms_reply
@@ -175,7 +175,7 @@ def communicateOrderSellerPaid(order):
 
 def cancelOrder(order):
   try:
-    message = 'Cancel order %d, Confirmation# %d' % (order.id, order.cart.checkout_id)
+    message = 'Cancel order %d, Confirmation# %d' % (order.id, order.checkout.cart.checkout_id)
     email = Email(message=message)
     email.assignToOrder(order)
     email.sendTo([person.email for person in support_team])

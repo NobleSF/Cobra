@@ -102,7 +102,7 @@ def orders(request, year=None, week=None, show_orders=[]):
 def order(request, order_id):
   try:
     order = Order.objects.get(id=order_id)
-    order.shipping_address = order.cart.shipping_address.replace('\n','<br>')
+    order.shipping_address = order.checkout.cart.shipping_address.replace('\n','<br>')
     this_week = {'date': order.created_at,
                  'year': order.created_at.year,
                  'week': order.created_at.strftime('%W')}

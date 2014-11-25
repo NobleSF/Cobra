@@ -1,6 +1,4 @@
 {% extends "base.html" %}
-{% load url from future %}
-{% load checkout_inclusion_tags %}
 
 {% block title %}
   Shopping Cart
@@ -29,7 +27,7 @@
         </h3>
 
         <div id='items'>
-          {% for item in cart.items %}
+          {% for item in cart %}
             <div id='item_{{ item.id }}' class='thumbnail row-fluid'>
               <div class='photo span4'>
                 <a href="{{ item.product.get_absolute_url }}">
@@ -45,7 +43,7 @@
                   </li>
                   <li class='price'>${{ item.product.display_price }}</li>
                   <li class='delete'>
-                    <a href="{% url 'cart-remove' item.product.id %}">remove</a>
+                    <a href="{% url 'cart remove' item.product.id %}">remove</a>
                   </li>
                 </ul>
               </div>
@@ -92,7 +90,7 @@
         <div id='customer-info'>
 
           <div id='checkout-form'>
-            <input type='hidden' id='cart-ajax-url' value="{% url 'cart-save' %}">
+            <input type='hidden' id='cart-ajax-url' value="{% url 'cart save' %}">
             <div class='row-fluid'>
               <div class='span6'>
 
@@ -120,23 +118,38 @@
                 </div>
 
                 {% if 'admin_id' in request.session %}
-                  {% manual_checkout_tag cart %}
+
+                  <input type='hidden' id='manual_checkout_url' value="{% url 'manual checkout create' %}">
+                  <div id='submit-div'>
+                    <button id='admin-checkout-button' class='btn btn-info'>Submit Manual Order</button>
+                    <button class='admin-checkout-error btn btn-danger' disabled='disabled'>Error</button>
+                    <button class='admin-checkout-success btn btn-success' disabled='disabled'>Success</button>
+                    <br>
+                    <span class='admin-checkout-error'>
+                      Missing contact info or incomplete shipping address??
+                      <br>Refresh the page to try again.
+                    </span>
+                    <span class='admin-checkout-success'>
+                      Check email for link to complete the checkout.
+                    </span>
+                  </div>
+
                 {% else %}
 
                   <div id="payment-div">
                     <h4>Order Total: ${{ cart.summary }}</h4>
                     <form id="pay-button" action="{%  url 'stripe checkout' %}" method="POST" style="display: none;">
-  {#                    http://respondto.it/anou-stripe#}
+                      {#                    http://respondto.it/anou-stripe#}
                       <script
-                        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                        data-key="{{ STRIPE_PUBLIC_KEY }}"
-                        data-amount="{% widthratio cart.summary 1 100 %}"
-                        data-name="Anou"
-                        data-description="{{ cart|length }} item{{ cart|length|pluralize }} (${{ cart.summary }})"
-                        data-image="https://res.cloudinary.com/hork5h8x1/image/upload/Anou_logo_square_128_azlqgp.png"
-                        data-allow-remember-me="false"
-                        data-currency="USD"
-                        data-label="Pay with card.">
+                          src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                          data-key="{{ STRIPE_PUBLIC_KEY }}"
+                          data-amount="{% widthratio cart.summary 1 100 %}"
+                          data-name="Anou"
+                          data-description="{{ cart|length }} item{{ cart|length|pluralize }} (${{ cart.summary }})"
+                          data-image="https://res.cloudinary.com/hork5h8x1/image/upload/Anou_logo_square_128_azlqgp.png"
+                          data-allow-remember-me="false"
+                          data-currency="USD"
+                          data-label="Pay with card.">
                       </script>
                     </form>
                   </div>

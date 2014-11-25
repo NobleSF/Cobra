@@ -15,14 +15,13 @@ $(function(){//on page load
 
   $(".autosave").autosave({
     url:$('#cart-ajax-url').attr('value'),
-    method:"GET",
     done:function(){$(this).addClass('saved')},
     fail:function(){$(this).addClass('error')}
   });
 
-$('.required').on('keyup', function(){
-  validateForm();
-})
+  $('.required').on('keyup', function(){
+    validateForm();
+  })
 
 });
 
@@ -78,7 +77,7 @@ function manualCheckout(){
     $('.admin-checkout-error').show('300');
   })
   .done(function(){
-    $('input').attr('disabled', 'disabled');
+    $('input, textarea').attr('disabled', 'disabled');
     $('#admin-checkout-button').hide('300');
     $('.admin-checkout-success').show('300');
   });

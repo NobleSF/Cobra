@@ -1,33 +1,70 @@
-{% load url from future %}
+{% extends "base.html" %}
 
-<div id='manual-checkout-form'>
+{% block title %}
+  Order Confirmation
+{% endblock title %}
 
-  <input type='hidden' id='manual_checkout_url' value="{% url 'admin checkout' %}">
+{% block javascript %}
+{% endblock javascript %}
 
-  <div id='notes-div' class=''>
-    <h4 class='copy-font'>Notes</h4>
-    {{ form.notes }}
-    <br>
-    <h4 class='copy-font'>Receipt</h4>
-    {{ form.receipt }}
+{% block css %}
+{#  <link href="{{ STATIC_URL }}public/css/confirmation.css" rel="stylesheet">#}
+{% endblock css %}
+
+{% block content %}
+
+  <div id='items'>
+    {% for item in cart %}
+      <div id='item_{{ item.id }}' class='thumbnail row-fluid'>
+        <div class='photo span4'>
+          <a href="{{ item.product.get_absolute_url }}">
+            <img src='{{ item.photo.thumb_size }}' alt='{{ item.product.title }}'>
+          </a>
+        </div>
+        <div class='details span8'>
+          <ul>
+            <li class='name'>
+              <a href="{{ item.product.get_absolute_url }}">
+                {{ item.product.name }} by {{ item.product.seller.name }}
+              </a>
+            </li>
+            <li class='price'>${{ item.product.display_price }}</li>
+          </ul>
+        </div>
+      </div>
+    {% endfor %}
   </div>
 
-  <div id='submit-div'>
-    <h4 style="color: maroon;">Submit to confirm that customer has paid in full.</h4>
-    <button id='admin-checkout-button' class='btn btn-info'>Submit</button>
-    <button class='admin-checkout-error btn btn-danger' disabled='disabled'>Error</button>
-    <button class='admin-checkout-success btn btn-success' disabled='disabled'>Success</button>
-    <br>
-    <span class='admin-checkout-error'>
-      Did you complete the contact info, shipping address, AND notes and receipt information?
-      <br>
-      Please refresh the page and try again.
-      <br>
-      If you are still having problems, call Tom.
-    </span>
-    <span class='admin-checkout-success'>
-      Order is not complete, check email for confirmation link.
-    </span>
+  <div id='checkout-form'>
+    <div id='address-div' class=''>
+      <h4 class='copy-font'>Payment Information</h4>
+      <form action="{% url 'manual checkout save' %}" method="POST">
+        <div class="row-fluid">
+          <div class="span6">
+            <ul class="unstyled">
+              <li>
+                Invoice Receipt<br>
+                {{ checkout_form.receipt }}
+              </li>
+              <li>
+                Transaction Notes<br>
+                {{ checkout_form.notes }}
+              </li>
+            </ul>
+          </div>
+          <div class="span6">
+            <ul class="unstyled">
+              <li>Currency<br>{{ checkout_form.currency }}</li>
+              <li>Cart Total<br>{{ checkout_form.total_charge }}</li>
+              <li>Sum of Discounts<br>{{ checkout_form.total_discount }}</li>
+              <li>Sum of Customer Payments<br>{{ checkout_form.total_paid }}</li>
+              <li>Sum of Refunds<br>{{ checkout_form.total_refunded }}</li>
+              <li><button type="submit">Submit and Complete</button></li>
+            </ul>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
 
-</div>
+{% endblock content %}

@@ -20,14 +20,18 @@ class CartForm(forms.Form):
   country     = forms.CharField(max_length=50,  widget=forms.TextInput(
                   attrs={'class':"autosave required", 'placeholder':"country"}))
 
-  #ORDER DETAILS
+class CheckoutForm(forms.Form):
   receipt     = forms.CharField(widget=forms.Textarea(
-                  attrs={'class':"autosave required",
-                         'placeholder':"payment data (and URL if available)",
-                         'rows':"7"
+                  attrs={'placeholder': "payment data (and URL if available)",
+                         'rows': "7"
                         }))
   notes       = forms.CharField(widget=forms.Textarea(
-                  attrs={'class':"autosave required",
-                         'placeholder':"sale details (and URL if available)",
-                         'rows':"7"
+                  attrs={'placeholder': "sale details",
+                         'rows': "7"
                         }))
+
+  total_charge    = forms.DecimalField(widget=forms.TextInput())
+  total_discount  = forms.DecimalField(widget=forms.TextInput())
+  total_paid      = forms.DecimalField(widget=forms.TextInput())
+  total_refunded  = forms.DecimalField(widget=forms.TextInput())
+  currency        = forms.CharField(max_length=3, widget=forms.TextInput())
