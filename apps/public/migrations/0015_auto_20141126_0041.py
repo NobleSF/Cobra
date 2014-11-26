@@ -26,7 +26,7 @@ def doStuff(apps, schema_editor):
       except Exception as e:
         errors.append("manual order for checkout %d: %s" % (checkout.id, str(e)))
       try:
-        checkout.total_paid = checkout.cart.summary()
+        checkout.total_paid = sum([order.product.display_price for order in checkout.orders.all()])
         checkout.save()
       except Exception as e:
         errors.append("manual total_paid for checkout %d: %s" % (checkout.id, str(e)))
