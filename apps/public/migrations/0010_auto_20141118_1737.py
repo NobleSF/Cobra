@@ -37,6 +37,7 @@ def createCheckoutForEachPaidCart(apps, schema_editor):
             checkout.total_refunded = sum(refund_amounts) / 100
           except: pass
         checkout.currency = "USD"
+        checkout.save()
 
       elif cart.wepay_checkout_id and checkout.checkout_data:
         #save WePay checkout_data into checkout model values
@@ -44,6 +45,7 @@ def createCheckoutForEachPaidCart(apps, schema_editor):
         checkout.total_discount   = 0
         checkout.total_paid       = checkout.checkout_data.get('amount') if checkout.checkout_data.get('state') in ['captured', 'refunded'] else 0
         checkout.total_refunded   = checkout.checkout_data.get('amount_refunded')
+        checkout.save()
 
 def getCheckoutId(cart):
   if cart.wepay_checkout_id:
