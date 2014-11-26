@@ -18,7 +18,7 @@
       <div id='item_{{ item.id }}' class='thumbnail row-fluid'>
         <div class='photo span4'>
           <a href="{{ item.product.get_absolute_url }}">
-            <img src='{{ item.photo.thumb_size }}' alt='{{ item.product.title }}'>
+            <img src='{{ item.photo.pinky_size }}' alt='{{ item.product.title }}'>
           </a>
         </div>
         <div class='details span8'>
@@ -43,21 +43,21 @@
           <div class="span6">
             <ul class="unstyled">
               <li>
-                Invoice Receipt<br>
+                Invoice Receipt*<br>
                 {{ checkout_form.receipt }}
               </li>
               <li>
-                Transaction Notes<br>
+                Transaction Notes*<br>
                 {{ checkout_form.notes }}
               </li>
             </ul>
           </div>
           <div class="span6">
             <ul class="unstyled">
-              <li>Currency<br>{{ checkout_form.currency }}</li>
+              <li>Currency*<br>{{ checkout_form.currency }}</li>
               <li>Cart Total<br>{{ checkout_form.total_charge }}</li>
               <li>Sum of Discounts<br>{{ checkout_form.total_discount }}</li>
-              <li>Sum of Customer Payments<br>{{ checkout_form.total_paid }}</li>
+              <li>Sum of Customer Payments*<br>{{ checkout_form.total_paid }}</li>
               <li>Sum of Refunds<br>{{ checkout_form.total_refunded }}</li>
               <li><button type="submit">Submit and Complete</button></li>
             </ul>

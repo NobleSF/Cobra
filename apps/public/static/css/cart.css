@@ -5,17 +5,14 @@
 }
 #items .details ul{
   list-style: none;
-  padding: 1em 1em 0 1em;
 }
 #summary ul, #mini-summary ul{
   list-style: none;
-  padding: 0 0 0 1em;
 }
 
 #items .details li, #summary li, #mini-summary li{
-  font-size: 1.7em;
-  line-height: 1.5em;
-  text-align: right;
+  font-size: 1.2em;
+  line-height: 1.2em;
 }
 
 #items .details .price, #summary{
@@ -47,14 +44,11 @@ fieldset legend{
   cursor: pointer;
 }
 
-#manual-checkout-form #address-div{margin: 5% 0;}
-
 #id_address_name, #id_address1, #id_address2{width: 250px;}
 #id_city, #id_postal_code{width: 150px;}
 #id_state, #id_country{width: 100px;}
 #id_notes, #id_receipt{width: 250px;}
 
-#submit-div{padding: 2em 0;}
 #submit-div .admin-checkout-error, #submit-div .admin-checkout-success{
   display: none;
 }

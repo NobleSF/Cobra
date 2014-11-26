@@ -9,7 +9,7 @@
 {% endblock javascript %}
 
 {% block css %}
-  <link href="{{ STATIC_URL }}public/css/cart.css?v=1" rel="stylesheet">
+  <link href="{{ STATIC_URL }}public/css/cart.css?v=2" rel="stylesheet">
 {% endblock css %}
 
 {% block content %}
@@ -29,19 +29,18 @@
         <div id='items'>
           {% for item in cart %}
             <div id='item_{{ item.id }}' class='thumbnail row-fluid'>
-              <div class='photo span4'>
+              <div class='photo span3'>
                 <a href="{{ item.product.get_absolute_url }}">
-                  <img src='{{ item.photo.thumb_size }}' alt='{{ item.product.title }}'>
+                  <img src='{{ item.photo.pinky_size }}' alt='{{ item.product.title }}'>
                 </a>
               </div>
-              <div class='details span8'>
+              <div class='details span9'>
                 <ul>
                   <li class='name'>
-                    <a href="{{ item.product.get_absolute_url }}">
-                      {{ item.product.name }} by {{ item.product.seller.name }}
-                    </a>
+                    <a href="{{ item.product.get_absolute_url }}">{{ item.product.name }}</a>
+                    by {{ item.product.seller.name }}
                   </li>
-                  <li class='price'>${{ item.product.display_price }}</li>
+                  <li class='price'>${{ item.product.display_price }} (includes shipping)</li>
                   <li class='delete'>
                     <a href="{% url 'cart remove' item.product.id %}">remove</a>
                   </li>
@@ -49,24 +48,23 @@
               </div>
             </div>
           {% endfor %}
+
+          <div id='summary' class='thumbnail row-fluid'>
+            <div class="details span3">
+              <ul>
+                <li class='title-font'>Cart Total</li>
+              </ul>
+            </div>
+            <div class='details span9'>
+              <ul>
+                <li class='amount title-font'>
+                  $<span id='order-total'>{{ cart.summary }}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
 
-        <div id='summary' class='row-fluid'>
-          <div class='span5'>
-            <ul>
-              <li class='title-font'>Shipping</li>
-              <li class='title-font'>Total</li>
-            </ul>
-          </div>
-          <div class='span7'>
-            <ul>
-              <li class='amount title-font'>0.00</li>
-              <li class='amount title-font'>
-                $<span id='order-total'>{{ cart.summary }}</span>
-              </li>
-            </ul>
-          </div>
-        </div>
       </div>
 
 {#      <div id='cart-shortcut'>#}
@@ -87,80 +85,115 @@
 {#      </div>#}
 
       {% if cart.count %}
-        <div id='customer-info'>
+        <div id='checkout-form'>
+          <input type='hidden' id='cart-ajax-url' value="{% url 'cart save' %}">
 
-          <div id='checkout-form'>
-            <input type='hidden' id='cart-ajax-url' value="{% url 'cart save' %}">
-            <div class='row-fluid'>
-              <div class='span6'>
+          <div id="checkout_form" class="form-horizontal">
 
-                <div id='address-div' class=''>
-                  <h4 class='copy-font'>Shipping Address</h4>
-                  {{ cart_form.address_name }}<br>
-                  {{ cart_form.address1 }}<br>
-                  {{ cart_form.address2 }}<br>
-                  {{ cart_form.city }}
-                  {{ cart_form.state }}<br>
-                  {{ cart_form.postal_code }}
-                  {{ cart_form.country }}
-                </div>
+            <div class="control-group">
+              <label class="control-label" for=""></label>
+              <div class="controls"><h4>Contact Info</h4></div>
+            </div>
 
-              </div>
-              <div class='span6'>
+            <div class="control-group">
+              <label class="control-label" for="name">Your Name</label>
+              <div class="controls">{{ cart_form.name }}</div>
+            </div>
 
-                <div id='contact-div' class=''>
-                  <h4>Contact Info</h4>
-                  {{ cart_form.name }}
-                  {{ cart_form.email }}
-                  <p><span id='email-suggestion'>
-                    Did you mean <a id='suggested-email'></a>?
-                  </span>&nbsp;</p>
-                </div>
-
-                {% if 'admin_id' in request.session %}
-
-                  <input type='hidden' id='manual_checkout_url' value="{% url 'manual checkout create' %}">
-                  <div id='submit-div'>
-                    <button id='admin-checkout-button' class='btn btn-info'>Submit Manual Order</button>
-                    <button class='admin-checkout-error btn btn-danger' disabled='disabled'>Error</button>
-                    <button class='admin-checkout-success btn btn-success' disabled='disabled'>Success</button>
-                    <br>
-                    <span class='admin-checkout-error'>
-                      Missing contact info or incomplete shipping address??
-                      <br>Refresh the page to try again.
-                    </span>
-                    <span class='admin-checkout-success'>
-                      Check email for link to complete the checkout.
-                    </span>
-                  </div>
-
-                {% else %}
-
-                  <div id="payment-div">
-                    <h4>Order Total: ${{ cart.summary }}</h4>
-                    <form id="pay-button" action="{%  url 'stripe checkout' %}" method="POST" style="display: none;">
-                      {#                    http://respondto.it/anou-stripe#}
-                      <script
-                          src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                          data-key="{{ STRIPE_PUBLIC_KEY }}"
-                          data-amount="{% widthratio cart.summary 1 100 %}"
-                          data-name="Anou"
-                          data-description="{{ cart|length }} item{{ cart|length|pluralize }} (${{ cart.summary }})"
-                          data-image="https://res.cloudinary.com/hork5h8x1/image/upload/Anou_logo_square_128_azlqgp.png"
-                          data-allow-remember-me="false"
-                          data-currency="USD"
-                          data-label="Pay with card.">
-                      </script>
-                    </form>
-                  </div>
-
-                {% endif %}
-
+            <div class="control-group">
+              <label class="control-label" for="email">Email Address</label>
+              <div class="controls">
+                {{ cart_form.email }}<br>
+                <span id='email-suggestion'>
+                  Did you mean <a id='suggested-email'></a>?
+                </span>
               </div>
             </div>
-          </div>
 
+            <div class="control-group">
+              <label class="control-label" for=""></label>
+              <div class="controls"><h4>Shipping Address</h4></div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label" for="address_name">Recipient Name</label>
+              <div class="controls">{{ cart_form.address_name }}</div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label" for="address1">Address</label>
+              <div class="controls">{{ cart_form.address1 }}</div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label" for="address2"></label>
+              <div class="controls">{{ cart_form.address2 }}</div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label" for="city">City, State/Region</label>
+              <div class="controls">{{ cart_form.city }} {{ cart_form.state }}</div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label" for="postal_code">Postal Code, Country</label>
+              <div class="controls">{{ cart_form.postal_code }} {{ cart_form.country }}</div>
+            </div>
+
+            {% if 'admin_id' in request.session %}
+              <!-- admin manual checkout -->
+              <input type='hidden' id='manual_checkout_url' value="{% url 'manual checkout create' %}">
+
+              <div class="control-group">
+                <label class="control-label" for="name"></label>
+                <div id="submit-div" class="controls">
+                  <button id='admin-checkout-button' class='btn btn-info'>Submit Manual Order</button>
+                  <button class='admin-checkout-error btn btn-danger' disabled='disabled'>Error</button>
+                  <button class='admin-checkout-success btn btn-success' disabled='disabled'>Success</button>
+                  <br>
+                  <span class='admin-checkout-error'>
+                    Missing contact info or incomplete shipping address??
+                    <br>Refresh the page to try again.
+                  </span>
+                  <span class='admin-checkout-success'>
+                    Check email for link to complete the checkout.
+                  </span>
+                </div>
+              </div>
+
+            {% else %}
+              <!-- checkout with Stripe -->
+
+              <div class="control-group">
+                <label class="control-label" for=""></label>
+                <div class="controls"><h4>Secure Payment ${{ cart.summary }}</h4></div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for=""></label>
+                <div class="controls">
+                  <form id="pay-button" action="{%  url 'stripe checkout' %}"
+                        method="POST" style="display: none;">
+                    {#http://respondto.it/anou-stripe#}
+                    <script
+                        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                        data-key="{{ STRIPE_PUBLIC_KEY }}"
+                        data-amount="{% widthratio cart.summary 1 100 %}"
+                        data-name="Anou"
+                        data-description="{{ cart|length }} item{{ cart|length|pluralize }} (${{ cart.summary }})"
+                        data-image="https://res.cloudinary.com/hork5h8x1/image/upload/Anou_logo_square_128_azlqgp.png"
+                        data-allow-remember-me="false"
+                        data-currency="USD"
+                        data-label="Pay now with card.">
+                    </script>
+                  </form>
+                </div>
+              </div>
+
+            {% endif %}
+          </div>
         </div>
+
       {% endif %}
 
     </div><!-- end of left side, span8 -->
@@ -168,19 +201,19 @@
     <div id='information' class='span4'>
       <div class='well'>
         <h4>How much is Shipping?</h4>
-        <p>Shipping is free to the USA, Europe, and Morocco. However, we are exploring the demand for shipping to other countries. Shoot us an email to <a href='mailto:hello@theanou.com'>hello@theanou.com</a> and we'll see what we can do for you!</p>
+        <p>Shipping is included for customers in USA, Canada, and Europe. If you are either closer or further away, email us at <a href='mailto:hello@theanou.com'>hello@theanou.com</a> and we will adjust your cart total accordingly.</p>
       </div>
       <div class='well'>
         <h4>What about returns?</h4>
-        <p>If you need to return an item for any reason, we will send you a shipping label to cover return shipping and you will receive a full refund. Just email us at <a href='mailto:hello@theanou.com'>hello@theanou.com</a>. As a matter of fact, we haven't even had any returns yet! So we're trusting you on when something needs to be returned.</p>
+        <p>If you need to return an item for any reason, we will send you a shipping label to cover return shipping and you will receive a full refund. Just email us at <a href='mailto:hello@theanou.com'>hello@theanou.com</a>. So far, the need for this has been extremely rare! We trust your judgement whether something needs to be returned or replaced.</p>
       </div>
       <div class='well'>
         <h4>Can the shipping and billing address be different?</h4>
-        <p>Yes, they can be different. You will have the opportunity to enter them seperately.</p>
+        <p>Yes. Please only provide the shipping address. You will not be asked for your billing address.</p>
       </div>
       <div class='well'>
         <h4>What is your security policy?</h4>
-        <p>Our security is the highest possible because we do not handle any of your sensitive personal information. Your payment will be processed by <a href='https://www.wepay.com/security' target='_blank'>WePay</a> through their secure portal. The only information we keep on file is your shipping address so the artisan can mail your order, and your email so we can update you on it's progress.</p>
+        <p>We do not handle any of your sensitive personal information. Your payment will be processed by <a href='https://stripe.com/help/security' target='_blank'>Stripe</a> using their secure portal. The only information we keep on file is your shipping address so the artisan can mail your order, and your email so we can update you on it's progress.</p>
       </div>
     </div>
   </div>
