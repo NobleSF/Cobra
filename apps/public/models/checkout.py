@@ -73,7 +73,7 @@ class Checkout(models.Model):
   def pullStripeData(self):
     #todo: use stripe api to reset our data
     if self.payment_id.startswith('ch_'):
-      return self.checkout_data
+      return self.payment_data
     else:
       return {}
 
@@ -108,7 +108,7 @@ class Checkout(models.Model):
         return {'error': e}
       else:
         self.payment_id = self.cart.wepay_checkout_id
-        self.checkout_data = wepay_response if wepay_response else self.checkout_data
+        self.payment_data = wepay_response if wepay_response else self.payment_data
         self.save()
 
         #PAYMENT INFO
@@ -150,53 +150,6 @@ class Checkout(models.Model):
           self.cart.save() #save all our address changes
         return wepay_response
 
-  def getCheckoutData(self):
-    checkout_data = wepay_checkout_data = self.cart.checkout_data or {}
-
-    try:
-      if self.is_manual_order:
-        checkout_data = {'manual_order':True}
-      elif str(self.cart.stripe_charge_id).startswith('ch_'): #stripe
-        stripe_checkout = True
-        checkout_data = self.getStripeCheckoutData()
-      else:
-        wepay_checkout = True
-        checkout_data = self.getWePayCheckoutData()
-        try:
-          self.cart.checkout_data = checkout_data
-          self.cart.save()
-        except: pass
-
-      #name and email
-      if self.cart.name:
-        checkout_data['name'] = self.cart.name
-      else:
-        checkout_data['name'] = checkout_data.get('payer_name')
-        self.cart.name = checkout_data.get('payer_name')
-        self.cart.save()
-      if self.cart.email:
-        checkout_data['email'] = self.cart.email
-      else:
-        checkout_data['email'] = checkout_data.get('payer_email')
-        self.cart.email = checkout_data.get('payer_email')
-        self.cart.save()
-
-      if not checkout_data.get('shipping_address'):
-        checkout_data['shipping_address'] = {}
-
-      if self.cart.address_name:
-        checkout_data['shipping_address']['name']       = self.cart.address_name
-      checkout_data['shipping_address']['address1']     = self.cart.address1
-      checkout_data['shipping_address']['address2']     = self.cart.address2
-      checkout_data['shipping_address']['city']         = self.cart.city
-      checkout_data['shipping_address']['state']        = self.cart.state
-      checkout_data['shipping_address']['postal_code']  = self.cart.postal_code
-      checkout_data['shipping_address']['country']      = self.cart.country
-
-    except Exception as e: print str(e)
-
-    return checkout_data
-
 #SIGNALS AND SIGNAL REGISTRATION
 from django.dispatch import receiver
 from django.db.models.signals import post_save
@@ -222,9 +175,9 @@ def createOrders(sender, instance, created, **kwargs):
           total_charge        = item.product.intl_price,
           seller_paid_amount  = item.product.price + item.product.shipping_cost
         )
+        order.product = item.product
         order.save()
-        order.products.add(item.product)
-        item.product.sold_at = timezone.now()
+        item.product.sold_at = timezone.now()#todo: make this a post_save order to mark a product sold
         item.product.save()
 
     # email = Email('checkout/created', checkout)

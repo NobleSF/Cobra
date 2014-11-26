@@ -15,7 +15,7 @@ def stripe_checkout(request):
   #stripe_email = request.POST.get('stripeEmail')
   stripe.api_key = STRIPE_SECRET_KEY #initiate stripe
 
-  checkout = Checkout(cart_id=request.session.get('cart_id'))
+  checkout, created = Checkout.objects.get_or_create(cart_id=request.session.get('cart_id'))
   if stripe_token:
     try:
       charge = stripe.Charge.create(
@@ -25,13 +25,20 @@ def stripe_checkout(request):
           description="payment to Anou"
       )
       checkout.payment_id = charge.get('id')
-      checkout.checkout_data = charge
+      checkout.payment_data = charge
+      checkout.save()
 
     except stripe.CardError, e:
       # The card has been declined
       print "card has been declined"
     except Exception as e:
       ExceptionHandler(e, 'in checkout.stripe_checkout')
+    else:
+      checkout.currency = charge.get('currency').upper()
+      checkout.total_charge = float(charge.get('amount'))/100
+      checkout.total_paid = float(charge.get('amount'))/100 if charge.get('paid') else 0
+      #checkout.total_refunded = sum([refund.amount for refund in charge['refunds']['data']])
+      checkout.receipt = str(charge.get('card'))
 
   checkout.save()
   return redirect('confirmation', checkout.public_id)
@@ -46,7 +53,7 @@ def confirmation(request, checkout_id=None):
       del request.session['cart_id']
 
   elif checkout.cart.wepay_checkout_id:
-    wepay_data = checkout.getWepayCheckoutData() #return {} if no data available
+    wepay_data = checkout.getWePayCheckoutData() #return {} if no data available
     checkout.payment_data = wepay_data if wepay_data else checkout.payment_data
 
     if (checkout.payment_data.get('gross') and
@@ -60,7 +67,7 @@ def confirmation(request, checkout_id=None):
     else:
       context['problem'] = "Payment on order is not complete."
 
-  elif checkout.cart.stripe_charge_id:
+  elif checkout.payment_id:
     #pull updated stripe payment data
     if checkout.payment_data and checkout.payment_data.get('paid'):
 

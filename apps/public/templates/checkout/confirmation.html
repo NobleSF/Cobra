@@ -16,7 +16,7 @@
   <div class='row-fluid'>
     <div class='span8'>
 
-      {% if checkout.cart.count %}
+      {% if checkout.orders.count %}
         <div id='confirmation-title'>
           <h1>
             {% if problem %}
@@ -65,14 +65,14 @@
           <fieldset>
             <legend>Order Items</legend>
             <ul class='unstyled'>
-              {% for item in checkout.cart %}
+              {% for order in checkout.orders.all %}
                 <li>
-                  <a href="{{ item.product.get_absolute_url }}">
+                  <a href="{{ order.product.get_absolute_url }}">
                     <img class='product-photo'
-                         src='{{ item.photo.pinky_size }}' alt='{{ item.product.title }}'>
+                         src='{{ order.product.photo.pinky_size }}' alt='{{ order.product.title }}'>
                     <h5 class='product-title'>
-                      {{ item.product.name }}
-                      <span class=''>${{ item.product.display_price }}</span>
+                      {{ order.product.name }}
+                      <span class=''>${{ order.product.display_price }}</span>
                     </h5>
                   </a>
                 </li>
@@ -160,15 +160,6 @@
         <p>When your purchase arrives, pleas send us a picture or post it to our <a href="http://www.facebook.com/TheAn0u">Facebook page</a>. Our artisans always love to see how you are using their products so they can improve their designs.</p>
       </div>
     </div>
-  </div>
-
-  <div id='data' class='hidden'>
-    <h1>Wepay Data:</h1>
-    <ul>
-      {% for key,value in checkout_data.items %}
-        <li>{{key}}: {{value}}</li>
-      {% endfor %}
-    </ul>
   </div>
 
 {% endblock content %}
