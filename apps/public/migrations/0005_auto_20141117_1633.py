@@ -7,10 +7,11 @@ def saveFirstOfProductsAsProduct(apps, schema_editor):
   # version than this migration expects. We use the historical version.
   Order = apps.get_model("public", "Order")
   for order in Order.objects.all():
-    if len(order.products.all()):
-      order.product = order.products.all()[0]
-      order.save()
-
+    try:
+      if len(order.products.all()):
+        order.product = order.products.all()[0]
+        order.save()
+    except: pass
 
 class Migration(migrations.Migration):
   dependencies = [
