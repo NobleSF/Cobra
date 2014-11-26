@@ -6,9 +6,14 @@ def createCheckoutForEachPaidCart(apps, schema_editor):
   Cart = apps.get_model("public", "Cart")
   for cart in Cart.objects.filter(checked_out=True):
     if len(cart.orders.all()) < 1:
-      cart.delete()
+      try:
+        cart.delete()
+      except: pass
     if not getCheckoutId(cart):
-      cart.delete()
+      try:
+        cart.delete()
+      except:
+        pass
 
   Checkout = apps.get_model("public", "Checkout")
   for cart in Cart.objects.filter(checked_out=True):
