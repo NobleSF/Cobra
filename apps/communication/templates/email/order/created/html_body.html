@@ -20,6 +20,7 @@
 {% block body %}
 
   Hi {{ data.name }},<br>
+  Thank you for your purchase!
   <br>
   The artisan{{ data.orders|length|pluralize}} you purchased from just received an SMS message!
   They will make sure your item{{ data.orders|length|pluralize:" is,s are" }}
@@ -28,7 +29,7 @@
   <br>
   Item{{ data.orders|length|pluralize}} Ordered:<br>
   <table>
-    {% for order in data.orders %}
+    {% for order in data.orders.all %}
       <tr>
         <td>
           <a href="http://www.theanou.com{{ order.product.get_absolute_url }}">

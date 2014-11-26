@@ -76,12 +76,12 @@ class Order(models.Model):
 from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save, pre_delete
 
-# @receiver(post_save, sender=Order)
-# def createOrders(sender, instance, created, **kwargs):
-#   order = instance
-#   if created:
-#     from apps.communication.controller.order_events import communicateOrderCreated
-#     communicateOrderCreated(order)
+@receiver(post_save, sender=Order)
+def createOrders(sender, instance, created, **kwargs):
+  if created:
+    order = instance
+    from apps.communication.controller.order_events import communicateOrderCreated
+    communicateOrderCreated(order)
 
 @receiver(post_save, sender=Order)
 def setPublicId(sender, instance, created, **kwargs):

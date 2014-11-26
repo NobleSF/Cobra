@@ -44,12 +44,12 @@
             <p class="red">Note: You have received a full or partial refund!</p>
           {% endif %}
 
-          {% for item in cart.items %}
-            {% if item.order.tracking_number %}
+          {% for order in checkout.orders.all %}
+            {% if order.tracking_number %}
               <h3 class=''>
-                Track your {{ item.product.name }} at
-                <a href="{{ item.order.tracking_url }}" target='_blank'>
-                  {{ item.order.tracking_number }}
+                Track your {{ order.product.name }} at
+                <a href="{{ order.tracking_url }}" target='_blank'>
+                  {{ order.tracking_number }}
                 </a>.
               </h3>
             {% endif %}
