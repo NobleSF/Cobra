@@ -28,44 +28,6 @@ def communicateOrderCreated(order):
   except Exception as e:
     ExceptionHandler(e, "in order_events.communicateOrdersCreated-B")
 
-def communicateOrdersCreated(orders):
-  try:
-    for order in orders: #send SMS to seller for each order
-      products_string = "%d  " % order.product.id
-
-      try: #message each artisan that their product has sold and for how much
-        artisan_msg = "%d \r\n %d Dh" % (order.product.id, order.product.price)
-        for artisan in order.product.assets.filter(ilk='artisan'):
-          if artisan.phone:
-            sendSMSForOrder(artisan_msg, artisan.phone, order)
-      except Exception as e:
-        ExceptionHandler(e, "in order_events.communicateOrdersCreated-A")
-
-      #message the seller with the address
-      address_string = order.checkout.cart.shipping_address.replace('\n','\n\r')
-      seller_msg = products_string + "\r\n" + address_string
-      seller_phone = order.seller.phone
-      sendSMSForOrder(seller_msg, seller_phone, order)
-
-      #notify the team
-      try:
-        order.seller_msg = seller_msg.replace('\n', '<br>')
-        emails = [person.email for person in operations_team]
-        for address in emails:
-          Email('order/created_copy_director', order).sendTo(address)
-
-      except Exception as e:
-        ExceptionHandler(e, "in order_events.communicateOrdersCreated-B")
-
-    #send email to buyer
-    email = Email('order/created', orders)
-    email.assignToOrder(orders[0])
-    email.sendTo(orders[0].cart.email_with_name)
-    return True
-  except Exception as e:
-    ExceptionHandler(e, "in order_events.communicateOrdersCreated-C")
-    return False
-
 def updateOrder((product_id, data), gimme_reply_sms=False):
   """
       gets a tuple of (id, data-dict) plus optional boolean
