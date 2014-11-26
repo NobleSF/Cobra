@@ -18,7 +18,6 @@ def find_order(request):
 
   try:
     some_id = request.GET.get('some_id').strip()
-    # print "some id: " + some_id
     found_orders = []
 
     if some_id.isdigit():
@@ -36,12 +35,10 @@ def find_order(request):
 
     else: #not a digit
       found_orders = Order.objects.filter(
-        Q(cart__anou_checkout_id=some_id) |
-        Q(cart__stripe_charge_id__endswith=some_id)
-      )
-
-      if not found_orders:
-        found_orders = Order.objects.filter(tracking_number=some_id)
+                            Q(checkout__payment_id=some_id) |
+                            Q(checkout__public_id=some_id) |
+                            Q(public_id=some_id) |
+                            Q(tracking_number=some_id))
 
       if not found_orders:
         found_orders = [] #reset because it may be an empty query set which can't be appended
@@ -102,7 +99,6 @@ def orders(request, year=None, week=None, show_orders=[]):
 def order(request, order_id):
   try:
     order = Order.objects.get(id=order_id)
-    order.shipping_address = order.checkout.cart.shipping_address.replace('\n','<br>')
     this_week = {'date': order.created_at,
                  'year': order.created_at.year,
                  'week': order.created_at.strftime('%W')}
@@ -112,6 +108,7 @@ def order(request, order_id):
                'CLOUDINARY':CLOUDINARY}
     return render(request, 'orders/order.html', context)
   except Exception as e:
+    print str(e)
     return redirect('admin:orders')
 
 @access_required('admin')
@@ -128,7 +125,7 @@ def updateOrder(request):
 
       #SEND EMAIL WITH RECEIPT TO SELLER
       if order.seller.account.email:
-        message = "%d: %s" % (order.products.all()[0].id, order.seller_paid_receipt.original)
+        message = "%d: %s" % (order.product.id, order.seller_paid_receipt.original)
         email = Email(message=message, subject="$")
         email.assignToOrder(order)
         email.sendTo(order.seller.account.email)
@@ -136,10 +133,10 @@ def updateOrder(request):
       #SEND SMS TO SELLER
       if order.seller.account.phone:
         message = ("%d\r\n$\r\n%dDh" %
-                    (order.products.all()[0].id, int(order.seller_paid_amount)))
+                    (order.product.id, int(order.seller_paid_amount)))
         message += "\r\n"
         message += ("Anou transfere %d Dh a votre compte pour les produit: %d" %
-                    (order.seller_paid_amount, order.products.all()[0].id))
+                    (order.seller_paid_amount, order.product.id))
         sendSMS(message, order.seller.account.phone)
 
     elif action == "add note": #requires order_id, note

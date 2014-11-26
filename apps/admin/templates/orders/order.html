@@ -33,9 +33,8 @@
 <input type='hidden' id='update-order-url' value='{% url 'admin:update order' %}'>
 
 <h3 class='copy-font'>
-  <a href="{% url 'confirmation' %}?checkout_id={{order.checkout.cart.checkout_id}}"
-     target='_blank'>
-    {{order.checkout.cart.checkout_id}}
+  <a href="{% url 'confirmation' order.checkout.public_id %}">
+    {{order.checkout.public_id}}
   </a>
 </h3>
 
@@ -46,10 +45,10 @@
 <h3 class='copy-font'>
 
   <i class='symbol-opentag black' title='product id'></i>
-  <span class='product-id-number'>{{ order.products.all.0.id }}</span>
+  <span class='product-id-number'>{{ order.product.id }}</span>
 
-  <a href="{{ order.products.all.0.get_absolute_url }}" target='_blank'>
-    {{ order.products.all.0.title }}
+  <a href="{{ order.product.get_absolute_url }}" target='_blank'>
+    {{ order.product.title }}
   </a>
 </h3>
 
@@ -156,7 +155,7 @@
 
 <p>
   <div style='border: solid 1px black'>
-    {% if order.shipping_address %}{{ order.shipping_address|safe }}{% endif %}
+    {% if order.checkout.shipping_address %}{{ order.checkout.shipping_address|linebreaksbr }}{% endif %}
   </div>
 </p>
 
@@ -193,7 +192,7 @@
     <td>shipping</td>
     <td style='white-space: nowrap'>
       {{ order.shipping_charge|floatformat:0 }} MAD
-      ({{ order.products.all.0.weight }}g, {{ order.products.all.0.metric_dimensions }})
+      ({{ order.product.weight }}g, {{ order.product.metric_dimensions }})
     </td>
   </tr>
 
@@ -208,6 +207,6 @@
   </tr>
 </table>
 
-<img src="{{ order.products.all.0.photo.product_size }}">
+<img src="{{ order.product.photo.product_size }}">
 
 {% endblock content %}

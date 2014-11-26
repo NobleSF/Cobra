@@ -31,19 +31,19 @@
     {% for order in data %}
       <tr>
         <td>
-          <a href="http://www.theanou.com{{ order.products.all.0.get_absolute_url }}">
-            <img src="{{ order.products.all.0.photo.pinky_size }}" width="75" height="75">
+          <a href="http://www.theanou.com{{ order.product.get_absolute_url }}">
+            <img src="{{ order.product.photo.pinky_size }}" width="75" height="75">
           </a>
         </td>
         <td valign="middle">
-          <a href="http://www.theanou.com{{ order.products.all.0.get_absolute_url }}">
-            {{ order.products.all.0.name }}
+          <a href="http://www.theanou.com{{ order.product.get_absolute_url }}">
+            {{ order.product.name }}
             from
             {{ order.seller.city }}, Morocco
           </a>
         </td>
       </tr>
-      {{ order.products.0.name }}
+      {{ order.product.name }}
     {% endfor %}
   </table>
 {% endblock body %}

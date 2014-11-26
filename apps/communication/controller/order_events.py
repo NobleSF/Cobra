@@ -31,16 +31,15 @@ def communicateOrderCreated(order):
 def communicateOrdersCreated(orders):
   try:
     for order in orders: #send SMS to seller for each order
-      products_string = ""
-      for product in order.products.all():
-        products_string += "%d  " % product.id
+      products_string = "%d  " % order.product.id
 
-        try: #message each artisan that their product has sold and for how much
-          artisan_msg = "%d \r\n %d Dh" % (product.id, product.price)
-          for artisan in product.assets.filter(ilk='artisan'):
+      try: #message each artisan that their product has sold and for how much
+        artisan_msg = "%d \r\n %d Dh" % (order.product.id, order.product.price)
+        for artisan in order.product.assets.filter(ilk='artisan'):
+          if artisan.phone:
             sendSMSForOrder(artisan_msg, artisan.phone, order)
-        except Exception as e:
-          ExceptionHandler(e, "in order_events.communicateOrdersCreated-A")
+      except Exception as e:
+        ExceptionHandler(e, "in order_events.communicateOrdersCreated-A")
 
       #message the seller with the address
       address_string = order.checkout.cart.shipping_address.replace('\n','\n\r')
