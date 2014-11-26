@@ -12,23 +12,23 @@
 {% endblock headline %}
 
 {% block tagline %}
-  <a href="http://www.theanou.com/checkout/confirmation?checkout_id={{ data.0.cart.checkout_id }}">
+  <a href="http://www.theanou.com/checkout/confirmation/{{ data.public_id }}">
     view order online
   </a>
 {% endblock tagline %}
 
 {% block body %}
 
-  Hi {{ data.0.cart.name }},<br>
+  Hi {{ data.name }},<br>
   <br>
-  The artisan{{ data|length|pluralize}} you purchased from just received an SMS message!
-  They will make sure your item{{ data|length|pluralize:" is,s are" }}
+  The artisan{{ data.orders|length|pluralize}} you purchased from just received an SMS message!
+  They will make sure your item{{ data.orders|length|pluralize:" is,s are" }}
   ready to ship and confirm
-  {{ data|length|pluralize:"it,each one" }} soon.<br>
+  {{ data.orders|length|pluralize:"it,each one" }} soon.<br>
   <br>
-  Item{{ data|length|pluralize}} Ordered:<br>
+  Item{{ data.orders|length|pluralize}} Ordered:<br>
   <table>
-    {% for order in data %}
+    {% for order in data.orders %}
       <tr>
         <td>
           <a href="http://www.theanou.com{{ order.product.get_absolute_url }}">

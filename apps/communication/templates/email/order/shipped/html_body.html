@@ -15,24 +15,24 @@
 {% endblock headline %}
 
 {% block tagline %}
-  <a href="http://www.theanou.com/checkout/confirmation?checkout_id={{ data.cart.checkout_id }}">
+  <a href="http://www.theanou.com/checkout/confirmation/{{ data.checkout.public_id }}">
     view order online
   </a>
 {% endblock tagline %}
 
 {% block body %}
 
-  Hi {{ data.cart.name }},<br>
+  Hi {{ data.checkout.name }},<br>
   <br>
   Your order for the
-  <a href="http://www.theanou.com{{ data.products.all.0.get_absolute_url }}">
-    {{ data.products.all.0.name }}
+  <a href="http://www.theanou.com{{ data.product.get_absolute_url }}">
+    {{ data.product.name }}
     from
-    {{ data.products.all.0.seller.city }}, Morocco
+    {{ data.product.seller.city }}, Morocco
   </a>
   was just shipped by
-  <a href="http://www.theanou.com{{ data.products.all.0.seller.get_absolute_url }}">
-    {{ data.products.all.0.seller.name }}
+  <a href="http://www.theanou.com{{ data.product.seller.get_absolute_url }}">
+    {{ data.product.seller.name }}
   </a>.
   Your item should arrive in about two weeks. Sometimes in rare cases items from rural areas can take up to 4 weeks to arrive.<br>
   <br>
@@ -53,15 +53,15 @@
   <table>
       <tr>
         <td>
-          <a href="http://www.theanou.com{{ data.products.all.0.get_absolute_url }}">
-            <img src="{{ data.products.all.0.photo.pinky_size }}" width="75" height="75">
+          <a href="http://www.theanou.com{{ data.product.get_absolute_url }}">
+            <img src="{{ data.product.photo.pinky_size }}" width="75" height="75">
           </a>
         </td>
         <td valign="middle">
-          <a href="http://www.theanou.com{{ data.products.all.0.get_absolute_url }}">
-            {{ data.products.all.0.name }}
+          <a href="http://www.theanou.com{{ data.product.get_absolute_url }}">
+            {{ data.product.name }}
             from
-            {{ data.products.all.0.seller.city }}, Morocco
+            {{ data.product.seller.city }}, Morocco
           </a>
         </td>
       </tr>

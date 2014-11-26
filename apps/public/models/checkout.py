@@ -180,9 +180,9 @@ def createOrders(sender, instance, created, **kwargs):
         item.product.sold_at = timezone.now()#todo: make this a post_save order to mark a product sold
         item.product.save()
 
-    # email = Email('checkout/created', checkout)
-    # email.assignToOrder(checkout.cart.orders[0])
-    # email.sendTo(checkout.cart.email_with_name)
+    email = Email('order/created', checkout)
+    email.assignToOrder(checkout.orders.first())
+    email.sendTo(checkout.cart.email_with_name)
 
 @receiver(post_save, sender=Checkout)
 def setPublicId(sender, instance, created, **kwargs):

@@ -1,1 +1,1 @@
-Anou Order #{{ data.0.cart.checkout_id }}
+Anou Order {{ data.public_id }}
