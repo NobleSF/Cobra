@@ -2,11 +2,11 @@ from django import forms
 
 class CartForm(forms.Form):
   email       = forms.CharField(max_length=100, widget=forms.TextInput(
-                  attrs={'class':"autosave required", 'placeholder':"email address"}))
+                  attrs={'class':"autosave required", 'placeholder':""}))
   name        = forms.CharField(max_length=100, widget=forms.TextInput(
-                  attrs={'class':"autosave required", 'placeholder':"your name"}))
+                  attrs={'class':"autosave required", 'placeholder':""}))
   address_name= forms.CharField(max_length=100, widget=forms.TextInput(
-                  attrs={'class':"autosave", 'placeholder':"address name"}))
+                  attrs={'class':"autosave", 'placeholder':""}))
   address1    = forms.CharField(max_length=100, widget=forms.TextInput(
                   attrs={'class':"autosave required", 'placeholder':"address line 1"}))
   address2    = forms.CharField(max_length=100, widget=forms.TextInput(
