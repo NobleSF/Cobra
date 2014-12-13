@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.http import Http404
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
@@ -45,6 +46,7 @@ def stripe_checkout(request):
 
 def confirmation(request, checkout_id=None):
   checkout_id = checkout_id or request.GET.get('checkout_id')
+  if not checkout_id: raise Http404
   checkout = Checkout.objects.filter(Q(payment_id=checkout_id) | Q(public_id=checkout_id)).first()
   context = {'checkout': checkout}
 
