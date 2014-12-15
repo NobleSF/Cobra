@@ -47,7 +47,7 @@ def stripe_checkout(request):
 def confirmation(request, checkout_id=None):
   checkout_id = checkout_id or request.GET.get('checkout_id')
   checkout = Checkout.objects.filter(Q(payment_id=checkout_id) | Q(public_id=checkout_id)).first()
-  if not (checkout_id or checkout): raise Http404
+  if not (checkout_id and checkout): raise Http404
   context = {'checkout': checkout}
 
   if checkout.is_manual_order:
