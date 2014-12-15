@@ -80,6 +80,8 @@ from django.db.models.signals import pre_save, post_save, pre_delete
 def createOrders(sender, instance, created, **kwargs):
   if created:
     order = instance
+    if not order.public_id: # very messy, but email communications need that public_id
+      setPublicId(sender, instance, False)
     from apps.communication.controller.order_events import communicateOrderCreated
     communicateOrderCreated(order)
 
