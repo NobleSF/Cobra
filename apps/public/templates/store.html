@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load url from future %}
+{% load cycle from future %}
 {% load cache %}
 
 {% cache 86400 public_store_header store.id store.updated_at %}

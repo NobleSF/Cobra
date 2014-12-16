@@ -31,7 +31,7 @@
 {% endblock css %}
 
 {% block content %}
-  {% load url from future %}
+
 
   <form method='post' action="{% url 'admin:product lookup' %}">{% csrf_token %}
     <ul class='inline'>

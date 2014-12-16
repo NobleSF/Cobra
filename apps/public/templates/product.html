@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load url from future %}
+{% load cycle from future %}
 {% load cache %}
 
 {% cache 86400 public_product_header product.id product.is_approved product.is_sold %}
@@ -445,7 +445,7 @@
           </tr>
         </table>
       </div>
-      {% cycle "" "</div><div id='utilities' class='row-fluid'>"%}
+      {% cycle "" "</div><div id='utilities' class='row-fluid'>" %}
     {% endfor %}
   </div></div>
   <hr>
