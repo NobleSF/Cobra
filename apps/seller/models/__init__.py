@@ -13,5 +13,4 @@ from apps.seller.models.asset import Asset
 from apps.seller.models.product import Product
 
 #requires product
-from apps.seller.models.custom_order import CustomOrder
 from apps.seller.models.photo import Photo
