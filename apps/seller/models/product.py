@@ -153,6 +153,10 @@ class Product(models.Model):
       return False
 
   @property
+  def is_commission(self):
+    return True if hasattr(self, 'commission') else False
+
+  @property
   def photo(self):
     try:
       return self.photos.exclude(is_progress=True)[0]

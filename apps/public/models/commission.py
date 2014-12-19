@@ -4,16 +4,17 @@ from apps.public.models.customer import Customer
 from apps.seller.models.product import Product
 
 class Commission(models.Model):
-  base_product              = models.ForeignKey(Product, null=True, related_name="commissions")
-  product                   = models.OneToOneField(Product, related_name='commission') #new product is created for each new custom order
+  base_product              = models.ForeignKey(Product, null=True, related_name='commissions')
+  # new product is created for each new custom order
+  product                   = models.OneToOneField(Product, null=True, related_name='commission')
 
-  customer                  = models.ForeignKey(Customer, related_name='commissions')
+  customer                  = models.ForeignKey(Customer, null=True, related_name='commissions')
   notes                     = models.TextField(null=True, blank=True)
 
   quantity                  = models.SmallIntegerField(default=1)
   length                    = models.IntegerField(null=True, blank=True)
   width                     = models.IntegerField(null=True, blank=True)
-  estimated_price           = models.SmallIntegerField(null=True, blank=True)
+  estimated_display_price   = models.SmallIntegerField(null=True, blank=True)
   estimated_weight          = models.SmallIntegerField(null=True, blank=True)
 
   estimated_completion_date = models.DateTimeField(null=True, blank=True)
@@ -99,25 +100,36 @@ class Commission(models.Model):
       self.canceled_at = timezone.now()
 
   @property
-  def display_price_estimate(self):
-
-    old_volume = self.base_product.length * self.base_product.width * self.base_product.height
-    shortest_side = min(self.base_product.length, self.base_product.width, self.base_product.height)
-    new_volume = self.length * self.width * shortest_side
-    ratio = float(new_volume)/old_volume
-
-    artisan_price = self.base_product.price * ratio
-    anou_fee = 0.25 * artisan_price
-    weight = self.base_product.weight * ratio * self.quantity
-
-    #bump estimate to next shipping price tier if close
-    weight = (self.custom_product.weight * 1.05) + 100
-
-
-    return int(round(self.display_price))
-
-  @property
   def is_bulk(self):
     return True if self.quantity > 1 else False
 
   # MODEL FUNCTIONS
+  def createPriceEstimate(self, save=True):
+    base_volume = self.base_product.length * self.base_product.width * self.base_product.height
+    shortest_side = min(self.base_product.length, self.base_product.width, self.base_product.height)
+    new_volume = self.length * self.width * shortest_side
+    ratio = float(new_volume) / base_volume
+
+    if not self.product:
+      self.product = Product(seller=self.base_product.seller)
+
+    # pad the weight (add 5% + 100g)
+    self.product.weight = int(((self.base_product.weight * ratio * 1.05) + 100) * self.quantity)
+    self.product.price = int(self.base_product.price * ratio * self.quantity)
+
+    if save:
+      self.estimated_display_price = self.product.display_price
+      self.save()
+    return self.product.display_price
+
+#SIGNALS AND SIGNAL REGISTRATION
+from django.dispatch import receiver
+from django.db.models.signals import pre_save
+
+@receiver(pre_save, sender=Commission)
+def createRelatedObjects(sender, instance, **kwargs):
+  if not instance.product:
+    instance.product = Product.objects.create(seller=instance.base_product.seller)
+  instance.product.save()
+  if instance.estimated_display_price and not instance.customer:
+    instance.customer = Customer.objects.create()
