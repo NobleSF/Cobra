@@ -37,7 +37,7 @@ class Product(models.Model):
   #todo: change this to on_hold_at = datetime
   approved_at   = models.DateTimeField(null=True, blank=True) #admin approval
   sold_at       = models.DateTimeField(null=True, blank=True)
-  #is_orderable  = models.BooleanField(default=False) #for custom orders
+  #is_orderable  = models.BooleanField(default=True) #for custom orders
 
   #dynamically created and updated
   slug          = models.CharField(max_length=150, null=True, blank=True)
@@ -171,7 +171,7 @@ class Product(models.Model):
       else:
         return str(self.id)
     except:
-      return str(self.id)
+      return str(self.id) if self.id else str("unsaved product")
 
   @property
   def artisan(self):
@@ -366,7 +366,7 @@ class Product(models.Model):
 
   @property
   def english_dimensions(self):
-    engish_string = ""
+    english_string = ""
     measurements = sorted([self.width, self.height, self.length], reverse=True)
 
     for length in measurements:
@@ -380,16 +380,19 @@ class Product(models.Model):
           inches = inches if inches > 0 else 1
         dimension_string = ("%dft " % feet) if feet else ""
         dimension_string += ("%din" % inches) if inches else ""
-        engish_string += "%s x " % dimension_string
+        english_string += "%s x " % dimension_string
 
-    if engish_string.endswith(" x "):
-      engish_string = rreplace(engish_string, " x ", "", 1)
-    return engish_string
+    if english_string.endswith(" x "):
+      english_string = rreplace(english_string, " x ", "", 1)
+    return english_string
 
   @property
   def anou_fee(self):
-    from settings.settings import ANOU_FEE_RATE
-    if self.price:
+    from settings.settings import ANOU_FEE_RATE, ANOU_CUSTOM_ORDER_FEE_RATE
+    if self.price and self.is_commission:
+      fee = self.price * ANOU_CUSTOM_ORDER_FEE_RATE / (1-ANOU_CUSTOM_ORDER_FEE_RATE)
+      return int(round(fee)) #round off for local currencies
+    elif self.price:
       fee = self.price * ANOU_FEE_RATE / (1-ANOU_FEE_RATE)
       return int(round(fee)) #round off for local currencies
     else:
@@ -398,16 +401,22 @@ class Product(models.Model):
   @property
   def shipping_cost(self):
     from apps.seller.controller.shipping import calculateShippingCost
-    if self.weight and len(self.shipping_options.all()) > 0:
-      return calculateShippingCost(self.weight, self.shipping_options.all()[0], 'US')
+    if self.is_commission and not self.id: #unsaved temp product
+      shipping_option = self.commission.base_product.shipping_options.first()
+      return calculateShippingCost(self.weight, shipping_option, 'US')
+    elif self.weight and self.shipping_options.count():
+      return calculateShippingCost(self.weight, self.shipping_options.first(), 'US')
     else:
       return 0
 
   @property
   def local_shipping_cost(self):
     from apps.seller.controller.shipping import calculateShippingCost
-    if self.weight and len(self.shipping_options.all()) > 0:
-      return calculateShippingCost(self.weight, self.shipping_options.all()[0], 'MA')
+    if self.is_commission and not self.id: #unsaved temp product
+      shipping_option = self.commission.base_product.shipping_options.first()
+      return calculateShippingCost(self.weight, shipping_option, 'MA')
+    elif self.weight and self.shipping_options.count():
+      return calculateShippingCost(self.weight, self.shipping_options.first(), 'MA')
     else:
       return 0
 
@@ -510,6 +519,16 @@ class Product(models.Model):
       return "" #probably doesn't need to be working anyway
 
   # MODEL FUNCTIONS
+  def sortDimensions(self):
+    self.length = self.length or 1
+    self.width = self.width or 1
+    self.height = self.height or 1
+    dimensions = [self.length, self.width, self.height]
+    dimensions.sort()
+    #shortest to longest
+    [self.height, self.width, self.length] = dimensions
+    self.save()
+
   def get_related_products(self, limit=3):
     from django.utils import timezone
     try:
@@ -547,10 +566,7 @@ class Product(models.Model):
       return reverse('product', args=[str(self.id)])
 
   def __unicode__(self):
-    if self.color_adjective:
-      return unicode("%s %s" % (self.color_adjective, self.name))
-    else:
-      return unicode(self.name)
+    return u'%s' % self.name
 
 #SUPPORTING FUNCTIONS
 def rreplace(s, old, new, occurrence):

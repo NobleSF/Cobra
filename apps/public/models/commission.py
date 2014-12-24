@@ -105,22 +105,39 @@ class Commission(models.Model):
 
   # MODEL FUNCTIONS
   def createPriceEstimate(self, save=True):
-    base_volume = self.base_product.length * self.base_product.width * self.base_product.height
-    shortest_side = min(self.base_product.length, self.base_product.width, self.base_product.height)
-    new_volume = self.length * self.width * shortest_side
-    ratio = float(new_volume) / base_volume
-
-    if not self.product:
-      self.product = Product(seller=self.base_product.seller)
-
-    # pad the weight (add 5% + 100g)
-    self.product.weight = int(((self.base_product.weight * ratio * 1.05) + 100) * self.quantity)
-    self.product.price = int(self.base_product.price * ratio * self.quantity)
-
+    self.product = self.createProduct(False)
     if save:
       self.estimated_display_price = self.product.display_price
       self.save()
     return self.product.display_price
+
+  def createWeightEstimate(self, save=True):
+    self.product = self.createProduct(False)
+    if save:
+      self.estimated_weight = self.product.weight
+      self.save()
+    return self.product.weight
+
+  def createProduct(self, save=True):
+    self.product = Product(seller=self.base_product.seller) if not self.product else self.product
+
+    self.base_product.sortDimensions() #sorts base_product dimensions and all set to positive integers
+    base_size = self.base_product.length * self.base_product.width
+    self.product.length = self.length or self.base_product.length
+    self.product.width = self.width or self.base_product.width
+    self.product.height = self.base_product.height
+
+    new_size = self.product.length * self.product.width
+    ratio = float(new_size) / base_size
+
+    self.product.weight = int(((self.base_product.weight * ratio * 1.05) + 100) * self.quantity)
+    self.product.price = int(self.base_product.price * ratio * self.quantity)
+
+    if save:
+      self.product.save()
+      self.save()
+
+    return self.product
 
 #SIGNALS AND SIGNAL REGISTRATION
 from django.dispatch import receiver
