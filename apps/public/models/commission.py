@@ -23,7 +23,6 @@ class Commission(models.Model):
   artisan_confirmed_at      = models.DateTimeField(null=True, blank=True)
   invoice_sent_at           = models.DateTimeField(null=True, blank=True)
   invoice_paid_at           = models.DateTimeField(null=True, blank=True)
-
   artisan_notified_at       = models.DateTimeField(null=True, blank=True)
   in_progress_at            = models.DateTimeField(null=True, blank=True)
   complete_at               = models.DateTimeField(null=True, blank=True)
@@ -102,6 +101,9 @@ class Commission(models.Model):
   @property
   def is_bulk(self):
     return True if self.quantity > 1 else False
+
+  @property
+  def public_id(self): return "C%d" % self.id
 
   # MODEL FUNCTIONS
   def createPriceEstimate(self, save=True):

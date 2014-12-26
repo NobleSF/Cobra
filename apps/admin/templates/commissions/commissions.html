@@ -1,0 +1,98 @@
+{% extends "admin_base.html" %}
+
+{% block javascript %}
+<script>
+  $().ready(function(){
+  });
+</script>
+{% endblock javascript %}
+
+{% block css %}
+<style>
+  a:hover{text-decoration: none}
+</style>
+{% endblock css %}
+
+{% block logo %}
+  <ul class="inline">
+    <li>
+      <i class='symbol-commissions black' title="commissions"></i>
+    </li>
+  </ul>
+{% endblock logo %}
+
+{% block content %}
+<table class='table table-hover table-condensed'>
+
+  {% for commission in commissions %}
+    <tr class='information-row'>
+      <td>
+        <a href="{% url 'admin:commission' commission.id %}">
+          {{ commission.public_id }}<i class='symbol-go blue'></i>
+        </a>
+      </td>
+
+      <td>{{ commission.created_at|date:"m-d  H:i" }}</td>
+
+      <td>
+        <a href="{{ commission.product.get_absolute_url }}"
+            target='_blank'>
+          {{ commission.product.id }}
+        </a>
+      </td>
+
+      <td style='white-space: nowrap;'>
+        <i title='{{ commission.artisan_confirmed_at|date:"m/d  H:i" }}'
+           class='symbol-SMS
+                  {% if commission.artisan_confirmed  %}green has-info
+                  {% else %}gray{% endif %}'
+           data-info='{{ commission.artisan_confirmed_at|date:"m/d  H:i" }}'
+           ></i>
+
+        <i title='{{ commission.invoice_sent_at|date:"m/d  H:i" }}'
+           class='symbol-SMS-shipping
+                  {% if commission.invoice_sent %}green has-info
+                  {% else %}gray{% endif %}'
+           data-info='{{ commission.invoice_sent_at|date:"m/d  H:i" }}'
+           ></i>
+
+        <i title='{{ commission.invoice_paid_at }}'
+           class='symbol-shipping
+                  {% if commission.invoice_paid %}green has-info
+                  {% else %}gray{% endif %}'
+           data-info='{{ commission.invoice_paid_at|date:"m/d  H:i" }}'
+           ></i>
+
+        <i title='{{ commission.artisan_notified_at|date:"m/d  H:i" }}'
+           class='symbol-money
+              {% if commission.artisan_notified %}green has-info
+              {% else %}gray{% endif %}'
+           data-info='{{ commission.artisan_notified_at|date:"m/d  H:i" }}'
+           ></i>
+
+        <i title='{{ commission.in_progress_at|date:"m/d  H:i" }}'
+           class='symbol-money
+              {% if commission.in_progress %}green has-info
+              {% else %}gray{% endif %}'
+           data-info='{{ commission.in_progress_at|date:"m/d  H:i" }}'
+           ></i>
+
+        <i title='{{ commission.complete_at|date:"m/d  H:i" }}'
+           class='symbol-money
+              {% if commission.complete %}green has-info
+              {% else %}gray{% endif %}'
+           data-info='{{ commission.complete_at|date:"m/d  H:i" }}'
+           ></i>
+
+        <i title='{{ commission.shipped_at|date:"m/d  H:i" }}'
+           class='symbol-money
+              {% if commission.shipped %}green has-info
+              {% else %}gray{% endif %}'
+           data-info='{{ commission.shipped_at|date:"m/d  H:i" }}'
+           ></i>
+      </td>
+    </tr>
+  {% endfor %}
+
+</table>
+{% endblock content %}`

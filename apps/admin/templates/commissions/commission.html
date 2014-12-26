@@ -1,0 +1,108 @@
+{% extends "admin_base.html" %}
+
+{% block title %}
+  Commission {{ commission.id }}
+{% endblock title %}
+
+{% block javascript %}
+  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/vendor/jquery.ui.widget.min.js'></script>
+  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.iframe-transport.min.js'></script>
+  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.fileupload.min.js'></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}admin/js/commission.min.js?v=0"></script>
+{% endblock javascript %}
+
+{% block css %}
+  <link href="{{ STATIC_URL }}admin/css/commission.css" rel="stylesheet">
+{% endblock css %}
+
+{% block logo %}
+  <i>{{ commission.public_id }}</i>
+{% endblock logo %}
+
+{% block content %}
+<!-- the location to upload photos to -->
+<input type='hidden' id='upload-url' value='{{ CLOUDINARY.upload_url }}'>
+<!-- to give cloudinary so they can tell our server when upload is complete -->
+<input type='hidden' id='upload-complete-url' value="{% url 'seller:complete upload' %}">
+<!-- for JS to check upload completion and get thumb_url -->
+<input type='hidden' id='upload-check-url' value="{% url 'seller:check image upload' %}">
+{#<input type='hidden' id='update-commission-url' value='{% url 'admin:update commission' %}'>#}
+
+<h3 class='copy-font'>
+  <a href="{% url 'confirmation' commission.checkout.public_id %}">
+    {{commission.checkout.public_id}}
+  </a>
+</h3>
+
+<h3 class='copy-font'>
+  {{ commission.created_at|date:"d-m-Y  H:i" }}
+</h3>
+
+<h3 class='copy-font'>
+
+  <i class='symbol-opentag black' title='product id'></i>
+  <span class='product-id-number'>{{ commission.product.id }}</span>
+
+  <a href="{{ commission.product.get_absolute_url }}" target='_blank'>
+    {{ commission.product.title }}
+  </a>
+</h3>
+
+<h3 class='copy-font'>
+  {{ commission.seller.name }},
+  <a href="tel:{{ commission.seller.account.phone }}"><i class="symbol-phone blue"></i></a>
+  {{ commission.seller.account.phone }}
+</h3>
+
+<p>
+  <div style='bcommission: solid 1px black'>
+    {% if commission.checkout.shipping_address %}{{ commission.checkout.shipping_address|linebreaksbr }}{% endif %}
+  </div>
+</p>
+
+<p>
+  <div id='notes'
+       style='bcommission: solid 1px black'>
+    {% if commission.checkout.notes %}
+      {{ commission.checkout.notes|linebreaks }}<br>
+    {% endif %}
+    {{ commission.notes|default_if_none:""|linebreaks }}
+  </div>
+</p>
+
+<input id='commission-id' type='hidden' value='{{ commission.id }}'>
+<textarea id='new-note' name='new-note'></textarea>
+<button id='add-note' class='btn btn-info'>Add Note</button>
+
+{% if commission.checkout.cart.receipt %}
+  <p>Receipt:<br>
+    <div style='bcommission: solid 1px black'>
+      {{ commission.checkout.cart.receipt }}
+    </div>
+  </p>
+{% endif %}
+
+<table>
+  <thead><td style='width:100px;'></td><td align='right' style='width:200px;'></td></thead>
+  <tr>
+    <td>artisan price</td>
+    <td>{{ commission.product.price|floatformat:0 }} MAD</td>
+  </tr>
+
+  <tr>
+    <td>shipping</td>
+    <td style='white-space: nowrap'>
+      {{ commission.product.shipping_cost|floatformat:0 }} MAD
+      ({{ commission.product.weight }}g, {{ commission.product.metric_dimensions }})
+    </td>
+  </tr>
+
+  <tr>
+    <td>Anou fee</td>
+    <td>{{ commission.product.anou_charge|floatformat:0 }} MAD</td>
+  </tr>
+</table>
+
+<img src="{{ commission.product.photo.product_size }}">
+
+{% endblock content %}
