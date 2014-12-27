@@ -17,6 +17,7 @@
 
 {% block logo %}
   <i>{{ commission.public_id }}</i>
+  {{ commission.base_product.seller.name }}
 {% endblock logo %}
 
 {% block content %}
@@ -28,81 +29,115 @@
 <input type='hidden' id='upload-check-url' value="{% url 'seller:check image upload' %}">
 {#<input type='hidden' id='update-commission-url' value='{% url 'admin:update commission' %}'>#}
 
-<h3 class='copy-font'>
-  <a href="{% url 'confirmation' commission.checkout.public_id %}">
-    {{commission.checkout.public_id}}
-  </a>
-</h3>
+<ul class="unstyled">
+  <li>
+    requirement images
+    <ul class="inline">
+      <li>
+        {% for image in commission.requirement_images.all %}
+          <a href="{{ image.original }}"><img src="{{ image.thumb_size }}"></a>
+        {% endfor %}
+      </li>
+    </ul>
+  </li>
 
-<h3 class='copy-font'>
-  {{ commission.created_at|date:"d-m-Y  H:i" }}
-</h3>
+  <li>
+    requested length {{ commission.length }}
+    actual length {{ commission.product.length }}
+  </li>
+  <li>
+    requested width {{ commission.width }}
+    actual width {{ commission.product.width }}
+  </li>
 
-<h3 class='copy-font'>
+  <li>
+    quantity
+    {{ commission.quantity }}
+  </li>
 
-  <i class='symbol-opentag black' title='product id'></i>
-  <span class='product-id-number'>{{ commission.product.id }}</span>
+  <li>
+    price
+    {{ commission.product.price }}
+  </li>
 
-  <a href="{{ commission.product.get_absolute_url }}" target='_blank'>
-    {{ commission.product.title }}
-  </a>
-</h3>
+  <li>
+    days to complete
+    {{ commission.estimated_completion_date|timeuntil }}
+  </li>
 
-<h3 class='copy-font'>
-  {{ commission.seller.name }},
-  <a href="tel:{{ commission.seller.account.phone }}"><i class="symbol-phone blue"></i></a>
-  {{ commission.seller.account.phone }}
-</h3>
+  <li>
+    progression
+    {{ commission.progression }}%
+  </li>
 
-<p>
-  <div style='bcommission: solid 1px black'>
-    {% if commission.checkout.shipping_address %}{{ commission.checkout.shipping_address|linebreaksbr }}{% endif %}
-  </div>
-</p>
+  <li>
+    weight
+    {% if commission.product.weight %}{{ commission.product.weight }}
+    {% else %}{{ commission.estimated_weight }}{% endif %} g
+  </li>
 
-<p>
-  <div id='notes'
-       style='bcommission: solid 1px black'>
-    {% if commission.checkout.notes %}
-      {{ commission.checkout.notes|linebreaks }}<br>
-    {% endif %}
-    {{ commission.notes|default_if_none:""|linebreaks }}
-  </div>
-</p>
+  <li>
+    expected completion date
+    {{ commission.estimated_completion_date|date:"d/m/y  H:i" }}
+  </li>
 
-<input id='commission-id' type='hidden' value='{{ commission.id }}'>
-<textarea id='new-note' name='new-note'></textarea>
-<button id='add-note' class='btn btn-info'>Add Note</button>
+  <li>
+    country
+    {{ commission.customer.country }}
+  </li>
 
-{% if commission.checkout.cart.receipt %}
-  <p>Receipt:<br>
-    <div style='bcommission: solid 1px black'>
-      {{ commission.checkout.cart.receipt }}
-    </div>
-  </p>
-{% endif %}
+  <li>
+    shipping cost
+    {{ commission.product.shipping_cost|floatformat:0 }}
+  </li>
 
-<table>
-  <thead><td style='width:100px;'></td><td align='right' style='width:200px;'></td></thead>
-  <tr>
-    <td>artisan price</td>
-    <td>{{ commission.product.price|floatformat:0 }} MAD</td>
-  </tr>
+  <li>
+    anou fee
+    {{ commission.product.anou_fee|floatformat:0 }}
+  </li>
+  <li>
+    stripe fee
+    ${{ commission.product.stripe_fee }}
+  </li>
+  <li>
+    conversion
+    {{ commission.product.exchange_rate }}
+  </li>
+  <li>
+    invoiced price
+    ${{ commission.estimated_display_price }}
+  </li>
 
-  <tr>
-    <td>shipping</td>
-    <td style='white-space: nowrap'>
-      {{ commission.product.shipping_cost|floatformat:0 }} MAD
-      ({{ commission.product.weight }}g, {{ commission.product.metric_dimensions }})
-    </td>
-  </tr>
+  <li>
+    payment receipt
+    {{ commission.product.orders.all.0.checkout.receipt }}
+  </li>
+  <li>
+    product
+    <a href="{{ commission.product.get_absolute_url }}">{{ commission.product.id }}</a>
+  </li>
 
-  <tr>
-    <td>Anou fee</td>
-    <td>{{ commission.product.anou_charge|floatformat:0 }} MAD</td>
-  </tr>
-</table>
+  <li>
+    progress photos
+    <ul class="inline">
+      {% for photo in commission.progress_photos.all %}
+        <li>
+          <a href="{{ photo.original }}"><img src="{{ photo.thumb_size }}"></a>
+        </li>
+      {% endfor %}
+      <li>
+        <img src="{{ commission.product.photo.thumb_size }}">
+      </li>
+    </ul>
+  </li>
 
-<img src="{{ commission.product.photo.product_size }}">
+  <li>
+    <a class="symbol-product-add green"
+      href="{% url "seller:edit product" commission.product.id %}"
+      title="edit product">
+    </a>
+  </li>
+
+</ul>
 
 {% endblock content %}

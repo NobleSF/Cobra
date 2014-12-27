@@ -9,7 +9,7 @@
       </a>
       <i class='black'>{{ product.id }}</i>
       {% if product.in_holding or not product.is_approved %}
-        <a href="{% url 'seller:edit product' product.id %}" target='_blank'>
+        <a href="{% url 'seller:edit product' product.id %}">
           <i class='symbol-go blue'></i>
         </a>
       {% endif %}
