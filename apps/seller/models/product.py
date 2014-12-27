@@ -18,17 +18,17 @@ class ProductQuerySet(models.QuerySet):
                   seller__deactive_at=None)
 
 class Product(models.Model):
-  seller        = models.ForeignKey(Seller)
+  seller        = models.ForeignKey(Seller)#related_name='products' #todo: refactor .product_set
 
   #product description elements
-  assets        = models.ManyToManyField(Asset)
-  colors        = models.ManyToManyField(Color)
+  assets        = models.ManyToManyField(Asset)#related_name='products'
+  colors        = models.ManyToManyField(Color)#related_name='products'
   width         = models.SmallIntegerField(null=True, blank=True)
   height        = models.SmallIntegerField(null=True, blank=True)
   length        = models.SmallIntegerField(null=True, blank=True)
   weight        = models.SmallIntegerField(null=True, blank=True)
   price         = models.SmallIntegerField(null=True, blank=True)
-  shipping_options = models.ManyToManyField(ShippingOption)
+  shipping_options = models.ManyToManyField(ShippingOption)#related_name='products'
 
   #lifecycle milestones
   active_at     = models.DateTimeField(null=True, blank=True) #seller add
@@ -37,7 +37,7 @@ class Product(models.Model):
   #todo: change this to on_hold_at = datetime
   approved_at   = models.DateTimeField(null=True, blank=True) #admin approval
   sold_at       = models.DateTimeField(null=True, blank=True)
-  #is_orderable  = models.BooleanField(default=True) #for custom orders
+  #is_commissionable  = models.BooleanField(default=True) #for commissions
 
   #dynamically created and updated
   slug          = models.CharField(max_length=150, null=True, blank=True)
@@ -442,10 +442,12 @@ class Product(models.Model):
       return 0
 
   @property
+  def exchange_rate(self): return self.seller.country.currency.exchange_rate_to_USD
+
+  @property
   def usd_price(self): #convert to USD
     if self.intl_price:
-      local_currency = self.seller.country.currency
-      return self.intl_price/float(local_currency.exchange_rate_to_USD)
+      return self.intl_price/float(self.exchange_rate)
     else:
       return 0
 
@@ -479,7 +481,7 @@ class Product(models.Model):
     return int(round(self.usd_price + self.etsy_fee))
 
   @property
-  def wepay_fee(self):#wepay fee is $0.30 plus 2.9% of total
+  def stripe_fee(self):#stripe fee is $0.30 plus 2.9% of total
     if self.usd_price:
       fee = 0.30
       fee += (0.029/(1-0.029)) * (self.usd_price + fee)
@@ -493,7 +495,7 @@ class Product(models.Model):
 
   @property
   def display_price(self): #round to the nearest $1
-    return int(round(self.usd_price + self.wepay_fee - self.display_shipping_price))
+    return int(round(self.usd_price + self.stripe_fee - self.display_shipping_price))
 
   @property
   def is_complete(self):
