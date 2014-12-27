@@ -28,6 +28,7 @@ class Commission(models.Model):
   invoice_paid_at           = models.DateTimeField(null=True, blank=True)
   artisan_notified_at       = models.DateTimeField(null=True, blank=True)
   in_progress_at            = models.DateTimeField(null=True, blank=True)
+  progression               = models.SmallIntegerField(default=0)
   complete_at               = models.DateTimeField(null=True, blank=True)
   shipped_at                = models.DateTimeField(null=True, blank=True)
   canceled_at               = models.DateTimeField(null=True, blank=True)
