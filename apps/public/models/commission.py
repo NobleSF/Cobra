@@ -1,24 +1,27 @@
 from django.db import models
 from django.utils import timezone
+
 from apps.public.models.customer import Customer
+from apps.seller.models.image import Image
 from apps.seller.models.product import Product
+
 
 class Commission(models.Model):
   base_product              = models.ForeignKey(Product, null=True, related_name='commissions')
-  # new product is created for each new custom order
+  requirement_images        = models.ManyToManyField(Image)
   product                   = models.OneToOneField(Product, null=True, related_name='commission')
-
   customer                  = models.ForeignKey(Customer, null=True, related_name='commissions')
   notes                     = models.TextField(null=True, blank=True)
 
+  # DETAILS
   quantity                  = models.SmallIntegerField(default=1)
   length                    = models.IntegerField(null=True, blank=True)
   width                     = models.IntegerField(null=True, blank=True)
   estimated_display_price   = models.SmallIntegerField(null=True, blank=True)
   estimated_weight          = models.SmallIntegerField(null=True, blank=True)
-
   estimated_completion_date = models.DateTimeField(null=True, blank=True)
 
+  # MILESTONES
   #director_notified
   artisan_confirmed_at      = models.DateTimeField(null=True, blank=True)
   invoice_sent_at           = models.DateTimeField(null=True, blank=True)
@@ -29,7 +32,7 @@ class Commission(models.Model):
   shipped_at                = models.DateTimeField(null=True, blank=True)
   canceled_at               = models.DateTimeField(null=True, blank=True)
 
-  #update history
+  # UPDATE HISTORY
   created_at                = models.DateTimeField(auto_now_add = True)
   updated_at                = models.DateTimeField(auto_now = True)
 
@@ -97,6 +100,10 @@ class Commission(models.Model):
   def canceled(self, value):
     if not self.canceled:
       self.canceled_at = timezone.now()
+
+  @property
+  def progress_photos(self):
+    return self.product.photos.filter(is_progress=True) if self.product else []
 
   @property
   def is_bulk(self):
