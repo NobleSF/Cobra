@@ -42,12 +42,20 @@
   </li>
 
   <li>
-    requested length {{ commission.length }}
-    actual length {{ commission.product.length }}
+    requested length
+    {{ commission.length|default:"" }}
   </li>
   <li>
-    requested width {{ commission.width }}
-    actual width {{ commission.product.width }}
+    actual length
+    {{ commission.product.length|default:"" }}
+  </li>
+  <li>
+    requested width
+    {{ commission.width|default:"" }}
+  </li>
+  <li>
+    actual width
+    {{ commission.product.width|default:"" }}
   </li>
 
   <li>
@@ -57,7 +65,7 @@
 
   <li>
     price
-    {{ commission.product.price }}
+    {{ commission.product.price|default:"" }}
   </li>
 
   <li>
@@ -78,12 +86,12 @@
 
   <li>
     expected completion date
-    {{ commission.estimated_completion_date|date:"d/m/y  H:i" }}
+    {{ commission.estimated_completion_date|date:"d/m/y" }}
   </li>
 
   <li>
     country
-    {{ commission.customer.country }}
+    {{ commission.customer.country|default:"" }}
   </li>
 
   <li>
@@ -110,7 +118,7 @@
 
   <li>
     payment receipt
-    {{ commission.product.orders.all.0.checkout.receipt }}
+    {{ commission.product.orders.all.0.checkout.receipt|default:"" }}
   </li>
   <li>
     product
