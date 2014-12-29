@@ -53,8 +53,7 @@ def checkImageUpload(request):#for our JS to check upload status and get thumb_u
     else:
       try:
         if upload.is_complete:
-          image = Image(original=upload.url)
-          image.save()
+          image, created = Image.objects.get_or_create(original=upload.url)
 
           if 'seller' == request.GET.get('ilk'):
             seller = Seller.objects.get(id=request.session['seller_id'])
@@ -76,6 +75,11 @@ def checkImageUpload(request):#for our JS to check upload status and get thumb_u
             order = Order.objects.get(id=request.GET['order_id'])
             order.seller_paid_receipt = image
             order.save()
+
+          elif 'commission_id' in request.GET:#commission requirement or progress image
+            from apps.public.models.commission import Commission
+            commission = Commission.objects.get(id=request.GET['commission_id'])
+            commission.requirement_images.add(image)
 
           response = {'thumb_url': image.thumb_size}
           return HttpResponse(json.dumps(response),
