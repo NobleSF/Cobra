@@ -8,7 +8,7 @@
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/vendor/jquery.ui.widget.min.js'></script>
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.iframe-transport.min.js'></script>
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.fileupload.min.js'></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}admin/js/commission.min.js?v=0"></script>
+  <script src="{{ STATIC_URL }}admin/js/commission.min.js?v=0"></script>
 {% endblock javascript %}
 
 {% block css %}
@@ -30,7 +30,7 @@
 {#<input type='hidden' id='update-commission-url' value='{% url 'admin:update commission' %}'>#}
 
 <ul class="unstyled">
-  <li>
+  <li id="requirement-images">
     requirement images
     <ul class="inline">
       <li>
@@ -39,6 +39,42 @@
         {% endfor %}
       </li>
     </ul>
+
+      <div id='image-{{ commission.id }}-upload-div' class='image-upload-div'>
+
+        <div id='image-{{ commission.id }}' class='image'>
+          <img src="" width="100" height="75" />
+        </div>
+
+        <div id='spinner-{{ commission.id }}' class='spinner-div'></div>
+
+        <div id='progress-{{ commission.id }}' class="progress progress-striped">
+          <div id='progress-bar-{{ commission.id }}' class="bar" style="width: 0%;"></div>
+        </div>
+
+        <div id='image-forms-{{ commission.id }}' class='image-forms'>
+          <form id='data-form-{{ commission.id }}' class='data-form'
+                method='post' action='{% url "admin:commission image" %}'>
+
+            <input type='hidden' name='commission_id' class='commission-id'
+                   id='image-{{ commission.id }}-commission-id'
+                   value='{{ commission.id }}'>
+
+          </form>
+
+          <form id='upload-form-{{ commission.id }}' class='upload-form' onsubmit='return false;'>
+            <span class='file-wrapper'>
+
+              <input type='file' name='file' class='image-input'
+                     id='image-input-{{ commission.id }}'
+                     accept='*'
+                     capture='camera'>
+
+              <span class='file-button btn symbol-camera black'></span>
+            </span>
+          </form>
+        </div>
+      </div>
   </li>
 
   <li>

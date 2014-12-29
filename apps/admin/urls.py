@@ -31,6 +31,7 @@ urlpatterns = patterns('',
   #COMMISSIONS
   url(r'^commissions$', commissions.commissions, name='commissions'),
   url(r'^commission/(?P<commission_id>\d+)$', commissions.commission, name='commission'),
+  url(r'^commission/order_image_data$', commissions.imageFormData, name='commission image'),
 
   #COMMUNICATION
   url(r'^send_sms$', communication.sendSMS, name='send sms'),
