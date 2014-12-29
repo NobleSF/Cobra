@@ -17,6 +17,8 @@ class Commission(models.Model):
   quantity                  = models.SmallIntegerField(default=1)
   length                    = models.IntegerField(null=True, blank=True)
   width                     = models.IntegerField(null=True, blank=True)
+  # height                    = models.IntegerField(null=True, blank=True)
+  # weight                    = models.IntegerField(null=True, blank=True)
   estimated_display_price   = models.SmallIntegerField(null=True, blank=True)
   estimated_weight          = models.SmallIntegerField(null=True, blank=True)
   estimated_completion_date = models.DateTimeField(null=True, blank=True)
@@ -115,11 +117,16 @@ class Commission(models.Model):
 
   # MODEL FUNCTIONS
   def createPriceEstimate(self, save=True):
+    if not any([self.base_product, self.product]):
+      raise Exception("createPriceEstimate requires existing instance of base_product or product")
+
     self.product = self.createProduct(False)
-    if save:
+
+    if save and self.product.display_price:
       self.estimated_display_price = self.product.display_price
       self.save()
-    return self.product.display_price
+
+    return self.product.display_price or None
 
   def createWeightEstimate(self, save=True):
     self.product = self.createProduct(False)
@@ -128,20 +135,30 @@ class Commission(models.Model):
       self.save()
     return self.product.weight
 
-  def createProduct(self, save=True):
-    self.product = Product(seller=self.base_product.seller) if not self.product else self.product
+  def createProduct(self, save=True, seller=None):
+    if not any([self.base_product, self.product, seller]):
+      raise Exception("createProduct requires either seller or existing base_product instance")
 
-    self.base_product.sortDimensions() #sorts base_product dimensions and all set to positive integers
-    base_size = self.base_product.length * self.base_product.width
-    self.product.length = self.length or self.base_product.length
-    self.product.width = self.width or self.base_product.width
-    self.product.height = self.base_product.height
+    if not self.base_product:
+        self.product = Product(seller=seller) if not self.product else self.product
+        self.product.length = self.length
+        self.product.width = self.width
+        # self.product.height = self.height
+        # self.product.weight = self.weight
 
-    new_size = self.product.length * self.product.width
-    ratio = float(new_size) / base_size
+    else:
+      self.product = Product(seller=self.base_product.seller) if not self.product else self.product
+      self.base_product.sortDimensions() #sorts base_product dimensions and all set to positive integers
+      base_size = self.base_product.length * self.base_product.width
+      self.product.length = self.length or self.base_product.length
+      self.product.width = self.width or self.base_product.width
+      self.product.height = self.base_product.height
 
-    self.product.weight = int(((self.base_product.weight * ratio * 1.05) + 100) * self.quantity)
-    self.product.price = int(self.base_product.price * ratio * self.quantity)
+      new_size = self.product.length * self.product.width
+      ratio = float(new_size) / base_size
+
+      self.product.weight = int(((self.base_product.weight * ratio * 1.05) + 100) * self.quantity)
+      self.product.price = int(self.base_product.price * ratio * self.quantity)
 
     if save:
       self.product.save()
