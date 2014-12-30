@@ -3,8 +3,19 @@ from django.utils import timezone
 
 from apps.public.models.customer import Customer
 from apps.seller.models.image import Image
-from apps.seller.models.product import Product
+from apps.seller.models.product import Product, ProductQuerySet
 
+class CommissionQuerySet(models.QuerySet):
+  def requested(self):
+    return self.filter(progress_updated_at__isnull=True,
+                       canceled_at__isnull=True)
+  def in_progress(self):
+    return self.filter(progress_updated_at__isnull=False,
+                       complete_at__isnull=True,
+                       canceled_at__isnull=True)
+  def completed(self):
+    return self.filter(complete_at__lte=timezone.now(),
+                       canceled_at__isnull=True)
 
 class Commission(models.Model):
   base_product              = models.ForeignKey(Product, null=True, related_name='commissions')
@@ -21,16 +32,16 @@ class Commission(models.Model):
   # weight                    = models.IntegerField(null=True, blank=True)
   estimated_display_price   = models.SmallIntegerField(null=True, blank=True)
   estimated_weight          = models.SmallIntegerField(null=True, blank=True)
+
+  artisan_notified_at       = models.DateTimeField(null=True, blank=True)
+  artisan_confirmed_at      = models.DateTimeField(null=True, blank=True)
   estimated_completion_date = models.DateTimeField(null=True, blank=True)
 
   # MILESTONES
-  #director_notified
-  artisan_confirmed_at      = models.DateTimeField(null=True, blank=True)
   invoice_sent_at           = models.DateTimeField(null=True, blank=True)
   invoice_paid_at           = models.DateTimeField(null=True, blank=True)
-  artisan_notified_at       = models.DateTimeField(null=True, blank=True)
-  in_progress_at            = models.DateTimeField(null=True, blank=True)
-  progression               = models.SmallIntegerField(default=0)
+  progress_updated_at       = models.DateTimeField(null=True, blank=True)
+  progress                  = models.SmallIntegerField(default=0)
   complete_at               = models.DateTimeField(null=True, blank=True)
   shipped_at                = models.DateTimeField(null=True, blank=True)
   canceled_at               = models.DateTimeField(null=True, blank=True)
@@ -39,7 +50,32 @@ class Commission(models.Model):
   created_at                = models.DateTimeField(auto_now_add = True)
   updated_at                = models.DateTimeField(auto_now = True)
 
+  #CUSTOMIZED MANAGER
+  objects = ProductQuerySet.as_manager()
+
   # MODEL PROPERTIES
+  @property
+  def seller(self):
+    if self.product: return self.product.seller
+    elif self.base_product: return self.base_product.seller
+    else: return None
+
+  @property
+  def is_bulk(self):
+    return True if self.quantity > 1 else False
+
+  @property
+  def progress_photos(self):
+    return self.product.photos.filter(is_progress=True) if self.product else []
+
+  @property
+  def artisan_notified(self):
+    return True if self.artisan_notified_at <= timezone.now() else False
+  @artisan_notified.setter
+  def artisan_notified(self, value):
+    if not self.artisan_notified:
+      self.artisan_notified_at = timezone.now()
+
   @property
   def artisan_confirmed(self):
     return True if self.artisan_confirmed_at <= timezone.now() else False
@@ -65,20 +101,11 @@ class Commission(models.Model):
       self.invoice_paid_at = timezone.now()
 
   @property
-  def artisan_notified(self):
-    return True if self.artisan_notified_at <= timezone.now() else False
-  @artisan_notified.setter
-  def artisan_notified(self, value):
-    if not self.artisan_notified:
-      self.artisan_notified_at = timezone.now()
-
-  @property
   def in_progress(self):
-    return True if self.in_progress_at <= timezone.now() else False
+    return True if self.progress_updated_at else False
   @artisan_notified.setter
   def in_progress(self, value):
-    if not self.artisan_notified:
-      self.in_progress_at = timezone.now()
+    self.progress_updated_at = timezone.now()
 
   @property
   def complete(self):
@@ -104,13 +131,7 @@ class Commission(models.Model):
     if not self.canceled:
       self.canceled_at = timezone.now()
 
-  @property
-  def progress_photos(self):
-    return self.product.photos.filter(is_progress=True) if self.product else []
 
-  @property
-  def is_bulk(self):
-    return True if self.quantity > 1 else False
 
   @property
   def public_id(self): return "C%d" % self.id

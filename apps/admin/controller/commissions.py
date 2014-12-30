@@ -18,17 +18,11 @@ def commissions(request):
 
 @access_required('admin')
 def commission(request, commission_id):
-  # try:
-    commission = Commission.objects.get(id=commission_id)
-
-    context = {'commission':  commission,
-               'CLOUDINARY':  CLOUDINARY}
-    return render(request, 'commissions/commission.html', context)
-  # except Exception as e:
-  #   print str(e)
-  #   return redirect('admin:commissions')
-
-
+  context = {'commissions_requested':   Commission.objects.requested(),
+             'commissions_in_progress': Commission.objects.in_progress(),
+             'commissions_completed':   Commission.objects.completed(),
+             'CLOUDINARY':              CLOUDINARY}
+  return render(request, 'commissions/commission.html', context)
 
 
 
