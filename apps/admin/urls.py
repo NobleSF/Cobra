@@ -29,6 +29,7 @@ urlpatterns = patterns('',
   url(r'^ajax/order_image_data$', orders.imageFormData, name='image form data'),
 
   #COMMISSIONS
+  url(r'^find_commission/$', commissions.find_commission, name='find commission'),
   url(r'^commissions$', commissions.commissions, name='commissions'),
   url(r'^commission/(?P<commission_id>\d+)$', commissions.commission, name='commission'),
   url(r'^commission/order_image_data$', commissions.imageFormData, name='commission image'),
