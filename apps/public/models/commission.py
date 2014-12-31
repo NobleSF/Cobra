@@ -3,7 +3,7 @@ from django.utils import timezone
 
 from apps.public.models.customer import Customer
 from apps.seller.models.image import Image
-from apps.seller.models.product import Product, ProductQuerySet
+from apps.seller.models.product import Product
 
 class CommissionQuerySet(models.QuerySet):
   def requested(self):
@@ -51,7 +51,7 @@ class Commission(models.Model):
   updated_at                = models.DateTimeField(auto_now = True)
 
   #CUSTOMIZED MANAGER
-  objects = ProductQuerySet.as_manager()
+  objects = CommissionQuerySet.as_manager()
 
   # MODEL PROPERTIES
   @property
@@ -70,68 +70,95 @@ class Commission(models.Model):
 
   @property
   def artisan_notified(self):
-    return True if self.artisan_notified_at <= timezone.now() else False
+    return True if self.artisan_notified_at and self.artisan_notified_at <= timezone.now() else False
   @artisan_notified.setter
   def artisan_notified(self, value):
-    if not self.artisan_notified:
+    if not value:
+      self.artisan_notified_at = None
+    else:
       self.artisan_notified_at = timezone.now()
 
   @property
   def artisan_confirmed(self):
-    return True if self.artisan_confirmed_at <= timezone.now() else False
+    return True if self.artisan_confirmed_at and self.artisan_confirmed_at <= timezone.now() else False
   @artisan_confirmed.setter
   def artisan_confirmed(self, value):
-    if not self.artisan_confirmed:
+    if not value:
+      self.artisan_confirmed_at = None
+    elif not self.artisan_confirmed:
       self.artisan_confirmed_at = timezone.now()
 
   @property
   def invoice_sent(self):
-    return True if self.invoice_sent_at <= timezone.now() else False
+    return True if self.invoice_sent_at and self.invoice_sent_at <= timezone.now() else False
   @invoice_sent.setter
   def invoice_sent(self, value):
-    if not self.invoice_sent:
+    if not value:
+      self.invoice_paid_at = None
+    else:
       self.invoice_sent_at = timezone.now()
 
   @property
   def invoice_paid(self):
-    return True if self.invoice_paid_at <= timezone.now() else False
+    return True if self.invoice_paid_at and self.invoice_paid_at <= timezone.now() else False
   @invoice_paid.setter
   def invoice_paid(self, value):
-    if not self.invoice_paid:
+    if not value:
+      self.invoice_paid_at = None
+    elif not self.invoice_paid:
       self.invoice_paid_at = timezone.now()
 
   @property
   def in_progress(self):
     return True if self.progress_updated_at else False
-  @artisan_notified.setter
+  @in_progress.setter
   def in_progress(self, value):
-    self.progress_updated_at = timezone.now()
+    if not value:
+      self.progress_updated_at = None
+    else:
+      self.progress_updated_at = timezone.now()
 
   @property
   def complete(self):
-    return True if self.complete_at <= timezone.now() else False
+    return True if self.complete_at and self.complete_at <= timezone.now() else False
   @complete.setter
   def complete(self, value):
-    if not self.complete:
+    if not value:
+      self.complete_at = None
+    elif not self.complete:
       self.complete_at = timezone.now()
 
   @property
   def shipped(self):
-    return True if self.shipped_at <= timezone.now() else False
-  @artisan_notified.setter
+    return True if self.shipped_at and self.shipped_at <= timezone.now() else False
+  @shipped.setter
   def shipped(self, value):
-    if not self.shipped:
+    if not value:
+      self.shipped_at = None
+    elif not self.shipped:
       self.shipped_at = timezone.now()
 
   @property
   def canceled(self):
-    return True if self.canceled_at <= timezone.now() else False
-  @artisan_notified.setter
+    return True if self.canceled_at and self.canceled_at <= timezone.now() else False
+  @canceled.setter
   def canceled(self, value):
-    if not self.canceled:
+    if not value:
+      self.canceled_at = None
+    elif not self.canceled:
       self.canceled_at = timezone.now()
 
+  @property
+  def days_to_complete(self):
+    if self.estimated_completion_date:
+      return (self.estimated_completion_date - timezone.now()).days
 
+  @property
+  def payment_receipt(self):
+    try:
+      return self.product.orders.first().checkout.receipt
+    except:
+      return ""
 
   @property
   def public_id(self): return "C%d" % self.id
@@ -191,10 +218,7 @@ class Commission(models.Model):
 from django.dispatch import receiver
 from django.db.models.signals import pre_save
 
-@receiver(pre_save, sender=Commission)
-def createRelatedObjects(sender, instance, **kwargs):
-  if not instance.product:
-    instance.product = Product.objects.create(seller=instance.base_product.seller)
-  instance.product.save()
-  if instance.estimated_display_price and not instance.customer:
-    instance.customer = Customer.objects.create()
+# @receiver(pre_save, sender=Commission)
+# def createRelatedObjects(sender, instance, **kwargs):
+#   if instance.estimated_display_price and not instance.customer:
+#     instance.customer = Customer.objects.create()
