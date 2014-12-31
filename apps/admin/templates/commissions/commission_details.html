@@ -1,0 +1,47 @@
+
+{% for name, value, editable in details %}
+  <div class="control-group">
+    <label class="control-label" for="{{ name|slugify }}">{{ name|title }}</label>
+    <div class="controls">
+      <input type="text" id="{{ name|slugify }}" placeholder="{{ value|default:'' }}"
+             {% if not editable %}disabled{% endif %}
+      >
+    </div>
+  </div>
+{% endfor %}
+
+
+<div class="control-group">
+  <label class="control-label" for="progress-photos">Progress Photos</label>
+  <div class="controls">
+    <ul id="progress-photos" class="unstyled">
+      {% for photo in commission.progress_photos.all %}
+        <li>
+          <a href="{{ photo.original }}"><img src="{{ photo.thumb_size }}"></a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+
+<div class="control-group">
+  <label class="control-label" for="product">Product</label>
+  <div class="controls">
+
+    {% if commission.product and commission.is_complete %}
+      <a href="{{ commission.product.get_absolute_url }}">
+        <img src="{{ commission.product.photo.pinky_size }}">
+      </a>
+
+    {% elif commission.product %}
+      <a href="{% url 'seller:edit product' commission.product_id %}">
+        <i class="symbol-product-add"></i>
+      </a>
+
+    {% else %}
+      <i class="symbol-product-add"></i>
+    {% endif %}
+
+  </div>
+</div>
