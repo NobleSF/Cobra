@@ -8,23 +8,23 @@ from settings.settings import CLOUDINARY
 from apps.admin.utils.decorator import access_required
 from apps.public.models import Commission
 
-
 @access_required('admin')
 def commissions(request):
-  commissions = Commission.objects.order_by('-created_at')
-
-  context = {'commissions': commissions}
+  context = {'commissions_requested':   Commission.objects.requested().order_by('-created_at'),
+             'commissions_in_progress': Commission.objects.in_progress().order_by('-created_at'),
+             'commissions_completed':   Commission.objects.completed().order_by('-created_at'),
+            }
   return render(request, 'commissions/commissions.html', context)
 
 @access_required('admin')
 def commission(request, commission_id):
-  context = {'commissions_requested':   Commission.objects.requested(),
-             'commissions_in_progress': Commission.objects.in_progress(),
-             'commissions_completed':   Commission.objects.completed(),
-             'CLOUDINARY':              CLOUDINARY}
+  context = {'commission':  Commission.objects.get(id=commission_id),
+             'CLOUDINARY':  CLOUDINARY}
   return render(request, 'commissions/commission.html', context)
 
-
+@access_required('admin')
+def find_commission(request): #search for commission based on POST params
+  pass
 
 @access_required('admin')
 @csrf_exempt #find a way to add csrf
