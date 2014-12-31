@@ -1,0 +1,56 @@
+{% extends "admin_base.html" %}
+{% load commission_tags %}
+
+{% block javascript %}
+<script>
+  $().ready(function(){
+  });
+</script>
+{% endblock javascript %}
+
+{% block css %}
+<style>
+  a:hover{text-decoration: none}
+</style>
+{% endblock css %}
+
+{% block logo %}
+  <ul class="inline">
+    <li>
+      <i class='symbol-commissions black' title="commissions">C</i>
+    </li>
+    <li>
+      <form method="get" action="{% url 'admin:find commission' %}" style="margin: 0;;">
+        <input id='search_field' name="some_id" type="text" disabled>
+        <button type="submit" id='search-button' class='symbol-go' disabled
+            style="line-height: 18pt;"></button>
+      </form>
+    </li>
+  </ul>
+{% endblock logo %}
+
+{% block content %}
+<table class='table table-hover table-condensed'>
+  <ul class="unstyled">
+    <li><h3>Requests</h3></li>
+    {% for commission in commissions_requested %}
+      <li>{% commission_list_item commission %}</li>
+    {% endfor %}
+  </ul>
+
+  <ul class="unstyled">
+    <li><h3>In Progress</h3></li>
+    {% for commission in commissions_in_progress %}
+      <li>{% commission_list_item commission %}</li>
+    {% endfor %}
+  </ul>
+
+  <ul class="unstyled">
+    <li><h3>Completed</h3></li>
+    {% for commission in commissions_completed %}
+      <li>{% commission_list_item commission %}</li>
+    {% endfor %}
+  </ul>
+
+</table>
+{% endblock content %}`
