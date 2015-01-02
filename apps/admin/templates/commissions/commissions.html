@@ -30,7 +30,11 @@
 {% endblock logo %}
 
 {% block content %}
-<table class='table table-hover table-condensed'>
+
+  <div>
+    <a href="{% url 'admin:create commission' %}">C+</a>
+  </div>
+
   <ul class="unstyled">
     <li><h3>Requests</h3></li>
     {% for commission in commissions_requested %}
@@ -52,5 +56,4 @@
     {% endfor %}
   </ul>
 
-</table>
 {% endblock content %}`

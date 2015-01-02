@@ -23,8 +23,17 @@ def commission(request, commission_id):
   return render(request, 'commissions/commission.html', context)
 
 @access_required('admin')
+def create(request):
+  commission = Commission.objects.create()
+  return redirect('admin:commission', commission.id)
+
+@access_required('admin')
 def find_commission(request): #search for commission based on POST params
-  pass
+  try:
+    commission = Commission.objects.get(id=request.POST.get('commission_id'))
+    return redirect('admin:commission', commission.id)
+  except:
+    return redirect('admin:commissions')
 
 @access_required('admin')
 @csrf_exempt #find a way to add csrf

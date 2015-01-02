@@ -3,8 +3,10 @@
     <a href="{% url 'admin:commission' commission.id %}">
       {% if commission.base_product %}
         <img src="{{ commission.base_product.photo.pinky_size }}">
-      {% else %}
+      {% elif commission.requirement_images.count %}
         <img src="{{ commission.requirement_images.first.pinky_size }}">
+      {% else %}
+        <div style="width: 100px; height: 75px; background-color: darkgray;"></div>
       {% endif %}
     </a>
   </li>
