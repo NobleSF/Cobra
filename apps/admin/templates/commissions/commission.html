@@ -30,61 +30,84 @@
 <input type='hidden' id='upload-check-url' value="{% url 'seller:check image upload' %}">
 {#<input type='hidden' id='update-commission-url' value='{% url 'admin:update commission' %}'>#}
 
-<ul class="unstyled">
-  <li id="requirement-images">
-    requirement images
-    <ul class="inline">
-      <li>
-        {% for image in commission.requirement_images.all %}
-          <a href="{{ image.original }}"><img src="{{ image.thumb_size }}"></a>
-        {% endfor %}
-      </li>
-    </ul>
+<!-- Requirement Images Upload -->
+<form id='data-form-{{ commission.id }}' class='data-form form-horizontal'
+      method='post' action='{% url "admin:commission image" %}'>
 
-    <div id='image-{{ commission.id }}-upload-div' class='image-upload-div'>
+  <input type='hidden' name='commission_id' class='commission-id'
+         id='image-{{ commission.id }}-commission-id'
+         value='{{ commission.id }}'>
 
-      <div id='image-{{ commission.id }}' class='image'>
-        <img src="" width="100" height="75" />
-      </div>
+  <div class="control-group">
+    <label class="control-label" for="base-product">Upload Requirement Image</label>
+    <div class="controls">
+      <ul class="inline">
+        <li>
+          <div id='image-{{ commission.id }}' class='image'>
+            <img src="" height="75" />
+          </div>
+        </li>
 
-      <div id='spinner-{{ commission.id }}' class='spinner-div'></div>
+        <li id='progress-{{ commission.id }}' class="progress progress-striped">
+          <div id='progress-bar-{{ commission.id }}' class="bar" style="width: 0%;"></div>
+        </li>
 
-      <div id='progress-{{ commission.id }}' class="progress progress-striped">
-        <div id='progress-bar-{{ commission.id }}' class="bar" style="width: 0%;"></div>
-      </div>
-
-      <div id='image-forms-{{ commission.id }}' class='image-forms'>
-        <form id='data-form-{{ commission.id }}' class='data-form'
-              method='post' action='{% url "admin:commission image" %}'>
-
-          <input type='hidden' name='commission_id' class='commission-id'
-                 id='image-{{ commission.id }}-commission-id'
-                 value='{{ commission.id }}'>
-
-        </form>
-
-        <form id='upload-form-{{ commission.id }}' class='upload-form' onsubmit='return false;'>
-          <span class='file-wrapper'>
-
-            <input type='file' name='file' class='image-input'
-                   id='image-input-{{ commission.id }}'
-                   accept='*'
-                   capture='camera'>
-
-            <span class='file-button btn symbol-camera black'></span>
-          </span>
-        </form>
-      </div>
+        <li>
+          <input type='file' name='file' class='image-input'
+                 id='image-input-{{ commission.id }}'
+                 accept='*'
+                 capture='camera'>
+        </li>
+      </ul>
     </div>
-  </li>
-</ul>
-
-
-<form class="form-horizontal">
-
-  {% commission_details commission %}
-
+  </div>
 </form>
+<!-- End Requirement Images Upload -->
 
+{% commission_details commission %}
+
+<!-- Progress Photo Upload -->
+<form id='data-form-{{ commission.id }}' class='data-form form-horizontal'
+      method='post' action='{% url "admin:commission progress photo" %}'>
+
+  <input type='hidden' name='commission_id' class='commission-id'
+         id='image-{{ commission.id }}-commission-id'
+         value='{{ commission.id }}'>
+
+  <div class="control-group">
+    <label class="control-label" for="base-product">Upload Progress Photo</label>
+    <div class="controls">
+
+
+
+    </div>
+  </div>
+</form>
+<!-- End Progress Photo Upload -->
+
+<!-- Final Product -->
+<form class="form-horizontal">
+  <div class="control-group">
+    <label class="control-label" for="product">Product</label>
+    <div class="controls">
+
+      {% if commission.product and commission.is_complete %}
+        <a href="{{ commission.product.get_absolute_url }}">
+          <img src="{{ commission.product.photo.pinky_size }}">
+        </a>
+
+      {% elif commission.product %}
+        <a href="{% url 'seller:edit product' commission.product_id %}">
+          <i class="symbol-product-add"></i>
+        </a>
+
+      {% else %}
+        <i class="symbol-product-add"></i>
+      {% endif %}
+
+    </div>
+  </div>
+</form>
+<!-- End Final Product -->
 
 {% endblock content %}
