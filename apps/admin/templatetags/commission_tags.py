@@ -46,7 +46,7 @@ def commission_details(commission):
       True,
     ],
     [
-      'progression',
+      'progress',
       "%d%%" % commission.progress,
       True,
     ],

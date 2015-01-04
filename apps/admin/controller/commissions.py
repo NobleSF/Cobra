@@ -17,10 +17,22 @@ def commissions(request):
   return render(request, 'commissions/commissions.html', context)
 
 @access_required('admin')
+@csrf_exempt
 def commission(request, commission_id):
-  context = {'commission':  Commission.objects.get(id=commission_id),
-             'CLOUDINARY':  CLOUDINARY}
-  return render(request, 'commissions/commission.html', context)
+  if request.method == "POST":
+    element = request.POST.get('name')
+    value = request.POST.get('value')
+    try:
+      Commission.objects.get(id=commission_id).update(element, value)
+      return HttpResponse(200)#ok
+    except Exception as e:
+      ExceptionHandler(e, "in commissions.commission, saving commission details")
+      return HttpResponse(500)#error
+
+  elif request.method == "GET":
+    context = {'commission':  Commission.objects.get(id=commission_id),
+               'CLOUDINARY':  CLOUDINARY}
+    return render(request, 'commissions/commission.html', context)
 
 @access_required('admin')
 def create(request):
