@@ -9,6 +9,7 @@
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/vendor/jquery.ui.widget.min.js'></script>
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.iframe-transport.min.js'></script>
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.fileupload.min.js'></script>
+  <script src='{{ STATIC_URL }}vendor/jquery-autosave/js/jquery-autosave.min.js'></script>
   <script src="{{ STATIC_URL }}admin/js/commission.min.js?v=0"></script>
 {% endblock javascript %}
 
@@ -29,6 +30,9 @@
 <!-- for JS to check upload completion and get thumb_url -->
 <input type='hidden' id='upload-check-url' value="{% url 'seller:check image upload' %}">
 {#<input type='hidden' id='update-commission-url' value='{% url 'admin:update commission' %}'>#}
+
+<!-- for JS to autosave commission details -->
+<input type="hidden" id="autosave-url" value="{% url 'admin:commission' commission.id %}">
 
 <!-- Requirement Images Upload -->
 <form id='data-form-{{ commission.id }}' class='data-form form-horizontal'
