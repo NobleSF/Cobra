@@ -55,7 +55,7 @@ def edit(request, product_id=None):
       value = request.POST.get('value', None)
       # remove non-digits, round to nearest integer
       value = int(round(float(re.sub(r"\D", "", value)))) if value else None
-      value = value/100 if value > 32000 else value
+      value = value/100 if value > 70000 else value
 
       if   name == 'price':   product.price   = value
       elif name == 'length':  product.length  = value
