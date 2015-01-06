@@ -8,7 +8,6 @@ def home(request):
   #request.session['admin_type'] = 'master'
   return render(request, 'admin_home.html', {})
 
-@access_required('admin')
 def stats(request):
   today = datetime.now()
   beginning_of_time = datetime(2013, 10, 1)#August 1st, 2013 - launch of this app
