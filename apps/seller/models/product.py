@@ -1,11 +1,12 @@
 from django.db import models
+from django.utils import timezone
+
 from apps.admin.models.color import Color
 from apps.seller.models.asset import Asset
 from apps.seller.models.seller import Seller
 from apps.seller.models.shipping_option import ShippingOption
-
-from django.utils import timezone
 from apps.admin.utils.exception_handling import ExceptionHandler
+
 
 class ProductQuerySet(models.QuerySet):
   def for_sale(self):
@@ -23,11 +24,11 @@ class Product(models.Model):
   #product description elements
   assets        = models.ManyToManyField(Asset)#related_name='products'
   colors        = models.ManyToManyField(Color)#related_name='products'
-  width         = models.SmallIntegerField(null=True, blank=True)
-  height        = models.SmallIntegerField(null=True, blank=True)
-  length        = models.SmallIntegerField(null=True, blank=True)
-  weight        = models.SmallIntegerField(null=True, blank=True)
-  price         = models.SmallIntegerField(null=True, blank=True)
+  width         = models.IntegerField(null=True, blank=True)
+  height        = models.IntegerField(null=True, blank=True)
+  length        = models.IntegerField(null=True, blank=True)
+  weight        = models.IntegerField(null=True, blank=True)
+  price         = models.IntegerField(null=True, blank=True)
   shipping_options = models.ManyToManyField(ShippingOption)#related_name='products'
 
   #lifecycle milestones
@@ -343,7 +344,6 @@ class Product(models.Model):
 
   @property
   def metric_dimensions(self):
-    from math import floor
     metric_string = ""
     measurements = sorted([self.width, self.height, self.length], reverse=True)
 
@@ -532,7 +532,6 @@ class Product(models.Model):
     self.save()
 
   def get_related_products(self, limit=3):
-    from django.utils import timezone
     try:
       return (Product.objects.for_sale()
               .filter(seller=self.seller)
@@ -577,7 +576,7 @@ def rreplace(s, old, new, occurrence):
 
 #SIGNALS AND SIGNAL REGISTRATION
 from django.dispatch import receiver
-from django.db.models.signals import pre_save, post_save, pre_delete
+from django.db.models.signals import post_save, pre_delete
 
 @receiver(pre_delete, sender=Product)
 def onDelete(sender, instance, **kwargs):
