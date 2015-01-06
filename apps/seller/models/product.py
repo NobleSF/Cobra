@@ -23,11 +23,11 @@ class Product(models.Model):
   #product description elements
   assets        = models.ManyToManyField(Asset)
   colors        = models.ManyToManyField(Color)
-  width         = models.SmallIntegerField(null=True, blank=True)
-  height        = models.SmallIntegerField(null=True, blank=True)
-  length        = models.SmallIntegerField(null=True, blank=True)
-  weight        = models.SmallIntegerField(null=True, blank=True)
-  price         = models.SmallIntegerField(null=True, blank=True)
+  width         = models.IntegerField(null=True, blank=True)
+  height        = models.IntegerField(null=True, blank=True)
+  length        = models.IntegerField(null=True, blank=True)
+  weight        = models.IntegerField(null=True, blank=True)
+  price         = models.IntegerField(null=True, blank=True)
   shipping_options = models.ManyToManyField(ShippingOption)
 
   #lifecycle milestones
