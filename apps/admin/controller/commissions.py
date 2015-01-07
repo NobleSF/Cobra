@@ -24,7 +24,11 @@ def commission(request, commission_id):
     value = request.POST.get('value')
     try:
       commission = Commission.objects.get(id=commission_id)
-      if (element == value == "cancel"):
+      if request.POST.get('base_product_id'):
+        commission.base_product_id = int(request.POST['base_product_id'])
+        commission.save()
+        return redirect('admin:commission', commission.id)
+      elif element == value == "cancel":
         commission.canceled = True
       else:
         commission.update(element, value)

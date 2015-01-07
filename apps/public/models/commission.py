@@ -216,7 +216,7 @@ class Commission(models.Model):
     return self.product
 
   def update(self, var, val):
-    val = val.strip()
+    val = val.strip() if val else ""
     if var == 'quantity':
       self.quantity = int(val)
     elif var == 'requested-length':
