@@ -1,0 +1,117 @@
+{% extends "admin_base.html" %}
+{% load commission_tags %}
+
+{% block title %}
+  Commission {{ commission.id }}
+{% endblock title %}
+
+{% block javascript %}
+  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/vendor/jquery.ui.widget.min.js'></script>
+  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.iframe-transport.min.js'></script>
+  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.fileupload.min.js'></script>
+  <script src='{{ STATIC_URL }}vendor/jquery-autosave/js/jquery-autosave.min.js'></script>
+  <script src="{{ STATIC_URL }}admin/js/commission.min.js?v=0"></script>
+{% endblock javascript %}
+
+{% block css %}
+  <link href="{{ STATIC_URL }}admin/css/commission.css" rel="stylesheet">
+{% endblock css %}
+
+{% block logo %}
+  <i>{{ commission.public_id }}</i>
+  {{ commission.base_product.seller.name }}
+{% endblock logo %}
+
+{% block content %}
+<!-- the location to upload photos to -->
+<input type='hidden' id='upload-url' value='{{ CLOUDINARY.upload_url }}'>
+<!-- to give cloudinary so they can tell our server when upload is complete -->
+<input type='hidden' id='upload-complete-url' value="{% url 'seller:complete upload' %}">
+<!-- for JS to check upload completion and get thumb_url -->
+<input type='hidden' id='upload-check-url' value="{% url 'seller:check image upload' %}">
+{#<input type='hidden' id='update-commission-url' value='{% url 'admin:update commission' %}'>#}
+
+<!-- for JS to autosave commission details -->
+<input type="hidden" id="autosave-url" value="{% url 'admin:commission' commission.id %}">
+
+<!-- Requirement Images Upload -->
+<form id='data-form-{{ commission.id }}' class='data-form form-horizontal'
+      method='post' action='{% url "admin:commission image" %}'>
+
+  <input type='hidden' name='commission_id' class='commission-id'
+         id='image-{{ commission.id }}-commission-id'
+         value='{{ commission.id }}'>
+
+  <div class="control-group">
+    <label class="control-label" for="base-product">Upload Requirement Image</label>
+    <div class="controls">
+      <ul class="inline">
+        <li>
+          <div id='image-{{ commission.id }}' class='image'>
+            <img src="" height="75" />
+          </div>
+        </li>
+
+        <li id='progress-{{ commission.id }}' class="progress progress-striped">
+          <div id='progress-bar-{{ commission.id }}' class="bar" style="width: 0%;"></div>
+        </li>
+
+        <li>
+          <input type='file' name='file' class='image-input'
+                 id='image-input-{{ commission.id }}'
+                 accept='*'
+                 capture='camera'>
+        </li>
+      </ul>
+    </div>
+  </div>
+</form>
+<!-- End Requirement Images Upload -->
+
+{% commission_details commission %}
+
+<!-- Progress Photo Upload -->
+<form id='data-form-{{ commission.id }}' class='data-form form-horizontal'
+      method='post' action='{% url "admin:commission progress photo" %}'>
+
+  <input type='hidden' name='commission_id' class='commission-id'
+         id='image-{{ commission.id }}-commission-id'
+         value='{{ commission.id }}'>
+
+  <div class="control-group">
+    <label class="control-label" for="base-product">Upload Progress Photo</label>
+    <div class="controls">
+
+
+
+    </div>
+  </div>
+</form>
+<!-- End Progress Photo Upload -->
+
+<!-- Final Product -->
+<form class="form-horizontal">
+  <div class="control-group">
+    <label class="control-label" for="product">Product</label>
+    <div class="controls">
+
+      {% if commission.product and commission.is_complete %}
+        <a href="{{ commission.product.get_absolute_url }}">
+          <img src="{{ commission.product.photo.pinky_size }}">
+        </a>
+
+      {% elif commission.product %}
+        <a href="{% url 'seller:edit product' commission.product_id %}">
+          <i class="symbol-product-add"></i>
+        </a>
+
+      {% else %}
+        <i class="symbol-product-add"></i>
+      {% endif %}
+
+    </div>
+  </div>
+</form>
+<!-- End Final Product -->
+
+{% endblock content %}

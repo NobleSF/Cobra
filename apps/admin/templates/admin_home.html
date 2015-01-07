@@ -133,6 +133,12 @@
                class='symbol-orders gold'
                title='orders'></a>
           </li>
+
+          <li>
+            <a href="{% url 'admin:commissions' %}"
+               class='symbol-commissions blue'
+               title='custom orders'>C</a>
+          </li>
         {% endif %}
 
         {% if request.session.admin_type in "country, master" %}

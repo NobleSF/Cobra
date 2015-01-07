@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db import IntegrityError
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
+from apps.seller.models import Product
 from apps.seller.models.upload import Upload
 from apps.seller.models.image import Image
 from settings.settings import CLOUDINARY
@@ -52,8 +53,7 @@ def checkImageUpload(request):#for our JS to check upload status and get thumb_u
     else:
       try:
         if upload.is_complete:
-          image = Image(original=upload.url)
-          image.save()
+          image, created = Image.objects.get_or_create(original=upload.url)
 
           if 'seller' == request.GET.get('ilk'):
             seller = Seller.objects.get(id=request.session['seller_id'])
@@ -75,6 +75,11 @@ def checkImageUpload(request):#for our JS to check upload status and get thumb_u
             order = Order.objects.get(id=request.GET['order_id'])
             order.seller_paid_receipt = image
             order.save()
+
+          elif 'commission_id' in request.GET:#commission requirement or progress image
+            from apps.public.models.commission import Commission
+            commission = Commission.objects.get(id=request.GET['commission_id'])
+            commission.requirement_images.add(image)
 
           response = {'thumb_url': image.thumb_size}
           return HttpResponse(json.dumps(response),
@@ -172,8 +177,11 @@ def checkPhotoUpload(request): #js checks upload status and gets thumb_url
 @csrf_exempt
 def photoFormData(request):
   if request.method == "POST":
-    seller_id   = request.session['seller_id']
     product_id  = request.POST['product']
+    if request.session.get('admin_id'):
+      seller_id = Product.objects.get(id=product_id).seller_id
+    else:
+      seller_id = request.session['seller_id']
     rank        = request.POST['rank']
     timestamp   = dateformat.format(timezone.now(), u'U')#unix timestamp
 

@@ -1,0 +1,64 @@
+<ul class='information-row inline'>
+  <li>
+    <a href="{% url 'admin:commission' commission.id %}">
+      {% if commission.base_product %}
+        <img src="{{ commission.base_product.photo.pinky_size }}">
+      {% elif commission.requirement_images.count %}
+        <img src="{{ commission.requirement_images.first.pinky_size }}">
+      {% else %}
+        <div style="width: 100px; height: 75px; background-color: darkgray;"></div>
+      {% endif %}
+    </a>
+  </li>
+
+  <li style='white-space: nowrap;'>
+    <i title='{{ commission.artisan_notified_at|date:"m/d  H:i" }}'
+       class='symbol-check
+          {% if commission.artisan_notified %}green has-info
+          {% else %}gray{% endif %}'
+       data-info='{{ commission.artisan_notified_at|date:"m/d  H:i" }}'
+       ></i>
+
+    <i title='{{ commission.artisan_confirmed_at|date:"m/d  H:i" }}'
+       class='symbol-check
+              {% if commission.artisan_confirmed  %}green has-info
+              {% else %}gray{% endif %}'
+       data-info='{{ commission.artisan_confirmed_at|date:"m/d  H:i" }}'
+       ></i>
+
+    <i title='{{ commission.invoice_sent_at|date:"m/d  H:i" }}'
+       class='symbol-check
+              {% if commission.invoice_sent %}green has-info
+              {% else %}gray{% endif %}'
+       data-info='{{ commission.invoice_sent_at|date:"m/d  H:i" }}'
+       ></i>
+
+    <i title='{{ commission.invoice_paid_at|date:"m/d  H:i" }}'
+       class='symbol-check
+              {% if commission.invoice_paid %}green has-info
+              {% else %}gray{% endif %}'
+       data-info='{{ commission.invoice_paid_at|date:"m/d  H:i" }}'
+       ></i>
+
+    <i title='{{ commission.in_progress_at|date:"m/d  H:i" }}'
+       class='symbol-check
+          {% if commission.in_progress %}green has-info
+          {% else %}gray{% endif %}'
+       data-info='{{ commission.in_progress_at|date:"m/d  H:i" }}'
+       ></i>
+
+    <i title='{{ commission.complete_at|date:"m/d  H:i" }}'
+       class='symbol-check
+          {% if commission.complete %}green has-info
+          {% else %}gray{% endif %}'
+       data-info='{{ commission.complete_at|date:"m/d  H:i" }}'
+       ></i>
+
+    <i title='{{ commission.shipped_at|date:"m/d  H:i" }}'
+       class='symbol-check
+          {% if commission.shipped %}green has-info
+          {% else %}gray{% endif %}'
+       data-info='{{ commission.shipped_at|date:"m/d  H:i" }}'
+       ></i>
+  </li>
+</ul>

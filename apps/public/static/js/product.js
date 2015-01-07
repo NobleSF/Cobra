@@ -76,6 +76,12 @@ $('#custom-order-submit-button').click(function(){
     $('#custom-order-submit-button h2').html("Sending...");
     $('#custom-order-submit-button').attr('disabled', 'True')
 
+    //pull dimensions
+    var length = $('#custom-order-length-A').val()*12*2.54; //feet -> cm
+    length += $('#custom-order-length-B').val()*2.54; //inches -> cm
+    var width = $('#custom-order-width-A').val()*12*2.54; //feet -> cm
+    width += $('#custom-order-width-B').val()*2.54; //inches -> cm
+
     var size = $('#custom-order-length-A').val() + "ft. ";
     size += $('#custom-order-length-B').val() + "in. by ";
     size += $('#custom-order-width-A').val() + "ft. ";
@@ -86,6 +92,8 @@ $('#custom-order-submit-button').click(function(){
                     'country':      $('#custom-order-country').val(),
                     'email':        $('#custom-order-email').val(),
                     'size':         size,
+                    'length':       length,
+                    'width':        width,
                     'quantity':     $('#custom-order-quantity').val(),
                     'description':  $('#custom-order-description').val(),
                     'estimate':     $('#custom-order-estimate').val()

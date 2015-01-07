@@ -1,5 +1,6 @@
-from django.conf.urls import patterns, include, url
-from apps.admin.controller import admin, account, products, orders, communication, site_management, research
+from django.conf.urls import patterns, url
+
+from apps.admin.controller import admin, account, products, orders, communication, site_management, research, commissions
 
 #DASHBOARD PAGES
 urlpatterns = patterns('',
@@ -26,6 +27,14 @@ urlpatterns = patterns('',
   url(r'^order/(?P<order_id>\d+)$', orders.order, name='order'),
   url(r'^ajax/update_order$', orders.updateOrder, name='update order'),
   url(r'^ajax/order_image_data$', orders.imageFormData, name='image form data'),
+
+  #COMMISSIONS
+  url(r'^find_commission/$', commissions.find_commission, name='find commission'),
+  url(r'^commissions$', commissions.commissions, name='commissions'),
+  url(r'^commission/create$', commissions.create, name='create commission'),
+  url(r'^commission/(?P<commission_id>\d+)$', commissions.commission, name='commission'),
+  url(r'^commission/requirement_image$', commissions.imageFormData, name='commission image'),
+  url(r'^commission/progress_photo$', commissions.imageFormData, name='commission progress photo'),
 
   #COMMUNICATION
   url(r'^send_sms$', communication.sendSMS, name='send sms'),

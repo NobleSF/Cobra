@@ -7,14 +7,14 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('public', '0017_auto_20141218_1813'),
+        ('public', '0020_auto_20141219_1934'),
     ]
 
     operations = [
         migrations.AlterField(
             model_name='commission',
-            name='customer',
-            field=models.ForeignKey(related_name='commissions', to='public.Customer'),
+            name='product',
+            field=models.OneToOneField(related_name='commission', null=True, to='seller.Product'),
             preserve_default=True,
         ),
     ]

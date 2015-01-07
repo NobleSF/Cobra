@@ -42,6 +42,7 @@ TEMPLATE_DEBUG = LOCAL
 ADMINS = (('Developer', 'dev@theanou.com'),)
 MANAGERS = ADMINS
 ANOU_FEE_RATE = 0.10
+ANOU_CUSTOM_ORDER_FEE_RATE = 0.20
 
 # DATABASE
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases

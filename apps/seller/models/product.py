@@ -1,11 +1,12 @@
 from django.db import models
+from django.utils import timezone
+
 from apps.admin.models.color import Color
 from apps.seller.models.asset import Asset
 from apps.seller.models.seller import Seller
 from apps.seller.models.shipping_option import ShippingOption
-
-from django.utils import timezone
 from apps.admin.utils.exception_handling import ExceptionHandler
+
 
 class ProductQuerySet(models.QuerySet):
   def for_sale(self):
@@ -18,17 +19,17 @@ class ProductQuerySet(models.QuerySet):
                   seller__deactive_at=None)
 
 class Product(models.Model):
-  seller        = models.ForeignKey(Seller)
+  seller        = models.ForeignKey(Seller)#related_name='products' #todo: refactor .product_set
 
   #product description elements
-  assets        = models.ManyToManyField(Asset)
-  colors        = models.ManyToManyField(Color)
+  assets        = models.ManyToManyField(Asset)#related_name='products'
+  colors        = models.ManyToManyField(Color)#related_name='products'
   width         = models.IntegerField(null=True, blank=True)
   height        = models.IntegerField(null=True, blank=True)
   length        = models.IntegerField(null=True, blank=True)
   weight        = models.IntegerField(null=True, blank=True)
   price         = models.IntegerField(null=True, blank=True)
-  shipping_options = models.ManyToManyField(ShippingOption)
+  shipping_options = models.ManyToManyField(ShippingOption)#related_name='products'
 
   #lifecycle milestones
   active_at     = models.DateTimeField(null=True, blank=True) #seller add
@@ -37,7 +38,7 @@ class Product(models.Model):
   #todo: change this to on_hold_at = datetime
   approved_at   = models.DateTimeField(null=True, blank=True) #admin approval
   sold_at       = models.DateTimeField(null=True, blank=True)
-  #is_orderable  = models.BooleanField(default=False) #for custom orders
+  #is_commissionable  = models.BooleanField(default=True) #for commissions
 
   #dynamically created and updated
   slug          = models.CharField(max_length=150, null=True, blank=True)
@@ -153,6 +154,10 @@ class Product(models.Model):
       return False
 
   @property
+  def is_commission(self):
+    return True if hasattr(self, 'commission') else False
+
+  @property
   def photo(self):
     try:
       return self.photos.exclude(is_progress=True)[0]
@@ -167,7 +172,7 @@ class Product(models.Model):
       else:
         return str(self.id)
     except:
-      return str(self.id)
+      return str(self.id) if self.id else str("unsaved product")
 
   @property
   def artisan(self):
@@ -339,7 +344,6 @@ class Product(models.Model):
 
   @property
   def metric_dimensions(self):
-    from math import floor
     metric_string = ""
     measurements = sorted([self.width, self.height, self.length], reverse=True)
 
@@ -362,7 +366,7 @@ class Product(models.Model):
 
   @property
   def english_dimensions(self):
-    engish_string = ""
+    english_string = ""
     measurements = sorted([self.width, self.height, self.length], reverse=True)
 
     for length in measurements:
@@ -376,16 +380,19 @@ class Product(models.Model):
           inches = inches if inches > 0 else 1
         dimension_string = ("%dft " % feet) if feet else ""
         dimension_string += ("%din" % inches) if inches else ""
-        engish_string += "%s x " % dimension_string
+        english_string += "%s x " % dimension_string
 
-    if engish_string.endswith(" x "):
-      engish_string = rreplace(engish_string, " x ", "", 1)
-    return engish_string
+    if english_string.endswith(" x "):
+      english_string = rreplace(english_string, " x ", "", 1)
+    return english_string
 
   @property
   def anou_fee(self):
-    from settings.settings import ANOU_FEE_RATE
-    if self.price:
+    from settings.settings import ANOU_FEE_RATE, ANOU_CUSTOM_ORDER_FEE_RATE
+    if self.price and self.is_commission:
+      fee = self.price * ANOU_CUSTOM_ORDER_FEE_RATE / (1-ANOU_CUSTOM_ORDER_FEE_RATE)
+      return int(round(fee)) #round off for local currencies
+    elif self.price:
       fee = self.price * ANOU_FEE_RATE / (1-ANOU_FEE_RATE)
       return int(round(fee)) #round off for local currencies
     else:
@@ -394,16 +401,22 @@ class Product(models.Model):
   @property
   def shipping_cost(self):
     from apps.seller.controller.shipping import calculateShippingCost
-    if self.weight and len(self.shipping_options.all()) > 0:
-      return calculateShippingCost(self.weight, self.shipping_options.all()[0], 'US')
+    if self.is_commission and not self.id: #unsaved temp product
+      shipping_option = self.commission.base_product.shipping_options.first()
+      return calculateShippingCost(self.weight, shipping_option, 'US')
+    elif self.weight and self.shipping_options.count():
+      return calculateShippingCost(self.weight, self.shipping_options.first(), 'US')
     else:
       return 0
 
   @property
   def local_shipping_cost(self):
     from apps.seller.controller.shipping import calculateShippingCost
-    if self.weight and len(self.shipping_options.all()) > 0:
-      return calculateShippingCost(self.weight, self.shipping_options.all()[0], 'MA')
+    if self.is_commission and not self.id: #unsaved temp product
+      shipping_option = self.commission.base_product.shipping_options.first()
+      return calculateShippingCost(self.weight, shipping_option, 'MA')
+    elif self.weight and self.shipping_options.count():
+      return calculateShippingCost(self.weight, self.shipping_options.first(), 'MA')
     else:
       return 0
 
@@ -429,10 +442,12 @@ class Product(models.Model):
       return 0
 
   @property
+  def exchange_rate(self): return self.seller.country.currency.exchange_rate_to_USD
+
+  @property
   def usd_price(self): #convert to USD
     if self.intl_price:
-      local_currency = self.seller.country.currency
-      return self.intl_price/float(local_currency.exchange_rate_to_USD)
+      return self.intl_price/float(self.exchange_rate)
     else:
       return 0
 
@@ -466,7 +481,7 @@ class Product(models.Model):
     return int(round(self.usd_price + self.etsy_fee))
 
   @property
-  def wepay_fee(self):#wepay fee is $0.30 plus 2.9% of total
+  def stripe_fee(self):#stripe fee is $0.30 plus 2.9% of total
     if self.usd_price:
       fee = 0.30
       fee += (0.029/(1-0.029)) * (self.usd_price + fee)
@@ -480,7 +495,7 @@ class Product(models.Model):
 
   @property
   def display_price(self): #round to the nearest $1
-    return int(round(self.usd_price + self.wepay_fee - self.display_shipping_price))
+    return int(round(self.usd_price + self.stripe_fee - self.display_shipping_price))
 
   @property
   def is_complete(self):
@@ -506,8 +521,17 @@ class Product(models.Model):
       return "" #probably doesn't need to be working anyway
 
   # MODEL FUNCTIONS
+  def sortDimensions(self):
+    self.length = self.length or 1
+    self.width = self.width or 1
+    self.height = self.height or 1
+    dimensions = [self.length, self.width, self.height]
+    dimensions.sort()
+    #shortest to longest
+    [self.height, self.width, self.length] = dimensions
+    self.save()
+
   def get_related_products(self, limit=3):
-    from django.utils import timezone
     try:
       return (Product.objects.for_sale()
               .filter(seller=self.seller)
@@ -543,10 +567,7 @@ class Product(models.Model):
       return reverse('product', args=[str(self.id)])
 
   def __unicode__(self):
-    if self.color_adjective:
-      return unicode("%s %s" % (self.color_adjective, self.name))
-    else:
-      return unicode(self.name)
+    return u'%s' % self.name
 
 #SUPPORTING FUNCTIONS
 def rreplace(s, old, new, occurrence):
@@ -555,7 +576,7 @@ def rreplace(s, old, new, occurrence):
 
 #SIGNALS AND SIGNAL REGISTRATION
 from django.dispatch import receiver
-from django.db.models.signals import pre_save, post_save, pre_delete
+from django.db.models.signals import post_save, pre_delete
 
 @receiver(pre_delete, sender=Product)
 def onDelete(sender, instance, **kwargs):
