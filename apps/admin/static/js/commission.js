@@ -6,7 +6,12 @@ $().ready( function(){
   $(".autosave").autosave({
       url:    $('#autosave-url').val(),
       method: "POST",
-      event:  "change"
+      event:  "change",
+      done:   function(data){
+        if ($(this).attr('data-cancel') == "cancel"){
+          window.location.replace("/admin/commissions");
+        }
+      }
   });
 });
 
