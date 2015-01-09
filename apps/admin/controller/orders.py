@@ -33,12 +33,14 @@ def find_order(request):
       except: pass
       found_orders = list(found_orders) + list(found_product_orders)
 
-    else: #not a digit
+    else: #not a digit, assume it's a string
       found_orders = Order.objects.filter(
                             Q(checkout__payment_id=some_id) |
                             Q(checkout__public_id=some_id) |
                             Q(public_id=some_id) |
-                            Q(tracking_number=some_id))
+                            Q(tracking_number=some_id) |
+                            Q(checkout__cart__email__icontains=some_id)
+      )
 
       if not found_orders:
         found_orders = [] #reset because it may be an empty query set which can't be appended
