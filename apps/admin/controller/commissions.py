@@ -23,7 +23,17 @@ def commission(request, commission_id):
     element = request.POST.get('name')
     value = request.POST.get('value')
     try:
-      Commission.objects.get(id=commission_id).update(element, value)
+      commission = Commission.objects.get(id=commission_id)
+      if request.POST.get('base_product_id'):
+        commission.base_product_id = int(request.POST['base_product_id'])
+        commission.save()
+        return redirect('admin:commission', commission.id)
+      elif element == value == "cancel":
+        commission.canceled = True
+      else:
+        commission.update(element, value)
+
+      commission.save()
       return HttpResponse(200)#ok
     except Exception as e:
       ExceptionHandler(e, "in commissions.commission, saving commission details")

@@ -9,17 +9,42 @@
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/vendor/jquery.ui.widget.min.js'></script>
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.iframe-transport.min.js'></script>
   <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.fileupload.min.js'></script>
-  <script src='{{ STATIC_URL }}vendor/jquery-autosave/js/jquery-autosave.min.js'></script>
-  <script src="{{ STATIC_URL }}admin/js/commission.min.js?v=0"></script>
+  <script src='{{ STATIC_URL }}vendor/jquery-autosave/js/jquery-autosave.js'></script>
+  <script src="{{ STATIC_URL }}admin/js/commission.js?v=0"></script>
 {% endblock javascript %}
 
 {% block css %}
-  <link href="{{ STATIC_URL }}admin/css/commission.css" rel="stylesheet">
+{#  <link href="{{ STATIC_URL }}admin/css/commission.css" rel="stylesheet">#}
 {% endblock css %}
 
 {% block logo %}
-  <i>{{ commission.public_id }}</i>
-  {{ commission.base_product.seller.name }}
+  <ul class="inline">
+    <li><a href="{% url 'admin:commissions' %}"><i>C</i></a></li>
+    <li><i>{{ commission.public_id }}</i></li>
+    {% if commission.base_product %}
+      <li>{{ commission.base_product.seller.name }}</li>
+    {% else %}
+      <li>
+        <form method="post" action="{% url 'admin:commission' commission.id %}">
+          <input type="tel" class="input-mini"
+                 name="base_product_id"
+                 width="6">
+          <button id="base-product-submit"
+                  class="btn btn-success"
+                  type="submit"
+                  >Assign Base Product</button>
+        </form>
+    </li>
+    {% endif %}
+    <li><button id="cancel-commission"
+                class="autosave btn btn-danger"
+                data-name="cancel"
+                data-value="cancel"
+                data-event="click"
+                data-cancel="cancel"
+        >Cancel All</button>
+    </li>
+  </ul>
 {% endblock logo %}
 
 {% block content %}

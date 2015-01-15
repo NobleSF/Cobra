@@ -216,27 +216,20 @@ class Commission(models.Model):
     return self.product
 
   def update(self, var, val):
-    val = val.strip()
+    val = val.strip() if val else ""
     if var == 'quantity':
       self.quantity = int(val)
-
     elif var == 'requested-length':
       self.length = int(val)
-
     elif var == 'requested-width':
       self.width = int(val)
-
     elif var =='weight':
       self.estimated_weight = int(val)
-
     elif var == 'days-to-complete':
       self.estimated_completion_date = timezone.now() + timedelta(days=int(val.strip('days')))
-
     elif var == 'progress':
       self.progress = int(val.strip('%'))
       self.in_progress = bool(self.progress)
-
-    self.save()
 
 #SIGNALS AND SIGNAL REGISTRATION
 from django.dispatch import receiver
