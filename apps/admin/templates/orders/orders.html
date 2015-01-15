@@ -113,10 +113,10 @@
       <td {% if not order.is_seller_paid %}style='font-weight: 800;'{% endif %}>
         {{ order.seller.name }}
         <br>
-        {{ order.seller.account.bank_name }}
+        <a href="tel:{{ order.seller.phone }}">{{ order.seller.phone }}</a>
       </td>
       <td {% if not order.is_seller_paid %}style='font-weight: 800;'{% endif %}>
-        {{ order.seller_paid_amount|floatformat:0 }}
+        {{ order.seller_paid_amount|floatformat:0 }} {{ order.seller.account.bank_name }}
         <small>{{ order.seller.country.currency.code }}</small>
         <br>
         {{ order.seller.account.bank_account }}
