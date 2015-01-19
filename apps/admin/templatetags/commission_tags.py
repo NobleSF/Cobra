@@ -9,7 +9,28 @@ def commission_list_item(commission):
 
 @register.inclusion_tag('commissions/commission_details.html')
 def commission_details(commission):
-  details = [ # ['title', value, True #editable],
+  product_details = [ # ['title', value, True #editable],
+    [
+      'days to complete',
+      "%d days" % commission.days_to_complete if commission.days_to_complete else "",
+      True,
+    ],
+    [
+      'progress',
+      "%d%%" % commission.progress,
+      True,
+    ],
+    [
+      'expected completion date',
+      (commission.estimated_completion_date.strftime("%d/%m/%y")
+        if commission.estimated_completion_date else None),
+      False,
+    ],
+    [
+      'quantity',
+      commission.quantity,
+      True,
+    ],
     [
       'requested length',
       commission.length,
@@ -31,43 +52,25 @@ def commission_details(commission):
       False,
     ],
     [
-      'quantity',
-      commission.quantity,
-      True,
-    ],
-    [
-      'price',
-      commission.product.price if commission.product else None,
-      False,
-    ],
-    [
-      'days to complete',
-      "%d days" % commission.days_to_complete if commission.days_to_complete else "",
-      True,
-    ],
-    [
-      'progress',
-      "%d%%" % commission.progress,
-      True,
-    ],
-    [
       'weight',
       commission.product.weight if commission.product else commission.estimated_weight,
       True,
     ],
-    [
-      'expected completion date',
-      (commission.estimated_completion_date.strftime("%d/%m/%y")
-        if commission.estimated_completion_date else None),
-      False,
-    ],
+    # [
+    #   'actual artisan price Dh',
+    #   commission.product.price if commission.product else None,
+    #   False,
+    # ],
     [
       'country',
       commission.customer.country if commission.customer else None,
-      False,
+      True,
     ],
+  ]
+
+  pricing_details = [ # ['title', value, True #editable],
     [
-      'shipping cost',
+      'shipping cost Dh',
       commission.product.shipping_cost if commission.product else None,
       False,
     ],
@@ -87,15 +90,19 @@ def commission_details(commission):
       False,
     ],
     [
-      'invoiced price',
+      'invoice price $',
       commission.estimated_display_price,
-      False,
+      False if commission.invoice_paid else True,
     ],
-    [
+  ]
+  if commission.invoice_paid:
+    pricing_details.append([
       'payment receipt',
       commission.payment_receipt,
       False,
-    ]
-  ]
+    ])
 
-  return {'commission': commission, 'details':details}
+  return {'commission':       commission,
+          'product_details':  product_details,
+          'pricing_details':  pricing_details,
+         }

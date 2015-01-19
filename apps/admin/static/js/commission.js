@@ -3,6 +3,26 @@ $().ready( function(){
   uploader = new fileUploadAction();
   uploader.apply($('#requirement-images').find('.image-input'));
 
+  $.get("/admin/countries", function(data){
+    var selected_country = $('#country').val();
+    var html = "<select class='autosave' id='country' name='country'>";
+    if(!selected_country){
+      html += "<option value=''></option>";
+    }
+    $.each(data, function(i, item) {
+      html += "<option value='" + item + "' ";
+      if(item == selected_country){
+        html += "selected='selected' ";
+      }
+      html += ">" + item + "</option>";
+    });
+    html += "</select>";
+    $('#country').replaceWith(html);
+    $('#country').autosave({
+      url:    $('#autosave-url').val()
+    });
+  });
+
   $(".autosave").autosave({
       url:    $('#autosave-url').val(),
       method: "POST",
@@ -13,24 +33,8 @@ $().ready( function(){
         }
       }
   });
+
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //Photo and Image Uploading
 function fileUploadAction(){

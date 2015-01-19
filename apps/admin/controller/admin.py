@@ -1,5 +1,8 @@
 from datetime import datetime
+import json
+from django.http import HttpResponse
 from django.shortcuts import render
+from apps.admin.models import Country
 from apps.admin.utils.decorator import access_required
 from apps.public.models.order import Order
 
@@ -77,6 +80,10 @@ def getNextMonth(date):#not smart to handle end-of-month limits (eg Feb 30th)
     month = date.month+1 if date.month < 12 else 1
     day = date.day
     return datetime(year, month, day)
+
+def getCountries(request):
+  country_data = [country.name for country in Country.objects.all()]
+  return HttpResponse(json.dumps(country_data), content_type='application/json')
 
 def getCostsForMonth(date):
   costs = {

@@ -44,6 +44,7 @@ class Commission(models.Model):
   progress_updated_at       = models.DateTimeField(null=True, blank=True)
   progress                  = models.SmallIntegerField(default=0)
   complete_at               = models.DateTimeField(null=True, blank=True)
+  customer_confirmed_at     = models.DateTimeField(null=True, blank=True)
   shipped_at                = models.DateTimeField(null=True, blank=True)
   canceled_at               = models.DateTimeField(null=True, blank=True)
 
@@ -128,6 +129,16 @@ class Commission(models.Model):
       self.complete_at = None
     elif not self.complete:
       self.complete_at = timezone.now()
+
+  @property
+  def customer_confirmed(self):
+    return True if self.customer_confirmed_at else False
+  @complete.setter
+  def complete(self, value):
+    if not value:
+      self.customer_confirmed_at = None
+    elif not self.complete:
+      self.customer_confirmed_at = timezone.now()
 
   @property
   def shipped(self):
@@ -215,6 +226,11 @@ class Commission(models.Model):
 
     return self.product
 
+  def getCustomer(self):
+    if not self.customer:
+      self.customer = Customer.objects.create()
+    return self.customer
+
   def update(self, var, val):
     val = val.strip() if val else ""
     if var == 'quantity':
@@ -230,6 +246,12 @@ class Commission(models.Model):
     elif var == 'progress':
       self.progress = int(val.strip('%'))
       self.in_progress = bool(self.progress)
+    elif var == 'country':
+      self.customer = self.getCustomer()
+      self.customer.country = val
+      self.customer.save()
+    elif var == 'invoice-price':
+      self.estimated_display_price = int(val)
 
 #SIGNALS AND SIGNAL REGISTRATION
 from django.dispatch import receiver

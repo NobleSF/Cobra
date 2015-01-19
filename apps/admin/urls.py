@@ -42,6 +42,7 @@ urlpatterns = patterns('',
   url(r'^email$', communication.allEmail, name='all email'),
 
   #EXTRAS
+  url(r'^countries', admin.getCountries, name='countries'),
   url(r'^stats$', admin.stats, name='stats'),
   url(r'^research$', research.home, name='research'),
   url(r'^research_google$', research.googleImageSearch, name='google product'),
