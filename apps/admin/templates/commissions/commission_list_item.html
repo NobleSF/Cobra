@@ -54,6 +54,13 @@
        data-info='{{ commission.complete_at|date:"m/d  H:i" }}'
        ></i>
 
+    <i title='{{ commission.customer_confirmed_at|date:"m/d  H:i" }}'
+       class='symbol-check
+          {% if commission.customer_confirmed %}green has-info
+          {% else %}gray{% endif %}'
+       data-info='{{ commission.customer_confirmed_at|date:"m/d  H:i" }}'
+       ></i>
+
     <i title='{{ commission.shipped_at|date:"m/d  H:i" }}'
        class='symbol-check
           {% if commission.shipped %}green has-info
