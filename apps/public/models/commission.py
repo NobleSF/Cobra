@@ -31,8 +31,10 @@ class Commission(models.Model):
   width                     = models.IntegerField(null=True, blank=True)
   # height                    = models.IntegerField(null=True, blank=True)
   # weight                    = models.IntegerField(null=True, blank=True)
-  estimated_display_price   = models.SmallIntegerField(null=True, blank=True)
-  estimated_weight          = models.SmallIntegerField(null=True, blank=True)
+  estimated_artisan_price   = models.IntegerField(null=True, blank=True)
+  estimated_display_price   = models.IntegerField(null=True, blank=True)
+  price_adjustment          = models.IntegerField(null=True, blank=True)
+  estimated_weight          = models.IntegerField(null=True, blank=True)
 
   artisan_notified_at       = models.DateTimeField(null=True, blank=True)
   artisan_confirmed_at      = models.DateTimeField(null=True, blank=True)
@@ -159,6 +161,10 @@ class Commission(models.Model):
       self.canceled_at = None
     elif not self.canceled:
       self.canceled_at = timezone.now()
+
+  @property
+  def has_progress_photo(self):
+    return True if len(self.progress_photos) else False
 
   @property
   def days_to_complete(self):
