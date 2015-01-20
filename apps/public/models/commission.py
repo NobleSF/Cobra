@@ -31,8 +31,10 @@ class Commission(models.Model):
   width                     = models.IntegerField(null=True, blank=True)
   # height                    = models.IntegerField(null=True, blank=True)
   # weight                    = models.IntegerField(null=True, blank=True)
-  estimated_display_price   = models.SmallIntegerField(null=True, blank=True)
-  estimated_weight          = models.SmallIntegerField(null=True, blank=True)
+  estimated_artisan_price   = models.IntegerField(null=True, blank=True)
+  estimated_display_price   = models.IntegerField(null=True, blank=True)
+  price_adjustment          = models.IntegerField(null=True, blank=True)
+  estimated_weight          = models.IntegerField(null=True, blank=True)
 
   artisan_notified_at       = models.DateTimeField(null=True, blank=True)
   artisan_confirmed_at      = models.DateTimeField(null=True, blank=True)
@@ -44,6 +46,7 @@ class Commission(models.Model):
   progress_updated_at       = models.DateTimeField(null=True, blank=True)
   progress                  = models.SmallIntegerField(default=0)
   complete_at               = models.DateTimeField(null=True, blank=True)
+  customer_confirmed_at     = models.DateTimeField(null=True, blank=True)
   shipped_at                = models.DateTimeField(null=True, blank=True)
   canceled_at               = models.DateTimeField(null=True, blank=True)
 
@@ -130,6 +133,16 @@ class Commission(models.Model):
       self.complete_at = timezone.now()
 
   @property
+  def customer_confirmed(self):
+    return True if self.customer_confirmed_at else False
+  @complete.setter
+  def complete(self, value):
+    if not value:
+      self.customer_confirmed_at = None
+    elif not self.complete:
+      self.customer_confirmed_at = timezone.now()
+
+  @property
   def shipped(self):
     return True if self.shipped_at and self.shipped_at <= timezone.now() else False
   @shipped.setter
@@ -150,6 +163,10 @@ class Commission(models.Model):
       self.canceled_at = timezone.now()
 
   @property
+  def has_progress_photo(self):
+    return True if len(self.progress_photos) else False
+
+  @property
   def days_to_complete(self):
     if self.estimated_completion_date:
       return (self.estimated_completion_date - timezone.now() + timedelta(days=1)).days
@@ -165,11 +182,11 @@ class Commission(models.Model):
   def public_id(self): return "C%d" % self.id
 
   # MODEL FUNCTIONS
-  def createPriceEstimate(self, save=True):
+  def createdDisplayPriceEstimate(self, save=True):
     if not any([self.base_product, self.product]):
-      raise Exception("createPriceEstimate requires existing instance of base_product or product")
+      raise Exception("createdDisplayPriceEstimate requires existing instance of base_product or product")
 
-    self.product = self.createProduct(False)
+    self.product = self.createProduct(save=save)
 
     if save and self.product.display_price:
       self.estimated_display_price = self.product.display_price
@@ -178,7 +195,7 @@ class Commission(models.Model):
     return self.product.display_price or None
 
   def createWeightEstimate(self, save=True):
-    self.product = self.createProduct(False)
+    self.product = self.createProduct(save=save)
     if save:
       self.estimated_weight = self.product.weight
       self.save()
@@ -193,7 +210,6 @@ class Commission(models.Model):
         self.product.length = self.length
         self.product.width = self.width
         # self.product.height = self.height
-        # self.product.weight = self.weight
 
     else:
       self.product = Product(seller=self.base_product.seller) if not self.product else self.product
@@ -206,14 +222,21 @@ class Commission(models.Model):
       new_size = self.product.length * self.product.width
       ratio = float(new_size) / base_size
 
-      self.product.weight = int(((self.base_product.weight * ratio * 1.05) + 100) * self.quantity)
-      self.product.price = int(self.base_product.price * ratio * self.quantity)
+      if not self.product.weight:
+        self.product.weight = int(((self.base_product.weight * ratio * 1.05) + 100) * self.quantity)
+      if not self.product.price:
+        self.product.price = int(self.base_product.price * ratio * self.quantity)
 
     if save:
       self.product.save()
       self.save()
 
     return self.product
+
+  def getCustomer(self):
+    if not self.customer:
+      self.customer = Customer.objects.create()
+    return self.customer
 
   def update(self, var, val):
     val = val.strip() if val else ""
@@ -230,6 +253,12 @@ class Commission(models.Model):
     elif var == 'progress':
       self.progress = int(val.strip('%'))
       self.in_progress = bool(self.progress)
+    elif var == 'country':
+      self.customer = self.getCustomer()
+      self.customer.country = val
+      self.customer.save()
+    elif var == 'invoice-price':
+      self.estimated_display_price = int(val)
 
 #SIGNALS AND SIGNAL REGISTRATION
 from django.dispatch import receiver

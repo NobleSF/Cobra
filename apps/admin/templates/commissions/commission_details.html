@@ -1,38 +1,14 @@
-<form class="form-horizontal">
+{#<form class="form-horizontal">#}
 
-  <div class="control-group">
-    <label class="control-label" for="base-product">Requirement Images</label>
-    <div class="controls">
-      <ul class="inline">
-        {% for image in commission.requirement_images.all %}
-          <li>
-            <a href="{{ image.original }}"><img src="{{ image.thumb_size }}"></a>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-  </div>
-
-  {% if commission.base_product %}
-    <div class="control-group">
-      <label class="control-label" for="base-product">Base Product</label>
-      <div class="controls">
-        <a href="{{ commission.base_product.get_absolute_url }}">
-          <img src="{{ commission.base_product.photo.pinky_size }}">
-        </a>
-      </div>
-    </div>
-  {% endif %}
-
-
-  {% for name, value, editable in details %}
+  <!-- Product Details -->
+  {% for name, value, editable in product_details %}
     <div class="control-group">
       <label class="control-label" for="{{ name|slugify }}">{{ name|title }}</label>
       <div class="controls">
         <input type="text"
                id="{{ name|slugify }}"
                name="{{ name|slugify }}"
-               class="autosave"
+               class="autosave input-small"
                value="{{ value|default:'' }}"
                placeholder=""
                {% if not editable %}disabled{% endif %}
@@ -41,18 +17,37 @@
     </div>
   {% endfor %}
 
+{#  <!-- Generate Estimates Button -->#}
+{#  <div class="control-group">#}
+{#    <label class="control-label" for="base-product"></label>#}
+{#    <div class="controls">#}
+{#      <button id="generate-estimates" class="btn btn-info">Generate Estimates</button>#}
+{#    </div>#}
+{#  </div>#}
 
-  <div class="control-group">
-    <label class="control-label" for="progress-photos">Progress Photos</label>
-    <div class="controls">
-      <ul id="progress-photos" class="unstyled">
-        {% for photo in commission.progress_photos.all %}
-          <li>
-            <a href="{{ photo.original }}"><img src="{{ photo.thumb_size }}"></a>
-          </li>
-        {% endfor %}
-      </ul>
+  <!-- Pricing Details -->
+  {% for name, value, editable in pricing_details %}
+    <div class="control-group">
+      <label class="control-label" for="{{ name|slugify }}">{{ name|title }}</label>
+      <div class="controls">
+        <input type="text"
+               id="{{ name|slugify }}"
+               name="{{ name|slugify }}"
+               class="autosave input-small"
+               value="{{ value|default:'' }}"
+               placeholder=""
+               {% if not editable %}disabled{% endif %}
+        > <span class="comment"></span>
+      </div>
     </div>
-  </div>
+  {% endfor %}
 
-</form>
+{#  <!-- Send Invoice Button -->#}
+{#  <div class="control-group">#}
+{#    <label class="control-label" for="base-product"></label>#}
+{#    <div class="controls">#}
+{#      <button id="generate-estimates" class="btn btn-info">Send Invoice</button>#}
+{#    </div>#}
+{#  </div>#}
+
+{#</form>#}
