@@ -59,13 +59,41 @@
 <!-- for JS to autosave commission details -->
 <input type="hidden" id="autosave-url" value="{% url 'admin:commission' commission.id %}">
 
-<!-- Requirement Images Upload -->
-<form id='data-form-{{ commission.id }}' class='data-form form-horizontal'
-      method='post' action='{% url "admin:commission image" %}'>
+<form id='commission-{{ commission.id }}-form' class='data-form form-horizontal'>
 
+  <!-- Base Product Photo -->
+  {% if commission.base_product %}
+    <div class="control-group">
+      <label class="control-label" for="base-product">Base Product</label>
+      <div class="controls">
+        <a href="{{ commission.base_product.get_absolute_url }}">
+          <img src="{{ commission.base_product.photo.pinky_size }}">
+        </a>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Requirement Photos -->
+  <div class="control-group">
+    <label class="control-label" for="base-product">Requirement Images</label>
+    <div class="controls">
+      <ul class="inline">
+        {% for image in commission.requirement_images.all %}
+          <li>
+            <a href="{{ image.original }}"><img src="{{ image.thumb_size }}"></a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <!-- Requirement Images Upload -->
   <input type='hidden' name='commission_id' class='commission-id'
          id='image-{{ commission.id }}-commission-id'
          value='{{ commission.id }}'>
+
+  <input type="hidden" name="commission-image-url"
+         value="{% url "admin:commission image" %}">
 
   <div class="control-group">
     <label class="control-label" for="base-product">Upload Requirement Image</label>
@@ -90,14 +118,14 @@
       </ul>
     </div>
   </div>
-</form>
-<!-- End Requirement Images Upload -->
+  <!-- End Requirement Images Upload -->
 
-{% commission_details commission %}
+  <!-- commission_details template tag -->
+  {% commission_details commission %}
 
-<!-- Progress Photo Upload -->
-<form id='data-form-{{ commission.id }}' class='data-form form-horizontal'
-      method='post' action='{% url "admin:commission progress photo" %}'>
+  <!-- Progress Photo Upload -->
+  <input type="hidden" name="progress-photo-url"
+         value="{% url "admin:commission progress photo" %}">
 
   <input type='hidden' name='commission_id' class='commission-id'
          id='image-{{ commission.id }}-commission-id'
@@ -111,11 +139,24 @@
 
     </div>
   </div>
-</form>
-<!-- End Progress Photo Upload -->
+  <!-- End Progress Photo Upload -->
 
-<!-- Final Product -->
-<form class="form-horizontal">
+  <!-- Progress Photos -->
+  <div class="control-group">
+    <label class="control-label" for="progress-photos">Progress Photos</label>
+    <div class="controls">
+      <ul id="progress-photos" class="unstyled">
+        {% for photo in commission.progress_photos.all %}
+          <li>
+            <a href="{{ photo.original }}"><img src="{{ photo.thumb_size }}"></a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- Final Product -->
   <div class="control-group">
     <label class="control-label" for="product">Product</label>
     <div class="controls">
@@ -136,7 +177,7 @@
 
     </div>
   </div>
-</form>
-<!-- End Final Product -->
+  <!-- End Final Product -->
 
+</form>
 {% endblock content %}

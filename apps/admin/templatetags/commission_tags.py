@@ -52,15 +52,15 @@ def commission_details(commission):
       False,
     ],
     [
-      'weight',
-      commission.product.weight if commission.product else commission.estimated_weight,
-      True,
+      'estimated weight',
+      commission.estimated_weight,
+      False,
     ],
-    # [
-    #   'actual artisan price Dh',
-    #   commission.product.price if commission.product else None,
-    #   False,
-    # ],
+    [
+      'actual weight',
+      commission.product.weight if commission.product else None,
+      False,
+    ],
     [
       'country',
       commission.customer.country if commission.customer else None,
@@ -69,6 +69,16 @@ def commission_details(commission):
   ]
 
   pricing_details = [ # ['title', value, True #editable],
+    [
+      'estimated price Dh',
+      commission.estimated_artisan_price,
+      False,
+    ],
+    [
+      'actual price Dh',
+      commission.product.price if commission.product else None,
+      False,
+    ],
     [
       'shipping cost Dh',
       commission.product.shipping_cost if commission.product else None,

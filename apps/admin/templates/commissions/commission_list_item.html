@@ -47,6 +47,12 @@
        data-info='{{ commission.in_progress_at|date:"m/d  H:i" }}'
        ></i>
 
+    <i title='has progress photo'
+       class='symbol-check
+          {% if commission.has_progress_photo %}green
+          {% else %}gray{% endif %}'
+       ></i>
+
     <i title='{{ commission.complete_at|date:"m/d  H:i" }}'
        class='symbol-check
           {% if commission.complete %}green has-info
