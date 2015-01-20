@@ -38,7 +38,7 @@ def commission_details(commission):
     ],
     [
       'actual length',
-      commission.product.length if commission.product else None,
+      commission.product.length if commission.product and commission.product.is_active else None,
       False,
     ],
     [
@@ -48,7 +48,7 @@ def commission_details(commission):
     ],
     [
       'actual width',
-      commission.product.width if commission.product else None,
+      commission.product.width if commission.product and commission.product.is_active else None,
       False,
     ],
     [
@@ -58,7 +58,7 @@ def commission_details(commission):
     ],
     [
       'actual weight',
-      commission.product.weight if commission.product else None,
+      commission.product.weight if commission.product and commission.product.is_active else None,
       False,
     ],
     [
@@ -86,17 +86,17 @@ def commission_details(commission):
     ],
     [
       'anou fee',
-      commission.product.anou_fee if commission.product else None,
-      False,
-    ],
-    [
-      'stripe fee',
-      commission.product.stripe_fee if commission.product else None,
+      "%.0f" % commission.product.anou_fee if commission.product else None,
       False,
     ],
     [
       'conversion',
-      commission.product.exchange_rate if commission.product else None,
+      "%.2f" % commission.product.exchange_rate if commission.product else None,
+      False,
+    ],
+    [
+      'stripe fee',
+      "%.0f" % commission.product.stripe_fee if commission.product else None,
       False,
     ],
     [

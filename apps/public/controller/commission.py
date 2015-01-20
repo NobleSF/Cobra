@@ -17,7 +17,7 @@ def estimate(request):
     if request.GET.get('width') > 0:
       commission.width  = int(request.GET['width'])
 
-    price_estimate = commission.createPriceEstimate(save=False)
+    price_estimate = commission.createdDisplayPriceEstimate(save=False)
     response = {'display_price_estimate': price_estimate}
     return HttpResponse(json.dumps(response), content_type='application/json')
 
@@ -36,7 +36,7 @@ def propose(request):
     commission.customer = customer
     commission.length = request.POST.get('length')
     commission.width = request.POST.get('width')
-    commission.createPriceEstimate(),
+    commission.createdDisplayPriceEstimate(),
     commission.createWeightEstimate()
     commission.save()
 

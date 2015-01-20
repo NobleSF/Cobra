@@ -40,7 +40,13 @@ def commission(request, commission_id):
       return HttpResponse(500)#error
 
   elif request.method == "GET":
-    context = {'commission':  Commission.objects.get(id=commission_id),
+    commission = Commission.objects.get(id=commission_id)
+    if (commission.base_product or commission.product):
+      if not commission.invoice_paid:
+        commission.createdDisplayPriceEstimate(save=True)
+        commission.createWeightEstimate(save=True)
+
+    context = {'commission':  commission,
                'CLOUDINARY':  CLOUDINARY}
     return render(request, 'commissions/commission.html', context)
 

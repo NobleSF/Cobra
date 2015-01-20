@@ -182,11 +182,11 @@ class Commission(models.Model):
   def public_id(self): return "C%d" % self.id
 
   # MODEL FUNCTIONS
-  def createPriceEstimate(self, save=True):
+  def createdDisplayPriceEstimate(self, save=True):
     if not any([self.base_product, self.product]):
-      raise Exception("createPriceEstimate requires existing instance of base_product or product")
+      raise Exception("createdDisplayPriceEstimate requires existing instance of base_product or product")
 
-    self.product = self.createProduct(False)
+    self.product = self.createProduct(save=save)
 
     if save and self.product.display_price:
       self.estimated_display_price = self.product.display_price
@@ -195,7 +195,7 @@ class Commission(models.Model):
     return self.product.display_price or None
 
   def createWeightEstimate(self, save=True):
-    self.product = self.createProduct(False)
+    self.product = self.createProduct(save=save)
     if save:
       self.estimated_weight = self.product.weight
       self.save()
@@ -210,7 +210,6 @@ class Commission(models.Model):
         self.product.length = self.length
         self.product.width = self.width
         # self.product.height = self.height
-        # self.product.weight = self.weight
 
     else:
       self.product = Product(seller=self.base_product.seller) if not self.product else self.product
@@ -223,8 +222,10 @@ class Commission(models.Model):
       new_size = self.product.length * self.product.width
       ratio = float(new_size) / base_size
 
-      self.product.weight = int(((self.base_product.weight * ratio * 1.05) + 100) * self.quantity)
-      self.product.price = int(self.base_product.price * ratio * self.quantity)
+      if not self.product.weight:
+        self.product.weight = int(((self.base_product.weight * ratio * 1.05) + 100) * self.quantity)
+      if not self.product.price:
+        self.product.price = int(self.base_product.price * ratio * self.quantity)
 
     if save:
       self.product.save()
