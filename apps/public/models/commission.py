@@ -226,6 +226,7 @@ class Commission(models.Model):
         self.product.weight = int(((self.base_product.weight * ratio * 1.05) + 100) * self.quantity)
       if not self.product.price:
         self.product.price = int(self.base_product.price * ratio * self.quantity)
+        self.estimated_artisan_price = self.product.price
 
     if save:
       self.product.save()
