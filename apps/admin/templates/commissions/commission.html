@@ -59,9 +59,8 @@
 <!-- for JS to autosave commission details -->
 <input type="hidden" id="autosave-url" value="{% url 'admin:commission' commission.id %}">
 
-<form id='commission-{{ commission.id }}-form' class='data-form form-horizontal'>
-
-  <!-- Base Product Photo -->
+<!-- Base Product Photo -->
+<form class='form-horizontal'>
   {% if commission.base_product %}
     <div class="control-group">
       <label class="control-label" for="base-product">Base Product</label>
@@ -72,8 +71,18 @@
       </div>
     </div>
   {% endif %}
+</form>
 
-  <!-- Requirement Photos -->
+<!-- Requirement Photos and Upload -->
+<div class='form-horizontal'>
+  <input type='hidden' name='commission_id' class='commission-id'
+         id='image-{{ commission.id }}-commission-id'
+         value='{{ commission.id }}'>
+
+  <input type="hidden" name="commission-image-url"
+         id="requirement-image-upload-url"
+         value="{% url "admin:commission image" %}">
+
   <div class="control-group">
     <label class="control-label" for="base-product">Requirement Images</label>
     <div class="controls">
@@ -83,47 +92,19 @@
             <a href="{{ image.original }}"><img src="{{ image.thumb_size }}"></a>
           </li>
         {% endfor %}
-      </ul>
-    </div>
-  </div>
-
-  <!-- Requirement Images Upload -->
-  <input type='hidden' name='commission_id' class='commission-id'
-         id='image-{{ commission.id }}-commission-id'
-         value='{{ commission.id }}'>
-
-  <input type="hidden" name="commission-image-url"
-         value="{% url "admin:commission image" %}">
-
-  <div class="control-group">
-    <label class="control-label" for="base-product">Upload Requirement Image</label>
-    <div class="controls">
-      <ul class="inline">
         <li>
-          <div id='image-{{ commission.id }}' class='image'>
-            <img src="" height="75" />
-          </div>
-        </li>
-
-        <li id='progress-{{ commission.id }}' class="progress progress-striped">
-          <div id='progress-bar-{{ commission.id }}' class="bar" style="width: 0%;"></div>
-        </li>
-
-        <li>
-          <input type='file' name='file' class='image-input'
-                 id='image-input-{{ commission.id }}'
-                 accept='*'
-                 capture='camera'>
+          {% requirement_image %}
         </li>
       </ul>
     </div>
   </div>
-  <!-- End Requirement Images Upload -->
+</div>
 
-  <!-- commission_details template tag -->
-  {% commission_details commission %}
+<!-- Commission Details template tag -->
+{% commission_details commission %}
 
-  <!-- Progress Photo Upload -->
+<!-- Progress Photos and Upload-->
+<div class='form-horizontal'>
   <input type="hidden" name="progress-photo-url"
          value="{% url "admin:commission progress photo" %}">
 
@@ -131,17 +112,6 @@
          id='image-{{ commission.id }}-commission-id'
          value='{{ commission.id }}'>
 
-  <div class="control-group">
-    <label class="control-label" for="base-product">Upload Progress Photo</label>
-    <div class="controls">
-
-
-
-    </div>
-  </div>
-  <!-- End Progress Photo Upload -->
-
-  <!-- Progress Photos -->
   <div class="control-group">
     <label class="control-label" for="progress-photos">Progress Photos</label>
     <div class="controls">
@@ -151,33 +121,12 @@
             <a href="{{ photo.original }}"><img src="{{ photo.thumb_size }}"></a>
           </li>
         {% endfor %}
+        <li>
+          {% requirement_image %}
+        </li>
       </ul>
     </div>
   </div>
+</div>
 
-
-  <!-- Final Product -->
-  <div class="control-group">
-    <label class="control-label" for="product">Product</label>
-    <div class="controls">
-
-      {% if commission.product and commission.is_complete %}
-        <a href="{{ commission.product.get_absolute_url }}">
-          <img src="{{ commission.product.photo.pinky_size }}">
-        </a>
-
-      {% elif commission.product %}
-        <a href="{% url 'seller:edit product' commission.product_id %}">
-          <i class="symbol-product-add"></i>
-        </a>
-
-      {% else %}
-        <i class="symbol-product-add"></i>
-      {% endif %}
-
-    </div>
-  </div>
-  <!-- End Final Product -->
-
-</form>
 {% endblock content %}

@@ -11,6 +11,10 @@ class Image(models.Model): #for assets and anything other than product photos
     return unicode(self.original).replace(CLOUDINARY['download_url'],'')
 
   @property
+  def commission(self):
+    return self.commission_set.all()[0] if self.commission_set.count() else None
+
+  @property
   def thumb_size(self):
     transformation = "c_fill,g_center,h_225,q_85,w_300"
     return u'%s' % self.original.replace("upload", ("upload/"+transformation))

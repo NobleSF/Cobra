@@ -34,6 +34,11 @@ $().ready( function(){
       }
   });
 
+  //activate requirement image uploading
+  uploader = new fileUploadAction();
+  uploader.apply($('#requirement-image-upload').find('.image-input'));
+  uploader.apply($('#requirement-photo-upload').find('.photo-input'));
+
 });
 
 //Photo and Image Uploading
@@ -47,15 +52,15 @@ function fileUploadAction(){
     var forms_div = this_file_input.closest('.image-upload-div').find('.image-forms');
 
     //hide progress
-    this_file_input.closest('.image-upload-div').find('.progress').hide();
+    this_file_input.closest('#requirement-image-upload').find('.progress').hide();
     //show user actionable items
-    this_file_input.closest('.image-upload-div').find('.image-forms');
+    this_file_input.closest('#requirement-image-upload').find('.image-forms');
 
     //apply upload action callbacks
     this_file_input.fileupload({
       //forceIframeTransport: true,
       dataType: 'json',
-      url: $('#upload-url').val(),
+      url: "http://httpresponder.com/req-image",//$('#requirement-image-upload-url').val(),
 
       submit: function(e, data){
         // call server to get signed form data
@@ -86,7 +91,6 @@ function fileUploadAction(){
           }
 
           //show loading and hide interaction elements
-
           forms_div.hide();
         }
       },

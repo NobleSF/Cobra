@@ -1,0 +1,41 @@
+<div id='requirement-image-upload'
+     class='requirement-image {% if not image %}empty{% endif %}'
+
+     data-image_id='{{ image.id }}'
+     data-commission_id="{{ image.commission.id }}">
+
+
+  <div id='image-{{ image.id }}' class='image'>
+    <img src="{{ image.thumb_size|default_if_none:'' }}"
+         width="300" height="225" />
+  </div>
+
+  <div id='spinner-{{ image.id }}' class='spinner-div'></div>
+
+  <div id='progress-{{ image.id }}' class="progress progress-striped">
+    <div id='progress-bar-{{ image.id }}' class="bar" style="width: 0%;"></div>
+  </div>
+
+  <div id='image-forms-{{ image.id }}' class='image-forms'>
+    <form id='data-form-{{ image.id }}' class='data-form'
+          method='post' action='{% url "seller:image form data" %}'>
+
+      <input type='hidden' name='image_id' class='image-id'
+             id='image-{{ image.id }}-id'
+             value='{{ image.id }}'>
+    </form>
+
+    <form id='upload-form-{{ image.id }}' class='upload-form' onsubmit='return false;'>
+      <span class='file-wrapper'>
+
+        <input type='file' name='file' class='image-input'
+               id='image-input-{{ image.id }}'
+               accept='*'
+               capture='camera'>
+
+        <span class='file-button btn symbol-camera black'></span>
+      </span>
+    </form>
+
+  </div>
+</div>
