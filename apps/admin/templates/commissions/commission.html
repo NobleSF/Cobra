@@ -75,14 +75,6 @@
 
 <!-- Requirement Photos and Upload -->
 <div class='form-horizontal'>
-  <input type='hidden' name='commission_id' class='commission-id'
-         id='image-{{ commission.id }}-commission-id'
-         value='{{ commission.id }}'>
-
-  <input type="hidden" name="commission-image-url"
-         id="requirement-image-upload-url"
-         value="{% url "admin:commission image" %}">
-
   <div class="control-group">
     <label class="control-label" for="base-product">Requirement Images</label>
     <div class="controls">
@@ -93,7 +85,7 @@
           </li>
         {% endfor %}
         <li>
-          {% requirement_image %}
+          {% requirement_image commission %}
         </li>
       </ul>
     </div>
@@ -105,12 +97,6 @@
 
 <!-- Progress Photos and Upload-->
 <div class='form-horizontal'>
-  <input type="hidden" name="progress-photo-url"
-         value="{% url "admin:commission progress photo" %}">
-
-  <input type='hidden' name='commission_id' class='commission-id'
-         id='image-{{ commission.id }}-commission-id'
-         value='{{ commission.id }}'>
 
   <div class="control-group">
     <label class="control-label" for="progress-photos">Progress Photos</label>
@@ -122,7 +108,7 @@
           </li>
         {% endfor %}
         <li>
-          {% requirement_image %}
+          {% progress_photo commission %}
         </li>
       </ul>
     </div>

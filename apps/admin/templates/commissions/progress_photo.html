@@ -17,6 +17,14 @@
   </div>
 
   <div id='photo-forms-{{ photo.id }}' class='photo-forms'>
+
+    <input type="hidden" name="progress-photo-url"
+           value="{% url "admin:commission photo" %}">
+
+    <input type='hidden' name='commission_id' class='commission-id'
+           id='image-{{ commission.id }}-commission-id'
+           value='{{ commission.id }}'>
+
     <form id='data-form-{{ photo.id }}' class='data-form'
           method='post' action='{% url "seller:photo form data" %}'>
 

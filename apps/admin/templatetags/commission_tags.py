@@ -8,8 +8,12 @@ def commission_list_item(commission):
   return {'commission': commission}
 
 @register.inclusion_tag('commissions/requirement_image.html')
-def requirement_image(image=None):
-  return {'image': image}
+def requirement_image(commission, image=None):
+  return {'commission': commission,'image': image}
+
+@register.inclusion_tag('commissions/progress_photo.html')
+def progress_photo(commission, photo=None):
+  return {'commission': commission,'photo': photo}
 
 @register.inclusion_tag('commissions/commission_details.html')
 def commission_details(commission):

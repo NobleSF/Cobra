@@ -49,18 +49,18 @@ function fileUploadAction(){
     var this_file_input = file_input;
     var image_data = {}
 
-    var forms_div = this_file_input.closest('.image-upload-div').find('.image-forms');
+    var forms_div = this_file_input.closest('.upload-div').find('.upload-forms');
 
     //hide progress
-    this_file_input.closest('#requirement-image-upload').find('.progress').hide();
+    //this_file_input.closest('.upload').find('.progress').hide();
     //show user actionable items
-    this_file_input.closest('#requirement-image-upload').find('.image-forms');
+    //this_file_input.closest('.upload').find('.image-forms');
 
     //apply upload action callbacks
     this_file_input.fileupload({
       //forceIframeTransport: true,
       dataType: 'json',
-      url: "http://httpresponder.com/req-image",//$('#requirement-image-upload-url').val(),
+      url: $('#requirement-image-upload-url').val(),
 
       submit: function(e, data){
         // call server to get signed form data
@@ -137,7 +137,7 @@ function getFormData(form){//just a generic ajax call that returns resulting res
     dataType: 'json',
 
     success: function(data){
-      form_data = data //dictionary object of values cloudinary needs
+      form_data = data; //dictionary object of values cloudinary needs
     }
   });
   return form_data;

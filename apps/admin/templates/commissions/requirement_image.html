@@ -1,5 +1,5 @@
 <div id='requirement-image-upload'
-     class='requirement-image {% if not image %}empty{% endif %}'
+     class='requirement-image upload-div'
 
      data-image_id='{{ image.id }}'
      data-commission_id="{{ image.commission.id }}">
@@ -16,9 +16,18 @@
     <div id='progress-bar-{{ image.id }}' class="bar" style="width: 0%;"></div>
   </div>
 
-  <div id='image-forms-{{ image.id }}' class='image-forms'>
+  <div id='image-forms-{{ image.id }}' class='upload-forms'>
+
+    <input type='hidden' name='commission_id' class='commission-id'
+           id='image-{{ commission.id }}-commission-id'
+           value='{{ commission.id }}'>
+
+    <input type="hidden" name="commission-image-url"
+           id="requirement-image-upload-url"
+           value="{% url "admin:commission image" %}">
+
     <form id='data-form-{{ image.id }}' class='data-form'
-          method='post' action='{% url "seller:image form data" %}'>
+          method='post' action='{% url "admin:commission image" %}'>
 
       <input type='hidden' name='image_id' class='image-id'
              id='image-{{ image.id }}-id'
