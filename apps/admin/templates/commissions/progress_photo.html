@@ -1,0 +1,49 @@
+<div id='requirement-photo-upload'
+     class='requirement-photo {% if not photo %}empty{% endif %}'
+
+     data-photo_id='{{ photo.id }}'
+     data-commission_id="{{ photo.commission.id }}">
+
+
+  <div id='photo-{{ photo.id }}' class='photo'>
+    <img src="{{ photo.thumb_size|default_if_none:'' }}"
+         width="300" height="225" />
+  </div>
+
+  <div id='spinner-{{ photo.id }}' class='spinner-div'></div>
+
+  <div id='progress-{{ photo.id }}' class="progress progress-striped">
+    <div id='progress-bar-{{ photo.id }}' class="bar" style="width: 0%;"></div>
+  </div>
+
+  <div id='photo-forms-{{ photo.id }}' class='photo-forms'>
+
+    <input type="hidden" name="progress-photo-url"
+           value="{% url "admin:commission photo" %}">
+
+    <input type='hidden' name='commission_id' class='commission-id'
+           id='image-{{ commission.id }}-commission-id'
+           value='{{ commission.id }}'>
+
+    <form id='data-form-{{ photo.id }}' class='data-form'
+          method='post' action='{% url "seller:photo form data" %}'>
+
+      <input type='hidden' name='photo_id' class='photo-id'
+             id='photo-{{ photo.id }}-id'
+             value='{{ photo.id }}'>
+    </form>
+
+    <form id='upload-form-{{ photo.id }}' class='upload-form' onsubmit='return false;'>
+      <span class='file-wrapper'>
+
+        <input type='file' name='file' class='photo-input'
+               id='photo-input-{{ photo.id }}'
+               accept='*'
+               capture='camera'>
+
+        <span class='file-button btn symbol-camera black'></span>
+      </span>
+    </form>
+
+  </div>
+</div>

@@ -1,4 +1,27 @@
-{#<form class="form-horizontal">#}
+<form id='commission-{{ commission.id }}-form' class='data-form form-horizontal'>
+
+  <!-- Final Product -->
+  <div class="control-group">
+    <label class="control-label" for="product">Product</label>
+    <div class="controls">
+
+      {% if commission.product and commission.is_complete %}
+        <a href="{{ commission.product.get_absolute_url }}">
+          <img src="{{ commission.product.photo.pinky_size }}">
+        </a>
+
+      {% elif commission.product %}
+        <a href="{% url 'seller:edit product' commission.product_id %}">
+          <i class="symbol-product-add"></i>
+        </a>
+
+      {% else %}
+        <i class="symbol-product-add"></i>
+      {% endif %}
+
+    </div>
+  </div>
+  <!-- End Final Product -->
 
   <!-- Product Details -->
   {% for name, value, editable in product_details %}
@@ -50,4 +73,4 @@
 {#    </div>#}
 {#  </div>#}
 
-{#</form>#}
+</form>

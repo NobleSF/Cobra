@@ -7,6 +7,14 @@ register = template.Library()
 def commission_list_item(commission):
   return {'commission': commission}
 
+@register.inclusion_tag('commissions/requirement_image.html')
+def requirement_image(commission, image=None):
+  return {'commission': commission,'image': image}
+
+@register.inclusion_tag('commissions/progress_photo.html')
+def progress_photo(commission, photo=None):
+  return {'commission': commission,'photo': photo}
+
 @register.inclusion_tag('commissions/commission_details.html')
 def commission_details(commission):
   product_details = [ # ['title', value, True #editable],
@@ -21,7 +29,7 @@ def commission_details(commission):
       True,
     ],
     [
-      'expected completion date',
+      'completion date',
       (commission.estimated_completion_date.strftime("%d/%m/%y")
         if commission.estimated_completion_date else None),
       False,

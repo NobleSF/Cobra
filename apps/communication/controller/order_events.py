@@ -136,7 +136,7 @@ def communicateOrderSellerPaid(order):
 
 def cancelOrder(order):
   try:
-    message = 'Cancel order %d, Confirmation# %d' % (order.id, order.checkout.cart.checkout_id)
+    message = 'Cancel order %d, Confirmation# %d' % (order.id, order.checkout.id)
     email = Email(message=message)
     email.assignToOrder(order)
     email.sendTo([person.email for person in support_team])

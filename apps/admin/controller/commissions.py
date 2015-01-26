@@ -70,7 +70,7 @@ def imageFormData(request):
   from apps.seller.controller.cloudinary_upload import createSignature
   from apps.seller.models.upload import Upload
 
-  if request.method == "POST" and 'order_id' in request.POST:
+  if request.method == "POST" and 'commission_id' in request.POST:
     try:
       commission = Commission.objects.get(id=request.POST['commission_id'])
       timestamp   = dateformat.format(timezone.now(), u'U')#unix timestamp
