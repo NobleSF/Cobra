@@ -77,7 +77,8 @@ class Product(models.Model):
       #cancel orders of this product
       from apps.communication.controller.order_events import cancelOrder
       for order in self.orders.all():
-        cancelOrder(order)
+        if not order.is_shipped: #todo: and not order.is_cancelled
+          cancelOrder(order)
 
       try:
         message = "R %d" % self.id

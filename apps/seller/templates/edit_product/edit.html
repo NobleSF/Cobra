@@ -14,11 +14,15 @@
 {% endblock css%}
 
 {% block javascript %}
-  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/vendor/jquery.ui.widget.min.js'></script>
-  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.iframe-transport.min.js'></script>
-  <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.fileupload.min.js'></script>
-  <script src='{{ STATIC_URL }}seller/js/edit_product.min.js'></script>
-  <script src='{{ STATIC_URL }}seller/js/product_photo_upload.min.js'></script>
+  {% if product.is_sold %}
+    <script src='{{ STATIC_URL }}seller/js/edit_sold_product.min.js'></script>
+  {% else %}
+    <script src='{{ STATIC_URL }}seller/js/edit_product.min.js'></script>
+    <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/vendor/jquery.ui.widget.min.js'></script>
+    <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.iframe-transport.min.js'></script>
+    <script src='{{ STATIC_URL }}vendor/blueimp-file-upload/js/jquery.fileupload.min.js'></script>
+    <script src='{{ STATIC_URL }}seller/js/product_photo_upload.min.js'></script>
+  {% endif %}
 {% endblock javascript%}
 
 {% block content %}

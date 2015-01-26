@@ -157,38 +157,38 @@ function updateSummary(data){
 function validateForm(){
   //remove previously applied attention classes
   $('.attention').removeClass('attention');
-  no_errors = true
+  no_errors = true;
   //product type selected
   if($('#product-chooser-section .selected').length === 0){
     $('#product-chooser-section').addClass('attention');
-    no_errors = false
+    no_errors = false;
   }
   //artisan selected
   if($('#artisan-chooser-section .selected').length === 0){
     $('#artisan-chooser-section').addClass('attention');
-    no_errors = false
+    no_errors = false;
   }
   //photo
   if($('#photos .photo').first().find('img').length === 0){
     $('#photos-section').addClass('attention');
-    no_errors = false
+    no_errors = false;
   }
   //price
   if(!($('#price').val() > 0)){
     $('#price-section').addClass('attention');
-    no_errors = false
+    no_errors = false;
   }
   //weight provided
   if(!($('#weight').val() > 0)){
     $('#measurements-section').addClass('attention');
-    no_errors = false
+    no_errors = false;
   }
   //shipping option selected
   if($('#shipping-option-chooser-section .selected').length === 0){
     $('#shipping-option-chooser-section').addClass('attention');
-    no_errors = false
+    no_errors = false;
   }
-  return no_errors
+  return no_errors;
 }
 // remove .attention when editing section
 $('.section').on('click', function(){
