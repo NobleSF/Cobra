@@ -43,7 +43,7 @@
 
       if (artisan_price > 0 && shipping_cost > 0 && exchange_rate > 0){
 
-        var anou_fee = artisan_price * (10 / 90);
+        var anou_fee = artisan_price * (20 / 80);
         var intl_price = artisan_price + shipping_cost + anou_fee;
         $('#old-artisan-price').val(artisan_price.toFixed(0));
 
@@ -137,7 +137,7 @@
           $('#new-artisan-price').val(new_artisan_price.toFixed(0));
 
           //calculate new local price
-          var anou_fee = Math.round(new_artisan_price * (10 / 90));
+          var anou_fee = Math.round(new_artisan_price * (20 / 80));
           var intl_price = new_artisan_price + data.shipping_cost + anou_fee;
 
           //add fees, etc to get anou store price
