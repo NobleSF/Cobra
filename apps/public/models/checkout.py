@@ -94,62 +94,6 @@ class Checkout(models.Model):
     except Exception as e:
       ExceptionHandler(e, "error on checkout.cleanupCarts")
 
-  def getWePayCheckoutData(self):#todo delete once finished with potential refunds
-    from apps.wepay.api import WePay
-    from settings.settings import WEPAY, PAYMENTS_PRODUCTION
-    if not self.cart.wepay_checkout_id: return {}
-    else:
-      try:
-        wepay = WePay(PAYMENTS_PRODUCTION, WEPAY['access_token'])
-        wepay_response = wepay.call('/checkout', {
-          'checkout_id': self.cart.wepay_checkout_id
-        })
-      except Exception as e:
-        return {'error': e}
-      else:
-        self.payment_id = self.cart.wepay_checkout_id
-        self.payment_data = wepay_response if wepay_response else self.payment_data
-        self.save()
-
-        #PAYMENT INFO
-        self.total_charge     = wepay_response.get('amount')
-        self.total_discount   = 0
-        self.total_paid       = wepay_response.get('amount') if wepay_response.get('state') in ['captured', 'refunded'] else 0
-        self.total_refunded   = wepay_response.get('amount_refunded')
-
-        #SHIPPING ADDRESS
-        if not wepay_response.get('shipping_address'):
-          wepay_response['shipping_address'] = {} #create the dict
-
-        if not (self.cart.address1 and self.cart.city and
-              self.cart.state and self.cart.postal_code):
-          #we do not have an address stored for this order
-          #pull address from WePay and save it as our own
-
-          #US or international address, all should match up except state, postal_code
-          if wepay_response.get('shipping_address'):
-            self.cart.address_name = wepay_response['shipping_address'].get('name')
-            self.cart.address1  = wepay_response['shipping_address'].get('address1')
-            self.cart.address2  = wepay_response['shipping_address'].get('address2')
-            self.cart.city      = wepay_response['shipping_address'].get('city')
-            if wepay_response['shipping_address'].get('country') == 'US':
-              self.cart.country = 'USA'
-            else:
-              self.cart.country = wepay_response['shipping_address'].get('country')
-
-            #check for non-US address first
-            if (wepay_response['shipping_address'].get('region') or
-                wepay_response['shipping_address'].get('post_code')):
-             # international address, all should match except region -> state, post_code -> postal_code
-             self.cart.state = wepay_response['shipping_address'].get('region')
-             self.cart.postal_code = wepay_response['shipping_address'].get('post_code')
-
-            else: #US address
-              self.cart.state = wepay_response['shipping_address'].get('state')
-              self.cart.postal_code = wepay_response['shipping_address'].get('zip')
-          self.cart.save() #save all our address changes
-        return wepay_response
-
 #SIGNALS AND SIGNAL REGISTRATION
 from django.dispatch import receiver
 from django.db.models.signals import post_save

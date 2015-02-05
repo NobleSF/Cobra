@@ -54,9 +54,9 @@
         $('#local-price-copy').val(intl_price.toFixed(2));
         $('#usd-price').val(usd_price.toFixed(2));
 
-        var wepay_fee = 0.3 + ((0.029/(1-0.029))*(usd_price + 0.3));
-        var anou_store_price = usd_price + wepay_fee;
-        $('#wepay-fee').val(wepay_fee.toFixed(2));
+        var stripe_fee = 0.3 + ((0.029/(1-0.029))*(usd_price + 0.3));
+        var anou_store_price = usd_price + stripe_fee;
+        $('#stripe-fee').val(stripe_fee.toFixed(2));
         $('#anou-price').val(anou_store_price.toFixed(2));
         $('#old-price').val(anou_store_price.toFixed(2));
 
@@ -143,8 +143,8 @@
           //add fees, etc to get anou store price
           var exchange_rate = parseFloat($('#exchange-rate').val());
           var usd_price = intl_price / exchange_rate;
-          var wepay_fee = 0.3 + ((0.029/(1-0.029))*(usd_price + 0.3));
-          var anou_store_price = usd_price + wepay_fee;
+          var stripe_fee = 0.3 + ((0.029/(1-0.029))*(usd_price + 0.3));
+          var anou_store_price = usd_price + stripe_fee;
 
           $('#new-price').val(anou_store_price.toFixed(2));
           $('#price-minus-10').val((anou_store_price * 0.9).toFixed(2));
@@ -267,7 +267,7 @@
       <li>Anou Store</li>
       <li class='input-prepend'>
         <i class='add-on black'>%</i>
-        <input id='wepay-fee' type='text' class='input-mini' disabled='true'>
+        <input id='stripe-fee' type='text' class='input-mini' disabled='true'>
       </li>
 
       <li class='input-prepend'>

@@ -55,8 +55,6 @@ def confirmation(request, checkout_id=None):
       del request.session['cart_id']
 
   elif checkout.cart.wepay_checkout_id:
-    wepay_data = checkout.getWePayCheckoutData() #return {} if no data available
-    checkout.payment_data = wepay_data if wepay_data else checkout.payment_data
 
     if (checkout.payment_data.get('gross') and
         checkout.payment_data.get('state') in ['authorized', 'reserved', 'captured', 'refunded']):
