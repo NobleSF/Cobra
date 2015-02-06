@@ -502,7 +502,7 @@ class Product(models.Model):
   def is_complete(self):
     if (self.assets.filter(ilk='product').count() #has product type
         and self.assets.filter(ilk='artisan').count() #has artisan
-        and self.photos.count() #has photo
+        and self.photos.exclude(is_progress=True).count() #has photo
         and self.shipping_options.count() #has shipping option
         and self.display_price #has price
         and self.weight #has weight

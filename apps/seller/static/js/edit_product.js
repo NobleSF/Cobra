@@ -169,7 +169,7 @@ function validateForm(){
     no_errors = false;
   }
   //photo
-  if($('#photos .photo').first().find('img').length === 0){
+  if($('#photos .photo').first().find('img').first().attr('src') === ""){
     $('#photos-section').addClass('attention');
     no_errors = false;
   }
