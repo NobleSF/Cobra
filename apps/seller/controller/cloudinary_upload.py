@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db import IntegrityError
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
-from apps.seller.models import Product
+from apps.seller.models import Product, Photo
 from apps.seller.models.upload import Upload
 from apps.seller.models.image import Image
 from settings.settings import CLOUDINARY
@@ -54,6 +54,7 @@ def checkImageUpload(request):#for our JS to check upload status and get thumb_u
       try:
         if upload.is_complete:
           image, created = Image.objects.get_or_create(original=upload.url)
+          thumb_url = image.thumb_size
 
           if 'seller' == request.GET.get('ilk'):
             seller = Seller.objects.get(id=request.session['seller_id'])
@@ -79,9 +80,16 @@ def checkImageUpload(request):#for our JS to check upload status and get thumb_u
           elif 'commission_id' in request.GET:#commission requirement or progress image
             from apps.public.models.commission import Commission
             commission = Commission.objects.get(id=request.GET['commission_id'])
-            commission.requirement_images.add(image)
+            if request.GET['image_or_photo'] == 'image':
+              commission.requirement_images.add(image)
+            elif request.GET['image_or_photo'] == 'photo':
+              photo = Photo(original = image.original)
+              photo.product = commission.product
+              photo.is_progress = True
+              photo.save()
+              thumb_url = photo.thumb_size
 
-          response = {'thumb_url': image.thumb_size}
+          response = {'thumb_url': thumb_url}
           return HttpResponse(json.dumps(response),
                               content_type='application/json',
                               status='200')

@@ -74,45 +74,54 @@
 </form>
 
 <!-- Requirement Photos and Upload -->
-<div class='form-horizontal'>
+<div id="requirement-images" class='form-horizontal'>
   <div class="control-group">
     <label class="control-label" for="base-product">Requirement Images</label>
     <div class="controls">
       <ul class="inline">
         {% for image in commission.requirement_images.all %}
           <li>
-            <a href="{{ image.original }}"><img src="{{ image.thumb_size }}"></a>
+            <a href="{{ image.original }}">
+              <img src="{{ image.thumb_size }}" width="300" height="225">
+            </a>
           </li>
         {% endfor %}
-        <li>
-          {% requirement_image commission %}
-        </li>
+        {% if not commission.in_progress %}
+          <li>
+            {% requirement_image commission %}
+          </li>
+        {% endif %}
       </ul>
     </div>
   </div>
 </div>
+
 
 <!-- Commission Details template tag -->
 {% commission_details commission %}
 
 <!-- Progress Photos and Upload-->
-<div class='form-horizontal'>
-
+<div id="progress-photos" class='form-horizontal'>
   <div class="control-group">
     <label class="control-label" for="progress-photos">Progress Photos</label>
     <div class="controls">
-      <ul id="progress-photos" class="unstyled">
+      <ul class="inline">
         {% for photo in commission.progress_photos.all %}
           <li>
-            <a href="{{ photo.original }}"><img src="{{ photo.thumb_size }}"></a>
+            <a href="{{ photo.original }}">
+              <img src="{{ photo.thumb_size }}" width="375" height="281">
+            </a>
           </li>
         {% endfor %}
-        <li>
-          {% progress_photo commission %}
-        </li>
+        {% if commission.in_progress %}
+          <li>
+            {% progress_photo commission %}
+          </li>
+        {% endif %}
       </ul>
     </div>
   </div>
 </div>
+
 
 {% endblock content %}
