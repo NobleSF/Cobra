@@ -64,7 +64,7 @@ def find_commission(request): #search for commission based on POST params
     return redirect('admin:commissions')
 
 @access_required('admin')
-@csrf_exempt #find a way to add csrf
+@csrf_exempt #todo: find a way to add csrf
 def imageFormData(request):
   import json
   from apps.seller.controller.cloudinary_upload import createSignature

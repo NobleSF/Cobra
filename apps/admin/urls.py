@@ -33,8 +33,8 @@ urlpatterns = patterns('',
   url(r'^commissions$', commissions.commissions, name='commissions'),
   url(r'^commission/create$', commissions.create, name='create commission'),
   url(r'^commission/(?P<commission_id>\d+)$', commissions.commission, name='commission'),
-  url(r'^commission/requirement_image$', commissions.imageFormData, name='commission image'),
-  url(r'^commission/progress_photo$', commissions.imageFormData, name='commission photo'),
+  url(r'^commission/requirement_image_form_data$', commissions.imageFormData, name='commission image'),
+  url(r'^commission/progress_photo_form_data$', commissions.imageFormData, name='commission photo'),
 
   #COMMUNICATION
   url(r'^send_sms$', communication.sendSMS, name='send sms'),

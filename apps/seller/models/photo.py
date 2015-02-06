@@ -5,8 +5,8 @@ from settings.settings import CLOUDINARY
 class Photo(models.Model): #exclusively product photos.
   from settings.settings import MEDIA_URL
   product         = models.ForeignKey(Product, related_name="photos")
-  rank            = models.SmallIntegerField()
-  is_progress     = models.BooleanField(default=False)#of incomplete product
+  rank            = models.SmallIntegerField(null=True)
+  is_progress     = models.BooleanField(default=False)#of incomplete product or commission
   original        = models.URLField(max_length=200)
   #update history
   created_at      = models.DateTimeField(auto_now_add = True)

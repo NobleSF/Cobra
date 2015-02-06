@@ -1,7 +1,4 @@
 $().ready( function(){
-  //run on page load
-  uploader = new fileUploadAction();
-  uploader.apply($('#requirement-images').find('.image-input'));
 
   $.get("/admin/countries", function(data){
     var selected_country = $('#country').val();
@@ -60,7 +57,7 @@ function fileUploadAction(){
     this_file_input.fileupload({
       //forceIframeTransport: true,
       dataType: 'json',
-      url: $('#requirement-image-upload-url').val(),
+      url: $('#upload-url').val(),
 
       submit: function(e, data){
         // call server to get signed form data
@@ -69,6 +66,7 @@ function fileUploadAction(){
 
         image_data = data.formData;
         image_data['commission_id'] = $(forms_div).find('.commission-id').val();
+        image_data['image_or_photo'] = $('#image-or-photo').val()
       },
 
       send: function (e, data) {
@@ -110,16 +108,15 @@ function fileUploadAction(){
         //response = response_data.result;
 
         if (!iframe_fallback){
-
           //confirm success on server, load thumbnail
           loadImage(image_data);
         }
+        //else loadImage was already called in 'send'
       },
 
       always: function (e, data) {
         //we're done here, hide the progress bar
         $('#progress-'+image_data.commission_id).hide();
-
         forms_div.show();
       }
     });//end fileupload
@@ -160,7 +157,6 @@ function loadImage(image_data){
       case 200: //image exists, load it and hide loading animations
         $('#image-'+image_data.commission_id).find('img').attr('src', data.thumb_url);
         $('#progress-'+image_data.commission_id).hide();
-
         $('#image-forms-'+image_data.commission_id).show();
         break;
 
