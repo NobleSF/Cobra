@@ -51,19 +51,19 @@
   {% for month, data in revenue_data %}
     <div class='group'>
       <div class="bar anou-fees"
-           style="height: {% sizescaler data.anou_fees 15000 200 20 %}px;"
+           style="height: {% sizescaler data.anou_fees 200000 500 20 %}px;"
       ></div>
       <span class='value'
-            style='top: -{% sizescaler data.anou_fees 15000 200 20 -10 %}px;'
+            style='top: -{% sizescaler data.anou_fees 200000 500 20 -10 %}px;'
       >{{ data.anou_fees }}</span>
 
       <div class='title'>{{ month }}</div>
 
       <span class='value'
-            style='top: {% sizescaler data.costs 15000 200 20 -10 %}px;'
+            style='top: {% sizescaler data.costs 200000 500 20 -10 %}px;'
       >{{ data.costs }}</span>
       <div class="bar costs"
-           style="height: {% sizescaler data.costs 15000 200 20 %}px;"
+           style="height: {% sizescaler data.costs 200000 500 20 %}px;"
       ></div>
 
     </div>
@@ -84,24 +84,24 @@
       </div>
 
       <div class="bar shipping-costs"
-           style="height: {% sizescaler data.shipping_costs 50000 500 20 %}px;"
+           style="height: {% sizescaler data.shipping_costs 200000 500 20 %}px;"
       ></div>
       <span class='value'
-            style='top: -{% sizescaler data.shipping_costs 50000 500 20 -10 %}px;'
+            style='top: -{% sizescaler data.shipping_costs 200000 500 20 -10 %}px;'
       >{{ data.shipping_costs }}</span>
 
       <div class="bar product-value"
-           style="height: {% sizescaler data.product_value 50000 500 20 %}px;"
+           style="height: {% sizescaler data.product_value 200000 500 20 %}px;"
       ></div>
       <span class='value'
-            style='top: -{% sizescaler data.product_value 50000 500 20 -10 %}px;'
+            style='top: -{% sizescaler data.product_value 200000 500 20 -10 %}px;'
       >{{ data.product_value }}</span>
 
       <div class="bar anou-fees"
-           style="height: {% sizescaler data.anou_fees 50000 500 20 %}px;"
+           style="height: {% sizescaler data.anou_fees 200000 500 20 %}px;"
       ></div>
       <span class='value'
-            style='top: -{% sizescaler data.anou_fees 50000 500 20 -10 %}px;'
+            style='top: -{% sizescaler data.anou_fees 200000 500 20 -10 %}px;'
       >{{ data.anou_fees }}</span>
 
       <div class='title'>{{ month }}</div>

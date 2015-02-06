@@ -40,28 +40,6 @@ if not LOCAL: #not PRODUCTION or STAGE or DEMO
   #todo: relieve us of the need for this
   TELERIVET['past_numbers'] = ['212637637566','2120623809088','5551212','0665555555']
 
-  #WEPAY PAYMENT AND CHECKOUT PROCESSING
-  if PAYMENTS_PRODUCTION:
-    WEPAY = {
-      'client_id':      '114473',
-      'client_secret':  '443ad32d57',
-      'access_token':   'PRODUCTION_ed41e33671a46b6a3a93e6c6c6d45265fcb62a8f04998d232391bcd3e39749f9',
-      'account_id':     '519238566',
-      'redirect_uri':   'http://www.theanou.com/checkout/confirmation'
-    }
-  else: #STAGE OR DEMO
-    WEPAY = {
-      'client_id':      '137470',
-      'client_secret':  '463bfe717b',
-      'access_token':   'STAGE_3c234c249310a336d4999b8604b73a27ac5ec6e7255ac9a7ef3d0b6c2629079e',
-      'account_id':     '854657449',
-    }
-  if STAGE:
-    WEPAY['redirect_uri'] = 'http://anou-cobra-stage.herokuapp.com/checkout/confirmation'
-  if DEMO:
-    WEPAY['redirect_uri'] = 'http://anou-cobra-demo.herokuapp.com/checkout/confirmation'
-
-
   # PAYMENT PROCESSING BY STRIPE
   STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY')
   STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')

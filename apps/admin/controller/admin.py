@@ -13,7 +13,7 @@ def home(request):
 
 def stats(request):
   today = datetime.now()
-  beginning_of_time = datetime(2013, 10, 1)#August 1st, 2013 - launch of this app
+  beginning_of_time = datetime(2014, 9, 1)#August 1st, 2013 - launch of this app
   firsts_of_months = [beginning_of_time,]
 
   #create list of datetimes, firsts of all months from beginning_of_time until now
@@ -103,10 +103,10 @@ def getCostsForMonth(date):
       6:  6074,
       7:  9047,
       8:  9832,
-      9:  0,
-      10: 0,
-      11: 0,
-      12: 0
+      9:  26041,
+      10: 62762,
+      11: 27221,
+      12: 18544,
     },
     2015: {
       1:  0,
