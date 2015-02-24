@@ -2,6 +2,8 @@ from django.conf.urls import patterns, url
 
 from apps.admin.controller import admin, account, products, orders, communication, site_management, research, commissions
 
+from apps.admin.controller.stats.shipping import stats as shipping_stats
+
 #DASHBOARD PAGES
 urlpatterns = patterns('',
   url(r'^$', admin.home, name='home'),
@@ -44,6 +46,7 @@ urlpatterns = patterns('',
   #EXTRAS
   url(r'^countries', admin.getCountries, name='countries'),
   url(r'^stats$', admin.stats, name='stats'),
+  url(r'^shipping_stats$', shipping_stats, name='shipping stats'),
   url(r'^research$', research.home, name='research'),
   url(r'^research_google$', research.googleImageSearch, name='google product'),
   url(r'^research_etsy$', research.etsySearch, name='etsy product'),
@@ -64,7 +67,7 @@ urlpatterns = patterns('',
 
 #ACCOUNT PAGES
 urlpatterns += patterns('',
-  #Todo: I'd like to add the word "secure" into all account and checkout pages
+  #Todo: I'd like to add the word "secure" into all account and checkout urls
     # just to give the user more peace of mind.
 
   url(r'^create_admin$', account.createAdmin, name='create admin'),

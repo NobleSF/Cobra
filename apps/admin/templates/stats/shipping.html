@@ -1,0 +1,59 @@
+{% extends "admin_base.html" %}
+
+{% load dashboard_tags %}
+
+{% block css %}
+{% endblock css %}
+
+{% block logo %}
+  <i class='symbol-chart black'></i>
+{% endblock logo %}
+
+{% block content %}
+
+  <table class="table table-striped table-bordered">
+
+    <thead>
+      <td>Month</td>
+      <td><b>Total</b></td>
+
+      <td>Amana International (AI)</td>
+      <td>Post Colis Prioritaire (CP and ED)</td>
+      <td>Envoi Recommande (RR)</td>
+      <td>Other (Unmarked)</td>
+
+      <td>USA</td>
+      <td>Canada</td>
+      <td>Australia</td>
+      <td>United Kingdom</td>
+
+    </thead>
+
+    {% for month in months %}
+      <tr>
+        <td>{{ month.name }}</td>
+        <td>{{ month.total|floatformat:0 }}</td>
+
+        <td>{{ month.AI|floatformat:0 }}</td>
+        <td>{{ month.CP|floatformat:0 }}</td>
+        <td>{{ month.RR|floatformat:0 }}</td>
+        <td>{{ month.other|floatformat:0 }}</td>
+
+        <td>{{ month.USA|floatformat:0 }}</td>
+        <td>{{ month.Canada|floatformat:0 }}</td>
+        <td>{{ month.Australia|floatformat:0 }}</td>
+        <td>{{ month.UnitedKingdom|floatformat:0 }}</td>
+
+      </tr>
+    {% endfor %}
+
+  </table>
+
+  <h3>All Countries Ever Shipped To</h3>
+  <ul class="unstyled">
+    {% for country in countries %}
+      <li>{{ country.checkout__cart__country }}</li>
+    {% endfor %}
+  </ul>
+
+{% endblock content %}
