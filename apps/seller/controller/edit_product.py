@@ -132,7 +132,8 @@ def edit(request, product_id=None):
       response['is_complete'] = product.is_complete
 
       #save product only at the very end
-      product.is_approved = False
+      if not product.is_sold:
+        product.is_approved = False
       product.save()
 
     except Exception as e:
@@ -140,7 +141,7 @@ def edit(request, product_id=None):
       response = {'exception': str(e)}
 
   else:
-    response['problem'] = "not GET or POST"
+    response = {'problem': "not GET or POST"}
 
   return HttpResponse(json.dumps(response), content_type='application/json')
   #return HttpResponse(response['exception'])
