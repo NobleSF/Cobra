@@ -38,7 +38,7 @@ if not LOCAL: #not PRODUCTION or STAGE or DEMO
     'webhook_secret':   os.environ.get('TELERIVET_WEBHOOK_SECRET'),
   }
   #todo: relieve us of the need for this
-  TELERIVET['past_numbers'] = ['212637637566','2120623809088','5551212','0665555555']
+  TELERIVET['past_numbers'] = ['212637637566','2120623809088','5551212','0665555555','212641534659']
 
   # PAYMENT PROCESSING BY STRIPE
   STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY')
