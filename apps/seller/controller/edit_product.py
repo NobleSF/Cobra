@@ -122,7 +122,7 @@ def edit(request, product_id=None):
         product.is_active = True
         response['activated'] = True
       elif product.is_active:
-        product.is_active = False
+        product.active_at = product.deactive_at = None
 
       cost_summary = {
         'summary_price': str(product.price) if product.price else "",

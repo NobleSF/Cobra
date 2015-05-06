@@ -56,7 +56,10 @@ class Product(models.Model):
   # MODEL PROPERTIES
   @property
   def is_active(self):
-    if self.active_at and not self.deactive_at: return True
+    if self.active_at and not self.deactive_at:
+      return True
+    elif self.active_at and self.deactive_at and self.active_at > self.deactive_at:
+      return True # was activated again after deactivated.
     else: return False
 
   @is_active.setter
