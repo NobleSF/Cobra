@@ -1,11 +1,10 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from apps.admin.controller import admin, account, products, orders, communication, site_management, research, commissions
-
 from apps.admin.controller.stats.shipping import stats as shipping_stats
 
 #DASHBOARD PAGES
-urlpatterns = patterns('',
+urlpatterns = [
   url(r'^$', admin.home, name='home'),
   url(r'^dashboard$', admin.home),
 
@@ -63,10 +62,9 @@ urlpatterns = patterns('',
   url(r'^management/rating_subject$', site_management.ratingSubject, name='rating subject'),
   url(r'^management/shipping_option$', site_management.shippingOption, name='shipping option'),
   url(r'^management/image_object$', site_management.imageObject, name='image object'),
-)
+
 
 #ACCOUNT PAGES
-urlpatterns += patterns('',
   #Todo: I'd like to add the word "secure" into all account and checkout urls
     # just to give the user more peace of mind.
 
@@ -80,12 +78,11 @@ urlpatterns += patterns('',
   url(r'^reset_password/(?P<account_id>\d+)?$', account.resetPassword, name='reset password'),
 
   url(r'^login_cheat$', account.loginCheat, name='login cheat'),
-)
 
 #MANUAL CACHE REBUILDs
-urlpatterns += patterns('',
+
   url(r'^re_homepg$', site_management.rebuildHomePage, name='rebuild homepage'),
   url(r'^re_productpg/(?P<product_id>\d+)$', site_management.rebuildProductPage, name='rebuild productpage'),
   url(r'^re_storepg/(?P<seller_id>\d+)$', site_management.rebuildStorePage, name='rebuild storepage'),
   url(r'^re_prod_ranks$', site_management.rebuildProductRankings, name='rebuild product rankings'),
-)
+]

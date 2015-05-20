@@ -10,7 +10,7 @@ class Asset(models.Model):
   name          = models.CharField(max_length=50, null=True, blank=True)
   description   = models.TextField(null=True, blank=True)
   image         = models.ForeignKey(Image, null=True, blank=True, on_delete=models.SET_NULL)
-  categories    = models.ManyToManyField(Category, null=True, blank=True)
+  categories    = models.ManyToManyField(Category)
   phone         = models.CharField(max_length=15, null=True, blank=True)
   #important     = models.BooleanField(default=False)
 

@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load cycle from future %}
 {% load cache %}
 
 {% cache 86400 public_product_header product.id product.is_approved product.is_sold %}

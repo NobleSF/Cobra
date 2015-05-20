@@ -33,6 +33,7 @@ def propose(request):
     customer.save()
 
     commission = Commission(base_product_id=request.POST['product_id'])
+    commission.save()
     commission.customer = customer
     commission.length = request.POST.get('length')
     commission.width = request.POST.get('width')

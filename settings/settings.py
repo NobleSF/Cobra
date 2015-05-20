@@ -37,7 +37,6 @@ else:
 
 PAYMENTS_PRODUCTION = PRODUCTION
 DEBUG = not (PRODUCTION or DEMO)
-TEMPLATE_DEBUG = LOCAL
 
 ADMINS = (('Developer', 'dev@theanou.com'),)
 MANAGERS = ADMINS

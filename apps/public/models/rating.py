@@ -1,4 +1,5 @@
 from django.db import models
+from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.seller.models.product import Product
 from apps.admin.models.rating_subject import RatingSubject
 

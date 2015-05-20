@@ -66,7 +66,7 @@ def approveProduct(request): #from AJAX GET request
       product.is_on_hold = True
       product.save()
     elif action == 'delete':
-      product.delete();
+      product.delete()
     else:
       raise Exception('invalid action: %s' % action)
 

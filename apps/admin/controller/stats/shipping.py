@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from django.db.models import Sum
 from django.shortcuts import render
+from django.utils import timezone
 from apps.public.models.order import Order
 
 
@@ -8,10 +9,11 @@ def stats(request):
   countries = sorted(Order.objects.values('checkout__cart__country').distinct())
   months = []
 
-  now_date = datetime.now()
   stats_end = datetime(2016, 1, 1)#datetime(now_date.year, now_date.month, 1)
+  stats_end = timezone.make_aware(stats_end, timezone.get_default_timezone())
 
-  month_start, month_end = next_month_start_end(datetime(2014,1,1))
+  jan_2014 = timezone.make_aware(datetime(2014,1,1), timezone.get_default_timezone())
+  month_start, month_end = next_month_start_end(jan_2014)
   while month_end < stats_end:
 
     month_orders = Order.objects.filter(shipped_at__gte=month_start).filter(shipped_at__lt=month_end)
