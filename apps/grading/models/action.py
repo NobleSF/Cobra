@@ -11,6 +11,13 @@ class Action(models.Model):
   voided_at       = models.DateTimeField(null=True)
 
   @property
+  def type(self):
+    return self.action_type.type
+  @type.setter
+  def type(self, value):
+    self.action_type = ActionType.objects.get(type = value)
+
+  @property
   def points(self):
     time_diff = timezone.now() - self.created_at
     time_since = time_diff.seconds + time_diff.days * 24 * 3600 # in seconds
@@ -40,6 +47,7 @@ def calculatePointsForAction(action, **kwargs):
     else:
       return int(points)
 
+  else: #has spread
     #scale the point value between max and min
     min_points = action.action_type.min_points
     point_spread = action.action_type.max_points - action.action_type.min_points
@@ -53,27 +61,37 @@ def calculatePointsForAction(action, **kwargs):
         spread_steps = [24, 48, 72, 96]
 
       try:
-        order, sms = kwargs.get('order'), kwargs.get('sms')
-        time_diff = order.created_at - sms.created_at
+        sms = kwargs.get('sms')
+        order = sms.order or kwargs.get('order')
+        time_diff = sms.created_at - order.created_at
         hours = (time_diff.seconds / 3600) + (time_diff.days * 24)
-        value = hours
+        valid_steps = [step_value for step_value in spread_steps if hours <= step_value]
+        if valid_steps:
+          step = spread_steps.index(min(valid_steps))
+        else:
+          step = len(spread_steps) #value is past last limit = gets worst possible points
 
       except Exception as e:
-        ExceptionHandler(e, "in action.calculatePointsForAction")
+        ExceptionHandler(e, "in action.calculatePointsForAction A")
 
     if action.action_type.type in [ActionType.PHOTOGRAPHY_RATING,
                                    ActionType.PRICE_RATING,
                                    ActionType.APPEAL_RATING]:
-      spread_steps = [1, 2, 3, 4, 5]
+      spread_steps = [5, 4, 3, 2] #1 is worst, because 1-5 rating is really 0-4
       try:
         rating = kwargs.get('rating')
-        value = rating.value
+        if rating.value in spread_steps:
+          step = spread_steps.index(rating.value)
+        else:
+          step = len(spread_steps)
+        # a shortcut that produces same result:
+        # step = rating.value - 1
+        # spread_steps = range(4)
       except Exception as e:
-        ExceptionHandler(e, "in action.calculatePointsForAction")
+        ExceptionHandler(e, "in action.calculatePointsForAction B")
 
-
-    spread_length = len(spread_steps)
-    step = spread_steps.index(min([s for s in spread_steps if s <= value]))
-    position_fraction = spread_length - step / float(spread_length)
-    points = action.action_type.min_points + (position_fraction * point_spread)
-    return int(points)
+    if spread_steps and step:
+      spread_length = len(spread_steps)
+      position_fraction = (spread_length - step) / float(spread_length)
+      points = action.action_type.min_points + (position_fraction * point_spread)
+      return int(points)
