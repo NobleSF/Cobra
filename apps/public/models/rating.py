@@ -4,8 +4,7 @@ from apps.seller.models.product import Product
 from apps.admin.models.rating_subject import RatingSubject
 
 class Rating(models.Model):
-  session_key         = models.CharField(max_length=32)
-  #todo: tie to account
+  session_key         = models.CharField(max_length=32) #todo: tie to account of rater
   product             = models.ForeignKey(Product)
   subject             = models.ForeignKey(RatingSubject)
   value               = models.SmallIntegerField()
