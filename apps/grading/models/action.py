@@ -35,8 +35,11 @@ def calculatePointsForAction(action, **kwargs):
 
   if not action.action_type.has_spread:
     points = action.action_type.max_points
-    return int(points) if not action.action_type.is_penalty else int(points) * -1
-  else:
+    if action.action_type.is_penalty and points > 0:
+      return int(points) * -1
+    else:
+      return int(points)
+
     #scale the point value between max and min
     min_points = action.action_type.min_points
     point_spread = action.action_type.max_points - action.action_type.min_points
