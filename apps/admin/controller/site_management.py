@@ -63,7 +63,7 @@ def cacheReset(request):
 @access_required('admin')
 def country(request):
   from apps.admin.models.country import Country
-  CountryFormSet = modelformset_factory(Country)
+  CountryFormSet = modelformset_factory(Country, exclude=[])
   context = {}
   if request.method == 'POST':
     formset = CountryFormSet(request.POST)
@@ -79,7 +79,7 @@ def country(request):
 @access_required('admin')
 def currency(request):
   from apps.admin.models.currency import Currency
-  CurrencyFormSet = modelformset_factory(Currency)
+  CurrencyFormSet = modelformset_factory(Currency, exclude=[])
   context = {}
   if request.method == 'POST':
     formset = CurrencyFormSet(request.POST)
@@ -95,7 +95,7 @@ def currency(request):
 @access_required('admin')
 def color(request):
   from apps.admin.models.color import Color
-  ColorFormSet = modelformset_factory(Color)
+  ColorFormSet = modelformset_factory(Color, exclude=[])
   context = {}
   if request.method == 'POST':
     formset = ColorFormSet(request.POST)
@@ -111,7 +111,7 @@ def color(request):
 @access_required('admin')
 def category(request):
   from apps.admin.models.category import Category
-  CategoryFormSet = modelformset_factory(Category)
+  CategoryFormSet = modelformset_factory(Category, exclude=[])
   context = {}
   if request.method == 'POST':
     formset = CategoryFormSet(request.POST)
@@ -127,7 +127,7 @@ def category(request):
 @access_required('admin')
 def ratingSubject(request):
   from apps.admin.models.rating_subject import RatingSubject
-  RatingSubjectFormSet = modelformset_factory(RatingSubject)
+  RatingSubjectFormSet = modelformset_factory(RatingSubject, exclude=[])
   context = {}
   if request.method == 'POST':
     formset = RatingSubjectFormSet(request.POST)
@@ -143,7 +143,7 @@ def ratingSubject(request):
 @access_required('admin')
 def shippingOption(request):
   from apps.seller.models.shipping_option import ShippingOption
-  ShippingOptionFormSet = modelformset_factory(ShippingOption)
+  ShippingOptionFormSet = modelformset_factory(ShippingOption, exclude=[])
   context = {}
   if request.method == 'POST':
     formset = ShippingOptionFormSet(request.POST)
@@ -159,7 +159,7 @@ def shippingOption(request):
 @access_required('admin')
 def imageObject(request):
   from apps.seller.models.image import Image
-  ImageFormSet = modelformset_factory(Image)
+  ImageFormSet = modelformset_factory(Image, exclude=[])
   context = {}
   if request.method == 'POST':
     formset = ImageFormSet(request.POST)
@@ -168,6 +168,6 @@ def imageObject(request):
       messages.success(request, 'Image Object saved.')
     except Exception as e:
       messages.error(request, e)
-  formset = ImageFormSet(queryset=Image.objects.all())
+  formset = ImageFormSet(queryset=Image.objects.order_by('id').reverse()[:5])
   context['formset'] = formset
   return render(request, 'site_management/formset.html', context)
