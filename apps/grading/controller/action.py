@@ -1,4 +1,4 @@
-from time import timezone
+from django.utils import timezone
 from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.grading.models import ActionType, Action
 
@@ -13,8 +13,15 @@ class ActionMaker(object):
 
       if action_type:
         self.action.type = action_type
-        self.action.seller = seller
-        self.action.product = product or None
+      if order:
+        self.order = order
+        product = self.order.product
+      if product:
+        self.action.product = self.product = product
+        seller = self.product.seller
+      if seller:
+        self.action.seller = self.seller = seller
+
       elif rating:
         self.action.rating = self.rating = rating
         self.action.product = self.product = rating.product

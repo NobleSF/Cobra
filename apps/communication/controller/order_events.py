@@ -2,6 +2,8 @@ from django.utils import timezone
 from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.communication.controller.email_class import Email
 from apps.communication.controller.sms import sendSMSForOrder
+from apps.grading.controller.action import ActionMaker
+from apps.grading.models import ActionType
 from settings.settings import DEBUG
 from settings.people import operations_team, support_team
 
@@ -51,18 +53,21 @@ def updateOrder((product_id, data), gimme_reply_sms=False):
       order.shipped_at = timezone.now()
       order.tracking_number = data.get('tracking_number')
       order.save()
+      ActionMaker(ActionType.SHIPPING_SMS, order=order)
       reply += communicateOrderShipped(order, gimme_reply_sms)
 
     elif order.is_seller_confirmed and not order.is_shipped: #if order already confirmed
       #confirm it is shipped
       order.shipped_at = timezone.now()
       order.save()
+      ActionMaker(ActionType.SHIPPING_SMS, order=order)
       reply += communicateOrderShipped(order, gimme_reply_sms)
 
     elif not order.is_seller_confirmed: #if the order is not yet confirmed
       #confirm the order
       order.seller_confirmed_at = timezone.now()
       order.save()
+      ActionMaker(ActionType.ORDER_SMS, order=order)
       reply += communicateOrderConfirmed(order, gimme_reply_sms)
 
     else: #if everything is already done
