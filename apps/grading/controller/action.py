@@ -11,8 +11,8 @@ class ActionMaker(object):
 
       self.action = Action()
 
-      if action_type:
-        self.action.type = action_type
+      if action_type != None:
+        self.action.type = self.action_type = action_type
       if order:
         self.order = order
         product = self.order.product
