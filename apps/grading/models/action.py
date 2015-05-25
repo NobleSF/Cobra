@@ -5,6 +5,7 @@ from apps.grading.models.action_type import ActionType
 
 class Action(models.Model):
   seller          = models.ForeignKey('seller.Seller', related_name='actions')
+  product         = models.ForeignKey('seller.Product', null=True, related_name='actions')
   action_type     = models.ForeignKey(ActionType)
   initial_points  = models.BigIntegerField()
   created_at      = models.DateTimeField(auto_now_add = True)
@@ -23,7 +24,7 @@ class Action(models.Model):
     time_since = time_diff.seconds + time_diff.days * 24 * 3600 # in seconds
     three_months = 90 * 24 * 3600 # in seconds
     if three_months > time_since:
-      return int(float(self.initial_points) * (three_months - time_since) / three_months)
+      return int(round(float(self.initial_points) * (three_months - time_since) / three_months))
     else:
       return 0
 
