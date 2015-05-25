@@ -2,6 +2,7 @@ from datetime import datetime
 import json
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.utils import timezone
 from apps.admin.models import Country
 from apps.admin.utils.decorator import access_required
 from apps.public.models.order import Order
@@ -12,8 +13,9 @@ def home(request):
   return render(request, 'admin_home.html', {})
 
 def stats(request):
-  today = datetime.now()
-  beginning_of_time = datetime(2014, 9, 1)#August 1st, 2013 - launch of this app
+  today = timezone.now()
+  #August 1st, 2013 - launch of this app
+  beginning_of_time = timezone.make_aware(datetime(2014, 9, 1), timezone.get_default_timezone())
   firsts_of_months = [beginning_of_time,]
 
   #create list of datetimes, firsts of all months from beginning_of_time until now
@@ -79,7 +81,7 @@ def getNextMonth(date):#not smart to handle end-of-month limits (eg Feb 30th)
     year = date.year if date.month < 12 else date.year + 1
     month = date.month+1 if date.month < 12 else 1
     day = date.day
-    return datetime(year, month, day)
+    return timezone.make_aware(datetime(year, month, day), timezone.get_default_timezone())
 
 def getCountries(request):
   country_data = [country.name for country in Country.objects.all()]

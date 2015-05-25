@@ -122,7 +122,7 @@ def edit(request, product_id=None):
         product.is_active = True
         response['activated'] = True
       elif product.is_active:
-        product.is_active = False
+        product.active_at = product.deactive_at = None
 
       cost_summary = {
         'summary_price': str(product.price) if product.price else "",
@@ -132,7 +132,8 @@ def edit(request, product_id=None):
       response['is_complete'] = product.is_complete
 
       #save product only at the very end
-      product.is_approved = False
+      if not product.is_sold:
+        product.is_approved = False
       product.save()
 
     except Exception as e:
@@ -140,7 +141,7 @@ def edit(request, product_id=None):
       response = {'exception': str(e)}
 
   else:
-    response['problem'] = "not GET or POST"
+    response = {'problem': "not GET or POST"}
 
   return HttpResponse(json.dumps(response), content_type='application/json')
   #return HttpResponse(response['exception'])

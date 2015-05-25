@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load cycle from future %}
 {% load cache %}
 
 {% cache 86400 public_product_header product.id product.is_approved product.is_sold %}
@@ -184,7 +183,7 @@
             <p>
               Prices usually vary within 10% of this estimate when<br>
               size and quantity are the only changes requested.<br>
-              This estimate includes shipping to North America or Europe.<br>
+              This estimate includes shipping to USA and Canada.<br>
               We ship everywhere. Provide your country for accurate quote:<br>
             </p>
           </div>
@@ -325,7 +324,7 @@
           </td>
           <td class='price-qualifier nowrap title-font'>
             Includes Shipping<br>
-            to USA, Europe<br>
+            to USA, Canada<br>
         </tr>
         <tr>
           <td colspan=2 class='morocco-price price-qualifier nowrap title-font' align='center'>

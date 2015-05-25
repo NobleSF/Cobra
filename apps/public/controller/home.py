@@ -36,12 +36,12 @@ def commonthreadAddToCart(request, rug_name):
   from settings.people import Tifawt, Dan, Tom
 
   rugs = {
-    'opportunity':  [1860,1888,1889,1890,1891,1892,],
-    'coexistence':  [1861,1882,1883,1884,1885,1886,],
-    'mother':       [1862,1893,1894,1895,1896,1897,],
-    'motherland':   [1863,1867,1868,1869,1870,1871,],
-    'sacred':       [1864,1877,1878,1879,1880,1881,],
-    'identity':     [1865,1872,1873,1874,1875,1876,],
+    'opportunity':  [1860,],
+    'coexistence':  [1861,],
+    'mother':       [1862,],
+    'motherland':   [1863,],
+    'sacred':       [1864,],
+    'identity':     [1865,],
   }
 
   try:

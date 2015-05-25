@@ -1,7 +1,8 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import url
+
 from controller import home, checkout, product, store, custom_order, cart, manual_checkout
 
-urlpatterns = patterns('',
+urlpatterns = [
 
   #homepage url defined in anou/urls.py
   url(r'^load_products$', home.loadProducts, name='load products'),
@@ -52,4 +53,4 @@ urlpatterns = patterns('',
   #testing
   url(r'^product_data', product.product_data, name='product_data'),
   url(r'^test_meta$', home.test_meta, name='test meta'),
-)
+]

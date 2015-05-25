@@ -69,13 +69,14 @@ def orders(request, year=None, week=None, show_orders=[]):
     context = {'orders': show_orders}
 
   else:
-    now = datetime.now()
+    now = timezone.now()
     try:
       year, week = int(year), int(week)
     except Exception as e:
       year, week = now.year, int(now.strftime('%W'))
 
     this_week = datetime.strptime("%d%d1" % (year, week), "%Y%W%w") #monday
+    this_week = timezone.make_aware(this_week, timezone.get_default_timezone())
     last_week = this_week - timedelta(days=7)
     next_week = this_week + timedelta(days=7)
 

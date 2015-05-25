@@ -1,7 +1,8 @@
-from django.conf.urls import patterns, include, url
-from controller import sms, public_events, order_events, testing
+from django.conf.urls import url
 
-urlpatterns = patterns('',
+from controller import sms, public_events, testing
+
+urlpatterns = [
   #email
   #url(r'^email/test$', public_events.test_email),
 
@@ -15,4 +16,4 @@ urlpatterns = patterns('',
 
   #testing
   url(r'^order_emails$', testing.orders, name='order emails'),
-)
+]

@@ -89,7 +89,7 @@ class Cart(models.Model):
 
   def addItem(self, product, quantity=1):
     from apps.public.models import Item
-    item, is_new = Item.objects.get_or_create(cart=self, product=product)
+    item, created = Item.objects.get_or_create(cart=self, product=product)
     #item.quantity = quantity if quantity else 1
     item.save()
 

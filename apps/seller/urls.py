@@ -1,7 +1,8 @@
-from django.conf.urls import patterns, include, url
-from controller import seller, account, inventory, cloudinary_upload, custom_order, edit_product
+from django.conf.urls import url
 
-urlpatterns = patterns('',
+from controller import seller, account, inventory, cloudinary_upload, edit_product
+
+urlpatterns = [
   url(r'^$', seller.home, name='home'), #seller dashboard, live products
 
   #SELLER ACCOUNT
@@ -27,4 +28,4 @@ urlpatterns = patterns('',
   url(r'^ajax/complete_up$', cloudinary_upload.completeUpload, name='complete upload'),
 
   # CUSTOM ORDERS
-)
+]

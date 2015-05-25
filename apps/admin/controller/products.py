@@ -4,6 +4,8 @@ from django.shortcuts import render
 from django.utils import timezone
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
+from apps.grading.controller.action import ActionMaker
+from apps.grading.models import ActionType
 from apps.seller.models.product import Product
 from apps.seller.models.shipping_option import ShippingOption
 
@@ -66,7 +68,7 @@ def approveProduct(request): #from AJAX GET request
       product.is_on_hold = True
       product.save()
     elif action == 'delete':
-      product.delete();
+      product.delete()
     else:
       raise Exception('invalid action: %s' % action)
 
@@ -93,10 +95,9 @@ def rateProduct(request): #from AJAX GET request
               session_key=request.session.session_key,
               subject=rating_subject_object,
               product_id=product_id
-            )
+            ).first()
     if rating:
-      rating[0].value = rating_value
-      rating[0].save()
+      rating.value = rating_value
     else:
       rating = Rating(
                   session_key=request.session.session_key,
@@ -104,7 +105,8 @@ def rateProduct(request): #from AJAX GET request
                   product_id=product_id,
                   value = rating_value
                 )
-      rating.save()
+    rating.save()
+    ActionMaker(rating=rating)
 
   except Exception as e:
     ExceptionHandler(e, "error on rate_product")

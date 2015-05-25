@@ -171,7 +171,7 @@ def approveSeller(request): #from AJAX GET request
       seller.save()
       #todo: refresh homepage cache
     elif action == 'delete':
-      seller.delete();
+      seller.delete()
     else:
       raise Exception('invalid action: %s' % action)
   except Exception as e:

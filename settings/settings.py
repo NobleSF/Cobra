@@ -37,7 +37,6 @@ else:
 
 PAYMENTS_PRODUCTION = PRODUCTION
 DEBUG = not (PRODUCTION or DEMO)
-TEMPLATE_DEBUG = LOCAL
 
 ADMINS = (('Developer', 'dev@theanou.com'),)
 MANAGERS = ADMINS
@@ -111,7 +110,9 @@ INSTALLED_APPS = (
   'apps.seller',
   'apps.admin',
   'apps.communication',
+  'apps.grading',
   #'apps.api',
+
   'storages',
   #'django.contrib.admin',
   #'django.contrib.auth',

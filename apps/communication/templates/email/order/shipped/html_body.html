@@ -34,7 +34,7 @@
   <a href="http://www.theanou.com{{ data.product.seller.get_absolute_url }}">
     {{ data.product.seller.name }}
   </a>.
-  Your item should arrive in about two weeks. Sometimes in rare cases items from rural areas can take up to 4 weeks to arrive.<br>
+  Your item should arrive within 3-5 weeks.<br>
   <br>
   {% if data.tracking_number %}
     Your tracking number is
@@ -42,7 +42,10 @@
       {{ data.tracking_number }}
     </a>
     <br>
-    It is probably not active at the moment you are receiving this email, but it will show up in the USPS system once it passes through Casablanca.<br>
+    It is probably not active at the moment you are receiving this email, but it will show up in the USPS system once it passes through Casablanca.
+    If you are not located in the US, please try your local post service website or
+    <a href="http://globaltracktrace.ptc.post/gtt.web/" target="_blank">GlobalTrack&Trace</a>
+    to track your shipment.<br>
     <br>
   {% endif %}
 

@@ -62,7 +62,7 @@ def checkImageUpload(request):#for our JS to check upload status and get thumb_u
             seller.save()
 
           elif 'ilk' in request.GET: #asset
-            asset, is_new = Asset.objects.get_or_create(
+            asset, created = Asset.objects.get_or_create(
                               seller_id = request.session['seller_id'],
                               ilk = request.GET['ilk'],
                               rank = request.GET['rank']
