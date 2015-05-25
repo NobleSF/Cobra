@@ -3,7 +3,7 @@ from django.db import models
 
 class ActionType(models.Model):
   # ACTION TYPES, ONLY ONE OF EACH TYPE ALLOWED
-  ( ADD_PRODUCT, EDIT_PRODUCT,
+  [ ADD_PRODUCT, EDIT_PRODUCT,
     SUSPENDED_PRODUCT,
     ORDER_SMS, SHIPPING_SMS,
     PHOTOGRAPHY_RATING, PRICE_RATING, APPEAL_RATING,
@@ -11,7 +11,7 @@ class ActionType(models.Model):
     PROBLEM_CALL,
     INSTAGRAM_PHOTO,
     #only add new types to end of list
-  ) = range(12)
+  ] = range(1, 13)
 
   TYPE_OPTIONS = ( # use name of icon in icon-font
     (ADD_PRODUCT,         'product-add'),

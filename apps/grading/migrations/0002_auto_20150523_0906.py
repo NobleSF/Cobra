@@ -10,26 +10,24 @@ from django.db import models, migrations
   PROBLEM_CALL,
   INSTAGRAM_PHOTO,
   #only add new types to end of list
-) = range(12)
+) = range(1, 13)
 
 def create_action_types(apps, schema_editor):
   ActionType = apps.get_model("grading", "ActionType")
 
   # ADD_PRODUCT
   action_type = ActionType(type=ADD_PRODUCT)
-  action_type.has_spread = True
-  action_type.max_points = 30
-  action_type.min_points = 0
-  action_type.count_limit = 5
+  action_type.has_spread = False
+  action_type.max_points = 5
+  action_type.count_limit = 6
   action_type.is_penalty = False
   action_type.save()
 
   # EDIT_PRODUCT
   action_type = ActionType(type=EDIT_PRODUCT)
-  action_type.has_spread = True
-  action_type.max_points = 30
-  action_type.min_points = 0
-  action_type.count_limit = 5
+  action_type.has_spread = False
+  action_type.max_points = 5
+  action_type.count_limit = 6
   action_type.is_penalty = False
   action_type.save()
 
