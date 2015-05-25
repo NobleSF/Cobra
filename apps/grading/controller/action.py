@@ -1,33 +1,38 @@
+from time import timezone
+from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.grading.models import ActionType, Action
 
 
 class ActionMaker(object):
-  def __init__(self, seller):
-    self.action = Action()
-    self.action.seller = seller
+  def __init__(self, action_type=None, seller=None, product=None, order=None, rating=None):
+    try:
+      self.order = order or None
+      self.rating = rating or None
 
-  def saveActionForCreatedProduct(self, product):
-    self.action.type = ActionType.ADD_PRODUCT
-    self.action.initial_points = self.calculatePointsForAction()
-    self.action.save()
+      self.action = Action()
 
-  def saveActionForEditedProduct(self, product):
-    self.action.type = ActionType.EDIT_PRODUCT
-    self.action.initial_points = self.calculatePointsForAction()
-    self.action.save()
+      if action_type:
+        self.action.type = action_type
+        self.action.seller = seller
+        self.action.product = product or None
+      elif rating:
+        self.action.rating = self.rating = rating
+        self.action.product = self.product = rating.product
+        self.action.seller = self.seller = rating.product.seller
+        if rating.subject.name == 'Photography':
+          self.action.type = ActionType.PHOTOGRAPHY_RATING
+        elif rating.subject.name == 'Price':
+          self.action.type = ActionType.PRICE_RATING
+        elif rating.subject.name == 'Appeal':
+          self.action.type = ActionType.APPEAL_RATING
 
-  def saveActionForOrderSMS(self, sms):
-    self.action.type = ActionType.ORDER_SMS
-    self.action.initial_points = self.calculatePointsForAction(sms=sms, order=sms.order)
-    self.action.save()
+      self.action.initial_points = self.calculatePointsForAction()
+      self.action.save()
+    except Exception as e:
+      ExceptionHandler(e, "in ActionMaker.__init__")
 
-  def saveActionForShippingSMS(self, sms):
-    self.action.type = ActionType.SHIPPING_SMS
-    self.action.initial_points = self.calculatePointsForAction(sms=sms, order=sms.order)
-    self.action.save()
 
-  def calculatePointsForAction(self, **kwargs):
-
+  def calculatePointsForAction(self):
     if not self.action.action_type.has_spread:
       points = self.action.action_type.max_points
       if self.action.action_type.is_penalty and points > 0:
@@ -42,15 +47,14 @@ class ActionMaker(object):
 
       if self.action.action_type.type in [ActionType.ORDER_SMS,
                                      ActionType.SHIPPING_SMS]:
-        #time between an order placed and the sms
+        #time between an order placed and the sms (just now)
         if self.action.action_type.type == ActionType.ORDER_SMS:
           spread_steps = [1, 12, 24, 36, 48]
         elif self.action.action_type.type == ActionType.SHIPPING_SMS:
           spread_steps = [24, 48, 72, 96]
 
         try:
-          sms, order = kwargs.get('sms'), kwargs.get('order')
-          time_diff = sms.created_at - order.created_at
+          time_diff = timezone.now() - self.order.created_at
           hours = (time_diff.seconds / 3600) + (time_diff.days * 24)
           valid_steps = [step_value for step_value in spread_steps if hours <= step_value]
           if valid_steps:
@@ -61,14 +65,15 @@ class ActionMaker(object):
         except Exception as e:
           ExceptionHandler(e, "in ActionMaker.calculatePointsForAction A")
 
-      if self.action.action_type.type in [ActionType.PHOTOGRAPHY_RATING,
-                                     ActionType.PRICE_RATING,
-                                     ActionType.APPEAL_RATING]:
+      if self.rating and self.action.action_type.type in [
+                            ActionType.PHOTOGRAPHY_RATING,
+                            ActionType.PRICE_RATING,
+                            ActionType.APPEAL_RATING]:
         spread_steps = [5, 4, 3, 2] #1 is worst, because 1-5 rating is really 0-4
         try:
-          rating = kwargs.get('rating')
-          if rating.value in spread_steps:
-            step = spread_steps.index(rating.value)
+
+          if self.rating.value in spread_steps:
+            step = spread_steps.index(self.rating.value)
           else:
             step = len(spread_steps)
           # a shortcut that produces same result:
