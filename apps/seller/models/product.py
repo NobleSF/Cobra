@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import timezone
 
 from apps.admin.models.color import Color
+from apps.grading.controller.action import ActionMaker
+from apps.grading.models import ActionType
 from apps.seller.models.asset import Asset
 from apps.seller.models.seller import Seller
 from apps.seller.models.shipping_option import ShippingOption
@@ -73,6 +75,7 @@ class Product(models.Model):
     elif value: #activate
       self.active_at = timezone.now()
       self.deactive_at = None
+      ActionMaker(action_type=ActionType.ADD_PRODUCT, product=self)
       Email('product/activated', self).sendTo([person.email for person in operations_team])
 
     elif not value: #deactivate

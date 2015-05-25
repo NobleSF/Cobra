@@ -110,7 +110,9 @@ INSTALLED_APPS = (
   'apps.seller',
   'apps.admin',
   'apps.communication',
+  'apps.grading',
   #'apps.api',
+
   'storages',
   #'django.contrib.admin',
   #'django.contrib.auth',
