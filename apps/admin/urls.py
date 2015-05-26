@@ -1,6 +1,7 @@
 from django.conf.urls import url
 
-from apps.admin.controller import admin, account, products, orders, communication, site_management, research, commissions
+from apps.admin.controller import admin, account, products, orders, communication, site_management, research
+from apps.commission.controller import commission
 from apps.admin.controller.stats.shipping import stats as shipping_stats
 
 #DASHBOARD PAGES
@@ -28,14 +29,6 @@ urlpatterns = [
   url(r'^order/(?P<order_id>\d+)$', orders.order, name='order'),
   url(r'^ajax/update_order$', orders.updateOrder, name='update order'),
   url(r'^ajax/order_image_data$', orders.imageFormData, name='image form data'),
-
-  #COMMISSIONS
-  url(r'^find_commission/$', commissions.find_commission, name='find commission'),
-  url(r'^commissions$', commissions.commissions, name='commissions'),
-  url(r'^commission/create$', commissions.create, name='create commission'),
-  url(r'^commission/(?P<commission_id>\d+)$', commissions.commission, name='commission'),
-  url(r'^commission/requirement_image_form_data$', commissions.imageFormData, name='commission image'),
-  url(r'^commission/progress_photo_form_data$', commissions.imageFormData, name='commission photo'),
 
   #COMMUNICATION
   url(r'^send_sms$', communication.sendSMS, name='send sms'),

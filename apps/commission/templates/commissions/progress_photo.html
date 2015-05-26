@@ -1,10 +1,10 @@
-<div id='requirement-image-upload'
-     class='requirement-image {% if not image %}empty{% endif %} upload-div'
-     data-image_id='{{ image.id }}'
+<div id='requirement-photo-upload'
+     class='requirement-photo {% if not photo %}empty{% endif %} upload-div'
+     data-photo_id='{{ photo.id }}'
      data-commission_id="{{ commission.id }}">
 
-  <div id='image-{{ commission.id }}' class='image'>
-    <img src="{{ image.thumb_size|default_if_none:'' }}"
+  <div id='image-{{ commission.id }}' class='photo'>
+    <img src="{{ photo.thumb_size|default_if_none:'' }}"
          width="300" height="225" />
   </div>
 
@@ -14,32 +14,32 @@
     <div id='progress-bar-{{ commission.id }}' class="bar" style="width: 0%;"></div>
   </div>
 
-  <div id='image-forms-{{ commission.id }}' class='upload-forms'>
+  <div id='photo-forms-{{ commission.id }}' class='upload-forms'>
 
     <input type="hidden" id="image-or-photo" name="image_or_photo"
-           value="image">
+           value="photo">
 
-    <input type="hidden" name="commission-image-url"
-           id="requirement-image-upload-url"
-           value="{% url "admin:commission image" %}">
+    <input type="hidden" name="progress-photo-url"
+           id="requirement-photo-upload-url"
+           value="{% url "commission:commission photo" %}">
 
     <form id='data-form-{{ commission.id }}' class='data-form'
-          method='post' action='{% url "admin:commission image" %}'>
+          method='post' action='{% url "commission:commission photo" %}'>
 
       <input type='hidden' name='commission_id' class='commission-id'
              id='commission-id'
              value='{{ commission.id }}'>
 
-      <input type='hidden' name='image_id' class='image-id'
-             id='image-{{ image.id }}-id'
-             value='{{ image.id }}'>
+      <input type='hidden' name='photo_id' class='photo-id'
+             id='photo-{{ photo.id }}-id'
+             value='{{ photo.id }}'>
     </form>
 
     <form id='upload-form-{{ commission.id }}' class='upload-form' onsubmit='return false;'>
       <span class='file-wrapper'>
 
-        <input type='file' name='file' class='image-input'
-               id='image-input-{{ commission.id }}'
+        <input type='file' name='file' class='photo-input'
+               id='photo-input-{{ commission.id }}'
                accept='*'
                capture='camera'>
 

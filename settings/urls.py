@@ -14,6 +14,7 @@ urlpatterns = [
   url(r'^', include('apps.public.urls')),
   url(r'^admin/', include('apps.admin.urls', namespace='admin')),
   url(r'^seller/', include('apps.seller.urls', namespace='seller')),
+  url(r'^commission/', include('apps.commission.urls', namespace='commission')),
   url(r'^communication/', include('apps.communication.urls', namespace='communication')),
 
 

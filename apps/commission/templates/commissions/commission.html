@@ -19,13 +19,13 @@
 
 {% block logo %}
   <ul class="inline">
-    <li><a href="{% url 'admin:commissions' %}"><i>C</i></a></li>
+    <li><a href="{% url 'commission:commissions' %}"><i>C</i></a></li>
     <li><i>{{ commission.public_id }}</i></li>
     {% if commission.base_product %}
       <li>{{ commission.base_product.seller.name }}</li>
     {% else %}
       <li>
-        <form method="post" action="{% url 'admin:commission' commission.id %}">
+        <form method="post" action="{% url 'commission:commission' commission.id %}">
           <input type="tel" class="input-mini"
                  name="base_product_id"
                  width="6">
@@ -57,7 +57,7 @@
 {#<input type='hidden' id='update-commission-url' value='{% url 'admin:update commission' %}'>#}
 
 <!-- for JS to autosave commission details -->
-<input type="hidden" id="autosave-url" value="{% url 'admin:commission' commission.id %}">
+<input type="hidden" id="autosave-url" value="{% url 'commission:commission' commission.id %}">
 
 <!-- Base Product Photo -->
 <form class='form-horizontal'>
