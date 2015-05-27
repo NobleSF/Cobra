@@ -1,6 +1,7 @@
 from datetime import timedelta
 from django.db import models
 from django.utils import timezone
+from apps.communication.controller.sms import sendSMS
 
 from apps.public.models.customer import Customer
 from apps.seller.models.image import Image
@@ -262,6 +263,22 @@ class Commission(models.Model):
       self.customer.save()
     elif var == 'invoice-price':
       self.estimated_display_price = int(val)
+
+
+  def askArtisan(self):
+    """C%d\r\n%d\r\n%"""
+
+    message = "C%d\r\n#%d\r\n" % (self.id, self.base_product.id)
+    message += "%d" % self.length
+    if self.width:
+      message += " x %d" % self.width
+    message += "\r\n"
+    if self.quantity > 1:
+      message += "*%d\r\n" % int(self.quantity or 0)
+    message += "%d\r\n" % int(self.estimated_artisan_price or 0)
+    print message
+    sendSMS(message, self.seller.account.phone)
+
 
 #SIGNALS AND SIGNAL REGISTRATION
 from django.dispatch import receiver

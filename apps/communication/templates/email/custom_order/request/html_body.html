@@ -5,6 +5,12 @@
   </a>
 </h3>
 
+{% if data.commission_id %}
+  <p>
+    Commission ID: C{{ data.commission_id }}
+  </p>
+{% endif %}
+
 <p>
   Size Imperial Units:<br>
   {{ data.size_imperial }}

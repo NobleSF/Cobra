@@ -2,8 +2,10 @@ import json
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from apps.admin.utils.exception_handling import ExceptionHandler
+from apps.commission.models import Commission
 from apps.seller.models.product import Product
 from settings.people import support_team
+import re
 from apps.communication.controller.email_class import Email
 
 def estimate(request):
@@ -54,11 +56,12 @@ def estimate(request):
 
 
 @csrf_exempt
-def request(request):
+def request(request): #todo: change function name
   if request.method == 'POST' and request.POST.get('email'):
     try:
+      product = Product.objects.get(id=request.POST['product_id'])
       data = {
-        'product':        Product.objects.get(id=request.POST['product_id']),
+        'product':        product,
         'country':        request.POST['country'],
         'email':          request.POST['email'],
         'size_imperial':  request.POST.get('size_imperial', ""),
@@ -68,12 +71,37 @@ def request(request):
         'estimate':       request.POST.get('estimate', ""),
       }
 
+      try:
+        commission = Commission.objects.create()
+        commission.base_product = product
+        commission.estimated_artisan_price = request.POST.get('estimate', None).strip('$ ')
+
+        # size_string = request.POST.get('size_metric', "")
+        # pattern = re.compile('\D*(\d{1,6})\D*(\d{1,6})\D*')
+        # dimensions = commission.length = pattern.match(size_string).groups()
+        # commission.length = dimensions[0]
+        # if len(dimensions) > 1:
+        #   commission.width = dimensions[1]
+
+        commission.length = int(float(request.POST.get('length', 0))) or None
+        commission.width = int(float(request.POST.get('width', 0))) or None
+        commission.quantity = request.POST.get('quantity', 1) or 1
+        commission.save()
+        print "commission saved. go sms artisan..."
+        commission.askArtisan()
+
+      except Exception as e:
+        ExceptionHandler(e, "in custom_order.request Commission")
+      else:
+        data['commission_id'] = commission.id
+
       recipient_email_list = [data['email'],] + [person.email for person in support_team]
       Email('custom_order/request', data).sendTo(recipient_email_list)
+
       return HttpResponse(status=200)
 
     except Exception as e:
-      ExceptionHandler(e, "error in custom_order.createCustomOrder")
+      ExceptionHandler(e, "error in custom_order.request")
       return HttpResponse(status=500)
 
   else:

@@ -4,7 +4,8 @@ from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from apps.admin.utils.exception_handling import ExceptionHandler
-from apps.public.models import Commission, Customer
+from apps.commission.models import Commission
+from apps.public.models import Customer
 from apps.seller.models.product import Product
 from settings.people import support_team
 from apps.communication.controller.email_class import Email
