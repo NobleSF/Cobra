@@ -1,15 +1,18 @@
 import json
+
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.utils import timezone, dateformat
 from django.views.decorators.csrf import csrf_exempt
 from django.db import IntegrityError
+
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.seller.models import Product, Photo
 from apps.seller.models.upload import Upload
 from apps.seller.models.image import Image
 from settings.settings import CLOUDINARY
+
 
 @csrf_exempt
 def completeUpload(request):#for cloudinary to post info on completed uploads
@@ -78,7 +81,7 @@ def checkImageUpload(request):#for our JS to check upload status and get thumb_u
             order.save()
 
           elif 'commission_id' in request.GET:#commission requirement or progress image
-            from apps.public.models.commission import Commission
+            from apps.commission.models.commission import Commission
             commission = Commission.objects.get(id=request.GET['commission_id'])
             if request.GET['image_or_photo'] == 'image':
               commission.requirement_images.add(image)

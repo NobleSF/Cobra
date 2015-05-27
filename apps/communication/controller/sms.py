@@ -4,6 +4,7 @@ import requests
 from requests.auth import HTTPBasicAuth
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from apps.seller.models import Asset
 from settings.settings import TELERIVET, STAGE, DEBUG, DEMO
 from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.seller.models.product import Product
@@ -112,24 +113,38 @@ def incoming(request):
       sms = saveSMS(sms_data)
 
       #who is it from?
-      sender = getPhoneOwner(request.POST.get('from_number'))
       #sender is a dict of a Seller and/or/neither Artisan(asset) as {'type':object}
+      sender = getPhoneOwner(request.POST.get('from_number'))
+      sender_text = ""
+      try:
+        for someone in sender:
+          sender_text = "<br>Sent by Anou %s %s." % (someone, sender[someone].name)
+      except: pass
 
       #what does it say?
       msg_data = understandMessage(request.POST.get('content'))
-      #msg_data is tuple of ( product_id, data{} ) or
+      #msg_data is tuple of ( product_id, data={} ) or
       #just False if not understandable
 
       if not msg_data: #message not understood
         message = "System did not understand incoming SMS"
         message += " from %s:<br>" % request.POST.get('from_number')
         message += "%s<br>" % request.POST.get('content')
-        try:
-          for someone in sender:
-            message += "<br>Sent by Anou %s %s." % (someone, sender[someone].name)
-        except: pass
+        message += sender_text
         Email(message=message).sendTo([person.email for person in support_team])
         return HttpResponse(status=200)#OK
+
+      elif msg_data == 'commission':
+        message = "Reply to Commission:<br>"
+        message += "%s<br><br>" % request.POST.get('content')
+        message += sender_text
+        Email(message=message).sendTo([person.email for person in support_team])
+        reply_msg = 'shukran'
+        sms.auto_reply = reply_msg
+        sms.save()
+        #send reply back with response
+        response = {'messages':[{'content':reply_msg}]}
+        return HttpResponse(json.dumps(response), content_type='application/json')
 
       else: #it was understandable
         (product_id, data) = msg_data
@@ -201,7 +216,7 @@ def getPhoneOwner(phone_number):
   sender = {}
   try: sender['Seller'] = Seller.objects.get(account__phone__endswith=phone_number)
   except: pass
-  try: sender['Artisan'] = Assets.objects.filter(phone__endswith=phone_number)[0]
+  try: sender['Artisan'] = Asset.objects.filter(phone__endswith=phone_number)[0]
   except: pass
   return sender
 
@@ -209,22 +224,31 @@ def understandMessage(message): #example message '123 CP123456789MA'
   #take a message and comprehend the desired action on a product id (or return False)
 
   try: #find the product id
-    #remove leading and trailing whitespace and upper-case all letters
+    #remove leading and trailing and extra whitespace and make upper-case
+    message = re.sub(r'\W+', ' ', message) #remove extra whitespace chars
     message = message.strip().upper()
 
-    # regex pattern ^\D{0,2}(\d{1,4})(?![\d])
-    #up to 2 non-digits from start of string,
-    #then product ID 1-4 digits length (captured)
-    #followed by anything but another digit
+    #commission? starts with "C"
+    # commission_pattern = re.compile('^C\s?{\d+}\s+#?\s?{\d+}\s{\d+}$')
+    commission_pattern = re.compile('^C.*')
+    if commission_pattern.match(message):
+      return 'commission'
 
-    pattern = re.compile('^\D{0,2}(\d{1,4})(?![\d])')
-    matches = pattern.match(message)
-    product_id = matches.group(1) #captured product_id
-    product = Product.objects.get(id=product_id)
+
+    else:
+      # regex pattern ^\D{0,2}(\d{1,4})(?![\d])
+      #up to 2 non-digits from start of string,
+      #then product ID 1-4 digits length (captured)
+      #followed by anything but another digit
+
+      pattern = re.compile('^\D{0,2}(\d{1,4})(?![\d])')
+      matches = pattern.match(message)
+      product_id = matches.group(1) #captured product_id
+      product = Product.objects.get(id=product_id)
   except:
     product = None
 
-  stripped_message = re.sub(r'\W', '', message) #strip out all whitespace
+  stripped_message = re.sub(r'\W', '', message) #strip out whitespace
 
   if product and stripped_message == str(product.id): #only product id
     return (product.id, {})

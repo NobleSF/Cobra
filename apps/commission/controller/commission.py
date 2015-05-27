@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from apps.admin.utils.exception_handling import ExceptionHandler
 from settings.settings import CLOUDINARY
 from apps.admin.utils.decorator import access_required
-from apps.public.models import Commission
+from apps.commission.models.commission import Commission
 
 @access_required('admin')
 def commissions(request):
@@ -27,7 +27,7 @@ def commission(request, commission_id):
       if request.POST.get('base_product_id'):
         commission.base_product_id = int(request.POST['base_product_id'])
         commission.save()
-        return redirect('admin:commission', commission.id)
+        return redirect('commission:commission', commission.id)
       elif element == value == "cancel":
         commission.canceled = True
       else:
@@ -43,7 +43,7 @@ def commission(request, commission_id):
     commission = Commission.objects.get(id=commission_id)
     if (commission.base_product or commission.product):
       if not commission.invoice_paid:
-        commission.createdDisplayPriceEstimate(save=True)
+        commission.createDisplayPriceEstimate(save=True)
         commission.createWeightEstimate(save=True)
 
     context = {'commission':  commission,
@@ -53,15 +53,15 @@ def commission(request, commission_id):
 @access_required('admin')
 def create(request):
   commission = Commission.objects.create()
-  return redirect('admin:commission', commission.id)
+  return redirect('commission:commission', commission.id)
 
 @access_required('admin')
 def find_commission(request): #search for commission based on POST params
   try:
     commission = Commission.objects.get(id=request.POST.get('commission_id'))
-    return redirect('admin:commission', commission.id)
+    return redirect('commission:commission', commission.id)
   except:
-    return redirect('admin:commissions')
+    return redirect('commission:commissions')
 
 @access_required('admin')
 @csrf_exempt #todo: find a way to add csrf

@@ -2,19 +2,23 @@ Custom Changes Request for product #{{ data.product.id }}
 {{ data.product.name }} by {{ data.product.seller.name }}
 http://www.theanou.com{{ data.product.get_absolute_url}}
 
-Size:<br>
+{% if data.commission_id %}
+Commission ID: C{{ data.commission_id }}
+{% endif %}
+
+Size:
 {{ data.size }}
 
-Quantity:<br>
+Quantity:
 {{ data.quantity }}
 
-Description:<br>
+Description:
 {{ data.description }}
 
-Estimate:<br>
+Estimate:
 {{ data.estimate }}
 
-Country:<br>
+Country:
 {{ data.country }}
 
 from {{ data.email }}

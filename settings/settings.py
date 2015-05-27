@@ -109,6 +109,7 @@ INSTALLED_APPS = (
   'apps.public',
   'apps.seller',
   'apps.admin',
+  'apps.commission',
   'apps.communication',
   'apps.grading',
   #'apps.api',

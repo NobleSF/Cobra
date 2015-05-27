@@ -1,6 +1,6 @@
 <ul class='information-row inline'>
   <li>
-    <a href="{% url 'admin:commission' commission.id %}">
+    <a href="{% url 'commission:commission' commission.id %}">
       {% if commission.base_product %}
         <img src="{{ commission.base_product.photo.pinky_size }}">
       {% elif commission.requirement_images.count %}
