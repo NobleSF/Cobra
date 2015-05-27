@@ -182,9 +182,9 @@ class Commission(models.Model):
   def public_id(self): return "C%d" % self.id
 
   # MODEL FUNCTIONS
-  def createdDisplayPriceEstimate(self, save=True):
+  def createDisplayPriceEstimate(self, save=True):
     if not any([self.base_product, self.product]):
-      raise Exception("createdDisplayPriceEstimate requires existing instance of base_product or product")
+      raise Exception("createDisplayPriceEstimate requires existing instance of base_product or product")
 
     self.product = self.createProduct(save=save)
 
@@ -212,27 +212,29 @@ class Commission(models.Model):
         # self.product.height = self.height
 
     else:
-      self.product = Product(seller=self.base_product.seller) if not self.product else self.product
+      self.mock_product = Product(seller=self.base_product.seller) if not self.product else self.product
       self.base_product.sortDimensions() #sorts base_product dimensions and all set to positive integers
       base_size = self.base_product.length * self.base_product.width
-      self.product.length = self.length or self.base_product.length
-      self.product.width = self.width or self.base_product.width
-      self.product.height = self.base_product.height
+      self.mock_product.length = self.length or self.base_product.length
+      self.mock_product.width = self.width or self.base_product.width
+      self.mock_product.height = self.base_product.height
 
-      new_size = self.product.length * self.product.width
+      new_size = self.mock_product.length * self.mock_product.width
       ratio = float(new_size) / base_size
 
-      if not self.product.weight:
-        self.product.weight = int(((self.base_product.weight * ratio * 1.05) + 100) * self.quantity)
-      if not self.product.price:
-        self.product.price = int(self.base_product.price * ratio * self.quantity)
-        self.estimated_artisan_price = self.product.price
+      if not self.mock_product.weight:
+        self.mock_product.weight = int(((self.base_product.weight * ratio * 1.05) + 100) * self.quantity)
+      if not self.mock_product.price:
+        self.mock_product.price = int(self.base_product.price * ratio * self.quantity)
+        self.estimated_artisan_price = self.mock_product.price
 
     if save:
-      self.product.save()
+      self.mock_product.save()
+      self.product = self.mock_product
       self.save()
-
-    return self.product
+      return self.product
+    else:
+      return self.mock_product
 
   def getCustomer(self):
     if not self.customer:

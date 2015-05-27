@@ -43,7 +43,7 @@ def commission(request, commission_id):
     commission = Commission.objects.get(id=commission_id)
     if (commission.base_product or commission.product):
       if not commission.invoice_paid:
-        commission.createdDisplayPriceEstimate(save=True)
+        commission.createDisplayPriceEstimate(save=True)
         commission.createWeightEstimate(save=True)
 
     context = {'commission':  commission,
