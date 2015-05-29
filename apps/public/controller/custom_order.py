@@ -74,7 +74,6 @@ def request(request): #todo: change function name
       try:
         commission = Commission.objects.create()
         commission.base_product = product
-        commission.estimated_artisan_price = request.POST.get('estimate', None).strip('$ ')
 
         # size_string = request.POST.get('size_metric', "")
         # pattern = re.compile('\D*(\d{1,6})\D*(\d{1,6})\D*')
@@ -86,6 +85,7 @@ def request(request): #todo: change function name
         commission.length = int(float(request.POST.get('length', 0))) or None
         commission.width = int(float(request.POST.get('width', 0))) or None
         commission.quantity = request.POST.get('quantity', 1) or 1
+        commission.createProduct(save=False)#calculates estimated artisan price
         commission.save()
         print "commission saved. go sms artisan..."
         commission.askArtisan()

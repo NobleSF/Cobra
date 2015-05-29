@@ -225,7 +225,7 @@ class Commission(models.Model):
 
       if not self.mock_product.weight:
         self.mock_product.weight = int(((self.base_product.weight * ratio * 1.05) + 100) * self.quantity)
-      if not self.mock_product.price:
+      if not self.mock_product.price or not self.estimated_artisan_price:
         self.mock_product.price = int(self.base_product.price * ratio * self.quantity)
         self.estimated_artisan_price = self.mock_product.price
 
@@ -276,7 +276,7 @@ class Commission(models.Model):
     if self.quantity > 1:
       message += "*%d\r\n" % int(self.quantity or 0)
     message += "%d\r\n" % int(self.estimated_artisan_price or 0)
-    print message
+    # print message
     sendSMS(message, self.seller.account.phone)
 
 
