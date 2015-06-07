@@ -27,4 +27,5 @@ static3==0.5.1
 stripe==1.19.1
 virtualenv==1.8.2
 waitress==0.8.9
+Werkzeug
 wsgiref==0.1.2
