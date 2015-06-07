@@ -1,13 +1,15 @@
 import json
+
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
+
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.grading.views.action import ActionMaker
-from apps.grading.models import ActionType
 from apps.seller.models.product import Product
 from apps.seller.models.shipping_option import ShippingOption
+
 
 @access_required('admin')
 def productLookup(request):
@@ -118,7 +120,7 @@ def rateProduct(request): #from AJAX GET request
 
 
 def priceCalc(request):
-  from apps.admin.models.currency import Currency
+  from apps.common.models.currency import Currency
   exchange_rate = Currency.objects.get(code='MAD').exchange_rate_to_USD
   return render(request, 'products/price_calc.html', {'exchange_rate':exchange_rate})
 

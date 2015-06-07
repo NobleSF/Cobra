@@ -1,12 +1,14 @@
 from django import forms
 from django.forms.widgets import TextInput
+
 from apps.admin.models.category import Category
+
 
 class NumberInput(TextInput):
   input_type = 'tel'
 
 class SellerEditForm(forms.Form):
-  from apps.admin.models.country import Country
+  from apps.common.models.country import Country
 
   name          = forms.CharField(required=False)
   email         = forms.EmailField(required=False)

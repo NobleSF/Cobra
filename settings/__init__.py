@@ -106,6 +106,8 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+  'apps.common',
+  'apps.branding',
   'apps.public',
   'apps.seller',
   'apps.admin',

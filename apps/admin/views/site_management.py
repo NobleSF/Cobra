@@ -1,9 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from apps.admin.utils.decorator import access_required
 from django.contrib import messages
 from django.forms.models import modelformset_factory
+
+from apps.admin.utils.decorator import access_required
 from apps.public.views.events import invalidate_cache
+
 
 @access_required('admin')
 def rebuildProductRankings(request):
@@ -21,7 +23,6 @@ def rebuildHomePage(request):
 
 @access_required('admin')
 def rebuildProductPage(request=None, product_id=None):
-  from apps.seller.models.product import Product
   from apps.public.views.events import invalidate_product_cache
   try:
     invalidate_product_cache(product_id)
@@ -62,7 +63,7 @@ def cacheReset(request):
 
 @access_required('admin')
 def country(request):
-  from apps.admin.models.country import Country
+  from apps.common.models.country import Country
   CountryFormSet = modelformset_factory(Country, exclude=[])
   context = {}
   if request.method == 'POST':
@@ -78,7 +79,7 @@ def country(request):
 
 @access_required('admin')
 def currency(request):
-  from apps.admin.models.currency import Currency
+  from apps.common.models.currency import Currency
   CurrencyFormSet = modelformset_factory(Currency, exclude=[])
   context = {}
   if request.method == 'POST':
