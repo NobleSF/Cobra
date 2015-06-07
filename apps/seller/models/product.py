@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 
 from apps.admin.models.color import Color
-from apps.grading.controller.action import ActionMaker
+from apps.grading.views.action import ActionMaker
 from apps.grading.models import ActionType
 from apps.seller.models.asset import Asset
 from apps.seller.models.seller import Seller
@@ -66,7 +66,7 @@ class Product(models.Model):
 
   @is_active.setter
   def is_active(self, value):
-    from apps.communication.controller.email_class import Email
+    from apps.communication.views.email_class import Email
     from settings.people import operations_team
 
     if value and self.active_at and not self.deactive_at: #already active
@@ -81,7 +81,7 @@ class Product(models.Model):
     elif not value: #deactivate
       self.deactive_at = timezone.now()
       #cancel orders of this product
-      from apps.communication.controller.order_events import cancelOrder
+      from apps.communication.views.order_events import cancelOrder
       for order in self.orders.all():
         if not order.is_shipped: #todo: and not order.is_cancelled
           cancelOrder(order)
@@ -407,7 +407,7 @@ class Product(models.Model):
 
   @property
   def shipping_cost(self):
-    from apps.seller.controller.shipping import calculateShippingCost
+    from apps.seller.views.shipping import calculateShippingCost
     if self.is_commission and not self.id: #unsaved temp product
       shipping_option = self.commission.base_product.shipping_options.first()
       return calculateShippingCost(self.weight, shipping_option, 'US')
@@ -418,7 +418,7 @@ class Product(models.Model):
 
   @property
   def local_shipping_cost(self):
-    from apps.seller.controller.shipping import calculateShippingCost
+    from apps.seller.views.shipping import calculateShippingCost
     if self.is_commission and not self.id: #unsaved temp product
       shipping_option = self.commission.base_product.shipping_options.first()
       return calculateShippingCost(self.weight, shipping_option, 'MA')
@@ -599,7 +599,7 @@ def onDelete(sender, instance, **kwargs):
 def createRanking(sender, instance, created, update_fields, **kwargs):
   try:
     from apps.public.models.ranking import Ranking
-    from apps.public.controller.product_ranking import updateRankings, newProductResult
+    from apps.public.views.product_ranking import updateRankings, newProductResult
     if created:
       ranking, is_new = Ranking.objects.get_or_create(product = instance)
       ranking.new_product = newProductResult(instance)
@@ -608,5 +608,5 @@ def createRanking(sender, instance, created, update_fields, **kwargs):
 
 @receiver(post_save, sender=Product)
 def resetProductPageCache(sender, instance, created, update_fields, **kwargs):
-  from apps.public.controller.events import invalidate_product_cache
+  from apps.public.views.events import invalidate_product_cache
   invalidate_product_cache(instance.id)

@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
 from apps.admin.utils.exception_handling import ExceptionHandler
-from apps.public.controller.forms import CartForm
+from apps.public.views.forms import CartForm
 from apps.public.models import Cart
 from apps.seller.models.product import Product
 

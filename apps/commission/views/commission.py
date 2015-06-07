@@ -67,7 +67,7 @@ def find_commission(request): #search for commission based on POST params
 @csrf_exempt #todo: find a way to add csrf
 def imageFormData(request):
   import json
-  from apps.seller.controller.cloudinary_upload import createSignature
+  from apps.seller.views.cloudinary_upload import createSignature
   from apps.seller.models.upload import Upload
 
   if request.method == "POST" and 'commission_id' in request.POST:

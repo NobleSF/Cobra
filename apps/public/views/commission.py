@@ -8,7 +8,7 @@ from apps.commission.models import Commission
 from apps.public.models import Customer
 from apps.seller.models.product import Product
 from settings.people import support_team
-from apps.communication.controller.email_class import Email
+from apps.communication.views.email_class import Email
 
 def estimate(request):
   if request.GET.get('product_id'):

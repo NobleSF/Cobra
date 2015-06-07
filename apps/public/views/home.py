@@ -32,7 +32,7 @@ def commonthread(request):
 
 def commonthreadAddToCart(request, rug_name):
   from apps.seller.models.product import Product
-  from apps.communication.controller.email_class import Email
+  from apps.communication.views.email_class import Email
   from settings.people import Tifawt, Dan, Tom
 
   rugs = {

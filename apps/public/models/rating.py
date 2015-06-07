@@ -22,7 +22,7 @@ from apps.public.models.ranking import Ranking
 
 @receiver(post_save, sender=Rating)
 def updateRatingRankings(sender, instance, created, **kwargs):
-  from apps.public.controller.product_ranking import newProductResult, newStoreResult, photographyResult, priceResult, appealResult
+  from apps.public.views.product_ranking import newProductResult, newStoreResult, photographyResult, priceResult, appealResult
   try:
     ranking, is_new = Ranking.objects.get_or_create(product=instance.product)
     if is_new:

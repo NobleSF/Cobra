@@ -3,8 +3,8 @@ from django.views.generic import TemplateView, RedirectView
 from django.contrib.sitemaps import views as sitemap_views
 
 from sitemaps import sitemaps
-from apps.admin.controller import account
-from apps.public.controller import home
+from apps.admin.views import account
+from apps.public.views import home
 
 urlpatterns = [
   url(r'^$', home.home, name='home'), #fyi, this is home

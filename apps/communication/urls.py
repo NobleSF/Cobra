@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from controller import sms, public_events, testing
+from views import sms, public_events, testing
 
 urlpatterns = [
   #email

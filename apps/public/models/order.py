@@ -82,7 +82,7 @@ def createOrders(sender, instance, created, **kwargs):
     order = instance
     if not order.public_id: # very messy, but email communications need that public_id
       setPublicId(sender, instance, False)
-    from apps.communication.controller.order_events import communicateOrderCreated
+    from apps.communication.views.order_events import communicateOrderCreated
     communicateOrderCreated(order)
 
 @receiver(post_save, sender=Order)

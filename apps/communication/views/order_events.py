@@ -1,8 +1,8 @@
 from django.utils import timezone
 from apps.admin.utils.exception_handling import ExceptionHandler
-from apps.communication.controller.email_class import Email
-from apps.communication.controller.sms import sendSMSForOrder
-from apps.grading.controller.action import ActionMaker
+from apps.communication.views.email_class import Email
+from apps.communication.views.sms import sendSMSForOrder
+from apps.grading.views.action import ActionMaker
 from apps.grading.models import ActionType
 from settings import DEBUG
 from settings.people import operations_team, support_team

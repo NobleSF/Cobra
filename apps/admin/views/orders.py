@@ -5,8 +5,8 @@ from django.utils import timezone, dateformat
 from apps.admin.utils.decorator import access_required
 from django.views.decorators.csrf import csrf_exempt
 from apps.admin.utils.exception_handling import ExceptionHandler
-from apps.communication.controller.email_class import Email
-from apps.communication.controller.sms import sendSMS
+from apps.communication.views.email_class import Email
+from apps.communication.views.sms import sendSMS
 from datetime import datetime, timedelta
 from apps.public.models.order import Order
 from apps.seller.models.product import Product
@@ -159,7 +159,7 @@ def updateOrder(request):
 @csrf_exempt #find a way to add csrf
 def imageFormData(request):
   import json
-  from apps.seller.controller.cloudinary_upload import createSignature
+  from apps.seller.views.cloudinary_upload import createSignature
   from apps.seller.models.upload import Upload
 
   if request.method == "POST" and 'order_id' in request.POST:

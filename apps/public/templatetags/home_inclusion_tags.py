@@ -4,7 +4,7 @@ register = template.Library()
 @register.inclusion_tag('home/homepage_products.html')
 def homepage_products_tag():
   from apps.seller.models.product import Product
-  from apps.public.controller.product_ranking import updateRankings
+  from apps.public.views.product_ranking import updateRankings
 
   products = Product.objects.for_sale().exclude(ranking=None)
   #sort by average ranking points, descending

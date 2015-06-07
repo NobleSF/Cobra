@@ -9,7 +9,7 @@ from settings import TELERIVET, STAGE, DEBUG, DEMO
 from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.seller.models.product import Product
 from apps.admin.utils.decorator import postpone
-from apps.communication.controller.email_class import Email
+from apps.communication.views.email_class import Email
 from settings.people import support_team
 
 
@@ -94,7 +94,7 @@ def incoming(request):
   """ receives SMS messages via Telerivet, detail at
       https://telerivet.com/p/PJ8973e6e346c349cbcdd094fcffa9fcb5/api/webhook/receiving
   """
-  from apps.communication.controller import order_events
+  from apps.communication.views import order_events
 
   if TELERIVET['webhook_secret'] == request.POST.get('secret'):
     """

@@ -3,11 +3,11 @@ from django.shortcuts import render, redirect
 from apps.admin.utils.decorator import access_required
 from django.contrib import messages
 from django.forms.models import modelformset_factory
-from apps.public.controller.events import invalidate_cache
+from apps.public.views.events import invalidate_cache
 
 @access_required('admin')
 def rebuildProductRankings(request):
-  from apps.public.controller.events import rebuildRankings
+  from apps.public.views.events import rebuildRankings
   rebuildRankings()
   return redirect('home')
 
@@ -22,7 +22,7 @@ def rebuildHomePage(request):
 @access_required('admin')
 def rebuildProductPage(request=None, product_id=None):
   from apps.seller.models.product import Product
-  from apps.public.controller.events import invalidate_product_cache
+  from apps.public.views.events import invalidate_product_cache
   try:
     invalidate_product_cache(product_id)
   except:
@@ -31,7 +31,7 @@ def rebuildProductPage(request=None, product_id=None):
 
 @access_required('admin')
 def rebuildStorePage(request, seller_id):
-  from apps.public.controller.events import invalidate_seller_cache
+  from apps.public.views.events import invalidate_seller_cache
   try:
     invalidate_seller_cache(seller_id)
   except:
@@ -44,7 +44,7 @@ def cache(request):
 
 @access_required('admin')
 def cacheReset(request):
-  from apps.public.controller.events import invalidateAllProductCaches, invalidateAllSellerCaches
+  from apps.public.views.events import invalidateAllProductCaches, invalidateAllSellerCaches
   try:
     if request.method == "GET" and request.GET.get('target', None):
       if request.GET['target'] == 'all product pages':

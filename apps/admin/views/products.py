@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
-from apps.grading.controller.action import ActionMaker
+from apps.grading.views.action import ActionMaker
 from apps.grading.models import ActionType
 from apps.seller.models.product import Product
 from apps.seller.models.shipping_option import ShippingOption
@@ -123,7 +123,7 @@ def priceCalc(request):
   return render(request, 'products/price_calc.html', {'exchange_rate':exchange_rate})
 
 def getShippingCost(request):
-  from apps.seller.controller.shipping import calculateShippingCost
+  from apps.seller.views.shipping import calculateShippingCost
 
   if request.method == "GET":
     if request.GET.get('product_id', None):

@@ -59,7 +59,7 @@ def invalidateAllSellerCaches():
 
 @postpone
 def rebuildRankings():
-  from apps.public.controller.product_ranking import updateRankings
+  from apps.public.views.product_ranking import updateRankings
 
   for product in Product.objects.for_sale():
     try:

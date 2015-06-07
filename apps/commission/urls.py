@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from apps.commission.controller import commission
+from apps.commission.views import commission
 
 urlpatterns = [
 

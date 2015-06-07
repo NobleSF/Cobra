@@ -8,7 +8,7 @@ from apps.seller.models.seller import Seller
 
 @access_required('admin')
 def sendSMS(request):
-  from apps.communication.controller import sms as sms_controller
+  from apps.communication.views import sms as sms_controller
 
   if request.method == 'POST':
     to_number = request.POST.get('to_number')
@@ -35,7 +35,7 @@ def sendSMS(request):
 @access_required('admin')
 def allSMS(request):
   from settings import TELERIVET
-  from apps.admin.controller.forms import SMSForm
+  from apps.admin.views.forms import SMSForm
 
   sms_messages = apps.communication.models.SMS.objects.all().order_by('created_at').reverse()[:100]
 

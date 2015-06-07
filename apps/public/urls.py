@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from controller import home, checkout, product, store, custom_order, cart, manual_checkout
+from views import home, checkout, product, store, custom_order, cart, manual_checkout
 
 urlpatterns = [
 

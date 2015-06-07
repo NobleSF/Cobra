@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from controller import seller, account, inventory, cloudinary_upload, edit_product
+from views import seller, account, inventory, cloudinary_upload, edit_product
 
 urlpatterns = [
   url(r'^$', seller.home, name='home'), #seller dashboard, live products

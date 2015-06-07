@@ -4,14 +4,14 @@ from django.views.decorators.csrf import csrf_exempt
 
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
-from apps.public.controller.forms import CheckoutForm
+from apps.public.views.forms import CheckoutForm
 from apps.public.models import Cart
 from apps.public.models.checkout import Checkout
 
 @access_required('admin')
 def createCheckout(request):
   from django.core.urlresolvers import reverse
-  from apps.communication.controller.email_class import Email
+  from apps.communication.views.email_class import Email
   from settings.people import Dan, Tifawt
 
   try:
