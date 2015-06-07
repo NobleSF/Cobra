@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from apps.public.models.order import Order
 from apps.seller.models.product import Product
 from django.db.models import Q
-from settings.settings import CLOUDINARY
+from settings import CLOUDINARY
 
 @access_required('admin')
 def find_order(request):

@@ -4,7 +4,7 @@ from apps.communication.controller.email_class import Email
 from apps.communication.controller.sms import sendSMSForOrder
 from apps.grading.controller.action import ActionMaker
 from apps.grading.models import ActionType
-from settings.settings import DEBUG
+from settings import DEBUG
 from settings.people import operations_team, support_team
 
 def communicateOrderCreated(order):

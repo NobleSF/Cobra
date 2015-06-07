@@ -9,7 +9,7 @@ from apps.public.models.checkout import Checkout
 @csrf_exempt
 def stripe_checkout(request):
   import stripe
-  from settings.settings import STRIPE_SECRET_KEY
+  from settings import STRIPE_SECRET_KEY
 
   stripe_token = request.POST.get('stripeToken')
   #stripe_token_type = request.POST.get('stripeTokenType')

@@ -21,7 +21,7 @@ def create(account):
 def edit(request):
   from apps.seller.models.seller import Seller
   from apps.seller.controller.forms import SellerEditForm
-  from settings.settings import CLOUDINARY
+  from settings import CLOUDINARY
 
   seller = Seller.objects.get(id=request.session['seller_id'])
   try:

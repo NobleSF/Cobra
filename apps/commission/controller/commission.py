@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.utils import dateformat, timezone
 from django.views.decorators.csrf import csrf_exempt
 from apps.admin.utils.exception_handling import ExceptionHandler
-from settings.settings import CLOUDINARY
+from settings import CLOUDINARY
 from apps.admin.utils.decorator import access_required
 from apps.commission.models.commission import Commission
 

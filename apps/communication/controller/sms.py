@@ -5,7 +5,7 @@ from requests.auth import HTTPBasicAuth
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from apps.seller.models import Asset
-from settings.settings import TELERIVET, STAGE, DEBUG, DEMO
+from settings import TELERIVET, STAGE, DEBUG, DEMO
 from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.seller.models.product import Product
 from apps.admin.utils.decorator import postpone

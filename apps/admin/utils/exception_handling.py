@@ -1,7 +1,7 @@
 from apps.admin.utils.decorator import postpone
 from settings import people
 import rollbar
-from settings.settings import DEBUG, LOCAL
+from settings import DEBUG, LOCAL
 
 
 class ExceptionHandler(object):

@@ -11,7 +11,7 @@ from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.seller.models import Product, Photo
 from apps.seller.models.upload import Upload
 from apps.seller.models.image import Image
-from settings.settings import CLOUDINARY
+from settings import CLOUDINARY
 
 
 @csrf_exempt

@@ -34,7 +34,7 @@ def sendSMS(request):
 
 @access_required('admin')
 def allSMS(request):
-  from settings.settings import TELERIVET
+  from settings import TELERIVET
   from apps.admin.controller.forms import SMSForm
 
   sms_messages = apps.communication.models.SMS.objects.all().order_by('created_at').reverse()[:100]

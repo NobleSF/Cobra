@@ -31,7 +31,7 @@ def cart(request):
   context = {'cart': cart, 'cart_form': cart_form}
 
   if not 'admin_id' in request.session:
-    from settings.settings import STRIPE_PUBLIC_KEY
+    from settings import STRIPE_PUBLIC_KEY
     context['STRIPE_PUBLIC_KEY'] = STRIPE_PUBLIC_KEY
 
   return render(request, 'checkout/cart.html', context)

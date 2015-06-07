@@ -1,7 +1,7 @@
 from apps.admin.utils.exception_handling import ExceptionHandler
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
-from settings.settings import STAGE, DEBUG, DEMO
+from settings import STAGE, DEBUG, DEMO
 from apps.admin.utils.decorator import postpone
 
 class Email(object):

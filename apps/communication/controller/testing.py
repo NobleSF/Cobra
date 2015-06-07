@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-from settings.settings import PRODUCTION, STAGE
+from settings import PRODUCTION, STAGE
 
 def orders(request):
   from apps.public.models.order import Order

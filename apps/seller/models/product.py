@@ -395,7 +395,7 @@ class Product(models.Model):
 
   @property
   def anou_fee(self):
-    from settings.settings import ANOU_FEE_RATE, ANOU_CUSTOM_ORDER_FEE_RATE
+    from settings import ANOU_FEE_RATE, ANOU_CUSTOM_ORDER_FEE_RATE
     if self.price and self.is_commission:
       fee = self.price * ANOU_CUSTOM_ORDER_FEE_RATE / (1-ANOU_CUSTOM_ORDER_FEE_RATE)
       return int(round(fee)) #round off for local currencies
