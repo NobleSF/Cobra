@@ -1,7 +1,7 @@
 from django.db import models
 
 from apps.admin.models.oldcategory import OldCategory
-# from apps.common.models.category import Category
+from apps.common.models.category import Category
 from apps.seller.models.image import Image
 from apps.seller.models.seller import Seller
 
@@ -15,7 +15,7 @@ class Asset(models.Model):
   image         = models.ForeignKey(Image, null=True, blank=True, on_delete=models.SET_NULL)
 
   oldcategories    = models.ManyToManyField(OldCategory)
-  # newcategories    = models.ManyToManyField(Category)
+  newcategories    = models.ManyToManyField(Category)
 
   phone         = models.CharField(max_length=15, null=True, blank=True)
   #important     = models.BooleanField(default=False)
