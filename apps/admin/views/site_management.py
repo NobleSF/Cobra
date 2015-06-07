@@ -95,7 +95,7 @@ def currency(request):
 
 @access_required('admin')
 def color(request):
-  from apps.admin.models.color import Color
+  from apps.common.models.color import Color
   ColorFormSet = modelformset_factory(Color, exclude=[])
   context = {}
   if request.method == 'POST':
