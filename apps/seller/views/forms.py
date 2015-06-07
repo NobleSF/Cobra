@@ -1,7 +1,7 @@
 from django import forms
 from django.forms.widgets import TextInput
 
-from apps.admin.models.category import Category
+from apps.common.models.category import Category
 
 
 class NumberInput(TextInput):

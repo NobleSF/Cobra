@@ -111,7 +111,7 @@ def color(request):
 
 @access_required('admin')
 def category(request):
-  from apps.admin.models.category import Category
+  from apps.common.models.category import Category
   CategoryFormSet = modelformset_factory(Category, exclude=[])
   context = {}
   if request.method == 'POST':

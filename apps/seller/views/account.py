@@ -1,11 +1,14 @@
-from django.http import HttpResponse
 import json
+
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from apps.admin.utils.decorator import access_required
-from apps.admin.utils.exception_handling import ExceptionHandler
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.db import IntegrityError, transaction
+
+from apps.admin.utils.decorator import access_required
+from apps.admin.utils.exception_handling import ExceptionHandler
+
 
 def create(account):
   try:
@@ -111,7 +114,7 @@ def edit(request):
 @csrf_exempt
 def Asset(request): #ajax get requests only, create or update asset
   from apps.seller.models.asset import Asset
-  from apps.admin.models.category import Category
+  from apps.common.models.category import Category
 
   try:
     if request.method == 'POST':
