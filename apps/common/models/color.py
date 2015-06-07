@@ -1,6 +1,6 @@
 from django.db import models
 
-class Color(models.Model):
+class NewColor(models.Model):
   name          = models.CharField(max_length=15)
   hex_value     = models.CharField(max_length=6)
 

@@ -8,7 +8,7 @@ from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.seller.models.shipping_option import ShippingOption
 from apps.seller.models.product import Product
 from apps.seller.models.asset import Asset
-from apps.common.models.color import Color
+from apps.common.models.color import NewColor
 from settings import CLOUDINARY
 
 @access_required('admin or seller')
@@ -81,7 +81,7 @@ def edit(request, product_id=None):
 
       elif name == 'color':
         try:
-          color = Color.objects.get(id=request.POST.get('color_id'))
+          color = NewColor.objects.get(id=request.POST.get('color_id'))
 
           if request.POST.get('selected') == 'yes':
             product.colors.add(color)

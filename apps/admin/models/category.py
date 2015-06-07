@@ -1,12 +1,12 @@
 from django.db import models
 
-class OldCategory(models.Model):
+class Category(models.Model):
   name            = models.CharField(max_length=50)
   plural_name     = models.CharField(max_length=50)
   keywords        = models.CharField(max_length=50, blank=True, null=True)
-  parent_category = models.IntegerField(null=True)
-  # parent_category = models.ForeignKey('self', related_name='sub_categories',
-  #                                     blank=True, null=True)
+  # parent_category = models.IntegerField(null=True)
+  parent_category = models.ForeignKey('self', related_name='sub_categories',
+                                      blank=True, null=True)
 
   ordering_name = models.CharField(max_length=100)
 
@@ -21,7 +21,7 @@ class OldCategory(models.Model):
   # MODEL FUNCTIONS
   def save(self, *args, **kwargs):
     self.ordering_name = self.get_ordering_name()
-    super(OldCategory, self).save(*args, **kwargs)
+    super(Category, self).save(*args, **kwargs)
 
   def get_ordering_name(self):
     if self.parent_category:

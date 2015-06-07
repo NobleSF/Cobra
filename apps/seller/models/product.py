@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
-from apps.common.models.color import Color
+from apps.common.models.color import NewColor
 from apps.grading.views.action import ActionMaker
 from apps.grading.models import ActionType
 from apps.seller.models.asset import Asset
@@ -25,7 +25,7 @@ class Product(models.Model):
 
   #product description elements
   assets        = models.ManyToManyField(Asset)#related_name='products'
-  colors        = models.ManyToManyField(Color, related_name='products')
+  colors        = models.ManyToManyField(NewColor, related_name='products')
   width         = models.IntegerField(null=True, blank=True)
   height        = models.IntegerField(null=True, blank=True)
   length        = models.IntegerField(null=True, blank=True)

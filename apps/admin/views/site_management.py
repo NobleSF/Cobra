@@ -95,8 +95,8 @@ def currency(request):
 
 @access_required('admin')
 def color(request):
-  from apps.common.models.color import Color
-  ColorFormSet = modelformset_factory(Color, exclude=[])
+  from apps.common.models.color import NewColor
+  ColorFormSet = modelformset_factory(NewColor, exclude=[])
   context = {}
   if request.method == 'POST':
     formset = ColorFormSet(request.POST)
@@ -105,7 +105,7 @@ def color(request):
       messages.success(request, 'Color saved.')
     except Exception as e:
       messages.error(request, e)
-  formset = ColorFormSet(queryset=Color.objects.all())
+  formset = ColorFormSet(queryset=NewColor.objects.all())
   context['formset'] = formset
   return render(request, 'site_management/formset.html', context)
 
