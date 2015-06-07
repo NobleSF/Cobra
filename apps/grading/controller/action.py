@@ -34,6 +34,8 @@ class ActionMaker(object):
           self.action.type = ActionType.APPEAL_RATING
 
       self.action.initial_points = self.calculatePointsForAction()
+      assert self.action.initial_points is not None
+
       self.action.save()
     except Exception as e:
       ExceptionHandler(e, "in ActionMaker.__init__")
