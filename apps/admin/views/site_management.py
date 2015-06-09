@@ -125,21 +125,6 @@ def category(request):
   context['formset'] = formset
   return render(request, 'site_management/formset.html', context)
 
-@access_required('admin')
-def ratingSubject(request):
-  from apps.admin.models.rating_subject import RatingSubject
-  RatingSubjectFormSet = modelformset_factory(RatingSubject, exclude=[])
-  context = {}
-  if request.method == 'POST':
-    formset = RatingSubjectFormSet(request.POST)
-    try:
-      formset.save()
-      messages.success(request, 'Rating Subject saved.')
-    except Exception as e:
-      messages.error(request, e)
-  formset = RatingSubjectFormSet(queryset=RatingSubject.objects.all())
-  context['formset'] = formset
-  return render(request, 'site_management/formset.html', context)
 
 @access_required('admin')
 def shippingOption(request):

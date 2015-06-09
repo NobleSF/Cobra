@@ -3,7 +3,7 @@ import json
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
-from apps.admin.models import Country
+from apps.common.models.country import Country
 from apps.admin.utils.decorator import access_required
 from apps.public.models.order import Order
 

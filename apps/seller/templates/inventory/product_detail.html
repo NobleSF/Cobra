@@ -16,14 +16,14 @@
   <div class='part1 ratings'>
 
     <i class='
-      {% if product.ratings.Appeal and 0 < product.ratings.Appeal and product.ratings.Appeal < 4 %}
+      {% if product.ratings.appeal and 0 < product.ratings.appeal and product.ratings.appeal < 4 %}
         symbol-sad
       {% else %}symbol-happy
       {% endif %}
-      color-rating{{ product.ratings.Appeal }}' title='appeal'></i>
+      color-rating{{ product.ratings.appeal }}' title='appeal'></i>
 
-    <i class='symbol-camera color-rating{{ product.ratings.Photography }}' title='photography'></i>
-    <i class='symbol-money color-rating{{ product.ratings.Price }}' title='price'></i>
+    <i class='symbol-camera color-rating{{ product.ratings.photography }}' title='photography'></i>
+    <i class='symbol-money color-rating{{ product.ratings.price }}' title='price'></i>
 
   </div>
 
