@@ -3,11 +3,21 @@ from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.seller.models.product import Product
 from apps.admin.models.rating_subject import RatingSubject
 
+
 class Rating(models.Model):
-  session_key         = models.CharField(max_length=32) #todo: tie to account of rater
-  product             = models.ForeignKey(Product)
+
+  [PHOTOGRAPHY, PRICE, APPEAL] = range(1, 4)
+  SUBJECT_OPTIONS = ( # use name of icon in icon-font
+    (PHOTOGRAPHY, 'photography'),
+    (PRICE,       'price'),
+    (APPEAL,      'appeal'),
+  )
+  new_subject         = models.SmallIntegerField(choices=SUBJECT_OPTIONS)
   subject             = models.ForeignKey(RatingSubject)
+  product             = models.ForeignKey(Product)
   value               = models.SmallIntegerField()
+
+  session_key         = models.CharField(max_length=32) #todo: tie to account of rater
   created_at          = models.DateTimeField(auto_now_add=True)
 
   # MODEL PROPERTIES
