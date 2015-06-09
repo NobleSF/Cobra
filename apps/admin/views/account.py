@@ -8,13 +8,13 @@ from django.utils import timezone
 
 from apps.admin.utils.decorator import access_required
 from apps.admin.utils.exception_handling import ExceptionHandler
-from apps.admin.models.account import Account
+from apps.admin.models.account import OldAccount
 
 @access_required('admin')
 def adminAccounts(request):
   from django.db.models import Count
   #types_order = ['unassigned', 'translator', 'trainer', 'country', 'master']
-  admin_accounts = (Account.objects
+  admin_accounts = (OldAccount.objects
                     .annotate(num_sellers=Count('sellers'))
                     .filter(
                       admin_type__isnull=False,
@@ -46,7 +46,7 @@ def createAdmin(request):
 
     else:
       try:
-        account = Account(phone=phone, password=password, admin_type=admin_type)
+        account = OldAccount(phone=phone, password=password, admin_type=admin_type)
         account.name = name if name else None
         account.save()
         return redirect('admin:edit account', account.id)
@@ -68,7 +68,7 @@ def createAdmin(request):
 @access_required('admin')
 def sellerAccounts(request):
   from django.db.models import Count
-  seller_accounts = (Account.objects
+  seller_accounts = (OldAccount.objects
                      .annotate(num_sellers=Count('sellers'))
                      .filter(
                       admin_type__isnull=True,
@@ -97,7 +97,7 @@ def createSeller(request):
 
     else:
       try:
-        account = Account(phone=phone, password=password)
+        account = OldAccount(phone=phone, password=password)
         account.name = name if name else None
         account.save()
 
@@ -127,7 +127,7 @@ def edit(request, account_id=None):
 
   if not account_id:
     account_id = request.session.get('admin_id')
-  account = Account.objects.get(id=account_id)
+  account = OldAccount.objects.get(id=account_id)
 
   if request.method == 'POST':
     account_model_form = AccountEditForm(request.POST, instance=account)
@@ -197,19 +197,19 @@ def login(request, next=None):
       #login with phone number
       if not account:
         try:
-          account = Account.objects.get(phone__endswith=username[-8:])#last 8 chars
+          account = OldAccount.objects.get(phone__endswith=username[-8:])#last 8 chars
         except: pass
 
       #login with username
       if not account:
         try:
-          account = Account.objects.get(username=username)
+          account = OldAccount.objects.get(username=username)
         except: pass
 
       #login with email address
       if not account:
         try:
-          account = Account.objects.get(email=username)
+          account = OldAccount.objects.get(email=username)
         except: pass
 
       if not account:
@@ -220,10 +220,10 @@ def login(request, next=None):
           username = "".join(username_as_list)
 
         try:
-          account = Account.objects.get(username=username)
+          account = OldAccount.objects.get(username=username)
         except:
           try:
-            account = Account.objects.get(email=username)
+            account = OldAccount.objects.get(email=username)
           except: pass
 
       if account and account.password == processPassword(request.POST.get('password', '')):
@@ -297,7 +297,7 @@ def logout(request):
 def resetPassword(request, account_id=None):
   from apps.admin.views.forms import AccountPasswordForm
   account_id = account_id if account_id else request.session.get('admin_id')
-  account = Account.objects.get(id=account_id)
+  account = OldAccount.objects.get(id=account_id)
 
   if request.method == 'POST':
     try:

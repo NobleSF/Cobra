@@ -38,8 +38,8 @@ class SMSTest(TestCase):
     """
     Tests that SMS messages can be properly understood
     """
-    from apps.admin.models.account import Account
-    account = Account(password="gobbly gook")
+    from apps.admin.models.account import OldAccount
+    account = OldAccount(password="gobbly gook")
     account.save()
     from apps.seller.models.seller import Seller
     seller = Seller(account=account)

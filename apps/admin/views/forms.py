@@ -1,6 +1,6 @@
 from django import forms
 from django.forms.widgets import TextInput
-from apps.admin.models.account import Account
+from apps.admin.models.account import OldAccount
 from apps.admin.views.account import processPassword
 
 
@@ -17,7 +17,7 @@ class AccountCreateForm(forms.Form):
 
 class AccountEditForm(forms.ModelForm):
   class Meta:
-    model = Account
+    model = OldAccount
     exclude = ['password','admin_type']
 
   def clean_phone(self):
@@ -32,7 +32,7 @@ class AccountEditForm(forms.ModelForm):
       raise forms.ValidationError("Phone must be at least 8 digits.")
 
     #must not have the same ending 8 characters as any other phone
-    if len(Account.objects.filter(phone__endswith=data[-8:])) > 1:
+    if len(OldAccount.objects.filter(phone__endswith=data[-8:])) > 1:
       raise forms.ValidationError("Account with this Phone already exists.")
 
     return data

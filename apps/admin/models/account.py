@@ -1,6 +1,6 @@
 from django.db import models
 
-class Account(models.Model):
+class OldAccount(models.Model):
   username      = models.CharField(max_length=50, blank=True, null=True, unique=True)
   password      = models.CharField(max_length=64)
   name          = models.CharField(max_length=50, blank=True, null=True)

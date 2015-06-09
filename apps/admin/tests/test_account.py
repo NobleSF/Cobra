@@ -1,5 +1,5 @@
 from django.test import TestCase
-from apps.admin.models.account import Account
+from apps.admin.models.account import OldAccount
 from apps.admin.views.account import processPassword
 
 class AccountTest(TestCase):
@@ -9,7 +9,7 @@ class AccountTest(TestCase):
     self.phone = "21212345678"
     self.password = "1234abcdEFGH!@#$"
 
-    Account.objects.create(
+    OldAccount.objects.create(
       username=self.username,
       email=self.email,
       phone=self.phone,
@@ -20,7 +20,7 @@ class AccountTest(TestCase):
     """
       Tests the ability to encrypt passwords
     """
-    account = Account.objects.get(username=self.username)
+    account = OldAccount.objects.get(username=self.username)
     #encrypted password generated
     self.assertIsNotNone(account.password)
     self.assertEqual(processPassword(self.password), account.password)
@@ -31,7 +31,7 @@ class AccountTest(TestCase):
     """
     Tests the creation of an account in the DB model
     """
-    account = Account.objects.get(username=self.username)
+    account = OldAccount.objects.get(username=self.username)
     self.assertIsNotNone(account)
     self.assertEqual(account.username, self.username)
     self.assertEqual(account.email, self.email)

@@ -1,12 +1,13 @@
 from django.db import models
 from apps.common.models.country import Country
-from apps.admin.models.account import Account
+from apps.admin.models.account import OldAccount
 from apps.seller.models.image import Image
 
 
 class Seller(models.Model):
-  account       = models.ForeignKey(Account, related_name='sellers')
+  account       = models.ForeignKey(OldAccount, related_name='sellers')
                 #should really be one-to-one relationship
+
   bio           = models.TextField(null=True, blank=True)
   city          = models.CharField(max_length=50, null=True, blank=True)
   country       = models.ForeignKey(Country, null=True, blank=True)
@@ -19,7 +20,7 @@ class Seller(models.Model):
   bio_ol = models.TextField(null=True, blank=True)
 
   #account lifecycle
-  translated_by = models.ForeignKey(Account, null=True, blank=True,
+  translated_by = models.ForeignKey(OldAccount, null=True, blank=True,
                                     related_name='translator')
   approved_at   = models.DateTimeField(null=True, blank=True) #admin approval
   deactive_at   = models.DateTimeField(null=True, blank=True) #seller deactivate
