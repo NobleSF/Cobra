@@ -1,6 +1,7 @@
 from math import log, pow, e
 from django.db.models import Avg
 from django.utils import timezone
+from apps.public.models import Rating
 from apps.public.models.ranking import Ranking
 from apps.admin.utils.exception_handling import ExceptionHandler
 
@@ -28,9 +29,9 @@ def updateRankings(product, except_ratings=False):
 
 def photographyResult(product):
   try:
-    ratings = (product.rating_set.filter(subject__name='Photography')
+    ratings = (product.rating_set.filter(subject=Rating.PHOTOGRAPHY)
                                      .aggregate(average=Avg('value')))
-    num_ratings = product.rating_set.filter(subject__name='Photography').count()
+    num_ratings = product.rating_set.filter(subject=Rating.PHOTOGRAPHY).count()
 
     V = float(ratings['average']-1) / 4 if ratings['average'] >= 1 else 0.5
     C = float(ratingConfidence(num_ratings)) if num_ratings else 0
@@ -40,9 +41,9 @@ def photographyResult(product):
 
 def priceResult(product):
   try:
-    ratings = (product.rating_set.filter(subject__name='Price')
+    ratings = (product.rating_set.filter(subject=Rating.PRICE)
                                      .aggregate(average=Avg('value')))
-    num_ratings = product.rating_set.filter(subject__name='Price').count()
+    num_ratings = product.rating_set.filter(subject=Rating.PRICE).count()
 
     V = float(ratings['average']-1) / 4 if ratings['average'] >= 1 else 0.5
     C = float(ratingConfidence(num_ratings)) if num_ratings else 0
@@ -52,9 +53,9 @@ def priceResult(product):
 
 def appealResult(product):
   try:
-    ratings = (product.rating_set.filter(subject__name='Appeal')
+    ratings = (product.rating_set.filter(subject=Rating.APPEAL)
                                      .aggregate(average=Avg('value')))
-    num_ratings = product.rating_set.filter(subject__name='Appeal').count()
+    num_ratings = product.rating_set.filter(subject=Rating.APPEAL).count()
 
     V = float(ratings['average']-1) / 4 if ratings['average'] >= 1 else 0.5
     C = float(ratingConfidence(num_ratings)) if num_ratings else 0

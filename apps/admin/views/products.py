@@ -85,17 +85,17 @@ def approveProduct(request): #from AJAX GET request
 @access_required('admin')
 def rateProduct(request): #from AJAX GET request
   from apps.public.models.rating import Rating
-  from apps.admin.models.rating_subject import RatingSubject
+
+  rating_subjects_dict = {name: key for key, name in Rating.SUBJECT_OPTIONS}
+
   try:
     product_id      = request.GET.get('product_id')
     rating_subject  = request.GET.get('subject')
     rating_value    = request.GET.get('value')
 
-    rating_subject_object = RatingSubject.objects.get(name=rating_subject)
-
     rating = Rating.objects.filter(
               session_key=request.session.session_key,
-              subject=rating_subject_object,
+              subject=rating_subjects_dict[rating_subject],
               product_id=product_id
             ).first()
     if rating:
@@ -103,7 +103,7 @@ def rateProduct(request): #from AJAX GET request
     else:
       rating = Rating(
                   session_key=request.session.session_key,
-                  subject=rating_subject_object,
+                  subject=rating_subjects_dict[rating_subject],
                   product_id=product_id,
                   value = rating_value
                 )

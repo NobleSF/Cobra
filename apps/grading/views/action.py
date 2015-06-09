@@ -1,5 +1,6 @@
 from django.utils import timezone
 from apps.admin.utils.exception_handling import ExceptionHandler
+from apps.public.models.rating import Rating
 from apps.grading.models import ActionType, Action
 
 
@@ -26,11 +27,11 @@ class ActionMaker(object):
         self.action.rating = self.rating = rating
         self.action.product = self.product = rating.product
         self.action.seller = self.seller = rating.product.seller
-        if rating.subject.name == 'Photography':
+        if rating.subject == Rating.PHOTOGRAPHY:
           self.action.type = ActionType.PHOTOGRAPHY_RATING
-        elif rating.subject.name == 'Price':
+        elif rating.subject == Rating.PRICE:
           self.action.type = ActionType.PRICE_RATING
-        elif rating.subject.name == 'Appeal':
+        elif rating.subject == Rating.APPEAL:
           self.action.type = ActionType.APPEAL_RATING
 
       self.action.initial_points = self.calculatePointsForAction()

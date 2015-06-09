@@ -52,7 +52,6 @@ urlpatterns = [
   url(r'^management/currency$', site_management.currency, name='currency'),
   url(r'^management/color$', site_management.color, name='color'),
   url(r'^management/category$', site_management.category, name='category'),
-  url(r'^management/rating_subject$', site_management.ratingSubject, name='rating subject'),
   url(r'^management/shipping_option$', site_management.shippingOption, name='shipping option'),
   url(r'^management/image_object$', site_management.imageObject, name='image object'),
 

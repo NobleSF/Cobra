@@ -69,16 +69,16 @@
           >
             <i class="rate
 
-                {% if subject.name == 'Appeal' %}
+                {% if subject == 'appeal' %}
                   {% if 0 < value and value < 4 %}symbol-sad{%else%}symbol-happy{%endif%}
-                {% elif subject.name = 'Photography' %}symbol-camera
-                {% elif subject.name = 'Price' %}symbol-money
+                {% elif subject == 'photography' %}symbol-camera
+                {% elif subject == 'price' %}symbol-money
                 {% endif %}
 
                 color-rating{{value}}
               "
               data-product-id="{{ product.id }}"
-              data-subject="{{ subject.name }}"
+              data-subject="{{ subject }}"
               data-value="{{ value }}">
             </i>
           </span>

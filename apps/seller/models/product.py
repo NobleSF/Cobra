@@ -2,7 +2,6 @@ from django.db import models
 from django.utils import timezone
 
 from apps.common.models.color import NewColor
-from apps.grading.views.action import ActionMaker
 from apps.grading.models import ActionType
 from apps.seller.models.asset import Asset
 from apps.seller.models.seller import Seller
@@ -66,6 +65,7 @@ class Product(models.Model):
 
   @is_active.setter
   def is_active(self, value):
+    from apps.grading.views.action import ActionMaker
     from apps.communication.views.email_class import Email
     from settings.people import operations_team
 
@@ -306,17 +306,17 @@ class Product(models.Model):
 
   @property
   def ratings(self):#rating by subject
+    from apps.public.models import Rating
     from django.db.models import Avg
     try:
       #get average rating by subject
-      query = (self.rating_set.values('subject')
-                  .annotate(average=Avg('value'))
-                  .values('subject__name','average')
-                 )
+      rating_averages_queryset = (self.rating_set.values('subject')
+                                    .annotate(average=Avg('value'))
+                                    .values('subject','average')
+                                  )
       #make dictionry: key, value = subject name, rounded rating
-      ratings = {}
-      for rating in query:
-        ratings[rating['subject__name']] = int(round(rating['average']))
+      rating_subjects = {key:name for key, name in Rating.SUBJECT_OPTIONS}
+      ratings = dict([(rating_subjects[r['subject']], int(round(r['average']))) for r in rating_averages_queryset])
       return ratings
 
     except: return {}

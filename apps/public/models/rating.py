@@ -1,7 +1,6 @@
 from django.db import models
 from apps.admin.utils.exception_handling import ExceptionHandler
 from apps.seller.models.product import Product
-from apps.admin.models.rating_subject import RatingSubject
 
 
 class Rating(models.Model):
@@ -12,8 +11,7 @@ class Rating(models.Model):
     (PRICE,       'price'),
     (APPEAL,      'appeal'),
   )
-  new_subject         = models.SmallIntegerField(choices=SUBJECT_OPTIONS)
-  subject             = models.ForeignKey(RatingSubject)
+  subject         = models.SmallIntegerField(choices=SUBJECT_OPTIONS)
   product             = models.ForeignKey(Product)
   value               = models.SmallIntegerField()
 
@@ -39,11 +37,11 @@ def updateRatingRankings(sender, instance, created, **kwargs):
       ranking.new_product = newProductResult(instance.product)
       ranking.new_store   = newStoreResult(instance.product)
 
-    if instance.subject.name == 'Photography':
+    if instance.subject == Rating.PHOTOGRAPHY:
       ranking.photography = photographyResult(instance.product)
-    elif instance.subject.name == 'Price':
+    elif instance.subject == Rating.PRICE:
       ranking.price = priceResult(instance.product)
-    elif instance.subject.name == 'Appeal':
+    elif instance.subject == Rating.APPEAL:
       ranking.appeal = appealResult(instance.product)
     ranking.save()
   except Exception as e:
