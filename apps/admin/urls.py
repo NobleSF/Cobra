@@ -1,8 +1,8 @@
 from django.conf.urls import url
 
-from apps.admin.controller import admin, account, products, orders, communication, site_management, research
-from apps.commission.controller import commission
-from apps.admin.controller.stats.shipping import stats as shipping_stats
+from apps.admin.views import admin, account, products, orders, communication, site_management, research
+from apps.commission.views import commission
+from apps.admin.views.stats.shipping import stats as shipping_stats
 
 #DASHBOARD PAGES
 urlpatterns = [

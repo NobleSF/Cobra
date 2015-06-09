@@ -24,7 +24,7 @@ class Ranking(models.Model):
 
   @property
   def weighted_average(self):
-    from apps.public.controller.product_ranking import WEIGHTS
+    from apps.public.views.product_ranking import WEIGHTS
     avg  = 0.0
     avg += float(self.photography * WEIGHTS['photography'])
     avg += float(self.price       * WEIGHTS['price'])
@@ -35,7 +35,7 @@ class Ranking(models.Model):
 
   @property
   def weights_sum(self):
-    from apps.public.controller.product_ranking import WEIGHTS
+    from apps.public.views.product_ranking import WEIGHTS
     sum = 0
     for key in WEIGHTS:
       sum += WEIGHTS[key]

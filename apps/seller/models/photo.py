@@ -1,9 +1,9 @@
 from django.db import models
 from apps.seller.models.product import Product
-from settings.settings import CLOUDINARY
+from settings import CLOUDINARY
 
 class Photo(models.Model): #exclusively product photos.
-  from settings.settings import MEDIA_URL
+  from settings import MEDIA_URL
   product         = models.ForeignKey(Product, related_name="photos")
   rank            = models.SmallIntegerField(null=True)
   is_progress     = models.BooleanField(default=False)#of incomplete product or commission

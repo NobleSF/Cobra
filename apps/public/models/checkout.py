@@ -5,7 +5,7 @@ from jsonfield import JSONField
 from django.utils import timezone
 
 from apps.admin.utils.exception_handling import ExceptionHandler
-from apps.communication.controller.email_class import Email
+from apps.communication.views.email_class import Email
 from apps.public.models.cart import Cart
 from settings.people import support_team
 

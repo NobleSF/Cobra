@@ -1,6 +1,6 @@
 from django.test import TestCase
 from apps.admin.models.account import Account
-from apps.admin.controller.account import processPassword
+from apps.admin.views.account import processPassword
 
 class AccountTest(TestCase):
   def setUp(self):

@@ -61,7 +61,7 @@ def doStuff(apps, schema_editor):
     except Exception as e:
       errors.append("stripe payment amount for checkout %d: %s" % (checkout.id, str(e)))
 
-  from apps.communication.controller.email_class import Email
+  from apps.communication.views.email_class import Email
   message = "<p>"
   for error in errors:
     message += str(error) + "<br>"

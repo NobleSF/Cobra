@@ -1,7 +1,7 @@
 from datetime import timedelta
 from django.db import models
 from django.utils import timezone
-from apps.communication.controller.sms import sendSMS
+from apps.communication.views.sms import sendSMS
 
 from apps.public.models.customer import Customer
 from apps.seller.models.image import Image

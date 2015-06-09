@@ -1,7 +1,9 @@
 from django.db import models
-from apps.admin.models.category import Category
+
+from apps.common.models.category import Category
 from apps.seller.models.image import Image
 from apps.seller.models.seller import Seller
+
 
 class Asset(models.Model):
   seller        = models.ForeignKey(Seller)
@@ -10,7 +12,9 @@ class Asset(models.Model):
   name          = models.CharField(max_length=50, null=True, blank=True)
   description   = models.TextField(null=True, blank=True)
   image         = models.ForeignKey(Image, null=True, blank=True, on_delete=models.SET_NULL)
+
   categories    = models.ManyToManyField(Category)
+
   phone         = models.CharField(max_length=15, null=True, blank=True)
   #important     = models.BooleanField(default=False)
 
@@ -41,7 +45,8 @@ class Asset(models.Model):
 
 #SIGNALS AND SIGNAL REGISTRATION
 from django.dispatch import receiver
-from django.db.models.signals import pre_save, post_save, pre_delete, m2m_changed
+from django.db.models.signals import post_save
+
 
 @receiver(post_save, sender=Asset)
 def createRanking(sender, instance, created, **kwargs):

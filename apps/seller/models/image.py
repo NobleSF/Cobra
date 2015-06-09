@@ -1,5 +1,5 @@
 from django.db import models
-from settings.settings import CLOUDINARY
+from settings import CLOUDINARY
 
 class Image(models.Model): #for assets and anything other than product photos
   original      = models.URLField(max_length=200)

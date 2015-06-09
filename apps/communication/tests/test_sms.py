@@ -1,6 +1,6 @@
 from django.test import TestCase
 from apps.communication.models.sms import SMS as SMSModel
-from apps.communication.controller import sms
+from apps.communication.views import sms
 
 class SMSTest(TestCase):
   def test_create(self):

@@ -40,9 +40,9 @@ def shipping_option_chooser_tag(product):
 
 @register.inclusion_tag('edit_product/product_asset_choosers/color_chooser.html')
 def color_chooser_tag(product):
-  from apps.admin.models.color import Color
+  from apps.common.models.color import NewColor
   try:
-    colors = Color.objects.all()
+    colors = NewColor.objects.all()
     for color in colors:
       color.selected = True if product.colors.filter(id=color.id).exists() else False
 

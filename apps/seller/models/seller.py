@@ -1,8 +1,8 @@
 from django.db import models
+from apps.common.models.country import Country
 from apps.admin.models.account import Account
-from apps.admin.models.country import Country
-
 from apps.seller.models.image import Image
+
 
 class Seller(models.Model):
   account       = models.ForeignKey(Account, related_name='sellers')

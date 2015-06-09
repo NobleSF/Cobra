@@ -1,7 +1,7 @@
 from apps.admin.utils.decorator import postpone
 from settings import people
 import rollbar
-from settings.settings import DEBUG, LOCAL
+from settings import DEBUG, LOCAL
 
 
 class ExceptionHandler(object):
@@ -45,7 +45,7 @@ class ExceptionHandler(object):
 
   #email is already async, no need for @postpone
   def emailTom(self):
-    from apps.communication.controller.email_class import Email
+    from apps.communication.views.email_class import Email
     try:
       message = self.message if self.message else "Something broke."
       message += "<br>%s" % str(self.exception)
@@ -56,7 +56,7 @@ class ExceptionHandler(object):
 
   @postpone
   def smsTom(self, sos=False):
-    from apps.communication.controller.sms import sendSMS
+    from apps.communication.views.sms import sendSMS
     message  = "ANOU SAYS: THERE'S SNOW IN IMOUZZER\r\n" if sos else ""
     message += ("%s" % self.message) if self.message else ""
     message += "\r\n%s" % str(self.exception)
@@ -64,7 +64,7 @@ class ExceptionHandler(object):
 
   @postpone
   def smsDan(self, sos=False):
-    from apps.communication.controller.sms import sendSMS
+    from apps.communication.views.sms import sendSMS
     message  = "ANOU SAYS: THERE'S SNOW IN IMOUZZER\r\n" if sos else ""
     message += ("%s" % self.message) if self.message else ""
     sendSMS(message, people.Dan.phone)
