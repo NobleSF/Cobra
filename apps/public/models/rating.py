@@ -11,7 +11,7 @@ class Rating(models.Model):
     (PRICE,       'price'),
     (APPEAL,      'appeal'),
   )
-  subject         = models.SmallIntegerField(choices=SUBJECT_OPTIONS)
+  subject             = models.SmallIntegerField(choices=SUBJECT_OPTIONS)
   product             = models.ForeignKey(Product)
   value               = models.SmallIntegerField()
 
